@@ -15,6 +15,7 @@
   },
   "scripts": {
     "fix": "node scripts/fix.mjs",
+    "fix:docker": "node scripts/dockerFixes.mjs",
     "dev": "yarn run dotenv -e .env -- turbo run dev",
     "dev:docker": "docker-compose -f docker-compose.dev.yaml up --build --renew-anon-volumes -d",
     "db": "docker-compose -f docker-compose.db.yaml up --build",
@@ -51,6 +52,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@fontsource/open-sans": "^5.0.27",
     "@material-ui/core": "^4.12.4",
     "@mui/material": "^5.15.14",
     "@mui/styled-engine-sc": "6.0.0-alpha.18",
