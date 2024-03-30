@@ -5,7 +5,6 @@ import { EdgeFields } from "./MapEdge";
 import CSVTools from "./lib/CSVTools";
 import fs from "fs";
 import { createEdgePrisma, createNodePrisma, client } from "./PrismaScripts";
-import mapNode from "./MapNode";
 import mapEdge from "./MapEdge";
 
 class DBManager {
@@ -260,7 +259,7 @@ class DBManager {
             }
             );
             if (DBEdge == null){
-                console.log("Node does not exist in database.");
+                console.log("Edge does not exist in database.");
             }
             else {
                 origEdge.startNode = DBEdge.startNode;

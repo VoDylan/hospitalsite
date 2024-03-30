@@ -74,3 +74,17 @@ test("Testing output filePath", () => {
     "./output/newNodeCSV.csv",
   );
 });
+
+test(testDB.updateNodeFromDB, () => {
+    //manually change database
+    testDB.updateNodeFromDB("CCONF001L1");
+    testDB.getNodeByID("CCONF001L1");
+    //check change manually
+});
+
+test(testDB.updateEdgeFromDB, () => {
+    //manually change database
+    testDB.updateEdgeFromDB("CCONF001L1", "CCONF002L1");
+    testDB.printEdges();
+    //check change manually
+});
