@@ -15,6 +15,19 @@ function LoginForm() {
     setCredentials({ username: "", password: "" });
   }
 
+  function handleLogin() {
+    if (input.username === "admin" && input.password === "admin") {
+      // Simulate successful login
+      alert("Logged in successfully!");
+      // You can redirect the user to another page here
+    } else {
+      // Handle invalid credentials
+      alert("Invalid username or password!");
+      // Optionally, clear the input fields
+      clear();
+    }
+  }
+
   function handleUsernameInput(e: ChangeEvent<HTMLInputElement>) {
     setCredentials({ ...input, username: e.target.value });
   }
@@ -91,7 +104,7 @@ function LoginForm() {
                 value={input.password}
                 onChange={handlePasswordInput}
               />
-              <Buttons input={input} clear={clear} />
+              <Buttons onClick={handleLogin} input={input} clear={clear} />
             </div>
           </div>
         </div>

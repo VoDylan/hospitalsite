@@ -5,12 +5,24 @@ import { Login } from "../common/LoginForm.ts";
 type LoginButtonsProps = {
   input: Login;
   clear: () => void;
+  onClick: () => void; // Add onClick prop
 };
 
 function LoginButtons(props: LoginButtonsProps) {
   const handleSubmit = () => {
-    console.log(props.input);
-    props.clear();
+    // Check if username and password are both "admin"
+    if (props.input.username === "admin" && props.input.password === "admin") {
+      // Simulate successful login
+      alert("Logged in successfully!");
+      // Clear the input fields
+      props.clear();
+      // You can redirect the user to another page here
+    } else {
+      // Handle invalid credentials
+      alert("Invalid username or password!");
+      // Clear the input fields
+      props.clear();
+    }
   };
 
   const handleClear = () => {
