@@ -1,13 +1,13 @@
-import { Prisma, PrismaClient } from "./.prisma/client";
+import client from "./bin/database-connection.ts";
 import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 async function createNodePrisma(node: MapNode) {
   console.log("Creating node");
   try {
-    const createdNode = await prisma.node.create({
+    const createdNode = await client.node.create({
       data: {
         nodeID: node.nodeID,
         xcoord: node.xcoord,
@@ -21,7 +21,7 @@ async function createNodePrisma(node: MapNode) {
     });
     console.log(`Node created with ID: ${createdNode.nodeID}`);
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+    if (e instanceof client.PrismaClientKnownRequestError) {
       if (e.code == "P2002") {
         console.log("Node already exists. Skipping...");
       }
@@ -34,7 +34,7 @@ async function createNodePrisma(node: MapNode) {
 async function createEdgePrisma(edge: MapEdge) {
   console.log("Creating edge");
   try {
-    const createdEdge = await prisma.edge.create({
+    const createdEdge = await client.edge.create({
       data: {
         startNodeID: edge.startNode,
         endNodeID: edge.endNode,
@@ -42,7 +42,7 @@ async function createEdgePrisma(edge: MapEdge) {
     });
     console.log(`Edge created with ID: ${createdEdge.edgeID}`);
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+    if (e instanceof client.PrismaClientKnownRequestError) {
       console.log("Edge already exists. Skipping...");
     } else {
       console.error(e);
@@ -52,20 +52,20 @@ async function createEdgePrisma(edge: MapEdge) {
 
 async function openPrismaConnection() {
   try {
-    await prisma.$connect();
+    await client.$connect();
   } catch (e) {
     console.error(e);
-    await prisma.$disconnect();
+    await client.$disconnect();
     process.exit(1);
   }
 }
 
 async function closePrismaConnection() {
   try {
-    await prisma.$disconnect();
+    await client.$disconnect();
   } catch (e) {
     console.error(e);
-    await prisma.$disconnect();
+    await client.$disconnect();
     process.exit(1);
   }
 }
