@@ -54,14 +54,30 @@ class MapEdge {
   /**
    * Getter function that returns the nodeID of the startingNode for this edge
    */
-  public get startNode(): string {
+  public get startNodeID(): string {
     return this._startNode.nodeID;
+  }
+
+  /**
+   * Getter function that returns the starting node object for this edge
+   */
+
+  public get startNode(): MapNode {
+      return this._startNode;
+  }
+
+  /**
+   * Getter function that returns the end node object for this edge
+   */
+
+  public get endNode(): MapNode {
+      return this._endNode;
   }
 
   /**
    * Getter function that returns the nodeID of the endingNode for this edge
    */
-  public get endNode(): string {
+  public get endNodeID(): string {
     return this._endNode.nodeID;
   }
 

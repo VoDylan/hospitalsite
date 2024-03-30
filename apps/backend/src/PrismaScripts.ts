@@ -1,6 +1,7 @@
 import client from "./bin/database-connection.ts";
 import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
+import { exit } from "node:process";
 
 //const prisma = new PrismaClient();
 
@@ -56,7 +57,7 @@ async function openPrismaConnection() {
   } catch (e) {
     console.error(e);
     await client.$disconnect();
-    process.exit(1);
+    exit(1);
   }
 }
 
@@ -66,13 +67,14 @@ async function closePrismaConnection() {
   } catch (e) {
     console.error(e);
     await client.$disconnect();
-    process.exit(1);
+    exit(1);
   }
 }
 
 export {
-  createNodePrisma,
-  createEdgePrisma,
-  openPrismaConnection,
-  closePrismaConnection,
+    createNodePrisma,
+    createEdgePrisma,
+    openPrismaConnection,
+    closePrismaConnection,
+    client
 };
