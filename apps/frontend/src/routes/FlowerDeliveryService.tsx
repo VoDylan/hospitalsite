@@ -1,32 +1,63 @@
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 function FlowerDeliveryService() {
   return (
     <>
       <Grid
         container
-        bgcolor={"primary.main"}
         my={8}
-        spacing={4}
-        alignSelf={"center"}
+        rowSpacing={8}
+        columnSpacing={4}
         alignContent={"center"}
+        alignItems={"flexStart"}
+        boxShadow={4}
       >
-        <Grid item xs={5}>
-          <Typography>Box 1</Typography>
+        <Grid
+          item
+          xs={12}
+          columnSpacing={0}
+          sx={{
+            alignItems: "flexStart",
+            bgcolor: "primary.main",
+          }}
+        >
+          <Typography
+            color={"white"}
+            align={"center"}
+            fontStyle={"Open Sans"}
+            fontSize={40}
+          >
+            Flower Delivery Service Form
+          </Typography>
         </Grid>
-        <Grid item xs={5}>
-          <Typography>Box 2</Typography>
+        <Grid item xs={6}>
+          <Box>
+            <Typography>Box 2</Typography>
+          </Box>
         </Grid>
-        <Grid item xs={5}>
-          <Typography>Box 2</Typography>
+        <Grid item xs={6}>
+          <Box>
+            <Typography>Box 2</Typography>
+          </Box>
         </Grid>
-        <Grid item xs={5}>
-          <Typography>Box 3</Typography>
+        <Grid item xs={6}>
+          <Box>
+            <Typography>Box 3</Typography>
+          </Box>
         </Grid>
-        <Grid item xs={5}>
-          <Typography>Box 4</Typography>
+        <Grid item xs={6}>
+          <Box>
+            <Typography>Box 4</Typography>
+          </Box>
         </Grid>
-        <Grid item xs={5}>
-          <Typography>Box 5</Typography>
+        <Grid item xs={6}>
+          <Box>
+            <Typography>Box 5</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box>
+            <Typography align={"center"}>Submit Button Here</Typography>
+          </Box>
         </Grid>
       </Grid>
     </>
