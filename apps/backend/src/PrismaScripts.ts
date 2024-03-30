@@ -1,6 +1,7 @@
 import client from "./bin/database-connection.ts";
 import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
+import { Prisma } from "../../../packages/database";
 
 //const prisma = new PrismaClient();
 
@@ -21,7 +22,7 @@ async function createNodePrisma(node: MapNode) {
     });
     console.log(`Node created with ID: ${createdNode.nodeID}`);
   } catch (e) {
-    if (e instanceof client.PrismaClientKnownRequestError) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code == "P2002") {
         console.log("Node already exists. Skipping...");
       }
@@ -42,7 +43,7 @@ async function createEdgePrisma(edge: MapEdge) {
     });
     console.log(`Edge created with ID: ${createdEdge.edgeID}`);
   } catch (e) {
-    if (e instanceof client.PrismaClientKnownRequestError) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
       console.log("Edge already exists. Skipping...");
     } else {
       console.error(e);
