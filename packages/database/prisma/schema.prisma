@@ -1,20 +1,77 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider   = "prisma-client-js"
-  output     = "../.prisma/client"
+  output     = "./.prisma/client"
   engineType = "binary"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_URL")
+  url      = env("DATABASE_URL")
 }
 
-// example table used in the express router example
-model HighScore {
-  id    Int      @id @default(autoincrement())
-  time  DateTime
-  score Int
+model Node {
+  nodeID     String    @id
+  xcoord     Int
+  ycoord     Int
+  floor      String?
+  building   String?
+  nodeType   String?
+  longName   String?
+  shortName  String?
+  startEdges Edge[]    @relation("StartNode")
+  endEdges   Edge[]    @relation("EndNode")
+  Patient    Patient[]
+}
+
+model Edge {
+  edgeID      Int    @id @default(autoincrement())
+  startNodeID String
+  endNodeID   String
+  startNode   Node   @relation(fields: [startNodeID], references: [nodeID], name: "StartNode")
+  endNode     Node   @relation(fields: [endNodeID], references: [nodeID], name: "EndNode")
+
+  @@unique([startNodeID, endNodeID])
+}
+
+model User {
+  userID        Int             @id @default(autoincrement())
+  userName      String          @unique
+  emailAddress  String
+  password      String
+  Admin         Admin[]
+  Patient       Patient[]
+  MedicalWorker MedicalWorker[]
+}
+
+model Admin {
+  adminID Int  @id @default(autoincrement())
+  User    User @relation(fields: [userID], references: [userID])
+  userID  Int
+}
+
+model Patient {
+  patientID          Int                  @id @default(autoincrement())
+  Room               Node                 @relation(fields: [roomID], references: [nodeID])
+  roomID             String
+  User               User                 @relation(fields: [userID], references: [userID])
+  userID             Int
+  MedicalAssignments MedicalAssignments[]
+}
+
+model MedicalWorker {
+  medicalID          Int                  @id @default(autoincrement())
+  title              String
+  User               User                 @relation(fields: [userID], references: [userID])
+  userID             Int
+  MedicalAssignments MedicalAssignments[]
+}
+
+model MedicalAssignments {
+  assignmentID  Int           @id @default(autoincrement())
+  MedicalWorker MedicalWorker @relation(fields: [medicalID], references: [medicalID])
+  medicalID     Int
+  Patient       Patient       @relation(fields: [patientID], references: [patientID])
+  patientID     Int
+
+  @@unique([medicalID, patientID])
 }

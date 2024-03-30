@@ -25,7 +25,8 @@
     "pg": "^8.11.0",
     "ts-node": "^10.9.1",
     "tsconfig-custom": "workspace:*",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitest": "^1.4.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
