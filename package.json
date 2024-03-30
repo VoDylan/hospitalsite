@@ -15,6 +15,7 @@
   },
   "scripts": {
     "fix": "node scripts/fix.mjs",
+    "fix:docker": "node scripts/dockerFixes.mjs",
     "dev": "yarn run dotenv -e .env -- turbo run dev",
     "dev:docker": "docker-compose -f docker-compose.dev.yaml up --build --renew-anon-volumes -d",
     "db": "docker-compose -f docker-compose.db.yaml up --build",
