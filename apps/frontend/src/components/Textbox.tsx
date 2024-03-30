@@ -18,9 +18,10 @@ interface TextboxProps {
   label: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: "text" | "password"; // Define type prop to indicate input type
 }
 
-const Textbox: React.FC<TextboxProps> = ({ label, value, onChange }) => {
+const Textbox: React.FC<TextboxProps> = ({ label, value, onChange, type }) => {
   const classes = useStyles();
 
   return (
@@ -29,6 +30,7 @@ const Textbox: React.FC<TextboxProps> = ({ label, value, onChange }) => {
         id="outlined-basic"
         label={label}
         variant="outlined"
+        type={type} // Set input type
         value={value}
         onChange={onChange}
       />

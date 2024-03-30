@@ -3,7 +3,8 @@ import { Login } from "../common/LoginForm.ts";
 import Textbox from "../components/Textbox.tsx";
 import Buttons from "../components/Buttons.tsx";
 import { Typography, Box } from "@mui/material";
-import background from "frontend/public/background.jpg";
+import background from "frontend/public/Background.jpg";
+import logo from "frontend/public/logo.png";
 
 function LoginForm() {
   const [input, setCredentials] = useState<Login>({
@@ -45,26 +46,19 @@ function LoginForm() {
         alignItems: "center",
         minHeight: "100vh",
         minWidth: "100wh",
+        background: `url(${background})`, // Set the background image
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      <img
-        src={background}
-        alt="background"
-        style={{
-          position: "absolute",
-          width: "100vw",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: -1,
-        }}
-      />
       <Box
         sx={{
           backgroundColor: "white",
+          opacity: "90%",
           padding: "20px",
           width: "50%",
           height: "60%",
+          minHeight: "80",
           position: "relative",
           zIndex: 0,
           display: "flex",
@@ -73,11 +67,16 @@ function LoginForm() {
           alignItems: "center",
         }}
       >
+        <img
+          src={logo}
+          alt="Logo"
+          style={{ width: "70%", height: "12%", marginBottom: "20px" }} // Adjust the size and position of the logo
+        />
         <Typography
           variant="h4"
           align="center"
           gutterBottom
-          style={{ fontSize: "32px" }}
+          style={{ fontSize: "26px" }}
         >
           Login
         </Typography>
@@ -103,6 +102,7 @@ function LoginForm() {
                 label="Password:"
                 value={input.password}
                 onChange={handlePasswordInput}
+                type="password" // Specify type as "password"
               />
               <Buttons onClick={handleLogin} input={input} clear={clear} />
             </div>
