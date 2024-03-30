@@ -1,3 +1,4 @@
+
 generator client {
   provider   = "prisma-client-js"
   output     = "./.prisma/client"
@@ -10,17 +11,18 @@ datasource db {
 }
 
 model Node {
-  nodeID     String    @id
-  xcoord     Int
-  ycoord     Int
-  floor      String?
-  building   String?
-  nodeType   String?
-  longName   String?
-  shortName  String?
-  startEdges Edge[]    @relation("StartNode")
-  endEdges   Edge[]    @relation("EndNode")
-  Patient    Patient[]
+  nodeID         String           @id
+  xcoord         Int
+  ycoord         Int
+  floor          String?
+  building       String?
+  nodeType       String?
+  longName       String?
+  shortName      String?
+  startEdges     Edge[]           @relation("StartNode")
+  endEdges       Edge[]           @relation("EndNode")
+  Patient        Patient[]
+  ServiceRequest ServiceRequest[]
 }
 
 model Edge {
@@ -34,13 +36,14 @@ model Edge {
 }
 
 model User {
-  userID        Int             @id @default(autoincrement())
-  userName      String          @unique
-  emailAddress  String
-  password      String
-  Admin         Admin[]
-  Patient       Patient[]
-  MedicalWorker MedicalWorker[]
+  userID         Int              @id @default(autoincrement())
+  userName       String           @unique
+  emailAddress   String
+  password       String
+  Admin          Admin[]
+  Patient        Patient[]
+  MedicalWorker  MedicalWorker[]
+  ServiceRequest ServiceRequest[]
 }
 
 model Admin {
@@ -75,3 +78,15 @@ model MedicalAssignments {
 
   @@unique([medicalID, patientID])
 }
+
+model ServiceRequest {
+  id            Int    @id @default(autoincrement())
+  user          User   @relation(fields: [userId], references: [userID])
+  userId        Int
+  node          Node   @relation(fields: [nodeShortName], references: [shortName])
+  nodeShortName String
+  services      String
+
+  @@unique([userId, nodeShortName])
+}
+
