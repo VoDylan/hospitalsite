@@ -35,7 +35,7 @@
   },
   "packageManager": "yarn@4.0.2",
   "devDependencies": {
-    "@types/react": "^18.0.37",
+    "@types/react": "^18.2.73",
     "@types/react-dom": "^18.0.11",
     "@vitest/ui": "^0.33.0",
     "eslint": "^8.56.0",
