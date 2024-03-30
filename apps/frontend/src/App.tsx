@@ -21,7 +21,7 @@ function App() {
   function Root() {
     return (
       // <div className="w-full flex flex-col px-20 gap-5">
-        <Outlet />
+      <Outlet />
       // {/*</div>*/}
     );
   }
