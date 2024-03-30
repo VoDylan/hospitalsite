@@ -7,17 +7,14 @@ type NavButtonProp = {
   name: string;
 };
 
-const NavButton: React.FC<NavButtonProp> =({
-    path, buttonType, name
-}) => {
-    return (
-        <div>
-            <Button variant={buttonType} href={path}>
-                {name}
-            </Button>
-        </div>
-    );
+const NavButton: React.FC<NavButtonProp> = ({ path, name }) => {
+  return (
+    <div>
+      <Button variant="text" href={path}>
+        {name}
+      </Button>
+    </div>
+  );
 };
-
 
 export default NavButton;
