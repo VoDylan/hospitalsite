@@ -214,7 +214,7 @@ class DBManager {
     if (origNode == null) {
       console.log("Node does not exist as object.");
     } else {
-      const DBNode: MapNode | null = await client.Node.findUnique({
+      const DBNode = await client.node.findUnique({
         where: {
           nodeID: nodeID,
         },
@@ -224,11 +224,11 @@ class DBManager {
       } else {
         origNode.xcoord = DBNode.xcoord;
         origNode.ycoord = DBNode.ycoord;
-        origNode.floor = DBNode.floor;
-        origNode.building = DBNode.building;
-        origNode.nodeType = DBNode.nodeType;
-        origNode.longName = DBNode.longName;
-        origNode.shortName = DBNode.shortName;
+        origNode.floor = DBNode.floor!;
+        origNode.building = DBNode.building!;
+        origNode.nodeType = DBNode.nodeType!;
+        origNode.longName = DBNode.longName!;
+        origNode.shortName = DBNode.shortName!;
       }
     }
   }
@@ -251,7 +251,7 @@ class DBManager {
     if (origEdge == null) {
       console.log("Edge does not exist as an object.");
     } else {
-      const DBEdge: mapEdge | null = await client.Edge.findUnique({
+      const DBEdge = await client.edge.findFirst({
         where: {
           startNodeID: startID,
           endNodeID: endID,
@@ -260,8 +260,15 @@ class DBManager {
       if (DBEdge == null) {
         console.log("Edge does not exist in database.");
       } else {
-        origEdge.startNode = DBEdge.startNode;
-        origEdge.endNode = DBEdge.endNode;
+        const startNode: MapNode | null = this.getNodeByID(DBEdge.startNodeID);
+        const endNode: MapNode | null = this.getNodeByID(DBEdge.endNodeID);
+
+        if (startNode == null || endNode == null) {
+          console.log("startNode or endNode not found!");
+        } else {
+          origEdge.startNode = startNode!;
+          origEdge.endNode = endNode!;
+        }
       }
     }
   }
