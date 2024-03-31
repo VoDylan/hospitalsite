@@ -21,9 +21,16 @@ class DBManager {
    * @param pathNode - Filepath for the node CSV data
    * @param pathEdge - Filepath for the edge CSV data
    */
-  public async importNodesAndEdges(pathNode: string, pathEdge: string) {
-    await this.importNodeFromPath(pathNode);
-    await this.importEdgeFromPath(pathEdge);
+  public importNodesAndEdges(pathNode: string, pathEdge: string) {
+    this.importNodeFromPath(pathNode);
+    this.importEdgeFromPath(pathEdge);
+  }
+
+  /**
+   * Function to congregate map lists to put in DB
+   */
+  public async toDB() {
+    await this.listsToDB();
   }
 
   /**
@@ -31,7 +38,7 @@ class DBManager {
    * @param nodePath - Filepath for the node CSV data
    * @private
    */
-  private async importNodeFromPath(nodePath: string) {
+  private importNodeFromPath(nodePath: string) {
     //Convert file data to individual elements in a 2d array. Rows represent an individual node and the columns represent the data elements
     const nodes: string[][] = CSVTools.parseCSVFromFile(nodePath);
 
@@ -53,8 +60,18 @@ class DBManager {
 
       //Create a new MapNode object with the given nodeInfo and append it to the list of nodes
       this._mapNodes.push(node);
+    }
+  }
 
-      await createNodePrisma(node);
+  /**
+   * Function to loop over filled map arrays and put the objects into the database
+   */
+  private async listsToDB() {
+    for (let i = 0; i < this._mapNodes.length; i++) {
+      await createNodePrisma(this._mapNodes[i]);
+    }
+    for (let i = 0; i < this._mapEdges.length; i++) {
+      await createEdgePrisma(this._mapEdges[i]);
     }
   }
 
@@ -63,7 +80,7 @@ class DBManager {
    * @param edgePath - Filepath for the edge CSV data
    * @private
    */
-  private async importEdgeFromPath(edgePath: string) {
+  private importEdgeFromPath(edgePath: string) {
     //Convert file data to individual elements in a 2d array. Rows represent an individual edge and the columns represent the data elements
     const edges: string[][] = CSVTools.parseCSVFromFile(edgePath);
 
@@ -95,8 +112,6 @@ class DBManager {
 
         //Push a new MapEdge object with the passed in information to the mapEdges list
         this._mapEdges.push(edge);
-
-        await createEdgePrisma(edge);
       }
     }
   }
@@ -234,10 +249,10 @@ class DBManager {
   }
 
   /**
-        Function to query database and update edge object if any discrepancies are found
-        @param startID - ID for starting node of edge
-        @param endID - ID for ending node of edge
-    */
+   * Function to query database and update edge object if any discrepancies are found
+   * @param startID - ID for starting node of edge
+   * @param endID - ID for ending node of edge
+   */
   public async updateEdgeFromDB(startID: string, endID: string) {
     let origEdge: mapEdge | null = null;
     for (let i = 0; i < this._mapEdges.length; i++) {
