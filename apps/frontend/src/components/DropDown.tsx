@@ -14,8 +14,9 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "flex-start",
     "& .MuiTextField-root": {
-      margin: "10px",
+      margin: "15px",
       width: "200px", // Adjust width as needed
+      padding: "20px",
     },
   },
 });
@@ -29,6 +30,9 @@ export function DropDown(props: DropDownProps) {
           retData = props.handleChange(event);
         }}
         value={retData}
+        sx={{
+          mx: "12px",
+        }}
       >
         {props.items.map((item) => (
           <MenuItem value={item}>{item}</MenuItem>

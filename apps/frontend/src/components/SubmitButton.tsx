@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmission.ts";
+import axios from "axios";
 
 interface ButtonProps {
   text: string;
@@ -8,8 +9,21 @@ interface ButtonProps {
 }
 export function SubmitButton(props: ButtonProps) {
   function handleSubmit() {
+    const submission = props.input;
     console.log(props.input);
-    props.clear();
+    props.clear;
+    pushToDB(submission);
+  }
+
+  async function pushToDB(form: FlowerDeliveryFormSubmission) {
+    const res = await axios.post("/api/FlowerDelivery", form, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
   }
 
   return (
