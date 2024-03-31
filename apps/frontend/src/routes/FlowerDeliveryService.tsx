@@ -49,16 +49,17 @@ function FlowerDeliveryService() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid
         container
+        direction={"row"}
         my={8}
         px={8}
         spacing={1}
-        justifyContent={"center"}
+        columnSpacing={3}
+        justifyContent={"space-between"}
         boxShadow={4}
       >
         <Grid
           item
           xs={12}
-          columnSpacing={0}
           sx={{
             alignItems: "flexStart",
             bgcolor: "primary.main",
@@ -109,13 +110,17 @@ function FlowerDeliveryService() {
         <Grid item xs={6}>
           <Box>
             <LeftAlignedTextbox
-              label={"Add a message (optional)"}
+              label={"Add a message (optional):"}
               value={form.message}
               onChange={handleMessageInput}
             />
           </Box>
         </Grid>
-        <Grid item xs={6}>
+        <Grid
+          item
+          xs={12}
+          sx={{ display: "flex", padding: 2, justifyContent: "center" }}
+        >
           <Box>
             <SubmitButton text={"SUBMIT"} input={form} clear={clear} />
           </Box>
