@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import ExampleRoute from "./routes/ExampleRoute.tsx";
+//import ExampleRoute from "./routes/ExampleRoute.tsx";
+import LoginForm from "./routes/LoginPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 function App() {
   const router = createBrowserRouter([
@@ -11,7 +12,7 @@ function App() {
       children: [
         {
           path: "",
-          element: <ExampleRoute />,
+          element: <LoginForm />,
         },
         {
           path: "/FlowerDelivery",
@@ -24,7 +25,7 @@ function App() {
   return <RouterProvider router={router} />;
   function Root() {
     return (
-      <div className="w-full flex flex-col px-20 gap-5">
+      <div className="w-full flex flex-col px-0 gap-5">
         <Outlet />
       </div>
     );
