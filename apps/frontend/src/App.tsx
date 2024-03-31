@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
 import HeroPage from "./routes/HeroPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
-import LoginPage from "./routes/LoginPage.tsx";
+import LoginForm from "./routes/LoginForm.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -22,7 +22,7 @@ function App() {
         },
         {
           path: "/Login",
-          element: <LoginPage />,
+          element: <LoginForm />,
         },
       ],
     },
