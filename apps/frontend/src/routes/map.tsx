@@ -31,40 +31,33 @@ const Map: React.FC = () => {
         let currentTargetIndex = 0;
         let currentX = nodes[currentTargetIndex].x;
         let currentY = nodes[currentTargetIndex].y;
-        const speed = 2; // Adjust the speed of the animation
+        const speed = 0.5; // Adjust the speed of the animation
 
         const moveDot = () => {
-          // Clear the canvas
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
 
-          // Draw the image on the canvas
-          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
 
-          // Draw the dot at the current position
           ctx.fillStyle = "red";
           ctx.beginPath();
-          ctx.arc(currentX, currentY, 5, 0, 2 * Math.PI);
+          ctx.arc(currentX, currentY, 5, 0, 2 * Math.PI); // draw circle
           ctx.fill();
 
-          // Calculate distance to the target
-          const dx = nodes[currentTargetIndex].x - currentX;
-          const dy = nodes[currentTargetIndex].y - currentY;
+          const dx = nodes[currentTargetIndex].x - currentX; // target coordinate
+          const dy = nodes[currentTargetIndex].y - currentY; // target coordinate
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          // If the dot is close to the target, move to the next target
           if (distance < speed) {
-            currentTargetIndex = (currentTargetIndex + 1) % nodes.length;
+            // if the distance is close then move to the next node
+            currentTargetIndex = (currentTargetIndex + 1) % nodes.length; // % is used to loop through
           } else {
-            // Move the dot towards the target
-            currentX += (dx / distance) * speed;
+            currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
             currentY += (dy / distance) * speed;
           }
 
-          // Request the next frame
-          requestAnimationFrame(moveDot);
+          // requestAnimationFrame(moveDot); // loop to call move to function consistently
         };
 
-        // Start the animation
         moveDot();
       };
     }
