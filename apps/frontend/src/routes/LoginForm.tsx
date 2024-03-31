@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { Login } from "../common/LoginForm.ts";
 import Textbox from "../components/Textbox.tsx";
-import Buttons from "../components/Buttons.tsx";
+import Buttons from "../components/LoginButtons.tsx";
 import { Typography, Box } from "@mui/material";
 import background from "/Background.jpg";
 import logo from "/logo.png";
@@ -13,6 +13,9 @@ function LoginForm() {
     password: "",
   });
   const navigate = useNavigate();
+  const handleRedirect = () => {
+    navigate("/FlowerDelivery");
+  };
 
   function clear() {
     setCredentials({ username: "", password: "" });
@@ -20,10 +23,8 @@ function LoginForm() {
 
   function handleLogin() {
     if (input.username === "admin" && input.password === "admin") {
-      // Simulate successful login
-      alert("Logged in successfully!");
-      // You can redirect the user to another page here
-      navigate("/FlowerDelivery");
+      handleRedirect();
+      // redirect the user to another page here
     } else {
       // Handle invalid credentials
       alert("Invalid username or password!");
