@@ -6,7 +6,7 @@ const genDBScript = async () => {
 
   console.log("Importing node and edge information...");
 
-  await db.importNodesAndEdges("./L1Nodes.csv", "./L1Edges.csv");
+  db.importNodesAndEdges("./L1Nodes.csv", "./L1Edges.csv");
 
   console.log("Finished importing information!");
 
