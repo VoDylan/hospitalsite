@@ -5,7 +5,7 @@ import "./map.css";
 
 const Map: React.FC = () => {
   // Define the scale factor for the container
-  const containerScaleFactor = 0.5; // Adjust this value to change the scale of the container
+  const containerScaleFactor = 0.24; // Adjust this value to change the scale of the container
 
   return (
     <div
@@ -18,7 +18,7 @@ const Map: React.FC = () => {
       <img
         src={MapImage}
         alt={"Image of 1 Floor Map"}
-        className={"firstFloorImage"}
+        // className={"firstFloorImage"}
       />
       <Dot x={2255} y={849} />
     </div>
