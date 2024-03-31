@@ -18,7 +18,9 @@ export function ServiceCard(props: ServiceProps) {
     <Card
       sx={{
         maxWidth: 360,
+        minWidth: 360,
         maxHeight: 360,
+        minHeight: 360,
         borderRadius: 10,
         "&:hover": {
           color: "black",
