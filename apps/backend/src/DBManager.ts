@@ -234,7 +234,26 @@ class DBManager {
    * Call this then get mapEdges
    */
   public async getEdgesFromDB() {
-    //same thing
+    const edges = await client.edge.findMany();
+    const newEdges: mapEdge[] = [];
+    //loop through all edges, skipping the header line
+    for (let i: number = 1; i < edges.length; i++) {
+      //Get the references to the Node objects based on the imported ID. Returns null if no reference is found
+      const startingNode: MapNode | null = this.getNodeByID(
+        newEdges[i].startNodeID,
+      );
+      const endingNode: MapNode | null = this.getNodeByID(
+        newEdges[i].endNodeID,
+      );
+      //If both edges are valid, create an EdgeFields object storing the references to each, marking them as non-null since they
+      //are guaranteed to be valid at this point in the code
+      const edgeInfo: EdgeFields = {
+        startNode: startingNode!,
+        endNode: endingNode!,
+      };
+      const edge: mapEdge = new MapEdge(edgeInfo);
+      newEdges.push(edge);
+    }
   }
 
   /**

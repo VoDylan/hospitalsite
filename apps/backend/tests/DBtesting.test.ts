@@ -96,7 +96,6 @@ test(testDB.updateNodeFromDB, () => {
 test(testDB.updateEdgeFromDB, () => {
   //manually change database
   testDB.updateEdgeFromDB("CCONF001L1", "CCONF002L1");
-  //should output nonexistent in DB message, await is possibly causing issues
   testDB.printEdges();
   //check change manually
 });
