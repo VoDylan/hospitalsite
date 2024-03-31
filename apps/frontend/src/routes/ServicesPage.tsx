@@ -1,4 +1,5 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
+import { ServiceCard } from "../components/ServiceCard.tsx";
 
 export default function ServicesPage() {
   return (
@@ -9,66 +10,16 @@ export default function ServicesPage() {
         justifyContent={"space-evenly"}
         alignItems={"baseline"}
       >
+        <Grid></Grid>
         <Grid>
-          <Box
-            sx={{
-              width: 360,
-              height: 360,
-              borderRadius: 1,
-              bgcolor: "primary.main",
-              "&:hover": {
-                bgcolor: "primary.dark",
-              },
-            }}
-          >
-            Hello
-          </Box>
+          <ServiceCard
+            service={"Flower Delivery"}
+            imagePath={"../../public/Flower.jpg"}
+            imageAlt={"Flower"}
+          />
         </Grid>
-        <Grid>
-          <Box
-            sx={{
-              width: 360,
-              height: 360,
-              borderRadius: 1,
-              bgcolor: "primary.main",
-              "&:hover": {
-                bgcolor: "primary.dark",
-              },
-            }}
-          >
-            Hello
-          </Box>
-        </Grid>
-        <Grid>
-          <Box
-            sx={{
-              width: 360,
-              height: 360,
-              borderRadius: 1,
-              bgcolor: "primary.main",
-              "&:hover": {
-                bgcolor: "primary.dark",
-              },
-            }}
-          >
-            Hello
-          </Box>
-        </Grid>
-        <Grid>
-          <Box
-            sx={{
-              width: 360,
-              height: 360,
-              borderRadius: 1,
-              bgcolor: "primary.main",
-              "&:hover": {
-                bgcolor: "primary.dark",
-              },
-            }}
-          >
-            Hello
-          </Box>
-        </Grid>
+        <Grid></Grid>
+        <Grid></Grid>
       </Grid>
     </div>
   );
