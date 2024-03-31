@@ -4,8 +4,17 @@ import Dot from "./dot.tsx";
 import "./map.css";
 
 const Map: React.FC = () => {
+  // Define the scale factor for the container
+  const containerScaleFactor = 0.5; // Adjust this value to change the scale of the container
+
   return (
-    <div className={"firstFloor"}>
+    <div
+      className={"firstFloor"}
+      style={{
+        transform: `scale(${containerScaleFactor})`,
+        transformOrigin: "top left", // Set the transform origin to the top-left corner
+      }}
+    >
       <img
         src={MapImage}
         alt={"Image of 1 Floor Map"}
