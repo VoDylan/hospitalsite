@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import Map from "./routes/map.tsx";
+// import Map from "./routes/map.tsx";
+import TestAnimation from "./routes/testAnimation.tsx";
 // import MapWithMouseCoordinates from "./routes/mapWithMouseCoordinates.tsx";
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
       children: [
         {
           path: "map",
-          element: <Map />,
+          element: <TestAnimation />,
         },
       ],
     },
