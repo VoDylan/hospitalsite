@@ -81,14 +81,13 @@ model HighScore {
   time  DateTime
   score Int
 }
+ model ServiceRequest {
+   id            Int    @id @default(autoincrement())
+   user          User   @relation(fields: [userId], references: [userID])
+   userId        Int
+   node          Node   @relation(fields: [nodeShortName], references: [shortName])
+   nodeShortName String
+   services      String
 
-// model ServiceRequest {
-//   id            Int    @id @default(autoincrement())
-//   user          User   @relation(fields: [userId], references: [userID])
-//   userId        Int
-//   node          Node   @relation(fields: [nodeShortName], references: [shortName])
-//   nodeShortName String
-//   services      String
-//
-//   @@unique([userId, nodeShortName])
-// }
+   @@unique([userId, nodeShortName])
+ }
