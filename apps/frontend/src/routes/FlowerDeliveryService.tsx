@@ -1,8 +1,9 @@
 import { Box, Grid, SelectChangeEvent, Typography } from "@mui/material";
-import { DropDown } from "../components/DropDown.tsx";
+
 import Textbox from "../components/Textbox.tsx";
 import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useState } from "react";
+import { DropDown } from "../components/DropDown.tsx";
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
@@ -33,9 +34,10 @@ function FlowerDeliveryService() {
   // }
 
   // For dropdown
-  const handleFlowerTypeInput = (event: SelectChangeEvent) => {
+  function handleFlowerTypeInput(event: SelectChangeEvent) {
     setResponses({ ...form, flowerType: event.target.value as string });
-  };
+    return form.flowerType;
+  }
 
   return (
     <>
