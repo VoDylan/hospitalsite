@@ -16,16 +16,13 @@ const Map: React.FC = () => {
       const image = new Image();
       image.src = MapImage;
       image.onload = () => {
-        // Set the canvas size
         canvas.width = image.width;
         canvas.height = image.height;
 
-        // Define nodes' coordinates
         const nodes = [
           { x: 2255, y: 849 },
           { x: 1500, y: 1000 },
           { x: 1000, y: 500 },
-          // Add more nodes as needed
         ];
 
         let currentTargetIndex = 0;
@@ -55,7 +52,7 @@ const Map: React.FC = () => {
             currentY += (dy / distance) * speed;
           }
 
-          // requestAnimationFrame(moveDot); // loop to call move to function consistently
+          requestAnimationFrame(moveDot); // loop to call move to function consistently
         };
 
         moveDot();
