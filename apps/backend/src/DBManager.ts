@@ -212,6 +212,44 @@ class DBManager {
   }
 
   /**
+   * Function to query database for all nodes and places them in this object's array
+   * Call this then get mapNodes
+   */
+
+  public async getNodesFromDB() {
+    const nodes = await client.node.findMany();
+    const newNodes: MapNode[] = [];
+    //Loop through all nodes, skipping the header row
+    for (let i: number = 1; i < nodes.length; i++) {
+      //Create a NodeFields object to store all node information in an easy-to-transport object
+      const nodeInfo: NodeFields = {
+        nodeID: nodes[i].nodeID,
+        xcoord: nodes[i].xcoord,
+        ycoord: nodes[i].ycoord,
+        floor: nodes[i].floor!,
+        building: nodes[i].building!,
+        nodeType: nodes[i].nodeType!,
+        longName: nodes[i].longName!,
+        shortName: nodes[i].shortName!,
+      };
+
+      const node: MapNode = new MapNode(nodeInfo);
+
+      //Create a new MapNode object with the given nodeInfo and append it to the list of nodes
+      newNodes.push(node);
+    }
+    this._mapNodes = newNodes;
+  }
+
+  /**
+   * Function to query database for all edges and places them in this object's array
+   * Call this then get mapEdges
+   */
+  public async getEdgesFromDB() {
+    //same thing
+  }
+
+  /**
    * Helper function to get the combined path for exporting a file to the default export directory
    * @param fileName - Name of the file to export to
    */
