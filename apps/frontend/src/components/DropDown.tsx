@@ -3,10 +3,10 @@ import React from "react";
 
 interface DropDownProps {
   items: string[];
-  handleChange: (event: SelectChangeEvent) => void | string;
+  handleChange: (event: SelectChangeEvent) => string;
 }
 
-let retData: string | void = "";
+let retData: string = "";
 
 export function DropDown(props: DropDownProps) {
   return (
@@ -15,7 +15,7 @@ export function DropDown(props: DropDownProps) {
         onChange={(event: SelectChangeEvent) => {
           retData = props.handleChange(event);
         }}
-        value={retData!}
+        value={retData}
       >
         {props.items.map((item) => (
           <MenuItem value={item}>{item}</MenuItem>
