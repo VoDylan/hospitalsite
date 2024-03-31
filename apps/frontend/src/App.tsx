@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Map from "./routes/map.tsx";
+// import BFSCombo from "./routes/BFScombo.tsx";
 
 function App() {
   const router = createBrowserRouter([

@@ -1,9 +1,21 @@
 import React, { useEffect, useRef } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
-// import Dot from "./dot.tsx";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./map.css";
+// import {number} from "prop-types";
 
-const Map: React.FC = () => {
+function Map() {
+  const menuItems = [];
+
+  for (let i = 0; i < 20; i++) {
+    const value = i * 10;
+    menuItems.push(
+      <MenuItem key={value} value={value}>
+        {value}
+      </MenuItem>,
+    );
+  }
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -21,47 +33,56 @@ const Map: React.FC = () => {
 
         const nodes = [
           { x: 2255, y: 849 },
-          { x: 1500, y: 1000 },
-          { x: 1000, y: 500 },
+          { x: 2665, y: 1043 },
+          { x: 2770, y: 1284 },
         ];
 
-        let currentTargetIndex = 0;
-        let currentX = nodes[currentTargetIndex].x;
-        let currentY = nodes[currentTargetIndex].y;
-        const speed = 0.5; // Adjust the speed of the animation
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
 
-        const moveDot = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
-
-          ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
-
-          ctx.fillStyle = "red";
-          ctx.beginPath();
-          ctx.arc(currentX, currentY, 5, 0, 2 * Math.PI); // draw circle
+        ctx.fillStyle = "red";
+        for (let i = 0; i < nodes.length; i++) {
+          ctx.beginPath(); // initialize a creation of a new path
+          ctx.arc(nodes[i].x, nodes[i].y, 7, 0, 2 * Math.PI); // draw circle
           ctx.fill();
+        }
 
-          const dx = nodes[currentTargetIndex].x - currentX; // target coordinate
-          const dy = nodes[currentTargetIndex].y - currentY; // target coordinate
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < speed) {
-            // if the distance is close then move to the next node
-            currentTargetIndex = (currentTargetIndex + 1) % nodes.length; // % is used to loop through
-          } else {
-            currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
-            currentY += (dy / distance) * speed;
-          }
-
-          requestAnimationFrame(moveDot); // loop to call move to function consistently
-        };
-
-        moveDot();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(nodes[0].x, nodes[0].y); // Move to the first node
+        for (let i = 1; i < nodes.length; i++) {
+          ctx.lineTo(nodes[i].x, nodes[i].y); // Draw a line to each subsequent node, acts as a move to as well
+        }
+        ctx.stroke();
       };
     }
   }, []);
 
   return (
     <div className={"firstFloor"}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <FormControl className={"nodeInputs"}>
+          <InputLabel id="demo-simple-select-label">Starting Node</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Age"
+          >
+            {menuItems}
+          </Select>
+        </FormControl>
+
+        <FormControl className={"nodeInputs"}>
+          <InputLabel id="demo-simple-select-label">Ending Node</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Age"
+          >
+            {menuItems}
+          </Select>
+        </FormControl>
+      </div>
       <canvas
         ref={canvasRef}
         style={{ width: "100%", height: "100%" }}
@@ -69,6 +90,6 @@ const Map: React.FC = () => {
       />
     </div>
   );
-};
+}
 
 export default Map;
