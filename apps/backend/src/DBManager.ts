@@ -315,15 +315,11 @@ class DBManager {
   }
 
   /**
-   * Function to loop over filled map arrays and put the objects into the database
+   * Helper function to loop over filled map arrays and put the objects into the database
    */
   private async listsToDB() {
-    for (let i = 0; i < this._mapNodes.length; i++) {
-      await createNodePrisma(this._mapNodes[i]);
-    }
-    for (let i = 0; i < this._mapEdges.length; i++) {
-      await createEdgePrisma(this._mapEdges[i]);
-    }
+    await client.node.createMany({ data: this._mapNodes });
+    await client.edge.createMany({ data: this._mapEdges });
   }
 }
 

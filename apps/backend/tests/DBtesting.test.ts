@@ -58,6 +58,11 @@ test(testDB.toDB, () => {
   //works
 });
 
+test(testDB.getNodesFromDB, () => {
+  testDB.getNodesFromDB();
+  testDB.printNodes();
+});
+
 /*works
 test(CSVTools.parseCSVFromFile, () => {
     console.log(CSVTools.parseCSVFromFile('./L1Nodes.csv'))
