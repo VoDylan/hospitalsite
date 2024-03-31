@@ -3,6 +3,7 @@ import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField } from "@mui/material";
 import "./map.css";
 // import {number} from "prop-types";
+import { BFSalgorithm } from "./BFSalgorithm.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -25,6 +26,9 @@ function Map() {
           { x: 2665, y: 1043 },
           { x: 2770, y: 1284 },
         ];
+
+        const bfsAlgorithm = new BFSalgorithm();
+        bfsAlgorithm.setup();
 
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
 

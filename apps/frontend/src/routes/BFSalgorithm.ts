@@ -17,12 +17,12 @@ let count: number = 0;
 export class BFSalgorithm {
   // type should have starting node ID and coordinate
 
-  start_node: Node;
-  end_node: Node;
+  // start_node: Node;
+  // end_node: Node;
 
-  public constructor(start_node: Node, end_node: Node) {
-    this.start_node = start_node;
-    this.end_node = end_node;
+  public constructor() {
+    // this.start_node = start_node;
+    // this.end_node = end_node;
   }
 
   private parseCSV() {
