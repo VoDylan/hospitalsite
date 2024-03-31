@@ -21,14 +21,17 @@ function Map() {
         canvas.width = image.width;
         canvas.height = image.height;
 
-        const nodes = [
-          { x: 2255, y: 849 },
-          { x: 2665, y: 1043 },
-          { x: 2770, y: 1284 },
-        ];
+        // const nodes = [
+        //   { x: 2255, y: 849 },
+        //   { x: 2665, y: 1043 },
+        //   { x: 2770, y: 1284 },
+        // ];
 
         const bfsAlgorithm = new BFSalgorithm();
-        bfsAlgorithm.setup();
+        const nodes = bfsAlgorithm.setup();
+
+        if (nodes === null) return;
+        if (nodes === undefined) return;
 
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
 

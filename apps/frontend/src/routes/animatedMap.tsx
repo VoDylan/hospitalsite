@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
 // import Dot from "./dot.tsx";
 import "./map.css";
+import { BFSalgorithm } from "./BFSalgorithm.ts";
 
 const AnimatedMap: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -19,11 +20,23 @@ const AnimatedMap: React.FC = () => {
         canvas.width = image.width;
         canvas.height = image.height;
 
-        const nodes = [
-          { x: 2255, y: 849 },
-          { x: 1500, y: 1000 },
-          { x: 1000, y: 500 },
-        ];
+        // const nodes = [
+        //   { x: 2255, y: 849 },
+        //   { x: 1500, y: 1000 },
+        //   { x: 1000, y: 500 },
+        // ];
+
+        const bfsAlgorithm = new BFSalgorithm();
+        const nodes = bfsAlgorithm.setup();
+
+        if (nodes === null) {
+          console.log("wrong");
+          return;
+        }
+        if (nodes === undefined) {
+          console.log("another wrong");
+          return;
+        }
 
         let currentTargetIndex = 0;
         let currentX = nodes[currentTargetIndex].x;
