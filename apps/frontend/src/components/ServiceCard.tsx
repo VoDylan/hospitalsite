@@ -8,6 +8,7 @@ import {
 
 interface ServiceProps {
   service: string;
+  servicePath: string;
   imagePath: string;
   imageAlt: string;
 }
@@ -17,11 +18,15 @@ export function ServiceCard(props: ServiceProps) {
     <Card
       sx={{
         maxWidth: 360,
-        maxHeight: 500,
+        maxHeight: 360,
+        borderRadius: 10,
+        "&:hover": {
+          color: "black",
+        },
       }}
     >
       <Box sx={{ position: "relative" }}>
-        <CardActionArea>
+        <CardActionArea href={props.servicePath}>
           <CardMedia
             component={"img"}
             image={props.imagePath}
@@ -37,9 +42,17 @@ export function ServiceCard(props: ServiceProps) {
               bgcolor: "rgba(21, 57, 144, 0.50)",
               color: "white",
               padding: "10px",
+              display: "flex",
             }}
           >
-            <Typography variant="h5">{props.service}</Typography>
+            <Typography
+              variant="h3"
+              display={"flex"}
+              alignItems={"center"}
+              align={"center"}
+            >
+              {props.service}
+            </Typography>
           </Box>
         </CardActionArea>
       </Box>

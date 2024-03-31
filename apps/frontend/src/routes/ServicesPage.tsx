@@ -14,6 +14,7 @@ export default function ServicesPage() {
         <Grid>
           <ServiceCard
             service={"Flower Delivery"}
+            servicePath={"http://localhost:3000/FlowerDeliveryService"}
             imagePath={"../../public/Flower.jpg"}
             imageAlt={"Flower"}
           />
