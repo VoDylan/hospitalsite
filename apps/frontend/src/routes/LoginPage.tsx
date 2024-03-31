@@ -3,14 +3,16 @@ import { Login } from "../common/LoginForm.ts";
 import Textbox from "../components/Textbox.tsx";
 import Buttons from "../components/Buttons.tsx";
 import { Typography, Box } from "@mui/material";
-import background from "frontend/public/Background.jpg";
-import logo from "frontend/public/logo.png";
+import background from "/Background.jpg";
+import logo from "/logo.png";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [input, setCredentials] = useState<Login>({
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   function clear() {
     setCredentials({ username: "", password: "" });
@@ -21,6 +23,7 @@ function LoginForm() {
       // Simulate successful login
       alert("Logged in successfully!");
       // You can redirect the user to another page here
+      navigate("/FlowerDelivery");
     } else {
       // Handle invalid credentials
       alert("Invalid username or password!");
@@ -70,7 +73,7 @@ function LoginForm() {
         <img
           src={logo}
           alt="Logo"
-          style={{ width: "70%", height: "12%", marginBottom: "20px" }} // Adjust the size and position of the logo
+          style={{ width: "70%", height: "12%", marginBottom: "5%" }} // Adjust the size and position of the logo
         />
         <Typography
           variant="h4"
