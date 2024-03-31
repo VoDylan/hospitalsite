@@ -1,5 +1,5 @@
 import React from "react";
-import MapImage from "../images/Floor1.png";
+import MapImage from "../images/00_thelowerlevel1.png";
 import Dot from "./dot.tsx";
 import "./map.css";
 
@@ -11,7 +11,7 @@ const Map: React.FC = () => {
         alt={"Image of 1 Floor Map"}
         className={"firstFloorImage"}
       />
-      <Dot x={0} y={0} />
+      <Dot x={2255} y={849} />
     </div>
   );
 };
