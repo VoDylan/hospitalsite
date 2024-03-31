@@ -60,7 +60,7 @@ test(testDB.toDB, () => {
 
 test(testDB.getNodesFromDB, () => {
   testDB.getNodesFromDB();
-  testDB.printNodes();
+  //testDB.printNodes();
 });
 
 /*works
@@ -89,7 +89,6 @@ test("Testing output filePath", () => {
 test(testDB.updateNodeFromDB, () => {
   //manually change database
   testDB.updateNodeFromDB("CCONF001L1");
-  //should output nonexistent in DB message, await is possibly causing issues
   testDB.getNodeByID("CCONF001L1");
   //check change manually
 });

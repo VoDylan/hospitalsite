@@ -6,22 +6,11 @@ import { Prisma } from "../../../packages/database";
 
 //const prisma = new PrismaClient();
 
-async function createNodePrisma(node: MapNode) {
-  console.log("Creating node");
+async function createNodePrisma(nodes: MapNode[]) {
+  console.log("Creating nodes");
   try {
-    const createdNode = await client.node.create({
-      data: {
-        nodeID: node.nodeID,
-        xcoord: node.xcoord,
-        ycoord: node.ycoord,
-        floor: node.floor,
-        building: node.building,
-        nodeType: node.nodeType,
-        longName: node.longName,
-        shortName: node.shortName,
-      },
-    });
-    console.log(`Node created with ID: ${createdNode.nodeID}`);
+    await client.node.createMany({ data: nodes });
+    console.log(`Nodes created`);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code == "P2002") {
@@ -33,16 +22,11 @@ async function createNodePrisma(node: MapNode) {
   }
 }
 
-async function createEdgePrisma(edge: MapEdge) {
-  console.log("Creating edge");
+async function createEdgePrisma(edges: MapEdge[]) {
+  console.log("Creating edges");
   try {
-    const createdEdge = await client.edge.create({
-      data: {
-        startNodeID: edge.startNode.nodeID,
-        endNodeID: edge.endNode.nodeID,
-      },
-    });
-    console.log(`Edge created with ID: ${createdEdge.edgeID}`);
+    await client.edge.createMany({ data: edges });
+    console.log(`Edges created`);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       console.log("Edge already exists. Skipping...");
