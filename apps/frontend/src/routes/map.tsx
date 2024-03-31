@@ -1,21 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { TextField } from "@mui/material";
 import "./map.css";
 // import {number} from "prop-types";
 
 function Map() {
-  const menuItems = [];
-
-  for (let i = 0; i < 20; i++) {
-    const value = i * 10;
-    menuItems.push(
-      <MenuItem key={value} value={value}>
-        {value}
-      </MenuItem>,
-    );
-  }
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -59,33 +48,39 @@ function Map() {
   }, []);
 
   return (
-    <div className={"firstFloor"}>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <FormControl className={"nodeInputs"}>
-          <InputLabel id="demo-simple-select-label">Starting Node</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
-          >
-            {menuItems}
-          </Select>
-        </FormControl>
-
-        <FormControl className={"nodeInputs"}>
-          <InputLabel id="demo-simple-select-label">Ending Node</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
-          >
-            {menuItems}
-          </Select>
-        </FormControl>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          zIndex: 1,
+          position: "absolute",
+        }}
+      >
+        <TextField
+          className={"nodeInputs"}
+          id="filled-search"
+          label="Starting Node"
+          type="search"
+          variant="filled"
+        />
+        <TextField
+          className={"nodeInputs"}
+          id="filled-search"
+          label="End Node"
+          type="search"
+          variant="filled"
+        />
       </div>
+
       <canvas
         ref={canvasRef}
-        style={{ width: "100%", height: "100%" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          zIndex: 0,
+          position: "relative",
+        }}
         className={"firstFloorCanvas"}
       />
     </div>
