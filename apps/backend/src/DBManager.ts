@@ -64,18 +64,6 @@ class DBManager {
   }
 
   /**
-   * Function to loop over filled map arrays and put the objects into the database
-   */
-  private async listsToDB() {
-    for (let i = 0; i < this._mapNodes.length; i++) {
-      await createNodePrisma(this._mapNodes[i]);
-    }
-    for (let i = 0; i < this._mapEdges.length; i++) {
-      await createEdgePrisma(this._mapEdges[i]);
-    }
-  }
-
-  /**
    * Function to import Edges from a file path into the object list and database
    * @param edgePath - Filepath for the edge CSV data
    * @private
@@ -323,6 +311,18 @@ class DBManager {
           origEdge.endNode = endNode!;
         }
       }
+    }
+  }
+
+  /**
+   * Function to loop over filled map arrays and put the objects into the database
+   */
+  private async listsToDB() {
+    for (let i = 0; i < this._mapNodes.length; i++) {
+      await createNodePrisma(this._mapNodes[i]);
+    }
+    for (let i = 0; i < this._mapEdges.length; i++) {
+      await createEdgePrisma(this._mapEdges[i]);
     }
   }
 }
