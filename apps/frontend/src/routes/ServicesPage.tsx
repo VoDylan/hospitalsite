@@ -1,9 +1,11 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { ServiceCard } from "../components/ServiceCard.tsx";
+import TopBanner from "../components/TopBanner.tsx";
 
 export default function ServicesPage() {
   return (
     <div>
+      <TopBanner />
       <Box
         sx={{
           backgroundColor: "#012D5A",
