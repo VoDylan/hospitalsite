@@ -1,9 +1,11 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
-import LoginForm from "./routes/LoginPage.tsx";
 import ServicesPage from "./routes/ServicesPage.tsx";
+import HeroPage from "./routes/HeroPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
+import LoginForm from "./routes/LoginForm.tsx";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -13,7 +15,7 @@ function App() {
       children: [
         {
           path: "",
-          element: <LoginForm />,
+          element: <HeroPage />,
         },
         {
           path: "/Services",
@@ -22,6 +24,10 @@ function App() {
         {
           path: "/FlowerDelivery",
           element: <FlowerDeliveryService />,
+        },
+        {
+          path: "/Login",
+          element: <LoginForm />,
         },
       ],
     },
