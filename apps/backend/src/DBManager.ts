@@ -204,70 +204,67 @@ class DBManager {
     return this.exportDir + fileName;
   }
 
-    /**
+  /**
    * Function to query database and update node object if any discrepancies are found
    * @param nodeID - ID of node to check against
    */
-    public async updateNodeFromDB(nodeID: string): Promise<void> {
-        const origNode: MapNode | null = this.getNodeByID(nodeID);
+  public async updateNodeFromDB(nodeID: string): Promise<void> {
+    const origNode: MapNode | null = this.getNodeByID(nodeID);
 
-        if (origNode == null) {
-            console.log("Node does not exist as object.");
-        } else {
-            const DBNode: MapNode | null = await client.Node.findUnique({
-                    where: {
-                        'nodeID': nodeID
-                    }
-            }
-            );
-            if (DBNode == null){
-                console.log("Node does not exist in database.");
-            }
-            else {
-                origNode.xcoord = DBNode.xcoord;
-                origNode.ycoord = DBNode.ycoord;
-                origNode.floor = DBNode.floor;
-                origNode.building = DBNode.building;
-                origNode.nodeType = DBNode.nodeType;
-                origNode.longName = DBNode.longName;
-                origNode.shortName = DBNode.shortName;
-            }
-        }
+    if (origNode == null) {
+      console.log("Node does not exist as object.");
+    } else {
+      const DBNode: MapNode | null = await client.Node.findUnique({
+        where: {
+          nodeID: nodeID,
+        },
+      });
+      if (DBNode == null) {
+        console.log("Node does not exist in database.");
+      } else {
+        origNode.xcoord = DBNode.xcoord;
+        origNode.ycoord = DBNode.ycoord;
+        origNode.floor = DBNode.floor;
+        origNode.building = DBNode.building;
+        origNode.nodeType = DBNode.nodeType;
+        origNode.longName = DBNode.longName;
+        origNode.shortName = DBNode.shortName;
+      }
     }
+  }
 
-    /**
+  /**
         Function to query database and update edge object if any discrepancies are found
         @param startID - ID for starting node of edge
         @param endID - ID for ending node of edge
     */
-    public async updateEdgeFromDB(startID: string, endID: string) {
-        let origEdge: mapEdge | null = null;
-        for (let i = 0; i < this._mapEdges.length; i++){
-            if (this._mapEdges[i].startNodeID == startID && this._mapEdges[i].endNodeID == endID){
-                origEdge = this._mapEdges[i];
-            }
-        }
-        if (origEdge == null){
-            console.log("Edge does not exist as an object.");
-        }
-        else {
-            const DBEdge: mapEdge | null = await client.Edge.findUnique({
-                where: {
-                    startNodeID: startID,
-                    endNodeID: endID
-                }
-            }
-            );
-            if (DBEdge == null){
-                console.log("Edge does not exist in database.");
-            }
-            else {
-                origEdge.startNode = DBEdge.startNode;
-                origEdge.endNode = DBEdge.endNode;
-            }
-        }
+  public async updateEdgeFromDB(startID: string, endID: string) {
+    let origEdge: mapEdge | null = null;
+    for (let i = 0; i < this._mapEdges.length; i++) {
+      if (
+        this._mapEdges[i].startNodeID == startID &&
+        this._mapEdges[i].endNodeID == endID
+      ) {
+        origEdge = this._mapEdges[i];
+      }
     }
-
+    if (origEdge == null) {
+      console.log("Edge does not exist as an object.");
+    } else {
+      const DBEdge: mapEdge | null = await client.Edge.findUnique({
+        where: {
+          startNodeID: startID,
+          endNodeID: endID,
+        },
+      });
+      if (DBEdge == null) {
+        console.log("Edge does not exist in database.");
+      } else {
+        origEdge.startNode = DBEdge.startNode;
+        origEdge.endNode = DBEdge.endNode;
+      }
+    }
+  }
 }
 
 //Export the DBManager class to make it accessible to the rest of the program

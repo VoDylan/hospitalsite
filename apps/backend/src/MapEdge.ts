@@ -63,7 +63,7 @@ class MapEdge {
    */
 
   public get startNode(): MapNode {
-      return this._startNode;
+    return this._startNode;
   }
 
   /**
@@ -71,7 +71,7 @@ class MapEdge {
    */
 
   public get endNode(): MapNode {
-      return this._endNode;
+    return this._endNode;
   }
 
   /**

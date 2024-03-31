@@ -72,9 +72,9 @@ async function closePrismaConnection() {
 }
 
 export {
-    createNodePrisma,
-    createEdgePrisma,
-    openPrismaConnection,
-    closePrismaConnection,
-    client
+  createNodePrisma,
+  createEdgePrisma,
+  openPrismaConnection,
+  closePrismaConnection,
+  client,
 };
