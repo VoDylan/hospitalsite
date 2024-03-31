@@ -10,7 +10,7 @@ type Node = {
 };
 
 let edges: string[][] = [];
-// let nodes = [];
+// let nodes: string[][] = [];
 const all_nodes: Node[] = [];
 let count: number = 0;
 
@@ -34,7 +34,7 @@ export class BFSalgorithm {
       .map((row: string): string[] => {
         return row.trim().split(",");
       });
-
+    //
     // nodes = fs
     //   .readFileSync("../csv/L1Nodes.csv", {
     //     encoding: "utf-8",
