@@ -1,9 +1,9 @@
 import { Box, Grid, SelectChangeEvent, Typography } from "@mui/material";
-
-import Textbox from "../components/Textbox.tsx";
 import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
+import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
+import { SubmitButton } from "../components/SubmitButton.tsx";
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
@@ -29,9 +29,15 @@ function FlowerDeliveryService() {
     setResponses({ ...form, message: e.target.value });
   }
 
-  // function clear(){
-  //     setResponses({name: "", flowerType: "", recipientName: "", roomNumber: "", message: ""});
-  // }
+  function clear() {
+    setResponses({
+      name: "",
+      flowerType: "",
+      recipientName: "",
+      roomNumber: "",
+      message: "",
+    });
+  }
 
   // For dropdown
   function handleFlowerTypeInput(event: SelectChangeEvent) {
@@ -40,15 +46,13 @@ function FlowerDeliveryService() {
   }
 
   return (
-    <>
+    <Box sx={{ flexGrow: 1 }}>
       <Grid
         container
         my={8}
-        mx={6}
-        rowSpacing={8}
-        columnSpacing={4}
-        alignContent={"center"}
-        alignItems={"flexStart"}
+        px={8}
+        spacing={1}
+        justifyContent={"center"}
         boxShadow={4}
       >
         <Grid
@@ -70,26 +74,23 @@ function FlowerDeliveryService() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Box>
-            <Textbox
-              label={"Name:"}
-              value={form.name}
-              onChange={handleNameInput}
-            />
-          </Box>
+          <LeftAlignedTextbox
+            label={"Name:"}
+            value={form.name}
+            onChange={handleNameInput}
+            type={"text"}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography>What type of flowers will you be ordering?</Typography>
+          <DropDown
+            items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
+            handleChange={handleFlowerTypeInput}
+          />
         </Grid>
         <Grid item xs={6}>
           <Box>
-            <Typography>What type of flowers will you be ordering?</Typography>
-            <DropDown
-              items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
-              handleChange={handleFlowerTypeInput}
-            />
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          <Box>
-            <Textbox
+            <LeftAlignedTextbox
               label={"Recipient Name:"}
               value={form.recipientName}
               onChange={handleRecipientNameInput}
@@ -98,7 +99,7 @@ function FlowerDeliveryService() {
         </Grid>
         <Grid item xs={6}>
           <Box>
-            <Textbox
+            <LeftAlignedTextbox
               label={"Room Number:"}
               value={form.roomNumber}
               onChange={handleRoomNumberInput}
@@ -107,20 +108,20 @@ function FlowerDeliveryService() {
         </Grid>
         <Grid item xs={6}>
           <Box>
-            <Textbox
+            <LeftAlignedTextbox
               label={"Add a message (optional)"}
               value={form.message}
               onChange={handleMessageInput}
             />
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Box>
-            <Typography align={"center"}>Submit Button Here</Typography>
+            <SubmitButton text={"SUBMIT"} input={form} clear={clear} />
           </Box>
         </Grid>
       </Grid>
-    </>
+    </Box>
   );
 }
 
