@@ -35,13 +35,14 @@ export class BFSalgorithm {
         return row.trim().split(",");
       });
 
-    // nodes = fs.readFileSync("../csv/L1Nodes.csv", {
-    //     encoding: "utf-8"
-    // })
-    //     .split("\n")
-    //     .map((row: string): string[] => {
-    //         return row.trim().split(",");
-    //     });
+    // nodes = fs
+    //   .readFileSync("../csv/L1Nodes.csv", {
+    //     encoding: "utf-8",
+    //   })
+    //   .split("\n")
+    //   .map((row: string): string[] => {
+    //     return row.trim().split(",");
+    //   });
   }
 
   /**
@@ -103,7 +104,7 @@ export class BFSalgorithm {
   }
 
   /**
-   * Implementation of Breadth-first search algorithm to find the shortest path from starting to end nodes
+   * Implementation of Breadth-first search algorithm to find the shortest path from start to end nodes
    * @param start the starting node as a string
    * @param end the ending node as a string
    */
