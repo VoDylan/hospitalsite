@@ -1,4 +1,4 @@
-import client from "./bin/database-connection.ts";
+import { client } from "./bin/database-connection.ts";
 import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
 import { exit } from "node:process";
@@ -6,37 +6,70 @@ import { Prisma } from "../../../packages/database";
 
 //const prisma = new PrismaClient();
 
-async function createNodePrisma(nodes: MapNode[]) {
+export async function createNodePrisma(nodes: MapNode[]) {
   console.log("Creating nodes");
-  try {
-    await client.node.createMany({ data: nodes });
-    console.log(`Nodes created`);
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code == "P2002") {
-        console.log("Node already exists. Skipping...");
+  for (let i = 0; i < nodes.length; i++) {
+    try {
+      const currNode: MapNode = nodes[i];
+      await client.node.create({
+        data: currNode.nodeInfo,
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code == "P2002") {
+          console.log("Node already exists. Skipping...");
+        }
+      } else {
+        console.error(e);
       }
-    } else {
-      console.error(e);
     }
   }
+  console.log(`Nodes created`);
 }
 
-async function createEdgePrisma(edges: MapEdge[]) {
+export async function createEdgePrisma(edges: MapEdge[]) {
   console.log("Creating edges");
-  try {
-    await client.edge.createMany({ data: edges });
-    console.log(`Edges created`);
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.log("Edge already exists. Skipping...");
-    } else {
-      console.error(e);
+  for (let i = 0; i < edges.length; i++) {
+    try {
+      const currEdge: MapEdge = edges[i];
+      await client.edge.create({
+        data: {
+          startNodeID: currEdge.startNodeID,
+          endNodeID: currEdge.endNodeID,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log("Edge already exists. Skipping...");
+      } else {
+        console.error(e);
+      }
     }
   }
+  console.log(`Edges created`);
 }
 
-async function openPrismaConnection() {
+export async function clearDBNodes() {
+  console.log("Clearing nodes from DB");
+  try {
+    await client.node.deleteMany({});
+  } catch (e) {
+    console.error(e);
+  }
+  console.log("Nodes cleared from DB");
+}
+
+export async function clearDBEdges() {
+  console.log("Clearing edges from DB");
+  try {
+    await client.edge.deleteMany({});
+  } catch (e) {
+    console.error(e);
+  }
+  console.log("Edges cleared from DB");
+}
+
+export async function openPrismaConnection() {
   try {
     await client.$connect();
   } catch (e) {
@@ -46,7 +79,7 @@ async function openPrismaConnection() {
   }
 }
 
-async function closePrismaConnection() {
+export async function closePrismaConnection() {
   try {
     await client.$disconnect();
   } catch (e) {
@@ -56,10 +89,4 @@ async function closePrismaConnection() {
   }
 }
 
-export {
-  createNodePrisma,
-  createEdgePrisma,
-  openPrismaConnection,
-  closePrismaConnection,
-  client,
-};
+export { client };

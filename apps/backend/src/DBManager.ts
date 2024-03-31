@@ -4,7 +4,13 @@ import MapEdge from "./MapEdge";
 import { EdgeFields } from "./MapEdge";
 import CSVTools from "./lib/CSVTools";
 import fs from "fs";
-import { createEdgePrisma, createNodePrisma, client } from "./PrismaScripts";
+import {
+  createEdgePrisma,
+  createNodePrisma,
+  client,
+  clearDBEdges,
+  clearDBNodes,
+} from "./PrismaScripts";
 import mapEdge from "./MapEdge";
 
 class DBManager {
@@ -21,9 +27,14 @@ class DBManager {
    * @param pathNode - Filepath for the node CSV data
    * @param pathEdge - Filepath for the edge CSV data
    */
-  public importNodesAndEdges(pathNode: string, pathEdge: string) {
+  public async importNodesAndEdges(pathNode: string, pathEdge: string) {
+    await clearDBEdges();
+    await clearDBNodes();
+
     this.importNodeFromPath(pathNode);
     this.importEdgeFromPath(pathEdge);
+
+    await this.listsToDB();
   }
 
   /**
@@ -44,6 +55,7 @@ class DBManager {
 
     //Loop through all nodes, skipping the header row
     for (let i: number = 1; i < nodes.length; i++) {
+      if (nodes[i][0] == "") continue;
       //Create a NodeFields object to store all node information in an easy-to-transport object
       const nodeInfo: NodeFields = {
         nodeID: nodes[i][0],
@@ -74,6 +86,7 @@ class DBManager {
 
     //loop through all edges, skipping the header line
     for (let i: number = 1; i < edges.length; i++) {
+      if (edges[i][0] == "") continue;
       //Get the references to the Node objects based on the imported ID. Returns null if no reference is found
       const startingNode: MapNode | null = this.getNodeByID(edges[i][0]);
       const endingNode: MapNode | null = this.getNodeByID(edges[i][1]);
