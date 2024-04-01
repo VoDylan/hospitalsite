@@ -35,11 +35,11 @@ function Map() {
         canvas.height = image.height;
 
         const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
-        let nodesData = bfsAlgorithm.setup();
-
-        if (!nodesData) nodesData = [];
+        const nodesData = bfsAlgorithm.setup();
 
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
+
+        if (!nodesData) return;
 
         ctx.fillStyle = "red";
         for (let i = 0; i < nodesData.length; i++) {
