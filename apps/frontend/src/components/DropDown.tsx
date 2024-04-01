@@ -1,4 +1,10 @@
-import { MenuItem, Select, SelectChangeEvent, Box, FormControl } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Box,
+  FormControl,
+} from "@mui/material";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -25,24 +31,24 @@ export function DropDown(props: DropDownProps) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-    <Box sx={{ minWidth: 220 }}>
-    <FormControl fullWidth>
-      <Select
-        onChange={(event: SelectChangeEvent) => {
-          retData = props.handleChange(event);
-        }}
-        value={retData}
-        sx={{
-          mx: "12px",
-        }}
-      >
-        {props.items.map((item) => (
-          <MenuItem value={item}>{item}</MenuItem>
-        ))}
-        ;
-      </Select>
-    </FormControl>
-    </Box>
+      <Box sx={{ minWidth: 220 }}>
+        <FormControl fullWidth>
+          <Select
+            onChange={(event: SelectChangeEvent) => {
+              retData = props.handleChange(event);
+            }}
+            value={retData}
+            sx={{
+              mx: "12px",
+            }}
+          >
+            {props.items.map((item) => (
+              <MenuItem value={item}>{item}</MenuItem>
+            ))}
+            ;
+          </Select>
+        </FormControl>
+      </Box>
     </div>
   );
 }

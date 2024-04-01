@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
+import ServicesPage from "./routes/ServicesPage.tsx";
 import HeroPage from "./routes/HeroPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
@@ -17,7 +18,11 @@ function App() {
           element: <HeroPage />,
         },
         {
-          path: "/FlowerDelivery",
+          path: "/Services",
+          element: <ServicesPage />,
+        },
+        {
+          path: "/Services/FlowerDelivery",
           element: <FlowerDeliveryService />,
         },
         {
