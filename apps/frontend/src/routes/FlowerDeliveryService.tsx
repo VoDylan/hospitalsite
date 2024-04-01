@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
-// import TopBanner from "../components/TopBanner.tsx";
+import TopBanner from "../components/TopBanner.tsx";
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
@@ -48,12 +48,12 @@ function FlowerDeliveryService() {
 
   return (
     <>
-      {/*<TopBanner/>*/}
+      <TopBanner />
       <Box sx={{ flexGrow: 1 }}>
         <Grid
           container
           direction={"row"}
-          my={8}
+          my={20}
           px={8}
           spacing={1}
           columnSpacing={3}
