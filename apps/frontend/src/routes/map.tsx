@@ -108,19 +108,20 @@ function Map() {
           value={endNode}
           onChange={handleEndNodeChange}
         />
-        <p
-          style={{
-            color: "red",
-            margin: 0,
-            padding: "5%",
-            fontSize: "80%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          {" "}
-          {errorMessage}{" "}
-        </p>
+        <div style={{ height: "40px" }}>
+          <p
+            style={{
+              color: "red",
+              margin: 0,
+              padding: "5%",
+              fontSize: "80%",
+              // display: "flex",
+              // justifyContent: "center",
+            }}
+          >
+            {errorMessage}
+          </p>
+        </div>
         <Button className={"nodeInputs"} onClick={handleSubmit}>
           Submit
         </Button>
