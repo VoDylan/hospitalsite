@@ -220,8 +220,8 @@ class DBManager {
   public async getNodesFromDB() {
     const nodes = await client.node.findMany();
     const newNodes: MapNode[] = [];
-    //Loop through all nodes, skipping the header row
-    for (let i: number = 1; i < nodes.length; i++) {
+    //Loop through all nodes
+    for (let i: number = 0; i < nodes.length; i++) {
       //Create a NodeFields object to store all node information in an easy-to-transport object
       const nodeInfo: NodeFields = {
         nodeID: nodes[i].nodeID,
@@ -249,8 +249,8 @@ class DBManager {
   public async getEdgesFromDB() {
     const edges = await client.edge.findMany();
     const newEdges: mapEdge[] = [];
-    //loop through all edges, skipping the header line
-    for (let i: number = 1; i < edges.length; i++) {
+    //loop through all edges
+    for (let i: number = 0; i < edges.length; i++) {
       //Get the references to the Node objects based on the imported ID. Returns null if no reference is found
       const startingNode: MapNode | null = this.getNodeByID(
         newEdges[i].startNodeID,
@@ -286,6 +286,7 @@ class DBManager {
 
     if (origNode == null) {
       console.log("Node does not exist as object.");
+      return;
     } else {
       const DBNode = await client.node.findUnique({
         where: {
@@ -323,6 +324,7 @@ class DBManager {
     }
     if (origEdge == null) {
       console.log("Edge does not exist as an object.");
+      return;
     } else {
       const DBEdge = await client.edge.findFirst({
         where: {

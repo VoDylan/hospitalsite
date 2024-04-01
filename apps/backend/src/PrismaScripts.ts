@@ -1,4 +1,4 @@
-import { client } from "./bin/database-connection.ts";
+import client from "./bin/database-connection.ts";
 import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
 import { exit } from "node:process";

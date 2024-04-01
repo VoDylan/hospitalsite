@@ -42,6 +42,6 @@
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
     "supertest": "^6.3.3",
-    "vitest": "^0.33.0"
+    "vitest": "^1.4.0"
   }
 }
