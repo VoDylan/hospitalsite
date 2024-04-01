@@ -274,5 +274,24 @@ class DBManager {
   }
 }
 
+public async function filterServiceRequestCategory(category: string) {
+    const filteredServiceRequests[];
+    for(let i: number = 0; i < databaseRequests; i++){
+        if(serviceReq[i][1] == category){
+            filteredServiceRequests.push(serviceReq[i][1])
+        }
+    }
+}
+
+public async function filterServiceRequestUrgency(category: string) {
+    const filteredServiceRequests[];
+    for(let i: number = 0; i < databaseRequests; i++){
+        if(serviceReq[i][2] == category){
+            filteredServiceRequests.push(serviceReq[i][2])
+        }
+    }
+}
+
+
 //Export the DBManager class to make it accessible to the rest of the program
 export default DBManager;
