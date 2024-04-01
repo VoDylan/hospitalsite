@@ -24,7 +24,7 @@ class DBManager {
   private _mapEdges: MapEdge[] = [];
 
   //Default export directory to be used when saving nodes and edges to a CSV file
-  private exportDir: string = "./output/";
+  private exportDir: string = "./apps/backend/output/";
 
   private loggingPrefix: string = "DBManager: ";
 
@@ -39,7 +39,7 @@ class DBManager {
   /**
    * Function to return the existing singleton instance for the DBManager class or create the singleton instance
    */
-  public static getInstance() {
+  public static getInstance(): DBManager {
     if (!this.instance) {
       this.instance = new DBManager();
     }

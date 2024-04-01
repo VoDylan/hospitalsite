@@ -6,9 +6,12 @@ import CSVTools from "../src/lib/CSVTools";
 
 //let testTool: CSVTools = new CSVTools();
 const testDB = DBManager.getInstance();
-const setupScript = async () => {
-  testDB.importNodesAndEdges("L1Nodes.csv", "L1Edges.csv");
-};
+// const setupScript = async () => {
+//   await testDB.importNodesAndEdges(
+//     "./apps/backend/data/L1Nodes.csv",
+//     "./apps/backend/data/L1Edges.csv",
+//   );
+// };
 const testNode1Fields: NodeFields = {
   nodeID: "CCONF001L1",
   xcoord: 2255,
@@ -34,10 +37,10 @@ const testNode1 = new MapNode(testNode1Fields);
 //let testEdge3Fields: EdgeFields = {startNode: testNode3, endNode: testNode1};
 //let testEdge3 = new MapEdge(testEdge3Fields);
 
-setupScript().then(() => console.log("Finished setup"));
-
 test("parsing", () => {
-  const nodes: string[][] = CSVTools.parseCSVFromFile("./L1Nodes.csv");
+  const nodes: string[][] = CSVTools.parseCSVFromFile(
+    "./apps/backend/data/L1Nodes.csv",
+  );
   const nodeInfo: NodeFields = {
     nodeID: nodes[1][0],
     xcoord: parseInt(nodes[1][1]),
@@ -82,7 +85,7 @@ test(testDB.printEdges, () => {
 
 test("Testing output filePath", () => {
   expect(testDB.getCombinedFilepath("newNodeCSV.csv")).toStrictEqual(
-    "./output/newNodeCSV.csv",
+    "./apps/backend/output/newNodeCSV.csv",
   );
 });
 
