@@ -4,7 +4,7 @@ import Textbox from "../components/Textbox.tsx";
 import Buttons from "../components/LoginButtons.tsx";
 import { Typography, Box } from "@mui/material";
 import background from "/Background.jpg";
-import logo from "/logo.png";
+import logo from "/bwh-logo.svg";
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -14,7 +14,7 @@ function LoginForm() {
   });
   const navigate = useNavigate();
   const handleRedirect = () => {
-    navigate("/FlowerDelivery");
+    navigate("/Services/FlowerDelivery");
   };
 
   function clear() {

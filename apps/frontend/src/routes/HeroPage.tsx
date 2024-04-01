@@ -1,6 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import background from "/Background.jpg";
-import logo from "/logo.png";
+import logo from "/bwh-logo.svg";
 import NavButton from "../components/NavButton.tsx";
 
 function HeroPage() {
