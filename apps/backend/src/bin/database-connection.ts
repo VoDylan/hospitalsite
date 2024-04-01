@@ -1,9 +1,19 @@
 import { PrismaClient } from "database";
+import DBManager from "../DBManager.ts";
 
-// Create the prisma client, this automatically connects to the database
 const client = new PrismaClient();
 
-// Export the client
 export default client;
+
+const importDefaultNodeAndEdgeData = async () => {
+  await DBManager.getInstance().importNodesAndEdges(
+    "./data/L1Nodes.csv",
+    "./data/L1Edges.csv",
+  );
+};
+
+importDefaultNodeAndEdgeData().then(() =>
+  console.log("Finished importing data into database"),
+);
 
 // Prisma automatically closes on shutdown
