@@ -70,9 +70,26 @@ function Map() {
 
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
 
+            ctx.fillStyle = "blue";
+            for (let i = 0; i < nodesData.length; i++) {
+              ctx.beginPath(); // initialize a creation of a new path
+              ctx.arc(nodesData[i].x, nodesData[i].y, 7, 0, 2 * Math.PI); // draw circle
+              ctx.fill();
+            }
+
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(nodesData[0].x, nodesData[0].y); // Move to the first node
+            for (let i = 1; i < nodesData.length; i++) {
+              ctx.lineTo(nodesData[i].x, nodesData[i].y); // Draw a line to each subsequent node, acts as a move to as well
+            }
+
+            ctx.stroke();
+
             ctx.fillStyle = "red";
             ctx.beginPath();
-            ctx.arc(currentX, currentY, 5, 0, 2 * Math.PI); // draw circle
+            ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI); // draw circle
             ctx.fill();
 
             const dx = nodesData[currentTargetIndex].x - currentX; // target coordinate
@@ -86,23 +103,6 @@ function Map() {
               currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
               currentY += (dy / distance) * speed;
             }
-
-            ctx.fillStyle = "red";
-            for (let i = 0; i < nodesData.length; i++) {
-              ctx.beginPath(); // initialize a creation of a new path
-              ctx.arc(nodesData[i].x, nodesData[i].y, 7, 0, 2 * Math.PI); // draw circle
-              ctx.fill();
-            }
-
-            ctx.strokeStyle = "red";
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(nodesData[0].x, nodesData[0].y); // Move to the first node
-            for (let i = 1; i < nodesData.length; i++) {
-              ctx.lineTo(nodesData[i].x, nodesData[i].y); // Draw a line to each subsequent node, acts as a move to as well
-            }
-
-            ctx.stroke();
 
             requestAnimationFrame(moveDot); // loop to call move to function consistently
           };
