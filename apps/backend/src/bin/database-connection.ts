@@ -2,6 +2,9 @@ import { PrismaClient } from "database";
 import DBManager from "../DBManager.ts";
 
 const client = new PrismaClient();
+
+export default client;
+
 const importDefaultNodeAndEdgeData = async () => {
   const dbManager: DBManager = new DBManager();
 
@@ -13,4 +16,3 @@ importDefaultNodeAndEdgeData().then(() =>
 );
 
 // Prisma automatically closes on shutdown
-export default client;
