@@ -78,6 +78,7 @@ function Map() {
             }
 
             ctx.lineWidth = 3;
+
             ctx.beginPath();
             ctx.moveTo(nodesData[0].x, nodesData[0].y); // Move to the first node
             for (let i = 1; i < nodesData.length; i++) {
@@ -85,6 +86,7 @@ function Map() {
             }
             ctx.stroke();
 
+            ctx.beginPath();
             ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI); // draw circle
             ctx.fill();
 
