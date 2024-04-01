@@ -54,8 +54,6 @@ function Map() {
           const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
           const nodesData = bfsAlgorithm.setup();
 
-          // draw the image
-
           if (!nodesData) return;
 
           ctx.fillStyle = "red";
@@ -108,20 +106,19 @@ function Map() {
           value={endNode}
           onChange={handleEndNodeChange}
         />
-        <div style={{ height: "40px" }}>
-          <p
-            style={{
-              color: "red",
-              margin: 0,
-              padding: "5%",
-              fontSize: "80%",
-              // display: "flex",
-              // justifyContent: "center",
-            }}
-          >
-            {errorMessage}
-          </p>
-        </div>
+        <p
+          style={{
+            color: "red",
+            margin: 0,
+            padding: "5%",
+            fontSize: "60%",
+            height: "10px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {errorMessage}
+        </p>
         <Button className={"nodeInputs"} onClick={handleSubmit}>
           Submit
         </Button>
