@@ -63,7 +63,7 @@ function Map() {
           let currentTargetIndex = 0;
           let currentX = nodesData[currentTargetIndex].x;
           let currentY = nodesData[currentTargetIndex].y;
-          const speed = 0.8; // Adjust the speed of the animation
+          const speed = 1; // Adjust the speed of the animation
 
           const moveDot = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
@@ -96,6 +96,7 @@ function Map() {
             const dy = nodesData[currentTargetIndex].y - currentY; // target coordinate
             const distance = Math.sqrt(dx * dx + dy * dy);
 
+            // if (currentTargetIndex !== nodesData.length) {
             if (distance < speed) {
               // if the distance is close then move to the next node
               currentTargetIndex = (currentTargetIndex + 1) % nodesData.length; // % is used to loop through
@@ -103,6 +104,7 @@ function Map() {
               currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
               currentY += (dy / distance) * speed;
             }
+            // }
 
             requestAnimationFrame(moveDot); // loop to call move to function consistently
           };
