@@ -6,7 +6,10 @@ const client = new PrismaClient();
 export default client;
 
 const importDefaultNodeAndEdgeData = async () => {
-  await dbManager.importNodesAndEdges("./L1Nodes.csv", "./L1Edges.csv");
+  await dbManager.importNodesAndEdges(
+    "./data/L1Nodes.csv",
+    "./data/L1Edges.csv",
+  );
 };
 
 importDefaultNodeAndEdgeData().then(() =>

@@ -2,9 +2,7 @@ import client from "./bin/database-connection.ts";
 import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
 import { exit } from "node:process";
-import { Prisma } from "../../../packages/database";
-
-//const prisma = new PrismaClient();
+import { Prisma } from "database";
 
 const loggingPrefix: string = "Prisma: ";
 
@@ -73,7 +71,7 @@ export async function clearDBEdges() {
 
 export async function getDBNodes() {
   console.log(`${loggingPrefix}Getting nodes from DB`);
-  let nodes: object[] | null = null;
+  let nodes = null;
   try {
     nodes = await client.node.findMany({});
   } catch (e) {
@@ -91,7 +89,7 @@ export async function getDBNodes() {
 
 export async function getDBNodeByID(nodeID: string) {
   console.log(`${loggingPrefix}Getting node of id ${nodeID} from DB`);
-  let node: object | null = null;
+  let node = null;
   try {
     node = await client.node.findUnique({
       where: {
@@ -113,7 +111,7 @@ export async function getDBNodeByID(nodeID: string) {
 
 export async function getDBEdges() {
   console.log(`${loggingPrefix}Getting edges from DB`);
-  let edges: object[] | null = null;
+  let edges = null;
   try {
     edges = await client.edge.findMany({});
   } catch (e) {
@@ -136,7 +134,7 @@ export async function getDBEdgeByStartAndEndNode(
   console.log(
     `${loggingPrefix}Getting edge by startNodeID ${startNodeID} and endNodeID ${endNodeID}`,
   );
-  let edge: object | null = null;
+  let edge = null;
   try {
     edge = await client.edge.findUnique({
       where: {

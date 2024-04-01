@@ -1,15 +1,11 @@
 import express, { Router } from "express";
-import {
-  getDBEdgeByStartAndEndNode,
-  getDBEdges,
-  getDBNodeByID,
-  getDBNodes,
-} from "../PrismaScripts.ts";
+import { getDBEdgeByStartAndEndNode, getDBNodeByID } from "../PrismaScripts.ts";
+import { dbManager } from "../DBManager.ts";
 
 const router: Router = express.Router();
 
 router.get("/nodes", async (req, res) => {
-  const nodeData = await getDBNodes();
+  const nodeData = await dbManager.updateAndGetNodesFromDB();
   res.status(200).json(nodeData);
 });
 
@@ -24,7 +20,7 @@ router.get("/nodes/:nodeid", async (req, res) => {
 });
 
 router.get("/edges", async (req, res) => {
-  const edgeData = await getDBEdges();
+  const edgeData = await dbManager.updateAndGetEdgesFromDB();
   res.status(200).json(edgeData);
 });
 

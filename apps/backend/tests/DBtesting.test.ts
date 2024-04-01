@@ -58,8 +58,8 @@ test(testDB.toDB, () => {
   //works
 });
 
-test(testDB.getNodesFromDB, () => {
-  testDB.getNodesFromDB();
+test(testDB.updateAndGetNodesFromDB, () => {
+  testDB.updateAndGetNodesFromDB();
   //testDB.printNodes();
 });
 
