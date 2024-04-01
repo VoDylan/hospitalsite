@@ -22,7 +22,7 @@ function App() {
           element: <ServicesPage />,
         },
         {
-          path: "/FlowerDelivery",
+          path: "/Services/FlowerDelivery",
           element: <FlowerDeliveryService />,
         },
         {

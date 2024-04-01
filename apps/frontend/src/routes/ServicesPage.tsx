@@ -8,6 +8,7 @@ export default function ServicesPage() {
       <TopBanner />
       <Box
         sx={{
+          mt: 15,
           backgroundColor: "#012D5A",
         }}
       >
@@ -31,7 +32,7 @@ export default function ServicesPage() {
           <Grid>
             <ServiceCard
               service={"Flower Delivery"}
-              servicePath={"http://localhost:3000/FlowerDeliveryService"}
+              servicePath={"/Services/FlowerDelivery"}
               imagePath={"../../public/Flower.jpg"}
               imageAlt={"Flower"}
             />
@@ -39,7 +40,7 @@ export default function ServicesPage() {
           <Grid>
             <ServiceCard
               service={"More Coming Soon!"}
-              servicePath={"http://localhost:3000/Services"}
+              servicePath={"/Services"}
               imagePath={"../../public/Clock.png"}
               imageAlt={"More coming soon"}
             />
