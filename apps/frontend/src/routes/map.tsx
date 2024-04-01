@@ -96,7 +96,6 @@ function Map() {
             const dy = nodesData[currentTargetIndex].y - currentY; // target coordinate
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            // if (currentTargetIndex !== nodesData.length) {
             if (distance < speed) {
               // if the distance is close then move to the next node
               currentTargetIndex = (currentTargetIndex + 1) % nodesData.length; // % is used to loop through
@@ -104,6 +103,10 @@ function Map() {
               currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
               currentY += (dy / distance) * speed;
             }
+            // if (currentTargetIndex === nodesData.length) {
+            //       currentX = nodesData[0].x;
+            //       currentY = nodesData[0].y;
+            //       currentTargetIndex = 0;
             // }
 
             requestAnimationFrame(moveDot); // loop to call move to function consistently
