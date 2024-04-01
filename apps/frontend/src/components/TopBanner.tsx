@@ -118,7 +118,7 @@ function TopBanner() {
             component={Link}
             to="/Login"
             variant="contained"
-            color="primary"
+            color="secondary"
           >
             Sign In
           </Button>

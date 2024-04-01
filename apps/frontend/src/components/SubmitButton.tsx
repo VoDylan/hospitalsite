@@ -31,6 +31,7 @@ export function SubmitButton(props: ButtonProps) {
       variant="contained"
       id={"submitButton"}
       onClick={() => handleSubmit()}
+      color={"secondary"}
     >
       {props.text}
     </Button>

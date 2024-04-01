@@ -6,6 +6,9 @@ import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import TopBanner from "../components/TopBanner.tsx";
 import LadyWithFlowersInHospital from "../../public/LadyWithFlowersInHospital.jpg";
+import customTheme from "../CustomTheme.tsx";
+import { ThemeProvider } from "@mui/material/styles";
+
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
@@ -48,110 +51,114 @@ function FlowerDeliveryService() {
   }
 
   return (
-    <div
-      style={{
-        background: `url(${LadyWithFlowersInHospital})`,
-        backgroundSize: "100%",
-      }}
-    >
-      <TopBanner />
-      <Box
-        sx={{
-          flexGrow: 1,
-          justifyContent: "center",
-          justifySelf: "center",
-          width: "90%",
-          alignSelf: "center",
-          mx: "5%",
+    <ThemeProvider theme={customTheme}>
+      <div
+        style={{
+          background: `url(${LadyWithFlowersInHospital})`,
+          backgroundSize: "100%",
         }}
       >
-        <Grid
-          container
-          direction={"row"}
-          my={20}
-          rowSpacing={2}
-          columnSpacing={2}
-          justifyContent={"space-between"}
-          boxShadow={4}
+        <TopBanner />
+        <Box
           sx={{
-            backgroundColor: "white",
+            flexGrow: 1,
+            justifyContent: "center",
+            justifySelf: "center",
+            width: "90%",
+            alignSelf: "center",
+            mx: "5%",
           }}
         >
           <Grid
-            item
-            xs={12}
+            container
+            direction={"row"}
+            my={20}
+            rowSpacing={2}
+            columnSpacing={2}
+            justifyContent={"space-between"}
+            boxShadow={4}
             sx={{
-              alignItems: "flexStart",
-              bgcolor: "primary.main",
+              backgroundColor: "primary.main",
             }}
           >
-            <Typography
-              color={"white"}
-              align={"center"}
-              fontStyle={"Open Sans"}
-              fontSize={40}
+            <Grid
+              item
+              xs={12}
+              sx={{
+                alignItems: "flexStart",
+                bgcolor: "secondary.main",
+              }}
             >
-              Flower Delivery Service Form
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>Name:</Typography>
-            <LeftAlignedTextbox
-              label={"Name"}
-              value={form.name}
-              onChange={handleNameInput}
-              type={"text"}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>What type of flowers will you be ordering?</Typography>
-            <DropDown
-              items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
-              handleChange={handleFlowerTypeInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Box>
-              <Typography>Recipient Name:</Typography>
+              <Typography
+                color={"white"}
+                align={"center"}
+                fontStyle={"Open Sans"}
+                fontSize={40}
+              >
+                Flower Delivery Service Form
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography>Name:</Typography>
               <LeftAlignedTextbox
-                label={"Recipient Name"}
-                value={form.recipientName}
-                onChange={handleRecipientNameInput}
+                label={"Name"}
+                value={form.name}
+                onChange={handleNameInput}
+                type={"text"}
               />
-            </Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Box>
-              <Typography>Room Number:</Typography>
-              <LeftAlignedTextbox
-                label={"Room Number"}
-                value={form.roomNumber}
-                onChange={handleRoomNumberInput}
+            </Grid>
+            <Grid item xs={6}>
+              <Typography>
+                What type of flowers will you be ordering?
+              </Typography>
+              <DropDown
+                items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
+                handleChange={handleFlowerTypeInput}
               />
-            </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box>
+                <Typography>Recipient Name:</Typography>
+                <LeftAlignedTextbox
+                  label={"Recipient Name"}
+                  value={form.recipientName}
+                  onChange={handleRecipientNameInput}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box>
+                <Typography>Room Number:</Typography>
+                <LeftAlignedTextbox
+                  label={"Room Number"}
+                  value={form.roomNumber}
+                  onChange={handleRoomNumberInput}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box>
+                <Typography>Add a message (optional):</Typography>
+                <LeftAlignedTextbox
+                  label={"Message"}
+                  value={form.message}
+                  onChange={handleMessageInput}
+                />
+              </Box>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: "flex", my: 2, justifyContent: "center" }}
+            >
+              <Box>
+                <SubmitButton text={"SUBMIT"} input={form} clear={clear} />
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Box>
-              <Typography>Add a message (optional):</Typography>
-              <LeftAlignedTextbox
-                label={"Message"}
-                value={form.message}
-                onChange={handleMessageInput}
-              />
-            </Box>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sx={{ display: "flex", my: 2, justifyContent: "center" }}
-          >
-            <Box>
-              <SubmitButton text={"SUBMIT"} input={form} clear={clear} />
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
-    </div>
+        </Box>
+      </div>
+    </ThemeProvider>
   );
 }
 
