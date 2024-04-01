@@ -11,8 +11,13 @@ export function SubmitButton(props: ButtonProps) {
   function handleSubmit() {
     const submission = props.input;
     console.log(props.input);
-    props.clear;
+    handleClear();
+    alert("Success!");
     pushToDB(submission);
+  }
+
+  function handleClear() {
+    props.clear();
   }
 
   async function pushToDB(form: FlowerDeliveryFormSubmission) {
