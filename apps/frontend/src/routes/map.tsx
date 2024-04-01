@@ -9,6 +9,7 @@ function Map() {
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]); // Declaring nodes state
+  const [errorMessage, setErrorMesage] = useState<string>("");
 
   const handleStartNodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -18,6 +19,17 @@ function Map() {
 
   const handleEndNodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEndNode(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    if (startNode.trim() === "" || endNode.trim() === "") {
+      // handles if one of them is empty
+      setErrorMesage("Please enter both start and end nodes");
+      return;
+    }
+
+    setNodes([startNode, endNode]);
+    setErrorMesage("");
   };
 
   useEffect(() => {
@@ -34,31 +46,37 @@ function Map() {
         canvas.width = image.width;
         canvas.height = image.height;
 
-        const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
-        const nodesData = bfsAlgorithm.setup();
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
+        if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
+          // this is so its clicked the same time
 
-        if (!nodesData) return;
+          const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
+          const nodesData = bfsAlgorithm.setup();
 
-        ctx.fillStyle = "red";
-        for (let i = 0; i < nodesData.length; i++) {
-          ctx.beginPath(); // initialize a creation of a new path
-          ctx.arc(nodesData[i].x, nodesData[i].y, 7, 0, 2 * Math.PI); // draw circle
-          ctx.fill();
-        }
+          // draw the image
 
-        ctx.strokeStyle = "red";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(nodesData[0].x, nodesData[0].y); // Move to the first node
-        for (let i = 1; i < nodesData.length; i++) {
-          ctx.lineTo(nodesData[i].x, nodesData[i].y); // Draw a line to each subsequent node, acts as a move to as well
+          if (!nodesData) return;
+
+          ctx.fillStyle = "red";
+          for (let i = 0; i < nodesData.length; i++) {
+            ctx.beginPath(); // initialize a creation of a new path
+            ctx.arc(nodesData[i].x, nodesData[i].y, 7, 0, 2 * Math.PI); // draw circle
+            ctx.fill();
+          }
+
+          ctx.strokeStyle = "red";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(nodesData[0].x, nodesData[0].y); // Move to the first node
+          for (let i = 1; i < nodesData.length; i++) {
+            ctx.lineTo(nodesData[i].x, nodesData[i].y); // Draw a line to each subsequent node, acts as a move to as well
+          }
         }
         ctx.stroke();
       };
     }
-  }, [nodes]); // Include nodes in the dependency array
+  }, [startNode, endNode, nodes]); // Include nodes in the dependency array
 
   return (
     <div>
@@ -88,13 +106,8 @@ function Map() {
           value={endNode}
           onChange={handleEndNodeChange}
         />
-        <Button
-          className={"nodeInputs"}
-          onClick={() => {
-            setNodes([startNode, endNode]);
-            console.log([startNode, endNode]);
-          }}
-        >
+        <p style={{ color: "red", margin: 0 }}> {errorMessage} </p>
+        <Button className={"nodeInputs"} onClick={handleSubmit}>
           Submit
         </Button>
       </div>
