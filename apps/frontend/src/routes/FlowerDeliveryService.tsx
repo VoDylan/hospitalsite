@@ -109,7 +109,13 @@ function FlowerDeliveryService() {
           <Grid item xs={6}>
             <Typography>What type of flowers will you be ordering?</Typography>
             <DropDown
-              items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
+              items={[
+                "-- Select Flower Type --",
+                "Red Carnations",
+                "Red Roses",
+                "White Roses",
+                "Tulips",
+              ]}
               handleChange={handleFlowerTypeInput}
             />
           </Grid>

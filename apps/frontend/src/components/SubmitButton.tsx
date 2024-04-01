@@ -9,11 +9,21 @@ interface ButtonProps {
 }
 export function SubmitButton(props: ButtonProps) {
   function handleSubmit() {
-    const submission = props.input;
-    console.log(props.input);
-    handleClear();
-    alert("Success!");
-    pushToDB(submission);
+    if (props.input.flowerType === "-- Select Flower Type --") {
+      alert("Please select a flower type");
+    } else if (props.input.name === "") {
+      alert("Please enter your name");
+    } else if (props.input.recipientName === "") {
+      alert("Please enter the recipient's name");
+    } else if (props.input.roomNumber === "") {
+      alert("Please enter a valid room number");
+    } else {
+      const submission = props.input;
+      console.log(props.input);
+      handleClear();
+      alert("Success!");
+      pushToDB(submission);
+    }
   }
 
   function handleClear() {
