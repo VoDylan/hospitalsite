@@ -26,11 +26,11 @@ const AnimatedMap: React.FC = () => {
         //   { x: 1000, y: 500 },
         // ];
 
-        const bfsAlgorithm = new BFSalgorithm();
+        const bfsAlgorithm = new BFSalgorithm("CCONF002L1", "CHALL009L1");
         const nodes = bfsAlgorithm.setup();
 
         if (nodes === null) {
-          console.log("wrong");
+          // console.log("wrong");
           return;
         }
         if (nodes === undefined) {

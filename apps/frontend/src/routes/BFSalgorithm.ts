@@ -13,7 +13,7 @@ type Coordinates = {
   y: number;
 };
 
-let edges: [
+const edges: string[][] = [
   ["startNodeID", "endNodeID"],
   ["CCONF002L1", "WELEV00HL1"],
   ["CCONF003L1", "CHALL002L1"],
@@ -64,7 +64,7 @@ let edges: [
   [""],
 ];
 
-let nodes: [
+const nodes: string[][] = [
   [
     "nodeID",
     "xcoord",
@@ -543,12 +543,12 @@ let count: number = 0;
 export class BFSalgorithm {
   // type should have starting node ID and coordinate
 
-  // start_node: Node;
-  // end_node: Node;
+  start_node: string;
+  end_node: string;
 
-  public constructor() {
-    // this.start_node = start_node;
-    // this.end_node = end_node;
+  public constructor(start_node: string, end_node: string) {
+    this.start_node = start_node;
+    this.end_node = end_node;
   }
 
   // private parseCSV() {
@@ -605,6 +605,11 @@ export class BFSalgorithm {
   }
 
   add_to_all_nodes() {
+    if (!edges) {
+      // console.error("Edges array is undefined or empty");
+      return;
+    }
+
     for (let i = 1; i < edges.length - 1; i++) {
       const start_node_now: Node = {
         current_node: edges[i][0],
@@ -614,8 +619,10 @@ export class BFSalgorithm {
         index: -1,
       };
 
+      // if (edges[i][1] === undefined) continue;
+
       const end_neighbor_now: Node = {
-        current_node: edges[i][1] || "",
+        current_node: edges[i][1],
         neighbors: [],
         x_coordinate: 0,
         y_coordinate: 0,
@@ -648,25 +655,13 @@ export class BFSalgorithm {
    * @param end the ending node as a string
    */
   BFS(start: string, end: string) {
-    let start_node: Node = {
-      current_node: start,
-      neighbors: [],
-      x_coordinate: 0,
-      y_coordinate: 0,
-      index: -1,
-    };
-    let end_node: Node = {
-      current_node: end,
-      neighbors: [],
-      x_coordinate: 0,
-      y_coordinate: 0,
-      index: -1,
-    };
+    const start_node = all_nodes.find((node) => node.current_node === start);
+    const end_node = all_nodes.find((node) => node.current_node === end);
 
-    for (let i = 0; i < all_nodes.length; i++) {
-      if (start === all_nodes[i].current_node) start_node = all_nodes[i];
-
-      if (end === all_nodes[i].current_node) end_node = all_nodes[i];
+    // Check if start and end nodes are found
+    if (!start_node || !end_node) {
+      console.error("Start or end node not found.");
+      return null;
     }
 
     const queue: Node[] = [];
@@ -737,7 +732,7 @@ export class BFSalgorithm {
   setup() {
     // this.parseCSV();
     this.add_to_all_nodes();
-
-    return this.BFS("CCONF002L1", "WELEV00HL1");
+    return this.BFS(this.start_node, this.end_node);
+    // return this.BFS("CCONF002L1", "CHALL009L1");
   }
 }
