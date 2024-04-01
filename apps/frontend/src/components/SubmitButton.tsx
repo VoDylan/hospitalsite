@@ -17,7 +17,7 @@ export function SubmitButton(props: ButtonProps) {
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
-      return <Alert elevation={6} ref={ref} onClose={handleClose} {...props} />;
+      return <Alert elevation={6} ref={ref} {...props} />;
     },
   );
 
@@ -96,9 +96,7 @@ export function SubmitButton(props: ButtonProps) {
         }}
       >
         {/*@ts-expect-error Severity will only be of type "success" or "error"*/}
-        <SnackbarAlert onClose={handleClose} severity={type}>
-          {message}
-        </SnackbarAlert>
+        <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
   );
