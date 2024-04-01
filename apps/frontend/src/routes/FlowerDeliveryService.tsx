@@ -43,8 +43,8 @@ function FlowerDeliveryService() {
 
   // For dropdown
   function handleFlowerTypeInput(event: SelectChangeEvent) {
-    setResponses({ ...form, flowerType: event.target.value as string });
-    return form.flowerType;
+    setResponses({ ...form, flowerType: event.target.value });
+    return event.target.value;
   }
 
   return (
