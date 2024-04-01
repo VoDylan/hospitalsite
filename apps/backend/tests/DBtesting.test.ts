@@ -5,7 +5,7 @@ import MapNode, { NodeFields } from "../src/MapNode";
 import CSVTools from "../src/lib/CSVTools";
 
 //let testTool: CSVTools = new CSVTools();
-const testDB = new DBManager();
+const testDB = DBManager.getInstance();
 const setupScript = async () => {
   testDB.importNodesAndEdges("L1Nodes.csv", "L1Edges.csv");
 };

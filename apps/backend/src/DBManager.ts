@@ -16,6 +16,8 @@ import {
 import mapEdge from "./MapEdge";
 
 class DBManager {
+  private static instance: DBManager;
+
   //Object representation of database for use across the program; kept updated on import of data and will provide new data to database
   //on map changes
   private _mapNodes: MapNode[] = [];
@@ -25,6 +27,25 @@ class DBManager {
   private exportDir: string = "./output/";
 
   private loggingPrefix: string = "DBManager: ";
+
+  /**
+   * Private constructor for use in creating the singleton DBManager instance
+   * @private
+   */
+  private constructor() {
+    console.log(`${this.loggingPrefix}Created DBManager singleton instance`);
+  }
+
+  /**
+   * Function to return the existing singleton instance for the DBManager class or create the singleton instance
+   */
+  public static getInstance() {
+    if (!this.instance) {
+      this.instance = new DBManager();
+    }
+
+    return this.instance;
+  }
 
   /**
    * Public helper function to import both nodes and edges from individual file paths
@@ -397,8 +418,6 @@ class DBManager {
     await createEdgePrisma(this._mapEdges);
   }
 }
-
-export const dbManager: DBManager = new DBManager();
 
 //Export the DBManager class to make it accessible to the rest of the program
 export default DBManager;

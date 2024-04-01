@@ -2,7 +2,7 @@ import { expect, test } from "vitest";
 import MapEdge from "../src/MapEdge";
 import DBManager from "../src/DBManager";
 
-const db: DBManager = new DBManager();
+const db: DBManager = DBManager.getInstance();
 const setupScript = async () => {
   db.importNodesAndEdges("./L1Nodes.csv", "./L1Edges.csv");
 };

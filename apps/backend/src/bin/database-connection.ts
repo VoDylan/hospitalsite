@@ -1,12 +1,12 @@
 import { PrismaClient } from "database";
-import { dbManager } from "../DBManager.ts";
+import DBManager from "../DBManager.ts";
 
 const client = new PrismaClient();
 
 export default client;
 
 const importDefaultNodeAndEdgeData = async () => {
-  await dbManager.importNodesAndEdges(
+  await DBManager.getInstance().importNodesAndEdges(
     "./data/L1Nodes.csv",
     "./data/L1Edges.csv",
   );
