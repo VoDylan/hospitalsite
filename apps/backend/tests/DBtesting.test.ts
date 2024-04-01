@@ -7,7 +7,7 @@ import CSVTools from "../src/lib/CSVTools";
 //let testTool: CSVTools = new CSVTools();
 const testDB = new DBManager();
 const setupScript = async () => {
-  await testDB.importNodesAndEdges("./L1Nodes.csv", "./L1Edges.csv");
+  testDB.importNodesAndEdges("L1Nodes.csv", "L1Edges.csv");
 };
 const testNode1Fields: NodeFields = {
   nodeID: "CCONF001L1",
@@ -52,6 +52,11 @@ test("parsing", () => {
   expect(created).toStrictEqual(testNode1);
 });
 
+test(testDB.toDB, () => {
+  testDB.toDB();
+  //check tables
+});
+
 /*works
 test(CSVTools.parseCSVFromFile, () => {
     console.log(CSVTools.parseCSVFromFile('./L1Nodes.csv'))
@@ -78,6 +83,7 @@ test("Testing output filePath", () => {
 test(testDB.updateNodeFromDB, () => {
   //manually change database
   testDB.updateNodeFromDB("CCONF001L1");
+  //should output nonexistent in DB message, await is possibly causing issues
   testDB.getNodeByID("CCONF001L1");
   //check change manually
 });
@@ -85,6 +91,7 @@ test(testDB.updateNodeFromDB, () => {
 test(testDB.updateEdgeFromDB, () => {
   //manually change database
   testDB.updateEdgeFromDB("CCONF001L1", "CCONF002L1");
+  //should output nonexistent in DB message, await is possibly causing issues
   testDB.printEdges();
   //check change manually
 });
