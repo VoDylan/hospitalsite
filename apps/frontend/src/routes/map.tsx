@@ -59,6 +59,37 @@ function Map() {
             return;
           }
 
+          // animation
+          let currentTargetIndex = 0;
+          let currentX = nodesData[currentTargetIndex].x;
+          let currentY = nodesData[currentTargetIndex].y;
+          const speed = 0.5; // Adjust the speed of the animation
+
+          const moveDot = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
+
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
+
+            ctx.fillStyle = "red";
+            ctx.beginPath();
+            ctx.arc(currentX, currentY, 5, 0, 2 * Math.PI); // draw circle
+            ctx.fill();
+
+            const dx = nodesData[currentTargetIndex].x - currentX; // target coordinate
+            const dy = nodesData[currentTargetIndex].y - currentY; // target coordinate
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < speed) {
+              // if the distance is close then move to the next node
+              currentTargetIndex = (currentTargetIndex + 1) % nodesData.length; // % is used to loop through
+            } else {
+              currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
+              currentY += (dy / distance) * speed;
+            }
+
+            requestAnimationFrame(moveDot); // loop to call move to function consistently
+          };
+
           ctx.fillStyle = "red";
           for (let i = 0; i < nodesData.length; i++) {
             ctx.beginPath(); // initialize a creation of a new path
@@ -73,8 +104,10 @@ function Map() {
           for (let i = 1; i < nodesData.length; i++) {
             ctx.lineTo(nodesData[i].x, nodesData[i].y); // Draw a line to each subsequent node, acts as a move to as well
           }
+
+          ctx.stroke();
+          moveDot();
         }
-        ctx.stroke();
       };
     }
   }, [startNode, endNode, nodes]); // Include nodes in the dependency array
