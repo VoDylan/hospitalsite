@@ -63,7 +63,7 @@ function Map() {
           let currentTargetIndex = 0;
           let currentX = nodesData[currentTargetIndex].x;
           let currentY = nodesData[currentTargetIndex].y;
-          const speed = 0.5; // Adjust the speed of the animation
+          const speed = 0.8; // Adjust the speed of the animation
 
           const moveDot = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
