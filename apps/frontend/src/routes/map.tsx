@@ -63,32 +63,30 @@ function Map() {
           let currentTargetIndex = 0;
           let currentX = nodesData[currentTargetIndex].x;
           let currentY = nodesData[currentTargetIndex].y;
-          const speed = 1; // Adjust the speed of the animation
+          const speed = 1;
 
           const moveDot = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
-            ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // draw the image
-            ctx.fillStyle = "blue";
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "black";
 
             // display all the nodes on the map if required
             for (let i = 0; i < nodesData.length; i++) {
-              ctx.beginPath(); // initialize a creation of a new path
+              ctx.beginPath();
               ctx.arc(nodesData[i].x, nodesData[i].y, 5, 0, 2 * Math.PI); // draw circle
               ctx.fill();
             }
 
             ctx.lineWidth = 3;
-
             ctx.beginPath();
-            ctx.fillStyle = "blue";
-            ctx.moveTo(nodesData[0].x, nodesData[0].y); // Move to the first node
+            ctx.moveTo(nodesData[0].x, nodesData[0].y);
             for (let i = 1; i < nodesData.length; i++) {
-              ctx.lineTo(nodesData[i].x, nodesData[i].y); // Draw a line to each subsequent node, acts as a move to as well
+              ctx.lineTo(nodesData[i].x, nodesData[i].y);
             }
             ctx.stroke();
 
-            ctx.beginPath();
             ctx.fillStyle = "blue";
+            ctx.beginPath();
             ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI); // draw circle
             ctx.fill();
 
@@ -98,7 +96,7 @@ function Map() {
 
             if (distance < speed) {
               // if the distance is close then move to the next node
-              currentTargetIndex = (currentTargetIndex + 1) % nodesData.length; // % is used to loop through
+              currentTargetIndex = (currentTargetIndex + 1) % nodesData.length;
             } else {
               currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
               currentY += (dy / distance) * speed;
@@ -116,14 +114,12 @@ function Map() {
         }
       };
     }
-  }, [startNode, endNode, nodes]); // Include nodes in the dependency array
+  }, [startNode, endNode, nodes]);
 
   return (
     <div>
       <div
         style={{
-          // width: "20%",
-          // height: "30%",
           display: "flex",
           flexDirection: "column",
           zIndex: 1,
