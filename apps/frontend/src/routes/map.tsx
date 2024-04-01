@@ -79,23 +79,21 @@ function Map() {
   }, [startNode, endNode, nodes]); // Include nodes in the dependency array
 
   return (
-    <div style={{ position: "relative" }}>
+    <div>
       <div
         style={{
-          width: "20%",
+          // width: "20%",
+          // height: "30%",
           display: "flex",
           flexDirection: "column",
           zIndex: 1,
           position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
         }}
       >
         <TextField
           className={"nodeInputs"}
           id="startNode"
-          label="Starting Node"
+          label="Start Node"
           type="search"
           variant="filled"
           value={startNode}
