@@ -1,10 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Map from "./routes/map.tsx";
-// import AnimatedMap from "./routes/animatedMap.tsx";
-// import BFSCombo from "./routes/BFScombo.tsx";
-// import AnimatedMap from "./routes/animatedMap.tsx";
-// import {BFSalgorithm} from "./routes/BFSalgorithm.ts";
 
 function App() {
   const router = createBrowserRouter([
@@ -14,7 +10,7 @@ function App() {
       element: <Root />,
       children: [
         {
-          path: "map",
+          path: "home",
           element: <Map />,
         },
       ],

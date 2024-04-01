@@ -551,26 +551,6 @@ export class BFSalgorithm {
     this.end_node = end_node;
   }
 
-  // private parseCSV() {
-  //   edges = fs
-  //     .readFileSync("../csv/L1Edges.csv", {
-  //       encoding: "utf-8",
-  //     })
-  //     .split("\n")
-  //     .map((row: string): string[] => {
-  //       return row.trim().split(",");
-  //     });
-  //
-  //   nodes = fs
-  //     .readFileSync("../csv/L1Nodes.csv", {
-  //       encoding: "utf-8",
-  //     })
-  //     .split("\n")
-  //     .map((row: string): string[] => {
-  //       return row.trim().split(",");
-  //     });
-  // }
-
   /**
    * Checking if the node already exists in all nodes
    * @param to_check the node to check
@@ -729,7 +709,6 @@ export class BFSalgorithm {
   }
 
   setup() {
-    // this.parseCSV();
     this.add_to_all_nodes();
     return this.BFS(this.start_node, this.end_node);
     // return this.BFS("CCONF002L1", "CHALL009L1");
