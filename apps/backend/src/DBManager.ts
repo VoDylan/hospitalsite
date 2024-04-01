@@ -22,6 +22,8 @@ class DBManager {
   //Default export directory to be used when saving nodes and edges to a CSV file
   private exportDir: string = "./output/";
 
+  private loggingPrefix: string = "DBManager: ";
+
   /**
    * Public helper function to import both nodes and edges from individual file paths
    * @param pathNode - Filepath for the node CSV data
@@ -95,11 +97,11 @@ class DBManager {
       //does not constitute a fatal error, so the program continues running without doing anything if either are null references
       if (startingNode == null) {
         console.log(
-          `Edge Generation Error: Starting node with id ${edges[i][0]} not found!`,
+          `${this.loggingPrefix}Edge Generation Error: Starting node with id ${edges[i][0]} not found!`,
         );
       } else if (endingNode == null) {
         console.log(
-          `Edge Generation Error: Ending node with id ${edges[i][1]} not found!`,
+          `${this.loggingPrefix}Edge Generation Error: Ending node with id ${edges[i][1]} not found!`,
         );
       } else {
         //If both edges are valid, create an EdgeFields object storing the references to each, marking them as non-null since they
@@ -171,7 +173,7 @@ class DBManager {
     for (let i = 0; i < this._mapNodes.length; i++) {
       prints = prints + this._mapNodes[i].toString();
     }
-    console.log(prints);
+    console.log(`${this.loggingPrefix}\n${prints}`);
   }
 
   /**
@@ -182,7 +184,7 @@ class DBManager {
     for (let i = 0; i < this._mapEdges.length; i++) {
       prints = prints + this._mapEdges[i].toString();
     }
-    console.log(prints);
+    console.log(`${this.loggingPrefix}${prints}`);
   }
 
   /**
@@ -285,7 +287,7 @@ class DBManager {
     const origNode: MapNode | null = this.getNodeByID(nodeID);
 
     if (origNode == null) {
-      console.log("Node does not exist as object.");
+      console.log(`${this.loggingPrefix}Node does not exist as object.`);
       return;
     } else {
       const DBNode = await client.node.findUnique({
@@ -294,7 +296,7 @@ class DBManager {
         },
       });
       if (DBNode == null) {
-        console.log("Node does not exist in database.");
+        console.log(`${this.loggingPrefix}Node does not exist in database.`);
       } else {
         origNode.xcoord = DBNode.xcoord;
         origNode.ycoord = DBNode.ycoord;
@@ -323,7 +325,7 @@ class DBManager {
       }
     }
     if (origEdge == null) {
-      console.log("Edge does not exist as an object.");
+      console.log(`${this.loggingPrefix}Edge does not exist as an object.`);
       return;
     } else {
       const DBEdge = await client.edge.findFirst({
@@ -333,13 +335,13 @@ class DBManager {
         },
       });
       if (DBEdge == null) {
-        console.log("Edge does not exist in database.");
+        console.log(`${this.loggingPrefix}Edge does not exist in database.`);
       } else {
         const startNode: MapNode | null = this.getNodeByID(DBEdge.startNodeID);
         const endNode: MapNode | null = this.getNodeByID(DBEdge.endNodeID);
 
         if (startNode == null || endNode == null) {
-          console.log("startNode or endNode not found!");
+          console.log(`${this.loggingPrefix}startNode or endNode not found!`);
         } else {
           origEdge.startNode = startNode!;
           origEdge.endNode = endNode!;
@@ -356,6 +358,8 @@ class DBManager {
     await createEdgePrisma(this._mapEdges);
   }
 }
+
+export const dbManager: DBManager = new DBManager();
 
 //Export the DBManager class to make it accessible to the rest of the program
 export default DBManager;

@@ -25,13 +25,12 @@ model Node {
 }
 
 model Edge {
-  edgeID      Int    @id @default(autoincrement())
   startNodeID String
   endNodeID   String
   startNode   Node   @relation(fields: [startNodeID], references: [nodeID], name: "StartNode")
   endNode     Node   @relation(fields: [endNodeID], references: [nodeID], name: "EndNode")
 
-  @@unique([startNodeID, endNodeID])
+  @@id(name: "pairID", [startNodeID, endNodeID])
 }
 
 model User {
