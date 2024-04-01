@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import background from "/Background.jpg";
 import logo from "/logo.png";
 import NavButton from "../components/NavButton.tsx";
@@ -39,16 +39,19 @@ function HeroPage() {
           alt="Logo"
           style={{ width: "70%", height: "12%", marginBottom: "5%" }} // Adjust the size and position of the logo
         />
-        <NavButton
-          path={"/Login"}
-          buttonType={"contained"}
-          name={"Admin Login"}
-        />
-        <NavButton
-          path={"/FlowerDelivery"}
-          buttonType={"contained"}
-          name={"Guest Login"}
-        />
+        <Stack direction="row" spacing={2}>
+          <NavButton
+            path={"/Login"}
+            buttonType={"contained"}
+            name={"Admin Login"}
+          />
+          <NavButton
+            path={"/FlowerDelivery"}
+            buttonType={"contained"}
+            name={"Guest Login"}
+          />
+        </Stack>
+
         <div className="SanitationDiv">
           <div
             className={"formDiv"}
