@@ -89,8 +89,9 @@ function Map() {
           onChange={handleEndNodeChange}
         />
         <Button
+          className={"nodeInputs"}
           onClick={() => {
-            setNodes([startNode, endNode]); // Update nodes state with new values
+            setNodes([startNode, endNode]);
             console.log([startNode, endNode]);
           }}
         >
