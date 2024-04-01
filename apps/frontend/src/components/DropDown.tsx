@@ -40,6 +40,7 @@ export function DropDown(props: DropDownProps) {
             value={retData}
             sx={{
               mx: "12px",
+              my: "7px",
             }}
           >
             {props.items.map((item) => (
