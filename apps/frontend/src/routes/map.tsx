@@ -79,13 +79,17 @@ function Map() {
   }, [startNode, endNode, nodes]); // Include nodes in the dependency array
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <div
         style={{
+          width: "20%",
           display: "flex",
           flexDirection: "column",
           zIndex: 1,
           position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
         }}
       >
         <TextField
@@ -106,7 +110,19 @@ function Map() {
           value={endNode}
           onChange={handleEndNodeChange}
         />
-        <p style={{ color: "red", margin: 0 }}> {errorMessage} </p>
+        <p
+          style={{
+            color: "red",
+            margin: 0,
+            padding: "5%",
+            fontSize: "80%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {" "}
+          {errorMessage}{" "}
+        </p>
         <Button className={"nodeInputs"} onClick={handleSubmit}>
           Submit
         </Button>

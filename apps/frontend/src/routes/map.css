@@ -10,6 +10,6 @@
 }
 
 .nodeInputs {
-  width: 200px;
-  margin: 20px !important; /* make sure there is nothing else conflicting */
+  width: 95%;
+  margin: 5% !important; /* make sure there is nothing else conflicting */
 }
