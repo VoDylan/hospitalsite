@@ -61,7 +61,6 @@ function FlowerDeliveryService() {
           justifyContent: "center",
           justifySelf: "center",
           width: "90%",
-          backgroundColor: "white",
           alignSelf: "center",
           mx: "5%",
         }}
@@ -70,10 +69,13 @@ function FlowerDeliveryService() {
           container
           direction={"row"}
           my={20}
-          rowSpacing={1}
-          columnSpacing={0}
+          rowSpacing={2}
+          columnSpacing={2}
           justifyContent={"space-between"}
           boxShadow={4}
+          sx={{
+            backgroundColor: "white",
+          }}
         >
           <Grid
             item
