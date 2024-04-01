@@ -12,10 +12,11 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { makeStyles } from "@mui/styles";
 import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
+import NavBar from "./NavBar.tsx";
 
-{
-  /*WITH NAV BAR*/
-}
+// {
+//   /*WITH NAV BAR*/
+// }
 // import {useLocation} from 'react-router-dom';
 // import Tabs from "@mui/material/Tabs";
 // import {Box, Tab} from "@mui/material";
@@ -60,7 +61,11 @@ function TopBanner() {
 
   return (
     <AppBar position="fixed" sx={{ backgroundColor: "white" }}>
-      <Toolbar sx={{ flexGrow: 2, marginLeft: 5 }}>
+      <Toolbar sx={{ flexGrow: 2, marginLeft: 2 }}>
+        <Stack sx={{ marginRight: 2, color: "#012D5A" }}>
+          <NavBar />
+        </Stack>
+
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -121,7 +126,7 @@ function TopBanner() {
           {/*Profile button links to login page for now*/}
           <Link to="/Login">
             <IconButton
-              sx={{ color: "blue" }}
+              sx={{ color: "#012D5A" }}
               size="large"
               aria-label="account of current user"
             >
