@@ -5,6 +5,7 @@ import { DropDown } from "../components/DropDown.tsx";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import TopBanner from "../components/TopBanner.tsx";
+import LadyWithFlowersInHospital from "../../public/LadyWithFlowersInHospital.jpg";
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
@@ -47,16 +48,30 @@ function FlowerDeliveryService() {
   }
 
   return (
-    <>
+    <div
+      style={{
+        background: `url(${LadyWithFlowersInHospital})`,
+        backgroundSize: "100%",
+      }}
+    >
       <TopBanner />
-      <Box sx={{ flexGrow: 1 }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          justifyContent: "center",
+          justifySelf: "center",
+          width: "90%",
+          backgroundColor: "white",
+          alignSelf: "center",
+          mx: "5%",
+        }}
+      >
         <Grid
           container
           direction={"row"}
           my={20}
-          px={8}
-          spacing={1}
-          columnSpacing={3}
+          rowSpacing={1}
+          columnSpacing={0}
           justifyContent={"space-between"}
           boxShadow={4}
         >
@@ -134,7 +149,7 @@ function FlowerDeliveryService() {
           </Grid>
         </Grid>
       </Box>
-    </>
+    </div>
   );
 }
 
