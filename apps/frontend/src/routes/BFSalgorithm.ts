@@ -613,8 +613,9 @@ export class BFSalgorithm {
         y_coordinate: 0,
         index: -1,
       };
+
       const end_neighbor_now: Node = {
-        current_node: edges[i][0],
+        current_node: edges[i][1] || "",
         neighbors: [],
         x_coordinate: 0,
         y_coordinate: 0,
