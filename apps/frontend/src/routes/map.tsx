@@ -108,6 +108,18 @@ function Map() {
           value={endNode}
           onChange={handleEndNodeChange}
         />
+      </div>
+
+      <div
+        style={{
+          // width: "20%",
+          // height: "30%",
+          display: "flex",
+          flexDirection: "column",
+          zIndex: 1,
+          position: "absolute",
+        }}
+      >
         <p
           style={{
             color: "red",
