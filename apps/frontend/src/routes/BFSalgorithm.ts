@@ -725,7 +725,6 @@ export class BFSalgorithm {
       }
     }
 
-    console.log("End node not reachable from the start node.");
     return null;
   }
 

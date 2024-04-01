@@ -54,7 +54,10 @@ function Map() {
           const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
           const nodesData = bfsAlgorithm.setup();
 
-          if (!nodesData) return;
+          if (!nodesData) {
+            setErrorMesage("There is no path between nodes");
+            return;
+          }
 
           ctx.fillStyle = "red";
           for (let i = 0; i < nodesData.length; i++) {
