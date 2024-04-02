@@ -1,4 +1,4 @@
-import { Box, Grid, SelectChangeEvent, Typography } from "@mui/material";
+import { Box, Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
@@ -46,16 +46,19 @@ function FlowerDeliveryService() {
 
   // For dropdown
   function handleFlowerTypeInput(event: SelectChangeEvent) {
-    setResponses({ ...form, flowerType: event.target.value as string });
-    return form.flowerType;
+    setResponses({ ...form, flowerType: event.target.value });
+    return event.target.value;
   }
 
   return (
     <ThemeProvider theme={customTheme}>
-      <div
-        style={{
+      <Stack
+        spacing={20}
+        direction={"column"}
+        sx={{
           background: `url(${LadyWithFlowersInHospital})`,
           backgroundSize: "100%",
+          minHeight: "100vh",
         }}
       >
         <TopBanner />
@@ -72,7 +75,7 @@ function FlowerDeliveryService() {
           <Grid
             container
             direction={"row"}
-            my={20}
+            // my={20}
             rowSpacing={2}
             columnSpacing={2}
             justifyContent={"space-between"}
@@ -157,7 +160,7 @@ function FlowerDeliveryService() {
             </Grid>
           </Grid>
         </Box>
-      </div>
+      </Stack>
     </ThemeProvider>
   );
 }
