@@ -112,7 +112,7 @@ export async function getDBNodeByID(nodeID: string) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function createServiceRequest(
-  userId: number,
+  userID: string,
   nodeID: string,
   serviceType: string,
   services: ServiceData,
@@ -124,11 +124,7 @@ async function createServiceRequest(
 
     const createdServiceRequest = await client.serviceRequest.create({
       data: {
-        user: {
-          connect: {
-            userID: userId,
-          },
-        },
+        userID: userID,
         node: {
           connect: {
             nodeID: nodeID,
@@ -271,7 +267,7 @@ export async function getServiceRequestFromDBByNodeID(nodeID: string) {
   return request;
 }
 
-export async function getServiceRequestFromDBByUserID(userID: number) {
+export async function getServiceRequestFromDBByUserID(userID: string) {
   let request = null;
   try {
     request = await client.serviceRequest.findMany({

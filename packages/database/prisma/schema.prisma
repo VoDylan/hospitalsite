@@ -34,14 +34,14 @@ model Edge {
 }
 
 model User {
-  userID         Int              @id @default(autoincrement())
-  userName       String           @unique
-  emailAddress   String
-  password       String
-  Admin          Admin[]
-  Patient        Patient[]
-  MedicalWorker  MedicalWorker[]
-  ServiceRequest ServiceRequest[]
+  userID        Int             @id @default(autoincrement())
+  userName      String          @unique
+  emailAddress  String
+  password      String
+  Admin         Admin[]
+  Patient       Patient[]
+  MedicalWorker MedicalWorker[]
+  // ServiceRequest ServiceRequest[]
 }
 
 model Admin {
@@ -85,8 +85,7 @@ model HighScore {
 
 model ServiceRequest {
   id          Int    @id @default(autoincrement())
-  user        User   @relation(fields: [userID], references: [userID])
-  userID      Int
+  userID      String
   node        Node   @relation(fields: [nodeID], references: [nodeID])
   nodeID      String
   serviceType String
