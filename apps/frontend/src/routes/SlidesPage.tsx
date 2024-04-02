@@ -1,7 +1,6 @@
 import TopBanner from "../components/TopBanner.tsx";
 import MainCarousel from "../components/Carousel.tsx";
 
-
 function MapPage() {
   return (
     <>
