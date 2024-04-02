@@ -92,7 +92,7 @@ model ServiceRequest {
   services    String
 }
 
-model flowerServiceRequest {
+model FlowerServiceRequest {
   id            Int    @id @default(autoincrement())
   name          String
   flowerType    String
