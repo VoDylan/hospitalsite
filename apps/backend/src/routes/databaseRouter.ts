@@ -48,7 +48,17 @@ router.get("/edges/:startNodeID/:endNodeID", async (req, res) => {
 });
 
 router.post("/servicerequest", async (req, res) => {
-  const data = req.body;
+  const data: {
+    userID: string;
+    nodeID: string;
+    serviceType: string;
+    services: string;
+  } = req.body;
+
+  data.nodeID;
+  data.userID;
+  data.serviceType;
+  data.services;
 
   console.log(data);
 
