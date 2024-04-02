@@ -114,6 +114,7 @@ export async function getDBNodeByID(nodeID: string) {
 async function createServiceRequest(
   userId: number,
   nodeID: string,
+  serviceType: string,
   services: ServiceData,
 ): Promise<void> {
   console.log("Creating service request");
@@ -133,6 +134,7 @@ async function createServiceRequest(
             nodeID: nodeID,
           },
         },
+        serviceType: serviceType,
         services: serviceJson,
       },
     });
@@ -200,6 +202,98 @@ export async function getDBEdgeByStartAndEndNode(
   }
 
   return edge;
+}
+
+export async function getServiceRequestsFromDB() {
+  let requests = null;
+  try {
+    requests = await client.serviceRequest.findMany();
+  } catch (e) {
+    console.error(e);
+  }
+
+  if (requests == null) {
+    console.log(`${loggingPrefix}No service requests found in DB`);
+  } else {
+    console.log(`${loggingPrefix}Service requests found in DB`);
+  }
+
+  return requests;
+}
+
+export async function getServiceRequestFromDBByType(serviceType: string) {
+  let request = null;
+  try {
+    request = await client.serviceRequest.findMany({
+      where: {
+        serviceType: serviceType,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+  }
+
+  if (request == null) {
+    console.log(
+      `${loggingPrefix}No request found with serviceType ${serviceType}`,
+    );
+  } else {
+    console.log(
+      `${loggingPrefix}Request(s) found with serviceType ${serviceType}`,
+    );
+  }
+
+  return request;
+}
+
+export async function getServiceRequestFromDBByNodeID(nodeID: string) {
+  let request = null;
+  try {
+    request = await client.serviceRequest.findMany({
+      where: {
+        nodeID: nodeID,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+  }
+
+  if (request == null) {
+    console.log(
+      `${loggingPrefix}No request found from rooms with nodeID ${nodeID}`,
+    );
+  } else {
+    console.log(
+      `${loggingPrefix}Request(s) found from rooms with nodeID ${nodeID}`,
+    );
+  }
+
+  return request;
+}
+
+export async function getServiceRequestFromDBByUserID(userID: number) {
+  let request = null;
+  try {
+    request = await client.serviceRequest.findMany({
+      where: {
+        userID: userID,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+  }
+
+  if (request == null) {
+    console.log(
+      `${loggingPrefix}No request found from users with userID ${userID}`,
+    );
+  } else {
+    console.log(
+      `${loggingPrefix}Request(s) found from users with userID ${userID}`,
+    );
+  }
+
+  return request;
 }
 
 export async function openPrismaConnection() {
