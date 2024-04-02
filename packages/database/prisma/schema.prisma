@@ -1,3 +1,4 @@
+
 generator client {
   provider   = "prisma-client-js"
   output     = "../.prisma/client"
@@ -10,37 +11,38 @@ datasource db {
 }
 
 model Node {
-  nodeID     String    @id
-  xcoord     Int
-  ycoord     Int
-  floor      String?
-  building   String?
-  nodeType   String?
-  longName   String?
-  shortName  String?
-  startEdges Edge[]    @relation("StartNode")
-  endEdges   Edge[]    @relation("EndNode")
-  Patient    Patient[]
-  //ServiceRequest ServiceRequest[]
+  nodeID         String           @id
+  xcoord         Int
+  ycoord         Int
+  floor          String?
+  building       String?
+  nodeType       String?
+  longName       String?
+  shortName      String?
+  startEdges     Edge[]           @relation("StartNode")
+  endEdges       Edge[]           @relation("EndNode")
+  Patient        Patient[]
+  ServiceRequest ServiceRequest[]
 }
 
 model Edge {
-  edgeID      Int    @id @default(autoincrement())
   startNodeID String
   endNodeID   String
   startNode   Node   @relation(fields: [startNodeID], references: [nodeID], name: "StartNode")
   endNode     Node   @relation(fields: [endNodeID], references: [nodeID], name: "EndNode")
+
+  @@id(name: "pairID", [startNodeID, endNodeID])
 }
 
 model User {
-  userID        Int             @id @default(autoincrement())
-  userName      String          @unique
-  emailAddress  String
-  password      String
-  Admin         Admin[]
-  Patient       Patient[]
-  MedicalWorker MedicalWorker[]
-  //ServiceRequest ServiceRequest[]
+  userID         Int              @id @default(autoincrement())
+  userName       String           @unique
+  emailAddress   String
+  password       String
+  Admin          Admin[]
+  Patient        Patient[]
+  MedicalWorker  MedicalWorker[]
+  ServiceRequest ServiceRequest[]
 }
 
 model Admin {
@@ -81,13 +83,14 @@ model HighScore {
   time  DateTime
   score Int
 }
- model ServiceRequest {
-   id            Int    @id @default(autoincrement())
-   user          User   @relation(fields: [userId], references: [userID])
-   userId        Int
-   node          Node   @relation(fields: [nodeShortName], references: [shortName])
-   nodeShortName String
-   services      String
 
-   @@unique([userId, nodeShortName])
- }
+model ServiceRequest {
+  id       Int    @id @default(autoincrement())
+  user     User   @relation(fields: [userID], references: [userID])
+  userID   Int
+  node     Node   @relation(fields: [nodeID], references: [nodeID])
+  nodeID   String
+  services String
+}
+
+

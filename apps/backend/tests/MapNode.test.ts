@@ -2,13 +2,16 @@ import { expect, test } from "vitest";
 import DBManager from "../src/DBManager";
 import MapNode from "../src/MapNode";
 
-const db: DBManager = new DBManager();
-const setupScript = async () => {
-  await db.importNodesAndEdges("./L1Nodes.csv", "./L1Edges.csv");
+const db: DBManager = DBManager.getInstance();
+const setupScript = () => {
+  db.importNodesAndEdges(
+    "./apps/backend/data/L1Nodes.csv",
+    "./apps/backend/data/L1Edges.csv",
+  );
 };
-setupScript().then(() => console.log("Finished setup"));
 
-test("Tests the toCSV function in the MapNode class for all imported nodes.", () => {
+test("Tests the toCSV function in the MapNode class for all imported nodes.", async () => {
+  setupScript();
   const nodes: MapNode[] = db.mapNodes;
 
   expect(nodes[0].toCSV()).toStrictEqual(
@@ -20,9 +23,13 @@ test("Tests the toCSV function in the MapNode class for all imported nodes.", ()
   expect(nodes[2].toCSV()).toStrictEqual(
     "CCONF003L1, 2445, 1245, L1, 45 Francis, CONF, Abrams Conference Room, Conf C003L1",
   );
+  expect(nodes[4].toCSV()).toStrictEqual(
+    "CDEPT003L1, 1845, 844, L1, Tower, DEPT, Day Surgery Family Waiting Exit Floor L1, Department C003L1",
+  );
 });
 
-test("Tests the toString function in the MapEdges file for all imported edges.", () => {
+test("Tests the toString function in the MapEdges file for all imported edges.", async () => {
+  setupScript();
   const nodes: MapNode[] = db.mapNodes;
 
   expect(nodes[0].toString()).toStrictEqual(

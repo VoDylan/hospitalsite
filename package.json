@@ -24,7 +24,7 @@
     "deploy:stop": "docker-compose -f docker-compose.prod.yaml down",
     "sync": "node scripts/sync.mjs",
     "setup": "yarn install && yarn build:dev",
-    "test": "yarn run vitest --ui --open=false",
+    "test": "yarn run dotenv -e .env -- yarn run vitest --ui --open=false",
     "test:docker": "docker-compose -f docker-compose.test.yaml up --build --renew-anon-volumes -d",
     "test:stop": "docker-compose -f docker-compose.dev.yaml down --volumes --rmi local",
     "lint": "turbo run lint",
@@ -38,7 +38,7 @@
     "@types/node": "^20.11.30",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
-    "@vitest/ui": "^0.33.0",
+    "@vitest/ui": "^1.4.0",
     "eslint": "^8.56.0",
     "eslint-config-custom": "workspace:*",
     "happy-dom": "^10.6.3",
@@ -48,7 +48,9 @@
     "tsconfig-custom": "workspace:*",
     "turbo": "latest",
     "typescript": "^5.0.4",
-    "vitest": "^1.4.0"
+    "vite": "^5.2.7",
+    "vitest": "^1.4.0",
+    "wsrun": "^5.2.4"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
