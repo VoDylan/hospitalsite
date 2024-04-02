@@ -28,13 +28,23 @@ export const NavBar = () => {
           <Stack direction="column" spacing={2}>
             <NavButton
               buttonType={"contained"}
-              name={"Google"}
-              path={"https://www.google.com"}
+              name={"Home"}
+              path={"http://localhost:3000/Slides"}
             />
             <NavButton
               buttonType={"contained"}
-              name={"youtube"}
-              path={"https://www.youtube.com"}
+              name={"Map"}
+              path={"http://localhost:3000/Map"}
+            />
+            <NavButton
+              buttonType={"contained"}
+              name={"Services"}
+              path={"http://localhost:3000/Services"}
+            />
+            <NavButton
+              path={"/DisplayDatabase"}
+              buttonType={"contained"}
+              name={"Database"}
             />
           </Stack>
         </Box>

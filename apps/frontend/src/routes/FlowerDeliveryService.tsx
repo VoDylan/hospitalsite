@@ -86,7 +86,7 @@ function FlowerDeliveryService() {
             xs={12}
             sx={{
               alignItems: "flexStart",
-              bgcolor: "primary.main",
+              backgroundColor: "primary.main",
             }}
           >
             <Typography
