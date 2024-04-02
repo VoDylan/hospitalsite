@@ -112,6 +112,7 @@ function FlowerDeliveryService() {
               items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
               handleChange={handleFlowerTypeInput}
               label={"Flower Type"}
+              returnData={form.flowerType}
             />
           </Grid>
           <Grid item xs={6}>

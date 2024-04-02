@@ -5,13 +5,13 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface DropDownProps {
   items: string[];
   handleChange: (event: SelectChangeEvent) => string;
   label: string;
+  returnData: string;
 }
 
 const useStyles = makeStyles({
@@ -23,10 +23,8 @@ const useStyles = makeStyles({
 
 export function DropDown(props: DropDownProps) {
   const classes = useStyles();
-  const [retData, setRetData] = useState<string>("");
 
   const handleSelectChange = (event: SelectChangeEvent) => {
-    setRetData(event.target.value); // Update retData using state
     props.handleChange(event);
   };
 
@@ -45,7 +43,7 @@ export function DropDown(props: DropDownProps) {
         </InputLabel>
         <Select
           onChange={handleSelectChange}
-          value={retData}
+          value={props.returnData}
           defaultValue={""}
           labelId="demo-simple-select-label"
           label={props.label}
