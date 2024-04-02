@@ -11,6 +11,7 @@ import {
   clearDBNodes,
   getDBNodes,
   getDBEdges,
+  clearDBRequests,
 } from "./PrismaScripts";
 import mapEdge from "./MapEdge";
 import client from "./bin/database-connection.ts";
@@ -63,6 +64,7 @@ export default class DBManager {
    */
   public async syncNodesAndEdgesToDB() {
     //Clear both the edges and the nodes tables
+    await clearDBRequests();
     await clearDBEdges();
     await clearDBNodes();
 

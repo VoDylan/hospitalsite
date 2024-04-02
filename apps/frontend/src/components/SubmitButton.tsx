@@ -1,7 +1,8 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmission.ts";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
+import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 
 interface ButtonProps {
   text: string;
@@ -57,10 +58,13 @@ export function SubmitButton(props: ButtonProps) {
       const submission = props.input;
       console.log(props.input);
 
-      const result = await pushToDB(submission);
+      const result: { success: boolean; data: HTTPResponseType } =
+        await pushToDB(submission);
 
-      if (!result) {
-        openWithError("Failed to post form data to database");
+      if (!result.success) {
+        openWithError(
+          `Failed to post form data to database: ${result.data.message}`,
+        );
       } else {
         handleClear();
         openWithSuccess();
@@ -81,21 +85,49 @@ export function SubmitButton(props: ButtonProps) {
       services: JSON.stringify(form),
     };
 
-    const res = await axios
-      .post("/api/database/servicerequest", returnData, {
+    let statusCode = undefined;
+    let data: HTTPResponseType;
+
+    try {
+      const res = await axios.post("/api/database/servicerequest", returnData, {
         headers: {
           "Content-Type": "application/json",
         },
-      })
-      .catch((e) => {
-        console.log(`Failed to send form data to database: ${e}`);
       });
-    if (res != undefined) {
-      console.log(`Success: response code - ${res.status}`);
-      return true;
+
+      statusCode = res.status;
+      data = JSON.parse(JSON.stringify(res.data));
+    } catch (e) {
+      if (isAxiosError(e)) {
+        if (e.response != null) {
+          data = JSON.parse(JSON.stringify(e.response!.data));
+          console.log(`Failed to send form data to database: ${data.message}`);
+        } else {
+          data = {
+            message: "Unknown error",
+          };
+          console.log(`Failed to send form data to database: ${data.message}`);
+        }
+      } else {
+        data = {
+          message: "Unknown error",
+        };
+        console.log(`Failed to send form data to database: ${data.message}`);
+      }
     }
 
-    return false;
+    if (statusCode != undefined) {
+      console.log(`Success: response code - ${statusCode}`);
+      return {
+        success: true,
+        data: data!,
+      };
+    }
+
+    return {
+      success: false,
+      data: data!,
+    };
   }
 
   return (

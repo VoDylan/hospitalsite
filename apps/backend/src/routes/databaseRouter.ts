@@ -1,5 +1,9 @@
 import express, { Router } from "express";
-import { getDBEdgeByStartAndEndNode, getDBNodeByID } from "../PrismaScripts.ts";
+import {
+  createServiceRequest,
+  getDBEdgeByStartAndEndNode,
+  getDBNodeByID,
+} from "../PrismaScripts.ts";
 import DBManager from "../DBManager.ts";
 
 //Create router instance to handle any database requests
@@ -55,16 +59,24 @@ router.post("/servicerequest", async (req, res) => {
     services: string;
   } = req.body;
 
-  data.nodeID;
-  data.userID;
-  data.serviceType;
-  data.services;
-
   console.log(data);
 
-  res.status(200).json({
-    message: "Successfully received data",
-  });
+  if (DBManager.getInstance().getNodeByID(data.nodeID) == null) {
+    res.status(400).json({
+      message: `Room ${data.nodeID} does not exist`,
+    });
+  } else {
+    await createServiceRequest(
+      data.userID,
+      data.nodeID,
+      data.serviceType,
+      data.services,
+    );
+
+    res.status(200).json({
+      message: "Successfully received data",
+    });
+  }
 });
 
 export default router;

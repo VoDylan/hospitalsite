@@ -3,7 +3,6 @@ import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
 import { exit } from "node:process";
 import { Prisma } from "database";
-import { ServiceData } from "common/src/ServiceData.ts";
 
 const loggingPrefix: string = "Prisma: ";
 
@@ -70,6 +69,17 @@ export async function clearDBEdges() {
   console.log(`${loggingPrefix}Edges cleared from DB`);
 }
 
+export async function clearDBRequests() {
+  console.log(`${loggingPrefix}Clearing service requests from DB`);
+  try {
+    await client.serviceRequest.deleteMany({});
+  } catch (e) {
+    console.error(e);
+  }
+
+  console.log(`${loggingPrefix}Service requests cleared from DB`);
+}
+
 export async function getDBNodes() {
   console.log(`${loggingPrefix}Getting nodes from DB`);
   let nodes = null;
@@ -110,12 +120,11 @@ export async function getDBNodeByID(nodeID: string) {
   return node;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function createServiceRequest(
+export async function createServiceRequest(
   userID: string,
   nodeID: string,
   serviceType: string,
-  services: ServiceData,
+  services: string,
 ): Promise<void> {
   console.log("Creating service request");
 
