@@ -6,6 +6,7 @@ import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import TopBanner from "../components/TopBanner.tsx";
 import LadyWithFlowersInHospital from "../../public/LadyWithFlowersInHospital.jpg";
+
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
@@ -111,6 +112,8 @@ function FlowerDeliveryService() {
             <DropDown
               items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
               handleChange={handleFlowerTypeInput}
+              label={"Flower Type"}
+              returnData={form.flowerType}
             />
           </Grid>
           <Grid item xs={6}>

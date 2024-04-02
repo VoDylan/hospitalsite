@@ -2,53 +2,62 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Box,
   FormControl,
+  InputLabel,
 } from "@mui/material";
-import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface DropDownProps {
   items: string[];
   handleChange: (event: SelectChangeEvent) => string;
+  label: string;
+  returnData: string;
 }
 
-let retData: string = "";
-
 const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    justifyContent: "flex-start",
-    "& .MuiTextField-root": {
-      margin: "15px",
-      width: "200px", // Adjust width as needed
-      padding: "20px",
-    },
+  centeredLabel: {
+    textAlign: "left", // Center text within the label
+    width: "100%", // Ensure full width
   },
 });
 
 export function DropDown(props: DropDownProps) {
   const classes = useStyles();
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    props.handleChange(event);
+  };
+
   return (
-    <div className={classes.root}>
-      <Box sx={{ minWidth: 220 }}>
-        <FormControl fullWidth>
-          <Select
-            onChange={(event: SelectChangeEvent) => {
-              retData = props.handleChange(event);
-            }}
-            value={retData}
-            sx={{
-              mx: "12px",
-            }}
-          >
-            {props.items.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
-            ))}
-            ;
-          </Select>
-        </FormControl>
-      </Box>
+    <div>
+      <FormControl fullWidth sx={{ width: 220 }}>
+        <InputLabel
+          id="demo-simple-select-label"
+          className={classes.centeredLabel}
+          sx={{
+            mx: "12px",
+            my: "7px",
+          }}
+        >
+          {props.label}
+        </InputLabel>
+        <Select
+          onChange={handleSelectChange}
+          value={props.returnData}
+          defaultValue={""}
+          labelId="demo-simple-select-label"
+          label={props.label}
+          sx={{
+            mx: "12px",
+            my: "7px",
+          }}
+        >
+          {props.items.map((item) => (
+            <MenuItem value={item}>{item}</MenuItem>
+          ))}
+          ;
+        </Select>
+      </FormControl>
     </div>
   );
 }

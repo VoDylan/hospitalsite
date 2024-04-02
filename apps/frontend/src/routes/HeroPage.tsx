@@ -46,7 +46,7 @@ function HeroPage() {
             name={"Admin Login"}
           />
           <NavButton
-            path={"/FlowerDelivery"}
+            path={"/Map"}
             buttonType={"contained"}
             name={"Guest Login"}
           />

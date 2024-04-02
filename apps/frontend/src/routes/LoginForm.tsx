@@ -14,7 +14,7 @@ function LoginForm() {
   });
   const navigate = useNavigate();
   const handleRedirect = () => {
-    navigate("/Services/FlowerDelivery");
+    navigate("/Slides");
   };
 
   function clear() {
