@@ -43,6 +43,7 @@ export default function CustomCard({
             justifyContent: "center",
             alignItems: "flex-start",
             marginLeft: "8%",
+            minHeight: "40vh",
           }}
         >
           <Box
@@ -51,7 +52,7 @@ export default function CustomCard({
               fontSize: 40,
               fontWeight: "bold",
               position: "relative",
-              marginTop: "8%",
+              marginTop: "6%",
               marginBottom: "1%",
               width: "30vw",
             }}
@@ -62,6 +63,8 @@ export default function CustomCard({
             sx={{
               color: "black",
               fontSize: 20,
+              maxWidth: "20vw",
+              whiteSpace: "nowrap",
             }}
           >
             {cardDescription}
@@ -70,9 +73,9 @@ export default function CustomCard({
             sx={{
               position: "relative",
               marginTop: "2%",
-              whiteSpace: "nowrap",
               width: "auto",
               minWidth: "10vw",
+              whiteSpace: "nowrap",
             }}
             component={Link}
             to={path}

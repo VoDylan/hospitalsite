@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
-import { IconButton, Button } from "@mui/material";
+import { IconButton, Button, styled } from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Slide from "@mui/material/Slide";
@@ -20,58 +20,73 @@ interface CardData {
   cardDescription: string;
 }
 
-function Carousel() {
+const Dot = styled("span")(({ theme }) => ({
+  height: "10px",
+  width: "10px",
+  borderRadius: "50%",
+  backgroundColor: theme.palette.primary.main,
+  margin: "0 5px",
+  cursor: "pointer",
+}));
+
+function MainCarousel() {
   const [cards, setCards] = useState<CardData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [slideDirection, setSlideDirection] = useState<
-    "right" | "left" | undefined
-  >("left");
+  const [autoScroll, setAutoScroll] = useState<boolean>(true);
+  const [autoScrollTimeout, setAutoScrollTimeout] =
+    useState<NodeJS.Timeout | null>(null);
 
-  const mainCards: CardData[] = [
-    {
-      image: "../../public/00_thelowerlevel1.png",
-      title: "Directions",
-      description:
-        "Graphical display for directions to anywhere in the hospital!",
-      buttonText: "Go To Map!",
-      path: "/Map",
-      cardTitle: "Simplify Your Hospital Experience",
-      cardDescription: "Graphical navigation to anywhere in the hospital",
-    },
-    {
-      image: "../../public/noLady.jpg",
-      title: "Services",
-      description: "Request a service!",
-      buttonText: "Request a Service!",
-      path: "/Services",
-      cardTitle: "Streamline Your Service Requests",
-      cardDescription:
-        "Access all of our available services in one place and get efficient responses",
-    },
-  ];
+  const handleNextPage = useCallback(() => {
+    setCurrentPage((prevPage) => (prevPage + 1) % cards.length);
+    setAutoScroll(false);
+    clearTimeout(autoScrollTimeout as NodeJS.Timeout);
+    const newTimeout = setTimeout(() => {
+      setAutoScroll(true);
+    }, 10000); // After 10 seconds, re-enable autoScroll
+    setAutoScrollTimeout(newTimeout);
+  }, [cards.length, autoScrollTimeout]);
 
-  const handleNextPage = () => {
-    let nextPage = currentPage + 1;
-    if (nextPage >= cards.length) {
-      nextPage = 0; // Go back to the first slide if at the end
-    }
-    setSlideDirection("left");
-    setCurrentPage(nextPage);
-  };
-
-  const handlePrevPage = () => {
-    let prevPage = currentPage - 1;
-    if (prevPage < 0) {
-      prevPage = cards.length - 1; // Go to the last slide if at the beginning
-    }
-    setSlideDirection("right");
-    setCurrentPage(prevPage);
-  };
+  const handlePrevPage = useCallback(() => {
+    setCurrentPage((prevPage) =>
+      prevPage === 0 ? cards.length - 1 : prevPage - 1,
+    );
+    setAutoScroll(false);
+    clearTimeout(autoScrollTimeout as NodeJS.Timeout);
+    const newTimeout = setTimeout(() => {
+      setAutoScroll(true);
+    }, 10000); // After 10 seconds, re-enable autoScroll
+    setAutoScrollTimeout(newTimeout);
+  }, [cards.length, autoScrollTimeout]);
 
   useEffect(() => {
+    const mainCards: CardData[] = [
+      {
+        image: "../../public/00_thelowerlevel1.png",
+        title: "Directions",
+        description:
+          "Graphical display for directions to anywhere in the hospital!",
+        buttonText: "Go To Map!",
+        path: "/Map",
+        cardTitle: "Simplify Your Hospital Experience",
+        cardDescription: "Graphical navigation to anywhere in the hospital",
+      },
+      {
+        image: "../../public/noLady.jpg",
+        title: "Services",
+        description: "Request a service!",
+        buttonText: "Request a Service!",
+        path: "/Services",
+        cardTitle: "Streamline Your Service Requests",
+        cardDescription: "Access all of our available services in one place",
+      },
+    ];
+
     setCards(mainCards);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (autoScroll) {
+      const interval = setInterval(handleNextPage, 4500);
+      return () => clearInterval(interval);
+    }
+  }, [handleNextPage, autoScroll]);
 
   return (
     <>
@@ -96,7 +111,7 @@ function Carousel() {
                 display: currentPage === index ? "block" : "none",
               }}
             >
-              <Slide direction={slideDirection} in={currentPage === index}>
+              <Slide direction="left" in={currentPage === index}>
                 <Stack
                   spacing={2}
                   direction="row"
@@ -132,6 +147,14 @@ function Carousel() {
           <IconButton onClick={handlePrevPage} sx={{ margin: 5 }}>
             <NavigateBeforeIcon />
           </IconButton>
+
+          {[...Array(cards.length)].map((_, index) => (
+            <Dot
+              key={index}
+              onClick={() => setCurrentPage(index)}
+              style={{ opacity: currentPage === index ? 1 : 0.5 }}
+            />
+          ))}
 
           <IconButton
             onClick={handleNextPage}
@@ -176,4 +199,4 @@ function Carousel() {
   );
 }
 
-export default Carousel;
+export default MainCarousel;
