@@ -44,7 +44,7 @@ export function SubmitButton(props: ButtonProps) {
   }
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
-  function handleSubmit() {
+  async function handleSubmit() {
     if (props.input.flowerType === "") {
       openWithError("Please select a flower type");
     } else if (props.input.name === "") {
@@ -56,9 +56,15 @@ export function SubmitButton(props: ButtonProps) {
     } else {
       const submission = props.input;
       console.log(props.input);
-      handleClear();
-      openWithSuccess();
-      pushToDB(submission);
+
+      const result = await pushToDB(submission);
+
+      if (!result) {
+        openWithError("Failed to post form data to database");
+      } else {
+        handleClear();
+        openWithSuccess();
+      }
     }
   }
 
@@ -68,14 +74,28 @@ export function SubmitButton(props: ButtonProps) {
 
   // Function for posting the form submission to the database
   async function pushToDB(form: FlowerDeliveryFormSubmission) {
-    const res = await axios.post("/api/FlowerDelivery", form, {
-      headers: {
-        "content-type": "Application/json",
-      },
-    });
-    if (res.status == 200) {
-      console.log("success");
+    const returnData = {
+      userID: "admin",
+      nodeID: form.roomNumber,
+      serviceType: "flower-delivery",
+      services: JSON.stringify(form),
+    };
+
+    const res = await axios
+      .post("/api/database/servicerequest", returnData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .catch((e) => {
+        console.log(`Failed to send form data to database: ${e}`);
+      });
+    if (res != undefined) {
+      console.log(`Success: response code - ${res.status}`);
+      return true;
     }
+
+    return false;
   }
 
   return (
