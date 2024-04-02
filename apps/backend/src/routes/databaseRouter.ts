@@ -47,4 +47,14 @@ router.get("/edges/:startNodeID/:endNodeID", async (req, res) => {
   }
 });
 
+router.post("/servicerequest", async (req, res) => {
+  const data = req.body;
+
+  console.log(data);
+
+  res.status(200).json({
+    message: "Successfully received data",
+  });
+});
+
 export default router;
