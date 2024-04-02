@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/material";
-import background from "/Background.jpg";
+import background from "/Cover.jpg";
 import logo from "/bwh-logo.svg";
 import NavButton from "../components/NavButton.tsx";
 
