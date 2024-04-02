@@ -3,16 +3,15 @@ import DBManager from "../src/DBManager";
 import MapNode from "../src/MapNode";
 
 const db: DBManager = DBManager.getInstance();
-const setupScript = async () => {
-  await db.importNodesAndEdges(
+const setupScript = () => {
+  db.importNodesAndEdges(
     "./apps/backend/data/L1Nodes.csv",
     "./apps/backend/data/L1Edges.csv",
   );
 };
-setupScript().then(() => console.log("Finished setup"));
 
 test("Tests the toCSV function in the MapNode class for all imported nodes.", async () => {
-  await setupScript();
+  setupScript();
   const nodes: MapNode[] = db.mapNodes;
 
   expect(nodes[0].toCSV()).toStrictEqual(
@@ -30,7 +29,7 @@ test("Tests the toCSV function in the MapNode class for all imported nodes.", as
 });
 
 test("Tests the toString function in the MapEdges file for all imported edges.", async () => {
-  await setupScript();
+  setupScript();
   const nodes: MapNode[] = db.mapNodes;
 
   expect(nodes[0].toString()).toStrictEqual(

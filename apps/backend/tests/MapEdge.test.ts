@@ -3,15 +3,15 @@ import MapEdge from "../src/MapEdge";
 import DBManager from "../src/DBManager";
 
 const db: DBManager = DBManager.getInstance();
-const setupScript = async () => {
-  await db.importNodesAndEdges(
+const setupScript = () => {
+  db.importNodesAndEdges(
     "./apps/backend/data/L1Nodes.csv",
     "./apps/backend/data/L1Edges.csv",
   );
 };
 
 test("Tests the toCSV function in the MapEdges file for all imported edges.", async () => {
-  await setupScript();
+  setupScript();
   const edges: MapEdge[] = db.mapEdges;
 
   expect(edges[0].toCSV()).toStrictEqual("CCONF002L1, WELEV00HL1");
@@ -20,7 +20,7 @@ test("Tests the toCSV function in the MapEdges file for all imported edges.", as
 });
 
 test("Tests the toString function in the MapEdges file for all imported edges.", async () => {
-  await setupScript();
+  setupScript();
   const edges: MapEdge[] = db.mapEdges;
 
   expect(edges[0].toString()).toStrictEqual(
