@@ -15,7 +15,7 @@ import {
 } from "./PrismaScripts";
 import mapEdge from "./MapEdge";
 
-class DBManager {
+export default class DBManager {
   private static instance: DBManager;
 
   //Object representation of database for use across the program; kept updated on import of data and will provide new data to database
@@ -432,6 +432,3 @@ class DBManager {
     await createEdgePrisma(this._mapEdges);
   }
 }
-
-//Export the DBManager class to make it accessible to the rest of the program
-export default DBManager;
