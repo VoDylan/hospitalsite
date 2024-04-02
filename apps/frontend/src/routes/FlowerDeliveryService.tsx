@@ -32,8 +32,7 @@ function FlowerDeliveryService() {
       const response = await axios.get<NodeData[]>("/api/database/nodes");
 
       // Extract node numbers from response data
-      const nodeNumbers: string[] = response.data.map((node) => node.nodeID);
-
+      setNodeNumbers(response.data.map((node) => node.nodeID));
       return nodeNumbers;
     } catch (error) {
       // Handle errors
@@ -42,28 +41,8 @@ function FlowerDeliveryService() {
     }
   };
 
-  const fetchNodeNumbers = async (): Promise<string[]> => {
-    try {
-      const nodeNumbers = await getNodeNumbers();
-      return nodeNumbers;
-    } catch (error) {
-      // Handle errors
-      console.error("Error fetching node numbers:", error);
-      return [];
-    }
-  };
-
-  const getNodeNumbersArray = async (): Promise<string[]> => {
-    if (nodeNumbers.length === 0) {
-      // If nodeNumbers is empty, fetch the node numbers
-      const fetchedNodeNumbers = await fetchNodeNumbers();
-      setNodeNumbers(fetchedNodeNumbers);
-    }
-    return nodeNumbers;
-  };
-
-  // Gets an array of node names to be used in the Room Number DropDown component
-  getNodeNumbersArray();
+  // Call the previously defined asynch function to populate the nodes array used in the DropDown
+  getNodeNumbers();
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setResponses({ ...form, name: e.target.value });
