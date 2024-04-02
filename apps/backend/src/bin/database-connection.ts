@@ -14,8 +14,10 @@ const importDefaultNodeAndEdgeData = async () => {
   await DBManager.getInstance().syncNodesAndEdgesToDB();
 };
 
-importDefaultNodeAndEdgeData().then(() =>
-  console.log("Finished importing data into database"),
-);
+if (DBManager != undefined) {
+  importDefaultNodeAndEdgeData().then(() =>
+    console.log("Finished importing data into database"),
+  );
+}
 
 // Prisma automatically closes on shutdown

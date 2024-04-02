@@ -15,7 +15,7 @@ import {
 import mapEdge from "./MapEdge";
 import client from "./bin/database-connection.ts";
 
-class DBManager {
+export default class DBManager {
   private static instance: DBManager;
 
   //Object representation of database for use across the program; kept updated on import of data and will provide new data to database
@@ -450,5 +450,3 @@ class DBManager {
         }*/
     }
 }
-//Export the DBManager class to make it accessible to the rest of the program
-export default DBManager;
