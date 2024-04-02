@@ -13,7 +13,7 @@
     "prettier-config-custom": "workspace:*",
     "tsconfig-custom": "workspace:*",
     "typescript": "^5.0.4",
-    "vitest": "^0.34.1"
+    "vitest": "^1.4.0"
   },
   "scripts": {
     "lint": "dotenv -e ${PROJECT_CWD}/.env -- yarn shared:prettierlint && dotenv -e ${PROJECT_CWD}/.env -- prisma validate && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:eslint && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:tslint",
