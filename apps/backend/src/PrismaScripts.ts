@@ -3,6 +3,7 @@ import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
 import { exit } from "node:process";
 import { Prisma } from "database";
+import { ServiceData } from "common/src/ServiceData.ts";
 
 const loggingPrefix: string = "Prisma: ";
 
@@ -109,6 +110,46 @@ export async function getDBNodeByID(nodeID: string) {
   return node;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function createServiceRequest(
+  userId: number,
+  nodeID: string,
+  services: ServiceData,
+): Promise<void> {
+  console.log("Creating service request");
+
+  try {
+    const serviceJson = JSON.stringify(services);
+
+    const createdServiceRequest = await client.serviceRequest.create({
+      data: {
+        user: {
+          connect: {
+            userID: userId,
+          },
+        },
+        node: {
+          connect: {
+            nodeID: nodeID,
+          },
+        },
+        services: serviceJson,
+      },
+    });
+
+    console.log(`Service request created with ID: ${createdServiceRequest.id}`);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === "P2002") {
+        console.log("Service request already exists. Skipping...");
+      }
+    } else {
+      // All other errors
+      console.error(e);
+    }
+  }
+}
+
 export async function getDBEdges() {
   console.log(`${loggingPrefix}Getting edges from DB`);
   let edges = null;
@@ -180,5 +221,3 @@ export async function closePrismaConnection() {
     exit(1);
   }
 }
-
-export { client };
