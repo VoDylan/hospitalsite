@@ -91,3 +91,12 @@ model ServiceRequest {
   serviceType String
   services    String
 }
+
+model flowerServiceRequest {
+  id            Int    @id @default(autoincrement())
+  name          String
+  flowerType    String
+  recipientName String
+  roomNumber    String
+  message       String
+}
