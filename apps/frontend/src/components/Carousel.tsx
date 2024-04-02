@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
-import { IconButton, Button } from "@mui/material";
+import { IconButton, Button, styled } from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Slide from "@mui/material/Slide";
@@ -11,169 +11,190 @@ import ServiceCarousel from "../components/ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
 
 interface CardData {
-  image: string;
-  title: string;
-  description: string;
-  buttonText: string;
-  path: string;
-  cardTitle: string;
-  cardDescription: string;
+    image: string;
+    title: string;
+    description: string;
+    buttonText: string;
+    path: string;
+    cardTitle: string;
+    cardDescription: string;
 }
 
-function Carousel() {
-  const [cards, setCards] = useState<CardData[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [slideDirection, setSlideDirection] = useState<
-    "right" | "left" | undefined
-  >("left");
+const Dot = styled("span")(({ theme }) => ({
+    height: "10px",
+    width: "10px",
+    borderRadius: "50%",
+    backgroundColor: theme.palette.primary.main,
+    margin: "0 5px",
+    cursor: "pointer",
+}));
 
-  const mainCards: CardData[] = [
-    {
-      image: "../../public/00_thelowerlevel1.png",
-      title: "Directions",
-      description:
-        "Graphical display for directions to anywhere in the hospital!",
-      buttonText: "Go To Map!",
-      path: "/Map",
-      cardTitle: "Simplify Your Hospital Experience",
-      cardDescription: "Graphical navigation to anywhere in the hospital",
-    },
-    {
-      image: "../../public/noLady.jpg",
-      title: "Services",
-      description: "Request a service!",
-      buttonText: "Request a Service!",
-      path: "/Services",
-      cardTitle: "Streamline Your Service Requests",
-      cardDescription:
-        "Access all of our available services in one place and get efficient responses",
-    },
-  ];
+function MainCarousel() {
+    const [cards, setCards] = useState<CardData[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [autoScroll, setAutoScroll] = useState<boolean>(true);
+    const [autoScrollTimeout, setAutoScrollTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  const handleNextPage = () => {
-    let nextPage = currentPage + 1;
-    if (nextPage >= cards.length) {
-      nextPage = 0; // Go back to the first slide if at the end
-    }
-    setSlideDirection("left");
-    setCurrentPage(nextPage);
-  };
+    const handleNextPage = useCallback(() => {
+        setCurrentPage((prevPage) => (prevPage + 1) % cards.length);
+        setAutoScroll(false);
+        clearTimeout(autoScrollTimeout as NodeJS.Timeout);
+        const newTimeout = setTimeout(() => {
+            setAutoScroll(true);
+        }, 10000); // After 10 seconds, re-enable autoScroll
+        setAutoScrollTimeout(newTimeout);
+    }, [cards.length, autoScrollTimeout]);
 
-  const handlePrevPage = () => {
-    let prevPage = currentPage - 1;
-    if (prevPage < 0) {
-      prevPage = cards.length - 1; // Go to the last slide if at the beginning
-    }
-    setSlideDirection("right");
-    setCurrentPage(prevPage);
-  };
+    const handlePrevPage = useCallback(() => {
+        setCurrentPage((prevPage) => (prevPage === 0 ? cards.length - 1 : prevPage - 1));
+        setAutoScroll(false);
+        clearTimeout(autoScrollTimeout as NodeJS.Timeout);
+        const newTimeout = setTimeout(() => {
+            setAutoScroll(true);
+        }, 10000); // After 10 seconds, re-enable autoScroll
+        setAutoScrollTimeout(newTimeout);
+    }, [cards.length, autoScrollTimeout]);
 
-  useEffect(() => {
-    setCards(mainCards);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    useEffect(() => {
+        const mainCards: CardData[] = [
+            {
+                image: "../../public/00_thelowerlevel1.png",
+                title: "Directions",
+                description:
+                    "Graphical display for directions to anywhere in the hospital!",
+                buttonText: "Go To Map!",
+                path: "/Map",
+                cardTitle: "Simplify Your Hospital Experience",
+                cardDescription: "Graphical navigation to anywhere in the hospital",
+            },
+            {
+                image: "../../public/noLady.jpg",
+                title: "Services",
+                description: "Request a service!",
+                buttonText: "Request a Service!",
+                path: "/Services",
+                cardTitle: "Streamline Your Service Requests",
+                cardDescription:
+                    "Access all of our available services in one place and get efficient responses",
+            },
+        ];
 
-  return (
-    <>
-      <TopBanner />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column", // Change to column direction
-          alignItems: "center",
-          alignContent: "center",
-          justifyContent: "center",
-          height: "790px",
-          width: "100%",
-        }}
-      >
-        {/*Cards*/}
-        <Box sx={{ width: "100vw", height: "45vh", display: "flex" }}>
-          {cards.map((card, index) => (
+        setCards(mainCards);
+        if (autoScroll) {
+            const interval = setInterval(handleNextPage, 4500);
+            return () => clearInterval(interval);
+        }
+    }, [handleNextPage, autoScroll]);
+
+    return (
+        <>
+            <TopBanner />
             <Box
-              key={`card-${index}`}
-              sx={{
-                display: currentPage === index ? "block" : "none",
-              }}
+                sx={{
+                    display: "flex",
+                    flexDirection: "column", // Change to column direction
+                    alignItems: "center",
+                    alignContent: "center",
+                    justifyContent: "center",
+                    height: "790px",
+                    width: "100%",
+                }}
             >
-              <Slide direction={slideDirection} in={currentPage === index}>
-                <Stack
-                  spacing={2}
-                  direction="row"
-                  alignContent="center"
-                  justifyContent="center"
-                  sx={{ width: "100%", height: "100%" }}
+                {/*Cards*/}
+                <Box sx={{ width: "100vw", height: "45vh", display: "flex" }}>
+                    {cards.map((card, index) => (
+                        <Box
+                            key={`card-${index}`}
+                            sx={{
+                                display: currentPage === index ? "block" : "none",
+                            }}
+                        >
+                            <Slide direction="left" in={currentPage === index}>
+                                <Stack
+                                    spacing={2}
+                                    direction="row"
+                                    alignContent="center"
+                                    justifyContent="center"
+                                    sx={{ width: "100%", height: "100%" }}
+                                >
+                                    <CustomCard
+                                        key={index}
+                                        image={card.image}
+                                        title={card.title}
+                                        description={card.description}
+                                        buttonText={card.buttonText}
+                                        path={card.path}
+                                        cardTitle={card.cardTitle}
+                                        cardDescription={card.cardDescription}
+                                    />
+                                </Stack>
+                            </Slide>
+                        </Box>
+                    ))}
+                    {/* Navigation Buttons */}
+                </Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        marginTop: "35px",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
                 >
-                  <CustomCard
-                    key={index}
-                    image={card.image}
-                    title={card.title}
-                    description={card.description}
-                    buttonText={card.buttonText}
-                    path={card.path}
-                    cardTitle={card.cardTitle}
-                    cardDescription={card.cardDescription}
-                  />
-                </Stack>
-              </Slide>
-            </Box>
-          ))}
-          {/* Navigation Buttons */}
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            marginTop: "35px",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <IconButton onClick={handlePrevPage} sx={{ margin: 5 }}>
-            <NavigateBeforeIcon />
-          </IconButton>
+                    <IconButton onClick={handlePrevPage} sx={{ margin: 5 }}>
+                        <NavigateBeforeIcon />
+                    </IconButton>
 
-          <IconButton
-            onClick={handleNextPage}
-            sx={{
-              margin: 5,
-            }}
-          >
-            <NavigateNextIcon />
-          </IconButton>
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          color: "black",
-          fontSize: 40,
-          fontWeight: "bold",
-          width: 500,
-          marginLeft: "70px",
-          textDecoration: "underline",
-        }}
-      >
-        Services
-      </Box>
-      <ServiceCarousel />
-      <Stack
-        direction={"row"}
-        sx={{
-          display: "flex",
-          alignContent: "center",
-          justifyContent: "end",
-          marginRight: "70px",
-          marginBottom: "50px",
-        }}
-      >
-        <Link to={"/Services"}>
-          <Button variant="contained" size="large">
-            See All {">"}
-          </Button>
-        </Link>
-      </Stack>
-    </>
-  );
+                    {[...Array(cards.length)].map((_, index) => (
+                        <Dot
+                            key={index}
+                            onClick={() => setCurrentPage(index)}
+                            style={{ opacity: currentPage === index ? 1 : 0.5 }}
+                        />
+                    ))}
+
+                    <IconButton
+                        onClick={handleNextPage}
+                        sx={{
+                            margin: 5,
+                        }}
+                    >
+                        <NavigateNextIcon />
+                    </IconButton>
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    color: "black",
+                    fontSize: 40,
+                    fontWeight: "bold",
+                    width: 500,
+                    marginLeft: "70px",
+                    textDecoration: "underline",
+                }}
+            >
+                Services
+            </Box>
+            <ServiceCarousel />
+            <Stack
+                direction={"row"}
+                sx={{
+                    display: "flex",
+                    alignContent: "center",
+                    justifyContent: "end",
+                    marginRight: "70px",
+                    marginBottom: "50px",
+                }}
+            >
+                <Link to={"/Services"}>
+                    <Button variant="contained" size="large">
+                        See All {">"}
+                    </Button>
+                </Link>
+            </Stack>
+        </>
+    );
 }
 
-export default Carousel;
+export default MainCarousel;
