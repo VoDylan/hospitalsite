@@ -1,4 +1,4 @@
-import ServiceCards from "./ServiceCards.tsx";
+import ServiceCards from "./ServiceHeroCards.tsx";
 import Stack from "@mui/material/Stack";
 
 interface secondaryCardData {
@@ -49,7 +49,7 @@ function ServiceCarousel() {
           marginBottom: "10px",
         }}
         direction={"row"}
-        spacing={4}
+        spacing={6}
         display={"flex"}
         alignContent={"center"}
         justifyContent={"center"}
