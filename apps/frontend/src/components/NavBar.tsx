@@ -41,6 +41,11 @@ export const NavBar = () => {
               name={"Services"}
               path={"http://localhost:3000/Services"}
             />
+            <NavButton
+              path={"/DisplayDatabase"}
+              buttonType={"contained"}
+              name={"Database"}
+            />
           </Stack>
         </Box>
       </Drawer>
