@@ -3,6 +3,9 @@ import {
   createServiceRequest,
   getDBEdgeByStartAndEndNode,
   getDBNodeByID,
+  getServiceRequestFromDBByNodeID,
+  getServiceRequestFromDBByType,
+  getServiceRequestFromDBByUserID,
   getServiceRequestsFromDB,
 } from "../PrismaScripts.ts";
 import DBManager from "../DBManager.ts";
@@ -54,6 +57,42 @@ router.get("/edges/:startNodeID/:endNodeID", async (req, res) => {
 
 router.get("/servicerequest", async (req, res) => {
   const requests = await getServiceRequestsFromDB();
+
+  if (requests == null) {
+    res.status(404).json({});
+  } else {
+    res.status(200).json(requests!);
+  }
+});
+
+router.get("/servicerequest/userid/:userid", async (req, res) => {
+  const userID: string = req.params.userid;
+
+  const requests = await getServiceRequestFromDBByUserID(userID);
+
+  if (requests == null) {
+    res.status(404).json({});
+  } else {
+    res.status(200).json(requests!);
+  }
+});
+
+router.get("/servicerequest/nodeid/:nodeid", async (req, res) => {
+  const nodeID: string = req.params.nodeid;
+
+  const requests = await getServiceRequestFromDBByNodeID(nodeID);
+
+  if (requests == null) {
+    res.status(404).json({});
+  } else {
+    res.status(200).json(requests!);
+  }
+});
+
+router.get("/servicerequest/servicetype/:servicetype", async (req, res) => {
+  const serviceType = req.params.servicetype;
+
+  const requests = await getServiceRequestFromDBByType(serviceType);
 
   if (requests == null) {
     res.status(404).json({});
