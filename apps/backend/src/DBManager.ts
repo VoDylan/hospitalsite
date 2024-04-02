@@ -4,17 +4,48 @@ import MapEdge from "./MapEdge";
 import { EdgeFields } from "./MapEdge";
 import CSVTools from "./lib/CSVTools";
 import fs from "fs";
-import { createEdgePrisma, createNodePrisma, client } from "./PrismaScripts";
+import {
+  createEdgePrisma,
+  createNodePrisma,
+  client,
+  clearDBEdges,
+  clearDBNodes,
+  getDBNodes,
+  getDBEdges,
+} from "./PrismaScripts";
 import mapEdge from "./MapEdge";
 
-class DBManager {
+export default class DBManager {
+  private static instance: DBManager;
+
   //Object representation of database for use across the program; kept updated on import of data and will provide new data to database
   //on map changes
   private _mapNodes: MapNode[] = [];
   private _mapEdges: MapEdge[] = [];
 
   //Default export directory to be used when saving nodes and edges to a CSV file
-  private exportDir: string = "./output/";
+  private exportDir: string = "./apps/backend/output/";
+
+  private loggingPrefix: string = "DBManager: ";
+
+  /**
+   * Private constructor for use in creating the singleton DBManager instance
+   * @private
+   */
+  private constructor() {
+    console.log(`${this.loggingPrefix}Created DBManager singleton instance`);
+  }
+
+  /**
+   * Function to return the existing singleton instance for the DBManager class or create the singleton instance
+   */
+  public static getInstance(): DBManager {
+    if (!this.instance) {
+      this.instance = new DBManager();
+    }
+
+    return this.instance;
+  }
 
   /**
    * Public helper function to import both nodes and edges from individual file paths
@@ -22,14 +53,20 @@ class DBManager {
    * @param pathEdge - Filepath for the edge CSV data
    */
   public importNodesAndEdges(pathNode: string, pathEdge: string) {
-    this.importNodeFromPath(pathNode);
-    this.importEdgeFromPath(pathEdge);
+    this._mapNodes = this.importNodeFromPath(pathNode);
+    this._mapEdges = this.importEdgeFromPath(pathEdge);
   }
 
   /**
-   * Function to congregate map lists to put in DB
+   * Function to sync the node and edge object arrays to the database. First clears the database and then pushes the lists
+   * to the database to ensure consistency
    */
-  public async toDB() {
+  public async syncNodesAndEdgesToDB() {
+    //Clear both the edges and the nodes tables
+    await clearDBEdges();
+    await clearDBNodes();
+
+    //Push the lists to the database;
     await this.listsToDB();
   }
 
@@ -38,12 +75,14 @@ class DBManager {
    * @param nodePath - Filepath for the node CSV data
    * @private
    */
-  private importNodeFromPath(nodePath: string) {
+  private importNodeFromPath(nodePath: string): MapNode[] {
+    const newNodes: MapNode[] = [];
     //Convert file data to individual elements in a 2d array. Rows represent an individual node and the columns represent the data elements
     const nodes: string[][] = CSVTools.parseCSVFromFile(nodePath);
 
     //Loop through all nodes, skipping the header row
     for (let i: number = 1; i < nodes.length; i++) {
+      if (nodes[i][0] == "") continue;
       //Create a NodeFields object to store all node information in an easy-to-transport object
       const nodeInfo: NodeFields = {
         nodeID: nodes[i][0],
@@ -59,20 +98,10 @@ class DBManager {
       const node: MapNode = new MapNode(nodeInfo);
 
       //Create a new MapNode object with the given nodeInfo and append it to the list of nodes
-      this._mapNodes.push(node);
+      newNodes.push(node);
     }
-  }
 
-  /**
-   * Function to loop over filled map arrays and put the objects into the database
-   */
-  private async listsToDB() {
-    for (let i = 0; i < this._mapNodes.length; i++) {
-      await createNodePrisma(this._mapNodes[i]);
-    }
-    for (let i = 0; i < this._mapEdges.length; i++) {
-      await createEdgePrisma(this._mapEdges[i]);
-    }
+    return newNodes;
   }
 
   /**
@@ -80,12 +109,14 @@ class DBManager {
    * @param edgePath - Filepath for the edge CSV data
    * @private
    */
-  private importEdgeFromPath(edgePath: string) {
+  private importEdgeFromPath(edgePath: string): MapEdge[] {
+    const newEdges: MapEdge[] = [];
     //Convert file data to individual elements in a 2d array. Rows represent an individual edge and the columns represent the data elements
     const edges: string[][] = CSVTools.parseCSVFromFile(edgePath);
 
     //loop through all edges, skipping the header line
     for (let i: number = 1; i < edges.length; i++) {
+      if (edges[i][0] == "") continue;
       //Get the references to the Node objects based on the imported ID. Returns null if no reference is found
       const startingNode: MapNode | null = this.getNodeByID(edges[i][0]);
       const endingNode: MapNode | null = this.getNodeByID(edges[i][1]);
@@ -94,11 +125,11 @@ class DBManager {
       //does not constitute a fatal error, so the program continues running without doing anything if either are null references
       if (startingNode == null) {
         console.log(
-          `Edge Generation Error: Starting node with id ${edges[i][0]} not found!`,
+          `${this.loggingPrefix}Edge Generation Error: Starting node with id ${edges[i][0]} not found!`,
         );
       } else if (endingNode == null) {
         console.log(
-          `Edge Generation Error: Ending node with id ${edges[i][1]} not found!`,
+          `${this.loggingPrefix}Edge Generation Error: Ending node with id ${edges[i][1]} not found!`,
         );
       } else {
         //If both edges are valid, create an EdgeFields object storing the references to each, marking them as non-null since they
@@ -111,9 +142,11 @@ class DBManager {
         const edge: MapEdge = new MapEdge(edgeInfo);
 
         //Push a new MapEdge object with the passed in information to the mapEdges list
-        this._mapEdges.push(edge);
+        newEdges.push(edge);
       }
     }
+
+    return newEdges;
   }
 
   /**
@@ -163,6 +196,13 @@ class DBManager {
   }
 
   /**
+   * Function to congregate map lists to put in DB
+   */
+  public async toDB() {
+    await this.listsToDB();
+  }
+
+  /**
    * Helper function to print the nodes in string format
    */
   public printNodes() {
@@ -170,7 +210,7 @@ class DBManager {
     for (let i = 0; i < this._mapNodes.length; i++) {
       prints = prints + this._mapNodes[i].toString();
     }
-    console.log(prints);
+    console.log(`${this.loggingPrefix}\n${prints}`);
   }
 
   /**
@@ -181,7 +221,7 @@ class DBManager {
     for (let i = 0; i < this._mapEdges.length; i++) {
       prints = prints + this._mapEdges[i].toString();
     }
-    console.log(prints);
+    console.log(`${this.loggingPrefix}${prints}`);
   }
 
   /**
@@ -212,6 +252,100 @@ class DBManager {
   }
 
   /**
+   * Function to query database for all nodes and places them in this object's array
+   * Call this then get mapNodes
+   */
+
+  public async updateAndGetNodesFromDB() {
+    const nodes = await getDBNodes();
+    const newNodes: MapNode[] = [];
+
+    if (nodes == null) {
+      console.log(`${this.loggingPrefix}No nodes found in DB`);
+      return [];
+    } else {
+      console.log(`${this.loggingPrefix}Nodes found in DB`);
+    }
+    //Loop through all nodes
+    for (let i: number = 0; i < nodes.length; i++) {
+      //Create a NodeFields object to store all node information in an easy-to-transport object
+      const nodeInfo: NodeFields = {
+        nodeID: nodes[i].nodeID,
+        xcoord: nodes[i].xcoord,
+        ycoord: nodes[i].ycoord,
+        floor: nodes[i].floor!,
+        building: nodes[i].building!,
+        nodeType: nodes[i].nodeType!,
+        longName: nodes[i].longName!,
+        shortName: nodes[i].shortName!,
+      };
+
+      const node: MapNode = new MapNode(nodeInfo);
+
+      //Create a new MapNode object with the given nodeInfo and append it to the list of nodes
+      newNodes.push(node);
+    }
+    console.log(`${this.loggingPrefix}Updated node objects from DB`);
+    this._mapNodes = newNodes;
+    return nodes;
+  }
+
+  /**
+   * Function to query database for all edges and places them in this object's array
+   * Call this then get mapEdges
+   */
+  public async updateAndGetEdgesFromDB() {
+    const edges = await getDBEdges();
+    const newEdges: mapEdge[] = [];
+
+    //First sync the nodes stored in the database to the objects
+    await this.updateAndGetNodesFromDB();
+
+    if (edges == null) {
+      console.log(`${this.loggingPrefix}No edges found in DB`);
+      return [];
+    } else {
+      console.log(`${this.loggingPrefix}Edges found in DB`);
+    }
+
+    //loop through all edges
+    for (let i: number = 0; i < edges.length; i++) {
+      //Get the references to the Node objects based on the imported ID. Returns null if no reference is found
+      const startingNode: MapNode | null = this.getNodeByID(
+        edges[i].startNodeID,
+      );
+      const endingNode: MapNode | null = this.getNodeByID(edges[i].endNodeID);
+
+      if (startingNode == null) {
+        console.log(
+          `${this.loggingPrefix}Starting node not found. Have the nodes been synced from the database?`,
+        );
+        return null;
+      }
+
+      if (endingNode == null) {
+        console.log(
+          `${this.loggingPrefix}Ending node not found. Have the nodes been synced from the database?`,
+        );
+        return null;
+      }
+
+      //If both edges are valid, create an EdgeFields object storing the references to each, marking them as non-null since they
+      //are guaranteed to be valid at this point in the code
+      const edgeInfo: EdgeFields = {
+        startNode: startingNode!,
+        endNode: endingNode!,
+      };
+      const edge: mapEdge = new MapEdge(edgeInfo);
+      newEdges.push(edge);
+    }
+
+    console.log(`${this.loggingPrefix}Updated edge objects from DB`);
+    this._mapEdges = newEdges;
+    return edges;
+  }
+
+  /**
    * Helper function to get the combined path for exporting a file to the default export directory
    * @param fileName - Name of the file to export to
    */
@@ -227,7 +361,8 @@ class DBManager {
     const origNode: MapNode | null = this.getNodeByID(nodeID);
 
     if (origNode == null) {
-      console.log("Node does not exist as object.");
+      console.log(`${this.loggingPrefix}Node does not exist as object.`);
+      return;
     } else {
       const DBNode = await client.node.findUnique({
         where: {
@@ -235,7 +370,7 @@ class DBManager {
         },
       });
       if (DBNode == null) {
-        console.log("Node does not exist in database.");
+        console.log(`${this.loggingPrefix}Node does not exist in database.`);
       } else {
         origNode.xcoord = DBNode.xcoord;
         origNode.ycoord = DBNode.ycoord;
@@ -264,7 +399,8 @@ class DBManager {
       }
     }
     if (origEdge == null) {
-      console.log("Edge does not exist as an object.");
+      console.log(`${this.loggingPrefix}Edge does not exist as an object.`);
+      return;
     } else {
       const DBEdge = await client.edge.findFirst({
         where: {
@@ -273,13 +409,13 @@ class DBManager {
         },
       });
       if (DBEdge == null) {
-        console.log("Edge does not exist in database.");
+        console.log(`${this.loggingPrefix}Edge does not exist in database.`);
       } else {
         const startNode: MapNode | null = this.getNodeByID(DBEdge.startNodeID);
         const endNode: MapNode | null = this.getNodeByID(DBEdge.endNodeID);
 
         if (startNode == null || endNode == null) {
-          console.log("startNode or endNode not found!");
+          console.log(`${this.loggingPrefix}startNode or endNode not found!`);
         } else {
           origEdge.startNode = startNode!;
           origEdge.endNode = endNode!;
@@ -287,7 +423,12 @@ class DBManager {
       }
     }
   }
-}
 
-//Export the DBManager class to make it accessible to the rest of the program
-export default DBManager;
+  /**
+   * Helper function to loop over filled map arrays and put the objects into the database
+   */
+  private async listsToDB() {
+    await createNodePrisma(this._mapNodes);
+    await createEdgePrisma(this._mapEdges);
+  }
+}

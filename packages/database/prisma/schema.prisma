@@ -21,15 +21,16 @@ model Node {
   startEdges Edge[]    @relation("StartNode")
   endEdges   Edge[]    @relation("EndNode")
   Patient    Patient[]
-  //ServiceRequest ServiceRequest[]
+  // ServiceRequest ServiceRequest[]
 }
 
 model Edge {
-  edgeID      Int    @id @default(autoincrement())
   startNodeID String
   endNodeID   String
   startNode   Node   @relation(fields: [startNodeID], references: [nodeID], name: "StartNode")
   endNode     Node   @relation(fields: [endNodeID], references: [nodeID], name: "EndNode")
+
+  @@id(name: "pairID", [startNodeID, endNodeID])
 }
 
 model User {
@@ -40,7 +41,7 @@ model User {
   Admin         Admin[]
   Patient       Patient[]
   MedicalWorker MedicalWorker[]
-  //ServiceRequest ServiceRequest[]
+  // ServiceRequest ServiceRequest[]
 }
 
 model Admin {

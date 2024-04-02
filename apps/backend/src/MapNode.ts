@@ -26,6 +26,8 @@ class MapNode {
   private _longName: string;
   private _shortName: string;
 
+  private _nodeInfo: NodeFields;
+
   /**
    * Constructor that creates a new MapNode object using the passed in NodeFields
    * @param nodeInfo
@@ -39,6 +41,8 @@ class MapNode {
     this._nodeType = nodeInfo.nodeType;
     this._longName = nodeInfo.longName;
     this._shortName = nodeInfo.shortName;
+
+    this._nodeInfo = nodeInfo;
   }
 
   /**
@@ -70,6 +74,10 @@ class MapNode {
    */
   public toCSV(): string {
     return `${this._nodeID}, ${this._xcoord}, ${this._ycoord}, ${this._floor}, ${this._building}, ${this._nodeType}, ${this._longName}, ${this._shortName}`;
+  }
+
+  public get nodeInfo(): NodeFields {
+    return this._nodeInfo;
   }
 
   /**
