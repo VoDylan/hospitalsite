@@ -1,5 +1,5 @@
 import TopBanner from "../components/TopBanner.tsx";
-import Carousel from "../components/Carousel.tsx";
+import MainCarousel from "../components/Carousel.tsx";
 
 function MapPage() {
   return (
@@ -11,7 +11,7 @@ function MapPage() {
         }}
       >
         <TopBanner />
-        <Carousel />
+        <MainCarousel />
       </div>
     </>
   );
