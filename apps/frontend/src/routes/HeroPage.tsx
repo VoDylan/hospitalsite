@@ -1,6 +1,6 @@
 import { Box, Stack } from "@mui/material";
-import background from "/Background.jpg";
-import logo from "/logo.png";
+import background from "/Cover.jpg";
+import logo from "/bwh-logo.svg";
 import NavButton from "../components/NavButton.tsx";
 
 function HeroPage() {
@@ -23,7 +23,7 @@ function HeroPage() {
           backgroundColor: "white",
           opacity: "90%",
           padding: "20px",
-          width: "50%",
+          width: "40%",
           height: "60%",
           minHeight: "80",
           position: "relative",

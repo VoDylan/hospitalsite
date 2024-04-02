@@ -3,8 +3,8 @@ import { Login } from "../common/LoginForm.ts";
 import Textbox from "../components/Textbox.tsx";
 import Buttons from "../components/LoginButtons.tsx";
 import { Typography, Box } from "@mui/material";
-import background from "/Background.jpg";
-import logo from "/logo.png";
+import background from "/Cover.jpg";
+import logo from "/bwh-logo.svg";
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -60,7 +60,7 @@ function LoginForm() {
           backgroundColor: "white",
           opacity: "90%",
           padding: "20px",
-          width: "50%",
+          width: "40%",
           height: "60%",
           minHeight: "80",
           position: "relative",
