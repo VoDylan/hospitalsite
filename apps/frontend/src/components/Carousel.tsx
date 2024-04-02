@@ -16,6 +16,8 @@ interface CardData {
   description: string;
   buttonText: string;
   path: string;
+  cardTitle: string;
+  cardDescription: string;
 }
 
 function Carousel() {
@@ -27,19 +29,24 @@ function Carousel() {
 
   const mainCards: CardData[] = [
     {
-      image: "",
+      image: "../../public/00_thelowerlevel1.png",
       title: "Directions",
       description:
         "Graphical display for directions to anywhere in the hospital!",
       buttonText: "Go To Map!",
       path: "/Map",
+      cardTitle: "Simplify Your Hospital Experience",
+      cardDescription: "Graphical navigation to anywhere in the hospital",
     },
     {
-      image: "",
+      image: "../../public/noLady.jpg",
       title: "Services",
       description: "Request a service!",
       buttonText: "Request a Service!",
       path: "/Services",
+      cardTitle: "Streamline Your Service Requests",
+      cardDescription:
+        "Access all of our available services in one place and get efficient responses",
     },
   ];
 
@@ -104,6 +111,8 @@ function Carousel() {
                     description={card.description}
                     buttonText={card.buttonText}
                     path={card.path}
+                    cardTitle={card.cardTitle}
+                    cardDescription={card.cardDescription}
                   />
                 </Stack>
               </Slide>
@@ -141,6 +150,7 @@ function Carousel() {
           fontWeight: "bold",
           width: 500,
           marginLeft: "70px",
+          textDecoration: "underline",
         }}
       >
         Services

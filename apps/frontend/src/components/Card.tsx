@@ -15,6 +15,8 @@ interface CardProps {
   description: string;
   buttonText: string;
   path: string;
+  cardTitle: string;
+  cardDescription: string;
 }
 
 export default function CustomCard({
@@ -23,6 +25,8 @@ export default function CustomCard({
   description,
   buttonText,
   path,
+  cardTitle,
+  cardDescription,
 }: CardProps) {
   return (
     <Card sx={{ position: "relative", width: "100vw", height: "52vh" }}>
@@ -43,7 +47,7 @@ export default function CustomCard({
               left: "8%",
             }}
           >
-            Simplify your hostpital experience
+            {cardTitle}
           </Box>
           <Box
             sx={{
@@ -55,7 +59,7 @@ export default function CustomCard({
               left: "8%",
             }}
           >
-            Get graphical directions to anywhere in the hospital
+            {cardDescription}
           </Box>
           <Button
             sx={{ position: "absolute", width: 220, top: "60%", left: "8%" }}
