@@ -82,7 +82,7 @@ export function SubmitButton(props: ButtonProps) {
       userID: "admin",
       nodeID: form.roomNumber,
       serviceType: "flower-delivery",
-      services: JSON.stringify(form),
+      services: form,
     };
 
     let statusCode = undefined;

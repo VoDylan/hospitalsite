@@ -3,6 +3,7 @@ import {
   createServiceRequest,
   getDBEdgeByStartAndEndNode,
   getDBNodeByID,
+  getServiceRequestsFromDB,
 } from "../PrismaScripts.ts";
 import DBManager from "../DBManager.ts";
 
@@ -48,6 +49,16 @@ router.get("/edges/:startNodeID/:endNodeID", async (req, res) => {
     res.status(404).json({});
   } else {
     res.status(200).json(edgeData!);
+  }
+});
+
+router.get("/servicerequest", async (req, res) => {
+  const requests = await getServiceRequestsFromDB();
+
+  if (requests == null) {
+    res.status(404).json({});
+  } else {
+    res.status(200).json(requests!);
   }
 });
 
