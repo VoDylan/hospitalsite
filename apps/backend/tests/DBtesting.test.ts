@@ -3,15 +3,17 @@ import DBManager from "../src/DBManager";
 import MapNode, { NodeFields } from "../src/MapNode";
 //import MapEdge, {EdgeFields} from "../src/MapEdge";
 import CSVTools from "../src/lib/CSVTools";
+import MapEdge from "../src/MapEdge.ts";
 
 //let testTool: CSVTools = new CSVTools();
 const testDB = DBManager.getInstance();
-// const setupScript = async () => {
-//   await testDB.importNodesAndEdges(
-//     "./apps/backend/data/L1Nodes.csv",
-//     "./apps/backend/data/L1Edges.csv",
-//   );
-// };
+
+const setupScript = () => {
+  testDB.importNodesAndEdges(
+    "./apps/backend/data/L1Nodes.csv",
+    "./apps/backend/data/L1Edges.csv",
+  );
+};
 const testNode1Fields: NodeFields = {
   nodeID: "CCONF001L1",
   xcoord: 2255,
@@ -37,7 +39,7 @@ const testNode1 = new MapNode(testNode1Fields);
 //let testEdge3Fields: EdgeFields = {startNode: testNode3, endNode: testNode1};
 //let testEdge3 = new MapEdge(testEdge3Fields);
 
-test("parsing", () => {
+test("CSV Parsing of Node Data", () => {
   const nodes: string[][] = CSVTools.parseCSVFromFile(
     "./apps/backend/data/L1Nodes.csv",
   );
@@ -55,50 +57,112 @@ test("parsing", () => {
   expect(created).toStrictEqual(testNode1);
 });
 
-test(testDB.toDB, () => {
-  testDB.toDB();
-  //check tables
-  //works
+test("Get node objects", () => {
+  setupScript();
+  const nodes: MapNode[] = testDB.mapNodes;
+
+  expect(nodes.length).toStrictEqual(46);
+
+  expect(nodes[25].nodeInfo).toStrictEqual({
+    nodeID: "CLABS005L1",
+    xcoord: 2770,
+    ycoord: 1284,
+    floor: "L1",
+    building: "45 Francis",
+    nodeType: "LABS",
+    longName: "CSIR MRI Floor L1",
+    shortName: "Lab C005L1",
+  });
+
+  expect(nodes[26].nodeInfo).toStrictEqual({
+    nodeID: "CREST001L1",
+    xcoord: 1732,
+    ycoord: 1019,
+    floor: "L1",
+    building: "Tower",
+    nodeType: "REST",
+    longName: "Restroom L Elevator Floor L1",
+    shortName: "Restroom C001L1",
+  });
+
+  expect(nodes[45].nodeInfo).toStrictEqual({
+    nodeID: "WELEV00ML1",
+    xcoord: 1820,
+    ycoord: 1284,
+    floor: "L1",
+    building: "Tower",
+    nodeType: "ELEV",
+    longName: "Elevator M Floor L1",
+    shortName: "Elevator ML1",
+  });
 });
 
-test(testDB.updateAndGetNodesFromDB, () => {
-  testDB.updateAndGetNodesFromDB();
-  //testDB.printNodes();
-});
+test("Get edge objects", () => {
+  setupScript();
+  const edges: MapEdge[] = testDB.mapEdges;
 
-/*works
-test(CSVTools.parseCSVFromFile, () => {
-    console.log(CSVTools.parseCSVFromFile('./L1Nodes.csv'))
-});*/
+  expect(edges.length).toStrictEqual(46);
 
-test("exporting", () => {
-  testDB.exportNodesAndEdgesToCSV();
-});
+  expect(`${edges[0].startNodeID} ${edges[0].endNodeID}`).toStrictEqual(
+    "CCONF002L1 WELEV00HL1",
+  );
 
-test(testDB.printNodes, () => {
-  testDB.printNodes();
-});
+  expect(`${edges[7].startNodeID} ${edges[7].endNodeID}`).toStrictEqual(
+    "CHALL003L1 CCONF003L1",
+  );
 
-test(testDB.printEdges, () => {
-  testDB.printEdges();
-});
-
-test("Testing output filePath", () => {
-  expect(testDB.getCombinedFilepath("newNodeCSV.csv")).toStrictEqual(
-    "./apps/backend/output/newNodeCSV.csv",
+  expect(`${edges[45].startNodeID} ${edges[45].endNodeID}`).toStrictEqual(
+    "GHALL006L1 GELEV00QL1",
   );
 });
 
-test(testDB.updateNodeFromDB, () => {
-  //manually change database
-  testDB.updateNodeFromDB("CCONF001L1");
-  testDB.getNodeByID("CCONF001L1");
-  //check change manually
+test("Export nodes and edges to CSV", () => {
+  testDB.exportNodesAndEdgesToCSV();
 });
 
-test(testDB.updateEdgeFromDB, () => {
-  //manually change database
-  testDB.updateEdgeFromDB("CCONF001L1", "CCONF002L1");
-  testDB.printEdges();
-  //check change manually
+test("Test output filePath generation function", () => {
+  expect(testDB.getCombinedFilepath("newNodeCSV.csv")).toStrictEqual(
+    "./apps/backend/output/newNodeCSV.csv",
+  );
+
+  expect(testDB.getCombinedFilepath("newEdgeCSV.csv")).toStrictEqual(
+    "./apps/backend/output/newEdgeCSV.csv",
+  );
+
+  expect(testDB.getCombinedFilepath("testfile.csv")).toStrictEqual(
+    "./apps/backend/output/testfile.csv",
+  );
+});
+
+test("Get node by node ID", () => {
+  setupScript();
+  const testNode1 = testDB.getNodeByID("CREST003L1")!;
+  expect(testNode1).toBeDefined();
+  expect(testNode1.nodeInfo).toStrictEqual({
+    nodeID: "CREST003L1",
+    xcoord: 2300,
+    ycoord: 879,
+    floor: "L1",
+    building: "45 Francis",
+    nodeType: "REST",
+    longName: "Restroom K Elevator Floor L1",
+    shortName: "Restroom C003L1",
+  });
+
+  const testNode2 = testDB.getNodeByID("WELEV00ML1")!;
+  expect(testNode2).toBeDefined();
+  expect(testNode2.nodeInfo).toStrictEqual({
+    nodeID: "WELEV00ML1",
+    xcoord: 1820,
+    ycoord: 1284,
+    floor: "L1",
+    building: "Tower",
+    nodeType: "ELEV",
+    longName: "Elevator M Floor L1",
+    shortName: "Elevator ML1",
+  });
+
+  const testNode3 = testDB.getNodeByID("testNull1");
+
+  expect(testNode3).toBeNull();
 });

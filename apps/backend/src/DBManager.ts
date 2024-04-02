@@ -52,13 +52,21 @@ class DBManager {
    * @param pathNode - Filepath for the node CSV data
    * @param pathEdge - Filepath for the edge CSV data
    */
-  public async importNodesAndEdges(pathNode: string, pathEdge: string) {
+  public importNodesAndEdges(pathNode: string, pathEdge: string) {
+    this._mapNodes = this.importNodeFromPath(pathNode);
+    this._mapEdges = this.importEdgeFromPath(pathEdge);
+  }
+
+  /**
+   * Function to sync the node and edge object arrays to the database. First clears the database and then pushes the lists
+   * to the database to ensure consistency
+   */
+  public async syncNodesAndEdgesToDB() {
+    //Clear both the edges and the nodes tables
     await clearDBEdges();
     await clearDBNodes();
 
-    this.importNodeFromPath(pathNode);
-    this.importEdgeFromPath(pathEdge);
-
+    //Push the lists to the database;
     await this.listsToDB();
   }
 
@@ -67,7 +75,8 @@ class DBManager {
    * @param nodePath - Filepath for the node CSV data
    * @private
    */
-  private importNodeFromPath(nodePath: string) {
+  private importNodeFromPath(nodePath: string): MapNode[] {
+    const newNodes: MapNode[] = [];
     //Convert file data to individual elements in a 2d array. Rows represent an individual node and the columns represent the data elements
     const nodes: string[][] = CSVTools.parseCSVFromFile(nodePath);
 
@@ -89,8 +98,10 @@ class DBManager {
       const node: MapNode = new MapNode(nodeInfo);
 
       //Create a new MapNode object with the given nodeInfo and append it to the list of nodes
-      this._mapNodes.push(node);
+      newNodes.push(node);
     }
+
+    return newNodes;
   }
 
   /**
@@ -98,7 +109,8 @@ class DBManager {
    * @param edgePath - Filepath for the edge CSV data
    * @private
    */
-  private importEdgeFromPath(edgePath: string) {
+  private importEdgeFromPath(edgePath: string): MapEdge[] {
+    const newEdges: MapEdge[] = [];
     //Convert file data to individual elements in a 2d array. Rows represent an individual edge and the columns represent the data elements
     const edges: string[][] = CSVTools.parseCSVFromFile(edgePath);
 
@@ -130,9 +142,11 @@ class DBManager {
         const edge: MapEdge = new MapEdge(edgeInfo);
 
         //Push a new MapEdge object with the passed in information to the mapEdges list
-        this._mapEdges.push(edge);
+        newEdges.push(edge);
       }
     }
+
+    return newEdges;
   }
 
   /**
