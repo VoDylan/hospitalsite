@@ -1,3 +1,3 @@
 export type ServiceData = {
-    test:string
-}
+  test: string;
+};

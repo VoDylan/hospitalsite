@@ -432,21 +432,23 @@ export default class DBManager {
     await createEdgePrisma(this._mapEdges);
   }
 
-    public async filterServiceRequestCategory(category: string) {
-        const filteredServiceRequests = [];
-        /*for(let i: number = 0; i < databaseRequests; i++){
+  public async filterServiceRequestCategory(category: string) {
+    const filteredServiceRequests: string[] = [];
+    console.log(`${category} ${filteredServiceRequests}`);
+    /*for(let i: number = 0; i < databaseRequests; i++){
             if(serviceReq[i][1] == category){
                 filteredServiceRequests.push(serviceReq[i][1]);
             }
         }*/
-    }
+  }
 
-    public async filterServiceRequestUrgency(category: string) {
-        const filteredServiceRequests = [];
-        /*for(let i: number = 0; i < databaseRequests; i++){
+  public async filterServiceRequestUrgency(category: string) {
+    const filteredServiceRequests: string[] = [];
+    console.log(`${category} ${filteredServiceRequests}`);
+    /*for(let i: number = 0; i < databaseRequests; i++){
             if(serviceReq[i][2] == category){
                 filteredServiceRequests.push(serviceReq[i][2]);
             }
         }*/
-    }
+  }
 }
