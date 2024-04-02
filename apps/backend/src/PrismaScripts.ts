@@ -3,6 +3,7 @@ import MapNode from "./MapNode";
 import MapEdge from "./MapEdge";
 import { exit } from "node:process";
 import { Prisma } from "database";
+import { ServiceData } from "common/src/ServiceData.ts";
 
 const loggingPrefix: string = "Prisma: ";
 
@@ -109,9 +110,10 @@ export async function getDBNodeByID(nodeID: string) {
   return node;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function createServiceRequest(
   userId: number,
-  nodeShortName: string,
+  nodeID: string,
   services: ServiceData,
 ): Promise<void> {
   console.log("Creating service request");
@@ -122,10 +124,14 @@ async function createServiceRequest(
     const createdServiceRequest = await client.serviceRequest.create({
       data: {
         user: {
-          connect: { userID: userId },
+          connect: {
+            userID: userId,
+          },
         },
         node: {
-          connect: { shortName: nodeShortName },
+          connect: {
+            nodeID: nodeID,
+          },
         },
         services: serviceJson,
       },
@@ -215,5 +221,3 @@ export async function closePrismaConnection() {
     exit(1);
   }
 }
-
-export { client };
