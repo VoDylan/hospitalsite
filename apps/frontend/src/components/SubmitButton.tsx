@@ -68,9 +68,16 @@ export function SubmitButton(props: ButtonProps) {
 
   // Function for posting the form submission to the database
   async function pushToDB(form: FlowerDeliveryFormSubmission) {
-    const res = await axios.post("/api/FlowerDelivery", form, {
+    const returnData = {
+      userID: "admin",
+      nodeID: form.roomNumber,
+      serviceType: "flower-delivery",
+      services: JSON.stringify(form),
+    };
+
+    const res = await axios.post("/api/database/servicerequest", returnData, {
       headers: {
-        "content-type": "Application/json",
+        "Content-Type": "application/json",
       },
     });
     if (res.status == 200) {
