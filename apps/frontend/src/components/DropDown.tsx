@@ -5,7 +5,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface DropDownProps {
@@ -13,8 +13,6 @@ interface DropDownProps {
   handleChange: (event: SelectChangeEvent) => string;
   label: string;
 }
-
-let retData: string = "";
 
 const useStyles = makeStyles({
   centeredLabel: {
@@ -25,6 +23,13 @@ const useStyles = makeStyles({
 
 export function DropDown(props: DropDownProps) {
   const classes = useStyles();
+  const [retData, setRetData] = useState<string>("");
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    setRetData(event.target.value); // Update retData using state
+    props.handleChange(event);
+  };
+
   return (
     <div>
       <FormControl fullWidth sx={{ width: 220 }}>
@@ -39,10 +44,9 @@ export function DropDown(props: DropDownProps) {
           {props.label}
         </InputLabel>
         <Select
-          onChange={(event: SelectChangeEvent) => {
-            retData = props.handleChange(event);
-          }}
+          onChange={handleSelectChange}
           value={retData}
+          defaultValue={""}
           labelId="demo-simple-select-label"
           label={props.label}
           sx={{
