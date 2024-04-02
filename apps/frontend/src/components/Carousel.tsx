@@ -83,7 +83,7 @@ function Carousel() {
           alignItems: "center",
           alignContent: "center",
           justifyContent: "center",
-          height: "790px",
+          height: "90vh",
           width: "100%",
         }}
       >
