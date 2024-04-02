@@ -45,7 +45,7 @@ export function SubmitButton(props: ButtonProps) {
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
   function handleSubmit() {
-    if (props.input.flowerType === "-- Select Flower Type --") {
+    if (props.input.flowerType === "") {
       openWithError("Please select a flower type");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
