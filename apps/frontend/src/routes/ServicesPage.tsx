@@ -1,15 +1,17 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { ServiceCard } from "../components/ServiceCard.tsx";
 import TopBanner from "../components/TopBanner.tsx";
+import customTheme from "../CustomTheme.tsx";
+import { ThemeProvider } from "@mui/material/styles";
 
 export default function ServicesPage() {
   return (
-    <div>
+    <ThemeProvider theme={customTheme}>
       <TopBanner />
       <Box
         sx={{
           mt: 15,
-          backgroundColor: "#012D5A",
+          backgroundColor: "secondary.main",
         }}
       >
         <Typography
@@ -47,6 +49,6 @@ export default function ServicesPage() {
           </Grid>
         </Grid>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
