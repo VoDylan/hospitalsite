@@ -21,6 +21,7 @@
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
     "@mui/styles": "^5.15.14",
+    "@mui/x-data-grid": "^7.1.0",
     "@popperjs/core": "^2.11.8",
     "@tanstack/react-table": "^8.9.3",
     "autoprefixer": "^10.4.18",

@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import ServicesPage from "./routes/ServicesPage.tsx";
 import HeroPage from "./routes/HeroPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
+import DisplayDatabase from "./routes/DisplayDatabase.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
 import MapPage from "./routes/MapPage.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
@@ -26,6 +27,10 @@ function App() {
         {
           path: "/Services/FlowerDelivery",
           element: <FlowerDeliveryService />,
+        },
+        {
+          path: "/DisplayDatabase",
+          element: <DisplayDatabase />,
         },
         {
           path: "/Login",

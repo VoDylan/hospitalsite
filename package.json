@@ -61,6 +61,7 @@
     "@mui/material": "^5.15.14",
     "@mui/styled-engine-sc": "6.0.0-alpha.18",
     "@mui/styles": "^5.15.14",
+    "@mui/x-data-grid": "^7.1.0",
     "@prisma/client": "^5.11.0",
     "@yarnpkg/pnpify": "^4.0.0-rc.45",
     "dotenv": "^16.4.5",
