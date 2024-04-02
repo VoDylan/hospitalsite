@@ -15,21 +15,29 @@ interface CardProps {
   path: string;
 }
 
-export default function ServiceCard({
+const ServiceCard: React.FC<CardProps> = ({
   image,
   title,
   description,
   buttonText,
   path,
-}: CardProps) {
+}: CardProps) => {
   return (
-    <Card sx={{ position: "relative", width: "100vw", height: "60vh" }}>
+    <Card
+      sx={{
+        position: "relative",
+        width: "100%",
+        height: "60vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <CardMedia
         sx={{ height: "25vh", position: "relative" }}
         image={image}
         title={title}
       ></CardMedia>
-      <CardContent>
+      <CardContent style={{ flex: 1 }}>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
@@ -37,17 +45,21 @@ export default function ServiceCard({
           {description}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Link to={path}>
-          <Button
-            sx={{ position: "absolute", top: "90%" }}
-            variant="contained"
-            size="large"
-          >
+      <CardActions style={{ marginTop: "auto" }}>
+        <Link
+          to={path}
+          style={{
+            margin: "auto",
+            marginLeft: "1%",
+          }}
+        >
+          <Button variant="contained" size="large">
             {buttonText}
           </Button>
         </Link>
       </CardActions>
     </Card>
   );
-}
+};
+
+export default ServiceCard;
