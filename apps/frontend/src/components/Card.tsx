@@ -35,16 +35,25 @@ export default function CustomCard({
         image={image}
         title={title}
       >
-        <Stack direction={"row"}>
+        <Stack
+          direction={"row"}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            marginLeft: "8%",
+          }}
+        >
           <Box
             sx={{
               color: "black",
               fontSize: 40,
               fontWeight: "bold",
-              position: "absolute",
-              width: 500,
-              top: "20%",
-              left: "8%",
+              position: "relative",
+              marginTop: "8%",
+              marginBottom: "1%",
+              width: "30vw",
             }}
           >
             {cardTitle}
@@ -53,16 +62,18 @@ export default function CustomCard({
             sx={{
               color: "black",
               fontSize: 20,
-              position: "absolute",
-              width: 400,
-              top: "43%",
-              left: "8%",
             }}
           >
             {cardDescription}
           </Box>
           <Button
-            sx={{ position: "absolute", width: 220, top: "60%", left: "8%" }}
+            sx={{
+              position: "relative",
+              marginTop: "2%",
+              whiteSpace: "nowrap",
+              width: "auto",
+              minWidth: "10vw",
+            }}
             component={Link}
             to={path}
             variant="contained"
