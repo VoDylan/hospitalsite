@@ -52,37 +52,39 @@ async function createEdgePrisma(edge: MapEdge) {
   }
 }
 
+async function createServiceRequest(
+  userId: number,
+  nodeShortName: string,
+  services: ServiceData,
+): Promise<void> {
+  console.log("Creating service request");
 
+  try {
+    const serviceJson = JSON.stringify(services);
 
-async function createServiceRequest(userId: number, nodeShortName: string, services: ServiceData): Promise<void> {
-    console.log("Creating service request");
+    const createdServiceRequest = await client.serviceRequest.create({
+      data: {
+        user: {
+          connect: { userID: userId },
+        },
+        node: {
+          connect: { shortName: nodeShortName },
+        },
+        services: serviceJson,
+      },
+    });
 
-    try {
-        const serviceJson = JSON.stringify(services);
-
-        const createdServiceRequest = await client.serviceRequest.create({
-            data: {
-                user: {
-                    connect: { userID: userId },
-                },
-                node: {
-                    connect: { shortName: nodeShortName },
-                },
-                services: serviceJson,
-            },
-        });
-
-        console.log(`Service request created with ID: ${createdServiceRequest.id}`);
-    } catch (e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            if (e.code === 'P2002') {
-                console.log("Service request already exists. Skipping...");
-            }
-        } else {
-            // All other errors
-            console.error(e);
-        }
+    console.log(`Service request created with ID: ${createdServiceRequest.id}`);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === "P2002") {
+        console.log("Service request already exists. Skipping...");
+      }
+    } else {
+      // All other errors
+      console.error(e);
     }
+  }
 }
 
 async function openPrismaConnection() {
