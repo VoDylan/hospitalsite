@@ -3,6 +3,7 @@ import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
 import { BFSalgorithm } from "./BFSalgorithm.ts";
+import TopBanner from "../components/TopBanner.tsx";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -117,7 +118,8 @@ function Map() {
   }, [startNode, endNode, nodes]);
 
   return (
-    <div>
+    <div style={{ marginTop: "120px" }}>
+      <TopBanner />
       <div
         style={{
           display: "flex",
