@@ -77,8 +77,7 @@ function MainCarousel() {
         buttonText: "Request a Service!",
         path: "/Services",
         cardTitle: "Streamline Your Service Requests",
-        cardDescription:
-          "Access all of our available services in one place and get efficient responses",
+        cardDescription: "Access all of our available services in one place",
       },
     ];
 
