@@ -5,6 +5,8 @@ import ServicesPage from "./routes/ServicesPage.tsx";
 import HeroPage from "./routes/HeroPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
+import MapPage from "./routes/MapPage.tsx";
+import SlidesPage from "./routes/SlidesPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -28,6 +30,16 @@ function App() {
         {
           path: "/Login",
           element: <LoginForm />,
+        },
+
+        {
+          path: "/Slides",
+          element: <SlidesPage />,
+        },
+
+        {
+          path: "/Map",
+          element: <MapPage />,
         },
       ],
     },
