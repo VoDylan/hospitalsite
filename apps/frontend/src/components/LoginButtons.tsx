@@ -20,11 +20,8 @@ function LoginButtons(props: LoginButtonsProps) {
         variant="contained"
         onClick={props.onClick}
         sx={{
-          backgroundColor: "#012D5A",
-          color: "white",
           borderRadius: "8px",
           marginRight: "5px",
-          border: "2px solid #F6BD38",
         }}
       >
         Submit
@@ -34,11 +31,8 @@ function LoginButtons(props: LoginButtonsProps) {
         variant="contained"
         onClick={handleClear}
         sx={{
-          backgroundColor: "#012D5A",
-          color: "white",
           borderRadius: "8px",
           marginRight: "-1px",
-          border: "2px solid #F6BD38",
         }}
       >
         Clear
