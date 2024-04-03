@@ -1,4 +1,4 @@
-import TopBanner from "../components/TopBanner.tsx";
+import TopBanner2 from "../components/TopBanner.tsx";
 import MainCarousel from "../components/Carousel.tsx";
 
 function MapPage() {
@@ -9,7 +9,7 @@ function MapPage() {
           backgroundColor: "white",
         }}
       >
-        <TopBanner />
+        <TopBanner2 />
         <MainCarousel />
       </div>
     </>

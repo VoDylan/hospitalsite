@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import TopBanner from "../components/TopBanner.tsx";
+import TopBanner2 from "../components/TopBanner2.tsx";
 
 import {
   DataGrid,
@@ -34,7 +34,7 @@ const columns: GridColDef[] = [
 function DisplayDatabase() {
   return (
     <>
-      <TopBanner />
+      <TopBanner2 />
       <div
         style={{
           position: "relative",

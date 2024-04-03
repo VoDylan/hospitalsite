@@ -1,12 +1,12 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { ServiceCard } from "../components/ServiceCard.tsx";
-import TopBanner from "../components/TopBanner.tsx";
+import TopBanner2 from "../components/TopBanner2.tsx";
 import bgImage from "../../public/Clock.png";
 
 export default function ServicesPage() {
   return (
     <>
-      <TopBanner />
+      <TopBanner2 />
       <Box
         sx={{
           mt: 15,
