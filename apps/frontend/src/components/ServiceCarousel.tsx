@@ -1,5 +1,9 @@
 import ServiceCards from "./ServiceHeroCards.tsx";
 import Stack from "@mui/material/Stack";
+import flower from "../../public/Flower.jpg";
+import bus from "../../public/bus.jpg";
+import priest from "../../public/priest-last-rites.jpg";
+import signL from "../../public/language.webp";
 
 interface secondaryCardData {
   image: string;
@@ -12,28 +16,28 @@ interface secondaryCardData {
 function ServiceCarousel() {
   const secondaryCards: secondaryCardData[] = [
     {
-      image: "../../public/Flower.jpg",
+      image: flower,
       title: "Flower Delivery",
       description: "Request flowers to be sent to a friend or loved one!",
       buttonText: "Get Flowers",
       path: "/Services/FlowerDelivery",
     },
     {
-      image: "../../public/bus.jpg",
+      image: bus,
       title: "Services",
       description: "Coming Soon!",
       buttonText: "Request Service",
       path: "/Services",
     },
     {
-      image: "../../public/priest-last-rites.jpg",
+      image: priest,
       title: "Services",
       description: "Coming Soon!",
       buttonText: "Request Service",
       path: "/Services",
     },
     {
-      image: "../../public/language.webp",
+      image: signL,
       title: "Services",
       description: "Coming Soon!",
       buttonText: "Request Service",

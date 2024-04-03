@@ -1,6 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { ServiceCard } from "../components/ServiceCard.tsx";
 import TopBanner from "../components/TopBanner.tsx";
+import bgImage from "../../public/Clock.png";
 
 export default function ServicesPage() {
   return (
@@ -40,7 +41,7 @@ export default function ServicesPage() {
             <ServiceCard
               service={"More Coming Soon!"}
               servicePath={"/Services"}
-              imagePath={"../../public/Clock.png"}
+              imagePath={bgImage}
               imageAlt={"More coming soon"}
             />
           </Grid>
