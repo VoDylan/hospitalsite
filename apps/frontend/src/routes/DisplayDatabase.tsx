@@ -24,6 +24,13 @@ type NodeParams = {
   shortName: string;
 };
 
+type ServiceParams = {
+  id: number;
+  userID: number;
+  nodeID: string;
+  serviceType: string;
+};
+
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
   height: 1,
@@ -40,7 +47,7 @@ function handleImport() {
 }
 
 function DisplayDatabase() {
-  const [columns] = useState<GridColDef[]>([
+  const [nodeColumns] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 100 },
     { field: "xcoord", headerName: "XCoord", width: 100 },
     { field: "ycoord", headerName: "YCoord", width: 100 },
@@ -50,9 +57,16 @@ function DisplayDatabase() {
     { field: "longName", headerName: "LongName", width: 100 },
     { field: "shortName", headerName: "ShortName", width: 100 },
   ]);
-  const [rowData, setRowData] = useState<NodeParams[]>([]);
+  const [nodeRowData, setNodeRowData] = useState<NodeParams[]>([]);
 
-  const getData = async () => {
+  const [serviceColumns] = useState<GridColDef[]>([
+    { field: "userID", headerName: "User ID", width: 200 },
+    { field: "nodeID", headerName: "Node ID", width: 200 },
+    { field: "serviceType", headerName: "Service Type", width: 200 },
+  ]);
+  const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
+
+  const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
     console.log("Got data");
     console.log(data);
@@ -72,11 +86,30 @@ function DisplayDatabase() {
       };
       rowData.push(tableFormattedNode);
     }
-    setRowData(rowData);
+    setNodeRowData(rowData);
+  };
+
+  const getServiceData = async () => {
+    const { data } = await axios.get("/api/database/servicerequest");
+    console.log("Gathered Service Requests");
+    console.log(data);
+
+    const rowData = [];
+    for (let i = 0; i < data.length; i++) {
+      const tableFormattedServReq: ServiceParams = {
+        id: i,
+        userID: data[i].userID,
+        nodeID: data[i].nodeID,
+        serviceType: data[i].serviceType,
+      };
+      rowData.push(tableFormattedServReq);
+    }
+    setServiceRowData(rowData);
   };
 
   useEffect(() => {
-    getData();
+    getNodeData();
+    getServiceData();
   }, []);
 
   return (
@@ -89,8 +122,8 @@ function DisplayDatabase() {
         minHeight: "100vh",
         minWidth: "100wh",
         /*background: `url(${background})`, // Set the background image
-          backgroundSize: "cover",
-          backgroundPosition: "center",*/
+                backgroundSize: "cover",
+                backgroundPosition: "center",*/
       }}
     >
       <Box
@@ -112,8 +145,8 @@ function DisplayDatabase() {
             justifyContent: "center",
             //alignItems: "center",
           }}
-          columns={columns}
-          rows={rowData}
+          columns={nodeColumns}
+          rows={nodeRowData}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
@@ -139,6 +172,24 @@ function DisplayDatabase() {
           Import CSV File
           <VisuallyHiddenInput type="file" />
         </Button>
+        <DataGrid
+          slots={{ toolbar: GridToolbar }}
+          sx={{
+            padding: "40px",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            //alignItems: "center",
+          }}
+          columns={serviceColumns}
+          rows={serviceRowData}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+        />
       </Box>
     </div>
   );
