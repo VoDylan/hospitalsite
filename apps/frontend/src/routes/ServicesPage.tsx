@@ -18,7 +18,7 @@ export default function ServicesPage() {
           color={"white"}
           gutterBottom={true}
         >
-          Services
+          ServicesWoah
         </Typography>
       </Box>
       <div style={{ padding: 80 }}>
