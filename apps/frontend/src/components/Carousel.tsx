@@ -191,7 +191,9 @@ function MainCarousel() {
           >
             <RateReviewSharpIcon />
           </IconButton>
-          <Button variant={"text"}>Make an appointment</Button>
+          <Button variant={"text"}>
+            Make an appointment (Real Link Don't Fill Out)
+          </Button>
         </a>
 
         <a
@@ -206,7 +208,7 @@ function MainCarousel() {
           >
             <InfoIcon />
           </IconButton>
-          <Button variant={"text"}>About Us!</Button>
+          <Button variant={"text"}>About Us! (Real Link)</Button>
         </a>
       </Stack>
 

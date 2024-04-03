@@ -4,6 +4,8 @@ import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios from "axios";
+import TopBanner2 from "../components/TopBanner2.tsx";
+
 import {
   DataGrid,
   GridColDef,
@@ -54,14 +56,14 @@ function handleImport() {
 
 function DisplayDatabase() {
   const [nodeColumns] = useState<GridColDef[]>([
-    { field: "nodeID", headerName: "NodeID", width: 100 },
-    { field: "xcoord", headerName: "XCoord", width: 100 },
-    { field: "ycoord", headerName: "YCoord", width: 100 },
+    { field: "nodeID", headerName: "NodeID", width: 150 },
+    { field: "xcoord", headerName: "XCoord", width: 120 },
+    { field: "ycoord", headerName: "YCoord", width: 120 },
     { field: "floor", headerName: "Floor", width: 100 },
-    { field: "building", headerName: "Building", width: 100 },
+    { field: "building", headerName: "Building", width: 120 },
     { field: "nodeType", headerName: "NodeType", width: 100 },
-    { field: "longName", headerName: "LongName", width: 100 },
-    { field: "shortName", headerName: "ShortName", width: 100 },
+    { field: "longName", headerName: "LongName", width: 300 },
+    { field: "shortName", headerName: "ShortName", width: 150 },
   ]);
 
   const [edgeColumns] = useState<GridColDef[]>([
@@ -147,118 +149,124 @@ function DisplayDatabase() {
   }, []);
 
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        minWidth: "100wh",
-      }}
-    >
-      <Box
-        display="flex"
-        mt={2}
-        alignItems="center"
-        flexDirection="column"
-        sx={{
-          backgroundColor: "white",
-          opacity: "90%",
+    <>
+      <TopBanner2 />
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          minWidth: "100wh",
+          marginTop: "10%",
+          marginBottom: "10%",
         }}
       >
-        <DataGrid
-          slots={{ toolbar: GridToolbar }}
+        <Box
+          display="flex"
+          mt={2}
+          alignItems="center"
+          flexDirection="column"
           sx={{
-            padding: "40px",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            //alignItems: "center",
-          }}
-          columns={nodeColumns}
-          rows={nodeRowData}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-        />
-        <Button
-          component="label"
-          role={undefined}
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-          className="importButton"
-          variant="contained"
-          onClick={handleImport}
-          sx={{
-            backgroundColor: "primary.main", // Change background color
-            color: "white", // Change text color
-            borderRadius: "8px", // Change border radius
-            marginRight: "-1px", // Adjust spacing
+            backgroundColor: "white",
+            opacity: "90%",
           }}
         >
-          Import CSV File
-          <VisuallyHiddenInput type="file" />
-        </Button>
-        <DataGrid
-          slots={{ toolbar: GridToolbar }}
-          sx={{
-            padding: "40px",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            //alignItems: "center",
-          }}
-          columns={edgeColumns}
-          rows={edgeRowData}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-        />
-        <Button
-          component="label"
-          role={undefined}
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-          className="importButton"
-          variant="contained"
-          onClick={handleImport}
-          sx={{
-            backgroundColor: "primary.main", // Change background color
-            color: "white", // Change text color
-            borderRadius: "8px", // Change border radius
-            marginRight: "-1px", // Adjust spacing
-          }}
-        >
-          Import CSV File
-          <VisuallyHiddenInput type="file" />
-        </Button>
-        <DataGrid
-          slots={{ toolbar: GridToolbar }}
-          sx={{
-            padding: "40px",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            //alignItems: "center",
-          }}
-          columns={serviceColumns}
-          rows={serviceRowData}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-        />
-      </Box>
-    </div>
+          <DataGrid
+            slots={{ toolbar: GridToolbar }}
+            sx={{
+              padding: "40px",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              width: "80vw",
+              //alignItems: "center",
+            }}
+            columns={nodeColumns}
+            rows={nodeRowData}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+          />
+          <Button
+            component="label"
+            role={undefined}
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            className="importButton"
+            variant="contained"
+            onClick={handleImport}
+            sx={{
+              backgroundColor: "primary.main", // Change background color
+              color: "white", // Change text color
+              borderRadius: "8px", // Change border radius
+              marginRight: "-1px", // Adjust spacing
+            }}
+          >
+            Import CSV File
+            <VisuallyHiddenInput type="file" />
+          </Button>
+          <DataGrid
+            slots={{ toolbar: GridToolbar }}
+            sx={{
+              padding: "40px",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              //alignItems: "center",
+            }}
+            columns={edgeColumns}
+            rows={edgeRowData}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+          />
+          <Button
+            component="label"
+            role={undefined}
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            className="importButton"
+            variant="contained"
+            onClick={handleImport}
+            sx={{
+              backgroundColor: "primary.main", // Change background color
+              color: "white", // Change text color
+              borderRadius: "8px", // Change border radius
+              marginRight: "-1px", // Adjust spacing
+            }}
+          >
+            Import CSV File
+            <VisuallyHiddenInput type="file" />
+          </Button>
+          <DataGrid
+            slots={{ toolbar: GridToolbar }}
+            sx={{
+              padding: "40px",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              //alignItems: "center",
+            }}
+            columns={serviceColumns}
+            rows={serviceRowData}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+          />
+        </Box>
+      </div>
+    </>
   );
 }
 
