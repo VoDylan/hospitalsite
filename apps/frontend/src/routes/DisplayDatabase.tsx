@@ -3,7 +3,7 @@ import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
-//import axios from 'axios';
+//import axios from "axios";
 import {
   DataGrid,
   GridColDef,
@@ -24,12 +24,19 @@ const VisuallyHiddenInput = styled("input")({
 
 const handleImport = () => console.log();
 
-const rows: GridRowsProp = [{ id: 1, col1: "Hello", col2: "World" }];
+//to retrieve row data from database
+/*const getData = async (rowId: number) => {
+  try {
+    const response = await axios.get(`${url}/rows/${rowId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error retrieving row data:", error);
+    return null;
+  }
+};*/
 
-const columns: GridColDef[] = [
-  { field: "col1", headerName: "Node Data", width: 150 },
-  { field: "col2", headerName: "Edge Data", width: 150 },
-];
+const rows: GridRowsProp = [];
+const columns: GridColDef[] = [];
 
 function DisplayDatabase() {
   return (
