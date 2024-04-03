@@ -1,11 +1,12 @@
 import { Box, Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmission.ts";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import TopBanner from "../components/TopBanner.tsx";
 import LadyWithFlowersInHospital from "../../public/LadyWithFlowersInHospital.jpg";
+import axios from "axios";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
@@ -16,16 +17,30 @@ function FlowerDeliveryService() {
     message: "",
   });
 
+  // Define an interface for the node data
+  interface NodeData {
+    nodeID: string;
+  }
+
+  // Storing the node numbers in a use state so that we only make a get request once
+  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+
+  // GET request to retrieve node numbers wrapped in a useEffect function
+  useEffect(() => {
+    axios
+      .get<NodeData[]>("/api/database/nodes")
+      .then((response) =>
+        setNodeNumbers(response.data.map((node) => node.nodeID)),
+      )
+      .catch((error) => console.error(error));
+  }, []);
+
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setResponses({ ...form, name: e.target.value });
   }
 
   function handleRecipientNameInput(e: ChangeEvent<HTMLInputElement>) {
     setResponses({ ...form, recipientName: e.target.value });
-  }
-
-  function handleRoomNumberInput(e: ChangeEvent<HTMLInputElement>) {
-    setResponses({ ...form, roomNumber: e.target.value });
   }
 
   function handleMessageInput(e: ChangeEvent<HTMLInputElement>) {
@@ -45,6 +60,11 @@ function FlowerDeliveryService() {
   // For dropdown
   function handleFlowerTypeInput(event: SelectChangeEvent) {
     setResponses({ ...form, flowerType: event.target.value });
+    return event.target.value;
+  }
+
+  function handleRoomNumberInput(event: SelectChangeEvent) {
+    setResponses({ ...form, roomNumber: event.target.value });
     return event.target.value;
   }
 
@@ -86,7 +106,7 @@ function FlowerDeliveryService() {
             xs={12}
             sx={{
               alignItems: "flexStart",
-              bgcolor: "primary.main",
+              backgroundColor: "#1976D2",
             }}
           >
             <Typography
@@ -129,10 +149,11 @@ function FlowerDeliveryService() {
           <Grid item xs={6}>
             <Box>
               <Typography>Room Number:</Typography>
-              <LeftAlignedTextbox
+              <DropDown
+                items={nodeNumbers}
                 label={"Room Number"}
-                value={form.roomNumber}
-                onChange={handleRoomNumberInput}
+                returnData={form.roomNumber}
+                handleChange={handleRoomNumberInput}
               />
             </Box>
           </Grid>

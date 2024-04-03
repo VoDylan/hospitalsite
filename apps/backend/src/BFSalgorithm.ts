@@ -4,7 +4,7 @@ import { Node } from "common/src/Node.ts";
 
 import { NodeBFS } from "common/src/NodeBFS.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
-import { client } from "./PrismaScripts.ts";
+import client from "./bin/database-connection.ts";
 export class BFSalgorithm {
   all_nodes: NodeBFS[];
   count: number;
