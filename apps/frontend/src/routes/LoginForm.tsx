@@ -60,6 +60,8 @@ function LoginForm() {
           backgroundColor: "white",
           opacity: "90%",
           padding: "20px",
+          paddingTop: "6%",
+          paddingBottom: "4%",
           width: "40%",
           height: "60%",
           minHeight: "80",
