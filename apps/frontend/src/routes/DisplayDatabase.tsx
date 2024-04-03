@@ -3,7 +3,7 @@ import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   DataGrid,
   GridColDef,
@@ -24,6 +24,12 @@ type NodeParams = {
   shortName: string;
 };
 
+type EdgeParams = {
+  id: number;
+  startNodeID: string;
+  endNodeID: string;
+};
+
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
   height: 1,
@@ -40,7 +46,10 @@ function handleImport() {
 }
 
 function DisplayDatabase() {
-  const [columns] = useState<GridColDef[]>([
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [data, setData] = useState<AxiosResponse>();
+  //const [rows] = useState<GridRowsProp>([]);
+  const [nodeCols] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 100 },
     { field: "xcoord", headerName: "XCoord", width: 100 },
     { field: "ycoord", headerName: "YCoord", width: 100 },
@@ -50,14 +59,22 @@ function DisplayDatabase() {
     { field: "longName", headerName: "LongName", width: 100 },
     { field: "shortName", headerName: "ShortName", width: 100 },
   ]);
-  const [rowData, setRowData] = useState<NodeParams[]>([]);
+  const [edgeCols] = useState<GridColDef[]>([
+    { field: "startNodeID", headerName: "StartNodeID", width: 150 },
+    { field: "endNodeID", headerName: "EndNodeID", width: 150 },
+  ]);
 
-  const getData = async () => {
+  // const [isFinished] = useState(false);
+  const [rowNodeData, setNodeRowData] = useState<NodeParams[]>([]);
+  const [rowEdgeData, setEdgeRowData] = useState<EdgeParams[]>([]);
+
+  const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
     console.log("Got data");
+    setData(data);
     console.log(data);
 
-    const rowData = [];
+    const rowNodeData = [];
     for (let i = 0; i < data.length; i++) {
       const tableFormattedNode = {
         id: i,
@@ -70,13 +87,32 @@ function DisplayDatabase() {
         longName: data[i].longName,
         shortName: data[i].shortName,
       };
-      rowData.push(tableFormattedNode);
+      rowNodeData.push(tableFormattedNode);
     }
-    setRowData(rowData);
+    setNodeRowData(rowNodeData);
+  };
+
+  const getEdgeData = async () => {
+    const { data } = await axios.get("/api/database/edges");
+    console.log("Got data");
+    setData(data);
+    console.log(data);
+
+    const rowEdgeData = [];
+    for (let i = 0; i < data.length; i++) {
+      const tableFormattedEdge = {
+        id: i,
+        startNodeID: data[i].startNodeID,
+        endNodeID: data[i].endNodeID,
+      };
+      rowEdgeData.push(tableFormattedEdge);
+    }
+    setEdgeRowData(rowEdgeData);
   };
 
   useEffect(() => {
-    getData();
+    getNodeData();
+    getEdgeData();
   }, []);
 
   return (
@@ -112,8 +148,44 @@ function DisplayDatabase() {
             justifyContent: "center",
             //alignItems: "center",
           }}
-          columns={columns}
-          rows={rowData}
+          columns={nodeCols}
+          rows={rowNodeData}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+        />
+        <Button
+          component="label"
+          role={undefined}
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+          className="importButton"
+          variant="contained"
+          onClick={handleImport}
+          sx={{
+            backgroundColor: "primary.main", // Change background color
+            color: "white", // Change text color
+            borderRadius: "8px", // Change border radius
+            marginRight: "-1px", // Adjust spacing
+          }}
+        >
+          Import CSV File
+          <VisuallyHiddenInput type="file" />
+        </Button>
+        <DataGrid
+          slots={{ toolbar: GridToolbar }}
+          sx={{
+            padding: "40px",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            //alignItems: "center",
+          }}
+          columns={edgeCols}
+          rows={rowEdgeData}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
