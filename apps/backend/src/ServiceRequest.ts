@@ -62,6 +62,6 @@ class RequestService {
     this._service = newService;
   }
 }
-//Export the MapEdge class and EdgeFields type to allow for its use across the program
+//Export the RequestService class and RequestFields type to allow for its use across the program
 export default RequestService;
 export type { RequestFields };

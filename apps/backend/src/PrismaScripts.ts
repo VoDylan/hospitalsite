@@ -297,8 +297,120 @@ export async function getServiceRequestFromDBByUserID(userID: string) {
       `${loggingPrefix}Request(s) found from users with userID ${userID}`,
     );
   }
-
   return request;
+}
+
+// Uses userID to check if user is in database
+export async function checkUserID(userID: number) {
+  let user = null;
+  try {
+    user = await client.user.findMany({
+      where: {
+        userID: userID,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+  }
+  if (user == null) {
+    console.log(
+      `${loggingPrefix}User ${userID} does not exist within current database`,
+    );
+    return false;
+  } else {
+    console.log(
+      `${loggingPrefix}User ${userID} is within the current database`,
+    );
+    return true;
+  }
+}
+
+export async function checkUserMedicalStaff(userID: number): Promise<boolean> {
+  if (await checkUserID(userID)) {
+    try {
+      const user = await client.user.findUnique({
+        where: { userID: userID },
+        include: { MedicalWorker: true },
+      });
+
+      // Check if the user exists and has MedicalWorker association
+      if (user && user.MedicalWorker.length > 0) {
+        console.log(
+          `${loggingPrefix}User ${userID} is a part of medical staff`,
+        );
+        return true;
+      } else {
+        console.log(
+          `${loggingPrefix}User ${userID} is not a part of medical staff`,
+        );
+        return false;
+      }
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  } else {
+    console.log(
+      `${loggingPrefix}User ${userID} does not exist in current database`,
+    );
+    return false;
+  }
+}
+
+export async function checkUserPatient(userID: number): Promise<boolean> {
+  if (await checkUserID(userID)) {
+    try {
+      const user = await client.user.findUnique({
+        where: { userID: userID },
+        include: { Patient: true },
+      });
+
+      // Check if the user exists and has MedicalWorker association
+      if (user && user.Patient.length > 0) {
+        console.log(`${loggingPrefix}User ${userID} is a patient`);
+        return true;
+      } else {
+        console.log(`${loggingPrefix}User ${userID} is not a patient`);
+        return false;
+      }
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  } else {
+    console.log(
+      `${loggingPrefix}User ${userID} does not exist in current database`,
+    );
+    return false;
+  }
+}
+
+export async function checkUserAdmin(userID: number): Promise<boolean> {
+  if (await checkUserID(userID)) {
+    try {
+      const user = await client.user.findUnique({
+        where: { userID: userID },
+        include: { Admin: true },
+      });
+
+      // Check if the user exists and has MedicalWorker association
+      if (user && user.Admin.length > 0) {
+        console.log(`${loggingPrefix}User ${userID} is an admin`);
+        return true;
+      } else {
+        console.log(`${loggingPrefix}User ${userID} is not an admin`);
+        return false;
+      }
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  } else {
+    console.log(
+      `${loggingPrefix}User ${userID} does not exist in current database`,
+    );
+    return false;
+  }
 }
 
 export async function openPrismaConnection() {
