@@ -2,6 +2,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import { ServiceCard } from "../components/ServiceCard.tsx";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import bgImage from "../../public/Clock.png";
+import flower from "../../public/Flower.jpg";
 
 export default function ServicesPage() {
   return (
@@ -33,7 +34,7 @@ export default function ServicesPage() {
             <ServiceCard
               service={"Flower Delivery"}
               servicePath={"/Services/FlowerDelivery"}
-              imagePath={"../../public/Flower.jpg"}
+              imagePath={flower}
               imageAlt={"Flower"}
             />
           </Grid>
