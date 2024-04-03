@@ -4,8 +4,6 @@ import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import TopBanner from "../components/TopBanner.tsx";
 
-//ADDED TOPBANNER
-
 import {
   DataGrid,
   GridColDef,

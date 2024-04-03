@@ -9,7 +9,6 @@ import LoginForm from "./routes/LoginForm.tsx";
 import MapPage from "./routes/MapPage.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
 
-//FIXED
 function App() {
   const router = createBrowserRouter([
     {
