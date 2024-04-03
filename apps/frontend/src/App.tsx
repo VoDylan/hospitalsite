@@ -5,6 +5,7 @@ import ServicesPage from "./routes/ServicesPage.tsx";
 import HeroPage from "./routes/HeroPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import DisplayDatabase from "./routes/DisplayDatabase.tsx";
+import DisplayServiceReqs from "./routes/DisplayServiceReqs.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
 import MapPage from "./routes/MapPage.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
@@ -31,6 +32,10 @@ function App() {
         {
           path: "/DisplayDatabase",
           element: <DisplayDatabase />,
+        },
+        {
+          path: "/DisplayServiceReqs",
+          element: <DisplayServiceReqs />,
         },
         {
           path: "/Login",
