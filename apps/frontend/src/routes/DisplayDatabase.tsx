@@ -31,6 +31,12 @@ type ServiceParams = {
   serviceType: string;
 };
 
+type EdgeParams = {
+  id: number;
+  startNodeID: string;
+  endNodeID: string;
+};
+
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
   height: 1,
@@ -57,21 +63,30 @@ function DisplayDatabase() {
     { field: "longName", headerName: "LongName", width: 100 },
     { field: "shortName", headerName: "ShortName", width: 100 },
   ]);
-  const [nodeRowData, setNodeRowData] = useState<NodeParams[]>([]);
+
+  const [edgeColumns] = useState<GridColDef[]>([
+    { field: "startNodeID", headerName: "StartNodeID", width: 150 },
+    { field: "endNodeID", headerName: "EndNodeID", width: 150 },
+  ]);
 
   const [serviceColumns] = useState<GridColDef[]>([
     { field: "userID", headerName: "User ID", width: 200 },
     { field: "nodeID", headerName: "Node ID", width: 200 },
     { field: "serviceType", headerName: "Service Type", width: 200 },
   ]);
+
+  // const [isFinished] = useState(false);
+  const [nodeRowData, setNodeRowData] = useState<NodeParams[]>([]);
+  const [edgeRowData, setEdgeRowData] = useState<EdgeParams[]>([]);
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
 
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
     console.log("Got data");
+    setNodeRowData(data);
     console.log(data);
 
-    const rowData = [];
+    const rowNodeData = [];
     for (let i = 0; i < data.length; i++) {
       const tableFormattedNode = {
         id: i,
@@ -84,9 +99,27 @@ function DisplayDatabase() {
         longName: data[i].longName,
         shortName: data[i].shortName,
       };
-      rowData.push(tableFormattedNode);
+      rowNodeData.push(tableFormattedNode);
     }
-    setNodeRowData(rowData);
+    setNodeRowData(rowNodeData);
+  };
+
+  const getEdgeData = async () => {
+    const { data } = await axios.get("/api/database/edges");
+    console.log("Got data");
+    setEdgeRowData(data);
+    console.log(data);
+
+    const rowData = [];
+    for (let i = 0; i < data.length; i++) {
+      const tableFormattedEdge = {
+        id: i,
+        startNodeID: data[i].startNodeID,
+        endNodeID: data[i].endNodeID,
+      };
+      rowData.push(tableFormattedEdge);
+    }
+    setEdgeRowData(rowData);
   };
 
   const getServiceData = async () => {
@@ -109,6 +142,7 @@ function DisplayDatabase() {
 
   useEffect(() => {
     getNodeData();
+    getEdgeData();
     getServiceData();
   }, []);
 
@@ -121,9 +155,6 @@ function DisplayDatabase() {
         alignItems: "center",
         minHeight: "100vh",
         minWidth: "100wh",
-        /*background: `url(${background})`, // Set the background image
-                backgroundSize: "cover",
-                backgroundPosition: "center",*/
       }}
     >
       <Box
@@ -147,6 +178,42 @@ function DisplayDatabase() {
           }}
           columns={nodeColumns}
           rows={nodeRowData}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+        />
+        <Button
+          component="label"
+          role={undefined}
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+          className="importButton"
+          variant="contained"
+          onClick={handleImport}
+          sx={{
+            backgroundColor: "primary.main", // Change background color
+            color: "white", // Change text color
+            borderRadius: "8px", // Change border radius
+            marginRight: "-1px", // Adjust spacing
+          }}
+        >
+          Import CSV File
+          <VisuallyHiddenInput type="file" />
+        </Button>
+        <DataGrid
+          slots={{ toolbar: GridToolbar }}
+          sx={{
+            padding: "40px",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            //alignItems: "center",
+          }}
+          columns={edgeColumns}
+          rows={edgeRowData}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
