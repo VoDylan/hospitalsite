@@ -6,8 +6,7 @@ function MapPage() {
     <>
       <div
         style={{
-          // Set the background image
-          backgroundColor: "#FCFCFC",
+          backgroundColor: "white",
         }}
       >
         <TopBanner />

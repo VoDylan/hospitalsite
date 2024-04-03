@@ -9,7 +9,7 @@ export default function ServicesPage() {
       <Box
         sx={{
           mt: 15,
-          backgroundColor: "primary.main",
+          backgroundColor: "#003A96",
         }}
       >
         <Typography
@@ -27,7 +27,6 @@ export default function ServicesPage() {
           direction={"row"}
           gap={5}
           justifyContent={"space-evenly"}
-          // alignItems={"center"}
         >
           <Grid>
             <ServiceCard
