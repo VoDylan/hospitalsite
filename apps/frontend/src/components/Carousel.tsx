@@ -10,6 +10,8 @@ import Stack from "@mui/material/Stack";
 import CustomCard from "../components/Card.tsx"; // Update path to Card component
 import ServiceCarousel from "../components/ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
+import LowerLevel from "../../public/00_thelowerlevel1.png";
+import noLady from "../../public/noLady.jpg";
 
 interface CardData {
   image: string;
@@ -62,7 +64,7 @@ function MainCarousel() {
   useEffect(() => {
     const mainCards: CardData[] = [
       {
-        image: "../../public/00_thelowerlevel1.png",
+        image: LowerLevel,
         title: "Directions",
         description:
           "Graphical display for directions to anywhere in the hospital!",
@@ -72,7 +74,7 @@ function MainCarousel() {
         cardDescription: "Graphical navigation to anywhere in the hospital",
       },
       {
-        image: "../../public/noLady.jpg",
+        image: noLady,
         title: "Services",
         description: "Request a service!",
         buttonText: "Request a Service!",
