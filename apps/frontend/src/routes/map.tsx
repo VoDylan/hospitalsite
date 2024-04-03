@@ -3,11 +3,10 @@ import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
 // import { BFSalgorithm } from "../../../backend/src/BFSalgorithm.ts";
-import TopBanner from "../components/TopBanner.tsx";
+import TopBanner from "../components/TopBanner";
 import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
-import { Node } from "common/src/Node.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,8 +15,6 @@ function Map() {
   const [nodes, setNodes] = useState<string[]>([]); // Declaring nodes state
   const [errorMessage, setErrorMesage] = useState<string>("");
   const [nodesData, setNodesData] = useState<Coordinates[]>([]);
-  const [allNodes, setAllNodes] = useState<Node[]>([]);
-
   const handleStartNodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -30,10 +27,6 @@ function Map() {
 
   const updateNodesData = (newData: Coordinates[]) => {
     setNodesData(newData);
-  };
-
-  const updateAllNodes = (newData: Node[]) => {
-    setAllNodes(newData);
   };
 
   async function handleSubmit() {
@@ -55,17 +48,6 @@ function Map() {
     const path = data.message;
     console.log(path);
     updateNodesData(path);
-
-    const nodes_request = await axios.get("/api/database/nodes", {
-      headers: { "Content-Type": "application/json" },
-    });
-    if (nodes_request.status !== 200) {
-      throw new Error("Failed to fetch data");
-    }
-    const nodes_data = await nodes_request.data;
-    // console.log(JSON.stringify(nodes_data));
-    const nodesArray: Node[] = JSON.parse(nodes_data);
-    updateAllNodes(nodesArray);
     // console.log(nodesArray);
 
     setNodes([startNode, endNode]);
@@ -156,7 +138,7 @@ function Map() {
         }
       };
     }
-  }, [startNode, endNode, nodes, nodesData, allNodes]);
+  }, [startNode, endNode, nodes, nodesData]);
 
   return (
     <div style={{ marginTop: "120px" }}>
