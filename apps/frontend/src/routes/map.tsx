@@ -2,8 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
-import { BFSalgorithm } from "./BFSalgorithm.ts";
+// import { BFSalgorithm } from "../../../backend/src/BFSalgorithm.ts";
 import TopBanner from "../components/TopBanner.tsx";
+import { Coordinates } from "common/src/Coordinates.ts";
+import axios from "axios";
+import { LocationInfo } from "common/src/LocationInfo.ts";
+import { Node } from "common/src/Node.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -11,6 +15,8 @@ function Map() {
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]); // Declaring nodes state
   const [errorMessage, setErrorMesage] = useState<string>("");
+  const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  const [allNodes, setAllNodes] = useState<Node[]>([]);
 
   const handleStartNodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -22,16 +28,49 @@ function Map() {
     setEndNode(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const updateNodesData = (newData: Coordinates[]) => {
+    setNodesData(newData);
+  };
+
+  const updateAllNodes = (newData: Node[]) => {
+    setAllNodes(newData);
+  };
+
+  async function handleSubmit() {
     if (startNode.trim() === "" || endNode.trim() === "") {
       // handles if one of them is empty
       setErrorMesage("Please enter both start and end nodes");
       return;
     }
 
+    const request: LocationInfo = { startNode: startNode, endNode: endNode };
+
+    const response = await axios.post("/api/path", request, {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    const data = await response.data;
+    const path = data.message;
+    console.log(path);
+    updateNodesData(path);
+
+    const nodes_request = await axios.get("/api/database/nodes", {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (nodes_request.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    const nodes_data = await nodes_request.data;
+    // console.log(JSON.stringify(nodes_data));
+    const nodesArray: Node[] = JSON.parse(nodes_data);
+    updateAllNodes(nodesArray);
+    // console.log(nodesArray);
+
     setNodes([startNode, endNode]);
     setErrorMesage("");
-  };
+  }
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -52,8 +91,10 @@ function Map() {
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           // this is so its clicked the same time
 
-          const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
-          const nodesData = bfsAlgorithm.setup();
+          // const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
+          // const nodesData = bfsAlgorithm.setup();
+
+          // nodesData: Coordinates[] = [];
 
           if (!nodesData) {
             setErrorMesage("There is no path between nodes");
@@ -115,7 +156,7 @@ function Map() {
         }
       };
     }
-  }, [startNode, endNode, nodes]);
+  }, [startNode, endNode, nodes, nodesData, allNodes]);
 
   return (
     <div style={{ marginTop: "120px" }}>

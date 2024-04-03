@@ -2,8 +2,9 @@ import createError, { HttpError } from "http-errors";
 import express, { Express, NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import exampleRouter from "./routes/example.ts";
-import databaseRouter from "./routes/databaseRouter.ts";
+import exampleRouter from "./routes/example";
+import databaseRouter from "./routes/databaseRouter";
+import sendPath from "./routes/sendPath";
 
 const app: Express = express(); // Setup the backend
 
@@ -26,6 +27,7 @@ app.use("/api/high-score", exampleRouter);
 
 //Open the /api/database endpoint and connect to the databaseRouter
 app.use("/api/database", databaseRouter);
+app.use("/api/path", sendPath);
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });

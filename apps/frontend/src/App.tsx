@@ -10,6 +10,7 @@ import DisplayDatabase from "./routes/DisplayDatabase.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
 // import MapPage from "./routes/MapPage.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
+// import Map from "./routes/map.tsx";
 
 function App() {
   const router = createBrowserRouter([
