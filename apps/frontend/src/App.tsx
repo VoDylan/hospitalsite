@@ -6,7 +6,6 @@ import ServicesPage from "./routes/ServicesPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import DisplayDatabase from "./routes/DisplayDatabase.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
-
 import SlidesPage from "./routes/SlidesPage.tsx";
 
 function App() {
