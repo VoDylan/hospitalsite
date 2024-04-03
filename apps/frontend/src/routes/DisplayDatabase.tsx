@@ -12,7 +12,7 @@ import {
 } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 
-// type nodeParams = {
+// type NodeParams = {
 //   nodeID: string;
 //   xcoord: number;
 //   ycoord: number;
@@ -39,7 +39,8 @@ function handleImport() {
 }
 
 function DisplayDatabase() {
-  const [data, setData] = useState([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [data, setData] = useState(null);
   //const [rows] = useState<GridRowsProp>([]);
   const [columns] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 100 },
@@ -51,66 +52,19 @@ function DisplayDatabase() {
     { field: "longName", headerName: "LongName", width: 100 },
     { field: "shortName", headerName: "ShortName", width: 100 },
   ]);
+  // const [isFinished] = useState(false);
   //const [rowData, setRowData] = useState<nodeParams[]>([]);
 
+  const getData = async () => {
+    const { data } = await axios.get("/api/database/nodes");
+    console.log("Got data");
+    console.log(data);
+    setData(data);
+  };
+
   useEffect(() => {
-    //to retrieve data as array from database
-    async function getData(fullURL: string) {
-      try {
-        const response = await axios.get(fullURL);
-        if (response.data != null) {
-          return response.data;
-        } else {
-          console.log("No data found.");
-          return null;
-        }
-      } catch (error) {
-        console.error("Error retrieving data:", error);
-        return null;
-      }
-    }
-    async function obtainData() {
-      const obtainedData = await getData("/api/database/nodes");
-
-      if (obtainedData != null) {
-        setData(obtainedData);
-        //console.log(data);
-      } else {
-        setData([]);
-      }
-
-      data;
-      console.log("got data");
-
-      // for (let i = 0; i < data.length; i++) {
-      //     console.log({
-      //         nodeID: data[i]["nodeID"],
-      //         xcoord: data[i]["xcoord"],
-      //         ycoord: data[i]["ycoord"],
-      //         floor: data[i]["floor"],
-      //         building: data[i]["building"],
-      //         nodeType: data[i]["nodeType"],
-      //         longName: data[i]["longName"],
-      //         shortName: data[i]["shortName"],
-      //     });
-      // }
-    }
-    obtainData().then();
-    //.then(() => {
-
-    // rowData.push({
-    //   nodeID: data[i]["nodeID"],
-    //   xcoord: data[i]["xcoord"],
-    //   ycoord: data[i]["ycoord"],
-    //   floor: data[i]["floor"],
-    //   building: data[i]["building"],
-    //   nodeType: data[i]["nodeType"],
-    //   longName: data[i]["longName"],
-    //   shortName: data[i]["shortName"],
-    // });
-    //}
-    //});
-  });
+    getData();
+  }, []);
 
   return (
     <div
