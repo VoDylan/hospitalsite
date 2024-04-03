@@ -214,7 +214,7 @@ function MainCarousel() {
       <Box
         sx={{
           width: "100%",
-          height: "6%",
+          height: "8vh",
           backgroundColor: "#003A96",
           opacity: "90%",
           display: "flex",

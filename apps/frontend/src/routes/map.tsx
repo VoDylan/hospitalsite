@@ -3,7 +3,7 @@ import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
 // import { BFSalgorithm } from "../../../backend/src/BFSalgorithm.ts";
-import TopBanner from "../components/TopBanner";
+import TopBanner2 from "../components/TopBanner2";
 import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
@@ -142,7 +142,7 @@ function Map() {
 
   return (
     <div style={{ marginTop: "120px" }}>
-      <TopBanner />
+      <TopBanner2 />
       <div
         style={{
           display: "flex",

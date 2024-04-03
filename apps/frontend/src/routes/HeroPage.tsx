@@ -42,12 +42,12 @@ function HeroPage() {
         <Stack direction="row" spacing={2}>
           <NavButton
             path={"/Login"}
-            buttonType={"contained"}
+            // buttonType={"contained"}
             name={"Admin Login"}
           />
           <NavButton
             path={"/Map"}
-            buttonType={"contained"}
+            // buttonType={"contained"}
             name={"Guest Login"}
           />
         </Stack>
