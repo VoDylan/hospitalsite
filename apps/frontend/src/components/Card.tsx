@@ -48,9 +48,8 @@ export default function CustomCard({
         >
           <Box
             sx={{
-              color: "black",
+              color: "#003A96",
               fontSize: 40,
-              fontWeight: "bold",
               position: "relative",
               marginTop: "6%",
               marginBottom: "1%",
@@ -61,8 +60,9 @@ export default function CustomCard({
           </Box>
           <Box
             sx={{
-              color: "black",
+              color: "#033A96",
               fontSize: 20,
+              fontWeight: "lighter",
               maxWidth: "20vw",
               whiteSpace: "nowrap",
             }}

@@ -3,12 +3,15 @@ import Box from "@mui/material/Box";
 import { IconButton, Button, styled } from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
+import InfoIcon from "@mui/icons-material/Info";
 import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import CustomCard from "../components/Card.tsx"; // Update path to Card component
-import TopBanner from "../components/TopBanner.tsx";
 import ServiceCarousel from "../components/ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
+import LowerLevel from "../../public/00_thelowerlevel1.png";
+import noLady from "../../public/noLady.jpg";
 
 interface CardData {
   image: string;
@@ -42,7 +45,7 @@ function MainCarousel() {
     clearTimeout(autoScrollTimeout as NodeJS.Timeout);
     const newTimeout = setTimeout(() => {
       setAutoScroll(true);
-    }, 10000); // After 10 seconds, re-enable autoScroll
+    }, 1500); // After 8 seconds, re-enable autoScroll
     setAutoScrollTimeout(newTimeout);
   }, [cards.length, autoScrollTimeout]);
 
@@ -54,14 +57,14 @@ function MainCarousel() {
     clearTimeout(autoScrollTimeout as NodeJS.Timeout);
     const newTimeout = setTimeout(() => {
       setAutoScroll(true);
-    }, 10000); // After 10 seconds, re-enable autoScroll
+    }, 1500); // After 8 seconds, re-enable autoScroll
     setAutoScrollTimeout(newTimeout);
   }, [cards.length, autoScrollTimeout]);
 
   useEffect(() => {
     const mainCards: CardData[] = [
       {
-        image: "../../public/00_thelowerlevel1.png",
+        image: LowerLevel,
         title: "Directions",
         description:
           "Graphical display for directions to anywhere in the hospital!",
@@ -71,7 +74,7 @@ function MainCarousel() {
         cardDescription: "Graphical navigation to anywhere in the hospital",
       },
       {
-        image: "../../public/noLady.jpg",
+        image: noLady,
         title: "Services",
         description: "Request a service!",
         buttonText: "Request a Service!",
@@ -90,7 +93,7 @@ function MainCarousel() {
 
   return (
     <>
-      <TopBanner />
+      {/*<TopBanner />*/}
       <Box
         sx={{
           display: "flex",
@@ -98,12 +101,12 @@ function MainCarousel() {
           alignItems: "center",
           alignContent: "center",
           justifyContent: "center",
-          height: "90vh",
+          height: "50vh",
           width: "100%",
         }}
       >
         {/*Cards*/}
-        <Box sx={{ width: "100vw", height: "45vh", display: "flex" }}>
+        <Box sx={{ width: "100vw", height: "25vh", display: "flex" }}>
           {cards.map((card, index) => (
             <Box
               key={`card-${index}`}
@@ -133,50 +136,102 @@ function MainCarousel() {
               </Slide>
             </Box>
           ))}
-          {/* Navigation Buttons */}
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            marginTop: "35px",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <IconButton onClick={handlePrevPage} sx={{ margin: 5 }}>
-            <NavigateBeforeIcon />
-          </IconButton>
-
-          {[...Array(cards.length)].map((_, index) => (
-            <Dot
-              key={index}
-              onClick={() => setCurrentPage(index)}
-              style={{ opacity: currentPage === index ? 1 : 0.5 }}
-            />
-          ))}
-
-          <IconButton
-            onClick={handleNextPage}
-            sx={{
-              margin: 5,
-            }}
-          >
-            <NavigateNextIcon />
-          </IconButton>
         </Box>
       </Box>
-      <Box
+
+      {/* Navigation Buttons */}
+      <Stack
         sx={{
-          color: "black",
-          fontSize: 40,
-          fontWeight: "bold",
-          width: 500,
-          marginLeft: "70px",
-          textDecoration: "underline",
+          display: "flex",
+          flexDirection: "row",
+          marginTop: "4%",
+          height: "20vh",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        Services
+        <IconButton onClick={handlePrevPage} sx={{ margin: 5 }}>
+          <NavigateBeforeIcon />
+        </IconButton>
+
+        {[...Array(cards.length)].map((_, index) => (
+          <Dot
+            key={index}
+            onClick={() => setCurrentPage(index)}
+            style={{ opacity: currentPage === index ? 1 : 0.5 }}
+          />
+        ))}
+
+        <IconButton
+          onClick={handleNextPage}
+          sx={{
+            margin: 5,
+          }}
+        >
+          <NavigateNextIcon />
+        </IconButton>
+      </Stack>
+
+      {/*{Icons}*/}
+      <Stack
+        direction={"row"}
+        display={"flex"}
+        justifyContent={"center"}
+        sx={{ marginBottom: "4%" }}
+      >
+        <a
+          href="https://www.brighamandwomens.org/forms/request-an-appointment"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <IconButton
+            sx={{ color: "#186BD9" }}
+            size="large"
+            aria-label="Make an appointment"
+          >
+            <RateReviewSharpIcon />
+          </IconButton>
+          <Button variant={"text"}>Make an appointment</Button>
+        </a>
+
+        <a
+          href="https://www.brighamandwomens.org/about-bwh"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <IconButton
+            sx={{ color: "#186BD9" }}
+            size="large"
+            aria-label="About Brigham and Women's Hospital"
+          >
+            <InfoIcon />
+          </IconButton>
+          <Button variant={"text"}>About Us!</Button>
+        </a>
+      </Stack>
+
+      {/*{Divider Bar}*/}
+      <Box
+        sx={{
+          width: "100%",
+          height: "8vh",
+          backgroundColor: "#003A96",
+          opacity: "90%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            color: "white",
+            fontSize: 40,
+            textDecoration: "underline",
+            marginLeft: "2%",
+          }}
+        >
+          Services
+        </Box>
       </Box>
       <ServiceCarousel />
       <Stack

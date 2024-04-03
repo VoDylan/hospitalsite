@@ -1,10 +1,10 @@
 import { Box, Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmission.ts";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
-import TopBanner from "../components/TopBanner.tsx";
+import TopBanner2 from "../components/TopBanner2.tsx";
 import LadyWithFlowersInHospital from "../../public/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
 
@@ -25,24 +25,15 @@ function FlowerDeliveryService() {
   // Storing the node numbers in a use state so that we only make a get request once
   const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
 
-  // Function to make a GET request to retrieve node numbers
-  const getNodeNumbers = async (): Promise<string[]> => {
-    try {
-      // Make GET request
-      const response = await axios.get<NodeData[]>("/api/database/nodes");
-
-      // Extract node numbers from response data
-      setNodeNumbers(response.data.map((node) => node.nodeID));
-      return nodeNumbers;
-    } catch (error) {
-      // Handle errors
-      console.error("Error fetching node numbers:", error);
-      return [];
-    }
-  };
-
-  // Call the previously defined asynch function to populate the nodes array used in the DropDown
-  getNodeNumbers();
+  // GET request to retrieve node numbers wrapped in a useEffect function
+  useEffect(() => {
+    axios
+      .get<NodeData[]>("/api/database/nodes")
+      .then((response) =>
+        setNodeNumbers(response.data.map((node) => node.nodeID)),
+      )
+      .catch((error) => console.error(error));
+  }, []);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setResponses({ ...form, name: e.target.value });
@@ -87,7 +78,7 @@ function FlowerDeliveryService() {
         minHeight: "100vh",
       }}
     >
-      <TopBanner />
+      <TopBanner2 />
       <Box
         sx={{
           flexGrow: 1,
@@ -115,7 +106,7 @@ function FlowerDeliveryService() {
             xs={12}
             sx={{
               alignItems: "flexStart",
-              backgroundColor: "primary.main",
+              backgroundColor: "#003A96",
             }}
           >
             <Typography

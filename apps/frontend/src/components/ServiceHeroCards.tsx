@@ -37,7 +37,7 @@ const ServiceCard: React.FC<CardProps> = ({
         image={image}
         title={title}
       ></CardMedia>
-      <CardContent style={{ flex: 1 }}>
+      <CardContent style={{ flex: 1, backgroundColor: "white" }}>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
@@ -53,7 +53,7 @@ const ServiceCard: React.FC<CardProps> = ({
             marginLeft: "1%",
           }}
         >
-          <Button variant="contained" size="large">
+          <Button variant="contained" size="large" sx={{ width: "100%" }}>
             {buttonText}
           </Button>
         </Link>
