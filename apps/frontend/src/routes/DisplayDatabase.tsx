@@ -90,11 +90,10 @@ function DisplayDatabase() {
           variant="contained"
           onClick={handleImport}
           sx={{
-            backgroundColor: "#012D5A", // Change background color
+            backgroundColor: "primary.main", // Change background color
             color: "white", // Change text color
             borderRadius: "8px", // Change border radius
             marginRight: "-1px", // Adjust spacing
-            border: "2px solid #F6BD38", // Change border thickness and color
           }}
         >
           Import CSV File

@@ -7,13 +7,14 @@ import fs from "fs";
 import {
   createEdgePrisma,
   createNodePrisma,
-  client,
   clearDBEdges,
   clearDBNodes,
   getDBNodes,
   getDBEdges,
+  clearDBRequests,
 } from "./PrismaScripts";
 import mapEdge from "./MapEdge";
+import client from "./bin/database-connection.ts";
 
 export default class DBManager {
   private static instance: DBManager;
@@ -63,6 +64,7 @@ export default class DBManager {
    */
   public async syncNodesAndEdgesToDB() {
     //Clear both the edges and the nodes tables
+    await clearDBRequests();
     await clearDBEdges();
     await clearDBNodes();
 
@@ -430,5 +432,25 @@ export default class DBManager {
   private async listsToDB() {
     await createNodePrisma(this._mapNodes);
     await createEdgePrisma(this._mapEdges);
+  }
+
+  public async filterServiceRequestCategory(category: string) {
+    const filteredServiceRequests: string[] = [];
+    console.log(`${category} ${filteredServiceRequests}`);
+    /*for(let i: number = 0; i < databaseRequests; i++){
+            if(serviceReq[i][1] == category){
+                filteredServiceRequests.push(serviceReq[i][1]);
+            }
+        }*/
+  }
+
+  public async filterServiceRequestUrgency(category: string) {
+    const filteredServiceRequests: string[] = [];
+    console.log(`${category} ${filteredServiceRequests}`);
+    /*for(let i: number = 0; i < databaseRequests; i++){
+            if(serviceReq[i][2] == category){
+                filteredServiceRequests.push(serviceReq[i][2]);
+            }
+        }*/
   }
 }

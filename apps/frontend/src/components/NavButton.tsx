@@ -10,7 +10,7 @@ type NavButtonProp = {
 const NavButton: React.FC<NavButtonProp> = ({ path, name }) => {
   return (
     <div>
-      <Button variant="contained" href={path} color={"secondary"}>
+      <Button variant="contained" href={path}>
         {name}
       </Button>
     </div>
