@@ -3,7 +3,7 @@ import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import {
   DataGrid,
   GridColDef,
@@ -40,9 +40,6 @@ function handleImport() {
 }
 
 function DisplayDatabase() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, setData] = useState<AxiosResponse>();
-  //const [rows] = useState<GridRowsProp>([]);
   const [columns] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 100 },
     { field: "xcoord", headerName: "XCoord", width: 100 },
@@ -53,13 +50,11 @@ function DisplayDatabase() {
     { field: "longName", headerName: "LongName", width: 100 },
     { field: "shortName", headerName: "ShortName", width: 100 },
   ]);
-  // const [isFinished] = useState(false);
   const [rowData, setRowData] = useState<NodeParams[]>([]);
 
   const getData = async () => {
     const { data } = await axios.get("/api/database/nodes");
     console.log("Got data");
-    setData(data);
     console.log(data);
 
     const rowData = [];
