@@ -7,21 +7,21 @@ import axios from "axios";
 import {
   DataGrid,
   GridColDef,
-  GridRowsProp,
+  //GridRowsProp,
   GridToolbar,
 } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 
-type nodeParams = {
-  nodeID: string;
-  xcoord: number;
-  ycoord: number;
-  floor: string;
-  building: string;
-  nodeType: string;
-  longName: string;
-  shortName: string;
-};
+// type nodeParams = {
+//   nodeID: string;
+//   xcoord: number;
+//   ycoord: number;
+//   floor: string;
+//   building: string;
+//   nodeType: string;
+//   longName: string;
+//   shortName: string;
+// };
 
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
@@ -34,61 +34,82 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-const handleImport = () => console.log();
-
-//to retrieve data as array from database
-const getData = async (fullURL: string) => {
-  try {
-    const response = await axios.get(fullURL);
-    if (response != null) {
-      return response.data;
-    } else {
-      console.log("No data found.");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error retrieving data:", error);
-    return null;
-  }
-};
-
-let rows: GridRowsProp = [];
-const rowData: nodeParams[] = [];
-
-const columns: GridColDef[] = [
-  { field: "nodeID", headerName: "NodeID", width: 100 },
-  { field: "xcoord", headerName: "XCoord", width: 100 },
-  { field: "ycoord", headerName: "YCoord", width: 100 },
-  { field: "floor", headerName: "Floor", width: 100 },
-  { field: "building", headerName: "Building", width: 100 },
-  { field: "nodeType", headerName: "NodeType", width: 100 },
-  { field: "longName", headerName: "LongName", width: 100 },
-  { field: "shortName", headerName: "ShortName", width: 100 },
-];
+function handleImport() {
+  console.log();
+}
 
 function DisplayDatabase() {
   const [data, setData] = useState([]);
+  //const [rows] = useState<GridRowsProp>([]);
+  const [columns] = useState<GridColDef[]>([
+    { field: "nodeID", headerName: "NodeID", width: 100 },
+    { field: "xcoord", headerName: "XCoord", width: 100 },
+    { field: "ycoord", headerName: "YCoord", width: 100 },
+    { field: "floor", headerName: "Floor", width: 100 },
+    { field: "building", headerName: "Building", width: 100 },
+    { field: "nodeType", headerName: "NodeType", width: 100 },
+    { field: "longName", headerName: "LongName", width: 100 },
+    { field: "shortName", headerName: "ShortName", width: 100 },
+  ]);
+  //const [rowData, setRowData] = useState<nodeParams[]>([]);
 
   useEffect(() => {
-    async function obtainData() {
-      setData(await getData("/api/database/nodes"));
-    }
-    obtainData().then(() => {
-      for (let i = 0; i < data.length; i++) {
-        rowData.push({
-          nodeID: data[i]["nodeID"],
-          xcoord: data[i]["xcoord"],
-          ycoord: data[i]["ycoord"],
-          floor: data[i]["floor"],
-          building: data[i]["building"],
-          nodeType: data[i]["nodeType"],
-          longName: data[i]["longName"],
-          shortName: data[i]["shortName"],
-        });
-        console.log("Works!");
+    //to retrieve data as array from database
+    async function getData(fullURL: string) {
+      try {
+        const response = await axios.get(fullURL);
+        if (response.data != null) {
+          return response.data;
+        } else {
+          console.log("No data found.");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error retrieving data:", error);
+        return null;
       }
-      rows = rowData;
-    });
+    }
+    async function obtainData() {
+      const obtainedData = await getData("/api/database/nodes");
+
+      if (obtainedData != null) {
+        setData(obtainedData);
+        //console.log(data);
+      } else {
+        setData([]);
+      }
+
+      data;
+      console.log("got data");
+
+      // for (let i = 0; i < data.length; i++) {
+      //     console.log({
+      //         nodeID: data[i]["nodeID"],
+      //         xcoord: data[i]["xcoord"],
+      //         ycoord: data[i]["ycoord"],
+      //         floor: data[i]["floor"],
+      //         building: data[i]["building"],
+      //         nodeType: data[i]["nodeType"],
+      //         longName: data[i]["longName"],
+      //         shortName: data[i]["shortName"],
+      //     });
+      // }
+    }
+    obtainData().then();
+    //.then(() => {
+
+    // rowData.push({
+    //   nodeID: data[i]["nodeID"],
+    //   xcoord: data[i]["xcoord"],
+    //   ycoord: data[i]["ycoord"],
+    //   floor: data[i]["floor"],
+    //   building: data[i]["building"],
+    //   nodeType: data[i]["nodeType"],
+    //   longName: data[i]["longName"],
+    //   shortName: data[i]["shortName"],
+    // });
+    //}
+    //});
   });
 
   return (
@@ -125,7 +146,19 @@ function DisplayDatabase() {
             //alignItems: "center",
           }}
           columns={columns}
-          rows={rows}
+          rows={[
+            {
+              id: 1,
+              nodeID: "tasdf",
+              xcoord: 234,
+              ycoord: 21345,
+              floor: "asd",
+              building: "asdgff",
+              nodeType: "adfa",
+              longName: "asdgfasdf",
+              shortName: "asdfafsd",
+            },
+          ]}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
