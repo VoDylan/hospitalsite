@@ -2,8 +2,10 @@ import * as React from "react";
 import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-//import background from "frontend/public/Background.jpg";
-//import axios from 'axios';
+import TopBanner from "../components/TopBanner.tsx";
+
+//ADDED TOPBANNER
+
 import {
   DataGrid,
   GridColDef,
@@ -33,67 +35,70 @@ const columns: GridColDef[] = [
 
 function DisplayDatabase() {
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        minWidth: "100wh",
-        /*background: `url(${background})`, // Set the background image
+    <>
+      <TopBanner />
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          minWidth: "100wh",
+          /*background: `url(${background})`, // Set the background image
           backgroundSize: "cover",
           backgroundPosition: "center",*/
-      }}
-    >
-      <Box
-        display="flex"
-        mt={2}
-        alignItems="center"
-        flexDirection="column"
-        sx={{
-          backgroundColor: "white",
-          opacity: "90%",
         }}
       >
-        <DataGrid
-          slots={{ toolbar: GridToolbar }}
+        <Box
+          display="flex"
+          mt={2}
+          alignItems="center"
+          flexDirection="column"
           sx={{
-            padding: "40px",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            //alignItems: "center",
-          }}
-          columns={columns}
-          rows={rows}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-        />
-        <Button
-          component="label"
-          role={undefined}
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-          className="importButton"
-          variant="contained"
-          onClick={handleImport}
-          sx={{
-            backgroundColor: "primary.main", // Change background color
-            color: "white", // Change text color
-            borderRadius: "8px", // Change border radius
-            marginRight: "-1px", // Adjust spacing
+            backgroundColor: "white",
+            opacity: "90%",
           }}
         >
-          Import CSV File
-          <VisuallyHiddenInput type="file" />
-        </Button>
-      </Box>
-    </div>
+          <DataGrid
+            slots={{ toolbar: GridToolbar }}
+            sx={{
+              padding: "40px",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              //alignItems: "center",
+            }}
+            columns={columns}
+            rows={rows}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+          />
+          <Button
+            component="label"
+            role={undefined}
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            className="importButton"
+            variant="contained"
+            onClick={handleImport}
+            sx={{
+              backgroundColor: "primary.main", // Change background color
+              color: "white", // Change text color
+              borderRadius: "8px", // Change border radius
+              marginRight: "-1px", // Adjust spacing
+            }}
+          >
+            Import CSV File
+            <VisuallyHiddenInput type="file" />
+          </Button>
+        </Box>
+      </div>
+    </>
   );
 }
 

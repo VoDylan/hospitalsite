@@ -3,6 +3,7 @@ import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import NavButton from "./NavButton.tsx";
 
+//FIXED
 export const NavBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   return (
@@ -26,20 +27,12 @@ export const NavBar = () => {
             Side Panel
           </Typography>
           <Stack direction="column" spacing={2}>
-            <NavButton
-              buttonType={"contained"}
-              name={"Home"}
-              path={"http://localhost:3000/Slides"}
-            />
-            <NavButton
-              buttonType={"contained"}
-              name={"Map"}
-              path={"http://localhost:3000/Map"}
-            />
+            <NavButton buttonType={"contained"} name={"Home"} path={"/"} />
+            <NavButton buttonType={"contained"} name={"Map"} path={"/Map"} />
             <NavButton
               buttonType={"contained"}
               name={"Services"}
-              path={"http://localhost:3000/Services"}
+              path={"/Services"}
             />
             <NavButton
               path={"/DisplayDatabase"}

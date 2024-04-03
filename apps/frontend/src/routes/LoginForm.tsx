@@ -14,7 +14,7 @@ function LoginForm() {
   });
   const navigate = useNavigate();
   const handleRedirect = () => {
-    navigate("/Slides");
+    navigate("/LoggedIn");
   };
 
   function clear() {
