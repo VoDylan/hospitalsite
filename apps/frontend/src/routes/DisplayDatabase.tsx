@@ -3,7 +3,7 @@ import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   DataGrid,
   GridColDef,
@@ -12,16 +12,17 @@ import {
 } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 
-// type NodeParams = {
-//   nodeID: string;
-//   xcoord: number;
-//   ycoord: number;
-//   floor: string;
-//   building: string;
-//   nodeType: string;
-//   longName: string;
-//   shortName: string;
-// };
+type NodeParams = {
+  id: number;
+  nodeID: string;
+  xcoord: number;
+  ycoord: number;
+  floor: string;
+  building: string;
+  nodeType: string;
+  longName: string;
+  shortName: string;
+};
 
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
@@ -40,7 +41,7 @@ function handleImport() {
 
 function DisplayDatabase() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<AxiosResponse>();
   //const [rows] = useState<GridRowsProp>([]);
   const [columns] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 100 },
@@ -53,13 +54,30 @@ function DisplayDatabase() {
     { field: "shortName", headerName: "ShortName", width: 100 },
   ]);
   // const [isFinished] = useState(false);
-  //const [rowData, setRowData] = useState<nodeParams[]>([]);
+  const [rowData, setRowData] = useState<NodeParams[]>([]);
 
   const getData = async () => {
     const { data } = await axios.get("/api/database/nodes");
     console.log("Got data");
-    console.log(data);
     setData(data);
+    console.log(data);
+
+    const rowData = [];
+    for (let i = 0; i < data.length; i++) {
+      const tableFormattedNode = {
+        id: i,
+        nodeID: data[i].nodeID,
+        xcoord: data[i].xcoord,
+        ycoord: data[i].ycoord,
+        floor: data[i].floor,
+        building: data[i].building,
+        nodeType: data[i].nodeType,
+        longName: data[i].longName,
+        shortName: data[i].shortName,
+      };
+      rowData.push(tableFormattedNode);
+    }
+    setRowData(rowData);
   };
 
   useEffect(() => {
@@ -100,19 +118,7 @@ function DisplayDatabase() {
             //alignItems: "center",
           }}
           columns={columns}
-          rows={[
-            {
-              id: 1,
-              nodeID: "tasdf",
-              xcoord: 234,
-              ycoord: 21345,
-              floor: "asd",
-              building: "asdgff",
-              nodeType: "adfa",
-              longName: "asdgfasdf",
-              shortName: "asdfafsd",
-            },
-          ]}
+          rows={rowData}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
