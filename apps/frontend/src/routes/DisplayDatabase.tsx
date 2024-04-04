@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios from "axios";
+
 import {
   DataGrid,
   GridColDef,
@@ -37,6 +38,10 @@ type EdgeParams = {
   endNodeID: string;
 };
 
+/*app.post('/csv', upload.none(), function (req, res, next) {
+  // req.body contains the text fields
+});*/
+
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
   height: 1,
@@ -47,10 +52,6 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
-
-function handleImport() {
-  console.log();
-}
 
 function DisplayDatabase() {
   const [nodeColumns] = useState<GridColDef[]>([
@@ -145,6 +146,103 @@ function DisplayDatabase() {
     getEdgeData();
     getServiceData();
   }, []);
+
+  function handleImport() {
+    console.log();
+  }
+
+  //csv file import to node table
+  /* function handleNodeImport() {
+    //console.log();
+
+    const app = express();
+    const port = 3000;
+
+    //  new Pool instance to connect to the postgres database
+    const poolNodes = new Pool({
+      user: "postgres",
+      host: "",
+      database: "",
+      password: "postgres",
+      port: 5432,
+    });
+
+    //define route to receive the array of json objects
+    // VisuallyHiddenInput file?
+    app.post("file", async (req: Request, res: Response) => {
+      const client = await poolNodes.connect();
+
+      try {
+        const data = req.body; // json array sent in the request body
+
+        // begin transaction
+        await client.query("BEGIN");
+
+        // inserting json object into the database
+        for (const obj of data) {
+          await client.query(
+            "INSERT INTO table_name (column1, column2) VALUES ($1, $2)",
+            [obj.property1, obj.property2],
+          );
+        }
+
+        await client.query("COMMIT");
+
+        res
+          .status(200)
+          .send("Data successfully inserted into Postgres database");
+      } catch (error) {
+        // Rollback the transaction in case of an error
+        await client.query("ROLLBACK");
+        console.error("Error inserting data into Postgres:", error);
+        res.status(500).send("Error inserting data into Postgres database");
+      } finally {
+        // release client back to the pool
+        client.release();
+      }
+    });
+
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  }*/
+
+  /*const fileReader = new FileReader();
+  const [file, setFile] = useState();
+  const [array, setArray] = useState([]);
+
+  const handleImport = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const csvFileToArray = string => {
+    const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
+    const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
+
+    const array = csvRows.map(i => {
+      const values = i.split(",");
+      const obj = csvHeader.reduce((object, header, index) => {
+        object[header] = values[index];
+        return object;
+      }, {});
+      return obj;
+    });
+
+    setArray(array);
+  };
+
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+
+    if (file) {
+      fileReader.onload = function (event) {
+        const text = event.target.result;
+        csvFileToArray(text);
+      };
+
+      fileReader.readAsText(file);
+    }
+  };*/
 
   return (
     <div
