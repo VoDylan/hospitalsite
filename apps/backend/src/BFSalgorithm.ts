@@ -29,16 +29,15 @@ export class BFSalgorithm {
       return;
     }
 
-    for (let i = 1; i < edges.length - 1; i++) {
+    for (let i = 0; i < edges.length; i++) {
       const start_node_now: NodeBFS = {
         current_node: edges[i].startNodeID,
         neighbors: [],
         x_coordinate: 0,
         y_coordinate: 0,
         index: -1,
+        inUse: false,
       };
-
-      // if (edges[i][1] === undefined) continue;
 
       const end_neighbor_now: NodeBFS = {
         current_node: edges[i].endNodeID,
@@ -46,80 +45,49 @@ export class BFSalgorithm {
         x_coordinate: 0,
         y_coordinate: 0,
         index: -1,
+        inUse: false,
       };
 
-      // this.add_coordinates(start_node_now);
-      // this.add_coordinates(end_neighbor_now);
-
-      for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].nodeID === start_node_now.current_node) {
-          start_node_now.x_coordinate = Number(nodes[i].xcoord);
-          start_node_now.y_coordinate = Number(nodes[i].ycoord);
+      // adding coordinates and checking if the node already exists in all nodes
+      for (let j = 0; j < nodes.length; i++) {
+        if (nodes[j].nodeID === start_node_now.current_node) {
+          start_node_now.inUse = true;
+          start_node_now.x_coordinate = Number(nodes[j].xcoord);
+          start_node_now.y_coordinate = Number(nodes[j].ycoord);
         }
-      }
-      for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].nodeID === end_neighbor_now.current_node) {
-          end_neighbor_now.x_coordinate = Number(nodes[i].xcoord);
-          end_neighbor_now.y_coordinate = Number(nodes[i].ycoord);
+        if (nodes[j].nodeID === end_neighbor_now.current_node) {
+          end_neighbor_now.inUse = true;
+          end_neighbor_now.x_coordinate = Number(nodes[j].xcoord);
+          end_neighbor_now.y_coordinate = Number(nodes[j].ycoord);
         }
       }
 
-      if (!this.check_node(start_node_now)) {
+      // if not in use push the current one
+      if (!start_node_now.inUse) {
         start_node_now.index = this.count;
         this.all_nodes.push(start_node_now);
         this.count++;
       }
 
-      if (!this.check_node(end_neighbor_now)) {
+      // if not in use push the neighbor one
+      if (!end_neighbor_now.inUse) {
         end_neighbor_now.index = this.count;
         this.all_nodes.push(end_neighbor_now);
         this.count++;
       }
 
-      // this.add_neighbor(start_node_now, );
-      for (let i = 0; i < this.all_nodes.length; i++) {
-        if (this.all_nodes[i].current_node === start_node_now.current_node)
-          this.all_nodes[i].neighbors.push(end_neighbor_now.current_node);
-      }
-      // this.add_neighbor(end_neighbor_now, start_node_now.current_node);
-      for (let i = 0; i < this.all_nodes.length; i++) {
-        if (this.all_nodes[i].current_node === end_neighbor_now.current_node)
-          this.all_nodes[i].neighbors.push(start_node_now.current_node);
+      // add a neighbor to all nodes
+      for (let j = 0; j < this.all_nodes.length; i++) {
+        if (this.all_nodes[j].current_node === start_node_now.current_node)
+          this.all_nodes[j].neighbors.push(end_neighbor_now.current_node);
+        else if (
+          this.all_nodes[j].current_node === end_neighbor_now.current_node
+        )
+          this.all_nodes[j].neighbors.push(start_node_now.current_node);
       }
     }
+    console.log(this.all_nodes);
   }
-
-  /**
-   * Checking if the NodeBFS already exists in all nodes
-   * @param to_check the NodeBFS to check
-   */
-  check_node(to_check: NodeBFS) {
-    for (let i = 0; i < this.all_nodes.length; i++) {
-      if (this.all_nodes[i].current_node === to_check.current_node) return true;
-    }
-
-    return false;
-  }
-
-  // add_coordinates(node: NodeBFS) {
-  //
-  // }
-
-  /**
-   * Adding neighbor node to each node (meaning the nodes a node goes directly to)
-   * @param to_check check if this node has a neighbor
-   * @param neighbor_now current node to be added
-   */
-  // add_neighbor(to_check: NodeBFS, neighbor_now: string) {
-  //   for (let i = 0; i < this.all_nodes.length; i++) {
-  //     if (this.all_nodes[i].current_node === to_check.current_node)
-  //         this.all_nodes[i].neighbors.push(neighbor_now);
-  //   }
-  // }
-
-  // add_to_all_nodes() {
-  //
-  // }
 
   /**
    * Implementation of Breadth-first search algorithm to find the shortest path from start to end nodes
