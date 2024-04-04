@@ -36,6 +36,11 @@ function Map() {
       return;
     }
 
+    if (startNode === endNode) {
+      setErrorMesage("Please enter different nodes");
+      return;
+    }
+
     const request: LocationInfo = { startNode: startNode, endNode: endNode };
 
     const response = await axios.post("/api/path", request, {
