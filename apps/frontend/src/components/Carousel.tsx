@@ -142,10 +142,11 @@ function MainCarousel() {
       {/* Navigation Buttons */}
       <Stack
         sx={{
+          position: "relative",
           display: "flex",
           flexDirection: "row",
           marginTop: "4%",
-          height: "20vh",
+          height: "220px",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -177,7 +178,7 @@ function MainCarousel() {
         direction={"row"}
         display={"flex"}
         justifyContent={"center"}
-        sx={{ marginBottom: "4%" }}
+        sx={{ marginBottom: "6%" }}
       >
         <a
           href="https://www.brighamandwomens.org/forms/request-an-appointment"
@@ -222,6 +223,7 @@ function MainCarousel() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          marginBottom: "8%",
         }}
       >
         <Box

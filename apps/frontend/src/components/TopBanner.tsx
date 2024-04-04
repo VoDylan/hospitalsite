@@ -60,7 +60,7 @@ function TopBanner() {
   // };
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "white", height: "10vh" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: "white", height: "120px" }}>
       <Toolbar sx={{ flexGrow: 2, marginLeft: 2 }}>
         <Stack sx={{ marginRight: 2, color: "#012D5A" }}>
           <NavBar />
