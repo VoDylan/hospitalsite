@@ -20,14 +20,8 @@ export class BFSalgorithm {
     const edges: Edge[] = await client.edge.findMany();
     const nodes: Node[] = await client.node.findMany();
 
-    if (!edges) {
-      // console.error("Edges array is undefined or empty");
-      return;
-    }
-    if (!nodes) {
-      // console.error("Edges array is undefined or empty");
-      return;
-    }
+    if (!edges) return;
+    if (!nodes) return;
 
     for (let i = 0; i < edges.length; i++) {
       const start_node_now: NodeBFS = {
@@ -48,45 +42,38 @@ export class BFSalgorithm {
         inUse: false,
       };
 
-      // adding coordinates and checking if the node already exists in all nodes
-      for (let j = 0; j < nodes.length; i++) {
-        if (nodes[j].nodeID === start_node_now.current_node) {
-          start_node_now.inUse = true;
-          start_node_now.x_coordinate = Number(nodes[j].xcoord);
-          start_node_now.y_coordinate = Number(nodes[j].ycoord);
-        }
-        if (nodes[j].nodeID === end_neighbor_now.current_node) {
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].nodeID === start_node_now.current_node) {
           end_neighbor_now.inUse = true;
-          end_neighbor_now.x_coordinate = Number(nodes[j].xcoord);
-          end_neighbor_now.y_coordinate = Number(nodes[j].ycoord);
+          start_node_now.x_coordinate = Number(nodes[i].xcoord);
+          start_node_now.y_coordinate = Number(nodes[i].ycoord);
+        }
+        if (nodes[i].nodeID === end_neighbor_now.current_node) {
+          end_neighbor_now.inUse = true;
+          end_neighbor_now.x_coordinate = Number(nodes[i].xcoord);
+          end_neighbor_now.y_coordinate = Number(nodes[i].ycoord);
         }
       }
 
-      // if not in use push the current one
       if (!start_node_now.inUse) {
         start_node_now.index = this.count;
         this.all_nodes.push(start_node_now);
         this.count++;
       }
 
-      // if not in use push the neighbor one
       if (!end_neighbor_now.inUse) {
         end_neighbor_now.index = this.count;
         this.all_nodes.push(end_neighbor_now);
         this.count++;
       }
 
-      // add a neighbor to all nodes
-      for (let j = 0; j < this.all_nodes.length; i++) {
-        if (this.all_nodes[j].current_node === start_node_now.current_node)
-          this.all_nodes[j].neighbors.push(end_neighbor_now.current_node);
-        else if (
-          this.all_nodes[j].current_node === end_neighbor_now.current_node
-        )
-          this.all_nodes[j].neighbors.push(start_node_now.current_node);
+      for (let i = 0; i < this.all_nodes.length; i++) {
+        if (this.all_nodes[i].current_node === start_node_now.current_node)
+          this.all_nodes[i].neighbors.push(end_neighbor_now.current_node);
+        if (this.all_nodes[i].current_node === end_neighbor_now.current_node)
+          this.all_nodes[i].neighbors.push(start_node_now.current_node);
       }
     }
-    console.log(this.all_nodes);
   }
 
   /**
