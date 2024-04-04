@@ -106,7 +106,7 @@ function MainCarousel() {
         }}
       >
         {/*Cards*/}
-        <Box sx={{ width: "100vw", height: "25vh", display: "flex" }}>
+        <Box sx={{ width: "100vw", height: "50vh", display: "flex" }}>
           {cards.map((card, index) => (
             <Box
               key={`card-${index}`}

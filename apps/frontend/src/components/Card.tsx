@@ -29,9 +29,13 @@ export default function CustomCard({
   cardDescription,
 }: CardProps) {
   return (
-    <Card sx={{ position: "relative", width: "100vw", height: "52vh" }}>
+    <Card sx={{ position: "relative", width: "100vw", height: "65vh" }}>
       <CardMedia
-        sx={{ height: "60vh", position: "relative" }}
+        sx={{
+          height: "70vh",
+          position: "relative",
+          backgroundPosition: "center 8%",
+        }}
         image={image}
         title={title}
       >
@@ -43,7 +47,7 @@ export default function CustomCard({
             justifyContent: "center",
             alignItems: "flex-start",
             marginLeft: "8%",
-            minHeight: "40vh",
+            minHeight: "65vh",
           }}
         >
           <Box
