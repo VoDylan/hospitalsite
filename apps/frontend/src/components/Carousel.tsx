@@ -142,10 +142,11 @@ function MainCarousel() {
       {/* Navigation Buttons */}
       <Stack
         sx={{
+          position: "relative",
           display: "flex",
           flexDirection: "row",
           marginTop: "4%",
-          height: "20vh",
+          height: "220px",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -177,7 +178,7 @@ function MainCarousel() {
         direction={"row"}
         display={"flex"}
         justifyContent={"center"}
-        sx={{ marginBottom: "4%" }}
+        sx={{ marginBottom: "6%" }}
       >
         <a
           href="https://www.brighamandwomens.org/forms/request-an-appointment"
@@ -191,7 +192,9 @@ function MainCarousel() {
           >
             <RateReviewSharpIcon />
           </IconButton>
-          <Button variant={"text"}>Make an appointment</Button>
+          <Button variant={"text"}>
+            Make an appointment (Real Link Don't Fill Out)
+          </Button>
         </a>
 
         <a
@@ -206,7 +209,7 @@ function MainCarousel() {
           >
             <InfoIcon />
           </IconButton>
-          <Button variant={"text"}>About Us!</Button>
+          <Button variant={"text"}>About Us! (Real Link)</Button>
         </a>
       </Stack>
 
@@ -220,6 +223,7 @@ function MainCarousel() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          marginBottom: "8%",
         }}
       >
         <Box
