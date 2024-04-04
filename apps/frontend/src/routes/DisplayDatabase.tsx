@@ -54,6 +54,12 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
+function parseCSVFromString(data: string) {
+  return data.split("\n").map((row: string): string[] => {
+    return row.trim().split(",");
+  });
+}
+
 function DisplayDatabase() {
   const [nodeColumns] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 150 },
@@ -151,13 +157,21 @@ function DisplayDatabase() {
     getServiceData();
   }, []);
 
-  function handleImport() {
-    console.log();
-  }
   function handleNodeImport(file: File) {
     const fileReader = new FileReader();
 
     let fileText: string | ArrayBuffer = "";
+
+    const jsonData: {
+      nodeID: string;
+      xcoord: number;
+      ycoord: number;
+      floor: string;
+      building: string;
+      nodeType: string;
+      longName: string;
+      shortName: string;
+    }[] = [];
 
     fileReader.onload = (evt) => {
       if (evt.target!.result == null) {
@@ -165,25 +179,82 @@ function DisplayDatabase() {
       } else {
         fileText = evt.target!.result;
         console.log(fileText);
-        axios
-          .post("/api/database/uploadnodes", JSON.stringify(fileText))
-          .then((response) => {
-            console.log(response);
+        const parsedData = parseCSVFromString(fileText as string);
+
+        for (let i = 1; i < parsedData.length; i++) {
+          jsonData.push({
+            nodeID: parsedData[i][0],
+            xcoord: parseInt(parsedData[i][1]),
+            ycoord: parseInt(parsedData[i][2]),
+            floor: parsedData[i][3],
+            building: parsedData[i][4],
+            nodeType: parsedData[i][5],
+            longName: parsedData[i][6],
+            shortName: parsedData[i][7],
           });
+        }
+
+        axios.post("/api/database/uploadnodes", jsonData).then((response) => {
+          console.log(response);
+        });
       }
     };
 
     fileReader.readAsText(file);
   }
 
-   
-  function handleFileUpload(event: { target: { files: FileList | null } }) {
+  function handleEdgeImport(file: File) {
+    const fileReader = new FileReader();
+
+    let fileText: string | ArrayBuffer = "";
+
+    const jsonData: {
+      startNodeID: string;
+      endNodeID: string;
+    }[] = [];
+
+    fileReader.onload = (evt) => {
+      if (evt.target!.result == null) {
+        console.log("No data found in file");
+      } else {
+        fileText = evt.target!.result;
+        console.log(fileText);
+        const parsedData = parseCSVFromString(fileText as string);
+
+        for (let i = 1; i < parsedData.length; i++) {
+          jsonData.push({
+            startNodeID: parsedData[i][0],
+            endNodeID: parsedData[i][1],
+          });
+        }
+
+        axios.post("/api/database/uploadedges", jsonData).then((response) => {
+          console.log(response);
+        });
+      }
+    };
+
+    fileReader.readAsText(file);
+  }
+
+  function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
     const file: FileList | null = event.target.files;
     console.log(`Uploaded file: ${file![0]}`);
     if (file == null) {
       console.log("No file uploaded");
     } else {
       handleNodeImport(file![0]);
+    }
+    console.log("Handling node import data");
+  }
+
+  function handleEdgeFileUpload(event: { target: { files: FileList | null } }) {
+    const file: FileList | null = event.target.files;
+    console.log(`Uploaded file: ${file![0]}`);
+    if (file == null) {
+      console.log("No file uploaded");
+    } else {
+      handleEdgeImport(file![0]);
     }
     console.log("Handling node import data");
   }
@@ -341,7 +412,7 @@ function DisplayDatabase() {
             }}
           >
             Import CSV File
-            <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
+            <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
           </Button>
           <DataGrid
             slots={{ toolbar: GridToolbar }}
@@ -368,7 +439,7 @@ function DisplayDatabase() {
             startIcon={<CloudUploadIcon />}
             className="importButton"
             variant="contained"
-            onClick={handleImport}
+            // onClick={handleImport}
             sx={{
               backgroundColor: "primary.main", // Change background color
               color: "white", // Change text color
@@ -377,7 +448,7 @@ function DisplayDatabase() {
             }}
           >
             Import CSV File
-            <VisuallyHiddenInput type="file" />
+            <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
           <DataGrid
             slots={{ toolbar: GridToolbar }}
