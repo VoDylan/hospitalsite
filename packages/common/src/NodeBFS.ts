@@ -4,4 +4,5 @@ export type NodeBFS = {
   x_coordinate: number;
   y_coordinate: number;
   index: number;
+  inUse: boolean;
 };
