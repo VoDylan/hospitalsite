@@ -82,6 +82,7 @@ function DisplayDatabase() {
   const [edgeRowData, setEdgeRowData] = useState<EdgeParams[]>([]);
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentFile, setCurrentFile] = useState<File>();
 
   const getNodeData = async () => {
@@ -153,27 +154,38 @@ function DisplayDatabase() {
   function handleImport() {
     console.log();
   }
-  function handleNodeImport() {
-    //console.log(event.target.files[0]);
-    const formData: FormData = new FormData();
+  function handleNodeImport(file: File) {
+    const fileReader = new FileReader();
 
-    if (currentFile == null) {
-      return;
-    }
+    let fileText: string | ArrayBuffer = "";
 
-    formData.append("file", currentFile);
-    axios.post("/api/database/uploadnodes", formData).then((response) => {
-      console.log(response);
-    });
+    fileReader.onload = (evt) => {
+      if (evt.target!.result == null) {
+        console.log("No data found in file");
+      } else {
+        fileText = evt.target!.result;
+        console.log(fileText);
+        axios
+          .post("/api/database/uploadnodes", JSON.stringify(fileText))
+          .then((response) => {
+            console.log(response);
+          });
+      }
+    };
+
+    fileReader.readAsText(file);
   }
 
-  function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
+   
+  function handleFileUpload(event: { target: { files: FileList | null } }) {
     const file: FileList | null = event.target.files;
+    console.log(`Uploaded file: ${file![0]}`);
     if (file == null) {
       console.log("No file uploaded");
     } else {
-      setCurrentFile(file[0]);
+      handleNodeImport(file![0]);
     }
+    console.log("Handling node import data");
   }
 
   //csv file import to node table
@@ -320,7 +332,7 @@ function DisplayDatabase() {
             startIcon={<CloudUploadIcon />}
             className="importButton"
             variant="contained"
-            onClick={handleNodeImport}
+            // onClick={handleNodeImport}
             sx={{
               backgroundColor: "primary.main", // Change background color
               color: "white", // Change text color

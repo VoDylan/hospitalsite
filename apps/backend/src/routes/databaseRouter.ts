@@ -130,7 +130,7 @@ router.post("/servicerequest", async (req, res) => {
 });
 
 router.post("/uploadnodes", async (req, res) => {
-  console.log(req.body);
+  console.log(`Received ${req.body.toString()}`);
   res.status(200);
 });
 
