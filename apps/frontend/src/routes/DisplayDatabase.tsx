@@ -39,6 +39,10 @@ type EdgeParams = {
   endNodeID: string;
 };
 
+/*app.post('/csv', upload.none(), function (req, res, next) {
+  // req.body contains the text fields
+});*/
+
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
   height: 1,
@@ -50,8 +54,10 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function handleImport() {
-  console.log();
+function parseCSVFromString(data: string) {
+  return data.split("\n").map((row: string): string[] => {
+    return row.trim().split(",");
+  });
 }
 
 function DisplayDatabase() {
@@ -81,6 +87,9 @@ function DisplayDatabase() {
   const [nodeRowData, setNodeRowData] = useState<NodeParams[]>([]);
   const [edgeRowData, setEdgeRowData] = useState<EdgeParams[]>([]);
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [currentFile, setCurrentFile] = useState<File>();
 
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
@@ -148,6 +157,201 @@ function DisplayDatabase() {
     getServiceData();
   }, []);
 
+  function handleNodeImport(file: File) {
+    const fileReader = new FileReader();
+
+    let fileText: string | ArrayBuffer = "";
+
+    const jsonData: {
+      nodeID: string;
+      xcoord: number;
+      ycoord: number;
+      floor: string;
+      building: string;
+      nodeType: string;
+      longName: string;
+      shortName: string;
+    }[] = [];
+
+    fileReader.onload = (evt) => {
+      if (evt.target!.result == null) {
+        console.log("No data found in file");
+      } else {
+        fileText = evt.target!.result;
+        console.log(fileText);
+        const parsedData = parseCSVFromString(fileText as string);
+
+        for (let i = 1; i < parsedData.length; i++) {
+          jsonData.push({
+            nodeID: parsedData[i][0],
+            xcoord: parseInt(parsedData[i][1]),
+            ycoord: parseInt(parsedData[i][2]),
+            floor: parsedData[i][3],
+            building: parsedData[i][4],
+            nodeType: parsedData[i][5],
+            longName: parsedData[i][6],
+            shortName: parsedData[i][7],
+          });
+        }
+
+        axios.post("/api/database/uploadnodes", jsonData).then((response) => {
+          console.log(response);
+        });
+      }
+    };
+
+    fileReader.readAsText(file);
+  }
+
+  function handleEdgeImport(file: File) {
+    const fileReader = new FileReader();
+
+    let fileText: string | ArrayBuffer = "";
+
+    const jsonData: {
+      startNodeID: string;
+      endNodeID: string;
+    }[] = [];
+
+    fileReader.onload = (evt) => {
+      if (evt.target!.result == null) {
+        console.log("No data found in file");
+      } else {
+        fileText = evt.target!.result;
+        console.log(fileText);
+        const parsedData = parseCSVFromString(fileText as string);
+
+        for (let i = 1; i < parsedData.length; i++) {
+          jsonData.push({
+            startNodeID: parsedData[i][0],
+            endNodeID: parsedData[i][1],
+          });
+        }
+
+        axios.post("/api/database/uploadedges", jsonData).then((response) => {
+          console.log(response);
+        });
+      }
+    };
+
+    fileReader.readAsText(file);
+  }
+
+  function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
+    const file: FileList | null = event.target.files;
+    console.log(`Uploaded file: ${file![0]}`);
+    if (file == null) {
+      console.log("No file uploaded");
+    } else {
+      handleNodeImport(file![0]);
+    }
+    console.log("Handling node import data");
+  }
+
+  function handleEdgeFileUpload(event: { target: { files: FileList | null } }) {
+    const file: FileList | null = event.target.files;
+    console.log(`Uploaded file: ${file![0]}`);
+    if (file == null) {
+      console.log("No file uploaded");
+    } else {
+      handleEdgeImport(file![0]);
+    }
+    console.log("Handling node import data");
+  }
+
+  //csv file import to node table
+  /* function handleNodeImport() {
+    //console.log();
+
+    const app = express();
+    const port = 3000;
+
+    //  new Pool instance to connect to the postgres database
+    const poolNodes = new Pool({
+      user: "postgres",
+      host: "",
+      database: "",
+      password: "postgres",
+      port: 5432,
+    });
+
+    //define route to receive the array of json objects
+    // VisuallyHiddenInput file?
+    app.post("file", async (req: Request, res: Response) => {
+      const client = await poolNodes.connect();
+
+      try {
+        const data = req.body; // json array sent in the request body
+
+        // begin transaction
+        await client.query("BEGIN");
+
+        // inserting json object into the database
+        for (const obj of data) {
+          await client.query(
+            "INSERT INTO table_name (column1, column2) VALUES ($1, $2)",
+            [obj.property1, obj.property2],
+          );
+        }
+
+        await client.query("COMMIT");
+
+        res
+          .status(200)
+          .send("Data successfully inserted into Postgres database");
+      } catch (error) {
+        // Rollback the transaction in case of an error
+        await client.query("ROLLBACK");
+        console.error("Error inserting data into Postgres:", error);
+        res.status(500).send("Error inserting data into Postgres database");
+      } finally {
+        // release client back to the pool
+        client.release();
+      }
+    });
+
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  }*/
+
+  /*const fileReader = new FileReader();
+  const [file, setFile] = useState();
+  const [array, setArray] = useState([]);
+
+  const handleImport = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const csvFileToArray = string => {
+    const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
+    const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
+
+    const array = csvRows.map(i => {
+      const values = i.split(",");
+      const obj = csvHeader.reduce((object, header, index) => {
+        object[header] = values[index];
+        return object;
+      }, {});
+      return obj;
+    });
+
+    setArray(array);
+  };
+
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+
+    if (file) {
+      fileReader.onload = function (event) {
+        const text = event.target.result;
+        csvFileToArray(text);
+      };
+
+      fileReader.readAsText(file);
+    }
+  };*/
+
   return (
     <>
       <TopBanner2 />
@@ -199,7 +403,7 @@ function DisplayDatabase() {
             startIcon={<CloudUploadIcon />}
             className="importButton"
             variant="contained"
-            onClick={handleImport}
+            // onClick={handleNodeImport}
             sx={{
               backgroundColor: "primary.main", // Change background color
               color: "white", // Change text color
@@ -208,7 +412,7 @@ function DisplayDatabase() {
             }}
           >
             Import CSV File
-            <VisuallyHiddenInput type="file" />
+            <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
           </Button>
           <DataGrid
             slots={{ toolbar: GridToolbar }}
@@ -235,7 +439,7 @@ function DisplayDatabase() {
             startIcon={<CloudUploadIcon />}
             className="importButton"
             variant="contained"
-            onClick={handleImport}
+            // onClick={handleImport}
             sx={{
               backgroundColor: "primary.main", // Change background color
               color: "white", // Change text color
@@ -244,7 +448,7 @@ function DisplayDatabase() {
             }}
           >
             Import CSV File
-            <VisuallyHiddenInput type="file" />
+            <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
           <DataGrid
             slots={{ toolbar: GridToolbar }}

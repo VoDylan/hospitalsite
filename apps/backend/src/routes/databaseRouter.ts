@@ -1,5 +1,7 @@
 import express, { Router } from "express";
 import {
+  clearDBEdges,
+  clearDBNodes,
   createServiceRequest,
   getDBEdgeByStartAndEndNode,
   getDBNodeByID,
@@ -9,6 +11,7 @@ import {
   getServiceRequestsFromDB,
 } from "../PrismaScripts.ts";
 import DBManager from "../DBManager.ts";
+import client from "../bin/database-connection.ts";
 
 //Create router instance to handle any database requests
 const router: Router = express.Router();
@@ -127,6 +130,53 @@ router.post("/servicerequest", async (req, res) => {
       message: "Successfully received data",
     });
   }
+});
+
+router.post("/uploadnodes", async (req, res) => {
+  const data: {
+    nodeID: string;
+    xcoord: number;
+    ycoord: number;
+    floor: string;
+    building: string;
+    nodeType: string;
+    longName: string;
+    shortName: string;
+  }[] = req.body;
+
+  await clearDBEdges();
+  await clearDBNodes();
+
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].nodeID == "") {
+      continue;
+    }
+    await client.node.create({
+      data: data[i],
+    });
+  }
+
+  res.status(200);
+});
+
+router.post("/uploadedges", async (req, res) => {
+  const data: {
+    startNodeID: string;
+    endNodeID: string;
+  }[] = req.body;
+
+  await clearDBEdges();
+
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].startNodeID == "") {
+      continue;
+    }
+    await client.edge.create({
+      data: data[i],
+    });
+  }
+
+  res.status(200);
 });
 
 export default router;
