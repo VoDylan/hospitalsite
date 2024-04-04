@@ -129,4 +129,9 @@ router.post("/servicerequest", async (req, res) => {
   }
 });
 
+router.post("/uploadnodes", async (req, res) => {
+  console.log(req.body);
+  res.status(200);
+});
+
 export default router;

@@ -82,6 +82,8 @@ function DisplayDatabase() {
   const [edgeRowData, setEdgeRowData] = useState<EdgeParams[]>([]);
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
 
+  const [currentFile, setCurrentFile] = useState<File>();
+
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
     console.log("Got data");
@@ -150,6 +152,28 @@ function DisplayDatabase() {
 
   function handleImport() {
     console.log();
+  }
+  function handleNodeImport() {
+    //console.log(event.target.files[0]);
+    const formData: FormData = new FormData();
+
+    if (currentFile == null) {
+      return;
+    }
+
+    formData.append("file", currentFile);
+    axios.post("/api/database/uploadnodes", formData).then((response) => {
+      console.log(response);
+    });
+  }
+
+  function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file: FileList | null = event.target.files;
+    if (file == null) {
+      console.log("No file uploaded");
+    } else {
+      setCurrentFile(file[0]);
+    }
   }
 
   //csv file import to node table
@@ -296,7 +320,7 @@ function DisplayDatabase() {
             startIcon={<CloudUploadIcon />}
             className="importButton"
             variant="contained"
-            onClick={handleImport}
+            onClick={handleNodeImport}
             sx={{
               backgroundColor: "primary.main", // Change background color
               color: "white", // Change text color
@@ -305,7 +329,7 @@ function DisplayDatabase() {
             }}
           >
             Import CSV File
-            <VisuallyHiddenInput type="file" />
+            <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
           </Button>
           <DataGrid
             slots={{ toolbar: GridToolbar }}
