@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
 import DBManager from "../src/DBManager";
-import MapNode from "../src/MapNode";
+import GraphManager from "common/src/GraphManager.ts";
+import MapNode from "common/src/MapNode.ts";
 
 const db: DBManager = DBManager.getInstance();
 const setupScript = () => {
@@ -12,7 +13,7 @@ const setupScript = () => {
 
 test("Tests the toCSV function in the MapNode class for all imported nodes.", async () => {
   setupScript();
-  const nodes: MapNode[] = db.mapNodes;
+  const nodes: MapNode[] = GraphManager.getInstance().nodes;
 
   expect(nodes[0].toCSV()).toStrictEqual(
     "CCONF001L1, 2255, 849, L1, 45 Francis, CONF, Anesthesia Conf Floor L1, Conf C001L1",
@@ -30,7 +31,7 @@ test("Tests the toCSV function in the MapNode class for all imported nodes.", as
 
 test("Tests the toString function in the MapEdges file for all imported edges.", async () => {
   setupScript();
-  const nodes: MapNode[] = db.mapNodes;
+  const nodes: MapNode[] = GraphManager.getInstance().nodes;
 
   expect(nodes[0].toString()).toStrictEqual(
     "Node: \n" +

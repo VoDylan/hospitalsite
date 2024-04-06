@@ -1,10 +1,11 @@
 import client from "./bin/database-connection.ts";
-import MapNode from "./MapNode";
-import MapEdge from "./MapEdge";
-import { exit } from "node:process";
+import MapNode from "common/src/MapNode.ts";
+import MapEdge from "common/src/MapEdge.ts";
 import { Prisma } from "database";
+import { MapNodeType } from "common/src/MapNodeType.ts";
+import { MapEdgeType } from "common/src/MapEdgeType.ts";
 
-const loggingPrefix: string = "Prisma: ";
+const loggingPrefix: string = "PrismaScripts: ";
 
 export async function createNodePrisma(nodes: MapNode[]) {
   console.log(`${loggingPrefix}Creating nodes`);
@@ -33,10 +34,7 @@ export async function createEdgePrisma(edges: MapEdge[]) {
     try {
       const currEdge: MapEdge = edges[i];
       await client.edge.create({
-        data: {
-          startNodeID: currEdge.startNodeID,
-          endNodeID: currEdge.endNodeID,
-        },
+        data: currEdge.edgeInfo,
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -80,9 +78,9 @@ export async function clearDBRequests() {
   console.log(`${loggingPrefix}Service requests cleared from DB`);
 }
 
-export async function getDBNodes() {
+export async function getDBNodes(): Promise<MapNodeType[] | null> {
   console.log(`${loggingPrefix}Getting nodes from DB`);
-  let nodes = null;
+  let nodes: MapNodeType[] | null = null;
   try {
     nodes = await client.node.findMany({});
   } catch (e) {
@@ -98,9 +96,11 @@ export async function getDBNodes() {
   return nodes;
 }
 
-export async function getDBNodeByID(nodeID: string) {
+export async function getDBNodeByID(
+  nodeID: string,
+): Promise<MapNodeType | null> {
   console.log(`${loggingPrefix}Getting node of id ${nodeID} from DB`);
-  let node = null;
+  let node: MapNodeType | null = null;
   try {
     node = await client.node.findUnique({
       where: {
@@ -157,9 +157,9 @@ export async function createServiceRequest(
   }
 }
 
-export async function getDBEdges() {
+export async function getDBEdges(): Promise<MapEdgeType[] | null> {
   console.log(`${loggingPrefix}Getting edges from DB`);
-  let edges = null;
+  let edges: MapEdgeType[] | null = null;
   try {
     edges = await client.edge.findMany({});
   } catch (e) {
@@ -178,11 +178,11 @@ export async function getDBEdges() {
 export async function getDBEdgeByStartAndEndNode(
   startNodeID: string,
   endNodeID: string,
-) {
+): Promise<MapEdgeType | null> {
   console.log(
     `${loggingPrefix}Getting edge by startNodeID ${startNodeID} and endNodeID ${endNodeID}`,
   );
-  let edge = null;
+  let edge: MapEdgeType | null = null;
   try {
     edge = await client.edge.findUnique({
       where: {
@@ -410,25 +410,5 @@ export async function checkUserAdmin(userID: number): Promise<boolean> {
       `${loggingPrefix}User ${userID} does not exist in current database`,
     );
     return false;
-  }
-}
-
-export async function openPrismaConnection() {
-  try {
-    await client.$connect();
-  } catch (e) {
-    console.error(e);
-    await client.$disconnect();
-    exit(1);
-  }
-}
-
-export async function closePrismaConnection() {
-  try {
-    await client.$disconnect();
-  } catch (e) {
-    console.error(e);
-    await client.$disconnect();
-    exit(1);
   }
 }

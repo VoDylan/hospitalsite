@@ -1,7 +1,5 @@
-import MapNode from "./MapNode";
-import { NodeFields } from "./MapNode";
-import MapEdge from "./MapEdge";
-import { EdgeFields } from "./MapEdge";
+import MapNode from "common/src/MapNode.ts";
+import MapEdge from "common/src/MapEdge.ts";
 import CSVTools from "./lib/CSVTools";
 import fs from "fs";
 import {
@@ -13,16 +11,14 @@ import {
   getDBEdges,
   clearDBRequests,
 } from "./PrismaScripts";
-import mapEdge from "./MapEdge";
 import client from "./bin/database-connection.ts";
+import { MapNodeType } from "common/src/MapNodeType.ts";
+import { MapEdgeType } from "common/src/MapEdgeType.ts";
+import { NodeDoesNotExistError } from "common/src/errors/NodeDoesNotExistError.ts";
+import GraphManager from "common/src/GraphManager.ts";
 
 export default class DBManager {
   private static instance: DBManager;
-
-  //Object representation of database for use across the program; kept updated on import of data and will provide new data to database
-  //on map changes
-  private _mapNodes: MapNode[] = [];
-  private _mapEdges: MapEdge[] = [];
 
   //Default export directory to be used when saving nodes and edges to a CSV file
   private exportDir: string = "./apps/backend/output/";
@@ -54,8 +50,8 @@ export default class DBManager {
    * @param pathEdge - Filepath for the edge CSV data
    */
   public importNodesAndEdges(pathNode: string, pathEdge: string) {
-    this._mapNodes = this.importNodeFromPath(pathNode);
-    this._mapEdges = this.importEdgeFromPath(pathEdge);
+    GraphManager.getInstance().nodes = this.importNodeFromPath(pathNode);
+    GraphManager.getInstance().edges = this.importEdgeFromPath(pathEdge);
   }
 
   /**
@@ -86,7 +82,7 @@ export default class DBManager {
     for (let i: number = 1; i < nodes.length; i++) {
       if (nodes[i][0] == "") continue;
       //Create a NodeFields object to store all node information in an easy-to-transport object
-      const nodeInfo: NodeFields = {
+      const nodeInfo: MapNodeType = {
         nodeID: nodes[i][0],
         xcoord: parseInt(nodes[i][1]),
         ycoord: parseInt(nodes[i][2]),
@@ -119,32 +115,22 @@ export default class DBManager {
     //loop through all edges, skipping the header line
     for (let i: number = 1; i < edges.length; i++) {
       if (edges[i][0] == "") continue;
-      //Get the references to the Node objects based on the imported ID. Returns null if no reference is found
-      const startingNode: MapNode | null = this.getNodeByID(edges[i][0]);
-      const endingNode: MapNode | null = this.getNodeByID(edges[i][1]);
+      const edgeInfo: MapEdgeType = {
+        startNodeID: edges[i][0],
+        endNodeID: edges[i][1],
+      };
 
-      //Ensure both starting and ending nodes are valid references, doing nothing if the reference is not found. A poorly formatted edge
-      //does not constitute a fatal error, so the program continues running without doing anything if either are null references
-      if (startingNode == null) {
-        console.log(
-          `${this.loggingPrefix}Edge Generation Error: Starting node with id ${edges[i][0]} not found!`,
-        );
-      } else if (endingNode == null) {
-        console.log(
-          `${this.loggingPrefix}Edge Generation Error: Ending node with id ${edges[i][1]} not found!`,
-        );
-      } else {
-        //If both edges are valid, create an EdgeFields object storing the references to each, marking them as non-null since they
-        //are guaranteed to be valid at this point in the code
-        const edgeInfo: EdgeFields = {
-          startNode: startingNode!,
-          endNode: endingNode!,
-        };
-
+      try {
         const edge: MapEdge = new MapEdge(edgeInfo);
 
         //Push a new MapEdge object with the passed in information to the mapEdges list
         newEdges.push(edge);
+      } catch (e) {
+        if (e instanceof NodeDoesNotExistError) {
+          console.log(e.message);
+        } else {
+          console.log(e);
+        }
       }
     }
 
@@ -170,11 +156,11 @@ export default class DBManager {
     );
 
     //Loop through all mapNodes and append their information in CSV format to the previously opened node CSV file
-    for (let i = 0; i < this._mapNodes.length; i++) {
-      const data = this._mapNodes[i].toCSV();
+    for (let i = 0; i < GraphManager.getInstance().nodes.length; i++) {
+      const data = GraphManager.getInstance().nodes[i].toCSV();
       fs.appendFileSync(
         this.getCombinedFilepath(exportNodesFileName),
-        data + (i != this.mapNodes.length - 1 ? "\n" : ""),
+        data + (i != GraphManager.getInstance().nodes.length - 1 ? "\n" : ""),
         { encoding: "utf8", flag: "a" },
       );
     }
@@ -187,11 +173,11 @@ export default class DBManager {
     );
 
     //Loop through all mapEdges and append their information in CSV format to the previously opened edge CSV file
-    for (let i = 0; i < this._mapEdges.length; i++) {
-      const data = this._mapEdges[i].toCSV();
+    for (let i = 0; i < GraphManager.getInstance().edges.length; i++) {
+      const data = GraphManager.getInstance().edges[i].toCSV();
       fs.appendFileSync(
         this.getCombinedFilepath(exportEdgesFileName),
-        data + (i != this.mapNodes.length - 1 ? "\n" : ""),
+        data + (i != GraphManager.getInstance().nodes.length - 1 ? "\n" : ""),
         { encoding: "utf8", flag: "a" },
       );
     }
@@ -209,8 +195,8 @@ export default class DBManager {
    */
   public printNodes() {
     let prints: string = "";
-    for (let i = 0; i < this._mapNodes.length; i++) {
-      prints = prints + this._mapNodes[i].toString();
+    for (let i = 0; i < GraphManager.getInstance().nodes.length; i++) {
+      prints = prints + GraphManager.getInstance().nodes[i].toString();
     }
     console.log(`${this.loggingPrefix}\n${prints}`);
   }
@@ -220,37 +206,10 @@ export default class DBManager {
    */
   public printEdges() {
     let prints: string = "";
-    for (let i = 0; i < this._mapEdges.length; i++) {
-      prints = prints + this._mapEdges[i].toString();
+    for (let i = 0; i < GraphManager.getInstance().edges.length; i++) {
+      prints = prints + GraphManager.getInstance().edges[i].toString();
     }
     console.log(`${this.loggingPrefix}${prints}`);
-  }
-
-  /**
-   * Helper function to get a node object reference based on a nodeID
-   * Does not query the database, rather it obtains the object from the list of nodes
-   * @param nodeID - The NodeID to search for
-   */
-  public getNodeByID(nodeID: string): MapNode | null {
-    for (let i = 0; i < this._mapNodes.length; i++) {
-      if (this._mapNodes[i].nodeID == nodeID) return this._mapNodes[i];
-    }
-
-    return null;
-  }
-
-  /**
-   * Getter function for the list of MapNode objects
-   */
-  public get mapNodes(): MapNode[] {
-    return this._mapNodes;
-  }
-
-  /**
-   * Getter function for the list of MapEdge objects
-   */
-  public get mapEdges(): MapEdge[] {
-    return this._mapEdges;
   }
 
   /**
@@ -258,8 +217,8 @@ export default class DBManager {
    * Call this then get mapNodes
    */
 
-  public async updateAndGetNodesFromDB() {
-    const nodes = await getDBNodes();
+  public async updateAndGetNodesFromDB(): Promise<MapNodeType[]> {
+    const nodes: MapNodeType[] | null = await getDBNodes();
     const newNodes: MapNode[] = [];
 
     if (nodes == null) {
@@ -271,7 +230,7 @@ export default class DBManager {
     //Loop through all nodes
     for (let i: number = 0; i < nodes.length; i++) {
       //Create a NodeFields object to store all node information in an easy-to-transport object
-      const nodeInfo: NodeFields = {
+      const nodeInfo: MapNodeType = {
         nodeID: nodes[i].nodeID,
         xcoord: nodes[i].xcoord,
         ycoord: nodes[i].ycoord,
@@ -288,7 +247,7 @@ export default class DBManager {
       newNodes.push(node);
     }
     console.log(`${this.loggingPrefix}Updated node objects from DB`);
-    this._mapNodes = newNodes;
+    GraphManager.getInstance().nodes = newNodes;
     return nodes;
   }
 
@@ -296,9 +255,9 @@ export default class DBManager {
    * Function to query database for all edges and places them in this object's array
    * Call this then get mapEdges
    */
-  public async updateAndGetEdgesFromDB() {
-    const edges = await getDBEdges();
-    const newEdges: mapEdge[] = [];
+  public async updateAndGetEdgesFromDB(): Promise<MapEdgeType[]> {
+    const edges: MapEdgeType[] | null = await getDBEdges();
+    const newEdges: MapEdge[] = [];
 
     //First sync the nodes stored in the database to the objects
     await this.updateAndGetNodesFromDB();
@@ -312,38 +271,26 @@ export default class DBManager {
 
     //loop through all edges
     for (let i: number = 0; i < edges.length; i++) {
-      //Get the references to the Node objects based on the imported ID. Returns null if no reference is found
-      const startingNode: MapNode | null = this.getNodeByID(
-        edges[i].startNodeID,
-      );
-      const endingNode: MapNode | null = this.getNodeByID(edges[i].endNodeID);
-
-      if (startingNode == null) {
-        console.log(
-          `${this.loggingPrefix}Starting node not found. Have the nodes been synced from the database?`,
-        );
-        return null;
-      }
-
-      if (endingNode == null) {
-        console.log(
-          `${this.loggingPrefix}Ending node not found. Have the nodes been synced from the database?`,
-        );
-        return null;
-      }
-
       //If both edges are valid, create an EdgeFields object storing the references to each, marking them as non-null since they
       //are guaranteed to be valid at this point in the code
-      const edgeInfo: EdgeFields = {
-        startNode: startingNode!,
-        endNode: endingNode!,
+      const edgeInfo: MapEdgeType = {
+        startNodeID: edges[i].startNodeID,
+        endNodeID: edges[i].endNodeID,
       };
-      const edge: mapEdge = new MapEdge(edgeInfo);
-      newEdges.push(edge);
+      try {
+        const edge: MapEdge = new MapEdge(edgeInfo);
+        newEdges.push(edge);
+      } catch (e) {
+        if (e instanceof NodeDoesNotExistError) {
+          console.log(e.message);
+        } else {
+          console.log(e);
+        }
+      }
     }
 
     console.log(`${this.loggingPrefix}Updated edge objects from DB`);
-    this._mapEdges = newEdges;
+    GraphManager.getInstance().edges = newEdges;
     return edges;
   }
 
@@ -360,13 +307,14 @@ export default class DBManager {
    * @param nodeID - ID of node to check against
    */
   public async updateNodeFromDB(nodeID: string): Promise<void> {
-    const origNode: MapNode | null = this.getNodeByID(nodeID);
+    const origNode: MapNode | null =
+      GraphManager.getInstance().getNodeByID(nodeID);
 
     if (origNode == null) {
       console.log(`${this.loggingPrefix}Node does not exist as object.`);
       return;
     } else {
-      const DBNode = await client.node.findUnique({
+      const DBNode: MapNodeType | null = await client.node.findUnique({
         where: {
           nodeID: nodeID,
         },
@@ -391,20 +339,20 @@ export default class DBManager {
    * @param endID - ID for ending node of edge
    */
   public async updateEdgeFromDB(startID: string, endID: string) {
-    let origEdge: mapEdge | null = null;
-    for (let i = 0; i < this._mapEdges.length; i++) {
+    let origEdgeIndex: number = -1;
+    for (let i = 0; i < GraphManager.getInstance().edges.length; i++) {
       if (
-        this._mapEdges[i].startNodeID == startID &&
-        this._mapEdges[i].endNodeID == endID
+        GraphManager.getInstance().edges[i].startNodeID == startID &&
+        GraphManager.getInstance().edges[i].endNodeID == endID
       ) {
-        origEdge = this._mapEdges[i];
+        origEdgeIndex = i;
       }
     }
-    if (origEdge == null) {
+    if (origEdgeIndex == -1) {
       console.log(`${this.loggingPrefix}Edge does not exist as an object.`);
       return;
     } else {
-      const DBEdge = await client.edge.findFirst({
+      const DBEdge: MapEdgeType | null = await client.edge.findFirst({
         where: {
           startNodeID: startID,
           endNodeID: endID,
@@ -413,14 +361,20 @@ export default class DBManager {
       if (DBEdge == null) {
         console.log(`${this.loggingPrefix}Edge does not exist in database.`);
       } else {
-        const startNode: MapNode | null = this.getNodeByID(DBEdge.startNodeID);
-        const endNode: MapNode | null = this.getNodeByID(DBEdge.endNodeID);
+        const newEdgeInfo: MapEdgeType = {
+          startNodeID: startID,
+          endNodeID: endID,
+        };
 
-        if (startNode == null || endNode == null) {
-          console.log(`${this.loggingPrefix}startNode or endNode not found!`);
-        } else {
-          origEdge.startNode = startNode!;
-          origEdge.endNode = endNode!;
+        try {
+          GraphManager.getInstance().edges[origEdgeIndex].edgeInfo =
+            newEdgeInfo;
+        } catch (e) {
+          if (e instanceof NodeDoesNotExistError) {
+            console.log(e.message);
+          } else {
+            console.log(e);
+          }
         }
       }
     }
@@ -430,8 +384,8 @@ export default class DBManager {
    * Helper function to loop over filled map arrays and put the objects into the database
    */
   private async listsToDB() {
-    await createNodePrisma(this._mapNodes);
-    await createEdgePrisma(this._mapEdges);
+    await createNodePrisma(GraphManager.getInstance().nodes);
+    await createEdgePrisma(GraphManager.getInstance().edges);
   }
 
   public async filterServiceRequestCategory(category: string) {
