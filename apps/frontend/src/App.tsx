@@ -7,6 +7,7 @@ import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import DisplayDatabase from "./routes/DisplayDatabase.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
+import SanitationService from "./routes/SanitationService.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,6 +27,10 @@ function App() {
         {
           path: "/Services/FlowerDelivery",
           element: <FlowerDeliveryService />,
+        },
+        {
+          path: "/Services/SanitationService",
+          element: <SanitationService />,
         },
         {
           path: "/DisplayDatabase",
