@@ -5,6 +5,7 @@ import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { SanitationRequestFormSubmission } from "../common/SanitationRequestFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
+import sanitationBackground from "../images/sanitationBackground.webp";
 
 function SanitationService() {
   const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
@@ -65,8 +66,9 @@ function SanitationService() {
         display: "flex",
         alignItems: "center", // Center vertically
         justifyContent: "center", // Center horizontally
-        // backgroundImage: `url(${hospitalImage})`,
-        backgroundSize: "100%",
+        backgroundImage: `url(${sanitationBackground})`,
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
         minHeight: "100vh",
         maxWidth: "100%",
         overflowX: "hidden",
@@ -77,12 +79,12 @@ function SanitationService() {
         container
         direction={"row"}
         rowSpacing={1}
-        columnSpacing={2}
-        justifyContent={"space-between"}
+        columnSpacing={5}
+        justifyContent={"center"}
         boxShadow={4}
         sx={{
           backgroundColor: "white",
-          width: "80vw",
+          width: "40vw", //Adjust this to change the width of the form
           height: "auto",
         }}
       >
@@ -90,7 +92,7 @@ function SanitationService() {
           item
           xs={12}
           sx={{
-            backgroundColor: "#003A96",
+            backgroundColor: "#186BD9",
           }}
         >
           <Typography
@@ -102,7 +104,7 @@ function SanitationService() {
             Sanitation Service Form
           </Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Typography color={"black"}>Name:</Typography>
           <LeftAlignedTextbox
             label={"Name"}
@@ -110,7 +112,7 @@ function SanitationService() {
             onChange={handleNameInput}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Typography color={"black"}>Location:</Typography>
           <LeftAlignedTextbox
             label={"Location"}
@@ -118,7 +120,7 @@ function SanitationService() {
             onChange={handleLocationInput}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Typography color={"black"}>Priority of Sanitation:</Typography>
           <RadioButtonsGroup
             label={"Priority"}
@@ -127,7 +129,7 @@ function SanitationService() {
             handleChange={handlePriorityInput}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Typography color={"black"}>Service Needed:</Typography>
           <DropDown
             items={[
@@ -143,7 +145,7 @@ function SanitationService() {
             returnData={form.service}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Typography color={"black"}>Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
@@ -152,7 +154,7 @@ function SanitationService() {
             returnData={form.frequency}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Typography color={"black"}>Status of the request:</Typography>
           <RadioButtonsGroup
             label={"Status"}

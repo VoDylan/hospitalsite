@@ -8,7 +8,7 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     "& .MuiTextField-root": {
-      margin: "10px",
+      margin: "1vw",
       width: "200px", // Adjust width as needed
     },
   },
