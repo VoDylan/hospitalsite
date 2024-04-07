@@ -5,4 +5,4 @@ export type DeviceDeliveryFormSubmission = {
   amount: string;
   priority: string;
   status: string;
-}
+};

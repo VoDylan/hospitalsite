@@ -5,7 +5,7 @@ import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
-import stetho from "../images/stetho.jpg";
+import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/DeviceSubmitButton.tsx";
 import axios from "axios";
 
@@ -18,10 +18,22 @@ function DeviceDeliveryService() {
     priority: "",
     status: "",
   });
-  
+
   // Arrays for Medical Devices Categories and Devices
-  const medDevices: string[] = ["Analytical Instruments", "Cardiology", "Dental", "Genetics", "Imaging",
-    "Lab Equipment", "Microscopy", "Neurology", "Physiotherapy", "Refrigeration", "Spectroscopy", "Ultrasound"];
+  const medDevices: string[] = [
+    "Analytical Instruments",
+    "Cardiology",
+    "Dental",
+    "Genetics",
+    "Imaging",
+    "Lab Equipment",
+    "Microscopy",
+    "Neurology",
+    "Physiotherapy",
+    "Refrigeration",
+    "Spectroscopy",
+    "Ultrasound",
+  ];
 
   // const analyticalInstruments: string[] = ["Blood Gas Analysis", "Electrolyte Analysis", "Flowmeter"];
   // const cardiology: string[] = ["Automatic External Defibrillator", "Electrocardiograph", "Pacing System"];
@@ -33,7 +45,8 @@ function DeviceDeliveryService() {
   // const neurology: string[] = ["Checkpoint Stimulator", "Nerve Monitoring System", "NIBP Simulator"];
   // const physiotherapy: string[] = ["Power Shockwave Therapy", "Pressotherapy Device", "Pump Vacuum Therapy Unit"];
   // const refrigeration: string[] = ["Plasma Refrigerator", "Vaccine Refigerator"];
-
+  // const spectroscopy: string[] = ["CD Spectropolarimeter", "NMR Spectrometer", "Rapid Kinetics Spectrometer"];
+  // const ultrasound: string[] = ["Display Doppler", "Ultrasonic Doppler", "Ultrasound Machine"];
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
@@ -102,7 +115,7 @@ function DeviceDeliveryService() {
         display: "flex",
         alignItems: "center", // Center vertically
         justifyContent: "center", // Center horizontally
-        backgroundImage: `url(${stetho})`,
+        backgroundImage: `url(${medDeviceBackground})`,
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
         minHeight: "100vh",
@@ -162,15 +175,6 @@ function DeviceDeliveryService() {
             label={"Device Category"}
             returnData={form.device}
           />
-        <Grid item xs={12}>
-          <Typography color={"black"}>Medical Device Needed:</Typography>
-          <DropDown
-            items={handleMedDevicesInput(form.device)}
-            handleChange={handleDeviceInput}
-            label={"Device"}
-            returnData={form.device}
-          />
-        </Grid>
         </Grid>
         <Grid item xs={12}>
           <Typography color={"black"}>Amount Needed:</Typography>
@@ -181,7 +185,9 @@ function DeviceDeliveryService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Priority of Medical Device Delivery:</Typography>
+          <Typography color={"black"}>
+            Priority of Medical Device Delivery:
+          </Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
