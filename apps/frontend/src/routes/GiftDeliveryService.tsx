@@ -1,8 +1,8 @@
 import { Grid, Stack } from "@mui/material";
-import { ChangeEvent, useState,useEffect } from "react";
-import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
-import { DropDown } from "../components/DropDown.tsx";
+import { ChangeEvent, useState, useEffect } from "react";
+//import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
+//import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
+//import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
 import axios from "axios";
@@ -23,7 +23,6 @@ function GiftDeliveryService() {
 
   const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
 
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     axios
       .get<NodeData[]>("/api/database/nodes")
