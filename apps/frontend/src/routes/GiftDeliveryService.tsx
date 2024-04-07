@@ -1,10 +1,11 @@
 import { Grid, Stack } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState,useEffect } from "react";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
+import axios from "axios";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -15,6 +16,22 @@ function GiftDeliveryService() {
     message: "",
     extraFee: "",
   });
+
+  interface NodeData {
+    nodeID: string;
+  }
+
+  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+
+  // GET request to retrieve node numbers wrapped in a useEffect function
+  useEffect(() => {
+    axios
+      .get<NodeData[]>("/api/database/nodes")
+      .then((response) =>
+        setNodeNumbers(response.data.map((node) => node.nodeID)),
+      )
+      .catch((error) => console.error(error));
+  }, []);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
