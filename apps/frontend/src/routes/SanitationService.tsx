@@ -1,11 +1,13 @@
 import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { SanitationRequestFormSubmission } from "../common/SanitationRequestFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
 import sanitationBackground from "../images/sanitationBackground.webp";
+import { SanitationSubmitButton } from "../components/SanitationSubmitButton.tsx";
+import axios from "axios";
 
 function SanitationService() {
   const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
@@ -21,8 +23,9 @@ function SanitationService() {
     setFormResponses({ ...form, name: e.target.value });
   }
 
-  function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
+  function handleLocationInput(e: SelectChangeEvent) {
     setFormResponses({ ...form, location: e.target.value });
+    return e.target.value;
   }
 
   function handlePriorityInput(e: ChangeEvent<HTMLInputElement>) {
@@ -43,16 +46,34 @@ function SanitationService() {
     return e.target.value;
   }
 
-  // function clear(){
-  //   setFormResponses({
-  //     name: "",
-  //     location: "",
-  //     priority: "",
-  //     service: "",
-  //     frequency: "",
-  //     status: "",
-  //   });
-  // }
+  function clear() {
+    setFormResponses({
+      name: "",
+      location: "",
+      priority: "",
+      service: "",
+      frequency: "",
+      status: "",
+    });
+  }
+
+  // Define an interface for the node data
+  interface NodeData {
+    longName: string;
+  }
+
+  // Storing the node numbers in a use state so that we only make a get request once
+  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+
+  // GET request to retrieve node numbers wrapped in a useEffect function
+  useEffect(() => {
+    axios
+      .get<NodeData[]>("/api/database/nodes")
+      .then((response) =>
+        setNodeNumbers(response.data.map((node) => node.longName)),
+      )
+      .catch((error) => console.error(error));
+  }, []);
 
   return (
     <Stack
@@ -95,12 +116,7 @@ function SanitationService() {
             backgroundColor: "#186BD9",
           }}
         >
-          <Typography
-            color={"white"}
-            align={"center"}
-            fontStyle={"Open Sans"}
-            fontSize={40}
-          >
+          <Typography color={"white"} align={"center"} fontSize={40}>
             Sanitation Service Form
           </Typography>
         </Grid>
@@ -114,10 +130,11 @@ function SanitationService() {
         </Grid>
         <Grid item xs={12}>
           <Typography color={"black"}>Location:</Typography>
-          <LeftAlignedTextbox
+          <DropDown
             label={"Location"}
-            value={form.location}
-            onChange={handleLocationInput}
+            returnData={form.location}
+            handleChange={handleLocationInput}
+            items={nodeNumbers}
           />
         </Grid>
         <Grid item xs={12}>
@@ -166,9 +183,13 @@ function SanitationService() {
         <Grid
           item
           xs={12}
-          sx={{ display: "flex", my: 2, justifyContent: "center" }}
+          sx={{
+            display: "flex",
+            my: 2,
+            justifyContent: "center",
+          }}
         >
-          {/*<SubmitButton input={form} text={"SUBMIT"} clear={clear} updateSubmissionList={updateSubmissionList}/>*/}
+          <SanitationSubmitButton input={form} text={"SUBMIT"} clear={clear} />
         </Grid>
       </Grid>
     </Stack>
