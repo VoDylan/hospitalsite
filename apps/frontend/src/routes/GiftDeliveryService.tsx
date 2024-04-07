@@ -1,14 +1,14 @@
-import {Grid, SelectChangeEvent, Stack} from "@mui/material";
-import { ChangeEvent, useState, useEffect } from "react";
+//import {Grid, SelectChangeEvent, Stack} from "@mui/material";
+//import { ChangeEvent, useState, useEffect } from "react";
 //import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 //import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 //import { DropDown } from "../components/DropDown.tsx";
-import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
+//import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
-import axios from "axios";
+//import axios from "axios";
 
 function GiftDeliveryService() {
-  const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
+  /*const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
     name: "",
     recipientName: "",
     roomNumber: "",
@@ -30,9 +30,9 @@ function GiftDeliveryService() {
         setNodeNumbers(response.data.map((node) => node.nodeID)),
       )
       .catch((error) => console.error(error));
-  }, []);
+  }, []);*/
 
-  function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
+  /*function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
   }
 
@@ -52,10 +52,11 @@ function GiftDeliveryService() {
   }
   function handleextreFeeInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, extraFee: e.target.value });
-  }
+  }*/
 
   return (
-    <Stack
+    <TopBanner />
+    /*<Stack
       direction="column"
       alignItems="center"
       justifyContent="center"
@@ -88,6 +89,8 @@ function GiftDeliveryService() {
         }}
       ></Grid>
     </Stack>
+  );
+}*/
   );
 }
 
