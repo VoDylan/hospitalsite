@@ -1,7 +1,7 @@
-import { NeighborsIndex } from "./NeighborsIndex.ts";
+// import { NeighborsIndex } from "./NeighborsIndex.ts";
 
 export type NodeAStar = {
   startNodeID: string;
-  neighbors: NeighborsIndex[];
+  neighbors: string[];
   distances: number[];
 };
