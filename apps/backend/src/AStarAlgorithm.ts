@@ -2,6 +2,7 @@ import { NodeAStar } from "common/src/NodeAStar.ts";
 import GraphManager from "common/src/GraphManager.ts";
 import MapNode from "common/src/MapNode.ts";
 import MapEdge from "common/src/MapEdge";
+// import mapNode from "common/src/MapNode.ts";
 // import MapNode from "common/src/MapNode.ts";
 
 export class AStarAlgorithm {
@@ -83,7 +84,33 @@ export class AStarAlgorithm {
     return this.mapNodes.find((node) => node.longName === longName)?.nodeID;
   }
 
-  // private heuristic() {}
+  private heuristic(startNodeID: string, endNodeID: string) {
+    let startX: number = -1;
+    let startY: number = -1;
+    let neighborX: number = -1;
+    let neighborY: number = -1;
+
+    for (let i = 0; i < this.mapNodes.length; i++) {
+      if (this.mapNodes[i].nodeID === startNodeID) {
+        startX = this.mapNodes[i].xcoord;
+        startY = this.mapNodes[i].ycoord;
+      } else if (this.mapNodes[i].nodeID === endNodeID) {
+        neighborX = this.mapNodes[i].xcoord;
+        neighborY = this.mapNodes[i].ycoord;
+      }
+
+      if (startX !== -1 && neighborX !== -1) {
+        break;
+      }
+    }
+
+    if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
+      console.error("Node does not exist");
+      return -1;
+    }
+
+    return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
+  }
 
   public AStar(startID: string, endID: string) {
     const startNodeID = this.getID(startID);
@@ -99,16 +126,19 @@ export class AStarAlgorithm {
     console.log(startNodeID);
     console.log(endNodeID);
 
-    // let open: string[] = [];
-    // let closed: string[] = [];
-    // let gScores: number[] = [];
-    // let fScores: number[] = [];
-    // let parents: string[] = [];
+    // const open: string[] = [];
+    // const closed: string[] = [];
+    // const gScores: number[] = [];
+    // const fScores: number[] = [];
+    // const parents: (string | null)[] = [];
     //
-    // const startNodeIndex = this.nodes.findIndex((node) => node.startNodeID === startNodeID);
+    // const startNodeIndex = this.nodes.findIndex(
+    //   (node) => node.startNodeID === startNodeID,
+    // );
     //
     // gScores[startNodeIndex] = 0;
-    // // fScores[startNodeIndex] =
+    // fScores[startNodeIndex] = this.heuristic(startNodeID, endNodeID);
+    // parents[startNodeIndex] = null;
 
     return this.nodes;
   }
