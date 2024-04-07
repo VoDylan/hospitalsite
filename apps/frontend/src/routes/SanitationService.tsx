@@ -80,7 +80,6 @@ function SanitationService() {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      spacing={20}
       sx={{
         width: "100vw",
         height: "auto",
@@ -107,6 +106,8 @@ function SanitationService() {
           backgroundColor: "white",
           width: "40vw", //Adjust this to change the width of the form
           height: "auto",
+          mt: "25vh",
+          mb: "5vh",
         }}
       >
         <Grid
@@ -192,6 +193,7 @@ function SanitationService() {
           <SanitationSubmitButton input={form} text={"SUBMIT"} clear={clear} />
         </Grid>
       </Grid>
+      <Typography>Jacob Murphy, Spencer Trautz</Typography>
     </Stack>
   );
 }
