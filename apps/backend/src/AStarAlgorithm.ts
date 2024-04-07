@@ -29,7 +29,8 @@ export class AStarAlgorithm {
         if (mapNodes[j].nodeID === currentNode.nodeID) {
           startX = mapNodes[j].xcoord;
           startY = mapNodes[j].ycoord;
-        } else if (mapNodes[j].nodeID === neighbor.nodeID) {
+        }
+        if (mapNodes[j].nodeID === neighbor.nodeID) {
           neighborX = mapNodes[j].xcoord;
           neighborY = mapNodes[j].ycoord;
         }
