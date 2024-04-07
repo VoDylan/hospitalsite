@@ -4,10 +4,10 @@ import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { SanitationRequestFormSubmission } from "../common/SanitationRequestFormSubmission.ts";
-import TopBanner from "../components/TopBanner.tsx";
 import sanitationBackground from "../images/sanitationBackground.webp";
 import { SanitationSubmitButton } from "../components/SanitationSubmitButton.tsx";
 import axios from "axios";
+import TopBanner2 from "../components/TopBanner2.tsx";
 
 function SanitationService() {
   const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
@@ -94,7 +94,7 @@ function SanitationService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
+      <TopBanner2 />
       <Grid
         container
         direction={"row"}
