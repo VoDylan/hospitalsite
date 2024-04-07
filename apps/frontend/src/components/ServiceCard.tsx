@@ -1,27 +1,16 @@
-import {
-  Card,
-  CardActionArea,
-  CardMedia,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Card, CardActionArea, CardMedia, Box } from "@mui/material";
 
 interface ServiceProps {
-  service: string;
   servicePath: string;
   imagePath: string;
-  imageAlt: string;
 }
 
 export function ServiceCard(props: ServiceProps) {
   return (
     <Card
       sx={{
-        maxWidth: 360,
-        minWidth: 360,
-        maxHeight: 360,
-        minHeight: 360,
-        borderRadius: 10,
+        width: 260, // Set the width of each card
+        height: 200, // Set the height of each card
         "&:hover": {
           color: "black",
         },
@@ -32,30 +21,8 @@ export function ServiceCard(props: ServiceProps) {
           <CardMedia
             component={"img"}
             image={props.imagePath}
-            alt={props.imageAlt}
+            sx={{ width: "100%", height: "100%" }} // Ensure the image fills the entire card
           />
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              bgcolor: "rgba(21, 57, 144, 0.50)",
-              color: "white",
-              padding: "10px",
-              display: "flex",
-            }}
-          >
-            <Typography
-              variant="h3"
-              display={"flex"}
-              alignItems={"center"}
-              align={"center"}
-            >
-              {props.service}
-            </Typography>
-          </Box>
         </CardActionArea>
       </Box>
     </Card>
