@@ -2,6 +2,7 @@ import { NodeAStar } from "common/src/NodeAStar.ts";
 import GraphManager from "common/src/GraphManager.ts";
 import MapNode from "common/src/MapNode.ts";
 import MapEdge from "common/src/MapEdge";
+import { AStarOpenNode } from "common/src/AStarOpenNode.ts";
 // import mapNode from "common/src/MapNode.ts";
 // import MapNode from "common/src/MapNode.ts";
 
@@ -112,6 +113,20 @@ export class AStarAlgorithm {
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
 
+  private shortestDistance(open: AStarOpenNode[]) {
+    let min: number = 1000000;
+    let minIndex = -1;
+
+    for (let i = 0; i < open.length; i++) {
+      if (open[i].fScore < min) {
+        min = open[i].fScore;
+        minIndex = i;
+      }
+    }
+
+    return minIndex;
+  }
+
   public AStar(startID: string, endID: string) {
     const startNodeID = this.getID(startID);
     const endNodeID = this.getID(endID);
@@ -126,19 +141,24 @@ export class AStarAlgorithm {
     console.log(startNodeID);
     console.log(endNodeID);
 
-    // const open: string[] = [];
+    const open: AStarOpenNode[] = [];
     // const closed: string[] = [];
-    // const gScores: number[] = [];
-    // const fScores: number[] = [];
-    // const parents: (string | null)[] = [];
-    //
-    // const startNodeIndex = this.nodes.findIndex(
-    //   (node) => node.startNodeID === startNodeID,
-    // );
-    //
-    // gScores[startNodeIndex] = 0;
-    // fScores[startNodeIndex] = this.heuristic(startNodeID, endNodeID);
-    // parents[startNodeIndex] = null;
+    const gScores: number[] = [];
+    const fScores: number[] = [];
+    const parents: (string | null)[] = [];
+
+    const startNodeIndex = this.nodes.findIndex(
+      (node) => node.startNodeID === startNodeID,
+    );
+
+    gScores[startNodeIndex] = 0;
+    fScores[startNodeIndex] = this.heuristic(startNodeID, endNodeID);
+    parents[startNodeIndex] = null;
+
+    while (open) {
+      const minIndex = this.shortestDistance(open);
+      open.splice(minIndex, 1);
+    }
 
     return this.nodes;
   }
