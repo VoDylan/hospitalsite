@@ -2,6 +2,7 @@ import app from "../app.ts";
 import http from "http";
 import { AddressInfo } from "net";
 import { createHttpTerminator } from "http-terminator";
+import { initializeDatabase } from "./database-initialization.ts";
 
 // Attempt a database connection
 console.info("Connecting to database...");
@@ -117,4 +118,8 @@ function onListening(): void {
     typeof addr === "string" ? "pipe " + addr : "port " + addr?.port; // Otherwise get the port
   console.info("Server listening on " + bind); // Debug output that we're listening
   console.log("Startup complete");
+
+  console.log("Initializing database");
+  initializeDatabase();
+  console.log("Finished initializing database");
 }

@@ -1,4 +1,4 @@
-export type Edge = {
+export type MapEdgeType = {
   startNodeID: string;
   endNodeID: string;
 };

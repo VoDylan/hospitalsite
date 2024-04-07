@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
-import MapEdge from "../src/MapEdge";
 import DBManager from "../src/DBManager";
+import GraphManager from "common/src/map/GraphManager.ts";
+import MapEdge from "common/src/map/MapEdge.ts";
 
 const db: DBManager = DBManager.getInstance();
 const setupScript = () => {
@@ -12,7 +13,7 @@ const setupScript = () => {
 
 test("Tests the toCSV function in the MapEdges file for all imported edges.", async () => {
   setupScript();
-  const edges: MapEdge[] = db.mapEdges;
+  const edges: MapEdge[] = GraphManager.getInstance().edges;
 
   expect(edges[0].toCSV()).toStrictEqual("CCONF002L1, WELEV00HL1");
   expect(edges[1].toCSV()).toStrictEqual("CCONF003L1, CHALL002L1");
@@ -21,7 +22,7 @@ test("Tests the toCSV function in the MapEdges file for all imported edges.", as
 
 test("Tests the toString function in the MapEdges file for all imported edges.", async () => {
   setupScript();
-  const edges: MapEdge[] = db.mapEdges;
+  const edges: MapEdge[] = GraphManager.getInstance().edges;
 
   expect(edges[0].toString()).toStrictEqual(
     "Edge: \n" + "\tstartNodeID: CCONF002L1\n" + "\tendNodeID: WELEV00HL1\n",
