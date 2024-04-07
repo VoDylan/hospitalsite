@@ -13,11 +13,11 @@ model Node {
   nodeID         String           @id
   xcoord         Int
   ycoord         Int
-  floor          String?
-  building       String?
-  nodeType       String?
-  longName       String?
-  shortName      String?
+  floor          String
+  building       String
+  nodeType       String
+  longName       String
+  shortName      String
   startEdges     Edge[]           @relation("StartNode")
   endEdges       Edge[]           @relation("EndNode")
   Patient        Patient[]
@@ -75,12 +75,6 @@ model MedicalAssignments {
   patientID     Int
 
   @@unique([medicalID, patientID])
-}
-
-model HighScore {
-  id    Int      @id @default(autoincrement())
-  time  DateTime
-  score Int
 }
 
 model ServiceRequest {
