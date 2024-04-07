@@ -5,7 +5,7 @@ import { NodeAStar } from "common/src/NodeAStar.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import GraphManager from "common/src/map/GraphManager.ts";
-import { AStarOpenNode } from "common/src/AStarOpenNode.ts";
+// import { AStarOpenNode } from "common/src/AStarOpenNode.ts";
 
 export class AStarAlgorithm {
   nodes: NodeAStar[];
@@ -114,18 +114,19 @@ export class AStarAlgorithm {
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
 
-  private shortestDistance(open: AStarOpenNode[]) {
-    let min: number = 1000000;
-    let minIndex = -1;
+  private shortestDistance(open: Map<string, number>) {
+    return Math.min(...Array.from(open.values()));
+  }
 
-    for (let i = 0; i < open.length; i++) {
-      if (open[i].fScore < min) {
-        min = open[i].fScore;
-        minIndex = i;
+  private distance(currentNode: NodeAStar, neighborNodeID: string) {
+    for (let i = 0; i < currentNode.neighbors.length; i++) {
+      if (currentNode.neighbors[i] === neighborNodeID) {
+        return currentNode.distances[i];
       }
     }
 
-    return minIndex;
+    console.error("could not find the distance");
+    return -1;
   }
 
   public AStar(startID: string, endID: string) {
@@ -142,7 +143,7 @@ export class AStarAlgorithm {
     console.log(startNodeID);
     console.log(endNodeID);
 
-    const open: AStarOpenNode[] = [];
+    const open = new Map();
     const closed: string[] = [];
     const gScores: number[] = [];
     const fScores: number[] = [];
@@ -157,14 +158,17 @@ export class AStarAlgorithm {
     parents[startNodeIndex] = null;
 
     while (open) {
-      const minIndex = this.shortestDistance(open);
-      const currentNodeID = open[minIndex].nodeID;
-      open.splice(minIndex, 1);
+      const minValue = this.shortestDistance(open);
+      let currentNodeID = "";
+      open.forEach((value, key) => {
+        if (value === minValue) currentNodeID = key;
+      });
+      open.delete(currentNodeID);
 
       if (currentNodeID === endNodeID) return parents;
 
       const currentNode = this.nodes.find(
-        (node) => node.startNodeID === startNodeID,
+        (node) => node.startNodeID === currentNodeID,
       );
 
       if (currentNode === undefined) {
@@ -173,15 +177,43 @@ export class AStarAlgorithm {
       }
 
       for (let i = 0; i < currentNode.neighbors.length; i++) {
-        const currentNeighbor = currentNode.neighbors[i];
-        if (closed.includes(currentNeighbor)) {
+        const currentNeighborID = currentNode.neighbors[i];
+        if (closed.includes(currentNeighborID)) {
           continue;
         }
 
-        // const tentativeG = gScores[]
+        const tentativeG =
+          gScores[
+            this.nodes.findIndex((node) => node.startNodeID === currentNodeID)
+          ] + this.distance(currentNode, currentNeighborID);
+        // if (tentativeG === undefined) {
+        //
+        // }
+
+        if (
+          tentativeG <
+            gScores[
+              this.nodes.findIndex(
+                (node) => node.startNodeID === currentNeighborID,
+              )
+            ] ||
+          !open.has(currentNeighborID)
+        ) {
+          const neighborIndex = this.nodes.findIndex(
+            (node) => node.startNodeID === currentNeighborID,
+          );
+          parents[neighborIndex] = currentNodeID;
+          gScores[neighborIndex] = tentativeG;
+          fScores[neighborIndex] =
+            gScores[neighborIndex] +
+            this.heuristic(currentNeighborID, endNodeID);
+          if (open.has(currentNeighborID)) {
+            open.set(currentNeighborID, fScores[neighborIndex]);
+          }
+        }
       }
     }
 
-    return this.nodes;
+    return null;
   }
 }
