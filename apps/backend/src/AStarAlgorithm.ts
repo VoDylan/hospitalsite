@@ -142,7 +142,7 @@ export class AStarAlgorithm {
     console.log(endNodeID);
 
     const open: AStarOpenNode[] = [];
-    // const closed: string[] = [];
+    const closed: string[] = [];
     const gScores: number[] = [];
     const fScores: number[] = [];
     const parents: (string | null)[] = [];
@@ -157,7 +157,28 @@ export class AStarAlgorithm {
 
     while (open) {
       const minIndex = this.shortestDistance(open);
+      const currentNodeID = open[minIndex].nodeID;
       open.splice(minIndex, 1);
+
+      if (currentNodeID === endNodeID) return parents;
+
+      const currentNode = this.nodes.find(
+        (node) => node.startNodeID === startNodeID,
+      );
+
+      if (currentNode === undefined) {
+        console.error("Invalid node");
+        return null;
+      }
+
+      for (let i = 0; i < currentNode.neighbors.length; i++) {
+        const currentNeighbor = currentNode.neighbors[i];
+        if (closed.includes(currentNeighbor)) {
+          continue;
+        }
+
+        // const tentativeG = gScores[]
+      }
     }
 
     return this.nodes;
