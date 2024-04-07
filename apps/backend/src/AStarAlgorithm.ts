@@ -44,44 +44,28 @@ export class AStarAlgorithm {
         (neighborX - startX) ** 2 + (neighborY - startY) ** 2,
       );
 
-      const isStartNodePresent = this.nodes.some(
-        (node) => node.startNodeID === currentNode.nodeID,
-      );
-      const isNeighborNodePresent = this.nodes.some(
-        (node) => node.startNodeID === neighbor.nodeID,
-      );
-
-      const nodeNow: NodeAStar = {
-        startNodeID: currentNode.nodeID,
-        neighbors: [neighbor.nodeID],
-        distances: [distance],
+      const updateNode = (
+        nodeID: string,
+        neighborID: string,
+        distance: number,
+      ) => {
+        const index = this.nodes.findIndex(
+          (node) => node.startNodeID === nodeID,
+        );
+        if (index === -1) {
+          this.nodes.push({
+            startNodeID: nodeID,
+            neighbors: [neighborID],
+            distances: [distance],
+          });
+        } else {
+          this.nodes[index].neighbors.push(neighborID);
+          this.nodes[index].distances.push(distance);
+        }
       };
 
-      const neighborNow: NodeAStar = {
-        startNodeID: neighbor.nodeID,
-        neighbors: [currentNode.nodeID],
-        distances: [distance],
-      };
-
-      if (!isStartNodePresent) this.nodes.push(nodeNow);
-      else {
-        this.nodes
-          .find((node) => node.startNodeID === currentNode.nodeID)
-          ?.neighbors.push(neighbor.nodeID);
-        this.nodes
-          .find((node) => node.startNodeID === currentNode.nodeID)
-          ?.distances.push(distance);
-      }
-
-      if (!isNeighborNodePresent) this.nodes.push(neighborNow);
-      else {
-        this.nodes
-          .find((node) => node.startNodeID === neighbor.nodeID)
-          ?.neighbors.push(currentNode.nodeID);
-        this.nodes
-          .find((node) => node.startNodeID === neighbor.nodeID)
-          ?.distances.push(distance);
-      }
+      updateNode(currentNode.nodeID, neighbor.nodeID, distance);
+      updateNode(neighbor.nodeID, currentNode.nodeID, distance);
     }
   }
 
