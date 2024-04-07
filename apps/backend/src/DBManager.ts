@@ -212,6 +212,11 @@ export default class DBManager {
     console.log(`${this.loggingPrefix}${prints}`);
   }
 
+  public async updateNodesAndEdgesFromDB() {
+    await this.updateAndGetNodesFromDB();
+    await this.updateAndGetEdgesFromDB();
+  }
+
   /**
    * Function to query database for all nodes and places them in this object's array
    * Call this then get mapNodes
@@ -258,9 +263,6 @@ export default class DBManager {
   public async updateAndGetEdgesFromDB(): Promise<MapEdgeType[]> {
     const edges: MapEdgeType[] | null = await getDBEdges();
     const newEdges: MapEdge[] = [];
-
-    //First sync the nodes stored in the database to the objects
-    await this.updateAndGetNodesFromDB();
 
     if (edges == null) {
       console.log(`${this.loggingPrefix}No edges found in DB`);
