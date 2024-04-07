@@ -1,4 +1,4 @@
-import { Grid, Stack } from "@mui/material";
+import {Grid, SelectChangeEvent, Stack} from "@mui/material";
 import { ChangeEvent, useState, useEffect } from "react";
 //import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 //import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
@@ -36,7 +36,7 @@ function GiftDeliveryService() {
     setFormResponses({ ...form, name: e.target.value });
   }
 
-  function handleRecipientNameInput(e: ChangeEvent<HTMLInputElement>) {
+  function handleRecipientNameInput(e: SelectChangeEvent) {
     setFormResponses({ ...form, recipientName: e.target.value });
   }
 
