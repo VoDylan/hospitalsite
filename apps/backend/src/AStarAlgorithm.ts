@@ -1,23 +1,25 @@
 import { NodeAStar } from "common/src/NodeAStar.ts";
 import GraphManager from "common/src/GraphManager.ts";
 import MapNode from "common/src/MapNode.ts";
+import MapEdge from "common/src/MapEdge";
 // import MapNode from "common/src/MapNode.ts";
 
 export class AStarAlgorithm {
   nodes: NodeAStar[];
+  mapNodes: MapNode[];
+  mapEdges: MapEdge[];
 
   public constructor() {
     this.nodes = [];
+    const graphManager = GraphManager.getInstance();
+    this.mapNodes = graphManager.nodes;
+    this.mapEdges = graphManager.edges;
   }
 
   public loadData() {
-    const graphManager = GraphManager.getInstance();
-    const mapNodes = graphManager.nodes;
-    const mapEdges = graphManager.edges;
-
-    for (let i = 0; i < mapEdges.length; i++) {
-      const currentNode: MapNode = mapEdges[i].startNode;
-      const neighbor: MapNode = mapEdges[i].endNode;
+    for (let i = 0; i < this.mapEdges.length; i++) {
+      const currentNode: MapNode = this.mapEdges[i].startNode;
+      const neighbor: MapNode = this.mapEdges[i].endNode;
 
       let startX: number = -1;
       let startY: number = -1;
@@ -25,13 +27,13 @@ export class AStarAlgorithm {
       let neighborY: number = -1;
 
       // go through the whole list to find the coordinates of two nodes
-      for (let j = 0; j < mapNodes.length; j++) {
-        if (mapNodes[j].nodeID === currentNode.nodeID) {
-          startX = mapNodes[j].xcoord;
-          startY = mapNodes[j].ycoord;
-        } else if (mapNodes[j].nodeID === neighbor.nodeID) {
-          neighborX = mapNodes[j].xcoord;
-          neighborY = mapNodes[j].ycoord;
+      for (let j = 0; j < this.mapNodes.length; j++) {
+        if (this.mapNodes[j].nodeID === currentNode.nodeID) {
+          startX = this.mapNodes[j].xcoord;
+          startY = this.mapNodes[j].ycoord;
+        } else if (this.mapNodes[j].nodeID === neighbor.nodeID) {
+          neighborX = this.mapNodes[j].xcoord;
+          neighborY = this.mapNodes[j].ycoord;
         }
 
         if (startX !== -1 && neighborX !== -1) {
@@ -41,6 +43,7 @@ export class AStarAlgorithm {
 
       if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
         console.error("Node does not exist");
+        return;
       }
 
       const distance: number = Math.sqrt(
@@ -72,9 +75,41 @@ export class AStarAlgorithm {
     }
   }
 
+  private getID(longName: string) {
+    if (longName === undefined) {
+      console.error("Invalid Name");
+      return;
+    }
+    return this.mapNodes.find((node) => node.longName === longName)?.nodeID;
+  }
+
+  // private heuristic() {}
+
   public AStar(startID: string, endID: string) {
+    const startNodeID = this.getID(startID);
+    const endNodeID = this.getID(endID);
+
+    if (!startNodeID || !endNodeID) {
+      console.error("Node ID not found for start or end node");
+      return;
+    }
+
     console.log(startID);
     console.log(endID);
+    console.log(startNodeID);
+    console.log(endNodeID);
+
+    // let open: string[] = [];
+    // let closed: string[] = [];
+    // let gScores: number[] = [];
+    // let fScores: number[] = [];
+    // let parents: string[] = [];
+    //
+    // const startNodeIndex = this.nodes.findIndex((node) => node.startNodeID === startNodeID);
+    //
+    // gScores[startNodeIndex] = 0;
+    // // fScores[startNodeIndex] =
+
     return this.nodes;
   }
 }
