@@ -13,6 +13,10 @@ import {
   getServiceRequestsFromDB,
 } from "../PrismaScripts.ts";
 import GraphManager from "common/src/map/GraphManager.ts";
+import {
+  validateEdgeData,
+  validateNodeData,
+} from "common/src/validations/validations.ts";
 
 //Create router instance to handle any database requests
 const router: Router = express.Router();
@@ -134,24 +138,19 @@ router.post("/servicerequest", async (req, res) => {
 });
 
 router.post("/uploadnodes", async (req, res) => {
-  const data: {
-    nodeID: string;
-    xcoord: number;
-    ycoord: number;
-    floor: string;
-    building: string;
-    nodeType: string;
-    longName: string;
-    shortName: string;
-  }[] = req.body;
+  const data: [] = req.body;
 
   await clearDBEdges();
   await clearDBNodes();
 
   for (let i = 0; i < data.length; i++) {
-    if (data[i].nodeID == "") {
+    if (validateNodeData(data[i]).error != undefined) {
+      console.log(`Node data at line ${i} badly formatted. Skipping...`);
       continue;
+    } else {
+      console.log(`Node data at line ${i} valid, adding to database`);
     }
+
     await client.node.create({
       data: data[i],
     });
@@ -161,16 +160,16 @@ router.post("/uploadnodes", async (req, res) => {
 });
 
 router.post("/uploadedges", async (req, res) => {
-  const data: {
-    startNodeID: string;
-    endNodeID: string;
-  }[] = req.body;
+  const data: [] = req.body;
 
   await clearDBEdges();
 
   for (let i = 0; i < data.length; i++) {
-    if (data[i].startNodeID == "") {
+    if (validateEdgeData(data[i]).error != undefined) {
+      console.log(`Edge data at line ${i} badly formatted. Skipping...`);
       continue;
+    } else {
+      console.log(`Edge data at line ${i} valid, adding to database`);
     }
     await client.edge.create({
       data: data[i],

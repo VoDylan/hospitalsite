@@ -4,8 +4,11 @@
   "version": "1.0.0",
   "module": "true",
   "devDependencies": {
+    "@types/joi": "latest",
+    "@types/node": "latest",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
+    "joi": "latest",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
     "tsconfig-custom": "workspace:*",

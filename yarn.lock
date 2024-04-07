@@ -2344,6 +2344,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:latest":
+  version: 20.12.5
+  resolution: "@types/node@npm:20.12.5"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 7b647ea6679016e4e58e1aa439c46b610230ffcbe19173911fbf1d1fa329ec6fd1eeba4e3e2d8743206d3b00d5a0cad75f1c90189e1d1ec057eb48df1a1dd747
+  languageName: node
+  linkType: hard
+
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -3826,8 +3835,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "common@workspace:packages/common"
   dependencies:
+    "@types/joi": "npm:latest"
+    "@types/node": "npm:latest"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
+    joi: "npm:latest"
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
     tsconfig-custom: "workspace:*"
@@ -6070,7 +6082,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joi@npm:*":
+"joi@npm:*, joi@npm:latest":
   version: 17.12.3
   resolution: "joi@npm:17.12.3"
   dependencies:
