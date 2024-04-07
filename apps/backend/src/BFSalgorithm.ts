@@ -1,6 +1,6 @@
 // import * as fs from "fs";
-import { Edge } from "common/src/Edge.ts";
-import { Node } from "common/src/Node.ts";
+import { MapEdgeType } from "common/src/MapEdgeType.ts";
+import { MapNodeType } from "common/src/MapNodeType.ts";
 
 import { NodeBFS } from "common/src/NodeBFS.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
@@ -17,8 +17,8 @@ export class BFSalgorithm {
 
   // load nodes and edges
   async load_data() {
-    const edges: Edge[] = await client.edge.findMany();
-    const nodes: Node[] = await client.node.findMany();
+    const edges: MapEdgeType[] = await client.edge.findMany();
+    const nodes: MapNodeType[] = await client.node.findMany();
 
     if (!edges) return;
     if (!nodes) return;

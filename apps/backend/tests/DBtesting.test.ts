@@ -1,9 +1,10 @@
 import { expect, test } from "vitest";
 import DBManager from "../src/DBManager";
-import MapNode, { NodeFields } from "../src/MapNode";
-//import MapEdge, {EdgeFields} from "../src/MapEdge";
+import MapNode from "common/src/MapNode.ts";
 import CSVTools from "../src/lib/CSVTools";
-import MapEdge from "../src/MapEdge.ts";
+import MapEdge from "common/src/MapEdge.ts";
+import { MapNodeType } from "common/src/MapNodeType.ts";
+import GraphManager from "common/src/GraphManager.ts";
 
 //let testTool: CSVTools = new CSVTools();
 const testDB = DBManager.getInstance();
@@ -14,7 +15,7 @@ const setupScript = () => {
     "./apps/backend/data/L1Edges.csv",
   );
 };
-const testNode1Fields: NodeFields = {
+const testNode1Fields: MapNodeType = {
   nodeID: "CCONF001L1",
   xcoord: 2255,
   ycoord: 849,
@@ -43,7 +44,7 @@ test("CSV Parsing of Node Data", () => {
   const nodes: string[][] = CSVTools.parseCSVFromFile(
     "./apps/backend/data/L1Nodes.csv",
   );
-  const nodeInfo: NodeFields = {
+  const nodeInfo: MapNodeType = {
     nodeID: nodes[1][0],
     xcoord: parseInt(nodes[1][1]),
     ycoord: parseInt(nodes[1][2]),
@@ -59,7 +60,7 @@ test("CSV Parsing of Node Data", () => {
 
 test("Get node objects", () => {
   setupScript();
-  const nodes: MapNode[] = testDB.mapNodes;
+  const nodes: MapNode[] = GraphManager.getInstance().nodes;
 
   expect(nodes.length).toStrictEqual(46);
 
@@ -99,7 +100,7 @@ test("Get node objects", () => {
 
 test("Get edge objects", () => {
   setupScript();
-  const edges: MapEdge[] = testDB.mapEdges;
+  const edges: MapEdge[] = GraphManager.getInstance().edges;
 
   expect(edges.length).toStrictEqual(46);
 
@@ -136,7 +137,7 @@ test("Test output filePath generation function", () => {
 
 test("Get node by node ID", () => {
   setupScript();
-  const testNode1 = testDB.getNodeByID("CREST003L1")!;
+  const testNode1 = GraphManager.getInstance().getNodeByID("CREST003L1")!;
   expect(testNode1).toBeDefined();
   expect(testNode1.nodeInfo).toStrictEqual({
     nodeID: "CREST003L1",
@@ -149,7 +150,7 @@ test("Get node by node ID", () => {
     shortName: "Restroom C003L1",
   });
 
-  const testNode2 = testDB.getNodeByID("WELEV00ML1")!;
+  const testNode2 = GraphManager.getInstance().getNodeByID("WELEV00ML1")!;
   expect(testNode2).toBeDefined();
   expect(testNode2.nodeInfo).toStrictEqual({
     nodeID: "WELEV00ML1",
@@ -162,7 +163,7 @@ test("Get node by node ID", () => {
     shortName: "Elevator ML1",
   });
 
-  const testNode3 = testDB.getNodeByID("testNull1");
+  const testNode3 = GraphManager.getInstance().getNodeByID("testNull1");
 
   expect(testNode3).toBeNull();
 });

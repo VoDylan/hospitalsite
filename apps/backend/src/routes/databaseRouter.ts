@@ -1,4 +1,6 @@
-import express, { Router } from "express";
+import express, { Request, Response, Router } from "express";
+import DBManager from "../DBManager.ts";
+import client from "../bin/database-connection.ts";
 import {
   clearDBEdges,
   clearDBNodes,
@@ -10,15 +12,14 @@ import {
   getServiceRequestFromDBByUserID,
   getServiceRequestsFromDB,
 } from "../PrismaScripts.ts";
-import DBManager from "../DBManager.ts";
-import client from "../bin/database-connection.ts";
+import GraphManager from "common/src/GraphManager.ts";
 
 //Create router instance to handle any database requests
 const router: Router = express.Router();
 
 //Accepts a GET request to the /api/database/nodes endpoint and returns all nodes stored in the database as an array of JSON
 //objects with all node information
-router.get("/nodes", async (req, res) => {
+router.get("/nodes", async (req: Request, res: Response) => {
   const nodeData = await DBManager.getInstance().updateAndGetNodesFromDB();
   res.status(200).json(nodeData);
 });
@@ -114,7 +115,7 @@ router.post("/servicerequest", async (req, res) => {
 
   console.log(data);
 
-  if (DBManager.getInstance().getNodeByID(data.nodeID) == null) {
+  if (GraphManager.getInstance().getNodeByID(data.nodeID) == null) {
     res.status(400).json({
       message: `Room ${data.nodeID} does not exist`,
     });
