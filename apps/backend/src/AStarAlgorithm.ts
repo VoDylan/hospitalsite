@@ -64,7 +64,16 @@ export class AStarAlgorithm {
       };
 
       if (!isStartNodePresent) this.nodes.push(nodeNow);
+      else
+        this.nodes
+          .find((node) => node.startNodeID === currentNode.nodeID)
+          ?.neighbors.push(neighbor.nodeID);
+
       if (!isNeighborNodePresent) this.nodes.push(neighborNow);
+      else
+        this.nodes
+          .find((node) => node.startNodeID === neighbor.nodeID)
+          ?.neighbors.push(currentNode.nodeID);
     }
   }
 
