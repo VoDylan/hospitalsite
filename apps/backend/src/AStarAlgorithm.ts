@@ -29,10 +29,13 @@ export class AStarAlgorithm {
         if (mapNodes[j].nodeID === currentNode.nodeID) {
           startX = mapNodes[j].xcoord;
           startY = mapNodes[j].ycoord;
-        }
-        if (mapNodes[j].nodeID === neighbor.nodeID) {
+        } else if (mapNodes[j].nodeID === neighbor.nodeID) {
           neighborX = mapNodes[j].xcoord;
           neighborY = mapNodes[j].ycoord;
+        }
+
+        if (startX !== -1 && neighborX !== -1) {
+          break;
         }
       }
 
