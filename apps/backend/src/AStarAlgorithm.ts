@@ -3,8 +3,6 @@ import GraphManager from "common/src/GraphManager.ts";
 import MapNode from "common/src/MapNode.ts";
 import MapEdge from "common/src/MapEdge";
 import { AStarOpenNode } from "common/src/AStarOpenNode.ts";
-// import mapNode from "common/src/MapNode.ts";
-// import MapNode from "common/src/MapNode.ts";
 
 export class AStarAlgorithm {
   nodes: NodeAStar[];
