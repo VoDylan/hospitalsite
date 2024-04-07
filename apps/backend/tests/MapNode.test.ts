@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import DBManager from "../src/DBManager";
-import GraphManager from "common/src/GraphManager.ts";
-import MapNode from "common/src/MapNode.ts";
+import GraphManager from "common/src/map/GraphManager.ts";
+import MapNode from "common/src/map/MapNode.ts";
 
 const db: DBManager = DBManager.getInstance();
 const setupScript = () => {

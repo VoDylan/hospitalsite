@@ -12,7 +12,13 @@ import {
   getServiceRequestFromDBByUserID,
   getServiceRequestsFromDB,
 } from "../PrismaScripts.ts";
-import GraphManager from "common/src/GraphManager.ts";
+import GraphManager from "common/src/map/GraphManager.ts";
+import {
+  validateEdgeData,
+  validateNodeData,
+} from "common/src/validations/validations.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 
 //Create router instance to handle any database requests
 const router: Router = express.Router();
@@ -20,14 +26,15 @@ const router: Router = express.Router();
 //Accepts a GET request to the /api/database/nodes endpoint and returns all nodes stored in the database as an array of JSON
 //objects with all node information
 router.get("/nodes", async (req: Request, res: Response) => {
-  const nodeData = await DBManager.getInstance().updateAndGetNodesFromDB();
+  const nodeData: MapNodeType[] =
+    await DBManager.getInstance().updateAndGetNodesFromDB();
   res.status(200).json(nodeData);
 });
 
 //Accepts a GET request to the /api/backend/nodes/<NODE_ID> endpoint where <NODE_ID> is replaced by the ID of the node you
 //wish to get information about; returns JSON data with the information or an empty JSON object if no node exists with NODE_ID
 router.get("/nodes/:nodeid", async (req, res) => {
-  const nodeData: object | null = await getDBNodeByID(req.params.nodeid);
+  const nodeData: MapNodeType | null = await getDBNodeByID(req.params.nodeid);
 
   if (nodeData == null) {
     res.status(404).json({});
@@ -39,7 +46,8 @@ router.get("/nodes/:nodeid", async (req, res) => {
 //Accepts a GET request to the /api/database/edges endpoint and returns all edges stored in the database as an array of JSON
 //objects with all edge information
 router.get("/edges", async (req, res) => {
-  const edgeData = await DBManager.getInstance().updateAndGetEdgesFromDB();
+  const edgeData: MapEdgeType[] =
+    await DBManager.getInstance().updateAndGetEdgesFromDB();
   res.status(200).json(edgeData);
 });
 
@@ -47,7 +55,7 @@ router.get("/edges", async (req, res) => {
 //is replaced by the starting node id and <END_NODE_ID> is replaced with the ending node id; returns JSON data with the edge
 //information or an empty JSON object if no node exists with the combination of the starting and ending ids
 router.get("/edges/:startNodeID/:endNodeID", async (req, res) => {
-  const edgeData: object | null = await getDBEdgeByStartAndEndNode(
+  const edgeData: MapEdgeType | null = await getDBEdgeByStartAndEndNode(
     req.params.startNodeID,
     req.params.endNodeID,
   );
@@ -134,48 +142,47 @@ router.post("/servicerequest", async (req, res) => {
 });
 
 router.post("/uploadnodes", async (req, res) => {
-  const data: {
-    nodeID: string;
-    xcoord: number;
-    ycoord: number;
-    floor: string;
-    building: string;
-    nodeType: string;
-    longName: string;
-    shortName: string;
-  }[] = req.body;
+  const data: [] = req.body;
 
   await clearDBEdges();
   await clearDBNodes();
 
   for (let i = 0; i < data.length; i++) {
-    if (data[i].nodeID == "") {
+    if (validateNodeData(data[i]).error != undefined) {
+      console.log(`Node data at line ${i} badly formatted. Skipping...`);
       continue;
+    } else {
+      console.log(`Node data at line ${i} valid, adding to database`);
     }
+
     await client.node.create({
       data: data[i],
     });
   }
 
+  await DBManager.getInstance().updateNodesAndEdgesFromDB();
+
   res.status(200);
 });
 
 router.post("/uploadedges", async (req, res) => {
-  const data: {
-    startNodeID: string;
-    endNodeID: string;
-  }[] = req.body;
+  const data: [] = req.body;
 
   await clearDBEdges();
 
   for (let i = 0; i < data.length; i++) {
-    if (data[i].startNodeID == "") {
+    if (validateEdgeData(data[i]).error != undefined) {
+      console.log(`Edge data at line ${i} badly formatted. Skipping...`);
       continue;
+    } else {
+      console.log(`Edge data at line ${i} valid, adding to database`);
     }
     await client.edge.create({
       data: data[i],
     });
   }
+
+  await DBManager.getInstance().updateNodesAndEdgesFromDB();
 
   res.status(200);
 });

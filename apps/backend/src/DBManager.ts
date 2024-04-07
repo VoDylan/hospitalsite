@@ -1,5 +1,5 @@
-import MapNode from "common/src/MapNode.ts";
-import MapEdge from "common/src/MapEdge.ts";
+import MapNode from "common/src/map/MapNode.ts";
+import MapEdge from "common/src/map/MapEdge.ts";
 import CSVTools from "./lib/CSVTools";
 import fs from "fs";
 import {
@@ -12,10 +12,10 @@ import {
   clearDBRequests,
 } from "./PrismaScripts";
 import client from "./bin/database-connection.ts";
-import { MapNodeType } from "common/src/MapNodeType.ts";
-import { MapEdgeType } from "common/src/MapEdgeType.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import { NodeDoesNotExistError } from "common/src/errors/NodeDoesNotExistError.ts";
-import GraphManager from "common/src/GraphManager.ts";
+import GraphManager from "common/src/map/GraphManager.ts";
 
 export default class DBManager {
   private static instance: DBManager;
@@ -212,6 +212,11 @@ export default class DBManager {
     console.log(`${this.loggingPrefix}${prints}`);
   }
 
+  public async updateNodesAndEdgesFromDB() {
+    await this.updateAndGetNodesFromDB();
+    await this.updateAndGetEdgesFromDB();
+  }
+
   /**
    * Function to query database for all nodes and places them in this object's array
    * Call this then get mapNodes
@@ -258,9 +263,6 @@ export default class DBManager {
   public async updateAndGetEdgesFromDB(): Promise<MapEdgeType[]> {
     const edges: MapEdgeType[] | null = await getDBEdges();
     const newEdges: MapEdge[] = [];
-
-    //First sync the nodes stored in the database to the objects
-    await this.updateAndGetNodesFromDB();
 
     if (edges == null) {
       console.log(`${this.loggingPrefix}No edges found in DB`);
