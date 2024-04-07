@@ -73,6 +73,7 @@ const RAW_RUNTIME_STATE =
           ["@mui/x-data-grid", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:7.1.0"],\
           ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0"],\
           ["@types/express", "npm:4.17.21"],\
+          ["@types/joi", "npm:17.2.3"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/react", "npm:18.2.48"],\
@@ -1151,6 +1152,25 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@fontsource-open-sans-npm-5.0.27-41b849d9d2-6e959ecbec.zip/node_modules/@fontsource/open-sans/",\
         "packageDependencies": [\
           ["@fontsource/open-sans", "npm:5.0.27"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@hapi/hoek", [\
+      ["npm:9.3.0", {\
+        "packageLocation": "./.yarn/cache/@hapi-hoek-npm-9.3.0-447eb8d274-ad83a22378.zip/node_modules/@hapi/hoek/",\
+        "packageDependencies": [\
+          ["@hapi/hoek", "npm:9.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@hapi/topo", [\
+      ["npm:5.1.0", {\
+        "packageLocation": "./.yarn/cache/@hapi-topo-npm-5.1.0-5e0b776809-084bfa6470.zip/node_modules/@hapi/topo/",\
+        "packageDependencies": [\
+          ["@hapi/topo", "npm:5.1.0"],\
+          ["@hapi/hoek", "npm:9.3.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2480,6 +2500,34 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@sideway/address", [\
+      ["npm:4.1.5", {\
+        "packageLocation": "./.yarn/cache/@sideway-address-npm-4.1.5-a3852745c8-c4c73ac033.zip/node_modules/@sideway/address/",\
+        "packageDependencies": [\
+          ["@sideway/address", "npm:4.1.5"],\
+          ["@hapi/hoek", "npm:9.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@sideway/formula", [\
+      ["npm:3.0.1", {\
+        "packageLocation": "./.yarn/cache/@sideway-formula-npm-3.0.1-ee371b2ddf-8d3ee7f80d.zip/node_modules/@sideway/formula/",\
+        "packageDependencies": [\
+          ["@sideway/formula", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@sideway/pinpoint", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/@sideway-pinpoint-npm-2.0.0-66d94e687e-1ed2180012.zip/node_modules/@sideway/pinpoint/",\
+        "packageDependencies": [\
+          ["@sideway/pinpoint", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@sinclair/typebox", [\
       ["npm:0.27.8", {\
         "packageLocation": "./.yarn/cache/@sinclair-typebox-npm-0.27.8-23e206d653-297f95ff77.zip/node_modules/@sinclair/typebox/",\
@@ -2956,6 +3004,16 @@ const RAW_RUNTIME_STATE =
           ["@types/istanbul-reports", "npm:1.1.2"],\
           ["@types/istanbul-lib-coverage", "npm:2.0.6"],\
           ["@types/istanbul-lib-report", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/joi", [\
+      ["npm:17.2.3", {\
+        "packageLocation": "./.yarn/cache/@types-joi-npm-17.2.3-81998661f1-f26d0132b4.zip/node_modules/@types/joi/",\
+        "packageDependencies": [\
+          ["@types/joi", "npm:17.2.3"],\
+          ["joi", "npm:17.12.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7303,6 +7361,20 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["joi", [\
+      ["npm:17.12.3", {\
+        "packageLocation": "./.yarn/cache/joi-npm-17.12.3-e7b8c23db6-454dcc8ff1.zip/node_modules/joi/",\
+        "packageDependencies": [\
+          ["joi", "npm:17.12.3"],\
+          ["@hapi/hoek", "npm:9.3.0"],\
+          ["@hapi/topo", "npm:5.1.0"],\
+          ["@sideway/address", "npm:4.1.5"],\
+          ["@sideway/formula", "npm:3.0.1"],\
+          ["@sideway/pinpoint", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["jose", [\
       ["npm:4.15.4", {\
         "packageLocation": "./.yarn/cache/jose-npm-4.15.4-c518ec3da8-20fa941597.zip/node_modules/jose/",\
@@ -10276,6 +10348,7 @@ const RAW_RUNTIME_STATE =
           ["@mui/x-data-grid", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:7.1.0"],\
           ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0"],\
           ["@types/express", "npm:4.17.21"],\
+          ["@types/joi", "npm:17.2.3"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/react", "npm:18.2.48"],\

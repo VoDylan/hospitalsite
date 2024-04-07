@@ -12,7 +12,7 @@ import {
   getServiceRequestFromDBByUserID,
   getServiceRequestsFromDB,
 } from "../PrismaScripts.ts";
-import GraphManager from "common/src/GraphManager.ts";
+import GraphManager from "common/src/map/GraphManager.ts";
 
 //Create router instance to handle any database requests
 const router: Router = express.Router();

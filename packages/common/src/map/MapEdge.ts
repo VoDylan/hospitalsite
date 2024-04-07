@@ -1,5 +1,5 @@
 import MapNode from "./MapNode";
-import { MapEdgeType } from "common/src/MapEdgeType.ts";
+import { MapEdgeType } from "./MapEdgeType.ts";
 import { NodeDoesNotExistError } from "common/src/errors/NodeDoesNotExistError.ts";
 import GraphManager from "./GraphManager.ts";
 

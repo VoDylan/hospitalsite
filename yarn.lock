@@ -887,6 +887,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hapi/hoek@npm:^9.0.0, @hapi/hoek@npm:^9.3.0":
+  version: 9.3.0
+  resolution: "@hapi/hoek@npm:9.3.0"
+  checksum: ad83a223787749f3873bce42bd32a9a19673765bf3edece0a427e138859ff729469e68d5fdf9ff6bbee6fb0c8e21bab61415afa4584f527cfc40b59ea1957e70
+  languageName: node
+  linkType: hard
+
+"@hapi/topo@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@hapi/topo@npm:5.1.0"
+  dependencies:
+    "@hapi/hoek": "npm:^9.0.0"
+  checksum: 084bfa647015f4fd3fdd51fadb2747d09ef2f5e1443d6cbada2988b0c88494f85edf257ec606c790db146ac4e34ff57f3fcb22e3299b8e06ed5c87ba7583495c
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.13":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -1831,6 +1847,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sideway/address@npm:^4.1.5":
+  version: 4.1.5
+  resolution: "@sideway/address@npm:4.1.5"
+  dependencies:
+    "@hapi/hoek": "npm:^9.0.0"
+  checksum: c4c73ac0339504f34e016d3a687118e7ddf197c1c968579572123b67b230be84caa705f0f634efdfdde7f2e07a6e0224b3c70665dc420d8bc95bf400cfc4c998
+  languageName: node
+  linkType: hard
+
+"@sideway/formula@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@sideway/formula@npm:3.0.1"
+  checksum: 8d3ee7f80df4e5204b2cbe92a2a711ca89684965a5c9eb3b316b7051212d3522e332a65a0bb2a07cc708fcd1d0b27fcb30f43ff0bcd5089d7006c7160a89eefe
+  languageName: node
+  linkType: hard
+
+"@sideway/pinpoint@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@sideway/pinpoint@npm:2.0.0"
+  checksum: 1ed21800128b2b23280ba4c9db26c8ff6142b97a8683f17639fd7f2128aa09046461574800b30fb407afc5b663c2331795ccf3b654d4b38fa096e41a5c786bf8
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -2211,6 +2250,15 @@ __metadata:
     "@types/istanbul-lib-coverage": "npm:*"
     "@types/istanbul-lib-report": "npm:*"
   checksum: 00866e815d1e68d0a590d691506937b79d8d65ad8eab5ed34dbfee66136c7c0f4ea65327d32046d5fe469f22abea2b294987591dc66365ebc3991f7e413b2d78
+  languageName: node
+  linkType: hard
+
+"@types/joi@npm:latest":
+  version: 17.2.3
+  resolution: "@types/joi@npm:17.2.3"
+  dependencies:
+    joi: "npm:*"
+  checksum: f26d0132b4e16d667176a0dce52a013fce1557a9d7a7b68c67e1bdb1ca470a221e638f2ad4566ca8fcfad544ca0845f6e241b3e86cb387ffee07910bad1147bb
   languageName: node
   linkType: hard
 
@@ -6022,6 +6070,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"joi@npm:*":
+  version: 17.12.3
+  resolution: "joi@npm:17.12.3"
+  dependencies:
+    "@hapi/hoek": "npm:^9.3.0"
+    "@hapi/topo": "npm:^5.1.0"
+    "@sideway/address": "npm:^4.1.5"
+    "@sideway/formula": "npm:^3.0.1"
+    "@sideway/pinpoint": "npm:^2.0.0"
+  checksum: 454dcc8ff1b095f978253bb1ef6d3033812d091d6a0a3da0ba7c3cb85623c7a1e657c19a8685839e991fe1cfb83ca25ea0caa1d17c9806dea0ffd49e43ecb0a2
+  languageName: node
+  linkType: hard
+
 "jose@npm:^4.13.1, jose@npm:^4.14.4":
   version: 4.15.4
   resolution: "jose@npm:4.15.4"
@@ -8657,6 +8718,7 @@ __metadata:
     "@mui/x-data-grid": "npm:^7.1.0"
     "@prisma/client": "npm:^5.11.0"
     "@types/express": "npm:^4.17.21"
+    "@types/joi": "npm:latest"
     "@types/multer": "npm:^1.4.11"
     "@types/node": "npm:^20.11.30"
     "@types/react": "npm:^18.0.37"

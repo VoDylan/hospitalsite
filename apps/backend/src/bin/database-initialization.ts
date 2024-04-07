@@ -10,9 +10,7 @@ const importDefaultNodeAndEdgeData = async () => {
 };
 
 export const initializeDatabase = () => {
-  if (DBManager != undefined) {
-    importDefaultNodeAndEdgeData().then(() =>
-      console.log("Finished importing data into database"),
-    );
-  }
+  importDefaultNodeAndEdgeData().then(() =>
+    console.log("Finished importing data into database"),
+  );
 };

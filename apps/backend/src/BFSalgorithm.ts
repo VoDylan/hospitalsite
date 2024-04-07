@@ -1,6 +1,6 @@
 // import * as fs from "fs";
-import { MapEdgeType } from "common/src/MapEdgeType.ts";
-import { MapNodeType } from "common/src/MapNodeType.ts";
+import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
 
 import { NodeBFS } from "common/src/NodeBFS.ts";
 import { Coordinates } from "common/src/Coordinates.ts";

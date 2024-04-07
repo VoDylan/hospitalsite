@@ -8,8 +8,10 @@ import TopBanner2 from "../components/TopBanner2.tsx";
 
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { MapNodeType } from "common/src/MapNodeType.ts";
-import { MapEdgeType } from "common/src/MapEdgeType.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
+import MapNode from "common/src/map/MapNode.ts";
+import MapEdge from "common/src/map/MapEdge.ts";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -77,11 +79,10 @@ function DisplayDatabase() {
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
     console.log("Got data");
-    setNodeRowData(data);
     console.log(data);
 
-    const rowNodeData = [];
-    for (let i = 0; i < data.length; i++) {
+    const rowNodeData: NodeParams[] = [];
+    for (let i: number = 0; i < data.length; i++) {
       const tableFormattedNode: NodeParams = {
         id: i,
         nodeID: data[i].nodeID,
@@ -101,10 +102,9 @@ function DisplayDatabase() {
   const getEdgeData = async () => {
     const { data } = await axios.get("/api/database/edges");
     console.log("Got data");
-    setEdgeRowData(data);
     console.log(data);
 
-    const rowData = [];
+    const rowData: EdgeParams[] = [];
     for (let i = 0; i < data.length; i++) {
       const tableFormattedEdge: EdgeParams = {
         id: i,
@@ -153,7 +153,21 @@ function DisplayDatabase() {
       } else {
         fileText = evt.target!.result;
         console.log(fileText);
+
         const parsedData: string[][] = parseCSVFromString(fileText as string);
+
+        console.log(parsedData);
+
+        for (let i: number = 0; i < parsedData[0].length; i++) {
+          if (parsedData[0][i] != MapNode.csvHeader.split(", ")[i]) {
+            console.error(
+              "Imported node data does not include the correct header fields",
+            );
+            return;
+          }
+        }
+
+        console.log("Imported node data is in the correct format");
 
         for (let i: number = 1; i < parsedData.length; i++) {
           jsonData.push({
@@ -193,6 +207,17 @@ function DisplayDatabase() {
         fileText = evt.target!.result;
         console.log(fileText);
         const parsedData: string[][] = parseCSVFromString(fileText as string);
+
+        for (let i: number = 0; i < parsedData[0].length; i++) {
+          if (parsedData[0][i] != MapEdge.csvHeader.split(", ")[i]) {
+            console.error(
+              "Imported edge data does not include the correct header fields",
+            );
+            return;
+          }
+        }
+
+        console.log("Imported edge data is in the correct format");
 
         for (let i: number = 1; i < parsedData.length; i++) {
           jsonData.push({
@@ -245,8 +270,8 @@ function DisplayDatabase() {
           alignItems: "center",
           minHeight: "100vh",
           minWidth: "100wh",
-          marginTop: "10%",
-          marginBottom: "10%",
+          marginTop: "150px",
+          marginBottom: "150px",
         }}
       >
         <Box
@@ -291,9 +316,11 @@ function DisplayDatabase() {
               color: "white", // Change text color
               borderRadius: "8px", // Change border radius
               marginRight: "-1px", // Adjust spacing
+              marginTop: "15px",
+              marginBottom: "15px",
             }}
           >
-            Import CSV File
+            Import Nodes (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
           </Button>
           <DataGrid
@@ -327,9 +354,11 @@ function DisplayDatabase() {
               color: "white", // Change text color
               borderRadius: "8px", // Change border radius
               marginRight: "-1px", // Adjust spacing
+              marginTop: "15px",
+              marginBottom: "15px",
             }}
           >
-            Import CSV File
+            Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
           <DataGrid

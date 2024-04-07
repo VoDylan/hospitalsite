@@ -1,4 +1,4 @@
-import { MapNodeType } from "common/src/MapNodeType.ts";
+import { MapNodeType } from "./MapNodeType.ts";
 
 /**
  * Class representing a node on the map

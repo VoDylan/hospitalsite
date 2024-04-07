@@ -1,9 +1,9 @@
 import client from "./bin/database-connection.ts";
-import MapNode from "common/src/MapNode.ts";
-import MapEdge from "common/src/MapEdge.ts";
+import MapNode from "common/src/map/MapNode.ts";
+import MapEdge from "common/src/map/MapEdge.ts";
 import { Prisma } from "database";
-import { MapNodeType } from "common/src/MapNodeType.ts";
-import { MapEdgeType } from "common/src/MapEdgeType.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 
 const loggingPrefix: string = "PrismaScripts: ";
 

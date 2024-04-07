@@ -1,10 +1,10 @@
 import { expect, test } from "vitest";
 import DBManager from "../src/DBManager";
-import MapNode from "common/src/MapNode.ts";
+import MapNode from "common/src/map/MapNode.ts";
 import CSVTools from "../src/lib/CSVTools";
-import MapEdge from "common/src/MapEdge.ts";
-import { MapNodeType } from "common/src/MapNodeType.ts";
-import GraphManager from "common/src/GraphManager.ts";
+import MapEdge from "common/src/map/MapEdge.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import GraphManager from "common/src/map/GraphManager.ts";
 
 //let testTool: CSVTools = new CSVTools();
 const testDB = DBManager.getInstance();
