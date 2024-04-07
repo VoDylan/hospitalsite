@@ -162,17 +162,6 @@ router.post("/uploadnodes", async (req, res) => {
 
   await DBManager.getInstance().updateNodesAndEdgesFromDB();
 
-  console.log(
-    GraphManager.getInstance().nodes[
-      GraphManager.getInstance().nodes.length - 1
-    ],
-  );
-  console.log(
-    GraphManager.getInstance().edges[
-      GraphManager.getInstance().edges.length - 1
-    ],
-  );
-
   res.status(200);
 });
 
@@ -194,17 +183,6 @@ router.post("/uploadedges", async (req, res) => {
   }
 
   await DBManager.getInstance().updateNodesAndEdgesFromDB();
-
-  console.log(
-    GraphManager.getInstance().nodes[
-      GraphManager.getInstance().nodes.length - 1
-    ],
-  );
-  console.log(
-    GraphManager.getInstance().edges[
-      GraphManager.getInstance().edges.length - 1
-    ],
-  );
 
   res.status(200);
 });
