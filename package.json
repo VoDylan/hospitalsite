@@ -22,6 +22,7 @@
     "dev:stop": "docker-compose -f docker-compose.dev.yaml down --volumes --rmi local",
     "deploy": "docker-compose -f docker-compose.prod.yaml up --build -d",
     "deploy:stop": "docker-compose -f docker-compose.prod.yaml down",
+    "kill": "pkill -f node",
     "sync": "node scripts/sync.mjs",
     "setup": "yarn install && yarn build:dev",
     "test": "yarn run dotenv -e .env -- yarn run vitest --ui --open=false",
