@@ -1,7 +1,9 @@
 import { expect, test } from "vitest";
 import MapNode from "common/src/map/MapNode.ts";
 import Filter from "common/src/filter/filters/Filter.ts";
-import FilterManager from "common/src/filter/FilterManager.ts";
+import FilterManager, {
+  generateFilterValue,
+} from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
@@ -74,7 +76,9 @@ FilterManager.getInstance().registerFilter(
 test("Test floorFilter", () => {
   const filters1: Filter[] = [];
   filters1.push(
-    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, ["L1"])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+      generateFilterValue(false, "L1"),
+    ])!,
   );
 
   expect(
@@ -83,7 +87,9 @@ test("Test floorFilter", () => {
 
   const filters2: Filter[] = [];
   filters2.push(
-    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, ["L2"])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+      generateFilterValue(false, "L2"),
+    ])!,
   );
 
   expect(
@@ -94,7 +100,9 @@ test("Test floorFilter", () => {
 test("Test TypeFilter", () => {
   const filters1: Filter[] = [];
   filters1.push(
-    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, ["CONF"])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(false, "CONF"),
+    ])!,
   );
   expect(
     FilterManager.getInstance().applyFilters(filters1, nodes),
@@ -103,8 +111,8 @@ test("Test TypeFilter", () => {
   const filters2: Filter[] = [];
   filters2.push(
     FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
-      "HALL",
-      "ELEV",
+      generateFilterValue(false, "HALL"),
+      generateFilterValue(false, "ELEV"),
     ])!,
   );
   expect(
@@ -116,8 +124,8 @@ test("Test BuildingFilter", () => {
   const filters1: Filter[] = [];
   filters1.push(
     FilterManager.getInstance().getConfiguredFilter(FilterName.BUILDING, [
-      "building1",
-      "building3",
+      generateFilterValue(false, "building1"),
+      generateFilterValue(false, "building3"),
     ])!,
   );
   expect(
@@ -127,7 +135,7 @@ test("Test BuildingFilter", () => {
   const filters2: Filter[] = [];
   filters2.push(
     FilterManager.getInstance().getConfiguredFilter(FilterName.BUILDING, [
-      "building2",
+      generateFilterValue(false, "building2"),
     ])!,
   );
   expect(
@@ -145,9 +153,9 @@ test("Test BuildingFilter", () => {
   const filters4: Filter[] = [];
   filters4.push(
     FilterManager.getInstance().getConfiguredFilter(FilterName.BUILDING, [
-      "building1",
-      "building2",
-      "building3",
+      generateFilterValue(false, "building1"),
+      generateFilterValue(false, "building2"),
+      generateFilterValue(false, "building3"),
     ])!,
   );
   expect(
@@ -158,8 +166,12 @@ test("Test BuildingFilter", () => {
 test("Test multiple filters", () => {
   const filters1: Filter[] = [];
   filters1.push(
-    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, ["L1"])!,
-    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, ["ELEV"])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+      generateFilterValue(false, "L1"),
+    ])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(false, "ELEV"),
+    ])!,
   );
   expect(
     FilterManager.getInstance().applyFilters(filters1, nodes),
@@ -167,8 +179,12 @@ test("Test multiple filters", () => {
 
   const filters2: Filter[] = [];
   filters2.push(
-    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, ["ELEV"])!,
-    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, ["L1"])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(false, "ELEV"),
+    ])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+      generateFilterValue(false, "L1"),
+    ])!,
   );
   expect(
     FilterManager.getInstance().applyFilters(filters2, nodes),
@@ -176,13 +192,31 @@ test("Test multiple filters", () => {
 
   const filters3: Filter[] = [];
   filters3.push(
-    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, ["ELEV"])!,
-    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, ["L1"])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(false, "ELEV"),
+    ])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+      generateFilterValue(false, "L1"),
+    ])!,
     FilterManager.getInstance().getConfiguredFilter(FilterName.BUILDING, [
-      "building3",
+      generateFilterValue(false, "building3"),
     ])!,
   );
   expect(
     FilterManager.getInstance().applyFilters(filters3, nodes),
   ).toStrictEqual([]);
+});
+
+test("Type inversion", () => {
+  const filters1: Filter[] = [];
+
+  filters1.push(
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(true, "HALL"),
+    ])!,
+  );
+
+  expect(
+    FilterManager.getInstance().applyFilters(filters1, nodes),
+  ).toStrictEqual([node2, node3, node4]);
 });
