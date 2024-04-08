@@ -1,8 +1,9 @@
 export type GiftDeliveryFormSubmission = {
   name: string;
   recipientName: string;
-  roomNumber: string;
-  giftSize: string;
+  status: string;
+  location: string;
   message: string;
-  extraFee: string;
+  priority: string;
+  giftAddOn: string;
 };
