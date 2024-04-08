@@ -84,6 +84,7 @@ model ServiceRequest {
   nodeID      String
   serviceType String
   services    String
+  status      String @default("unassigned")
 }
 
 model FlowerServiceRequest {
