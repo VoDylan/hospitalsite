@@ -1,7 +1,5 @@
 import MapNode from "./MapNode";
 import { MapEdgeType } from "./MapEdgeType.ts";
-import { NodeDoesNotExistError } from "common/src/errors/NodeDoesNotExistError.ts";
-import GraphManager from "./GraphManager.ts";
 
 /**
  * Class representing an edge between nodes on the map
@@ -16,45 +14,19 @@ class MapEdge {
   /**
    * Constructs a new MapNode object
    * @param edgeInfo - Object containing the fields that should appear in a MapEdge
+   * @param startNode - Object representation of the starting node for use in graphs
+   * @param endNode - Object representation of the ending node for use in graphs
    * @throws {NodeDoesNotExistError}
    */
-  public constructor(edgeInfo: MapEdgeType) {
-    const nodes: { startNode: MapNode; endNode: MapNode } =
-      this.verifyAndSetNodes(edgeInfo);
-
-    this._startNode = nodes.startNode;
-    this._endNode = nodes.endNode;
+  public constructor(
+    edgeInfo: MapEdgeType,
+    startNode: MapNode,
+    endNode: MapNode,
+  ) {
+    this._startNode = startNode;
+    this._endNode = endNode;
 
     this._edgeInfo = edgeInfo;
-  }
-
-  private verifyAndSetNodes(edgeInfo: MapEdgeType): {
-    startNode: MapNode;
-    endNode: MapNode;
-  } {
-    const startNode: MapNode | null = GraphManager.getInstance().getNodeByID(
-      edgeInfo.startNodeID,
-    );
-    const endNode: MapNode | null = GraphManager.getInstance().getNodeByID(
-      edgeInfo.endNodeID,
-    );
-
-    if (startNode == null) {
-      throw new NodeDoesNotExistError(
-        `Start node of ID ${edgeInfo.startNodeID} does not exist!`,
-      );
-    }
-
-    if (endNode == null) {
-      throw new NodeDoesNotExistError(
-        `End node of ID ${edgeInfo.endNodeID} does not exist!`,
-      );
-    }
-
-    return {
-      startNode: startNode,
-      endNode: endNode,
-    };
   }
 
   /**
@@ -132,14 +104,15 @@ class MapEdge {
     return this._edgeInfo;
   }
 
-  public set edgeInfo(newEdgeInfo: MapEdgeType) {
-    const nodes: { startNode: MapNode; endNode: MapNode } =
-      this.verifyAndSetNodes(newEdgeInfo);
+  public set edgeInfo(newEdgeInfo: {
+    edgeType: MapEdgeType;
+    startNode: MapNode;
+    endNode: MapNode;
+  }) {
+    this._startNode = newEdgeInfo.startNode;
+    this._endNode = newEdgeInfo.endNode;
 
-    this._startNode = nodes.startNode;
-    this._endNode = nodes.endNode;
-
-    this._edgeInfo = newEdgeInfo;
+    this._edgeInfo = newEdgeInfo.edgeType;
   }
 }
 
