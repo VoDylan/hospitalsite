@@ -25,18 +25,18 @@ const router: Router = express.Router();
 //   });
 // });
 
-router.post("/", async (req, res) => {
+router.post("/", (req, res) => {
   const request: LocationInfo = req.body;
   const startID = request.startNode;
   const endID = request.endNode;
 
   const algo = new AStarAlgorithm();
   async function runAStar() {
-    await algo.loadData();
+    algo.loadData();
     return algo.AStar(startID, endID);
   }
 
-  const path = await runAStar();
+  const path = runAStar();
 
   res.status(200).json({
     message: path,

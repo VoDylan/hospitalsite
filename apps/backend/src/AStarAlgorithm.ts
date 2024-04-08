@@ -248,7 +248,7 @@ export class AStarAlgorithm {
       for (let i = 0; i < currentNode.neighbors.length; i++) {
         const currentNeighborID = currentNode.neighbors[i];
         const currentNeighborIndex = this.nodes.findIndex(
-          (node) => node.startNodeID === currentNodeID,
+          (node) => node.startNodeID === currentNeighborID,
         );
 
         const currentNeighborCost: number =
