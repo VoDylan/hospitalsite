@@ -2,7 +2,13 @@ import app from "../app.ts";
 import http from "http";
 import { AddressInfo } from "net";
 import { createHttpTerminator } from "http-terminator";
-import { initializeDatabase } from "./database-initialization.ts";
+import { importDefaultNodeAndEdgeData } from "./database-initialization.ts";
+import { registerFilters } from "./filter-registration.ts";
+import Filter from "common/src/filter/filters/Filter.ts";
+import FilterManager from "common/src/filter/FilterManager.ts";
+import { FilterName } from "common/src/filter/FilterName.ts";
+import MapNode from "common/src/map/MapNode.ts";
+import GraphManager from "common/src/map/GraphManager.ts";
 
 // Attempt a database connection
 console.info("Connecting to database...");
@@ -119,7 +125,37 @@ function onListening(): void {
   console.info("Server listening on " + bind); // Debug output that we're listening
   console.log("Startup complete");
 
+  console.log("Registering filters");
+  registerFilters();
+  console.log("Finished registering filters");
+
   console.log("Initializing database");
-  initializeDatabase();
-  console.log("Finished initializing database");
+  importDefaultNodeAndEdgeData().then(() => {
+    console.log("Finished importing data into database");
+
+    const filters: Filter[] = [];
+
+    const typeFilter = FilterManager.getInstance().getConfiguredFilter(
+      FilterName.TYPE,
+      "LABS",
+    );
+    const buildingFilter = FilterManager.getInstance().getConfiguredFilter(
+      FilterName.BUILDING,
+      "45 Francis",
+    );
+
+    filters.push(typeFilter!);
+    filters.push(buildingFilter!);
+
+    const newNodes: MapNode[] = FilterManager.getInstance().applyFilters(
+      filters,
+      GraphManager.getInstance().nodes,
+    );
+
+    newNodes.forEach((node: MapNode) => {
+      console.log(node.toCSV());
+    });
+
+    console.log("Finished initializing database");
+  });
 }
