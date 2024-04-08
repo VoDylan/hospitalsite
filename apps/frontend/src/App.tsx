@@ -8,6 +8,7 @@ import DisplayDatabase from "./routes/DisplayDatabase.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
 import SanitationService from "./routes/SanitationService.tsx";
+import SecurityService from "./routes/SecurityService.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -31,6 +32,10 @@ function App() {
         {
           path: "/Services/SanitationService",
           element: <SanitationService />,
+        },
+        {
+          path: "/Services/SecurityService",
+          element: <SecurityService />,
         },
         {
           path: "/DisplayDatabase",
