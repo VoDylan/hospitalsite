@@ -11,7 +11,10 @@ export default class TypeFilter extends Filter {
     const newNodes: MapNode[] = [];
 
     nodes.forEach((node) => {
-      if (node.nodeType == this.filterValue) {
+      if (
+        this.filterValues &&
+        this.filterValues.includes(node.nodeType as never)
+      ) {
         newNodes.push(node);
       }
     });

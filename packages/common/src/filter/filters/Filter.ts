@@ -4,20 +4,20 @@ import { FilterName } from "../FilterName.ts";
 export default abstract class Filter {
   private readonly _filterName: FilterName;
 
-  private _filterValue: number | string | null;
+  private _filterValues: number[] | string[] | null;
 
   protected constructor(filterName: FilterName) {
     this._filterName = filterName;
-    this._filterValue = null;
+    this._filterValues = null;
   }
 
   public abstract applyFilter(nodes: MapNode[]): MapNode[];
 
-  public configure(filterValue: number | string): Filter {
-    if (!filterValue) {
+  public configure(filterValues: number[] | string[]): Filter {
+    if (!filterValues) {
       console.error(`Filter value cannot be reconfigured to null`);
     } else {
-      this._filterValue = filterValue!;
+      this._filterValues = filterValues!;
     }
 
     return this;
@@ -27,7 +27,7 @@ export default abstract class Filter {
     return this._filterName;
   }
 
-  public get filterValue(): number | string | null {
-    return this._filterValue;
+  public get filterValues(): number[] | string[] | null {
+    return this._filterValues;
   }
 }

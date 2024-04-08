@@ -11,7 +11,10 @@ export default class FloorFilter extends Filter {
     const newNodes: MapNode[] = [];
 
     nodes.forEach((node) => {
-      if (node.floor == this.filterValue) {
+      if (
+        this.filterValues &&
+        this.filterValues.includes(node.floor as never)
+      ) {
         newNodes.push(node);
       }
     });

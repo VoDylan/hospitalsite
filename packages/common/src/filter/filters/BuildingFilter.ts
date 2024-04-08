@@ -11,7 +11,10 @@ export default class BuildingFilter extends Filter {
     const newNodes: MapNode[] = [];
 
     nodes.forEach((node) => {
-      if (node.building == this.filterValue) {
+      if (
+        this.filterValues &&
+        this.filterValues.includes(node.building as never)
+      ) {
         newNodes.push(node);
       }
     });

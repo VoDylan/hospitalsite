@@ -25,8 +25,8 @@ export default class FilterManager {
 
   public getConfiguredFilter(
     filterName: FilterName,
-    filterValue: number | string,
-  ) {
+    filterValues: number[] | string[],
+  ): Filter | undefined {
     const filterGenerator: (() => Filter) | undefined =
       this.registeredFilters.get(filterName);
 
@@ -37,7 +37,7 @@ export default class FilterManager {
       return;
     }
 
-    return this.registeredFilters.get(filterName)!().configure(filterValue);
+    return this.registeredFilters.get(filterName)!().configure(filterValues);
   }
 
   public applyFilters(activeFilters: Filter[], data: MapNode[]): MapNode[] {
