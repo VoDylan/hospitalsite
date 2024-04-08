@@ -17,6 +17,7 @@ import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import NestedList from "../components/PathfindingSelect.tsx";
+import Autocomplete from "@mui/material/Autocomplete";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -31,6 +32,20 @@ function Map() {
   const [checkedBFS, setCheckedBFS] = React.useState(false);
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
+
+  const exNodes = [
+    { label: "Anesthesia Conf Floor L1", node: "CCONF001L1" },
+    { label: "Medical Records Conference Room Floor L1", node: "CCONF002L1" },
+    { label: "Abrams Conference Room", node: "CCONF003L1" },
+    { label: "Day Surgery Family Waiting Floor L1", node: "CDEPT002L1" },
+    { label: "Day Surgery Family Waiting Exit Floor L1", node: "CDEPT003L1" },
+    { label: "Medical Records Film Library Floor L1", node: "CDEPT004L1" },
+    { label: "Outpatient Fluoroscopy Floor L1", node: "CLABS001L1" },
+  ];
+
+
+  const exLabels = exNodes.map(node => node.label);
+
 
   const handleClick = () => {
     setOpen(!open);
@@ -73,14 +88,28 @@ function Map() {
     </Paper>
   );
 
-  const handleStartNodeChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setStartNode(event.target.value);
+  const handleStartNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = exNodes.find(node => node.label === value);
+      if (selectedNode) {
+        setStartNode(selectedNode.node);
+      }
+    } else {
+      setStartNode(""); // Handle null value if necessary
+    }
   };
 
-  const handleEndNodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndNode(event.target.value);
+  const handleEndNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = exNodes.find(node => node.label === value);
+      if (selectedNode) {
+        setEndNode(selectedNode.node);
+      }
+    } else {
+      setEndNode(""); // Handle null value if necessary
+    }
   };
 
   const updateNodesData = (newData: Coordinates[]) => {
@@ -88,6 +117,9 @@ function Map() {
   };
 
   async function handleSubmit() {
+    console.log(startNode);
+    console.log(endNode);
+
     if (startNode.trim() === "" || endNode.trim() === "") {
       setErrorMessage("Please enter both start and end nodes");
       return;
@@ -236,14 +268,19 @@ function Map() {
               sx={{ color: "blue" }}
             ></RadioButtonCheckedIcon>
 
-            <TextField
-              sx={{ width: "80%" }}
+
+            <Autocomplete
+              onChange={(event, value) => handleStartNodeChange(value)} // Pass selected value to handleStartNodeChange
+              disablePortal
               id="startNode"
-              label="Your Location"
-              type="search"
-              value={startNode}
-              onChange={handleStartNodeChange}
+              options={exLabels} // Use exLabels which are the labels from exNodes array
+              sx={{ width: "84%" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Starting Node" value={startNode} />
+              )}
             />
+
+
           </Stack>
 
           <Stack>
@@ -260,14 +297,15 @@ function Map() {
               sx={{ color: "red" }}
             ></LocationOnIcon>
 
-            <TextField
-              sx={{ width: "80%" }}
+            <Autocomplete
+              onChange={(event, value) => handleEndNodeChange(value)}  // Pass selected value to handleEndNodeChange
+              disablePortal
               id="endNode"
-              label="Destination"
-              type="search"
-              value={endNode}
-              onChange={handleEndNodeChange}
+              options={exLabels} // Use exLabels which are the labels from exNodes array
+              sx={{ width: "84%" }}
+              renderInput={(params) => <TextField {...params} label="Destination" value={endNode} />}
             />
+
           </Stack>
 
           {/*Pathfinding selection dropdown*/}
