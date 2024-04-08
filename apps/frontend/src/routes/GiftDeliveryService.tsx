@@ -6,7 +6,7 @@ import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
 import sanitationBackground from "../images/sanitationBackground.webp";
-//import { SanitationSubmitButton } from "../components/SanitationSubmitButton.tsx";
+import { GiftDeliverySubmitButton } from "../components/GiftDeliverySubmitButton.tsx";
 import axios from "axios";
 
 function GiftDeliveryService() {
@@ -159,7 +159,12 @@ function GiftDeliveryService() {
           <Typography color={"black"}>Priority :</Typography>
           <RadioButtonsGroup
             label={"Priority"}
-            options={["Standard Delivery", "Express Delivery", "Same Day Delivery", "Emergency Delivery"]}
+            options={[
+              "Standard Delivery",
+              "Express Delivery",
+              "Same Day Delivery",
+              "Emergency Delivery",
+            ]}
             returnData={form.priority}
             handleChange={handlePriorityInput}
           />
@@ -200,7 +205,11 @@ function GiftDeliveryService() {
             justifyContent: "center",
           }}
         >
-          <SanitationSubmitButton input={form} text={"SUBMIT"} clear={clear} />
+          <GiftDeliverySubmitButton
+            input={form}
+            text={"SUBMIT"}
+            clear={clear}
+          />
         </Grid>
       </Grid>
       <Typography>Yitao Hong, Araya Remillard</Typography>
