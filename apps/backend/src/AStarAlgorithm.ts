@@ -118,6 +118,38 @@ export class AStarAlgorithm {
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
 
+  private distance(startNodeID: string, endNodeID: string) {
+    let startX: number = -1;
+    let startY: number = -1;
+    let neighborX: number = -1;
+    let neighborY: number = -1;
+
+    for (let i = 0; i < this.mapNodes.length; i++) {
+      if (this.mapNodes[i].nodeID === startNodeID) {
+        startX = this.mapNodes[i].xcoord;
+        startY = this.mapNodes[i].ycoord;
+        // console.log("found");
+        // console.log(startNodeID);
+      } else if (this.mapNodes[i].nodeID === endNodeID) {
+        neighborX = this.mapNodes[i].xcoord;
+        neighborY = this.mapNodes[i].ycoord;
+        // console.log("found");
+        // console.log(endNodeID);
+      }
+
+      if (startX !== -1 && neighborX !== -1) {
+        break;
+      }
+    }
+
+    // if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
+    //   console.error("Node does not exist");
+    //   return -1;
+    // }
+
+    return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
+  }
+
   private shortestDistance(open: Map<string, number>) {
     let minValue: number = Infinity;
     let minKey: string = "";
@@ -132,16 +164,16 @@ export class AStarAlgorithm {
     return minKey;
   }
 
-  private distance(currentNode: NodeAStar, neighborNodeID: string) {
-    for (let i = 0; i < currentNode.neighbors.length; i++) {
-      if (currentNode.neighbors[i] === neighborNodeID) {
-        return currentNode.distances[i];
-      }
-    }
-
-    console.error("could not find the distance");
-    return -1;
-  }
+  // private distance(currentNode: NodeAStar, neighborNodeID: string) {
+  //   for (let i = 0; i < currentNode.neighbors.length; i++) {
+  //     if (currentNode.neighbors[i] === neighborNodeID) {
+  //       return currentNode.distances[i];
+  //     }
+  //   }
+  //
+  //   console.error("could not find the distance");
+  //   return -1;
+  // }
 
   public AStar(startNodeID: string, endNodeID: string) {
     // const startNodeID = this.getID(startID);
@@ -172,12 +204,19 @@ export class AStarAlgorithm {
       const currentNodeID = this.shortestDistance(open);
       open.delete(currentNodeID);
 
-      if (currentNodeID === endNodeID) return console.log(parents);
+      if (currentNodeID === endNodeID) {
+        console.log("done searching");
+        console.log(parents);
+        return null;
+      }
 
-      const currentNode = this.nodes.find(
+      const currentNodeIndex = this.nodes.findIndex(
         (node) => node.startNodeID === currentNodeID,
       );
 
+      const currentNode = this.nodes[currentNodeIndex];
+
+      console.log(currentNode);
       if (currentNode === undefined) {
         console.error("Invalid node");
         return null;
@@ -185,41 +224,68 @@ export class AStarAlgorithm {
 
       for (let i = 0; i < currentNode.neighbors.length; i++) {
         const currentNeighborID = currentNode.neighbors[i];
+        const currentNeighborIndex = this.nodes.findIndex(
+          (node) => node.startNodeID === currentNodeID,
+        );
 
-        if (closed.includes(currentNeighborID)) {
-          continue;
-        }
+        const currentNeighborCost: number =
+          gScores[currentNodeIndex] +
+          this.distance(currentNodeID, currentNeighborID);
 
-        const tentativeG =
-          gScores[
-            this.nodes.findIndex((node) => node.startNodeID === currentNodeID)
-          ] + this.distance(currentNode, currentNeighborID);
-        // if (tentativeG === undefined) {
-        //
-        // }
-
-        if (
-          tentativeG <
-            gScores[
-              this.nodes.findIndex(
-                (node) => node.startNodeID === currentNeighborID,
-              )
-            ] ||
-          !open.has(currentNeighborID)
-        ) {
-          const neighborIndex = this.nodes.findIndex(
-            (node) => node.startNodeID === currentNeighborID,
-          );
-          parents[neighborIndex] = currentNodeID;
-          gScores[neighborIndex] = tentativeG;
-          fScores[neighborIndex] =
-            gScores[neighborIndex] +
-            this.heuristic(currentNeighborID, endNodeID);
-          if (open.has(currentNeighborID)) {
-            open.set(currentNeighborID, fScores[neighborIndex]);
+        if (open.has(currentNeighborID)) {
+          // console.log(currentNeighborID);
+          if (gScores[currentNeighborIndex] <= currentNeighborCost) {
+            continue;
           }
+        } else if (closed.includes(currentNeighborID)) {
+          if (gScores[currentNeighborIndex] <= currentNeighborCost) continue;
+          closed.splice(currentNeighborIndex, 1);
+          open.set(currentNeighborID, fScores[currentNeighborIndex]);
+        } else {
+          open.set(
+            currentNeighborID,
+            currentNeighborCost + this.heuristic(currentNeighborID, endNodeID),
+          );
         }
+        gScores[currentNeighborIndex] = currentNeighborCost;
+        parents[currentNeighborIndex] = currentNodeID;
+        // else console.log("does not have");
+
+        //   if (closed.includes(currentNeighborID)) {
+        //     continue;
+        //   }
+        //
+        //   const tentativeG =
+        //     gScores[
+        //       this.nodes.findIndex((node) => node.startNodeID === currentNodeID)
+        //     ] + this.distance(currentNode, currentNeighborID);
+        //   // if (tentativeG === undefined) {
+        //   //
+        //   // }
+        //
+        //   if (
+        //     tentativeG <
+        //       gScores[
+        //         this.nodes.findIndex(
+        //           (node) => node.startNodeID === currentNeighborID,
+        //         )
+        //       ] ||
+        //     !open.has(currentNeighborID)
+        //   ) {
+        //     const neighborIndex = this.nodes.findIndex(
+        //       (node) => node.startNodeID === currentNeighborID,
+        //     );
+        //     parents[neighborIndex] = currentNodeID;
+        //     gScores[neighborIndex] = tentativeG;
+        //     fScores[neighborIndex] =
+        //       gScores[neighborIndex] +
+        //       this.heuristic(currentNeighborID, endNodeID);
+        //     if (open.has(currentNeighborID)) {
+        //       open.set(currentNeighborID, fScores[neighborIndex]);
+        //     }
+        //   }
       }
+      closed.push(currentNodeID);
     }
 
     return [
