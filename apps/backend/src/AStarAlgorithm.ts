@@ -5,7 +5,7 @@ import { NodeAStar } from "common/src/NodeAStar.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import GraphManager from "common/src/map/GraphManager.ts";
-import { Coordinates } from "common/src/Coordinates.ts";
+// import { Coordinates } from "common/src/Coordinates.ts";
 // import { AStarOpenNode } from "common/src/AStarOpenNode.ts";
 
 export class AStarAlgorithm {
@@ -25,36 +25,7 @@ export class AStarAlgorithm {
       const currentNode: MapNode = this.mapEdges[i].startNode;
       const neighbor: MapNode = this.mapEdges[i].endNode;
 
-      let startX: number = -1;
-      let startY: number = -1;
-      let neighborX: number = -1;
-      let neighborY: number = -1;
-
-      // go through the whole list to find the coordinates of two nodes
-      for (let j = 0; j < this.mapNodes.length; j++) {
-        if (this.mapNodes[j].nodeID === currentNode.nodeID) {
-          startX = this.mapNodes[j].xcoord;
-          startY = this.mapNodes[j].ycoord;
-        } else if (this.mapNodes[j].nodeID === neighbor.nodeID) {
-          neighborX = this.mapNodes[j].xcoord;
-          neighborY = this.mapNodes[j].ycoord;
-        }
-
-        if (startX !== -1 && neighborX !== -1) {
-          break;
-        }
-      }
-
-      if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
-        console.error("Node does not exist");
-        return;
-      }
-
-      const updateNode = (
-        nodeID: string,
-        neighborID: string,
-        coordinates: Coordinates,
-      ) => {
+      const updateNode = (nodeID: string, neighborID: string) => {
         const index = this.nodes.findIndex(
           (node) => node.startNodeID === nodeID,
         );
@@ -62,18 +33,14 @@ export class AStarAlgorithm {
           this.nodes.push({
             startNodeID: nodeID,
             neighbors: [neighborID],
-            coordinates: coordinates,
           });
         } else {
           this.nodes[index].neighbors.push(neighborID);
         }
       };
 
-      updateNode(currentNode.nodeID, neighbor.nodeID, { x: startX, y: startY });
-      updateNode(neighbor.nodeID, currentNode.nodeID, {
-        x: neighborX,
-        y: neighborY,
-      });
+      updateNode(currentNode.nodeID, neighbor.nodeID);
+      updateNode(neighbor.nodeID, currentNode.nodeID);
     }
   }
 
@@ -173,6 +140,13 @@ export class AStarAlgorithm {
   //   console.error("could not find the distance");
   //   return -1;
   // }
+
+  private getCoordinates(currentNode: string) {
+    const Node = this.mapNodes.find((node) => node.nodeID === currentNode);
+    if (!Node) return { x: 0, y: 0 };
+
+    return { x: Node.xcoord, y: Node.ycoord };
+  }
 
   public AStar(startNodeID: string, endNodeID: string) {
     // const startNodeID = this.getID(startID);
