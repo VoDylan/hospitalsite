@@ -3,19 +3,20 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { SanitationRequestFormSubmission } from "../common/SanitationRequestFormSubmission.ts";
+import { SecurityRequestFormSubmission } from "../common/SecurityRequestFormSubmission.ts";
+import TopBanner from "../components/TopBanner.tsx";
 import sanitationBackground from "../images/sanitationBackground.webp";
-import { SanitationSubmitButton } from "../components/SanitationSubmitButton.tsx";
+import { SecuritySubmitButton } from "../components/SecuritySubmitButton.tsx";
 import axios from "axios";
-import TopBanner2 from "../components/TopBanner2.tsx";
 
-function SanitationService() {
-  const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
+function SecurityService() {
+  const [form, setFormResponses] = useState<SecurityRequestFormSubmission>({
     name: "",
     location: "",
     priority: "",
-    service: "",
-    frequency: "",
+    securityPersonnel: "",
+    securityCategory: "",
+    securityDetail: "",
     status: "",
   });
 
@@ -32,8 +33,8 @@ function SanitationService() {
     setFormResponses({ ...form, priority: e.target.value });
   }
 
-  function handleServiceInput(e: SelectChangeEvent) {
-    setFormResponses({ ...form, service: e.target.value });
+  function handleSecurityPersonnelInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, securityPersonnel: e.target.value });
     return e.target.value;
   }
 
@@ -41,8 +42,13 @@ function SanitationService() {
     setFormResponses({ ...form, status: e.target.value });
   }
 
-  function handleFrequencyInput(e: SelectChangeEvent) {
-    setFormResponses({ ...form, frequency: e.target.value });
+  function handleSecurityCategoryInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, securityCategory: e.target.value });
+    return e.target.value;
+  }
+
+  function handleSecurityDetailInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, securityDetail: e.target.value });
     return e.target.value;
   }
 
@@ -51,8 +57,9 @@ function SanitationService() {
       name: "",
       location: "",
       priority: "",
-      service: "",
-      frequency: "",
+      securityDetail: "",
+      securityCategory: "",
+      securityPersonnel: "",
       status: "",
     });
   }
@@ -94,7 +101,7 @@ function SanitationService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner2 />
+      <TopBanner />
       <Grid
         container
         direction={"row"}
@@ -118,7 +125,7 @@ function SanitationService() {
           }}
         >
           <Typography color={"white"} align={"center"} fontSize={40}>
-            Sanitation Service Form
+            Security Service Form
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -139,7 +146,7 @@ function SanitationService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Priority of Sanitation:</Typography>
+          <Typography color={"black"}>Priority of Security:</Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
@@ -148,28 +155,38 @@ function SanitationService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Service Needed:</Typography>
+          <Typography color={"black"}>Security Personnel:</Typography>
           <DropDown
-            items={[
-              "Routine Cleaning",
-              "Deep Cleaning",
-              "Waste Management",
-              "Disinfection",
-              "Dry Sanitation",
-              "Biohazard Cleanup",
-            ]}
-            handleChange={handleServiceInput}
-            label={"Service"}
-            returnData={form.service}
+            items={["Local Security", "Local Police", "State Police", "Other"]}
+            handleChange={handleSecurityPersonnelInput}
+            label={"Personnel"}
+            returnData={form.securityPersonnel}
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Frequency Needed:</Typography>
+          <Typography color={"black"}>Why is Security Needed:</Typography>
           <DropDown
-            items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
-            handleChange={handleFrequencyInput}
-            label={"Frequency"}
-            returnData={form.frequency}
+            items={[
+              "I feel generally unsafe",
+              "I would like to report someone",
+              "I would like to report something",
+              "I would like someone removed from my room",
+              "There is a major emergency",
+              "Other",
+            ]}
+            handleChange={handleSecurityCategoryInput}
+            label={"Category"}
+            returnData={form.securityCategory}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography color={"black"}>
+            Additional Details (optional):
+          </Typography>
+          <LeftAlignedTextbox
+            label={"Details"}
+            value={form.securityDetail}
+            onChange={handleSecurityDetailInput}
           />
         </Grid>
         <Grid item xs={12}>
@@ -190,12 +207,11 @@ function SanitationService() {
             justifyContent: "center",
           }}
         >
-          <SanitationSubmitButton input={form} text={"SUBMIT"} clear={clear} />
+          <SecuritySubmitButton input={form} text={"SUBMIT"} clear={clear} />
         </Grid>
       </Grid>
-      <Typography>Jacob Murphy, Spencer Trautz</Typography>
     </Stack>
   );
 }
 
-export default SanitationService;
+export default SecurityService;
