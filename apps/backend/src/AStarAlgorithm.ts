@@ -204,15 +204,17 @@ export class AStarAlgorithm {
       const currentNodeID = this.shortestDistance(open);
       open.delete(currentNodeID);
 
-      if (currentNodeID === endNodeID) {
-        console.log("done searching");
-        console.log(parents);
-        return null;
-      }
-
       const currentNodeIndex = this.nodes.findIndex(
         (node) => node.startNodeID === currentNodeID,
       );
+
+      if (currentNodeID === endNodeID) {
+        console.log("done searching");
+        console.log(currentNodeID);
+        parents[currentNodeIndex] = currentNodeID;
+        console.log(parents);
+        return null;
+      }
 
       const currentNode = this.nodes[currentNodeIndex];
 
@@ -249,41 +251,6 @@ export class AStarAlgorithm {
         }
         gScores[currentNeighborIndex] = currentNeighborCost;
         parents[currentNeighborIndex] = currentNodeID;
-        // else console.log("does not have");
-
-        //   if (closed.includes(currentNeighborID)) {
-        //     continue;
-        //   }
-        //
-        //   const tentativeG =
-        //     gScores[
-        //       this.nodes.findIndex((node) => node.startNodeID === currentNodeID)
-        //     ] + this.distance(currentNode, currentNeighborID);
-        //   // if (tentativeG === undefined) {
-        //   //
-        //   // }
-        //
-        //   if (
-        //     tentativeG <
-        //       gScores[
-        //         this.nodes.findIndex(
-        //           (node) => node.startNodeID === currentNeighborID,
-        //         )
-        //       ] ||
-        //     !open.has(currentNeighborID)
-        //   ) {
-        //     const neighborIndex = this.nodes.findIndex(
-        //       (node) => node.startNodeID === currentNeighborID,
-        //     );
-        //     parents[neighborIndex] = currentNodeID;
-        //     gScores[neighborIndex] = tentativeG;
-        //     fScores[neighborIndex] =
-        //       gScores[neighborIndex] +
-        //       this.heuristic(currentNeighborID, endNodeID);
-        //     if (open.has(currentNeighborID)) {
-        //       open.set(currentNeighborID, fScores[neighborIndex]);
-        //     }
-        //   }
       }
       closed.push(currentNodeID);
     }
