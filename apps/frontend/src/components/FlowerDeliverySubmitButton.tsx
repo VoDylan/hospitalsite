@@ -10,7 +10,7 @@ interface ButtonProps {
   clear: () => void;
 }
 
-export function SubmitButton(props: ButtonProps) {
+export function FlowerDeliverySubmitButton(props: ButtonProps) {
   // Logic for snackbar alert
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
