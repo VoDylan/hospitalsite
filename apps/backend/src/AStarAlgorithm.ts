@@ -68,10 +68,10 @@ export class AStarAlgorithm {
       }
     }
 
-    // if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
-    //   console.error("Node does not exist");
-    //   return -1;
-    // }
+    if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
+      console.error("Node does not exist");
+      return -1;
+    }
 
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
