@@ -5,6 +5,7 @@ import { NodeAStar } from "common/src/NodeAStar.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import GraphManager from "common/src/map/GraphManager.ts";
+import { Coordinates } from "common/src/Coordinates.ts";
 // import { AStarOpenNode } from "common/src/AStarOpenNode.ts";
 
 export class AStarAlgorithm {
@@ -49,14 +50,10 @@ export class AStarAlgorithm {
         return;
       }
 
-      const distance: number = Math.sqrt(
-        (neighborX - startX) ** 2 + (neighborY - startY) ** 2,
-      );
-
       const updateNode = (
         nodeID: string,
         neighborID: string,
-        distance: number,
+        coordinates: Coordinates,
       ) => {
         const index = this.nodes.findIndex(
           (node) => node.startNodeID === nodeID,
@@ -65,16 +62,18 @@ export class AStarAlgorithm {
           this.nodes.push({
             startNodeID: nodeID,
             neighbors: [neighborID],
-            distances: [distance],
+            coordinates: coordinates,
           });
         } else {
           this.nodes[index].neighbors.push(neighborID);
-          this.nodes[index].distances.push(distance);
         }
       };
 
-      updateNode(currentNode.nodeID, neighbor.nodeID, distance);
-      updateNode(neighbor.nodeID, currentNode.nodeID, distance);
+      updateNode(currentNode.nodeID, neighbor.nodeID, { x: startX, y: startY });
+      updateNode(neighbor.nodeID, currentNode.nodeID, {
+        x: neighborX,
+        y: neighborY,
+      });
     }
   }
 
