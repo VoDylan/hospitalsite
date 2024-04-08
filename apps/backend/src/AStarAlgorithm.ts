@@ -211,6 +211,7 @@ export class AStarAlgorithm {
         path.unshift(startNodeID);
 
         console.log("Path found:", path);
+        console.log("Coordinates found:", coordinatesPath);
         return coordinatesPath;
       }
 
@@ -254,5 +255,6 @@ export class AStarAlgorithm {
     }
 
     return null;
+    // return this.mapNodes;
   }
 }

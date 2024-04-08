@@ -52,7 +52,7 @@ function Map() {
     const data = await response.data;
     console.log(data);
     const path = data.message;
-    // console.log(path);
+    console.log(path);
     updateNodesData(path);
     // console.log(nodesArray);
 
@@ -62,6 +62,9 @@ function Map() {
 
   useEffect(() => {
     if (canvasRef.current) {
+      console.log("nodesData:", nodesData);
+      console.log("nodes:", nodes);
+
       // Checking if nodes have been set
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -77,13 +80,6 @@ function Map() {
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
-          // this is so its clicked the same time
-
-          // const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
-          // const nodesData = bfsAlgorithm.setup();
-
-          // nodesData: Coordinates[] = [];
-
           if (!nodesData) {
             setErrorMesage("There is no path between nodes");
             return;
