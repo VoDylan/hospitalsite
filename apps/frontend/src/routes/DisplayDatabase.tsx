@@ -20,6 +20,7 @@ type ServiceParams = {
   userID: number;
   nodeID: string;
   serviceType: string;
+  status: string;
 };
 
 type EdgeParams = { id: number } & MapEdgeType;
@@ -66,6 +67,7 @@ function DisplayDatabase() {
     { field: "userID", headerName: "User ID", width: 200 },
     { field: "nodeID", headerName: "Node ID", width: 200 },
     { field: "serviceType", headerName: "Service Type", width: 200 },
+    { field: "status", headerName: "Status", width: 200 },
   ]);
 
   // const [isFinished] = useState(false);
@@ -128,6 +130,7 @@ function DisplayDatabase() {
         userID: data[i].userID,
         nodeID: data[i].nodeID,
         serviceType: data[i].serviceType,
+        status: data[i].status,
       };
       rowData.push(tableFormattedServReq);
     }
