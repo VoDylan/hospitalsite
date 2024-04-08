@@ -38,7 +38,7 @@ function Map() {
 
   //Pathfinder
   const [open, setOpen] = React.useState(false);
-  const [checkedBFS, setCheckedBFS] = React.useState(false);
+  const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
 
