@@ -18,6 +18,7 @@ import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import NestedList from "../components/PathfindingSelect.tsx";
 import Autocomplete from "@mui/material/Autocomplete";
+import GraphManager from "../../../../packages/common/src/map/GraphManager.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -33,19 +34,27 @@ function Map() {
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
 
-  const exNodes = [
-    { label: "Anesthesia Conf Floor L1", node: "CCONF001L1" },
-    { label: "Medical Records Conference Room Floor L1", node: "CCONF002L1" },
-    { label: "Abrams Conference Room", node: "CCONF003L1" },
-    { label: "Day Surgery Family Waiting Floor L1", node: "CDEPT002L1" },
-    { label: "Day Surgery Family Waiting Exit Floor L1", node: "CDEPT003L1" },
-    { label: "Medical Records Film Library Floor L1", node: "CDEPT004L1" },
-    { label: "Outpatient Fluoroscopy Floor L1", node: "CLABS001L1" },
-  ];
+  // const exNodes = [
+  //   { label: "Anesthesia Conf Floor L1", node: "CCONF001L1" },
+  //   { label: "Medical Records Conference Room Floor L1", node: "CCONF002L1" },
+  //   { label: "Abrams Conference Room", node: "CCONF003L1" },
+  //   { label: "Day Surgery Family Waiting Floor L1", node: "CDEPT002L1" },
+  //   { label: "Day Surgery Family Waiting Exit Floor L1", node: "CDEPT003L1" },
+  //   { label: "Medical Records Film Library Floor L1", node: "CDEPT004L1" },
+  //   { label: "Outpatient Fluoroscopy Floor L1", node: "CLABS001L1" },
+  // ];
 
+  const graphManager = GraphManager.getInstance().nodes;
+  console.log("graphNodes:", graphManager);
+  const testNodes = graphManager.map((node) => {
+    console.log("Node ID:", node.nodeID, "Long Name:", node.longName);
+    return {
+      label: node.longName, // Assuming `longName` is the label you want to use
+      node: node.nodeID,
+    };
+  });
 
-  const exLabels = exNodes.map(node => node.label);
-
+  // const exLabels = exNodes.map(node => node.label);
 
   const handleClick = () => {
     setOpen(!open);
@@ -91,7 +100,7 @@ function Map() {
   const handleStartNodeChange = (value: string | null) => {
     if (value) {
       // Find the corresponding node for the selected label
-      const selectedNode = exNodes.find(node => node.label === value);
+      const selectedNode = testNodes.find((node) => node.label === value);
       if (selectedNode) {
         setStartNode(selectedNode.node);
       }
@@ -103,7 +112,7 @@ function Map() {
   const handleEndNodeChange = (value: string | null) => {
     if (value) {
       // Find the corresponding node for the selected label
-      const selectedNode = exNodes.find(node => node.label === value);
+      const selectedNode = testNodes.find((node) => node.label === value);
       if (selectedNode) {
         setEndNode(selectedNode.node);
       }
@@ -268,19 +277,20 @@ function Map() {
               sx={{ color: "blue" }}
             ></RadioButtonCheckedIcon>
 
-
             <Autocomplete
-              onChange={(event, value) => handleStartNodeChange(value)} // Pass selected value to handleStartNodeChange
+              onChange={(event, value) => handleStartNodeChange(value)}
               disablePortal
               id="startNode"
-              options={exLabels} // Use exLabels which are the labels from exNodes array
+              options={testNodes.map((node) => node.label)}
               sx={{ width: "84%" }}
               renderInput={(params) => (
-                <TextField {...params} label="Starting Node" value={startNode} />
+                <TextField
+                  {...params}
+                  label="Starting Node"
+                  value={startNode}
+                />
               )}
             />
-
-
           </Stack>
 
           <Stack>
@@ -298,14 +308,15 @@ function Map() {
             ></LocationOnIcon>
 
             <Autocomplete
-              onChange={(event, value) => handleEndNodeChange(value)}  // Pass selected value to handleEndNodeChange
+              onChange={(event, value) => handleEndNodeChange(value)}
               disablePortal
-              id="endNode"
-              options={exLabels} // Use exLabels which are the labels from exNodes array
+              id="startNode"
+              options={testNodes.map((node) => node.label)}
               sx={{ width: "84%" }}
-              renderInput={(params) => <TextField {...params} label="Destination" value={endNode} />}
+              renderInput={(params) => (
+                <TextField {...params} label="Ending Node" value={endNode} />
+              )}
             />
-
           </Stack>
 
           {/*Pathfinding selection dropdown*/}
