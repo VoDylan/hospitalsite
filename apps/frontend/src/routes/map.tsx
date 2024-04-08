@@ -11,12 +11,15 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import React, { useEffect, useRef, useState } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
-import { TextField, Button, Stack, Paper, Slide } from "@mui/material";
+import { Button, Paper, Slide, Stack, TextField } from "@mui/material";
 import "./map.css";
 import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import NestedList from "../components/PathfindingSelect.tsx";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import GraphManager from "../common/GraphManager.ts";
+import MapNode from "common/src/map/MapNode.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -25,12 +28,30 @@ function Map() {
   const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [dbNodeData, setDBNodesData] = useState<MapNodeType[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
 
   //Pathfinder
   const [open, setOpen] = React.useState(false);
   const [checkedBFS, setCheckedBFS] = React.useState(false);
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
+
+  const loadNodeData = async (): Promise<MapNodeType[]> => {
+    const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
+      .data as MapNodeType[];
+
+    data.forEach((node) => {
+      if (!GraphManager.getInstance().getNodeByID(node.nodeID))
+        GraphManager.getInstance().nodes.push(new MapNode(node));
+    });
+
+    console.log(GraphManager.getInstance().nodes);
+
+    return data;
+  };
 
   const handleClick = () => {
     setOpen(!open);
@@ -122,6 +143,11 @@ function Map() {
   }
 
   useEffect(() => {
+    loadNodeData().then((data: MapNodeType[]) => {
+      setDBNodesData(data);
+      setNodeDataLoaded(true);
+    });
+
     console.log(algorithm);
     console.log(startNode);
     console.log(endNode);
