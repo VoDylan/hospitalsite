@@ -5,7 +5,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios, { AxiosResponse } from "axios";
 import TopBanner2 from "../components/TopBanner2.tsx";
-
+import { DropDown } from "../components/DropDown.tsx";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
@@ -67,7 +67,7 @@ function DisplayDatabase() {
     { field: "userID", headerName: "User ID", width: 200 },
     { field: "nodeID", headerName: "Node ID", width: 200 },
     { field: "serviceType", headerName: "Service Type", width: 200 },
-    { field: "status", headerName: "Status", width: 200 },
+    { field: "status", headerName: "Status", width: 200, editable: true },
   ]);
 
   // const [isFinished] = useState(false);
