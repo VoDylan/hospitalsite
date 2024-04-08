@@ -5,6 +5,7 @@ import { NodeAStar } from "common/src/NodeAStar.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import GraphManager from "common/src/map/GraphManager.ts";
+import { Coordinates } from "common/src/Coordinates.ts";
 // import { Coordinates } from "common/src/Coordinates.ts";
 // import { AStarOpenNode } from "common/src/AStarOpenNode.ts";
 
@@ -192,22 +193,25 @@ export class AStarAlgorithm {
         console.log(currentNodeID);
 
         // Reconstruct the path
+        const coordinatesPath: Coordinates[] = [];
         const path: string[] = [];
         let current: string | null = currentNodeID;
         while (current !== startNodeID) {
           let currentIdx: number = -1;
           if (current) {
             path.unshift(current);
+            coordinatesPath.unshift(this.getCoordinates(current));
             currentIdx = this.nodes.findIndex(
               (node) => node.startNodeID === current,
             );
           }
           current = parents[currentIdx];
         }
+        coordinatesPath.unshift(this.getCoordinates(startNodeID));
         path.unshift(startNodeID);
 
         console.log("Path found:", path);
-        return path;
+        return coordinatesPath;
       }
 
       const currentNode = this.nodes[currentNodeIndex];
