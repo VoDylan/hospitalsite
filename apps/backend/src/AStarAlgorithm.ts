@@ -1,13 +1,8 @@
 import { NodeAStar } from "common/src/NodeAStar.ts";
-// import GraphManager from "common/src/GraphManager.ts";
-// import MapNode from "common/src/MapNode.ts";
-// import MapEdge from "common/src/MapEdge";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import GraphManager from "common/src/map/GraphManager.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
-// import { Coordinates } from "common/src/Coordinates.ts";
-// import { AStarOpenNode } from "common/src/AStarOpenNode.ts";
 
 export class AStarAlgorithm {
   nodes: NodeAStar[];
@@ -53,38 +48,6 @@ export class AStarAlgorithm {
     return this.mapNodes.find((node) => node.longName === longName)?.nodeID;
   }
 
-  private heuristic(startNodeID: string, endNodeID: string) {
-    let startX: number = -1;
-    let startY: number = -1;
-    let neighborX: number = -1;
-    let neighborY: number = -1;
-
-    for (let i = 0; i < this.mapNodes.length; i++) {
-      if (this.mapNodes[i].nodeID === startNodeID) {
-        startX = this.mapNodes[i].xcoord;
-        startY = this.mapNodes[i].ycoord;
-        // console.log("found");
-        // console.log(startNodeID);
-      } else if (this.mapNodes[i].nodeID === endNodeID) {
-        neighborX = this.mapNodes[i].xcoord;
-        neighborY = this.mapNodes[i].ycoord;
-        // console.log("found");
-        // console.log(endNodeID);
-      }
-
-      if (startX !== -1 && neighborX !== -1) {
-        break;
-      }
-    }
-
-    // if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
-    //   console.error("Node does not exist");
-    //   return -1;
-    // }
-
-    return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
-  }
-
   private distance(startNodeID: string, endNodeID: string) {
     let startX: number = -1;
     let startY: number = -1;
@@ -95,13 +58,9 @@ export class AStarAlgorithm {
       if (this.mapNodes[i].nodeID === startNodeID) {
         startX = this.mapNodes[i].xcoord;
         startY = this.mapNodes[i].ycoord;
-        // console.log("found");
-        // console.log(startNodeID);
       } else if (this.mapNodes[i].nodeID === endNodeID) {
         neighborX = this.mapNodes[i].xcoord;
         neighborY = this.mapNodes[i].ycoord;
-        // console.log("found");
-        // console.log(endNodeID);
       }
 
       if (startX !== -1 && neighborX !== -1) {
@@ -131,20 +90,12 @@ export class AStarAlgorithm {
     return minKey;
   }
 
-  // private distance(currentNode: NodeAStar, neighborNodeID: string) {
-  //   for (let i = 0; i < currentNode.neighbors.length; i++) {
-  //     if (currentNode.neighbors[i] === neighborNodeID) {
-  //       return currentNode.distances[i];
-  //     }
-  //   }
-  //
-  //   console.error("could not find the distance");
-  //   return -1;
-  // }
-
   private getCoordinates(currentNode: string) {
     const Node = this.mapNodes.find((node) => node.nodeID === currentNode);
-    if (!Node) return { x: 0, y: 0 };
+    if (!Node) {
+      console.log("Could not get coordinates");
+      return { x: 0, y: 0 };
+    }
 
     return { x: Node.xcoord, y: Node.ycoord };
   }
@@ -169,12 +120,11 @@ export class AStarAlgorithm {
     );
 
     gScores[startNodeIndex] = 0;
-    fScores[startNodeIndex] = this.heuristic(startNodeID, endNodeID);
+    fScores[startNodeIndex] = this.distance(startNodeID, endNodeID);
     parents[startNodeIndex] = null;
     open.set(startNodeID, fScores[startNodeIndex]);
 
     while (open.size > 0) {
-      // getting the shortest distance currently and deleting it
       const currentNodeID = this.shortestDistance(open);
       open.delete(currentNodeID);
 
@@ -183,16 +133,6 @@ export class AStarAlgorithm {
       );
 
       if (currentNodeID === endNodeID) {
-        // console.log("done searching");
-        // console.log(currentNodeID);
-        // parents[currentNodeIndex] = currentNodeID;
-        // console.log(parents);
-        // return parents;
-
-        console.log("done searching");
-        console.log(currentNodeID);
-
-        // Reconstruct the path
         const coordinatesPath: Coordinates[] = [];
         const path: string[] = [];
         let current: string | null = currentNodeID;
@@ -234,7 +174,6 @@ export class AStarAlgorithm {
           this.distance(currentNodeID, currentNeighborID);
 
         if (open.has(currentNeighborID)) {
-          // console.log(currentNeighborID);
           if (gScores[currentNeighborIndex] <= currentNeighborCost) {
             continue;
           }
@@ -245,7 +184,7 @@ export class AStarAlgorithm {
         } else {
           open.set(
             currentNeighborID,
-            currentNeighborCost + this.heuristic(currentNeighborID, endNodeID),
+            currentNeighborCost + this.distance(currentNeighborID, endNodeID),
           );
         }
         gScores[currentNeighborIndex] = currentNeighborCost;
@@ -255,6 +194,5 @@ export class AStarAlgorithm {
     }
 
     return null;
-    // return this.mapNodes;
   }
 }
