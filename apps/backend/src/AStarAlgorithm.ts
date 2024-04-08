@@ -209,11 +209,32 @@ export class AStarAlgorithm {
       );
 
       if (currentNodeID === endNodeID) {
+        // console.log("done searching");
+        // console.log(currentNodeID);
+        // parents[currentNodeIndex] = currentNodeID;
+        // console.log(parents);
+        // return parents;
+
         console.log("done searching");
         console.log(currentNodeID);
-        parents[currentNodeIndex] = currentNodeID;
-        console.log(parents);
-        return null;
+
+        // Reconstruct the path
+        const path: string[] = [];
+        let current: string | null = currentNodeID;
+        while (current !== startNodeID) {
+          let currentIdx: number = -1;
+          if (current) {
+            path.unshift(current);
+            currentIdx = this.nodes.findIndex(
+              (node) => node.startNodeID === current,
+            );
+          }
+          current = parents[currentIdx];
+        }
+        path.unshift(startNodeID);
+
+        console.log("Path found:", path);
+        return path;
       }
 
       const currentNode = this.nodes[currentNodeIndex];
@@ -255,10 +276,6 @@ export class AStarAlgorithm {
       closed.push(currentNodeID);
     }
 
-    return [
-      { x: 0, y: 0 },
-      { x: 1, y: 1 },
-      { x: 2, y: 2 },
-    ];
+    return null;
   }
 }
