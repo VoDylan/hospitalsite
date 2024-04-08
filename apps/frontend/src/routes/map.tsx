@@ -31,8 +31,10 @@ function Map() {
   const [nodesData, setNodesData] = useState<Coordinates[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dbNodeData, setDBNodesData] = useState<MapNodeType[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+  const [autocompleteNodeData, setAutocompleteNodeData] = useState<
+    { label: string; node: string }[]
+  >([]);
 
   //Pathfinder
   const [open, setOpen] = React.useState(false);
@@ -54,27 +56,20 @@ function Map() {
     return data;
   };
 
-  // const exNodes = [
-  //   { label: "Anesthesia Conf Floor L1", node: "CCONF001L1" },
-  //   { label: "Medical Records Conference Room Floor L1", node: "CCONF002L1" },
-  //   { label: "Abrams Conference Room", node: "CCONF003L1" },
-  //   { label: "Day Surgery Family Waiting Floor L1", node: "CDEPT002L1" },
-  //   { label: "Day Surgery Family Waiting Exit Floor L1", node: "CDEPT003L1" },
-  //   { label: "Medical Records Film Library Floor L1", node: "CDEPT004L1" },
-  //   { label: "Outpatient Fluoroscopy Floor L1", node: "CLABS001L1" },
-  // ];
+  const populateAutocompleteData = () => {
+    const graphNodes: MapNode[] = GraphManager.getInstance().nodes;
+    const nodeAssociations: { label: string; node: string }[] = graphNodes.map(
+      (node) => {
+        console.log("Node ID:", node.nodeID, "Long Name:", node.longName);
+        return {
+          label: node.longName, // Assuming `longName` is the label you want to use
+          node: node.nodeID,
+        };
+      },
+    );
 
-  const graphManager = GraphManager.getInstance().nodes;
-  console.log("graphNodes:", graphManager);
-  const testNodes = graphManager.map((node) => {
-    console.log("Node ID:", node.nodeID, "Long Name:", node.longName);
-    return {
-      label: node.longName, // Assuming `longName` is the label you want to use
-      node: node.nodeID,
-    };
-  });
-
-  // const exLabels = exNodes.map(node => node.label);
+    setAutocompleteNodeData(nodeAssociations);
+  };
 
   const handleClick = () => {
     setOpen(!open);
@@ -120,7 +115,9 @@ function Map() {
   const handleStartNodeChange = (value: string | null) => {
     if (value) {
       // Find the corresponding node for the selected label
-      const selectedNode = testNodes.find((node) => node.label === value);
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
       if (selectedNode) {
         setStartNode(selectedNode.node);
       }
@@ -132,7 +129,9 @@ function Map() {
   const handleEndNodeChange = (value: string | null) => {
     if (value) {
       // Find the corresponding node for the selected label
-      const selectedNode = testNodes.find((node) => node.label === value);
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
       if (selectedNode) {
         setEndNode(selectedNode.node);
       }
@@ -183,10 +182,14 @@ function Map() {
   }
 
   useEffect(() => {
-    loadNodeData().then((data: MapNodeType[]) => {
-      setDBNodesData(data);
-      setNodeDataLoaded(true);
-    });
+    if (!nodeDataLoaded) {
+      loadNodeData().then((data: MapNodeType[]) => {
+        setDBNodesData(data);
+        setNodeDataLoaded(true);
+      });
+    } else {
+      populateAutocompleteData();
+    }
 
     console.log(algorithm);
     console.log(startNode);
@@ -263,7 +266,7 @@ function Map() {
         }
       };
     }
-  }, [startNode, endNode, nodes, nodesData, algorithm]);
+  }, [nodeDataLoaded, startNode, endNode, nodes, nodesData, algorithm]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -306,7 +309,7 @@ function Map() {
               onChange={(event, value) => handleStartNodeChange(value)}
               disablePortal
               id="startNode"
-              options={testNodes.map((node) => node.label)}
+              options={autocompleteNodeData.map((node) => node.label)}
               sx={{ width: "84%" }}
               renderInput={(params) => (
                 <TextField
@@ -336,7 +339,7 @@ function Map() {
               onChange={(event, value) => handleEndNodeChange(value)}
               disablePortal
               id="startNode"
-              options={testNodes.map((node) => node.label)}
+              options={autocompleteNodeData.map((node) => node.label)}
               sx={{ width: "84%" }}
               renderInput={(params) => (
                 <TextField {...params} label="Ending Node" value={endNode} />
