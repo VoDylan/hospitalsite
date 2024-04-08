@@ -50,8 +50,9 @@ function Map() {
       throw new Error("Failed to fetch data");
     }
     const data = await response.data;
+    console.log(data);
     const path = data.message;
-    console.log(path);
+    // console.log(path);
     updateNodesData(path);
     // console.log(nodesArray);
 

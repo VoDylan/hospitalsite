@@ -96,9 +96,13 @@ export class AStarAlgorithm {
       if (this.mapNodes[i].nodeID === startNodeID) {
         startX = this.mapNodes[i].xcoord;
         startY = this.mapNodes[i].ycoord;
+        // console.log("found");
+        // console.log(startNodeID);
       } else if (this.mapNodes[i].nodeID === endNodeID) {
         neighborX = this.mapNodes[i].xcoord;
         neighborY = this.mapNodes[i].ycoord;
+        // console.log("found");
+        // console.log(endNodeID);
       }
 
       if (startX !== -1 && neighborX !== -1) {
@@ -106,16 +110,26 @@ export class AStarAlgorithm {
       }
     }
 
-    if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
-      console.error("Node does not exist");
-      return -1;
-    }
+    // if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
+    //   console.error("Node does not exist");
+    //   return -1;
+    // }
 
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
 
   private shortestDistance(open: Map<string, number>) {
-    return Math.min(...Array.from(open.values()));
+    let minValue: number = Infinity;
+    let minKey: string = "";
+
+    for (const [key, value] of open) {
+      if (value < minValue) {
+        minValue = value;
+        minKey = key;
+      }
+    }
+
+    return minKey;
   }
 
   private distance(currentNode: NodeAStar, neighborNodeID: string) {
@@ -129,19 +143,14 @@ export class AStarAlgorithm {
     return -1;
   }
 
-  public AStar(startID: string, endID: string) {
-    const startNodeID = this.getID(startID);
-    const endNodeID = this.getID(endID);
+  public AStar(startNodeID: string, endNodeID: string) {
+    // const startNodeID = this.getID(startID);
+    // const endNodeID = this.getID(endID);
 
     if (!startNodeID || !endNodeID) {
       console.error("Node ID not found for start or end node");
       return;
     }
-
-    console.log(startID);
-    console.log(endID);
-    console.log(startNodeID);
-    console.log(endNodeID);
 
     const open = new Map();
     const closed: string[] = [];
@@ -156,16 +165,14 @@ export class AStarAlgorithm {
     gScores[startNodeIndex] = 0;
     fScores[startNodeIndex] = this.heuristic(startNodeID, endNodeID);
     parents[startNodeIndex] = null;
+    open.set(startNodeID, fScores[startNodeIndex]);
 
-    while (open) {
-      const minValue = this.shortestDistance(open);
-      let currentNodeID = "";
-      open.forEach((value, key) => {
-        if (value === minValue) currentNodeID = key;
-      });
+    while (open.size > 0) {
+      // getting the shortest distance currently and deleting it
+      const currentNodeID = this.shortestDistance(open);
       open.delete(currentNodeID);
 
-      if (currentNodeID === endNodeID) return parents;
+      if (currentNodeID === endNodeID) return console.log(parents);
 
       const currentNode = this.nodes.find(
         (node) => node.startNodeID === currentNodeID,
@@ -178,6 +185,7 @@ export class AStarAlgorithm {
 
       for (let i = 0; i < currentNode.neighbors.length; i++) {
         const currentNeighborID = currentNode.neighbors[i];
+
         if (closed.includes(currentNeighborID)) {
           continue;
         }
@@ -214,6 +222,10 @@ export class AStarAlgorithm {
       }
     }
 
-    return null;
+    return [
+      { x: 0, y: 0 },
+      { x: 1, y: 1 },
+      { x: 2, y: 2 },
+    ];
   }
 }
