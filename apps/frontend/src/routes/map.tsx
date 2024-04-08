@@ -11,7 +11,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import React, { useEffect, useRef, useState } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
-import { Button, Paper, Slide, Stack, TextField } from "@mui/material";
+import { TextField, Button, Stack, Paper, Slide } from "@mui/material";
 import "./map.css";
 import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
@@ -20,6 +20,7 @@ import NestedList from "../components/PathfindingSelect.tsx";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
+import Autocomplete from "@mui/material/Autocomplete";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -52,6 +53,28 @@ function Map() {
 
     return data;
   };
+
+  // const exNodes = [
+  //   { label: "Anesthesia Conf Floor L1", node: "CCONF001L1" },
+  //   { label: "Medical Records Conference Room Floor L1", node: "CCONF002L1" },
+  //   { label: "Abrams Conference Room", node: "CCONF003L1" },
+  //   { label: "Day Surgery Family Waiting Floor L1", node: "CDEPT002L1" },
+  //   { label: "Day Surgery Family Waiting Exit Floor L1", node: "CDEPT003L1" },
+  //   { label: "Medical Records Film Library Floor L1", node: "CDEPT004L1" },
+  //   { label: "Outpatient Fluoroscopy Floor L1", node: "CLABS001L1" },
+  // ];
+
+  const graphManager = GraphManager.getInstance().nodes;
+  console.log("graphNodes:", graphManager);
+  const testNodes = graphManager.map((node) => {
+    console.log("Node ID:", node.nodeID, "Long Name:", node.longName);
+    return {
+      label: node.longName, // Assuming `longName` is the label you want to use
+      node: node.nodeID,
+    };
+  });
+
+  // const exLabels = exNodes.map(node => node.label);
 
   const handleClick = () => {
     setOpen(!open);
@@ -94,14 +117,28 @@ function Map() {
     </Paper>
   );
 
-  const handleStartNodeChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setStartNode(event.target.value);
+  const handleStartNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = testNodes.find((node) => node.label === value);
+      if (selectedNode) {
+        setStartNode(selectedNode.node);
+      }
+    } else {
+      setStartNode(""); // Handle null value if necessary
+    }
   };
 
-  const handleEndNodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndNode(event.target.value);
+  const handleEndNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = testNodes.find((node) => node.label === value);
+      if (selectedNode) {
+        setEndNode(selectedNode.node);
+      }
+    } else {
+      setEndNode(""); // Handle null value if necessary
+    }
   };
 
   const updateNodesData = (newData: Coordinates[]) => {
@@ -109,6 +146,9 @@ function Map() {
   };
 
   async function handleSubmit() {
+    console.log(startNode);
+    console.log(endNode);
+
     if (startNode.trim() === "" || endNode.trim() === "") {
       setErrorMessage("Please enter both start and end nodes");
       return;
@@ -262,13 +302,19 @@ function Map() {
               sx={{ color: "blue" }}
             ></RadioButtonCheckedIcon>
 
-            <TextField
-              sx={{ width: "80%" }}
+            <Autocomplete
+              onChange={(event, value) => handleStartNodeChange(value)}
+              disablePortal
               id="startNode"
-              label="Your Location"
-              type="search"
-              value={startNode}
-              onChange={handleStartNodeChange}
+              options={testNodes.map((node) => node.label)}
+              sx={{ width: "84%" }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Starting Node"
+                  value={startNode}
+                />
+              )}
             />
           </Stack>
 
@@ -286,13 +332,15 @@ function Map() {
               sx={{ color: "red" }}
             ></LocationOnIcon>
 
-            <TextField
-              sx={{ width: "80%" }}
-              id="endNode"
-              label="Destination"
-              type="search"
-              value={endNode}
-              onChange={handleEndNodeChange}
+            <Autocomplete
+              onChange={(event, value) => handleEndNodeChange(value)}
+              disablePortal
+              id="startNode"
+              options={testNodes.map((node) => node.label)}
+              sx={{ width: "84%" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Ending Node" value={endNode} />
+              )}
             />
           </Stack>
 
