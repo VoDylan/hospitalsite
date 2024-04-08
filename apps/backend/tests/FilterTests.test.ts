@@ -219,4 +219,32 @@ test("Type inversion", () => {
   expect(
     FilterManager.getInstance().applyFilters(filters1, nodes),
   ).toStrictEqual([node2, node3, node4]);
+
+  const filters2: Filter[] = [];
+  filters2.push(
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(true, "CONF"),
+    ])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+      generateFilterValue(true, "L1"),
+    ])!,
+  );
+
+  expect(
+    FilterManager.getInstance().applyFilters(filters2, nodes),
+  ).toStrictEqual([node1]);
+
+  const filters3: Filter[] = [];
+  filters3.push(
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(true, "CONF"),
+    ])!,
+    FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+      generateFilterValue(false, "L1"),
+    ])!,
+  );
+
+  expect(
+    FilterManager.getInstance().applyFilters(filters3, nodes),
+  ).toStrictEqual([node4]);
 });
