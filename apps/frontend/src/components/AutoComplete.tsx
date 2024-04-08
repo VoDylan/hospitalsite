@@ -13,13 +13,10 @@ export default function ComboBox(props: ComboProps) {
       id="combo-box-demo"
       options={nodes}
       sx={{ width: "84%" }}
-      renderInput={(params) => (
-        <TextField {...params} label={props.text} />
-      )}
+      renderInput={(params) => <TextField {...params} label={props.text} />}
     />
   );
 }
-
 
 const nodes = [
   { label: "Anesthesia Conf Floor L1", node: "CCONF001L1" },
