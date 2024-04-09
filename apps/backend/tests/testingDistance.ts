@@ -1,7 +1,7 @@
-// import GraphManager from "common/src/map/GraphManager.ts";
-// import MapNode from "common/src/map/MapNode.ts";
-// import MapEdge from "common/src/map/MapEdge.ts";
 // import { Coordinates } from "common/src/Coordinates.ts";
+// import client from "../src/bin/database-connection.ts";
+// import { MapNodeType } from "common/src/map/MapNodeType.ts";
+// import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 //
 // type nodesDistances = {
 //   startID: string;
@@ -10,18 +10,20 @@
 // };
 //
 // export class testingDistance {
-//   mapNodes: MapNode[];
-//   mapEdges: MapEdge[];
+//   mapNodes: MapNodeType[];
+//   mapEdges: MapEdgeType[];
 //   nodesDistances: nodesDistances[];
 //
 //   public constructor() {
-//     const graphManager = GraphManager.getInstance();
-//     this.mapNodes = graphManager.nodes;
-//     this.mapEdges = graphManager.edges;
+//     this.mapNodes = [];
+//     this.mapEdges = [];
 //     this.nodesDistances = [];
 //   }
 //
-//   public putIntoTypes() {
+//   async putIntoTypes() {
+//     this.mapNodes = await client.node.findMany();
+//     this.mapEdges = await client.edge.findMany();
+//
 //     for (let i = 0; i < this.mapEdges.length; i++) {
 //       const startID: string = this.mapEdges[i].startNodeID;
 //       const endID: string = this.mapEdges[i].endNodeID;
