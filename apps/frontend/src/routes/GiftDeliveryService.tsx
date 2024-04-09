@@ -264,7 +264,7 @@ function GiftDeliveryService() {
               <TableCell align="right">Status</TableCell>
               <TableCell align="right">Location</TableCell>
               <TableCell align="right">Optional Message</TableCell>
-              <TableCell align="right">Priority</TableCell>
+              <TableCell align="right">Delivery</TableCell>
               <TableCell align="right">Gift Size</TableCell>
             </TableRow>
           </TableHead>
@@ -277,7 +277,6 @@ function GiftDeliveryService() {
                 <TableCell component="th" scope="row" align={"right"}>
                   {item.name}
                 </TableCell>
-                <TableCell align={"right"}>{item.name}</TableCell>
                 <TableCell align={"right"}>{item.recipientName}</TableCell>
                 <TableCell align={"right"}>{item.status}</TableCell>
                 <TableCell align={"right"}>{item.location}</TableCell>
