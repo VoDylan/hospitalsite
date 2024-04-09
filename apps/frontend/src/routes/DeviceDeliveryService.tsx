@@ -187,10 +187,10 @@ function DeviceDeliveryService() {
               value={form.amount}
             />
           </Grid>
-          <Typography color={"black"} textAlign={"center"}>
+          <Typography color={"black"} textAlign={"center"} paddingTop={3}>
             Priority of Medical Device Delivery:
           </Typography>
-          <Grid item sx={{ m: "auto" }}>
+          <Grid item sx={{ pl: "28.2%" }}>
             <RadioButtonsGroup
               label={"Priority"}
               options={["Low", "Medium", "High", "Emergency"]}
@@ -198,10 +198,10 @@ function DeviceDeliveryService() {
               handleChange={handlePriorityInput}
             />
           </Grid>
-          <Typography color={"black"} textAlign={"center"}>
-            Status
+          <Typography color={"black"} textAlign={"center"} paddingTop={3}>
+            Status of the Request:
           </Typography>
-          <Grid item sx={{ m: "auto" }}>
+          <Grid item sx={{ pl: "28.2%" }}>
             <RadioButtonsGroup
               label={"Status"}
               options={["Unassigned", "Assigned", "InProgress", "Closed"]}
