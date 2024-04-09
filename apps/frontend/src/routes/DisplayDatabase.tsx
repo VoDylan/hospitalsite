@@ -3,28 +3,17 @@ import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import TopBanner2 from "../components/TopBanner2.tsx";
 
-import {
-  DataGrid,
-  GridColDef,
-  //GridRowsProp,
-  GridToolbar,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
+import MapNode from "common/src/map/MapNode.ts";
+import MapEdge from "common/src/map/MapEdge.ts";
 
-type NodeParams = {
-  id: number;
-  nodeID: string;
-  xcoord: number;
-  ycoord: number;
-  floor: string;
-  building: string;
-  nodeType: string;
-  longName: string;
-  shortName: string;
-};
+type NodeParams = { id: number } & MapNodeType;
 
 type ServiceParams = {
   id: number;
@@ -33,11 +22,7 @@ type ServiceParams = {
   serviceType: string;
 };
 
-type EdgeParams = {
-  id: number;
-  startNodeID: string;
-  endNodeID: string;
-};
+type EdgeParams = { id: number } & MapEdgeType;
 
 /*app.post('/csv', upload.none(), function (req, res, next) {
   // req.body contains the text fields
@@ -94,12 +79,11 @@ function DisplayDatabase() {
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
     console.log("Got data");
-    setNodeRowData(data);
     console.log(data);
 
-    const rowNodeData = [];
-    for (let i = 0; i < data.length; i++) {
-      const tableFormattedNode = {
+    const rowNodeData: NodeParams[] = [];
+    for (let i: number = 0; i < data.length; i++) {
+      const tableFormattedNode: NodeParams = {
         id: i,
         nodeID: data[i].nodeID,
         xcoord: data[i].xcoord,
@@ -118,12 +102,11 @@ function DisplayDatabase() {
   const getEdgeData = async () => {
     const { data } = await axios.get("/api/database/edges");
     console.log("Got data");
-    setEdgeRowData(data);
     console.log(data);
 
-    const rowData = [];
+    const rowData: EdgeParams[] = [];
     for (let i = 0; i < data.length; i++) {
-      const tableFormattedEdge = {
+      const tableFormattedEdge: EdgeParams = {
         id: i,
         startNodeID: data[i].startNodeID,
         endNodeID: data[i].endNodeID,
@@ -158,30 +141,35 @@ function DisplayDatabase() {
   }, []);
 
   function handleNodeImport(file: File) {
-    const fileReader = new FileReader();
+    const fileReader: FileReader = new FileReader();
 
     let fileText: string | ArrayBuffer = "";
 
-    const jsonData: {
-      nodeID: string;
-      xcoord: number;
-      ycoord: number;
-      floor: string;
-      building: string;
-      nodeType: string;
-      longName: string;
-      shortName: string;
-    }[] = [];
+    const jsonData: MapNodeType[] = [];
 
-    fileReader.onload = (evt) => {
+    fileReader.onload = (evt: ProgressEvent<FileReader>) => {
       if (evt.target!.result == null) {
         console.log("No data found in file");
       } else {
         fileText = evt.target!.result;
         console.log(fileText);
-        const parsedData = parseCSVFromString(fileText as string);
 
-        for (let i = 1; i < parsedData.length; i++) {
+        const parsedData: string[][] = parseCSVFromString(fileText as string);
+
+        console.log(parsedData);
+
+        for (let i: number = 0; i < parsedData[0].length; i++) {
+          if (parsedData[0][i] != MapNode.csvHeader.split(", ")[i]) {
+            console.error(
+              "Imported node data does not include the correct header fields",
+            );
+            return;
+          }
+        }
+
+        console.log("Imported node data is in the correct format");
+
+        for (let i: number = 1; i < parsedData.length; i++) {
           jsonData.push({
             nodeID: parsedData[i][0],
             xcoord: parseInt(parsedData[i][1]),
@@ -194,9 +182,11 @@ function DisplayDatabase() {
           });
         }
 
-        axios.post("/api/database/uploadnodes", jsonData).then((response) => {
-          console.log(response);
-        });
+        axios
+          .post("/api/database/uploadnodes", jsonData)
+          .then((response: AxiosResponse) => {
+            console.log(response);
+          });
       }
     };
 
@@ -204,33 +194,43 @@ function DisplayDatabase() {
   }
 
   function handleEdgeImport(file: File) {
-    const fileReader = new FileReader();
+    const fileReader: FileReader = new FileReader();
 
     let fileText: string | ArrayBuffer = "";
 
-    const jsonData: {
-      startNodeID: string;
-      endNodeID: string;
-    }[] = [];
+    const jsonData: MapEdgeType[] = [];
 
-    fileReader.onload = (evt) => {
+    fileReader.onload = (evt: ProgressEvent<FileReader>) => {
       if (evt.target!.result == null) {
         console.log("No data found in file");
       } else {
         fileText = evt.target!.result;
         console.log(fileText);
-        const parsedData = parseCSVFromString(fileText as string);
+        const parsedData: string[][] = parseCSVFromString(fileText as string);
 
-        for (let i = 1; i < parsedData.length; i++) {
+        for (let i: number = 0; i < parsedData[0].length; i++) {
+          if (parsedData[0][i] != MapEdge.csvHeader.split(", ")[i]) {
+            console.error(
+              "Imported edge data does not include the correct header fields",
+            );
+            return;
+          }
+        }
+
+        console.log("Imported edge data is in the correct format");
+
+        for (let i: number = 1; i < parsedData.length; i++) {
           jsonData.push({
             startNodeID: parsedData[i][0],
             endNodeID: parsedData[i][1],
           });
         }
 
-        axios.post("/api/database/uploadedges", jsonData).then((response) => {
-          console.log(response);
-        });
+        axios
+          .post("/api/database/uploadedges", jsonData)
+          .then((response: AxiosResponse) => {
+            console.log(response);
+          });
       }
     };
 
@@ -259,99 +259,6 @@ function DisplayDatabase() {
     console.log("Handling node import data");
   }
 
-  //csv file import to node table
-  /* function handleNodeImport() {
-    //console.log();
-
-    const app = express();
-    const port = 3000;
-
-    //  new Pool instance to connect to the postgres database
-    const poolNodes = new Pool({
-      user: "postgres",
-      host: "",
-      database: "",
-      password: "postgres",
-      port: 5432,
-    });
-
-    //define route to receive the array of json objects
-    // VisuallyHiddenInput file?
-    app.post("file", async (req: Request, res: Response) => {
-      const client = await poolNodes.connect();
-
-      try {
-        const data = req.body; // json array sent in the request body
-
-        // begin transaction
-        await client.query("BEGIN");
-
-        // inserting json object into the database
-        for (const obj of data) {
-          await client.query(
-            "INSERT INTO table_name (column1, column2) VALUES ($1, $2)",
-            [obj.property1, obj.property2],
-          );
-        }
-
-        await client.query("COMMIT");
-
-        res
-          .status(200)
-          .send("Data successfully inserted into Postgres database");
-      } catch (error) {
-        // Rollback the transaction in case of an error
-        await client.query("ROLLBACK");
-        console.error("Error inserting data into Postgres:", error);
-        res.status(500).send("Error inserting data into Postgres database");
-      } finally {
-        // release client back to the pool
-        client.release();
-      }
-    });
-
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
-  }*/
-
-  /*const fileReader = new FileReader();
-  const [file, setFile] = useState();
-  const [array, setArray] = useState([]);
-
-  const handleImport = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const csvFileToArray = string => {
-    const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
-    const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
-
-    const array = csvRows.map(i => {
-      const values = i.split(",");
-      const obj = csvHeader.reduce((object, header, index) => {
-        object[header] = values[index];
-        return object;
-      }, {});
-      return obj;
-    });
-
-    setArray(array);
-  };
-
-  const handleOnSubmit = (e) => {
-    e.preventDefault();
-
-    if (file) {
-      fileReader.onload = function (event) {
-        const text = event.target.result;
-        csvFileToArray(text);
-      };
-
-      fileReader.readAsText(file);
-    }
-  };*/
-
   return (
     <>
       <TopBanner2 />
@@ -363,8 +270,8 @@ function DisplayDatabase() {
           alignItems: "center",
           minHeight: "100vh",
           minWidth: "100wh",
-          marginTop: "10%",
-          marginBottom: "10%",
+          marginTop: "150px",
+          marginBottom: "150px",
         }}
       >
         <Box
@@ -409,9 +316,11 @@ function DisplayDatabase() {
               color: "white", // Change text color
               borderRadius: "8px", // Change border radius
               marginRight: "-1px", // Adjust spacing
+              marginTop: "15px",
+              marginBottom: "15px",
             }}
           >
-            Import CSV File
+            Import Nodes (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
           </Button>
           <DataGrid
@@ -445,9 +354,11 @@ function DisplayDatabase() {
               color: "white", // Change text color
               borderRadius: "8px", // Change border radius
               marginRight: "-1px", // Adjust spacing
+              marginTop: "15px",
+              marginBottom: "15px",
             }}
           >
-            Import CSV File
+            Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
           <DataGrid

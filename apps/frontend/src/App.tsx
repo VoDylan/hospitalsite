@@ -9,6 +9,10 @@ import LoginForm from "./routes/LoginForm.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
 import SanitationService from "./routes/SanitationService.tsx";
 import DeviceDeliveryService from "./routes/DeviceDeliveryService.tsx";
+import GiftDeliveryService from "./routes/GiftDeliveryService.tsx";
+import SecurityService from "./routes/SecurityService.tsx";
+import MedicineDelivery from "./routes/MedicineDelivery.tsx";
+import RoomScheduling from "./routes/RoomScheduling.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -30,8 +34,24 @@ function App() {
           element: <FlowerDeliveryService />,
         },
         {
+          path: "/Services/GiftDelivery",
+          element: <GiftDeliveryService />,
+        },
+        {
+          path: "/Services/MedicineDelivery",
+          element: <MedicineDelivery />,
+        },
+        {
+          path: "/Services/RoomScheduling",
+          element: <RoomScheduling />,
+        },
+        {
           path: "/Services/SanitationService",
           element: <SanitationService />,
+        },
+        {
+          path: "/Services/SecurityService",
+          element: <SecurityService />,
         },
         {
           path: "/Services/DeviceDeliveryService",

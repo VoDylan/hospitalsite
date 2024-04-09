@@ -1,5 +1,6 @@
+import Map from "../routes/map2.tsx";
 function MapPage() {
-  return <h1>Map Page</h1>;
+  return <Map />;
 }
 
 export default MapPage;

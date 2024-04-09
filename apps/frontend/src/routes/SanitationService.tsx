@@ -1,13 +1,25 @@
-import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  SelectChangeEvent,
+  Stack,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { SanitationRequestFormSubmission } from "../common/SanitationRequestFormSubmission.ts";
-import TopBanner from "../components/TopBanner.tsx";
 import sanitationBackground from "../images/sanitationBackground.webp";
 import { SanitationSubmitButton } from "../components/SanitationSubmitButton.tsx";
 import axios from "axios";
+import TopBanner2 from "../components/TopBanner2.tsx";
 
 function SanitationService() {
   const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
@@ -18,6 +30,10 @@ function SanitationService() {
     frequency: "",
     status: "",
   });
+
+  const [submittedData, setSubmittedData] = useState<
+    SanitationRequestFormSubmission[]
+  >([]);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
@@ -57,6 +73,10 @@ function SanitationService() {
     });
   }
 
+  function updateSubmissionList() {
+    setSubmittedData([...submittedData, form]);
+  }
+
   // Define an interface for the node data
   interface NodeData {
     longName: string;
@@ -94,7 +114,7 @@ function SanitationService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
+      <TopBanner2 />
       <Grid
         container
         direction={"row"}
@@ -190,9 +210,54 @@ function SanitationService() {
             justifyContent: "center",
           }}
         >
-          <SanitationSubmitButton input={form} text={"SUBMIT"} clear={clear} />
+          <SanitationSubmitButton
+            input={form}
+            text={"SUBMIT"}
+            clear={clear}
+            updateSubmissionList={updateSubmissionList}
+          />
         </Grid>
       </Grid>
+      <TableContainer
+        component={Paper}
+        sx={{
+          minWidth: "40vw",
+          backgroundColor: "white",
+          width: "60vw", //Adjust this to change the width of the table
+          height: "auto",
+          mb: "5vh",
+        }}
+      >
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">Name</TableCell>
+              <TableCell align="right">Location</TableCell>
+              <TableCell align="right">Priority</TableCell>
+              <TableCell align="right">Service</TableCell>
+              <TableCell align="right">Frequency</TableCell>
+              <TableCell align="right">Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {submittedData.map((item: SanitationRequestFormSubmission) => (
+              <TableRow
+                key={item.name}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row" align={"right"}>
+                  {item.name}
+                </TableCell>
+                <TableCell align={"right"}>{item.location}</TableCell>
+                <TableCell align={"right"}>{item.priority}</TableCell>
+                <TableCell align={"right"}>{item.service}</TableCell>
+                <TableCell align={"right"}>{item.frequency}</TableCell>
+                <TableCell align={"right"}>{item.status}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Typography>Jacob Murphy, Spencer Trautz</Typography>
     </Stack>
   );
