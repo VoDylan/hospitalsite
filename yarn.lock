@@ -5386,6 +5386,7 @@ __metadata:
     prettier-config-custom: "workspace:*"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.7.4"
+    react-confetti: "npm:^6.1.0"
     react-dom: "npm:^18.2.0"
     react-material-ui-carousel: "npm:^3.4.2"
     react-router-bootstrap: "npm:^0.26.2"
@@ -8000,6 +8001,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-confetti@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "react-confetti@npm:6.1.0"
+  dependencies:
+    tween-functions: "npm:^1.2.0"
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.1 || ^18.0.0
+  checksum: 33423767c42362b29e0c8fd09f60bcf40d64aeb721fd63564f85c61357706a6080563ec40f33435d210d5b5b1af7277aef4545deccf771d08785a3cb19749470
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:^18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
@@ -8822,6 +8834,7 @@ __metadata:
     prisma: "npm:^5.11.0"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.10.0"
+    react-confetti: "npm:^6.1.0"
     react-dom: "npm:^18.2.0"
     react-material-ui-carousel: "npm:^3.4.2"
     styled-components: "npm:^6.1.8"
@@ -9547,6 +9560,13 @@ __metadata:
   bin:
     turbo: bin/turbo
   checksum: 649938c8fecc7f4a9f0995fc41593216eadf51bd8314e1d5a6f45603d6a15e0ea2a7b108de7feb617e6ee5b1cab2505c7b843cd26d1c2164b14a665b6adcf886
+  languageName: node
+  linkType: hard
+
+"tween-functions@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "tween-functions@npm:1.2.0"
+  checksum: f145f39187aacfe6e3c6bfe8452be4061a569b8e1e75c28169c55b7cdf519daa1877c79a8a2cdc902b68f49b67b8478f34818ff02529d27ae5aa0545e7fbdc06
   languageName: node
   linkType: hard
 
