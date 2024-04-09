@@ -74,6 +74,7 @@ function DisplayDatabase() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
   const handleSaveClick = (id: GridRowId) => () => {
+    console.log("id is " + id);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
@@ -83,6 +84,10 @@ function DisplayDatabase() {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
+  };
+
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel);
   };
 
   const [nodeColumns] = useState<GridColDef[]>([
@@ -101,7 +106,8 @@ function DisplayDatabase() {
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
 
-  const [serviceColumns] = useState<GridColDef[]>([
+  // const [serviceColumns] = useState<GridColDef[]>([
+  const serviceColumns: GridColDef[] = [
     { field: "userID", headerName: "User ID", width: 200 },
     { field: "nodeID", headerName: "Node ID", width: 200 },
     { field: "serviceType", headerName: "Service Type", width: 200 },
@@ -140,7 +146,7 @@ function DisplayDatabase() {
         ];
       },
     },
-  ]);
+  ];
 
   // const [isFinished] = useState(false);
   const [nodeRowData, setNodeRowData] = useState<NodeParams[]>([]);
@@ -354,9 +360,11 @@ function DisplayDatabase() {
     [],
   );
 
+  /*
   const handleProcessRowUpdateError = React.useCallback((error: Error) => {
     alert("status didn't save");
   }, []);
+*/
 
   return (
     <>
@@ -477,18 +485,19 @@ function DisplayDatabase() {
                 paginationModel: { page: 0, pageSize: 5 },
               },
             }}
+            editMode={"row"}
             rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             pageSizeOptions={[5, 10]}
             processRowUpdate={(newRow: GridRowModel) =>
               processRowUpdate(newRow, parseInt(newRow["id"]))
             }
-            onProcessRowUpdateError={handleProcessRowUpdateError}
           />
         </Box>
       </div>
     </>
   );
 }
-
+//onProcessRowUpdateError={handleProcessRowUpdateError}
 export default DisplayDatabase;
