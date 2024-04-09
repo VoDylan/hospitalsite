@@ -57,7 +57,9 @@ function Map() {
   const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
+  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
   const loadNodeData = async (): Promise<MapNodeType[]> => {
     const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
@@ -73,13 +75,14 @@ function Map() {
     return data;
   };
 
-  const populateAutocompleteData = useCallback(() => {
-    const filteredNodeAssociations = filteredNodes.map((node) => ({
+  const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
+    console.log(nodes);
+    const filteredNodeAssociations = nodes.map((node) => ({
       label: node.longName, // Assuming `longName` is the label you want to use
       node: node.nodeID,
     }));
     setAutocompleteNodeData(filteredNodeAssociations);
-  }, [filteredNodes]);
+  }, []);
 
   const handleClick = () => {
     setOpen(!open);
@@ -142,71 +145,86 @@ function Map() {
   const [ll2IconState, setLL2IconState] = React.useState<"plus" | "check">(
     "check",
   );
-  const [firstFloorIconState, setFirstFloorIconState] = React.useState<
-    "plus" | "check"
-  >("check");
-  const [secondFloorIconState, setSecondFloorIconState] = React.useState<
-    "plus" | "check"
-  >("check");
-  const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
-    "plus" | "check"
-  >("check");
+  // const [firstFloorIconState, setFirstFloorIconState] = React.useState<
+  //   "plus" | "check"
+  // >("check");
+  // const [secondFloorIconState, setSecondFloorIconState] = React.useState<
+  //   "plus" | "check"
+  // >("check");
+  // const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
+  //   "plus" | "check"
+  // >("check");
 
   const handleElevatorIconState = () => {
     setElevatorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
   };
   const handleStairsIconState = () => {
     setStairsIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
   };
   const handleExitsIconState = () => {
     setExitsIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
+
   const handleServIconState = () => {
     setServIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleRestroomsIconState = () => {
     setRestroomsIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
   };
   const handleConfIconState = () => {
     setConfIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleDeptIconState = () => {
     setDeptIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleLabsIconState = () => {
     setLabsIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleRetlIconState = () => {
     setRetlIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
 
   const handleLL1IconState = () => {
     setLL1IconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleLL2IconState = () => {
     setLL2IconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
-  const handleFirstFloorIconState = () => {
-    setFirstFloorIconState((prevState) =>
-      prevState === "plus" ? "check" : "plus",
-    );
-  };
-  const handleSecondFloorIconState = () => {
-    setSecondFloorIconState((prevState) =>
-      prevState === "plus" ? "check" : "plus",
-    );
-  };
-  const handleThirdFloorIconState = () => {
-    setThirdFloorIconState((prevState) =>
-      prevState === "plus" ? "check" : "plus",
-    );
-  };
+  // const handleFirstFloorIconState = () => {
+  //   setFirstFloorIconState((prevState) =>
+  //     prevState === "plus" ? "check" : "plus",
+  //   );
+  //   setFiltersApplied(false);
+  // };
+  // const handleSecondFloorIconState = () => {
+  //   setSecondFloorIconState((prevState) =>
+  //     prevState === "plus" ? "check" : "plus",
+  //   );
+  //   setFiltersApplied(false);
+  // };
+  // const handleThirdFloorIconState = () => {
+  //   setThirdFloorIconState((prevState) =>
+  //     prevState === "plus" ? "check" : "plus",
+  //   );
+  //   setFiltersApplied(false);
+  // };
 
   const handleSelectAll = () => {
     setElevatorIconState("check");
@@ -220,9 +238,10 @@ function Map() {
     setRetlIconState("check");
     setLL1IconState("check");
     setLL2IconState("check");
-    setFirstFloorIconState("check");
-    setSecondFloorIconState("check");
-    setThirdFloorIconState("check");
+    // setFirstFloorIconState("check");
+    // setSecondFloorIconState("check");
+    // setThirdFloorIconState("check");
+    setFiltersApplied(false);
   };
 
   const handleClearAll = () => {
@@ -237,9 +256,10 @@ function Map() {
     setRetlIconState("plus");
     setLL1IconState("plus");
     setLL2IconState("plus");
-    setFirstFloorIconState("plus");
-    setSecondFloorIconState("plus");
-    setThirdFloorIconState("plus");
+    // setFirstFloorIconState("plus");
+    // setSecondFloorIconState("plus");
+    // setThirdFloorIconState("plus");
+    setFiltersApplied(false);
   };
 
   const registerFilters = useCallback(() => {
@@ -255,7 +275,9 @@ function Map() {
       FilterName.BUILDING,
       () => new BuildingFilter(),
     );
+  }, []);
 
+  const determineFilters = useCallback(() => {
     const filters: NodeFilter[] = [];
     filters.push(
       FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
@@ -353,15 +375,16 @@ function Map() {
 
     console.log("Filtering");
 
-    const filteredNodes: MapNode[] = FilterManager.getInstance().applyFilters(
-      filters,
-      GraphManager.getInstance().nodes,
-    );
+    const newFilteredNodes: MapNode[] =
+      FilterManager.getInstance().applyFilters(
+        filters,
+        GraphManager.getInstance().nodes,
+      );
 
-    setFilteredNodes(filteredNodes); // Update filteredNodes state with the filtered result
+    setFilteredNodes(newFilteredNodes); // Update filteredNodes state with the filtered result
 
     // Update autocomplete data based on the filtered nodes
-    populateAutocompleteData();
+    populateAutocompleteData(newFilteredNodes);
   }, [
     populateAutocompleteData,
     ll1IconState,
@@ -817,9 +840,12 @@ function Map() {
         setDBNodesData(data);
         setNodeDataLoaded(true);
       });
-    } else {
-      populateAutocompleteData();
+
       registerFilters();
+    } else if (!filtersApplied) {
+      console.log("Applying filters");
+      determineFilters();
+      setFiltersApplied(true);
     }
 
     console.log(algorithm);
@@ -905,7 +931,9 @@ function Map() {
     nodesData,
     algorithm,
     populateAutocompleteData,
+    determineFilters,
     registerFilters,
+    filtersApplied,
   ]);
 
   return (
