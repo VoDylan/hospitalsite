@@ -2,21 +2,22 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
-export default function ComboBox() {
+interface ComboProps {
+  text: string;
+}
+
+export default function ComboBox(props: ComboProps) {
   return (
     <Autocomplete
       disablePortal
       id="combo-box-demo"
       options={nodes}
-      sx={{ width: 10000 }}
-      renderInput={(params) => (
-        <TextField {...params} label="Starting Location" />
-      )}
+      sx={{ width: "84%" }}
+      renderInput={(params) => <TextField {...params} label={props.text} />}
     />
   );
 }
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const nodes = [
   { label: "Anesthesia Conf Floor L1", node: "CCONF001L1" },
   { label: "Medical Records Conference Room Floor L1", node: "CCONF002L1" },
