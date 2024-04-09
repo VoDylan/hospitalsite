@@ -16,7 +16,7 @@ import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { SecurityRequestFormSubmission } from "../common/SecurityRequestFormSubmission.ts";
-import securitybackground from "../../public/security_background.jpg";
+import securitybackground from "../images/security_background.jpg";
 import TopBanner from "../components/TopBanner.tsx";
 import { SecuritySubmitButton } from "../components/SecuritySubmitButton.tsx";
 import axios from "axios";
