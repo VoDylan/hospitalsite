@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { Button, Stack } from "@mui/material";
 
-function Floors() {
+interface FloorProps {
+  callback: (newFloor: string) => void;
+}
+
+function Floors({ callback }: FloorProps) {
   // State to track the active button
-  const [activeButton, setActiveButton] = useState<string | null>("L1");
+  const [activeButton, setActiveButton] = useState<string>("L1");
 
   // Function to handle button click
   const handleButtonClick = (button: string) => {
     setActiveButton(button);
+    callback(button);
   };
 
   return (

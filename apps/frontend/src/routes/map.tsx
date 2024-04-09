@@ -19,7 +19,6 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/TopBanner2.tsx";
-import MapImage from "../images/00_thelowerlevel1.png";
 import NestedList from "../components/PathfindingSelect.tsx";
 import "./map.css";
 import { Coordinates } from "common/src/Coordinates.ts";
@@ -38,6 +37,12 @@ import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import Floor from "../components/FloorTabs.tsx";
 
+import L1MapImage from "../images/00_thelowerlevel1.png";
+import L2MapImage from "../images/00_thelowerlevel2.png";
+import FFMapImage from "../images/01_thefirstfloor.png";
+import SFMapImage from "../images/02_thesecondfloor.png";
+import TFMapImage from "../images/03_thethirdfloor.png";
+
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
@@ -52,11 +57,22 @@ function Map() {
     { label: string; node: string }[]
   >([]);
 
+  const [updateAnimation, setUpdateAnimation] = useState<boolean>(false);
+
+  const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
+    const image = new Image();
+    image.src = L1MapImage;
+    return image;
+  });
+
   //Pathfinder
   const [open, setOpen] = React.useState(false);
   const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
+
+  //-----------------------------------------------------------------------------------------
+  //DATA LOADING
 
   const loadNodeData = async (): Promise<MapNodeType[]> => {
     const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
@@ -67,8 +83,6 @@ function Map() {
         GraphManager.getInstance().nodes.push(new MapNode(node));
     });
 
-    console.log(GraphManager.getInstance().nodes);
-
     return data;
   };
 
@@ -76,7 +90,6 @@ function Map() {
     const graphNodes: MapNode[] = GraphManager.getInstance().nodes;
     const nodeAssociations: { label: string; node: string }[] = graphNodes.map(
       (node) => {
-        console.log("Node ID:", node.nodeID, "Long Name:", node.longName);
         return {
           label: node.longName, // Assuming `longName` is the label you want to use
           node: node.nodeID,
@@ -101,6 +114,8 @@ function Map() {
       () => new BuildingFilter(),
     );
   };
+
+  //-----------------------------------------------------------------------------------------
 
   const handleClick = () => {
     setOpen(!open);
@@ -583,6 +598,33 @@ function Map() {
     //stop animation
   }
 
+  const handleFloorChange = (newFloor: string) => {
+    const newImage = new Image();
+
+    switch (newFloor) {
+      case "L1":
+        newImage.src = L1MapImage;
+        break;
+      case "L2":
+        newImage.src = L2MapImage;
+        break;
+      case "1":
+        newImage.src = FFMapImage;
+        break;
+      case "2":
+        newImage.src = SFMapImage;
+        break;
+      case "3":
+        newImage.src = TFMapImage;
+        break;
+      default:
+        console.error("Returned map floor is not assigned to an image");
+        return;
+    }
+
+    setCurrImage(newImage);
+  };
+
   useEffect(() => {
     if (!nodeDataLoaded) {
       registerFilters();
@@ -591,8 +633,11 @@ function Map() {
         setNodeDataLoaded(true);
       });
     } else {
+      console.log("Populating autocomplete data");
       populateAutocompleteData();
     }
+
+    console.log("Rendering Canvas");
 
     console.log(algorithm);
     console.log(startNode);
@@ -604,13 +649,11 @@ function Map() {
 
       if (!ctx) return;
 
-      const image = new Image();
-      image.src = MapImage;
-      image.onload = () => {
-        canvas.width = image.width;
-        canvas.height = image.height;
+      currImage.onload = () => {
+        canvas.width = currImage.width;
+        canvas.height = currImage.height;
 
-        ctx.drawImage(image, 0, 0, image.width, image.height);
+        ctx.drawImage(currImage, 0, 0, currImage.width, currImage.height);
 
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
@@ -625,7 +668,7 @@ function Map() {
 
           const moveDot = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "black";
 
             for (let i = 0; i < nodesData.length; i++) {
@@ -669,7 +712,16 @@ function Map() {
         }
       };
     }
-  }, [nodeDataLoaded, startNode, endNode, nodes, nodesData, algorithm]);
+  }, [
+    nodeDataLoaded,
+    startNode,
+    endNode,
+    nodes,
+    nodesData,
+    algorithm,
+    currImage,
+    updateAnimation,
+  ]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -788,7 +840,11 @@ function Map() {
               startIcon={<AltRouteIcon />}
               variant={"contained"}
               sx={{ width: "80%", display: "flex", justifyContent: "center" }}
-              onClick={handleSubmit}
+              onClick={() => {
+                handleSubmit().then(() => {
+                  setUpdateAnimation(!updateAnimation);
+                });
+              }}
             >
               Find Path
             </Button>
@@ -843,7 +899,7 @@ function Map() {
                 {icon}
               </Slide>
             )}
-            <Floor />
+            <Floor callback={handleFloorChange} />
           </Stack>
         </Stack>
       </Drawer>
