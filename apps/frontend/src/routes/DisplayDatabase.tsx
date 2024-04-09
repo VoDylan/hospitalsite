@@ -71,10 +71,11 @@ function DisplayDatabase() {
     {},
   );
   const handleEditClick = (id: GridRowId) => () => {
+    console.log(rowModesModel);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
   const handleSaveClick = (id: GridRowId) => () => {
-    console.log("id is " + id);
+    console.log(rowModesModel);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
@@ -360,11 +361,9 @@ function DisplayDatabase() {
     [],
   );
 
-  /*
   const handleProcessRowUpdateError = React.useCallback((error: Error) => {
     alert("status didn't save");
   }, []);
-*/
 
   return (
     <>
@@ -493,11 +492,12 @@ function DisplayDatabase() {
             processRowUpdate={(newRow: GridRowModel) =>
               processRowUpdate(newRow, parseInt(newRow["id"]))
             }
+            onProcessRowUpdateError={handleProcessRowUpdateError}
           />
         </Box>
       </div>
     </>
   );
 }
-//onProcessRowUpdateError={handleProcessRowUpdateError}
+
 export default DisplayDatabase;
