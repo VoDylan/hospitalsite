@@ -846,14 +846,14 @@ function Map() {
         </Stack>
       </Drawer>
 
-      <TransformWrapper>
-        <TransformComponent>
-          <Draggable>
-            <Box
-              width={window.innerWidth}
-              height={window.innerHeight}
-              overflow={"clip"}
-            >
+      <Box
+        width={window.innerWidth}
+        height={window.innerHeight}
+        overflow={"clip"}
+      >
+        <TransformWrapper>
+          <TransformComponent>
+            <Draggable>
               <canvas
                 ref={canvasRef}
                 style={{
@@ -865,10 +865,10 @@ function Map() {
                   maxWidth: "100%",
                 }}
               />
-            </Box>
-          </Draggable>
-        </TransformComponent>
-      </TransformWrapper>
+            </Draggable>
+          </TransformComponent>
+        </TransformWrapper>
+      </Box>
       <Legend />
     </Box>
   );
