@@ -6,12 +6,25 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios, { AxiosResponse } from "axios";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbar,
+  GridRowModel,
+  GridRowsProp,
+  GridRowModesModel,
+  GridToolbarContainer,
+} from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -67,7 +80,14 @@ function DisplayDatabase() {
     { field: "userID", headerName: "User ID", width: 200 },
     { field: "nodeID", headerName: "Node ID", width: 200 },
     { field: "serviceType", headerName: "Service Type", width: 200 },
-    { field: "status", headerName: "Status", width: 200, editable: true },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: ["unassigned", "Assigned", "InProgress", "Closed"],
+    },
   ]);
 
   // const [isFinished] = useState(false);
@@ -136,6 +156,13 @@ function DisplayDatabase() {
     }
     setServiceRowData(rowData);
   };
+
+  /*  const [updatedRows, setUpdatedRows] = React.useState(serviceRowData);
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow, isNew: false };
+    setServiceRowData(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+  };*/
 
   useEffect(() => {
     getNodeData();
@@ -262,6 +289,13 @@ function DisplayDatabase() {
     console.log("Handling node import data");
   }
 
+  interface EditToolbarProps {
+    setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+    setRowModesModel: (
+      newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
+    ) => void;
+  }
+
   return (
     <>
       <TopBanner2 />
@@ -364,6 +398,7 @@ function DisplayDatabase() {
             Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
+
           <DataGrid
             slots={{ toolbar: GridToolbar }}
             sx={{
