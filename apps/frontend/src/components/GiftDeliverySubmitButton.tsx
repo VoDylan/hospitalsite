@@ -71,6 +71,8 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       openWithError("Please select a status");
     } else if (props.input.giftSize === "") {
       openWithError("Please select a Gift Size");
+    } else if (props.input.recipientName === "") {
+      openWithError("Please enter a Recipient Name");
     } else {
       console.log(props.input);
       handleListUpdate();
