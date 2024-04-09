@@ -27,8 +27,15 @@ import { LocationInfo } from "common/src/LocationInfo.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
-// import Legend from "../components/Legend.tsx";
+import Legend from "../components/Legend.tsx";
 import { Typography } from "@mui/material";
+import FilterManager from "common/src/filter/FilterManager.ts";
+import { FilterName } from "common/src/filter/FilterName.ts";
+import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
+import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
+import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
+import Draggable from "react-draggable";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import Floor from "../components/FloorTabs.tsx";
 
 function Map() {
@@ -78,6 +85,21 @@ function Map() {
     );
 
     setAutocompleteNodeData(nodeAssociations);
+  };
+
+  const registerFilters = () => {
+    FilterManager.getInstance().registerFilter(
+      FilterName.TYPE,
+      () => new TypeFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.FLOOR,
+      () => new FloorFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.BUILDING,
+      () => new BuildingFilter(),
+    );
   };
 
   const handleClick = () => {
@@ -563,6 +585,7 @@ function Map() {
 
   useEffect(() => {
     if (!nodeDataLoaded) {
+      registerFilters();
       loadNodeData().then((data: MapNodeType[]) => {
         setDBNodesData(data);
         setNodeDataLoaded(true);
@@ -587,7 +610,7 @@ function Map() {
         canvas.width = image.width;
         canvas.height = image.height;
 
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, image.width, image.height);
 
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
@@ -824,19 +847,31 @@ function Map() {
           </Stack>
         </Stack>
       </Drawer>
-      <Box>
-        <canvas
-          ref={canvasRef}
-          style={{
-            width: "100%",
-            height: "100%",
-            position: "relative",
-            top: 50,
-            left: 0,
-            minHeight: "100vh",
-          }}
-        />
+
+      <Box
+        width={window.innerWidth}
+        height={window.innerHeight}
+        overflow={"clip"}
+      >
+        <TransformWrapper>
+          <TransformComponent>
+            <Draggable>
+              <canvas
+                ref={canvasRef}
+                style={{
+                  position: "relative",
+                  top: 50,
+                  left: 0,
+                  minHeight: "100vh",
+                  maxHeight: "100%",
+                  maxWidth: "100%",
+                }}
+              />
+            </Draggable>
+          </TransformComponent>
+        </TransformWrapper>
       </Box>
+      <Legend />
     </Box>
   );
 }
