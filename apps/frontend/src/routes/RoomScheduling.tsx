@@ -15,14 +15,14 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { MedicineDeliveryFormSubmission } from "../common/MedicineDeliveryFormSubmission.ts";
-import MedicineBackground from "../images/MedicineDelivery.jpeg";
-import { MedicineSubmitButton } from "../components/MedicineSubmitButton.tsx";
+import { RoomSchedulingFormSubmission } from "../common/RoomSchedulingFormSubmission.ts";
+import RoomBackground from "../images/RoomScheduling.jpg";
+import { RoomSubmitButton } from "../components/RoomSubmitButton.tsx";
 import axios from "axios";
 import TopBanner2 from "../components/TopBanner2.tsx";
 
-function MedicineDelivery() {
-  const [form, setFormResponses] = useState<MedicineDeliveryFormSubmission>({
+function RoomScheduling() {
+  const [form, setFormResponses] = useState<RoomSchedulingFormSubmission>({
     name: "",
     location: "",
     priority: "",
@@ -32,7 +32,7 @@ function MedicineDelivery() {
   });
 
   const [submittedData, setSubmittedData] = useState<
-    MedicineDeliveryFormSubmission[]
+    RoomSchedulingFormSubmission[]
   >([]);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
@@ -106,7 +106,7 @@ function MedicineDelivery() {
         display: "flex",
         alignItems: "center", // Center vertically
         justifyContent: "center", // Center horizontally
-        backgroundImage: `url(${MedicineBackground})`,
+        backgroundImage: `url(${RoomBackground})`,
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
         minHeight: "100vh",
@@ -138,7 +138,7 @@ function MedicineDelivery() {
           }}
         >
           <Typography color={"white"} align={"center"} fontSize={40}>
-            Medicine Delivery Form
+            Room Scheduling Form
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -159,7 +159,7 @@ function MedicineDelivery() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Priority of Medicine:</Typography>
+          <Typography color={"black"}>Priority of Scheduling:</Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
@@ -168,17 +168,11 @@ function MedicineDelivery() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Medicine Needed:</Typography>
+          <Typography color={"black"}>Room Needed:</Typography>
           <DropDown
-            items={[
-              "Acetaminophen (Tylenol)",
-              "Ibuprofen (Advil)",
-              "Omeprazole (Prilosec)",
-              "Fexofenadine (Allegra)",
-              "Diphenhydramine (Benadryl)",
-            ]}
+            items={["MRI", "Surgery", "Conference", "Checkup", "Waiting Room"]}
             handleChange={handleServiceInput}
-            label={"Medicine"}
+            label={"Room"}
             returnData={form.service}
           />
         </Grid>
@@ -209,7 +203,7 @@ function MedicineDelivery() {
             justifyContent: "center",
           }}
         >
-          <MedicineSubmitButton
+          <RoomSubmitButton
             input={form}
             text={"SUBMIT"}
             clear={clear}
@@ -239,7 +233,7 @@ function MedicineDelivery() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {submittedData.map((item: MedicineDeliveryFormSubmission) => (
+            {submittedData.map((item: RoomSchedulingFormSubmission) => (
               <TableRow
                 key={item.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -262,4 +256,4 @@ function MedicineDelivery() {
   );
 }
 
-export default MedicineDelivery;
+export default RoomScheduling;
