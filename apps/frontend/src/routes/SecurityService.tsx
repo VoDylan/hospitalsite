@@ -149,7 +149,9 @@ function SecurityService() {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Name:</Typography>
+          <Typography color={"black"} fontWeight={"bold"}>
+            Name
+          </Typography>
           <LeftAlignedTextbox
             label={"Name"}
             value={form.name}
@@ -157,7 +159,9 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Location:</Typography>
+          <Typography color={"black"} fontWeight={"bold"}>
+            Location
+          </Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
@@ -166,7 +170,9 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Priority of Security:</Typography>
+          <Typography color={"black"} fontWeight={"bold"}>
+            Priority of Security
+          </Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
@@ -175,7 +181,9 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Security Personnel:</Typography>
+          <Typography color={"black"} fontWeight={"bold"}>
+            Security Personnel
+          </Typography>
           <DropDown
             items={["Local Security", "Local Police", "State Police", "Other"]}
             handleChange={handleSecurityPersonnelInput}
@@ -184,7 +192,9 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Why is Security Needed:</Typography>
+          <Typography color={"black"} fontWeight={"bold"}>
+            Why is Security Needed
+          </Typography>
           <DropDown
             items={[
               "I feel generally unsafe",
@@ -200,8 +210,8 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>
-            Additional Details (optional):
+          <Typography color={"black"} fontWeight={"bold"}>
+            Additional Details (optional)
           </Typography>
           <LeftAlignedTextbox
             label={"Details"}
@@ -210,7 +220,9 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color={"black"}>Status of the request:</Typography>
+          <Typography color={"black"} fontWeight={"bold"}>
+            Status of the request
+          </Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}

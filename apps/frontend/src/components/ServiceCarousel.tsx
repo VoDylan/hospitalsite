@@ -1,8 +1,8 @@
 import ServiceCards from "./ServiceHeroCards.tsx";
 import Stack from "@mui/material/Stack";
 import flower from "../images/Flower.jpg";
-import bus from "../images/bus.jpg";
-import priest from "../images/priest-last-rites.jpg";
+import gift from "../images/giftBasket.jpg";
+import medicine from "../images/medicineCard.jpg";
 import signL from "../images/language.webp";
 
 interface secondaryCardData {
@@ -23,25 +23,25 @@ function ServiceCarousel() {
       path: "/Services/FlowerDelivery",
     },
     {
-      image: bus,
-      title: "Services",
-      description: "Coming Soon!",
-      buttonText: "Request Service",
-      path: "/Services",
+      image: gift,
+      title: "Gift Delivery",
+      description: "Request for a gift to be sent to a friend or loved one!",
+      buttonText: "Get Gift",
+      path: "/Services/GiftDelivery",
     },
     {
-      image: priest,
-      title: "Services",
-      description: "Coming Soon!",
-      buttonText: "Request Service",
-      path: "/Services",
+      image: medicine,
+      title: "Medicine Delivery",
+      description: "Request for medicine to be delivered to you or a dependant",
+      buttonText: "Get Medicine",
+      path: "/Services/MedicineDelivery",
     },
     {
       image: signL,
-      title: "Services",
-      description: "Coming Soon!",
-      buttonText: "Request Service",
-      path: "/Services",
+      title: "Room Scheduling",
+      description: "Schedule a room for yourself or a dependant!",
+      buttonText: "Schedule Room",
+      path: "/Services/RoomScheduling",
     },
   ];
 
