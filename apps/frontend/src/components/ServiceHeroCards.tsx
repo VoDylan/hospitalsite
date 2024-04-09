@@ -30,6 +30,7 @@ const ServiceCard: React.FC<CardProps> = ({
         height: "35vh",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center", // Center content horizontally
       }}
     >
       <CardMedia
@@ -47,14 +48,8 @@ const ServiceCard: React.FC<CardProps> = ({
           {description}
         </Typography>
       </CardContent>
-      <CardActions style={{ marginTop: "auto" }}>
-        <Link
-          to={path}
-          style={{
-            margin: "auto",
-            marginLeft: "1%",
-          }}
-        >
+      <CardActions style={{ marginTop: "auto", justifyContent: "center" }}>
+        <Link to={path}>
           <Button variant="contained" size="large" sx={{ width: "100%" }}>
             {buttonText}
           </Button>
