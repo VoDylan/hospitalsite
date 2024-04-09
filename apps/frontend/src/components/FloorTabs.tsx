@@ -4,7 +4,7 @@ function Floors() {
   return (
     <Stack
       direction="column"
-      spacing={0.054}
+      spacing={0.1}
       sx={{
         position: "fixed",
         right: "1%",
