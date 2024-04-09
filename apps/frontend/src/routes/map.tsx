@@ -36,6 +36,8 @@ import { FilterName } from "common/src/filter/FilterName.ts";
 import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
+import Draggable from "react-draggable";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
 
 function Map() {
@@ -864,7 +866,7 @@ function Map() {
         canvas.width = image.width;
         canvas.height = image.height;
 
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, image.width, image.height);
 
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
@@ -1111,18 +1113,29 @@ function Map() {
           </Stack>
         </Stack>
       </Drawer>
-      <Box>
-        <canvas
-          ref={canvasRef}
-          style={{
-            width: "100%",
-            height: "100%",
-            position: "relative",
-            top: 50,
-            left: 0,
-            minHeight: "100vh",
-          }}
-        />
+
+      <Box
+        width={window.innerWidth}
+        height={window.innerHeight}
+        overflow={"clip"}
+      >
+        <TransformWrapper>
+          <TransformComponent>
+            <Draggable>
+              <canvas
+                ref={canvasRef}
+                style={{
+                  position: "relative",
+                  top: 50,
+                  left: 0,
+                  minHeight: "100vh",
+                  maxHeight: "100%",
+                  maxWidth: "100%",
+                }}
+              />
+            </Draggable>
+          </TransformComponent>
+        </TransformWrapper>
       </Box>
       <Legend />
     </Box>
