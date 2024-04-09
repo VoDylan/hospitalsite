@@ -13,8 +13,8 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import AddIcon from "@mui/icons-material/Add";
-import CheckIcon from "@mui/icons-material/Check";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
@@ -126,6 +126,9 @@ function Map() {
   const [servIconState, setServIconState] = React.useState<"plus" | "check">(
     "check",
   );
+  const [infoIconState, setInfoIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
   const [restroomsIconState, setRestroomsIconState] = React.useState<
     "plus" | "check"
   >("check");
@@ -147,15 +150,15 @@ function Map() {
   const [ll2IconState, setLL2IconState] = React.useState<"plus" | "check">(
     "check",
   );
-  // const [firstFloorIconState, setFirstFloorIconState] = React.useState<
-  //   "plus" | "check"
-  // >("check");
-  // const [secondFloorIconState, setSecondFloorIconState] = React.useState<
-  //   "plus" | "check"
-  // >("check");
-  // const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
-  //   "plus" | "check"
-  // >("check");
+  const [firstFloorIconState, setFirstFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [secondFloorIconState, setSecondFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
 
   const handleElevatorIconState = () => {
     setElevatorIconState((prevState) =>
@@ -173,7 +176,10 @@ function Map() {
     setExitsIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
     setFiltersApplied(false);
   };
-
+  const handleInfoIconState = () => {
+    setInfoIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
+  };
   const handleServIconState = () => {
     setServIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
     setFiltersApplied(false);
@@ -209,29 +215,30 @@ function Map() {
     setLL2IconState((prevState) => (prevState === "plus" ? "check" : "plus"));
     setFiltersApplied(false);
   };
-  // const handleFirstFloorIconState = () => {
-  //   setFirstFloorIconState((prevState) =>
-  //     prevState === "plus" ? "check" : "plus",
-  //   );
-  //   setFiltersApplied(false);
-  // };
-  // const handleSecondFloorIconState = () => {
-  //   setSecondFloorIconState((prevState) =>
-  //     prevState === "plus" ? "check" : "plus",
-  //   );
-  //   setFiltersApplied(false);
-  // };
-  // const handleThirdFloorIconState = () => {
-  //   setThirdFloorIconState((prevState) =>
-  //     prevState === "plus" ? "check" : "plus",
-  //   );
-  //   setFiltersApplied(false);
-  // };
+  const handleFirstFloorIconState = () => {
+    setFirstFloorIconState((prevState) =>
+      prevState === "plus" ? "check" : "plus",
+    );
+    setFiltersApplied(false);
+  };
+  const handleSecondFloorIconState = () => {
+    setSecondFloorIconState((prevState) =>
+      prevState === "plus" ? "check" : "plus",
+    );
+    setFiltersApplied(false);
+  };
+  const handleThirdFloorIconState = () => {
+    setThirdFloorIconState((prevState) =>
+      prevState === "plus" ? "check" : "plus",
+    );
+    setFiltersApplied(false);
+  };
 
   const handleSelectAll = () => {
     setElevatorIconState("check");
     setStairsIconState("check");
     setExitsIconState("check");
+    setInfoIconState("check");
     setServIconState("check");
     setRestroomsIconState("check");
     setConfIconState("check");
@@ -240,9 +247,9 @@ function Map() {
     setRetlIconState("check");
     setLL1IconState("check");
     setLL2IconState("check");
-    // setFirstFloorIconState("check");
-    // setSecondFloorIconState("check");
-    // setThirdFloorIconState("check");
+    setFirstFloorIconState("check");
+    setSecondFloorIconState("check");
+    setThirdFloorIconState("check");
     setFiltersApplied(false);
   };
 
@@ -250,6 +257,7 @@ function Map() {
     setElevatorIconState("plus");
     setStairsIconState("plus");
     setExitsIconState("plus");
+    setInfoIconState("plus");
     setServIconState("plus");
     setRestroomsIconState("plus");
     setConfIconState("plus");
@@ -258,9 +266,9 @@ function Map() {
     setRetlIconState("plus");
     setLL1IconState("plus");
     setLL2IconState("plus");
-    // setFirstFloorIconState("plus");
-    // setSecondFloorIconState("plus");
-    // setThirdFloorIconState("plus");
+    setFirstFloorIconState("plus");
+    setSecondFloorIconState("plus");
+    setThirdFloorIconState("plus");
     setFiltersApplied(false);
   };
 
@@ -299,6 +307,30 @@ function Map() {
       filters.push(
         FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
           generateFilterValue(true, "L2"),
+        ])!,
+      );
+    }
+
+    if (firstFloorIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "1"),
+        ])!,
+      );
+    }
+
+    if (secondFloorIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "2"),
+        ])!,
+      );
+    }
+
+    if (thirdFloorIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "3"),
         ])!,
       );
     }
@@ -400,11 +432,14 @@ function Map() {
     deptIconState,
     labsIconState,
     retlIconState,
+    firstFloorIconState,
+    secondFloorIconState,
+    thirdFloorIconState,
   ]);
 
   const icon = (
     <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
-      <Stack direction="column" sx={{ position: "absolute", top: 4, left: 4 }}>
+      <Stack direction="column" sx={{ position: "absolute", top: 1, left: 4 }}>
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={handleButtonClick}
@@ -415,14 +450,14 @@ function Map() {
       </Stack>
 
       <Stack
-        spacing={"14%"}
+        spacing={"10%"}
         direction="column"
         sx={{
           display: "flex",
           justifyContent: "start",
           alignItems: "start",
           position: "relative",
-          marginTop: "28%",
+          marginTop: "18%",
           marginLeft: "10%",
         }}
       >
@@ -430,58 +465,75 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={4.8}
+            spacing={6}
           >
-            <Filter iconColor="#0000FF" filterName="Elevators" filterType={1} />
-            {elevatorIconState === "plus" ? (
-              <AddIcon
-                onClick={handleElevatorIconState}
+            <Filter
+              iconColor="#1CA7EC"
+              filterName="Conference"
+              filterType={1}
+              shape={"pentagon"}
+            />
+            {confIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleConfIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
-                onClick={handleElevatorIconState}
+              <CheckBoxIcon
+                onClick={handleConfIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
             )}
           </Stack>
+
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={8.8}
+            spacing={5.7}
           >
-            <Filter iconColor="#008000" filterName="Stairs" filterType={1} />
-            {stairsIconState === "plus" ? (
-              <AddIcon
-                onClick={handleStairsIconState}
+            <Filter
+              iconColor="#72c41c"
+              filterName="Department"
+              filterType={1}
+              shape={"pentagon"}
+            />
+            {deptIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleDeptIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
-                onClick={handleStairsIconState}
+              <CheckBoxIcon
+                onClick={handleDeptIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
             )}
           </Stack>
+
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={9.6}
+            spacing={11.3}
           >
-            <Filter iconColor="#FF0000" filterName="Exits" filterType={1} />
-            {exitsIconState === "plus" ? (
-              <AddIcon
-                onClick={handleExitsIconState}
+            <Filter
+              iconColor="#e88911"
+              filterName="Labs"
+              filterType={1}
+              shape={"pentagon"}
+            />
+            {labsIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleLabsIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
-                onClick={handleExitsIconState}
+              <CheckBoxIcon
+                onClick={handleLabsIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
@@ -492,17 +544,22 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={7}
+            spacing={9.3}
           >
-            <Filter iconColor="#8877CC" filterName="Service" filterType={1} />
+            <Filter
+              iconColor="#e88911"
+              filterName="Service"
+              filterType={1}
+              shape={"circle"}
+            />
             {servIconState === "plus" ? (
-              <AddIcon
+              <AddBoxIcon
                 onClick={handleServIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
+              <CheckBoxIcon
                 onClick={handleServIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
@@ -512,18 +569,125 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={2.9}
+            spacing={12}
           >
-            <Filter iconColor="#63CA00" filterName="Restrooms" filterType={1} />
+            <Filter
+              iconColor="#1CA7EC"
+              filterName="Info"
+              filterType={1}
+              shape={"circle"}
+            />
+            {infoIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleInfoIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleInfoIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={6.5}
+          >
+            <Filter
+              iconColor="#72c41c"
+              filterName="Restrooms"
+              filterType={1}
+              shape={"circle"}
+            />
             {restroomsIconState === "plus" ? (
-              <AddIcon
+              <AddBoxIcon
+                onClick={handleRestroomsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
                 onClick={handleRestroomsIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
+            )}
+          </Stack>
+        </Stack>
+        <Stack direction="column" spacing={1}>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={7.8}
+          >
+            <Filter
+              iconColor="#1CA7EC"
+              filterName="Elevators"
+              filterType={1}
+              shape={"square"}
+            />
+            {elevatorIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleElevatorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
             ) : (
-              <CheckIcon
-                onClick={handleRestroomsIconState}
+              <CheckBoxIcon
+                onClick={handleElevatorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={10.5}
+          >
+            <Filter
+              iconColor="#72c41c"
+              filterName="Stairs"
+              filterType={1}
+              shape={"square"}
+            />
+            {stairsIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleStairsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleStairsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={11.3}
+          >
+            <Filter
+              iconColor="red"
+              filterName="Exits"
+              filterType={1}
+              shape={"square"}
+            />
+            {exitsIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleExitsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleExitsIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
@@ -533,80 +697,22 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={2.1}
+            spacing={10.6}
           >
-            <Filter iconColor="yellow" filterName="Conference" filterType={1} />
-            {confIconState === "plus" ? (
-              <AddIcon
-                onClick={handleConfIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 280, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleConfIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
-
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={1.8}
-          >
-            <Filter iconColor="gray" filterName="Department" filterType={1} />
-            {deptIconState === "plus" ? (
-              <AddIcon
-                onClick={handleDeptIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 280, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleDeptIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
-
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={9.7}
-          >
-            <Filter iconColor="lightBlue" filterName="Labs" filterType={1} />
-            {labsIconState === "plus" ? (
-              <AddIcon
-                onClick={handleLabsIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 280, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleLabsIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
-
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={8.8}
-          >
-            <Filter iconColor="pink" filterName="Retail" filterType={1} />
+            <Filter
+              iconColor="#e88911"
+              filterName="Retail"
+              filterType={1}
+              shape={"square"}
+            />
             {retlIconState === "plus" ? (
-              <AddIcon
+              <AddBoxIcon
                 onClick={handleRetlIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 280, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
+              <CheckBoxIcon
                 onClick={handleRetlIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
@@ -618,23 +724,28 @@ function Map() {
         {/*Floors*/}
         <Stack
           direction="column"
-          sx={{ display: "flex", justfiyContent: "start", paddingLeft: "2%" }}
-          spacing={2}
+          sx={{ display: "flex", justfiyContent: "start" }}
+          spacing={1}
         >
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={14.7}
+            spacing={13.2}
           >
-            <Filter iconColor="#63CA00" filterName="LL 1" filterType={0} />
+            <Filter
+              iconColor="#012D5A"
+              filterName="L1"
+              filterType={0}
+              shape={"stairs"}
+            />
             {ll1IconState === "plus" ? (
-              <AddIcon
+              <AddBoxIcon
                 onClick={handleLL1IconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
+              <CheckBoxIcon
                 onClick={handleLL1IconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
@@ -644,91 +755,103 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={14.7}
+            spacing={13.2}
           >
-            <Filter iconColor="#63CA00" filterName="LL 2" filterType={0} />
+            <Filter
+              iconColor="#012D5A"
+              filterName="L2"
+              filterType={0}
+              shape={"stairs"}
+            />
             {ll2IconState === "plus" ? (
-              <AddIcon
+              <AddBoxIcon
                 onClick={handleLL2IconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
+              <CheckBoxIcon
                 onClick={handleLL2IconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
             )}
           </Stack>
-          {/*<Stack*/}
-          {/*  direction="row"*/}
-          {/*  sx={{ display: "flex", alignItems: "center" }}*/}
-          {/*  spacing={9.5}*/}
-          {/*>*/}
-          {/*  <Filter iconColor="#63CA00" filterName="1st Floor" filterType={0} />*/}
-          {/*  {firstFloorIconState === "plus" ? (*/}
-          {/*    <AddIcon*/}
-          {/*      onClick={handleFirstFloorIconState}*/}
-          {/*      fontSize="medium"*/}
-          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
-          {/*    />*/}
-          {/*  ) : (*/}
-          {/*    <CheckIcon*/}
-          {/*      onClick={handleFirstFloorIconState}*/}
-          {/*      fontSize="medium"*/}
-          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
-          {/*    />*/}
-          {/*  )}*/}
-          {/*</Stack>*/}
-          {/*<Stack*/}
-          {/*  direction="row"*/}
-          {/*  sx={{ display: "flex", alignItems: "center" }}*/}
-          {/*  spacing={4.6}*/}
-          {/*>*/}
-          {/*  <Filter*/}
-          {/*    iconColor="#63CA00"*/}
-          {/*    filterName="Second Floor"*/}
-          {/*    filterType={0}*/}
-          {/*  />*/}
-          {/*  {secondFloorIconState === "plus" ? (*/}
-          {/*    <AddIcon*/}
-          {/*      onClick={handleSecondFloorIconState}*/}
-          {/*      fontSize="medium"*/}
-          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
-          {/*    />*/}
-          {/*  ) : (*/}
-          {/*    <CheckIcon*/}
-          {/*      onClick={handleSecondFloorIconState}*/}
-          {/*      fontSize="medium"*/}
-          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
-          {/*    />*/}
-          {/*  )}*/}
-          {/*</Stack>*/}
-          {/*<Stack*/}
-          {/*  direction="row"*/}
-          {/*  sx={{ display: "flex", alignItems: "center" }}*/}
-          {/*  spacing={7.2}*/}
-          {/*>*/}
-          {/*  <Filter*/}
-          {/*    iconColor="#63CA00"*/}
-          {/*    filterName="Third Floor"*/}
-          {/*    filterType={0}*/}
-          {/*  />*/}
-          {/*  {thirdFloorIconState === "plus" ? (*/}
-          {/*    <AddIcon*/}
-          {/*      onClick={handleThirdFloorIconState}*/}
-          {/*      fontSize="medium"*/}
-          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
-          {/*    />*/}
-          {/*  ) : (*/}
-          {/*    <CheckIcon*/}
-          {/*      onClick={handleThirdFloorIconState}*/}
-          {/*      fontSize="medium"*/}
-          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
-          {/*    />*/}
-          {/*  )}*/}
-          {/*</Stack>*/}
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={8.1}
+          >
+            <Filter
+              iconColor="#012D5A"
+              filterName="1st Floor"
+              filterType={0}
+              shape={"stairs"}
+            />
+            {firstFloorIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleFirstFloorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleFirstFloorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={4.7}
+          >
+            <Filter
+              iconColor="#012D5A"
+              filterName="Second Floor"
+              filterType={0}
+              shape={"stairs"}
+            />
+            {secondFloorIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleSecondFloorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleSecondFloorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={6.5}
+          >
+            <Filter
+              iconColor="#012D5A"
+              filterName="Third Floor"
+              filterType={0}
+              shape={"stairs"}
+            />
+            {thirdFloorIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleThirdFloorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleThirdFloorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
         </Stack>
 
         {/*Buttons*/}
@@ -739,8 +862,9 @@ function Map() {
             alignItems: "center",
             justifyContent: "center",
             width: "90%",
+            paddingBottom: "10%",
           }}
-          spacing={1}
+          spacing={0.5}
         >
           <Button
             variant={"contained"}
@@ -949,7 +1073,6 @@ function Map() {
         sx={{
           [`& .MuiDrawer-paper`]: {
             width: "18%",
-            // marginTop: "7.2%",
             height: "100%",
             minWidth: "18%",
             boxSizing: "border-box",
@@ -986,12 +1109,16 @@ function Map() {
               onChange={(event, value) => handleStartNodeChange(value)}
               disablePortal
               id="startNode"
-              options={autocompleteNodeData.map((node) => node.label)}
+              options={autocompleteNodeData
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((node) => node.label)}
+              groupBy={(option) => option.charAt(0).toUpperCase()}
+              getOptionLabel={(option) => option}
               sx={{ width: "75%" }}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Starting Node"
+                  label="Starting Location"
                   value={startNode}
                 />
               )}
@@ -1016,10 +1143,18 @@ function Map() {
               onChange={(event, value) => handleEndNodeChange(value)}
               disablePortal
               id="startNode"
-              options={autocompleteNodeData.map((node) => node.label)}
+              options={autocompleteNodeData
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((node) => node.label)}
+              groupBy={(option) => option.charAt(0).toUpperCase()}
+              getOptionLabel={(option) => option}
               sx={{ width: "75%" }}
               renderInput={(params) => (
-                <TextField {...params} label="Ending Node" value={endNode} />
+                <TextField
+                  {...params}
+                  label="Ending Location"
+                  value={endNode}
+                />
               )}
             />
           </Stack>
@@ -1101,10 +1236,10 @@ function Map() {
                   zIndex: 1,
                   backgroundColor: "#F5F7FA",
                   position: "absolute",
-                  top: "13%",
+                  top: "12%",
                   left: "2.5%",
-                  width: "95%",
-                  height: "84%",
+                  width: "96%",
+                  height: "99%",
                 }}
               >
                 {icon}
@@ -1137,7 +1272,70 @@ function Map() {
           </TransformComponent>
         </TransformWrapper>
       </Box>
-      <Legend />
+      <Legend
+        filterItems={[
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Conference",
+            filterType: 1,
+            shape: "pentagon",
+          },
+          {
+            iconColor: "#72c41c",
+            filterName: "Department",
+            filterType: 1,
+            shape: "pentagon",
+          },
+          {
+            iconColor: "#e88911",
+            filterName: "Labs",
+            filterType: 1,
+            shape: "pentagon",
+          },
+          {
+            iconColor: "#e88911",
+            filterName: "Service",
+            filterType: 1,
+            shape: "circle",
+          },
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Info",
+            filterType: 1,
+            shape: "circle",
+          },
+          {
+            iconColor: "#72c41c",
+            filterName: "Restrooms",
+            filterType: 1,
+            shape: "circle",
+          },
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Elevators",
+            filterType: 1,
+            shape: "square",
+          },
+          {
+            iconColor: "#72c41c",
+            filterName: "Stairs",
+            filterType: 1,
+            shape: "square",
+          },
+          {
+            iconColor: "red",
+            filterName: "Exits",
+            filterType: 1,
+            shape: "square",
+          },
+          {
+            iconColor: "#e88911",
+            filterName: "Retail",
+            filterType: 1,
+            shape: "square",
+          },
+        ]}
+      />
     </Box>
   );
 }
