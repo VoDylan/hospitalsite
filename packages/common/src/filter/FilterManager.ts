@@ -3,7 +3,7 @@ import { FilterName } from "./FilterName.ts";
 import MapNode from "../map/MapNode.ts";
 
 export type FilterValueType = {
-  inverted: boolean;
+  exclude: boolean;
   value: number | string;
 };
 
@@ -12,7 +12,7 @@ export const generateFilterValue = (
   value: number | string,
 ): FilterValueType => {
   return {
-    inverted: inverted,
+    exclude: inverted,
     value: value,
   };
 };
