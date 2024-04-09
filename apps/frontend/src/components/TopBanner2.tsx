@@ -65,7 +65,7 @@ function TopBanner() {
       sx={{
         backgroundColor: "white",
         height: "120px",
-        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.1)",
         elevation: 1,
       }}
     >
