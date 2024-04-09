@@ -6,7 +6,7 @@ import { Coordinates } from "common/src/Coordinates.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import client from "./bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
-// import { testingDistance } from "../tests/testingDistance.ts";
+import { testingDistance } from "../tests/testingDistance.ts";
 
 export class AStarAlgorithm {
   nodes: NodeAStar[];
@@ -159,8 +159,8 @@ export class AStarAlgorithm {
         console.log("Path found:", path);
         console.log("Coordinates found:", coordinatesPath);
 
-        // const TestingDistance = new testingDistance;
-        // TestingDistance.putIntoTypes();
+        const TestingDistance = new testingDistance();
+        TestingDistance.putIntoTypes();
 
         return coordinatesPath;
       }
