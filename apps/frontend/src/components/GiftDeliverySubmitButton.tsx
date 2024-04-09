@@ -8,6 +8,9 @@ interface ButtonProps {
   text: string;
   input: GiftDeliveryFormSubmission;
   clear: () => void;
+  displayConfetti: () => void;
+  hideConfetti: () => void;
+  updateList: () => void;
 }
 
 export function GiftDeliverySubmitButton(props: ButtonProps) {
@@ -21,6 +24,16 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       return <Alert elevation={6} ref={ref} {...props} />;
     },
   );
+
+  function handleShowConfetti() {
+    props.displayConfetti();
+
+    const duration = 7000; // 7 seconds
+
+    setTimeout(() => {
+      props.hideConfetti();
+    }, duration);
+  }
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -50,32 +63,19 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       openWithError("Please select a room");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
-    } else if (props.input.priority === "") {
+    } else if (props.input.delivery === "") {
       openWithError("Please select a priority");
     } else if (props.input.message === "") {
       openWithError("Please enter a message");
     } else if (props.input.status === "") {
       openWithError("Please select a status");
-    } else if (props.input.giftAddOn === "") {
-      openWithError("Please select a Gift Add-on");
+    } else if (props.input.giftSize === "") {
+      openWithError("Please select a Gift Size");
     } else {
-      // Not needed for iteration 2
-      // const submission = props.input;
       console.log(props.input);
-
-      // const result: { success: boolean; data: HTTPResponseType } =
-      //   await pushToDB(submission);
-
-      // if (!result.success) {
-      //   openWithError(
-      //     `Failed to post form data to database: ${result.data.message}`,
-      //   );
-      // } else {
-      //   handleClear();
-      //   openWithSuccess();
-
-      // Remove these once connected to DB
+      handleListUpdate();
       handleClear();
+      handleShowConfetti();
       openWithSuccess();
     }
   }
@@ -83,6 +83,10 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
 
   function handleClear() {
     props.clear();
+  }
+
+  function handleListUpdate() {
+    props.updateList();
   }
 
   /* Commenting this out for iteration 2
