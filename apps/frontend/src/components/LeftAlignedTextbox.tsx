@@ -30,8 +30,9 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "flex-start",
     "& .MuiTextField-root": {
-      margin: "10px",
+      // margin: "10px",
       width: "200px", // Adjust width as needed
+      height: "80px", // Adjust height as needed
     },
   },
 });
