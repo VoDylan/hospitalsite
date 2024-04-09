@@ -192,4 +192,30 @@ router.post("/uploadedges", async (req, res) => {
   res.status(200);
 });
 
+router.put("/updatesr/:id", async (req, res) => {
+  const data: {
+    id: number;
+    userID: string;
+    nodeID: string;
+    serviceType: string;
+    services: string;
+    status: string;
+  } = req.body;
+
+  console.log(data);
+
+  await client.serviceRequest.update({
+    where: {
+      id: parseInt(req.params.id),
+    },
+    data: {
+      status: data.status,
+    },
+  });
+
+  res.status(200).json({
+    message: "success",
+  });
+});
+
 export default router;
