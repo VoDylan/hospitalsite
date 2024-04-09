@@ -63,7 +63,7 @@ export class testingDistance {
     endCoordinate: Coordinates,
   ) {
     const deltaX: number = startCoordinate.x - endCoordinate.x;
-    const deltaY: number = endCoordinate.y - endCoordinate.y;
+    const deltaY: number = startCoordinate.y - endCoordinate.y;
     return Math.sqrt(deltaX ** 2 + deltaY ** 2);
   }
 
