@@ -5,13 +5,23 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios, { AxiosResponse } from "axios";
 import TopBanner2 from "../components/TopBanner2.tsx";
-
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbar,
+  GridRowModel,
+  GridRowModesModel,
+  GridRowModes,
+  GridRowId,
+  GridActionsCellItem,
+} from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -20,13 +30,11 @@ type ServiceParams = {
   userID: number;
   nodeID: string;
   serviceType: string;
+  services: string;
+  status: string;
 };
 
 type EdgeParams = { id: number } & MapEdgeType;
-
-/*app.post('/csv', upload.none(), function (req, res, next) {
-  // req.body contains the text fields
-});*/
 
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
@@ -46,6 +54,21 @@ function parseCSVFromString(data: string) {
 }
 
 function DisplayDatabase() {
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
+    {},
+  );
+  const handleEditClick = (id: GridRowId) => () => {
+    console.log(rowModesModel);
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+  const handleSaveClick = (id: GridRowId) => () => {
+    console.log(rowModesModel);
+    setRowModesModel((prevRowModesModel) => ({
+      ...prevRowModesModel,
+      [id]: { mode: GridRowModes.View },
+    }));
+  };
+
   const [nodeColumns] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 150 },
     { field: "xcoord", headerName: "XCoord", width: 120 },
@@ -63,11 +86,46 @@ function DisplayDatabase() {
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
 
-  const [serviceColumns] = useState<GridColDef[]>([
+  const serviceColumns: GridColDef[] = [
     { field: "userID", headerName: "User ID", width: 200 },
     { field: "nodeID", headerName: "Node ID", width: 200 },
     { field: "serviceType", headerName: "Service Type", width: 200 },
-  ]);
+    { field: "services", headerName: "Services", width: 100 },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: ["Unassigned", "Assigned", "InProgress", "Closed"],
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 100,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<SaveIcon />}
+            label="Save"
+            sx={{
+              color: "primary.main",
+            }}
+            onClick={handleSaveClick(id)}
+          />,
+        ];
+      },
+    },
+  ];
 
   // const [isFinished] = useState(false);
   const [nodeRowData, setNodeRowData] = useState<NodeParams[]>([]);
@@ -126,10 +184,12 @@ function DisplayDatabase() {
     const rowData = [];
     for (let i = 0; i < data.length; i++) {
       const tableFormattedServReq: ServiceParams = {
-        id: i,
+        id: data[i].id,
         userID: data[i].userID,
         nodeID: data[i].nodeID,
         serviceType: data[i].serviceType,
+        services: data[i].services,
+        status: data[i].status,
       };
       rowData.push(tableFormattedServReq);
     }
@@ -262,6 +322,29 @@ function DisplayDatabase() {
     console.log("Handling node import data");
   }
 
+  const processRowUpdate = React.useCallback(
+    async (newRow: GridRowModel, id: number) => {
+      console.log(`ID: ${id}`);
+      const data = {
+        id: newRow["id"],
+        userID: newRow["userID"],
+        nodeID: newRow["nodeID"],
+        serviceType: newRow["serviceType"],
+        services: newRow["services"],
+        status: newRow["status"],
+      };
+
+      // Make the HTTP request to save in the backend
+      await axios.put(`/api/database/updatesr/${id}`, data);
+      return newRow;
+    },
+    [],
+  );
+
+  const handleProcessRowUpdateError = React.useCallback((error: Error) => {
+    alert("status didn't save");
+  }, []);
+
   return (
     <>
       <TopBanner2 />
@@ -364,6 +447,7 @@ function DisplayDatabase() {
             Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
+
           <DataGrid
             slots={{ toolbar: GridToolbar }}
             sx={{
@@ -380,12 +464,21 @@ function DisplayDatabase() {
                 paginationModel: { page: 0, pageSize: 5 },
               },
             }}
+            editMode={"row"}
+            rowModesModel={rowModesModel}
             pageSizeOptions={[5, 10]}
+            processRowUpdate={(newRow: GridRowModel) =>
+              processRowUpdate(newRow, parseInt(newRow["id"]))
+            }
+            onProcessRowUpdateError={handleProcessRowUpdateError}
           />
         </Box>
       </div>
     </>
   );
 }
+
+//            onRowModesModelChange={handleRowModesModelChange}
+//             onRowEditStop={handleRowEditStop}
 
 export default DisplayDatabase;
