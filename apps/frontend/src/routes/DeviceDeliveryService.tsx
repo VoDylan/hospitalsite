@@ -1,4 +1,13 @@
-import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  SelectChangeEvent,
+  Stack,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+} from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
@@ -8,6 +17,7 @@ import TopBanner from "../components/TopBanner.tsx";
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/DeviceSubmitButton.tsx";
 import axios from "axios";
+import MoreMenuItem from "../components/MoreMenuItem.tsx";
 
 function DeviceDeliveryService() {
   const [form, setFormResponses] = useState<DeviceDeliveryFormSubmission>({
@@ -20,20 +30,20 @@ function DeviceDeliveryService() {
   });
 
   // Arrays for Medical Devices Categories and Devices
-  const medDevices: string[] = [
-    "Analytical Instruments",
-    "Cardiology",
-    "Dental",
-    "Genetics",
-    "Imaging",
-    "Lab Equipment",
-    "Microscopy",
-    "Neurology",
-    "Physiotherapy",
-    "Refrigeration",
-    "Spectroscopy",
-    "Ultrasound",
-  ];
+  // const medDevices: string[] = [
+  //   "Analytical Instruments",
+  //   "Cardiology",
+  //   "Dental",
+  //   "Genetics",
+  //   "Imaging",
+  //   "Lab Equipment",
+  //   "Microscopy",
+  //   "Neurology",
+  //   "Physiotherapy",
+  //   "Refrigeration",
+  //   "Spectroscopy",
+  //   "Ultrasound",
+  // ];
 
   // const analyticalInstruments: string[] = ["Blood Gas Analysis", "Electrolyte Analysis", "Flowmeter"];
   // const cardiology: string[] = ["Automatic External Defibrillator", "Electrocardiograph", "Pacing System"];
@@ -48,6 +58,17 @@ function DeviceDeliveryService() {
   // const spectroscopy: string[] = ["CD Spectropolarimeter", "NMR Spectrometer", "Rapid Kinetics Spectrometer"];
   // const ultrasound: string[] = ["Display Doppler", "Ultrasonic Doppler", "Ultrasound Machine"];
 
+  // Nested Menu Functions
+  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // // const open = Boolean(anchorEl);
+  // // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  // //   setAnchorEl(event.currentTarget);
+  // // };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
+
+  // Form Functions
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
   }
@@ -57,10 +78,10 @@ function DeviceDeliveryService() {
     return e.target.value;
   }
 
-  function handleDeviceInput(e: SelectChangeEvent) {
-    setFormResponses({ ...form, device: e.target.value });
-    return e.target.value;
-  }
+  // function handleDeviceInput(e: SelectChangeEvent) {
+  //   setFormResponses({ ...form, device: e.target.value });
+  //   return e.target.value;
+  // }
 
   function handleAmountInput(e: SelectChangeEvent) {
     setFormResponses({ ...form, amount: e.target.value });
@@ -172,12 +193,29 @@ function DeviceDeliveryService() {
           </Grid>
           <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"}>Medical Device Category:</Typography>
-            <DropDown
-              items={medDevices}
-              handleChange={handleDeviceInput}
-              label={"Device Category"}
-              returnData={form.device}
-            />
+            <FormControl fullWidth sx={{ width: 200, height: 70 }}>
+              <InputLabel>Device Category</InputLabel>
+              <Select
+                defaultValue={""}
+                labelId="demo-simple-select-label"
+                label="Device Category"
+              >
+                <MoreMenuItem label="Analytical Instruments">
+                  <MenuItem>Profile</MenuItem>
+                </MoreMenuItem>
+                <MoreMenuItem label={"Cardiology"}></MoreMenuItem>
+                <MoreMenuItem label={"Dental"}></MoreMenuItem>
+                <MoreMenuItem label={"Genetics"}></MoreMenuItem>
+                <MoreMenuItem label={"Imaging"}></MoreMenuItem>
+                <MoreMenuItem label={"Lab Equipment"}></MoreMenuItem>
+                <MoreMenuItem label={"Microscopy"}></MoreMenuItem>
+                <MoreMenuItem label={"Neurology"}></MoreMenuItem>
+                <MoreMenuItem label={"Physiotherapy"}></MoreMenuItem>
+                <MoreMenuItem label={"Refrigeration"}></MoreMenuItem>
+                <MoreMenuItem label={"Spectroscopy"}></MoreMenuItem>
+                <MoreMenuItem label={"Ultrasound"}></MoreMenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"}>Amount Needed:</Typography>
