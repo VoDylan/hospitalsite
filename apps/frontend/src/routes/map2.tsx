@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
-// import { BFSalgorithm } from "../../../backend/src/BFSalgorithm.ts";
 import TopBanner2 from "../components/TopBanner2";
 import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
+import { nodesDistances } from "common/src/nodesDistances.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -15,6 +15,8 @@ function Map() {
   const [nodes, setNodes] = useState<string[]>([]); // Declaring nodes state
   const [errorMessage, setErrorMesage] = useState<string>("");
   const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
+
   const handleStartNodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -29,6 +31,10 @@ function Map() {
     setNodesData(newData);
   };
 
+  const updateDistancesData = (newData: nodesDistances[]) => {
+    setDistancesData(newData);
+  };
+
   async function handleSubmit() {
     if (startNode.trim() === "" || endNode.trim() === "") {
       // handles if one of them is empty
@@ -41,6 +47,14 @@ function Map() {
       return;
     }
 
+    const distancesResponse = await axios.post("/api/testPath");
+    if (distancesResponse.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    const distanceData = await distancesResponse.data;
+    // console.log("distances", distanceData);
+    updateDistancesData(distanceData);
+
     const request: LocationInfo = { startNode: startNode, endNode: endNode };
 
     const response = await axios.post("/api/path", request, {
@@ -50,9 +64,9 @@ function Map() {
       throw new Error("Failed to fetch data");
     }
     const data = await response.data;
-    console.log(data);
+    // console.log(data);
     const path = data.message;
-    console.log(path);
+    // console.log(path);
     updateNodesData(path);
     // console.log(nodesArray);
 
@@ -62,8 +76,8 @@ function Map() {
 
   useEffect(() => {
     if (canvasRef.current) {
-      console.log("nodesData:", nodesData);
-      console.log("nodes:", nodes);
+      // console.log("nodesData:", nodesData);
+      // console.log("nodes:", nodes);
 
       // Checking if nodes have been set
       const canvas = canvasRef.current;
@@ -79,7 +93,11 @@ function Map() {
 
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-        if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
+        if (
+          startNode.trim() === nodes[0] &&
+          endNode.trim() === nodes[1] &&
+          distancesData
+        ) {
           if (!nodesData) {
             setErrorMesage("There is no path between nodes");
             return;
@@ -94,8 +112,25 @@ function Map() {
           const moveDot = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "black";
 
+            console.log(distancesData);
+
+            // adding all edges
+            // if (distancesData.length > 0) {
+            //   ctx.fillStyle = "red";
+            //   ctx.lineWidth = 3;
+            //   ctx.beginPath();
+            //
+            //   ctx.moveTo(distancesData[0].startCoords.x, distancesData[0].startCoords.y);
+            //   for (let i = 1; i < distancesData.length; i++) {
+            //     if (distancesData[i].startCoords && distancesData[i].endCoords) {
+            //       ctx.lineTo(distancesData[i].startCoords.x, distancesData[i].startCoords.y);
+            //     }
+            //   }
+            //   ctx.stroke();
+            // }
+
+            ctx.fillStyle = "black";
             // display all the nodes on the map if required
             for (let i = 0; i < nodesData.length; i++) {
               ctx.beginPath();
@@ -140,7 +175,7 @@ function Map() {
         }
       };
     }
-  }, [startNode, endNode, nodes, nodesData]);
+  }, [startNode, endNode, nodes, nodesData, distancesData]);
 
   return (
     <div style={{ marginTop: "120px" }}>

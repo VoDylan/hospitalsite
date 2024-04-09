@@ -2,12 +2,7 @@ import { Coordinates } from "common/src/Coordinates.ts";
 import client from "../src/bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
-
-type nodesDistances = {
-  startID: string;
-  endID: string;
-  distance: number;
-};
+import { nodesDistances } from "common/src/nodesDistances.ts";
 
 export class testingDistance {
   mapNodes: MapNodeType[];
@@ -38,13 +33,15 @@ export class testingDistance {
       if (!startCoordinates || !endCoordinates) return;
 
       this.nodesDistances[i] = {
-        startID: startID,
-        endID: endID,
+        startCoords: startCoordinates,
+        endCoords: endCoordinates,
         distance: this.getDistance(startCoordinates, endCoordinates),
       };
     }
 
     this.print();
+
+    return this.nodesDistances;
   }
 
   private getCoordinates(nodeID: string) {
