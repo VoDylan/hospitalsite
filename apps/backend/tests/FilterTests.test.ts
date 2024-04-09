@@ -248,3 +248,42 @@ test("Type inversion", () => {
     FilterManager.getInstance().applyFilters(filters3, nodes),
   ).toStrictEqual([node4]);
 });
+
+test("Multiple of each type", () => {
+  const filters1: Filter[] = [];
+  filters1.push(
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(true, "HALL"),
+      generateFilterValue(true, "CONF"),
+      generateFilterValue(true, "ELEV"),
+    ])!,
+  );
+
+  expect(
+    FilterManager.getInstance().applyFilters(filters1, nodes),
+  ).toStrictEqual([]);
+
+  const filters2: Filter[] = [];
+  filters2.push(
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(true, "CONF"),
+      generateFilterValue(true, "ELEV"),
+    ])!,
+  );
+
+  expect(
+    FilterManager.getInstance().applyFilters(filters2, nodes),
+  ).toStrictEqual([node1]);
+
+  const filters3: Filter[] = [];
+  filters3.push(
+    FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+      generateFilterValue(false, "HALL"),
+      generateFilterValue(false, "ELEV"),
+    ])!,
+  );
+
+  expect(
+    FilterManager.getInstance().applyFilters(filters3, nodes),
+  ).toStrictEqual([node1, node4]);
+});
