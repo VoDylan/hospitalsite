@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
@@ -22,15 +22,17 @@ import TopBanner2 from "../components/TopBanner2.tsx";
 import MapImage from "../images/00_thelowerlevel1.png";
 import NestedList from "../components/PathfindingSelect.tsx";
 import "./map.css";
-import {Coordinates} from "common/src/Coordinates.ts";
-import {LocationInfo} from "common/src/LocationInfo.ts";
-import {MapNodeType} from "common/src/map/MapNodeType.ts";
+import { Coordinates } from "common/src/Coordinates.ts";
+import { LocationInfo } from "common/src/LocationInfo.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/Legend.tsx";
-import {Typography} from "@mui/material";
-import FilterManager, {generateFilterValue} from "common/src/filter/FilterManager.ts";
-import {FilterName} from "common/src/filter/FilterName.ts";
+import { Typography } from "@mui/material";
+import FilterManager, {
+  generateFilterValue,
+} from "common/src/filter/FilterManager.ts";
+import { FilterName } from "common/src/filter/FilterName.ts";
 import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
@@ -71,9 +73,6 @@ function Map() {
     return data;
   };
 
-
-
-
   const populateAutocompleteData = useCallback(() => {
     const filteredNodeAssociations = filteredNodes.map((node) => ({
       label: node.longName, // Assuming `longName` is the label you want to use
@@ -81,8 +80,6 @@ function Map() {
     }));
     setAutocompleteNodeData(filteredNodeAssociations);
   }, [filteredNodes]);
-
-
 
   const handleClick = () => {
     setOpen(!open);
@@ -121,12 +118,24 @@ function Map() {
   const [exitsIconState, setExitsIconState] = React.useState<"plus" | "check">(
     "check",
   );
-  const [infoIconState, setInfoIconState] = React.useState<"plus" | "check">(
+  const [servIconState, setServIconState] = React.useState<"plus" | "check">(
     "check",
   );
   const [restroomsIconState, setRestroomsIconState] = React.useState<
     "plus" | "check"
   >("check");
+  const [confIconState, setConfIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [deptIconState, setDeptIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [labsIconState, setLabsIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [retlIconState, setRetlIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
   const [ll1IconState, setLL1IconState] = React.useState<"plus" | "check">(
     "check",
   );
@@ -156,13 +165,25 @@ function Map() {
   const handleExitsIconState = () => {
     setExitsIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
   };
-  const handleInfoIconState = () => {
-    setInfoIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+  const handleServIconState = () => {
+    setServIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
   };
   const handleRestroomsIconState = () => {
     setRestroomsIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+  };
+  const handleConfIconState = () => {
+    setConfIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+  };
+  const handleDeptIconState = () => {
+    setDeptIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+  };
+  const handleLabsIconState = () => {
+    setLabsIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+  };
+  const handleRetlIconState = () => {
+    setRetlIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
   };
 
   const handleLL1IconState = () => {
@@ -191,8 +212,12 @@ function Map() {
     setElevatorIconState("check");
     setStairsIconState("check");
     setExitsIconState("check");
-    setInfoIconState("check");
+    setServIconState("check");
     setRestroomsIconState("check");
+    setConfIconState("check");
+    setDeptIconState("check");
+    setLabsIconState("check");
+    setRetlIconState("check");
     setLL1IconState("check");
     setLL2IconState("check");
     setFirstFloorIconState("check");
@@ -204,8 +229,12 @@ function Map() {
     setElevatorIconState("plus");
     setStairsIconState("plus");
     setExitsIconState("plus");
-    setInfoIconState("plus");
+    setServIconState("plus");
     setRestroomsIconState("plus");
+    setConfIconState("plus");
+    setDeptIconState("plus");
+    setLabsIconState("plus");
+    setRetlIconState("plus");
     setLL1IconState("plus");
     setLL2IconState("plus");
     setFirstFloorIconState("plus");
@@ -214,36 +243,139 @@ function Map() {
   };
 
   const registerFilters = useCallback(() => {
-    FilterManager.getInstance().registerFilter(FilterName.TYPE, () => new TypeFilter());
-    FilterManager.getInstance().registerFilter(FilterName.FLOOR, () => new FloorFilter());
-    FilterManager.getInstance().registerFilter(FilterName.BUILDING, () => new BuildingFilter());
+    FilterManager.getInstance().registerFilter(
+      FilterName.TYPE,
+      () => new TypeFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.FLOOR,
+      () => new FloorFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.BUILDING,
+      () => new BuildingFilter(),
+    );
 
     const filters: NodeFilter[] = [];
     filters.push(
       FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
-        generateFilterValue(true, "HALL")
+        generateFilterValue(true, "HALL"),
       ])!,
     );
 
     if (ll1IconState === "plus") {
       filters.push(
         FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
-          generateFilterValue(true, "L1")
-        ])!);
+          generateFilterValue(true, "L1"),
+        ])!,
+      );
     }
+
+    if (ll2IconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "L2"),
+        ])!,
+      );
+    }
+
+    if (elevatorIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "ELEV"),
+        ])!,
+      );
+    }
+
+    if (stairsIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "STAI"),
+        ])!,
+      );
+    }
+
+    if (servIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "SERV"),
+        ])!,
+      );
+    }
+
+    if (restroomsIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "REST"),
+        ])!,
+      );
+    }
+
+    if (exitsIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "EXIT"),
+        ])!,
+      );
+    }
+
+    if (confIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "CONF"),
+        ])!,
+      );
+    }
+
+    if (deptIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "DEPT"),
+        ])!,
+      );
+    }
+
+    if (labsIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "LABS"),
+        ])!,
+      );
+    }
+
+    if (retlIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "RETL"),
+        ])!,
+      );
+    }
+
     console.log("Filtering");
 
     const filteredNodes: MapNode[] = FilterManager.getInstance().applyFilters(
       filters,
-      GraphManager.getInstance().nodes
+      GraphManager.getInstance().nodes,
     );
 
     setFilteredNodes(filteredNodes); // Update filteredNodes state with the filtered result
 
     // Update autocomplete data based on the filtered nodes
     populateAutocompleteData();
-  }, [populateAutocompleteData, ll1IconState]);
-
+  }, [
+    populateAutocompleteData,
+    ll1IconState,
+    ll2IconState,
+    elevatorIconState,
+    stairsIconState,
+    servIconState,
+    restroomsIconState,
+    exitsIconState,
+    confIconState,
+    deptIconState,
+    labsIconState,
+    retlIconState,
+  ]);
 
   const icon = (
     <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
@@ -335,18 +467,18 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={10.9}
+            spacing={7}
           >
-            <Filter iconColor="#8877CC" filterName="Info" filterType={1} />
-            {infoIconState === "plus" ? (
+            <Filter iconColor="#8877CC" filterName="Service" filterType={1} />
+            {servIconState === "plus" ? (
               <AddIcon
-                onClick={handleInfoIconState}
+                onClick={handleServIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
             ) : (
               <CheckIcon
-                onClick={handleInfoIconState}
+                onClick={handleServIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
@@ -367,6 +499,90 @@ function Map() {
             ) : (
               <CheckIcon
                 onClick={handleRestroomsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={2.1}
+          >
+            <Filter iconColor="yellow" filterName="Conference" filterType={1} />
+            {confIconState === "plus" ? (
+              <AddIcon
+                onClick={handleConfIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 280, 0.5)" }}
+              />
+            ) : (
+              <CheckIcon
+                onClick={handleConfIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={1.8}
+          >
+            <Filter iconColor="gray" filterName="Department" filterType={1} />
+            {deptIconState === "plus" ? (
+              <AddIcon
+                onClick={handleDeptIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 280, 0.5)" }}
+              />
+            ) : (
+              <CheckIcon
+                onClick={handleDeptIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={9.7}
+          >
+            <Filter iconColor="lightBlue" filterName="Labs" filterType={1} />
+            {labsIconState === "plus" ? (
+              <AddIcon
+                onClick={handleLabsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 280, 0.5)" }}
+              />
+            ) : (
+              <CheckIcon
+                onClick={handleLabsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={8.8}
+          >
+            <Filter iconColor="pink" filterName="Retail" filterType={1} />
+            {retlIconState === "plus" ? (
+              <AddIcon
+                onClick={handleRetlIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 280, 0.5)" }}
+              />
+            ) : (
+              <CheckIcon
+                onClick={handleRetlIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
@@ -420,74 +636,74 @@ function Map() {
               />
             )}
           </Stack>
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={9.5}
-          >
-            <Filter iconColor="#63CA00" filterName="1st Floor" filterType={0} />
-            {firstFloorIconState === "plus" ? (
-              <AddIcon
-                onClick={handleFirstFloorIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleFirstFloorIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={4.6}
-          >
-            <Filter
-              iconColor="#63CA00"
-              filterName="Second Floor"
-              filterType={0}
-            />
-            {secondFloorIconState === "plus" ? (
-              <AddIcon
-                onClick={handleSecondFloorIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleSecondFloorIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={7.2}
-          >
-            <Filter
-              iconColor="#63CA00"
-              filterName="Third Floor"
-              filterType={0}
-            />
-            {thirdFloorIconState === "plus" ? (
-              <AddIcon
-                onClick={handleThirdFloorIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleThirdFloorIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
+          {/*<Stack*/}
+          {/*  direction="row"*/}
+          {/*  sx={{ display: "flex", alignItems: "center" }}*/}
+          {/*  spacing={9.5}*/}
+          {/*>*/}
+          {/*  <Filter iconColor="#63CA00" filterName="1st Floor" filterType={0} />*/}
+          {/*  {firstFloorIconState === "plus" ? (*/}
+          {/*    <AddIcon*/}
+          {/*      onClick={handleFirstFloorIconState}*/}
+          {/*      fontSize="medium"*/}
+          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
+          {/*    />*/}
+          {/*  ) : (*/}
+          {/*    <CheckIcon*/}
+          {/*      onClick={handleFirstFloorIconState}*/}
+          {/*      fontSize="medium"*/}
+          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
+          {/*    />*/}
+          {/*  )}*/}
+          {/*</Stack>*/}
+          {/*<Stack*/}
+          {/*  direction="row"*/}
+          {/*  sx={{ display: "flex", alignItems: "center" }}*/}
+          {/*  spacing={4.6}*/}
+          {/*>*/}
+          {/*  <Filter*/}
+          {/*    iconColor="#63CA00"*/}
+          {/*    filterName="Second Floor"*/}
+          {/*    filterType={0}*/}
+          {/*  />*/}
+          {/*  {secondFloorIconState === "plus" ? (*/}
+          {/*    <AddIcon*/}
+          {/*      onClick={handleSecondFloorIconState}*/}
+          {/*      fontSize="medium"*/}
+          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
+          {/*    />*/}
+          {/*  ) : (*/}
+          {/*    <CheckIcon*/}
+          {/*      onClick={handleSecondFloorIconState}*/}
+          {/*      fontSize="medium"*/}
+          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
+          {/*    />*/}
+          {/*  )}*/}
+          {/*</Stack>*/}
+          {/*<Stack*/}
+          {/*  direction="row"*/}
+          {/*  sx={{ display: "flex", alignItems: "center" }}*/}
+          {/*  spacing={7.2}*/}
+          {/*>*/}
+          {/*  <Filter*/}
+          {/*    iconColor="#63CA00"*/}
+          {/*    filterName="Third Floor"*/}
+          {/*    filterType={0}*/}
+          {/*  />*/}
+          {/*  {thirdFloorIconState === "plus" ? (*/}
+          {/*    <AddIcon*/}
+          {/*      onClick={handleThirdFloorIconState}*/}
+          {/*      fontSize="medium"*/}
+          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
+          {/*    />*/}
+          {/*  ) : (*/}
+          {/*    <CheckIcon*/}
+          {/*      onClick={handleThirdFloorIconState}*/}
+          {/*      fontSize="medium"*/}
+          {/*      sx={{ color: "rgba(0, 0, 255, 0.5)" }}*/}
+          {/*    />*/}
+          {/*  )}*/}
+          {/*</Stack>*/}
         </Stack>
 
         {/*Buttons*/}
@@ -681,7 +897,16 @@ function Map() {
         }
       };
     }
-  }, [nodeDataLoaded, startNode, endNode, nodes, nodesData, algorithm, populateAutocompleteData, registerFilters]);
+  }, [
+    nodeDataLoaded,
+    startNode,
+    endNode,
+    nodes,
+    nodesData,
+    algorithm,
+    populateAutocompleteData,
+    registerFilters,
+  ]);
 
   return (
     <Box sx={{ display: "flex" }}>
