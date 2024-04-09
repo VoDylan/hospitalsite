@@ -1,50 +1,42 @@
 import client from "./bin/database-connection.ts";
-import MapNode from "common/src/map/MapNode.ts";
-import MapEdge from "common/src/map/MapEdge.ts";
 import { Prisma } from "database";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 
 const loggingPrefix: string = "PrismaScripts: ";
 
-export async function createNodePrisma(nodes: MapNode[]) {
-  console.log(`${loggingPrefix}Creating nodes`);
-  for (let i = 0; i < nodes.length; i++) {
-    try {
-      const currNode: MapNode = nodes[i];
-      await client.node.create({
-        data: currNode.nodeInfo,
-      });
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code == "P2002") {
-          console.log(`${loggingPrefix}Node already exists. Skipping...`);
-        }
-      } else {
-        console.error(e);
+export async function createNodePrisma(node: MapNodeType) {
+  console.log(`Adding node ${node.nodeID} to DB`);
+  try {
+    await client.node.create({
+      data: node,
+    });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code == "P2002") {
+        console.log(`${loggingPrefix}Node already exists. Skipping...`);
       }
+    } else {
+      console.error(e);
     }
   }
-  console.log(`${loggingPrefix}Nodes created`);
 }
 
-export async function createEdgePrisma(edges: MapEdge[]) {
-  console.log(`${loggingPrefix}Creating edges`);
-  for (let i = 0; i < edges.length; i++) {
-    try {
-      const currEdge: MapEdge = edges[i];
-      await client.edge.create({
-        data: currEdge.edgeInfo,
-      });
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(`${loggingPrefix}Edge already exists. Skipping...`);
-      } else {
-        console.error(e);
-      }
+export async function createEdgePrisma(edge: MapEdgeType) {
+  console.log(
+    `Adding edge between ${edge.startNodeID} and ${edge.endNodeID} to DB`,
+  );
+  try {
+    await client.edge.create({
+      data: edge,
+    });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log(`${loggingPrefix}Edge already exists. Skipping...`);
+    } else {
+      console.error(e);
     }
   }
-  console.log(`${loggingPrefix}Edges created`);
 }
 
 export async function clearDBNodes() {

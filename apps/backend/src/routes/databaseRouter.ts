@@ -12,7 +12,6 @@ import {
   getServiceRequestFromDBByUserID,
   getServiceRequestsFromDB,
 } from "../PrismaScripts.ts";
-import GraphManager from "common/src/map/GraphManager.ts";
 import {
   validateEdgeData,
   validateNodeData,
@@ -27,7 +26,7 @@ const router: Router = express.Router();
 //objects with all node information
 router.get("/nodes", async (req: Request, res: Response) => {
   const nodeData: MapNodeType[] =
-    await DBManager.getInstance().updateAndGetNodesFromDB();
+    await DBManager.getInstance().getNodesFromDB();
   res.status(200).json(nodeData);
 });
 
@@ -123,7 +122,13 @@ router.post("/servicerequest", async (req, res) => {
 
   console.log(data);
 
-  if (GraphManager.getInstance().getNodeByID(data.nodeID) == null) {
+  if (
+    (await client.node.findUnique({
+      where: {
+        nodeID: data.nodeID,
+      },
+    })) == null
+  ) {
     res.status(400).json({
       message: `Room ${data.nodeID} does not exist`,
     });
