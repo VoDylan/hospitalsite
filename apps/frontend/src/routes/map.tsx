@@ -17,7 +17,6 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import SyncIcon from "@mui/icons-material/Sync";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import MapImage from "../images/00_thelowerlevel1.png";
@@ -30,6 +29,11 @@ import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/Legend.tsx";
 import { Typography } from "@mui/material";
+import FilterManager from "common/src/filter/FilterManager.ts";
+import { FilterName } from "common/src/filter/FilterName.ts";
+import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
+import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
+import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -80,6 +84,21 @@ function Map() {
     setAutocompleteNodeData(nodeAssociations);
   };
 
+  const registerFilters = () => {
+    FilterManager.getInstance().registerFilter(
+      FilterName.TYPE,
+      () => new TypeFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.FLOOR,
+      () => new FloorFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.BUILDING,
+      () => new BuildingFilter(),
+    );
+  };
+
   const handleClick = () => {
     setOpen(!open);
   };
@@ -102,6 +121,7 @@ function Map() {
 
   // Slide Container
   const [checked, setChecked] = React.useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [iconState, setIconState] = React.useState<"plus" | "check">("plus"); // State to track icon state
 
   const handleButtonClick = () => {
@@ -553,6 +573,7 @@ function Map() {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function handleClear() {
     setStartNode(""); // Clear startNode
     setEndNode(""); // Clear endNode
@@ -561,6 +582,7 @@ function Map() {
 
   useEffect(() => {
     if (!nodeDataLoaded) {
+      registerFilters();
       loadNodeData().then((data: MapNodeType[]) => {
         setDBNodesData(data);
         setNodeDataLoaded(true);

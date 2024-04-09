@@ -14,10 +14,10 @@ export default class FloorFilter extends Filter {
     nodes.forEach((node) => {
       if (this.filterValues.length == 0) return;
 
-      let included: boolean = false;
+      let included: boolean = true;
       this.filterValues.forEach((filterParam: FilterValueType) => {
         included =
-          included ||
+          included &&
           (filterParam.inverted
             ? node.floor != filterParam.value
             : node.floor == filterParam.value);

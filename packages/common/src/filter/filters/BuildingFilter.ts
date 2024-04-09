@@ -14,10 +14,10 @@ export default class BuildingFilter extends Filter {
     nodes.forEach((node) => {
       if (this.filterValues.length == 0) return;
 
-      let included: boolean = false;
+      let included: boolean = true;
       this.filterValues.forEach((filterParam: FilterValueType) => {
         included =
-          included ||
+          included &&
           (filterParam.inverted
             ? node.building != filterParam.value
             : node.building == filterParam.value);
