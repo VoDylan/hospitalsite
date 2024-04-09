@@ -30,14 +30,16 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div>
-      <FormControl fullWidth sx={{ width: 220 }}>
+      <FormControl fullWidth sx={{ width: 200, height: 70 }}>
         <InputLabel
           id="demo-simple-select-label"
           className={classes.centeredLabel}
-          sx={{
-            mx: "12px",
-            my: "7px",
-          }}
+          sx={
+            {
+              // mx: "12px",
+              // my: "7px",
+            }
+          }
         >
           {props.label}
         </InputLabel>
@@ -47,10 +49,12 @@ export function DropDown(props: DropDownProps) {
           defaultValue={""}
           labelId="demo-simple-select-label"
           label={props.label}
-          sx={{
-            mx: "12px",
-            my: "7px",
-          }}
+          sx={
+            {
+              // mx: "12px",
+              // my: "7px",
+            }
+          }
         >
           {props.items.map((item) => (
             <MenuItem value={item}>{item}</MenuItem>
