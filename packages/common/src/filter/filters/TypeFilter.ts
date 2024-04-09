@@ -18,7 +18,7 @@ export default class TypeFilter extends Filter {
       this.filterValues.forEach((filterParam: FilterValueType) => {
         included =
           included ||
-          (filterParam.inverted
+          (filterParam.exclude
             ? node.nodeType != filterParam.value
             : node.nodeType == filterParam.value);
       });

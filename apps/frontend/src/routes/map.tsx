@@ -17,7 +17,6 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import SyncIcon from "@mui/icons-material/Sync";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import MapImage from "../images/00_thelowerlevel1.png";
@@ -28,7 +27,7 @@ import { LocationInfo } from "common/src/LocationInfo.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
-import Legend from "../components/Legend.tsx";
+// import Legend from "../components/Legend.tsx";
 import { Typography } from "@mui/material";
 import Floor from "../components/FloorTabs.tsx";
 
@@ -103,6 +102,7 @@ function Map() {
 
   // Slide Container
   const [checked, setChecked] = React.useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [iconState, setIconState] = React.useState<"plus" | "check">("plus"); // State to track icon state
 
   const handleButtonClick = () => {
@@ -554,6 +554,7 @@ function Map() {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function handleClear() {
     setStartNode(""); // Clear startNode
     setEndNode(""); // Clear endNode

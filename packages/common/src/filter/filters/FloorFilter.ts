@@ -18,7 +18,7 @@ export default class FloorFilter extends Filter {
       this.filterValues.forEach((filterParam: FilterValueType) => {
         included =
           included ||
-          (filterParam.inverted
+          (filterParam.exclude
             ? node.floor != filterParam.value
             : node.floor == filterParam.value);
       });

@@ -18,7 +18,7 @@ export default class BuildingFilter extends Filter {
       this.filterValues.forEach((filterParam: FilterValueType) => {
         included =
           included ||
-          (filterParam.inverted
+          (filterParam.exclude
             ? node.building != filterParam.value
             : node.building == filterParam.value);
       });
