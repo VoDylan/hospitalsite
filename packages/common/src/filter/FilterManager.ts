@@ -2,6 +2,21 @@ import Filter from "./filters/Filter.ts";
 import { FilterName } from "./FilterName.ts";
 import MapNode from "../map/MapNode.ts";
 
+export type FilterValueType = {
+  inverted: boolean;
+  value: number | string;
+};
+
+export const generateFilterValue = (
+  inverted: boolean,
+  value: number | string,
+): FilterValueType => {
+  return {
+    inverted: inverted,
+    value: value,
+  };
+};
+
 export default class FilterManager {
   private static instance: FilterManager;
 
@@ -25,7 +40,7 @@ export default class FilterManager {
 
   public getConfiguredFilter(
     filterName: FilterName,
-    filterValues: number[] | string[],
+    filterValues: FilterValueType[],
   ): Filter | undefined {
     const filterGenerator: (() => Filter) | undefined =
       this.registeredFilters.get(filterName);
