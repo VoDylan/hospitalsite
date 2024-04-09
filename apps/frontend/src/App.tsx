@@ -9,6 +9,7 @@ import LoginForm from "./routes/LoginForm.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
 import SanitationService from "./routes/SanitationService.tsx";
 import SecurityService from "./routes/SecurityService.tsx";
+import MedicineDelivery from "./routes/MedicineDelivery.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -28,6 +29,10 @@ function App() {
         {
           path: "/Services/FlowerDelivery",
           element: <FlowerDeliveryService />,
+        },
+        {
+          path: "/Services/MedicineDelivery",
+          element: <MedicineDelivery />,
         },
         {
           path: "/Services/SanitationService",
