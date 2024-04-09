@@ -47,12 +47,15 @@ function Map() {
       return;
     }
 
-    const distancesResponse = await axios.post("/api/testPath");
+    const distancesResponse = await axios.post("/api/testPath", {
+      headers: { "Content-Type": "application/json" },
+    });
     if (distancesResponse.status !== 200) {
       throw new Error("Failed to fetch data");
     }
-    const distanceData = await distancesResponse.data;
-    // console.log("distances", distanceData);
+    const distancePath = await distancesResponse.data;
+    const distanceData = distancePath.message;
+    console.log("distances", distanceData);
     updateDistancesData(distanceData);
 
     const request: LocationInfo = { startNode: startNode, endNode: endNode };
@@ -113,25 +116,56 @@ function Map() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-            console.log(distancesData);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "red";
+            ctx.font = "10px Arial";
 
-            // adding all edges
-            // if (distancesData.length > 0) {
-            //   ctx.fillStyle = "red";
-            //   ctx.lineWidth = 3;
-            //   ctx.beginPath();
-            //
-            //   ctx.moveTo(distancesData[0].startCoords.x, distancesData[0].startCoords.y);
-            //   for (let i = 1; i < distancesData.length; i++) {
-            //     if (distancesData[i].startCoords && distancesData[i].endCoords) {
-            //       ctx.lineTo(distancesData[i].startCoords.x, distancesData[i].startCoords.y);
-            //     }
-            //   }
-            //   ctx.stroke();
-            // }
+            for (let i = 0; i < distancesData.length; i++) {
+              ctx.beginPath();
+              ctx.moveTo(
+                distancesData[i].startCoords.x,
+                distancesData[i].startCoords.y,
+              );
+              ctx.lineTo(
+                distancesData[i].endCoords.x,
+                distancesData[i].endCoords.y,
+              );
+              ctx.stroke();
+              ctx.closePath();
 
-            ctx.fillStyle = "black";
-            // display all the nodes on the map if required
+              ctx.fillText(
+                distancesData[i].distance.toString(),
+                (distancesData[i].startCoords.x +
+                  distancesData[i].endCoords.x) /
+                  2,
+                (distancesData[i].startCoords.y +
+                  distancesData[i].endCoords.y) /
+                  2,
+              );
+            }
+
+            ctx.fillStyle = "red";
+            for (let i = 0; i < distancesData.length; i++) {
+              ctx.beginPath();
+              ctx.arc(
+                distancesData[i].startCoords.x,
+                distancesData[i].startCoords.y,
+                5,
+                0,
+                2 * Math.PI,
+              ); // draw circle
+              ctx.arc(
+                distancesData[i].endCoords.x,
+                distancesData[i].endCoords.y,
+                5,
+                0,
+                2 * Math.PI,
+              ); // draw circle
+              ctx.fill();
+            }
+
+            ctx.fillStyle = "blue";
+            ctx.strokeStyle = "blue";
             for (let i = 0; i < nodesData.length; i++) {
               ctx.beginPath();
               ctx.arc(nodesData[i].x, nodesData[i].y, 5, 0, 2 * Math.PI); // draw circle
@@ -156,7 +190,6 @@ function Map() {
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < speed) {
-              // if the distance is close then move to the next node
               currentTargetIndex = (currentTargetIndex + 1) % nodesData.length;
             } else {
               currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
@@ -169,7 +202,7 @@ function Map() {
               currentTargetIndex = 1;
             }
 
-            requestAnimationFrame(moveDot); // loop to call move to function consistently
+            requestAnimationFrame(moveDot);
           };
           moveDot();
         }
