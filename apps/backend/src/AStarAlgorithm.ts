@@ -1,26 +1,31 @@
 import { NodeAStar } from "common/src/NodeAStar.ts";
-import MapNode from "common/src/map/MapNode.ts";
-import MapEdge from "common/src/map/MapEdge.ts";
-import GraphManager from "common/src/map/GraphManager.ts";
+// import MapNode from "common/src/map/MapNode.ts";
+// import MapEdge from "common/src/map/MapEdge.ts";
+
 import { Coordinates } from "common/src/Coordinates.ts";
+import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
+import client from "./bin/database-connection.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
 // import { testingDistance } from "../tests/testingDistance.ts";
 
 export class AStarAlgorithm {
   nodes: NodeAStar[];
-  mapNodes: MapNode[];
-  mapEdges: MapEdge[];
+  mapNodes: MapNodeType[];
+  mapEdges: MapEdgeType[];
 
   public constructor() {
     this.nodes = [];
-    const graphManager = GraphManager.getInstance();
-    this.mapNodes = graphManager.nodes;
-    this.mapEdges = graphManager.edges;
+    this.mapNodes = [];
+    this.mapEdges = [];
   }
 
-  public loadData() {
+  async loadData() {
+    this.mapNodes = await client.node.findMany();
+    this.mapEdges = await client.edge.findMany();
+
     for (let i = 0; i < this.mapEdges.length; i++) {
-      const currentNode: MapNode = this.mapEdges[i].startNode;
-      const neighbor: MapNode = this.mapEdges[i].endNode;
+      const currentNode: string = this.mapEdges[i].startNodeID;
+      const neighbor: string = this.mapEdges[i].endNodeID;
 
       const updateNode = (nodeID: string, neighborID: string) => {
         const index = this.nodes.findIndex(
@@ -36,8 +41,8 @@ export class AStarAlgorithm {
         }
       };
 
-      updateNode(currentNode.nodeID, neighbor.nodeID);
-      updateNode(neighbor.nodeID, currentNode.nodeID);
+      updateNode(currentNode, neighbor);
+      updateNode(neighbor, currentNode);
     }
   }
 

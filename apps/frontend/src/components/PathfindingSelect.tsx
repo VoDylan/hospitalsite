@@ -31,13 +31,13 @@ const NestedList: React.FC<NestedListProps> = ({
       sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
     >
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton sx={{ color: "#767674" }} onClick={handleClick}>
         {open ? (
           <ExpandLess sx={{ marginRight: "4%" }} />
         ) : (
           <ExpandMore sx={{ marginRight: "4%" }} />
         )}
-        <ListItemText primary="Pathfinding" />
+        <ListItemText primary="Pathfinding" sx={{ color: "#767674" }} />
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>

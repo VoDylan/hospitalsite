@@ -18,8 +18,8 @@ export default function ServicesPage() {
   const serviceData = [
     { path: "/Services/FlowerDelivery", image: Flower },
     { path: "/Services/MedicineDelivery", image: Medicine },
-    { path: "/Services/SanitationServices", image: Sanitation },
-    { path: "/Services/SecurityServices", image: Security },
+    { path: "/Services/SanitationService", image: Sanitation },
+    { path: "/Services/SecurityService", image: Security },
     { path: "/Services/GiftDelivery", image: Gift },
     { path: "/Services/MedicalDeviceDelivery", image: MedicalDevice },
     { path: "/Services/RoomScheduling", image: Room },
