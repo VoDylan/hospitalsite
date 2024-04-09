@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
@@ -22,18 +22,19 @@ import TopBanner2 from "../components/TopBanner2.tsx";
 import MapImage from "../images/00_thelowerlevel1.png";
 import NestedList from "../components/PathfindingSelect.tsx";
 import "./map.css";
-import { Coordinates } from "common/src/Coordinates.ts";
-import { LocationInfo } from "common/src/LocationInfo.ts";
-import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import {Coordinates} from "common/src/Coordinates.ts";
+import {LocationInfo} from "common/src/LocationInfo.ts";
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/Legend.tsx";
-import { Typography } from "@mui/material";
-import FilterManager from "common/src/filter/FilterManager.ts";
-import { FilterName } from "common/src/filter/FilterName.ts";
+import {Typography} from "@mui/material";
+import FilterManager, {generateFilterValue} from "common/src/filter/FilterManager.ts";
+import {FilterName} from "common/src/filter/FilterName.ts";
 import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
+import NodeFilter from "common/src/filter/filters/Filter.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,6 +55,7 @@ function Map() {
   const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
+  const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
 
   const loadNodeData = async (): Promise<MapNodeType[]> => {
     const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
@@ -69,35 +71,18 @@ function Map() {
     return data;
   };
 
-  const populateAutocompleteData = () => {
-    const graphNodes: MapNode[] = GraphManager.getInstance().nodes;
-    const nodeAssociations: { label: string; node: string }[] = graphNodes.map(
-      (node) => {
-        console.log("Node ID:", node.nodeID, "Long Name:", node.longName);
-        return {
-          label: node.longName, // Assuming `longName` is the label you want to use
-          node: node.nodeID,
-        };
-      },
-    );
 
-    setAutocompleteNodeData(nodeAssociations);
-  };
 
-  const registerFilters = () => {
-    FilterManager.getInstance().registerFilter(
-      FilterName.TYPE,
-      () => new TypeFilter(),
-    );
-    FilterManager.getInstance().registerFilter(
-      FilterName.FLOOR,
-      () => new FloorFilter(),
-    );
-    FilterManager.getInstance().registerFilter(
-      FilterName.BUILDING,
-      () => new BuildingFilter(),
-    );
-  };
+
+  const populateAutocompleteData = useCallback(() => {
+    const filteredNodeAssociations = filteredNodes.map((node) => ({
+      label: node.longName, // Assuming `longName` is the label you want to use
+      node: node.nodeID,
+    }));
+    setAutocompleteNodeData(filteredNodeAssociations);
+  }, [filteredNodes]);
+
+
 
   const handleClick = () => {
     setOpen(!open);
@@ -121,8 +106,7 @@ function Map() {
 
   // Slide Container
   const [checked, setChecked] = React.useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [iconState, setIconState] = React.useState<"plus" | "check">("plus"); // State to track icon state
+  // const [iconState, setIconState] = React.useState<"plus" | "check">("plus"); // State to track icon state
 
   const handleButtonClick = () => {
     setChecked((prev) => !prev);
@@ -228,6 +212,38 @@ function Map() {
     setSecondFloorIconState("plus");
     setThirdFloorIconState("plus");
   };
+
+  const registerFilters = useCallback(() => {
+    FilterManager.getInstance().registerFilter(FilterName.TYPE, () => new TypeFilter());
+    FilterManager.getInstance().registerFilter(FilterName.FLOOR, () => new FloorFilter());
+    FilterManager.getInstance().registerFilter(FilterName.BUILDING, () => new BuildingFilter());
+
+    const filters: NodeFilter[] = [];
+    filters.push(
+      FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+        generateFilterValue(true, "HALL")
+      ])!,
+    );
+
+    if (ll1IconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "L1")
+        ])!);
+    }
+    console.log("Filtering");
+
+    const filteredNodes: MapNode[] = FilterManager.getInstance().applyFilters(
+      filters,
+      GraphManager.getInstance().nodes
+    );
+
+    setFilteredNodes(filteredNodes); // Update filteredNodes state with the filtered result
+
+    // Update autocomplete data based on the filtered nodes
+    populateAutocompleteData();
+  }, [populateAutocompleteData, ll1IconState]);
+
 
   const icon = (
     <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
@@ -572,23 +588,22 @@ function Map() {
       setErrorMessage("Failed to fetch data. Please try again.");
     }
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function handleClear() {
-    setStartNode(""); // Clear startNode
-    setEndNode(""); // Clear endNode
-    //stop animation
-  }
+  //
+  // function handleClear() {
+  //   setStartNode(""); // Clear startNode
+  //   setEndNode(""); // Clear endNode
+  //   //stop animation
+  // }
 
   useEffect(() => {
     if (!nodeDataLoaded) {
-      registerFilters();
       loadNodeData().then((data: MapNodeType[]) => {
         setDBNodesData(data);
         setNodeDataLoaded(true);
       });
     } else {
       populateAutocompleteData();
+      registerFilters();
     }
 
     console.log(algorithm);
@@ -666,7 +681,7 @@ function Map() {
         }
       };
     }
-  }, [nodeDataLoaded, startNode, endNode, nodes, nodesData, algorithm]);
+  }, [nodeDataLoaded, startNode, endNode, nodes, nodesData, algorithm, populateAutocompleteData, registerFilters]);
 
   return (
     <Box sx={{ display: "flex" }}>
