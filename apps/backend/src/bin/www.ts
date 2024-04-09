@@ -2,6 +2,8 @@ import app from "../app.ts";
 import http from "http";
 import { AddressInfo } from "net";
 import { createHttpTerminator } from "http-terminator";
+import { importDefaultNodeAndEdgeData } from "./database-initialization.ts";
+import { registerFilters } from "./filter-registration.ts";
 
 // Attempt a database connection
 console.info("Connecting to database...");
@@ -117,4 +119,14 @@ function onListening(): void {
     typeof addr === "string" ? "pipe " + addr : "port " + addr?.port; // Otherwise get the port
   console.info("Server listening on " + bind); // Debug output that we're listening
   console.log("Startup complete");
+
+  console.log("Registering filters");
+  registerFilters();
+  console.log("Finished registering filters");
+
+  console.log("Initializing database");
+  importDefaultNodeAndEdgeData().then(() => {
+    console.log("Finished importing data into database");
+    console.log("Finished initializing database");
+  });
 }

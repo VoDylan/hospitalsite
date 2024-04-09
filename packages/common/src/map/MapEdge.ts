@@ -1,12 +1,5 @@
 import MapNode from "./MapNode";
-
-/**
- * Custom type to define the data fields that should appear in a MapEdge
- */
-type EdgeFields = {
-  startNode: MapNode;
-  endNode: MapNode;
-};
+import { MapEdgeType } from "./MapEdgeType.ts";
 
 /**
  * Class representing an edge between nodes on the map
@@ -16,13 +9,24 @@ class MapEdge {
   private _startNode: MapNode;
   private _endNode: MapNode;
 
+  private _edgeInfo: MapEdgeType;
+
   /**
    * Constructs a new MapNode object
    * @param edgeInfo - Object containing the fields that should appear in a MapEdge
+   * @param startNode - Object representation of the starting node for use in graphs
+   * @param endNode - Object representation of the ending node for use in graphs
+   * @throws {NodeDoesNotExistError}
    */
-  public constructor(edgeInfo: EdgeFields) {
-    this._startNode = edgeInfo.startNode;
-    this._endNode = edgeInfo.endNode;
+  public constructor(
+    edgeInfo: MapEdgeType,
+    startNode: MapNode,
+    endNode: MapNode,
+  ) {
+    this._startNode = startNode;
+    this._endNode = endNode;
+
+    this._edgeInfo = edgeInfo;
   }
 
   /**
@@ -48,14 +52,14 @@ class MapEdge {
    * Helper function that returns all edge data in a writable CSV format
    */
   public toCSV(): string {
-    return `${this._startNode.nodeID}, ${this._endNode.nodeID}`;
+    return `${this._edgeInfo.startNodeID}, ${this._endNode.nodeID}`;
   }
 
   /**
    * Getter function that returns the nodeID of the startingNode for this edge
    */
   public get startNodeID(): string {
-    return this._startNode.nodeID;
+    return this.edgeInfo.startNodeID;
   }
 
   /**
@@ -67,26 +71,25 @@ class MapEdge {
   }
 
   /**
-   * Getter function that returns the end node object for this edge
+   * Setter function that can set the starting node to a new starting node reference
+   * @param newStartNode - Reference to the new starting node object
    */
-
-  public get endNode(): MapNode {
-    return this._endNode;
+  public set startNode(newStartNode: MapNode) {
+    this._startNode = newStartNode;
   }
 
   /**
    * Getter function that returns the nodeID of the endingNode for this edge
    */
   public get endNodeID(): string {
-    return this._endNode.nodeID;
+    return this.edgeInfo.endNodeID;
   }
 
   /**
-   * Setter function that can set the starting node to a new starting node reference
-   * @param newStartNode - Reference to the new starting node object
+   * Getter function that returns the end node object for this edge
    */
-  public set startNode(newStartNode: MapNode) {
-    this._startNode = newStartNode;
+  public get endNode(): MapNode {
+    return this._endNode;
   }
 
   /**
@@ -96,8 +99,22 @@ class MapEdge {
   public set endNode(newEndNode: MapNode) {
     this._endNode = newEndNode;
   }
+
+  public get edgeInfo(): MapEdgeType {
+    return this._edgeInfo;
+  }
+
+  public set edgeInfo(newEdgeInfo: {
+    edgeType: MapEdgeType;
+    startNode: MapNode;
+    endNode: MapNode;
+  }) {
+    this._startNode = newEdgeInfo.startNode;
+    this._endNode = newEdgeInfo.endNode;
+
+    this._edgeInfo = newEdgeInfo.edgeType;
+  }
 }
 
 //Export the MapEdge class and EdgeFields type to allow for its use across the program
 export default MapEdge;
-export type { EdgeFields };
