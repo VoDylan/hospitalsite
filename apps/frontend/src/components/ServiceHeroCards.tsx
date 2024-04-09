@@ -27,17 +27,19 @@ const ServiceCard: React.FC<CardProps> = ({
       sx={{
         position: "relative",
         width: "100%",
-        height: "60vh",
+        height: "35vh",
         display: "flex",
         flexDirection: "column",
       }}
     >
       <CardMedia
-        sx={{ height: "25vh", position: "relative" }}
+        sx={{ height: "30vh", position: "relative" }}
         image={image}
         title={title}
       ></CardMedia>
-      <CardContent style={{ flex: 1, backgroundColor: "white" }}>
+      <CardContent
+        style={{ flex: 1, backgroundColor: "white", textAlign: "center" }}
+      >
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
