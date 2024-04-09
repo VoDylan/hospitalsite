@@ -5,7 +5,7 @@ import {
   clearDBEdges,
   clearDBNodes,
   createServiceRequest,
-  getDBEdgeByStartAndEndNode,
+  getDBEdgeByEdgeID,
   getDBNodeByID,
   getServiceRequestFromDBByNodeID,
   getServiceRequestFromDBByType,
@@ -53,10 +53,9 @@ router.get("/edges", async (req, res) => {
 //Accepts a GET request to the /api/database/edges/<START_NODE_ID>/<END_NODE_ID> accepts a GET request where <START_NODE_ID>
 //is replaced by the starting node id and <END_NODE_ID> is replaced with the ending node id; returns JSON data with the edge
 //information or an empty JSON object if no node exists with the combination of the starting and ending ids
-router.get("/edges/:startNodeID/:endNodeID", async (req, res) => {
-  const edgeData: MapEdgeType | null = await getDBEdgeByStartAndEndNode(
-    req.params.startNodeID,
-    req.params.endNodeID,
+router.get("/edges/:edgeID", async (req, res) => {
+  const edgeData: MapEdgeType | null = await getDBEdgeByEdgeID(
+    req.params.edgeID,
   );
 
   if (edgeData == null) {
@@ -172,6 +171,8 @@ router.post("/uploadnodes", async (req, res) => {
 
 router.post("/uploadedges", async (req, res) => {
   const data: [] = req.body;
+
+  console.log(data);
 
   await clearDBEdges();
 

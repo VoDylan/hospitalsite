@@ -58,6 +58,7 @@ function DisplayDatabase() {
   ]);
 
   const [edgeColumns] = useState<GridColDef[]>([
+    { field: "edgeID", headerName: "EdgeID", width: 200 },
     { field: "startNodeID", headerName: "StartNodeID", width: 150 },
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
@@ -108,6 +109,7 @@ function DisplayDatabase() {
     for (let i = 0; i < data.length; i++) {
       const tableFormattedEdge: EdgeParams = {
         id: i,
+        edgeID: data[i].edgeID,
         startNodeID: data[i].startNodeID,
         endNodeID: data[i].endNodeID,
       };
@@ -211,7 +213,7 @@ function DisplayDatabase() {
         for (let i: number = 0; i < parsedData[0].length; i++) {
           if (parsedData[0][i] != MapEdge.csvHeader.split(", ")[i]) {
             console.error(
-              "Imported edge data does not include the correct header fields",
+              `Imported edge data does not include the correct header fields`,
             );
             return;
           }
@@ -221,8 +223,9 @@ function DisplayDatabase() {
 
         for (let i: number = 1; i < parsedData.length; i++) {
           jsonData.push({
-            startNodeID: parsedData[i][0],
-            endNodeID: parsedData[i][1],
+            edgeID: parsedData[i][0],
+            startNodeID: parsedData[i][1],
+            endNodeID: parsedData[i][2],
           });
         }
 
