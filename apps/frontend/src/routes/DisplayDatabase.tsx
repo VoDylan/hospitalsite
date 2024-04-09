@@ -5,17 +5,14 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios, { AxiosResponse } from "axios";
 import TopBanner2 from "../components/TopBanner2.tsx";
-import { DropDown } from "../components/DropDown.tsx";
 import {
   DataGrid,
   GridColDef,
   GridToolbar,
   GridRowModel,
-  GridRowsProp,
   GridRowModesModel,
   GridRowModes,
   GridRowId,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridEventListener,
   GridRowEditStopReasons,
@@ -76,7 +73,10 @@ function DisplayDatabase() {
   };
   const handleSaveClick = (id: GridRowId) => () => {
     console.log(rowModesModel);
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    setRowModesModel((prevRowModesModel) => ({
+      ...prevRowModesModel,
+      [id]: { mode: GridRowModes.View }
+    }));
   };
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -355,8 +355,8 @@ function DisplayDatabase() {
       };
 
       // Make the HTTP request to save in the backend
-      const response = await axios.put(`/api/database/updatesr/${id}`, newRow);
-      return response;
+      await axios.put(`/api/database/updatesr/${id}`, data);
+      return newRow;
     },
     [],
   );
