@@ -25,6 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import { ServiceData } from "common/src/ServiceData.ts";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -86,7 +87,7 @@ function DisplayDatabase() {
       width: 200,
       editable: true,
       type: "singleSelect",
-      valueOptions: ["unassigned", "Assigned", "InProgress", "Closed"],
+      valueOptions: ["Unassigned", "Assigned", "InProgress", "Closed"],
     },
   ]);
 
@@ -289,6 +290,24 @@ function DisplayDatabase() {
     console.log("Handling node import data");
   }
 
+  const processRowUpdate = React.useCallback(
+    async (newRow: GridRowModel, id: number) => {
+      const data = {
+        id: newRow["id"],
+        userID: newRow["userID"],
+        nodeID: newRow["nodeID"],
+        serviceType: newRow["serviceType"],
+        services: newRow["services"],
+        status: newRow["status"],
+      };
+
+      // Make the HTTP request to save in the backend
+      const response = await axios.put(`/api/database/updatesr/${id}`, newRow);
+      return response;
+    },
+    [],
+  );
+
   interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
     setRowModesModel: (
@@ -416,6 +435,9 @@ function DisplayDatabase() {
               },
             }}
             pageSizeOptions={[5, 10]}
+            processRowUpdate={(newRow: GridRowModel) =>
+              processRowUpdate(newRow, newRow.id as number)
+            }
           />
         </Box>
       </div>
