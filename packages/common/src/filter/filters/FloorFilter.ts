@@ -14,37 +14,16 @@ export default class FloorFilter extends Filter {
     nodes.forEach((node) => {
       if (this.filterValues.length == 0) return;
 
-      let passesInclusiveFilters: boolean = false;
-      let passesExclusiveFilters: boolean = true;
-
-      const inclusionFilters: FilterValueType[] = [];
-      const exclusionFilters: FilterValueType[] = [];
-
+      let included: boolean = false;
       this.filterValues.forEach((filterParam: FilterValueType) => {
-        filterParam.exclude
-          ? exclusionFilters.push(filterParam)
-          : inclusionFilters.push(filterParam);
+        included =
+          included ||
+          (filterParam.exclude
+            ? node.floor != filterParam.value
+            : node.floor == filterParam.value);
       });
 
-      if (inclusionFilters.length == 0) {
-        passesInclusiveFilters = true;
-      } else {
-        inclusionFilters.forEach((filterParam: FilterValueType) => {
-          passesInclusiveFilters =
-            passesInclusiveFilters || node.floor == filterParam.value;
-        });
-      }
-
-      if (exclusionFilters.length == 0) {
-        passesExclusiveFilters = true;
-      } else {
-        exclusionFilters.forEach((filterParam: FilterValueType) => {
-          passesExclusiveFilters =
-            passesExclusiveFilters && node.floor != filterParam.value;
-        });
-      }
-
-      if (passesInclusiveFilters && passesExclusiveFilters) newNodes.push(node);
+      if (included) newNodes.push(node);
     });
 
     return newNodes;

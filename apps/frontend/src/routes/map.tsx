@@ -36,6 +36,7 @@ import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import Floor from "../components/FloorTabs.tsx";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -371,7 +372,7 @@ function Map() {
             sx={{ display: "flex", alignItems: "center" }}
             spacing={14.7}
           >
-            <Filter iconColor="#63CA00" filterName="LL 1" filterType={0} />
+            <Filter iconColor="#63CA00" filterName="L1" filterType={0} />
             {ll1IconState === "plus" ? (
               <AddIcon
                 onClick={handleLL1IconState}
@@ -391,7 +392,7 @@ function Map() {
             sx={{ display: "flex", alignItems: "center" }}
             spacing={14.7}
           >
-            <Filter iconColor="#63CA00" filterName="LL 2" filterType={0} />
+            <Filter iconColor="#63CA00" filterName="L2" filterType={0} />
             {ll2IconState === "plus" ? (
               <AddIcon
                 onClick={handleLL2IconState}
@@ -842,6 +843,7 @@ function Map() {
                 {icon}
               </Slide>
             )}
+            <Floor />
           </Stack>
         </Stack>
       </Drawer>
