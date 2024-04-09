@@ -1,6 +1,15 @@
+import React, { useState } from "react";
 import { Button, Stack } from "@mui/material";
 
 function Floors() {
+  // State to track the active button
+  const [activeButton, setActiveButton] = useState<string | null>("L1");
+
+  // Function to handle button click
+  const handleButtonClick = (button: string) => {
+    setActiveButton(button);
+  };
+
   return (
     <Stack
       direction="column"
@@ -14,75 +23,80 @@ function Floors() {
       <Button
         variant="contained"
         sx={{
-          backgroundColor: "white",
+          backgroundColor: activeButton === "3" ? "#186BD9" : "white",
           width: "60px",
           height: "60px",
           borderRadius: "2px",
-          color: "#767674", // Text color
+          color: activeButton === "3" ? "white" : "#767674",
           "&:hover": {
             color: "white", // Text color on hover
           },
         }}
+        onClick={() => handleButtonClick("3")}
       >
         3
       </Button>
       <Button
         variant="contained"
         sx={{
-          backgroundColor: "white",
+          backgroundColor: activeButton === "2" ? "#186BD9" : "white",
           width: "60px",
           height: "60px",
           borderRadius: "2px",
-          color: "#767674", // Text color
+          color: activeButton === "2" ? "white" : "#767674",
           "&:hover": {
             color: "white", // Text color on hover
           },
         }}
+        onClick={() => handleButtonClick("2")}
       >
         2
       </Button>
       <Button
         variant="contained"
         sx={{
-          backgroundColor: "white",
+          backgroundColor: activeButton === "1" ? "#186BD9" : "white",
           width: "60px",
           height: "60px",
           borderRadius: "2px",
-          color: "#767674", // Text color
+          color: activeButton === "1" ? "white" : "#767674",
           "&:hover": {
             color: "white", // Text color on hover
           },
         }}
+        onClick={() => handleButtonClick("1")}
       >
         1
       </Button>
       <Button
         variant="contained"
         sx={{
-          backgroundColor: "white",
+          backgroundColor: activeButton === "L1" ? "#186BD9" : "white",
           width: "60px",
           height: "60px",
           borderRadius: "2px",
-          color: "#767674", // Text color
+          color: activeButton === "L1" ? "white" : "#767674",
           "&:hover": {
             color: "white", // Text color on hover
           },
         }}
+        onClick={() => handleButtonClick("L1")}
       >
         L1
       </Button>
       <Button
         variant="contained"
         sx={{
-          backgroundColor: "white",
+          backgroundColor: activeButton === "L2" ? "#186BD9" : "white",
           width: "60px",
           height: "60px",
           borderRadius: "2px",
-          color: "#767674", // Text color
+          color: activeButton === "L2" ? "white" : "#767674",
           "&:hover": {
             color: "white", // Text color on hover
           },
         }}
+        onClick={() => handleButtonClick("L2")}
       >
         L2
       </Button>
