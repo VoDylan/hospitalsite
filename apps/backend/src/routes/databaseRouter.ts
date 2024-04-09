@@ -204,11 +204,13 @@ router.put("/updatesr/:id", async (req, res) => {
 
   console.log(data);
 
-  client.serviceRequest.update({
+  await client.serviceRequest.update({
     where: {
       id: parseInt(req.params.id),
     },
-    data: data,
+    data: {
+      status: data.status,
+    },
   });
 
   res.status(200).json({

@@ -34,6 +34,7 @@ type ServiceParams = {
   userID: number;
   nodeID: string;
   serviceType: string;
+  services: string;
   status: string;
 };
 
@@ -81,6 +82,7 @@ function DisplayDatabase() {
     { field: "userID", headerName: "User ID", width: 200 },
     { field: "nodeID", headerName: "Node ID", width: 200 },
     { field: "serviceType", headerName: "Service Type", width: 200 },
+    { field: "services", headerName: "Services", width: 100 },
     {
       field: "status",
       headerName: "Status",
@@ -147,10 +149,11 @@ function DisplayDatabase() {
     const rowData = [];
     for (let i = 0; i < data.length; i++) {
       const tableFormattedServReq: ServiceParams = {
-        id: i,
+        id: data[i].id,
         userID: data[i].userID,
         nodeID: data[i].nodeID,
         serviceType: data[i].serviceType,
+        services: data[i].services,
         status: data[i].status,
       };
       rowData.push(tableFormattedServReq);
@@ -292,6 +295,7 @@ function DisplayDatabase() {
 
   const processRowUpdate = React.useCallback(
     async (newRow: GridRowModel, id: number) => {
+      console.log(`ID: ${id}`);
       const data = {
         id: newRow["id"],
         userID: newRow["userID"],
@@ -307,6 +311,10 @@ function DisplayDatabase() {
     },
     [],
   );
+
+  const handleProcessRowUpdateError = React.useCallback((error: Error) => {
+    alert("status didn't save");
+  }, []);
 
   interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -436,8 +444,9 @@ function DisplayDatabase() {
             }}
             pageSizeOptions={[5, 10]}
             processRowUpdate={(newRow: GridRowModel) =>
-              processRowUpdate(newRow, newRow.id as number)
+              processRowUpdate(newRow, parseInt(newRow["id"]))
             }
+            onProcessRowUpdateError={handleProcessRowUpdateError}
           />
         </Box>
       </div>
