@@ -240,6 +240,15 @@ export async function getServiceRequestFromDBByType(serviceType: string) {
     );
   }
 
+  client.serviceRequest.update({
+    where: {
+      id: 47,
+    },
+    data: {
+      serviceType: "done",
+    },
+  });
+
   return request;
 }
 

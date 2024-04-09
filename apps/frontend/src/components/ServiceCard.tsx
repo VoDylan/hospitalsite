@@ -9,8 +9,9 @@ export function ServiceCard(props: ServiceProps) {
   return (
     <Card
       sx={{
-        width: 260, // Set the width of each card
-        height: 200, // Set the height of each card
+        display: "flex",
+        width: "90%", // Set the width of each card
+        height: "25vh", // Set the height of each card
         "&:hover": {
           color: "black",
         },
