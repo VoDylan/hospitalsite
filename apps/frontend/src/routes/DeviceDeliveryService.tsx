@@ -126,9 +126,7 @@ function DeviceDeliveryService() {
       <TopBanner />
       <Grid
         container
-        direction={"row"}
-        rowSpacing={1}
-        columnSpacing={0}
+        direction={"column"}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -141,7 +139,6 @@ function DeviceDeliveryService() {
       >
         <Grid
           item
-          xs={12}
           sx={{
             backgroundColor: "#186BD9",
           }}
@@ -155,8 +152,8 @@ function DeviceDeliveryService() {
             Medical Device Request Form
           </Typography>
         </Grid>
-        <Grid container padding={2}>
-          <Grid item xs={12}>
+        <Grid container padding={2} direction={"column"}>
+          <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"}>Name:</Typography>
             <LeftAlignedTextbox
               label={"Name"}
@@ -164,7 +161,7 @@ function DeviceDeliveryService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"}>Location:</Typography>
             <DropDown
               label={"Location"}
@@ -173,7 +170,7 @@ function DeviceDeliveryService() {
               items={nodeNumbers}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"}>Medical Device Category:</Typography>
             <DropDown
               items={medDevices}
@@ -182,7 +179,7 @@ function DeviceDeliveryService() {
               returnData={form.device}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"}>Amount Needed:</Typography>
             <LeftAlignedTextbox
               onChange={handleAmountInput}
@@ -190,10 +187,10 @@ function DeviceDeliveryService() {
               value={form.amount}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Typography color={"black"}>
-              Priority of Medical Device Delivery:
-            </Typography>
+          <Typography color={"black"} textAlign={"center"}>
+            Priority of Medical Device Delivery:
+          </Typography>
+          <Grid item sx={{ m: "auto" }}>
             <RadioButtonsGroup
               label={"Priority"}
               options={["Low", "Medium", "High", "Emergency"]}
@@ -201,8 +198,10 @@ function DeviceDeliveryService() {
               handleChange={handlePriorityInput}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Typography color={"black"}>Status of the request:</Typography>
+          <Typography color={"black"} textAlign={"center"}>
+            Status
+          </Typography>
+          <Grid item sx={{ m: "auto" }}>
             <RadioButtonsGroup
               label={"Status"}
               options={["Unassigned", "Assigned", "InProgress", "Closed"]}
