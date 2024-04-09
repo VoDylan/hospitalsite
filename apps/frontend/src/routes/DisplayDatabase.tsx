@@ -22,12 +22,8 @@ import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import { ServiceData } from "common/src/ServiceData.ts";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -41,10 +37,6 @@ type ServiceParams = {
 };
 
 type EdgeParams = { id: number } & MapEdgeType;
-
-/*app.post('/csv', upload.none(), function (req, res, next) {
-  // req.body contains the text fields
-});*/
 
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
@@ -75,20 +67,8 @@ function DisplayDatabase() {
     console.log(rowModesModel);
     setRowModesModel((prevRowModesModel) => ({
       ...prevRowModesModel,
-      [id]: { mode: GridRowModes.View }
+      [id]: { mode: GridRowModes.View },
     }));
-  };
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
-    params,
-    event,
-  ) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
-  };
-
-  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-    setRowModesModel(newRowModesModel);
   };
 
   const [nodeColumns] = useState<GridColDef[]>([
@@ -107,7 +87,6 @@ function DisplayDatabase() {
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
 
-  // const [serviceColumns] = useState<GridColDef[]>([
   const serviceColumns: GridColDef[] = [
     { field: "userID", headerName: "User ID", width: 200 },
     { field: "nodeID", headerName: "Node ID", width: 200 },
@@ -486,8 +465,6 @@ function DisplayDatabase() {
             }}
             editMode={"row"}
             rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStop={handleRowEditStop}
             pageSizeOptions={[5, 10]}
             processRowUpdate={(newRow: GridRowModel) =>
               processRowUpdate(newRow, parseInt(newRow["id"]))
@@ -499,5 +476,8 @@ function DisplayDatabase() {
     </>
   );
 }
+
+//            onRowModesModelChange={handleRowModesModelChange}
+//             onRowEditStop={handleRowEditStop}
 
 export default DisplayDatabase;
