@@ -3,7 +3,7 @@ import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmis
 import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import { SubmitButton } from "../components/SubmitButton.tsx";
+import { FlowerDeliverySubmitButton } from "../components/FlowerDeliverySubmitButton.tsx";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import LadyWithFlowersInHospital from "../../public/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
@@ -176,7 +176,11 @@ function FlowerDeliveryService() {
           }}
         >
           <Box>
-            <SubmitButton text={"SUBMIT"} input={form} clear={clear} />
+            <FlowerDeliverySubmitButton
+              text={"SUBMIT"}
+              input={form}
+              clear={clear}
+            />
           </Box>
         </Grid>
       </Grid>

@@ -1,5 +1,5 @@
-import MapNode from "./MapNode.ts";
-import MapEdge from "./MapEdge.ts";
+import MapNode from "common/src/map/MapNode.ts";
+import MapEdge from "common/src/map/MapEdge.ts";
 
 class GraphManager {
   private static instance: GraphManager;

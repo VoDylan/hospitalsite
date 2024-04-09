@@ -17,6 +17,10 @@ import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import NestedList from "../components/PathfindingSelect.tsx";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import GraphManager from "../common/GraphManager.ts";
+import MapNode from "common/src/map/MapNode.ts";
+import Autocomplete from "@mui/material/Autocomplete";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -25,12 +29,47 @@ function Map() {
   const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [dbNodeData, setDBNodesData] = useState<MapNodeType[]>([]);
+  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+  const [autocompleteNodeData, setAutocompleteNodeData] = useState<
+    { label: string; node: string }[]
+  >([]);
 
   //Pathfinder
   const [open, setOpen] = React.useState(false);
-  const [checkedBFS, setCheckedBFS] = React.useState(false);
+  const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
+
+  const loadNodeData = async (): Promise<MapNodeType[]> => {
+    const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
+      .data as MapNodeType[];
+
+    data.forEach((node) => {
+      if (!GraphManager.getInstance().getNodeByID(node.nodeID))
+        GraphManager.getInstance().nodes.push(new MapNode(node));
+    });
+
+    console.log(GraphManager.getInstance().nodes);
+
+    return data;
+  };
+
+  const populateAutocompleteData = () => {
+    const graphNodes: MapNode[] = GraphManager.getInstance().nodes;
+    const nodeAssociations: { label: string; node: string }[] = graphNodes.map(
+      (node) => {
+        console.log("Node ID:", node.nodeID, "Long Name:", node.longName);
+        return {
+          label: node.longName, // Assuming `longName` is the label you want to use
+          node: node.nodeID,
+        };
+      },
+    );
+
+    setAutocompleteNodeData(nodeAssociations);
+  };
 
   const handleClick = () => {
     setOpen(!open);
@@ -73,14 +112,32 @@ function Map() {
     </Paper>
   );
 
-  const handleStartNodeChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setStartNode(event.target.value);
+  const handleStartNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setStartNode(selectedNode.node);
+      }
+    } else {
+      setStartNode(""); // Handle null value if necessary
+    }
   };
 
-  const handleEndNodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndNode(event.target.value);
+  const handleEndNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setEndNode(selectedNode.node);
+      }
+    } else {
+      setEndNode(""); // Handle null value if necessary
+    }
   };
 
   const updateNodesData = (newData: Coordinates[]) => {
@@ -88,6 +145,9 @@ function Map() {
   };
 
   async function handleSubmit() {
+    console.log(startNode);
+    console.log(endNode);
+
     if (startNode.trim() === "" || endNode.trim() === "") {
       setErrorMessage("Please enter both start and end nodes");
       return;
@@ -122,6 +182,15 @@ function Map() {
   }
 
   useEffect(() => {
+    if (!nodeDataLoaded) {
+      loadNodeData().then((data: MapNodeType[]) => {
+        setDBNodesData(data);
+        setNodeDataLoaded(true);
+      });
+    } else {
+      populateAutocompleteData();
+    }
+
     console.log(algorithm);
     console.log(startNode);
     console.log(endNode);
@@ -197,7 +266,7 @@ function Map() {
         }
       };
     }
-  }, [startNode, endNode, nodes, nodesData, algorithm]);
+  }, [nodeDataLoaded, startNode, endNode, nodes, nodesData, algorithm]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -236,13 +305,19 @@ function Map() {
               sx={{ color: "blue" }}
             ></RadioButtonCheckedIcon>
 
-            <TextField
-              sx={{ width: "80%" }}
+            <Autocomplete
+              onChange={(event, value) => handleStartNodeChange(value)}
+              disablePortal
               id="startNode"
-              label="Your Location"
-              type="search"
-              value={startNode}
-              onChange={handleStartNodeChange}
+              options={autocompleteNodeData.map((node) => node.label)}
+              sx={{ width: "84%" }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Starting Node"
+                  value={startNode}
+                />
+              )}
             />
           </Stack>
 
@@ -260,13 +335,15 @@ function Map() {
               sx={{ color: "red" }}
             ></LocationOnIcon>
 
-            <TextField
-              sx={{ width: "80%" }}
-              id="endNode"
-              label="Destination"
-              type="search"
-              value={endNode}
-              onChange={handleEndNodeChange}
+            <Autocomplete
+              onChange={(event, value) => handleEndNodeChange(value)}
+              disablePortal
+              id="startNode"
+              options={autocompleteNodeData.map((node) => node.label)}
+              sx={{ width: "84%" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Ending Node" value={endNode} />
+              )}
             />
           </Stack>
 
