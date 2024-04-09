@@ -13,7 +13,12 @@ import {
   GridRowModel,
   GridRowsProp,
   GridRowModesModel,
+  GridRowModes,
+  GridRowId,
   GridToolbarContainer,
+  GridActionsCellItem,
+  GridEventListener,
+  GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
@@ -62,6 +67,24 @@ function parseCSVFromString(data: string) {
 }
 
 function DisplayDatabase() {
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
+    {},
+  );
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
+    params,
+    event,
+  ) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
   const [nodeColumns] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 150 },
     { field: "xcoord", headerName: "XCoord", width: 120 },
@@ -90,6 +113,32 @@ function DisplayDatabase() {
       editable: true,
       type: "singleSelect",
       valueOptions: ["Unassigned", "Assigned", "InProgress", "Closed"],
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 100,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<SaveIcon />}
+            label="Save"
+            sx={{
+              color: "primary.main",
+            }}
+            onClick={handleSaveClick(id)}
+          />,
+        ];
+      },
     },
   ]);
 
@@ -160,13 +209,6 @@ function DisplayDatabase() {
     }
     setServiceRowData(rowData);
   };
-
-  /*  const [updatedRows, setUpdatedRows] = React.useState(serviceRowData);
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setServiceRowData(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };*/
 
   useEffect(() => {
     getNodeData();
@@ -316,13 +358,6 @@ function DisplayDatabase() {
     alert("status didn't save");
   }, []);
 
-  interface EditToolbarProps {
-    setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-    setRowModesModel: (
-      newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-    ) => void;
-  }
-
   return (
     <>
       <TopBanner2 />
@@ -442,6 +477,8 @@ function DisplayDatabase() {
                 paginationModel: { page: 0, pageSize: 5 },
               },
             }}
+            rowModesModel={rowModesModel}
+            onRowEditStop={handleRowEditStop}
             pageSizeOptions={[5, 10]}
             processRowUpdate={(newRow: GridRowModel) =>
               processRowUpdate(newRow, parseInt(newRow["id"]))
