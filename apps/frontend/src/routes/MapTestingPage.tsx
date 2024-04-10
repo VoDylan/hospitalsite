@@ -2,19 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
-// import { BFSalgorithm } from "../../../backend/src/BFSalgorithm.ts";
-import TopBanner2 from "../components/TopBanner2";
 import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
+import { nodesDistances } from "common/src/nodesDistances.ts";
 
-function Map() {
+function MapTestingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]); // Declaring nodes state
   const [errorMessage, setErrorMesage] = useState<string>("");
   const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
+
   const handleStartNodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -29,6 +30,10 @@ function Map() {
     setNodesData(newData);
   };
 
+  const updateDistancesData = (newData: nodesDistances[]) => {
+    setDistancesData(newData);
+  };
+
   async function handleSubmit() {
     if (startNode.trim() === "" || endNode.trim() === "") {
       // handles if one of them is empty
@@ -41,6 +46,17 @@ function Map() {
       return;
     }
 
+    const distancesResponse = await axios.post("/api/testPath", {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (distancesResponse.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+    const distancePath = await distancesResponse.data;
+    const distanceData = distancePath.message;
+    console.log("distances", distanceData);
+    updateDistancesData(distanceData);
+
     const request: LocationInfo = { startNode: startNode, endNode: endNode };
 
     const response = await axios.post("/api/path", request, {
@@ -50,8 +66,9 @@ function Map() {
       throw new Error("Failed to fetch data");
     }
     const data = await response.data;
+    // console.log(data);
     const path = data.message;
-    console.log(path);
+    // console.log(path);
     updateNodesData(path);
     // console.log(nodesArray);
 
@@ -61,6 +78,9 @@ function Map() {
 
   useEffect(() => {
     if (canvasRef.current) {
+      // console.log("nodesData:", nodesData);
+      // console.log("nodes:", nodes);
+
       // Checking if nodes have been set
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -75,14 +95,11 @@ function Map() {
 
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-        if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
-          // this is so its clicked the same time
-
-          // const bfsAlgorithm = new BFSalgorithm(nodes[0], nodes[1]);
-          // const nodesData = bfsAlgorithm.setup();
-
-          // nodesData: Coordinates[] = [];
-
+        if (
+          startNode.trim() === nodes[0] &&
+          endNode.trim() === nodes[1] &&
+          distancesData
+        ) {
           if (!nodesData) {
             setErrorMesage("There is no path between nodes");
             return;
@@ -97,9 +114,57 @@ function Map() {
           const moveDot = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "black";
 
-            // display all the nodes on the map if required
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "red";
+            ctx.font = "10px Arial";
+
+            for (let i = 0; i < distancesData.length; i++) {
+              ctx.beginPath();
+              ctx.moveTo(
+                distancesData[i].startCoords.x,
+                distancesData[i].startCoords.y,
+              );
+              ctx.lineTo(
+                distancesData[i].endCoords.x,
+                distancesData[i].endCoords.y,
+              );
+              ctx.stroke();
+              ctx.closePath();
+
+              ctx.fillText(
+                distancesData[i].distance.toString(),
+                (distancesData[i].startCoords.x +
+                  distancesData[i].endCoords.x) /
+                  2,
+                (distancesData[i].startCoords.y +
+                  distancesData[i].endCoords.y) /
+                  2,
+              );
+            }
+
+            ctx.fillStyle = "red";
+            for (let i = 0; i < distancesData.length; i++) {
+              ctx.beginPath();
+              ctx.arc(
+                distancesData[i].startCoords.x,
+                distancesData[i].startCoords.y,
+                5,
+                0,
+                2 * Math.PI,
+              ); // draw circle
+              ctx.arc(
+                distancesData[i].endCoords.x,
+                distancesData[i].endCoords.y,
+                5,
+                0,
+                2 * Math.PI,
+              ); // draw circle
+              ctx.fill();
+            }
+
+            ctx.fillStyle = "blue";
+            ctx.strokeStyle = "blue";
             for (let i = 0; i < nodesData.length; i++) {
               ctx.beginPath();
               ctx.arc(nodesData[i].x, nodesData[i].y, 5, 0, 2 * Math.PI); // draw circle
@@ -124,7 +189,6 @@ function Map() {
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < speed) {
-              // if the distance is close then move to the next node
               currentTargetIndex = (currentTargetIndex + 1) % nodesData.length;
             } else {
               currentX += (dx / distance) * speed; // using vectors to calculate the ratio change and add to current
@@ -137,17 +201,16 @@ function Map() {
               currentTargetIndex = 1;
             }
 
-            requestAnimationFrame(moveDot); // loop to call move to function consistently
+            requestAnimationFrame(moveDot);
           };
           moveDot();
         }
       };
     }
-  }, [startNode, endNode, nodes, nodesData]);
+  }, [startNode, endNode, nodes, nodesData, distancesData]);
 
   return (
-    <div style={{ marginTop: "120px" }}>
-      <TopBanner2 />
+    <div>
       <div
         style={{
           display: "flex",
@@ -206,4 +269,4 @@ function Map() {
   );
 }
 
-export default Map;
+export default MapTestingPage;
