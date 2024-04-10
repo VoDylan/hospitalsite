@@ -38,7 +38,7 @@ export default function ServicesPage() {
         <Typography
           variant={"h1"}
           align={"center"}
-          color={"Black"}
+          color={"#003A96"}
           gutterBottom={true}
           fontSize={36}
           //fontWeight={'bold'}
@@ -54,11 +54,12 @@ export default function ServicesPage() {
           display: "flex",
           justifyContent: "center",
           marginLeft: "2.4%",
+          marginRight: "2.4%",
         }}
       >
-        <Grid container spacing={3}>
+        <Grid container spacing={3} direction={"row"}>
           {serviceData.map((service, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={index}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
               <Zoom
                 in={showCards}
                 style={{
