@@ -3,6 +3,7 @@ import axios from "axios";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import MapImage from "../images/00_thelowerlevel1.png";
 import { nodesDistances } from "common/src/nodesDistances.ts";
+import TopBanner2 from "../components/TopBanner2.tsx";
 
 function MapEditingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -76,16 +77,19 @@ function MapEditingPage() {
   });
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        width: "100%",
-        height: "100%",
-        zIndex: 0,
-        position: "relative",
-      }}
-      className={"firstFloorCanvas"}
-    />
+    <div>
+      <TopBanner2 />
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: "100%",
+          height: "100%",
+          zIndex: 0,
+          position: "relative",
+        }}
+        className={"firstFloorCanvas"}
+      />
+    </div>
   );
 }
 

@@ -38,6 +38,7 @@ export const NavBar = () => {
             <NavButton name={"Directions"} path={"/Map"} />
             <NavButton name={"Services"} path={"/Services"} />
             <NavButton path={"/DisplayDatabase"} name={"Database"} />
+            <NavButton path={"/MapEditingPage"} name={"EDITING PAGE"} />
           </Stack>
         </Stack>
       </Drawer>
