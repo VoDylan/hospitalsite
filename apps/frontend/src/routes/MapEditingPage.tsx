@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-// import { MapNodeType } from "common/src/map/MapNodeType.ts";
-// import MapImage from "../images/00_thelowerlevel1.png";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import L1MapImage from "../images/00_thelowerlevel1.png";
@@ -12,17 +10,8 @@ import TFMapImage from "../images/03_thethirdfloor.png";
 import Floor from "../components/FloorTabs.tsx";
 import { sendRequest } from "common/src/sendRequest.ts";
 
-// type floorNodes = {
-//   l2: NodeFilter[];
-//   l1: NodeFilter[];
-//   f1: NodeFilter[];
-//   f2: NodeFilter[];
-//   f3: NodeFilter[];
-// };
-
 function MapEditingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  // const [nodeData, setNodesData] = useState<MapNodeType[]>([]);
   const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
   const floor = useRef<string>("L1");
   const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
@@ -30,11 +19,6 @@ function MapEditingPage() {
     image.src = L1MapImage;
     return image;
   });
-
-  // async function loadNodeData() {
-  //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
-  //   setNodesData(data);
-  // }
 
   async function loadEdgesDistance(request: sendRequest) {
     // const req = { req: "L1" };
@@ -88,17 +72,9 @@ function MapEditingPage() {
   };
 
   useEffect(() => {
-    // if (nodeData.length < 1) {
-    //   // console.log("Loading Data");
-    //   loadNodeData();
-    // }
     if (distancesData.length < 1) {
-      // console.log("Loading Distances");
       loadEdgesDistance({ req: "L1" });
     }
-
-    // console.log(floor.current);
-    // console.log(nodeData);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -106,7 +82,6 @@ function MapEditingPage() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // image.src = MapImage;
     currImage.onload = () => {
       canvas.width = currImage.width;
       canvas.height = currImage.height;
@@ -139,17 +114,9 @@ function MapEditingPage() {
           );
         }
       }
-
-      // ctx.fillStyle = "blue";
-      // ctx.strokeStyle = "blue";
-      // for (let i = 0; i < filteredNodes.length; i++) {
-      //   ctx.beginPath();
-      //   ctx.arc(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 5, 0, 2 * Math.PI); // draw circle
-      //   ctx.fill();
-      // }
     };
 
-    console.log(distancesData); // Log distancesData here to see the updated value
+    console.log(distancesData);
   }, [currImage, distancesData]);
 
   return (
