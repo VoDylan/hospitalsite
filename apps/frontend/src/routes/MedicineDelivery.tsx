@@ -118,9 +118,7 @@ function MedicineDelivery() {
       <TopBanner2 />
       <Grid
         container
-        direction={"row"}
-        rowSpacing={1}
-        columnSpacing={5}
+        direction={"column"}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -133,16 +131,16 @@ function MedicineDelivery() {
       >
         <Grid
           item
-          xs={12}
           sx={{
             backgroundColor: "#186BD9",
           }}
         >
-          <Typography color={"white"} align={"center"} fontSize={40}>
+          <Typography color={"white"} align={"center"} fontSize={40} padding={1}>
             Medicine Delivery Form
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid container padding={2} direction={"row"}>
+        <Grid item sx={{ m: "auto" }}>
           <Typography color={"black"}>Name:</Typography>
           <LeftAlignedTextbox
             label={"Name"}
@@ -150,7 +148,7 @@ function MedicineDelivery() {
             onChange={handleNameInput}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item sx={{ m: "auto" }}>
           <Typography color={"black"}>Location:</Typography>
           <DropDown
             label={"Location"}
@@ -159,16 +157,7 @@ function MedicineDelivery() {
             items={nodeNumbers}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"}>Priority of Medicine:</Typography>
-          <RadioButtonsGroup
-            label={"Priority"}
-            options={["Low", "Medium", "High", "Emergency"]}
-            returnData={form.priority}
-            handleChange={handlePriorityInput}
-          />
-        </Grid>
-        <Grid item xs={12}>
+        <Grid item sx={{ m: "auto" }}>
           <Typography color={"black"}>Medicine Needed:</Typography>
           <DropDown
             items={[
@@ -183,7 +172,7 @@ function MedicineDelivery() {
             returnData={form.service}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item sx={{ m: "auto"}}>
           <Typography color={"black"}>Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
@@ -192,8 +181,17 @@ function MedicineDelivery() {
             returnData={form.frequency}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"}>Status of the request:</Typography>
+          <Grid item sx={{ m: "auto" }}>
+            <Typography color={"black"} textAlign={"center"} paddingTop={3}>Priority of Medicine:</Typography>
+            <RadioButtonsGroup
+              label={"Priority"}
+              options={["Low", "Medium", "High", "Emergency"]}
+              returnData={form.priority}
+              handleChange={handlePriorityInput}
+            />
+          </Grid>
+        <Grid item sx={{ m: "auto" }}>
+          <Typography color={"black"} textAlign={"center"} paddingTop={3}>Status of the Request:</Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -217,6 +215,7 @@ function MedicineDelivery() {
             updateSubmissionList={updateSubmissionList}
           />
         </Grid>
+      </Grid>
       </Grid>
       <TableContainer
         component={Paper}

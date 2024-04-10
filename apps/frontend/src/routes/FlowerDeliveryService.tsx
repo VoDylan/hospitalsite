@@ -89,9 +89,7 @@ function FlowerDeliveryService() {
       <TopBanner2 />
       <Grid
         container
-        direction={"row"}
-        rowSpacing={1}
-        columnSpacing={5}
+        direction={"column"}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -118,7 +116,8 @@ function FlowerDeliveryService() {
             Flower Delivery Service Form
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid container padding={2} direction={"row"}>
+        <Grid item sx={{ m: "auto" }}>
           <Typography>Name:</Typography>
           <LeftAlignedTextbox
             label={"Name"}
@@ -127,8 +126,8 @@ function FlowerDeliveryService() {
             type={"text"}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography>What type of flowers will you be ordering?</Typography>
+        <Grid item sx={{ m: "auto" }}>
+          <Typography>Flower Type:</Typography>
           <DropDown
             items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
             handleChange={handleFlowerTypeInput}
@@ -136,7 +135,7 @@ function FlowerDeliveryService() {
             returnData={form.flowerType}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item sx={{ m: "auto" }}>
           <Box>
             <Typography>Recipient Name:</Typography>
             <LeftAlignedTextbox
@@ -146,7 +145,7 @@ function FlowerDeliveryService() {
             />
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item sx={{ m: "auto" }}>
           <Box>
             <Typography>Room Number:</Typography>
             <DropDown
@@ -157,7 +156,7 @@ function FlowerDeliveryService() {
             />
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item sx={{ m: "auto" }}>
           <Box>
             <Typography>Add a message (optional):</Typography>
             <LeftAlignedTextbox
@@ -183,6 +182,7 @@ function FlowerDeliveryService() {
               clear={clear}
             />
           </Box>
+        </Grid>
         </Grid>
       </Grid>
     </Stack>

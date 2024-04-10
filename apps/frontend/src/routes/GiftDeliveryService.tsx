@@ -143,7 +143,7 @@ function GiftDeliveryService() {
         boxShadow={4}
         sx={{
           backgroundColor: "white",
-          width: "40vw", //Adjust this to change the width of the form
+          width: "35vw", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -164,7 +164,7 @@ function GiftDeliveryService() {
             Gift Delivery Service Form
           </Typography>
         </Grid>
-        <Grid container padding={4} direction={"row"}>
+        <Grid container padding={2} direction={"row"}>
           <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"}>Name:</Typography>
             <LeftAlignedTextbox
@@ -200,7 +200,7 @@ function GiftDeliveryService() {
           </Grid>
 
           <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Delivery:</Typography>
+            <Typography color={"black"} textAlign={"center"} paddingTop={3}>Delivery:</Typography>
             <RadioButtonsGroup
               label={"Delivery"}
               options={[
@@ -226,7 +226,7 @@ function GiftDeliveryService() {
             />
           </Grid>
           <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Gift Size:</Typography>
+            <Typography color={"black"} textAlign={"center"} paddingTop={3}>Gift Size:</Typography>
             <RadioButtonsGroup
               label={"Gift Size"}
               options={["Small", "Medium", "Large", "Extra Large"]}
@@ -235,7 +235,7 @@ function GiftDeliveryService() {
             />
           </Grid>
           <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Gift Add-on:</Typography>
+            <Typography color={"black"} textAlign={"center"} paddingTop={3}>Gift Add-on:</Typography>
             <RadioButtonsGroup
               label={"Gift Add-on"}
               options={["Greeting Card", "Balloons", "Stuffed Animal", "None"]}

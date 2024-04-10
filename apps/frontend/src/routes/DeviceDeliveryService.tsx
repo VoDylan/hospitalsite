@@ -24,6 +24,7 @@ import TopBanner from "../components/TopBanner.tsx";
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/DeviceSubmitButton.tsx";
 import axios from "axios";
+import TopBanner2 from "../components/TopBanner2.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
 
 function DeviceDeliveryService() {
@@ -159,7 +160,7 @@ function DeviceDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
+      <TopBanner2 />
       <Grid
         container
         direction={"column"}
