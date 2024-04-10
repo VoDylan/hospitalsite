@@ -17,11 +17,12 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import SyncIcon from "@mui/icons-material/Sync";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import NestedList from "../components/PathfindingSelect.tsx";
 import "./map.css";
-import { Coordinates } from "common/src/Coordinates.ts";
+// import { Coordinates } from "common/src/Coordinates.ts";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
@@ -45,6 +46,7 @@ import L2MapImage from "../images/00_thelowerlevel2.png";
 import FFMapImage from "../images/01_thefirstfloor.png";
 import SFMapImage from "../images/02_thesecondfloor.png";
 import TFMapImage from "../images/03_thethirdfloor.png";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -52,7 +54,7 @@ function Map() {
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
   const [pathNodeObjects, setPathNodeObjects] = useState<MapNode[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dbNodeData, setDBNodesData] = useState<MapNodeType[]>([]);
@@ -1041,7 +1043,7 @@ function Map() {
     }
   };
 
-  const updateNodesData = (newData: Coordinates[]) => {
+  const updateNodesData = (newData: IDCoordinates[]) => {
     setNodesData(newData);
   };
 
@@ -1066,18 +1068,17 @@ function Map() {
         headers: { "Content-Type": "application/json" },
       });
       const data = response.data;
-      const path = data.message.coordinate_path;
-
-      const nodeIDs = data.message.path;
+      const path = data.message;
 
       const nodeObjectList: MapNode[] = [];
 
-      nodeIDs.forEach((nodeID: string) => {
-        nodeObjectList.push(GraphManager.getInstance().getNodeByID(nodeID)!);
+      path.forEach((node: IDCoordinates) => {
+        nodeObjectList.push(
+          GraphManager.getInstance().getNodeByID(node.nodeID)!,
+        );
       });
 
       console.log(path);
-      console.log(nodeIDs);
       console.log(nodeObjectList);
 
       updateNodesData(path);
@@ -1168,8 +1169,8 @@ function Map() {
           }
 
           let currentTargetIndex = 0;
-          let currentX = nodesData[currentTargetIndex].x;
-          let currentY = nodesData[currentTargetIndex].y;
+          let currentX = nodesData[currentTargetIndex].coordinates.x;
+          let currentY = nodesData[currentTargetIndex].coordinates.y;
           const speed = 1;
 
           const moveDot = () => {
@@ -1180,7 +1181,13 @@ function Map() {
             for (let i = 0; i < nodesData.length; i++) {
               if (pathNodeObjects[i].floor != floor) continue;
               ctx.beginPath();
-              ctx.arc(nodesData[i].x, nodesData[i].y, 5, 0, 2 * Math.PI);
+              ctx.arc(
+                nodesData[i].coordinates.x,
+                nodesData[i].coordinates.y,
+                5,
+                0,
+                2 * Math.PI,
+              );
               ctx.fill();
             }
 
@@ -1189,7 +1196,7 @@ function Map() {
 
             let firstNodeOnFloorIndex = -1;
 
-            const includedNodesOnFloor: Coordinates[] = [];
+            const includedNodesOnFloor: IDCoordinates[] = [];
 
             for (let i = 0; i < nodesData.length; i++) {
               if (pathNodeObjects[i].floor == floor) {
@@ -1199,13 +1206,16 @@ function Map() {
             }
             if (firstNodeOnFloorIndex >= 0) {
               ctx.moveTo(
-                nodesData[firstNodeOnFloorIndex].x,
-                nodesData[firstNodeOnFloorIndex].y,
+                nodesData[firstNodeOnFloorIndex].coordinates.x,
+                nodesData[firstNodeOnFloorIndex].coordinates.y,
               );
               includedNodesOnFloor.push(nodesData[firstNodeOnFloorIndex]);
               for (let i = firstNodeOnFloorIndex; i < nodesData.length; i++) {
                 if (pathNodeObjects[i].floor != floor) break;
-                ctx.lineTo(nodesData[i].x, nodesData[i].y);
+                ctx.lineTo(
+                  nodesData[i].coordinates.x,
+                  nodesData[i].coordinates.y,
+                );
                 includedNodesOnFloor.push(nodesData[i]);
               }
               ctx.stroke();
@@ -1215,8 +1225,12 @@ function Map() {
               ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI);
               ctx.fill();
 
-              const dx = includedNodesOnFloor[currentTargetIndex].x - currentX;
-              const dy = includedNodesOnFloor[currentTargetIndex].y - currentY;
+              const dx =
+                includedNodesOnFloor[currentTargetIndex].coordinates.x -
+                currentX;
+              const dy =
+                includedNodesOnFloor[currentTargetIndex].coordinates.y -
+                currentY;
               const distance = Math.sqrt(dx * dx + dy * dy);
 
               if (distance < speed) {
@@ -1227,8 +1241,8 @@ function Map() {
                 currentY += (dy / distance) * speed;
               }
               if (currentTargetIndex === 0) {
-                currentX = includedNodesOnFloor[0].x;
-                currentY = includedNodesOnFloor[0].y;
+                currentX = includedNodesOnFloor[0].coordinates.x;
+                currentY = includedNodesOnFloor[0].coordinates.y;
                 currentTargetIndex = 1;
               }
               requestAnimationFrame(moveDot);

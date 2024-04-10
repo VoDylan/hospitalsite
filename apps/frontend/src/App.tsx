@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import SlidesPageLI from "../src/routes/SlidesPageLI.tsx";
+import MapTestingPage from "./routes/MapTestingPage.tsx";
 import Map from "./routes/map.tsx";
 import ServicesPage from "./routes/ServicesPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
@@ -66,10 +67,13 @@ function App() {
           path: "/Map",
           element: <Map />,
         },
-
         {
           path: "/LoggedIn",
           element: <SlidesPageLI />,
+        },
+        {
+          path: "/MapTestingPage",
+          element: <MapTestingPage />,
         },
       ],
     },

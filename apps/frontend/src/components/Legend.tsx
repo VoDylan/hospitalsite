@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import Filter from "./Filter"; // Import Filter component and FilterProps interface
+// import { FilterProps } from "../common/FilterProps.ts";
 
 interface LegendProps {
   filterItems: {
