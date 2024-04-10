@@ -7,6 +7,13 @@ import {
   FormControl,
   InputLabel,
   Select,
+  TableRow,
+  TableCell,
+  TableHead,
+  TableBody,
+  Table,
+  TableContainer,
+  Paper,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
@@ -124,6 +131,14 @@ function DeviceDeliveryService() {
       )
       .catch((error) => console.error(error));
   }, []);
+
+  const [submittedData, setSubmittedData] = useState<
+    DeviceDeliveryFormSubmission[]
+  >([]);
+
+  function updateList() {
+    setSubmittedData([...submittedData, form]);
+  }
 
   return (
     <Stack
@@ -256,10 +271,54 @@ function DeviceDeliveryService() {
               justifyContent: "center",
             }}
           >
-            <DeviceSubmitButton input={form} text={"SUBMIT"} clear={clear} />
+            <DeviceSubmitButton
+              input={form}
+              text={"SUBMIT"}
+              clear={clear}
+              updateList={updateList}
+            />
           </Grid>
         </Grid>
       </Grid>
+      <TableContainer
+        component={Paper}
+        sx={{
+          minWidth: "40vw",
+          backgroundColor: "white",
+          width: "60vw", //Adjust this to change the width of the table
+          height: "auto",
+          mb: "5vh",
+        }}
+      >
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">Name</TableCell>
+              <TableCell align="right">Status</TableCell>
+              <TableCell align="right">Location</TableCell>
+              <TableCell align="right">Priority</TableCell>
+              <TableCell align="right">Device</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {submittedData.map((item: DeviceDeliveryFormSubmission) => (
+              <TableRow
+                key={item.name}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row" align={"right"}>
+                  {item.name}
+                </TableCell>
+                <TableCell align={"right"}>{item.name}</TableCell>
+                <TableCell align={"right"}>{item.status}</TableCell>
+                <TableCell align={"right"}>{item.roomNum}</TableCell>
+                <TableCell align={"right"}>{item.priority}</TableCell>
+                <TableCell align={"right"}>{item.device}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Typography>Sebastian Gurgol, Jingxu (Rick) Wang</Typography>
     </Stack>
   );

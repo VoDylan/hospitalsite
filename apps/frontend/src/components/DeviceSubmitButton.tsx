@@ -1,6 +1,6 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 // import axios, { isAxiosError } from "axios";
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 // import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
 
@@ -8,6 +8,7 @@ interface ButtonProps {
   text: string;
   input: DeviceDeliveryFormSubmission;
   clear: () => void;
+  updateList: () => void;
 }
 
 export function DeviceSubmitButton(props: ButtonProps) {
@@ -23,7 +24,7 @@ export function DeviceSubmitButton(props: ButtonProps) {
   );
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -75,6 +76,7 @@ export function DeviceSubmitButton(props: ButtonProps) {
       //   openWithSuccess();
 
       // Remove these once connected to DB
+      handleListUpdate();
       handleClear();
       openWithSuccess();
     }
@@ -83,6 +85,10 @@ export function DeviceSubmitButton(props: ButtonProps) {
 
   function handleClear() {
     props.clear();
+  }
+
+  function handleListUpdate() {
+    props.updateList();
   }
 
   /* Commenting this out for iteration 2
