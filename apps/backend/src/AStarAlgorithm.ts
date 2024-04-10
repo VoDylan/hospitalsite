@@ -1,14 +1,12 @@
 import { NodeAStar } from "common/src/NodeAStar.ts";
-// import MapNode from "common/src/map/MapNode.ts";
-// import MapEdge from "common/src/map/MapEdge.ts";
-
-import { Coordinates } from "common/src/Coordinates.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import client from "./bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { testingDistance } from "../tests/testingDistance.ts";
+import Algorithms from "./routes/Algorithms.ts";
 
-export class AStarAlgorithm {
+export class AStarAlgorithm implements Algorithms {
   nodes: NodeAStar[];
   mapNodes: MapNodeType[];
   mapEdges: MapEdgeType[];
@@ -44,14 +42,6 @@ export class AStarAlgorithm {
       updateNode(currentNode, neighbor);
       updateNode(neighbor, currentNode);
     }
-  }
-
-  private getID(longName: string) {
-    if (longName === undefined) {
-      console.error("Invalid Name");
-      return;
-    }
-    return this.mapNodes.find((node) => node.longName === longName)?.nodeID;
   }
 
   private distance(startNodeID: string, endNodeID: string) {
@@ -106,13 +96,10 @@ export class AStarAlgorithm {
     return { x: Node.xcoord, y: Node.ycoord };
   }
 
-  public AStar(startNodeID: string, endNodeID: string) {
-    // const startNodeID = this.getID(startID);
-    // const endNodeID = this.getID(endID);
-
-    if (!startNodeID || !endNodeID) {
+  runAlgorithm(start: string, end: string): IDCoordinates[] {
+    if (!start || !end) {
       console.error("Node ID not found for start or end node");
-      return;
+      return [];
     }
 
     const open = new Map();
@@ -122,13 +109,13 @@ export class AStarAlgorithm {
     const parents: (string | null)[] = [];
 
     const startNodeIndex = this.nodes.findIndex(
-      (node) => node.startNodeID === startNodeID,
+      (node) => node.startNodeID === start,
     );
 
     gScores[startNodeIndex] = 0;
-    fScores[startNodeIndex] = this.distance(startNodeID, endNodeID);
+    fScores[startNodeIndex] = this.distance(start, end);
     parents[startNodeIndex] = null;
-    open.set(startNodeID, fScores[startNodeIndex]);
+    open.set(start, fScores[startNodeIndex]);
 
     while (open.size > 0) {
       const currentNodeID = this.shortestDistance(open);
@@ -138,23 +125,29 @@ export class AStarAlgorithm {
         (node) => node.startNodeID === currentNodeID,
       );
 
-      if (currentNodeID === endNodeID) {
-        const coordinatesPath: Coordinates[] = [];
+      if (currentNodeID === end) {
+        const coordinatesPath: IDCoordinates[] = [];
         const path: string[] = [];
         let current: string | null = currentNodeID;
-        while (current !== startNodeID) {
+        while (current !== start) {
           let currentIdx: number = -1;
           if (current) {
             path.unshift(current);
-            coordinatesPath.unshift(this.getCoordinates(current));
+            coordinatesPath.unshift({
+              nodeID: current,
+              coordinates: this.getCoordinates(current),
+            });
             currentIdx = this.nodes.findIndex(
               (node) => node.startNodeID === current,
             );
           }
           current = parents[currentIdx];
         }
-        coordinatesPath.unshift(this.getCoordinates(startNodeID));
-        path.unshift(startNodeID);
+        coordinatesPath.unshift({
+          nodeID: start,
+          coordinates: this.getCoordinates(start),
+        });
+        path.unshift(start);
 
         console.log("Path found:", path);
         console.log("Coordinates found:", coordinatesPath);
@@ -170,7 +163,7 @@ export class AStarAlgorithm {
       console.log(currentNode);
       if (currentNode === undefined) {
         console.error("Invalid node");
-        return null;
+        return [];
       }
 
       for (let i = 0; i < currentNode.neighbors.length; i++) {
@@ -194,7 +187,7 @@ export class AStarAlgorithm {
         } else {
           open.set(
             currentNeighborID,
-            currentNeighborCost + this.distance(currentNeighborID, endNodeID),
+            currentNeighborCost + this.distance(currentNeighborID, end),
           );
         }
         gScores[currentNeighborIndex] = currentNeighborCost;
@@ -203,6 +196,6 @@ export class AStarAlgorithm {
       closed.push(currentNodeID);
     }
 
-    return null;
+    return [];
   }
 }

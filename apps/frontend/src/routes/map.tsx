@@ -1041,7 +1041,11 @@ function Map() {
       return;
     }
 
-    const request: LocationInfo = { startNode: startNode, endNode: endNode };
+    const request: LocationInfo = {
+      algorithm: algorithm,
+      startNode: startNode,
+      endNode: endNode,
+    };
 
     try {
       const response = await axios.post("/api/path", request, {
