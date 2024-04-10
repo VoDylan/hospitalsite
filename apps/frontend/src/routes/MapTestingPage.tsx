@@ -56,7 +56,7 @@ function MapTestingPage() {
     console.log("distances", distanceData);
     updateDistancesData(distanceData);
 
-    const algorithm: string = "BFS";
+    const algorithm: string = "A*";
 
     const request: LocationInfo = {
       algorithm: algorithm,
