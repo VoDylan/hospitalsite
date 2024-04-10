@@ -52,22 +52,22 @@ export default function CustomCard({
         >
           <Box
             sx={{
-              color: "#003A96",
+              color: "#000000",
               fontSize: 40,
               position: "relative",
               marginTop: "6%",
-              marginBottom: "1%",
-              width: "30vw",
+              marginBottom: "0.75%",
+              width: "26vw",
             }}
           >
             {cardTitle}
           </Box>
           <Box
             sx={{
-              color: "#033A96",
+              color: "#000000",
               fontSize: 20,
               fontWeight: "lighter",
-              maxWidth: "20vw",
+              width: "26vw",
               whiteSpace: "nowrap",
             }}
           >
