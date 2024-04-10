@@ -7,7 +7,7 @@ import {
   IconButton,
 } from "@mui/material";
 import React from "react";
-import bwhLogo from "frontend/public/bwh-logo.svg";
+import bwhLogo from "frontend/src/images/bwh-logo.svg";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { makeStyles } from "@mui/styles";
 import SearchBar from "./SearchBar.tsx";

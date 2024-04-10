@@ -17,7 +17,7 @@ import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
-import giftbackground from "../../public/giftbackground.jpg";
+import giftbackground from "../images/giftbackground.jpg";
 import { GiftDeliverySubmitButton } from "../components/GiftDeliverySubmitButton.tsx";
 import React from "react";
 import Confetti from "react-confetti";
@@ -264,7 +264,7 @@ function GiftDeliveryService() {
               <TableCell align="right">Status</TableCell>
               <TableCell align="right">Location</TableCell>
               <TableCell align="right">Optional Message</TableCell>
-              <TableCell align="right">Priority</TableCell>
+              <TableCell align="right">Delivery</TableCell>
               <TableCell align="right">Gift Size</TableCell>
             </TableRow>
           </TableHead>
@@ -277,7 +277,6 @@ function GiftDeliveryService() {
                 <TableCell component="th" scope="row" align={"right"}>
                   {item.name}
                 </TableCell>
-                <TableCell align={"right"}>{item.name}</TableCell>
                 <TableCell align={"right"}>{item.recipientName}</TableCell>
                 <TableCell align={"right"}>{item.status}</TableCell>
                 <TableCell align={"right"}>{item.location}</TableCell>

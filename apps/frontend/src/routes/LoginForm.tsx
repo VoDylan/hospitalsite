@@ -3,8 +3,8 @@ import { Login } from "../common/LoginForm.ts";
 import Textbox from "../components/Textbox.tsx";
 import Buttons from "../components/LoginButtons.tsx";
 import { Typography, Box } from "@mui/material";
-import background from "/Cover.jpg";
-import logo from "/bwh-logo.svg";
+import background from "../images/Cover.jpg";
+import logo from "../images/bwh-logo.svg";
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
