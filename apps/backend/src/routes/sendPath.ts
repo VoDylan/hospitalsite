@@ -1,7 +1,10 @@
 import express, { Router } from "express";
-import { BFSalgorithm } from "../BFSalgorithm.ts";
+// import { BFSalgorithm } from "../BFSalgorithm.ts";
 // import {Coordinates} from "common/src/Coordinates.ts";
 import { LocationInfo } from "common/src/LocationInfo.ts";
+
+// import { AStarAlgorithm } from "../AStarAlgorithm.ts";
+import { BFSalgorithm } from "../BFSalgorithm.ts";
 
 const router: Router = express.Router();
 

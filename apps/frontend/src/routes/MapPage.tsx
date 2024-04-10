@@ -1,4 +1,4 @@
-import Map from "../routes/map2.tsx";
+import Map from "./MapTestingPage.tsx";
 function MapPage() {
   return <Map />;
 }
