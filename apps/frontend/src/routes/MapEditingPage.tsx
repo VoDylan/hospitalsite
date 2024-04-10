@@ -86,31 +86,40 @@ function MapEditingPage() {
       ctx.clearRect(0, 0, currImage.width, currImage.height);
       ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
 
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "red";
-      ctx.font = "15px Arial";
-
-      for (let i = 0; i < distancesData.length; i++) {
-        if (distancesData[i]) {
-          ctx.beginPath();
-          ctx.moveTo(
-            distancesData[i].startCoords.x,
-            distancesData[i].startCoords.y,
-          );
-          ctx.lineTo(
-            distancesData[i].endCoords.x,
-            distancesData[i].endCoords.y,
-          );
-          ctx.stroke();
-          ctx.closePath();
-
-          ctx.fillText(
-            distancesData[i].distance.toString(),
-            (distancesData[i].startCoords.x + distancesData[i].endCoords.x) / 2,
-            (distancesData[i].startCoords.y + distancesData[i].endCoords.y) / 2,
-          );
+      const moveDot = (origFloor: string) => {
+        if (floor.current != origFloor) {
+          loadEdgesDistance({ req: floor.current });
         }
-      }
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "red";
+        ctx.font = "15px Arial";
+
+        for (let i = 0; i < distancesData.length; i++) {
+          if (distancesData[i]) {
+            ctx.beginPath();
+            ctx.moveTo(
+              distancesData[i].startCoords.x,
+              distancesData[i].startCoords.y,
+            );
+            ctx.lineTo(
+              distancesData[i].endCoords.x,
+              distancesData[i].endCoords.y,
+            );
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.fillText(
+              distancesData[i].distance.toString(),
+              (distancesData[i].startCoords.x + distancesData[i].endCoords.x) /
+                2,
+              (distancesData[i].startCoords.y + distancesData[i].endCoords.y) /
+                2,
+            );
+          }
+        }
+      };
+      moveDot(floor.current);
     };
 
     console.log(distancesData);

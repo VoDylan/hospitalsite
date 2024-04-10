@@ -74,6 +74,7 @@ const RAW_RUNTIME_STATE =
           ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/joi", "npm:17.2.3"],\
+          ["@types/lodash", "npm:4.17.0"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/react", "npm:18.2.48"],\
@@ -91,6 +92,7 @@ const RAW_RUNTIME_STATE =
           ["fs-js", "npm:1.0.6"],\
           ["happy-dom", "npm:10.11.2"],\
           ["husky", "npm:8.0.3"],\
+          ["lodash", "npm:4.17.21"],\
           ["multer", "npm:1.4.5-lts.1"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
@@ -3166,6 +3168,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@types/keyv", "npm:3.1.4"],\
           ["@types/node", "npm:20.11.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/lodash", [\
+      ["npm:4.17.0", {\
+        "packageLocation": "./.yarn/cache/@types-lodash-npm-4.17.0-11e757616b-2053203292.zip/node_modules/@types/lodash/",\
+        "packageDependencies": [\
+          ["@types/lodash", "npm:4.17.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10613,6 +10624,7 @@ const RAW_RUNTIME_STATE =
           ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/joi", "npm:17.2.3"],\
+          ["@types/lodash", "npm:4.17.0"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/react", "npm:18.2.48"],\
@@ -10630,6 +10642,7 @@ const RAW_RUNTIME_STATE =
           ["fs-js", "npm:1.0.6"],\
           ["happy-dom", "npm:10.11.2"],\
           ["husky", "npm:8.0.3"],\
+          ["lodash", "npm:4.17.21"],\
           ["multer", "npm:1.4.5-lts.1"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
