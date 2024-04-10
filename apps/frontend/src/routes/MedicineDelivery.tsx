@@ -118,7 +118,9 @@ function MedicineDelivery() {
       <TopBanner2 />
       <Grid
         container
-        direction={"column"}
+        direction={"row"}
+        rowSpacing={1}
+        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -131,15 +133,15 @@ function MedicineDelivery() {
       >
         <Grid
           item
+          xs={12}
           sx={{
             backgroundColor: "#186BD9",
           }}
         >
-          <Typography color={"white"} align={"center"} fontSize={40} padding={1}>
+          <Typography color={"white"} align={"center"} fontSize={40}>
             Medicine Delivery Form
           </Typography>
         </Grid>
-        <Grid container padding={2} direction={"row"}>
         <Grid item xs={6}>
           <Typography color={"black"}>Name:</Typography>
           <LeftAlignedTextbox
@@ -206,6 +208,7 @@ function MedicineDelivery() {
             display: "flex",
             my: 2,
             justifyContent: "center",
+            pr: 6,
           }}
         >
           <MedicineSubmitButton
@@ -215,7 +218,6 @@ function MedicineDelivery() {
             updateSubmissionList={updateSubmissionList}
           />
         </Grid>
-      </Grid>
       </Grid>
       <TableContainer
         component={Paper}

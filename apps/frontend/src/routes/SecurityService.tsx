@@ -239,6 +239,7 @@ function SecurityService() {
             display: "flex",
             my: 2,
             justifyContent: "center",
+            pr: 7,
           }}
         >
           <SecuritySubmitButton
