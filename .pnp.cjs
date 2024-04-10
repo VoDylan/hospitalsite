@@ -6557,6 +6557,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["framer-motion", [\
+      ["npm:11.0.25", {\
+        "packageLocation": "./.yarn/cache/framer-motion-npm-11.0.25-95ce7f6271-9e045267fe.zip/node_modules/framer-motion/",\
+        "packageDependencies": [\
+          ["framer-motion", "npm:11.0.25"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
       ["npm:4.1.17", {\
         "packageLocation": "./.yarn/cache/framer-motion-npm-4.1.17-00d2b9950f-c68f5eafd9.zip/node_modules/framer-motion/",\
         "packageDependencies": [\
@@ -6580,6 +6587,28 @@ const RAW_RUNTIME_STATE =
           ["tslib", "npm:2.6.2"]\
         ],\
         "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.25", {\
+        "packageLocation": "./.yarn/__virtual__/framer-motion-virtual-a4ccaadfc3/0/cache/framer-motion-npm-11.0.25-95ce7f6271-9e045267fe.zip/node_modules/framer-motion/",\
+        "packageDependencies": [\
+          ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.25"],\
+          ["@emotion/is-prop-valid", null],\
+          ["@types/emotion__is-prop-valid", null],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:18.2.0"],\
+          ["tslib", "npm:2.6.2"]\
+        ],\
+        "packagePeers": [\
+          "@emotion/is-prop-valid",\
+          "@types/emotion__is-prop-valid",\
           "@types/react-dom",\
           "@types/react",\
           "react-dom",\
@@ -6641,6 +6670,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["eslint-plugin-react-hooks", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.6.0"],\
           ["eslint-plugin-react-refresh", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.4.5"],\
+          ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.25"],\
           ["localforage", "npm:1.10.0"],\
           ["match-sorter", "npm:6.3.3"],\
           ["postcss", "npm:8.4.35"],\

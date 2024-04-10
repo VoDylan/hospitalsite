@@ -1,23 +1,20 @@
-// import * as fs from "fs";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
-
 import { NodeBFS } from "common/src/NodeBFS.ts";
-// import { Coordinates } from "common/src/Coordinates.ts";
 import client from "./bin/database-connection.ts";
-export class BFSalgorithm {
+import Algorithms from "./routes/Algorithms.ts";
+
+export class BFSalgorithm implements Algorithms {
   all_nodes: NodeBFS[];
   count: number;
-  // type should have starting NodeBFS ID and coordinate
 
   public constructor() {
     this.all_nodes = [];
     this.count = 0;
   }
 
-  // load nodes and edges
-  async load_data() {
+  async loadData(): Promise<void> {
     const edges: MapEdgeType[] = await client.edge.findMany();
     const nodes: MapNodeType[] = await client.node.findMany();
 
@@ -83,15 +80,9 @@ export class BFSalgorithm {
           this.all_nodes[j].neighbors.push(start_node_now.current_node);
       }
     }
-    // console.log(this.all_nodes);
   }
 
-  /**
-   * Implementation of Breadth-first search algorithm to find the shortest path from start to end nodes
-   * @param start the starting node as a string
-   * @param end the ending node as a string
-   */
-  BFS(start: string, end: string) {
+  runAlgorithm(start: string, end: string): IDCoordinates[] {
     const start_node = this.all_nodes.find(
       (node) => node.current_node === start,
     );
@@ -100,7 +91,7 @@ export class BFSalgorithm {
     // Check if start and end nodes are found
     if (!start_node || !end_node) {
       console.error("Start or end node not found.");
-      return null;
+      return [];
     }
 
     const queue: NodeBFS[] = [];
@@ -138,7 +129,7 @@ export class BFSalgorithm {
                 "Error: Parent not found for node",
                 current.current_node,
               );
-              return;
+              return [];
             }
           }
           path.unshift(start_node.current_node); // adds the first node to index 0
@@ -170,6 +161,6 @@ export class BFSalgorithm {
       }
     }
 
-    return null;
+    return [];
   }
 }

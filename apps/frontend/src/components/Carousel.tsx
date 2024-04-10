@@ -223,14 +223,13 @@ function MainCarousel() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: "8%",
         }}
       >
         <Box
           sx={{
             color: "white",
             fontSize: 40,
-            textDecoration: "underline",
+            //textDecoration: "underline",
             marginLeft: "2%",
           }}
         >
@@ -245,7 +244,7 @@ function MainCarousel() {
           alignContent: "center",
           justifyContent: "end",
           marginRight: "70px",
-          marginBottom: "50px",
+          marginBottom: "10px",
         }}
       >
         <Link to={"/Services"}>

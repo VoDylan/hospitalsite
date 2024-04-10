@@ -1,25 +1,31 @@
 import express, { Router } from "express";
-// import { BFSalgorithm } from "../BFSalgorithm.ts";
-// import {Coordinates} from "common/src/Coordinates.ts";
 import { LocationInfo } from "common/src/LocationInfo.ts";
-
-// import { AStarAlgorithm } from "../AStarAlgorithm.ts";
 import { BFSalgorithm } from "../BFSalgorithm.ts";
+import { AStarAlgorithm } from "../AStarAlgorithm.ts";
+import Algorithms from "./Algorithms.ts";
 
 const router: Router = express.Router();
 
 router.post("/", async (req, res) => {
   const request: LocationInfo = req.body;
+  const algorithmName = request.algorithm;
   const startID = request.startNode;
   const endID = request.endNode;
 
-  const bfs = new BFSalgorithm();
-  async function runBfs() {
-    await bfs.load_data();
-    return bfs.BFS(startID, endID);
+  let algorithm: Algorithms;
+
+  if (algorithmName == "A*") {
+    algorithm = new AStarAlgorithm();
+  } else {
+    algorithm = new BFSalgorithm();
   }
 
-  const path = await runBfs();
+  async function runAlgo() {
+    await algorithm.loadData();
+    return algorithm.runAlgorithm(startID, endID);
+  }
+
+  const path = await runAlgo();
 
   res.status(200).json({
     message: path,

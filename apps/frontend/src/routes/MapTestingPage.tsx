@@ -57,7 +57,11 @@ function MapTestingPage() {
     console.log("distances", distanceData);
     updateDistancesData(distanceData);
 
-    const request: LocationInfo = { startNode: startNode, endNode: endNode };
+    const request: LocationInfo = {
+      algorithm: "A*",
+      startNode: startNode,
+      endNode: endNode,
+    };
 
     const response = await axios.post("/api/path", request, {
       headers: { "Content-Type": "application/json" },
