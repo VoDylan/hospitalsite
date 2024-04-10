@@ -7,7 +7,7 @@ interface LegendProps {
     iconColor: string;
     filterName: string;
     filterType: number;
-    shape: "square" | "circle" | "pentagon"; // Define shape property
+    shape: string; // Define shape property
   }[];
 }
 

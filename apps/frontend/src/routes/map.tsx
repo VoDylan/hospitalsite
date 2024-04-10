@@ -160,6 +160,108 @@ function Map() {
     "plus" | "check"
   >("check");
 
+  const items = [
+    ...(confIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Conference",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(deptIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Department",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(labsIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Labs",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(servIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Service",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(infoIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Info",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(restroomsIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Restrooms",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(elevatorIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Elevators",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(stairsIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Stairs",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(exitsIconState === "check"
+      ? [
+          {
+            iconColor: "red",
+            filterName: "Exits",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(retlIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Retail",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+  ];
   const handleElevatorIconState = () => {
     setElevatorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
@@ -1272,70 +1374,7 @@ function Map() {
           </TransformComponent>
         </TransformWrapper>
       </Box>
-      <Legend
-        filterItems={[
-          {
-            iconColor: "#1CA7EC",
-            filterName: "Conference",
-            filterType: 1,
-            shape: "pentagon",
-          },
-          {
-            iconColor: "#72c41c",
-            filterName: "Department",
-            filterType: 1,
-            shape: "pentagon",
-          },
-          {
-            iconColor: "#e88911",
-            filterName: "Labs",
-            filterType: 1,
-            shape: "pentagon",
-          },
-          {
-            iconColor: "#e88911",
-            filterName: "Service",
-            filterType: 1,
-            shape: "circle",
-          },
-          {
-            iconColor: "#1CA7EC",
-            filterName: "Info",
-            filterType: 1,
-            shape: "circle",
-          },
-          {
-            iconColor: "#72c41c",
-            filterName: "Restrooms",
-            filterType: 1,
-            shape: "circle",
-          },
-          {
-            iconColor: "#1CA7EC",
-            filterName: "Elevators",
-            filterType: 1,
-            shape: "square",
-          },
-          {
-            iconColor: "#72c41c",
-            filterName: "Stairs",
-            filterType: 1,
-            shape: "square",
-          },
-          {
-            iconColor: "red",
-            filterName: "Exits",
-            filterType: 1,
-            shape: "square",
-          },
-          {
-            iconColor: "#e88911",
-            filterName: "Retail",
-            filterType: 1,
-            shape: "square",
-          },
-        ]}
-      />
+      <Legend filterItems={items} />
     </Box>
   );
 }

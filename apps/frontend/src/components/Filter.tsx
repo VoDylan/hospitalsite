@@ -8,7 +8,7 @@ interface FilterProps {
   iconColor: string;
   filterName: string;
   filterType: number;
-  shape?: "square" | "circle" | "pentagon" | "stairs"; // Make shape prop optional
+  shape?: string; // Make shape prop optional
 }
 
 function Filter(props: FilterProps) {
