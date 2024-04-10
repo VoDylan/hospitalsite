@@ -280,6 +280,7 @@ function DeviceDeliveryService() {
               <TableCell align="right">Location</TableCell>
               <TableCell align="right">Priority</TableCell>
               <TableCell align="right">Device</TableCell>
+              <TableCell align={"right"}>Amount</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -296,6 +297,7 @@ function DeviceDeliveryService() {
                 <TableCell align={"right"}>{item.roomNum}</TableCell>
                 <TableCell align={"right"}>{item.priority}</TableCell>
                 <TableCell align={"right"}>{item.device}</TableCell>
+                <TableCell align={"right"}>{item.amount}</TableCell>
               </TableRow>
             ))}
           </TableBody>
