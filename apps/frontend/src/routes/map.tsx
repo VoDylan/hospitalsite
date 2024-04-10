@@ -17,7 +17,6 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-// import SyncIcon from "@mui/icons-material/Sync";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import MapImage from "../images/00_thelowerlevel1.png";
@@ -1041,7 +1040,11 @@ function Map() {
       return;
     }
 
-    const request: LocationInfo = { startNode: startNode, endNode: endNode };
+    const request: LocationInfo = {
+      algorithm: algorithm,
+      startNode: startNode,
+      endNode: endNode,
+    };
 
     try {
       const response = await axios.post("/api/path", request, {
