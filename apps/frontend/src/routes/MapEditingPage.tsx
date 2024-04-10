@@ -21,7 +21,6 @@ function MapEditingPage() {
   });
 
   async function loadEdgesDistance(request: sendRequest) {
-    // const req = { req: "L1" };
     const distancesResponse = await axios.post("/api/sendDistances", request, {
       headers: { "Content-Type": "application/json" },
     });
@@ -30,9 +29,7 @@ function MapEditingPage() {
     }
     const distancePath = await distancesResponse.data;
     const distanceData = distancePath.message;
-    // console.log("distances", distanceData);
     setDistancesData(distanceData);
-    console.log("Updated distancesData:", distancePath); // Log the updated value here
   }
 
   const handleFloorChange = (newFloor: string) => {
