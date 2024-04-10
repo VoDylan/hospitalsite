@@ -117,7 +117,7 @@ function FlowerDeliveryService() {
           </Typography>
         </Grid>
         <Grid container padding={2} direction={"row"}>
-        <Grid item sx={{ m: "auto" }}>
+        <Grid item xs={6}>
           <Typography>Name:</Typography>
           <LeftAlignedTextbox
             label={"Name"}
@@ -126,7 +126,7 @@ function FlowerDeliveryService() {
             type={"text"}
           />
         </Grid>
-        <Grid item sx={{ m: "auto" }}>
+        <Grid item xs={6}>
           <Typography>Flower Type:</Typography>
           <DropDown
             items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
@@ -135,7 +135,7 @@ function FlowerDeliveryService() {
             returnData={form.flowerType}
           />
         </Grid>
-        <Grid item sx={{ m: "auto" }}>
+        <Grid item xs={6}>
           <Box>
             <Typography>Recipient Name:</Typography>
             <LeftAlignedTextbox
@@ -145,7 +145,7 @@ function FlowerDeliveryService() {
             />
           </Box>
         </Grid>
-        <Grid item sx={{ m: "auto" }}>
+        <Grid item xs={6}>
           <Box>
             <Typography>Room Number:</Typography>
             <DropDown
@@ -156,7 +156,7 @@ function FlowerDeliveryService() {
             />
           </Box>
         </Grid>
-        <Grid item sx={{ m: "auto" }}>
+        <Grid item xs={6}>
           <Box>
             <Typography>Add a message (optional):</Typography>
             <LeftAlignedTextbox
