@@ -11,6 +11,8 @@ import SFMapImage from "../images/02_thesecondfloor.png";
 import TFMapImage from "../images/03_thethirdfloor.png";
 import Floor from "../components/FloorTabs.tsx";
 import { sendRequest } from "common/src/sendRequest.ts";
+import Draggable from "react-draggable";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
 // type floorNodes = {
 //   l2: NodeFilter[];
@@ -31,6 +33,8 @@ function MapEditingPage() {
     return image;
   });
 
+  const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
+
   // async function loadNodeData() {
   //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
   //   setNodesData(data);
@@ -47,6 +51,7 @@ function MapEditingPage() {
     const distancePath = await distancesResponse.data;
     const distanceData = distancePath.message;
     // console.log("distances", distanceData);
+
     setDistancesData(distanceData);
     console.log("Updated distancesData:", distancePath); // Log the updated value here
   }
@@ -56,27 +61,27 @@ function MapEditingPage() {
 
     switch (newFloor) {
       case "L1":
-        loadEdgesDistance({ req: "L1" });
+        loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
         newImage.src = L1MapImage;
         floor.current = "L1";
         break;
       case "L2":
-        loadEdgesDistance({ req: "L2" });
+        loadEdgesDistance({ req: "L2" }).then(() => setEdgeDataLoaded(true));
         newImage.src = L2MapImage;
         floor.current = "L2";
         break;
       case "1":
-        loadEdgesDistance({ req: "1" });
+        loadEdgesDistance({ req: "1" }).then(() => setEdgeDataLoaded(true));
         newImage.src = FFMapImage;
         floor.current = "1";
         break;
       case "2":
-        loadEdgesDistance({ req: "2" });
+        loadEdgesDistance({ req: "2" }).then(() => setEdgeDataLoaded(true));
         newImage.src = SFMapImage;
         floor.current = "2";
         break;
       case "3":
-        loadEdgesDistance({ req: "3" });
+        loadEdgesDistance({ req: "3" }).then(() => setEdgeDataLoaded(true));
         newImage.src = TFMapImage;
         floor.current = "3";
         break;
@@ -94,7 +99,7 @@ function MapEditingPage() {
     // }
     if (distancesData.length < 1) {
       // console.log("Loading Distances");
-      loadEdgesDistance({ req: "L1" });
+      loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
     }
 
     // console.log(floor.current);
@@ -106,66 +111,83 @@ function MapEditingPage() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // image.src = MapImage;
-    currImage.onload = () => {
-      canvas.width = currImage.width;
-      canvas.height = currImage.height;
+    const processCanvas = () => {
+      if (edgeDataLoaded) {
+        canvas.width = currImage.width;
+        canvas.height = currImage.height;
 
-      ctx.clearRect(0, 0, currImage.width, currImage.height);
-      ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, currImage.width, currImage.height);
+        ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
 
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "red";
-      ctx.font = "15px Arial";
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "red";
+        ctx.font = "15px Arial";
 
-      for (let i = 0; i < distancesData.length; i++) {
-        if (distancesData[i]) {
-          ctx.beginPath();
-          ctx.moveTo(
-            distancesData[i].startCoords.x,
-            distancesData[i].startCoords.y,
-          );
-          ctx.lineTo(
-            distancesData[i].endCoords.x,
-            distancesData[i].endCoords.y,
-          );
-          ctx.stroke();
-          ctx.closePath();
+        for (let i = 0; i < distancesData.length; i++) {
+          if (distancesData[i]) {
+            ctx.beginPath();
+            ctx.moveTo(
+              distancesData[i].startCoords.x,
+              distancesData[i].startCoords.y,
+            );
+            ctx.lineTo(
+              distancesData[i].endCoords.x,
+              distancesData[i].endCoords.y,
+            );
+            ctx.stroke();
+            ctx.closePath();
 
-          ctx.fillText(
-            distancesData[i].distance.toString(),
-            (distancesData[i].startCoords.x + distancesData[i].endCoords.x) / 2,
-            (distancesData[i].startCoords.y + distancesData[i].endCoords.y) / 2,
-          );
+            ctx.fillText(
+              distancesData[i].distance.toString(),
+              (distancesData[i].startCoords.x + distancesData[i].endCoords.x) /
+                2,
+              (distancesData[i].startCoords.y + distancesData[i].endCoords.y) /
+                2,
+            );
+          }
         }
       }
-
-      // ctx.fillStyle = "blue";
-      // ctx.strokeStyle = "blue";
-      // for (let i = 0; i < filteredNodes.length; i++) {
-      //   ctx.beginPath();
-      //   ctx.arc(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 5, 0, 2 * Math.PI); // draw circle
-      //   ctx.fill();
-      // }
     };
 
+    if (currImage.complete) {
+      processCanvas();
+    }
+
+    // image.src = MapImage;
+    currImage.onload = () => {
+      processCanvas();
+    };
+
+    // ctx.fillStyle = "blue";
+    // ctx.strokeStyle = "blue";
+    // for (let i = 0; i < filteredNodes.length; i++) {
+    //   ctx.beginPath();
+    //   ctx.arc(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 5, 0, 2 * Math.PI); // draw circle
+    //   ctx.fill();
+    // }
+
     console.log(distancesData); // Log distancesData here to see the updated value
-  }, [currImage, distancesData]);
+  }, [currImage, distancesData, currImage.complete, edgeDataLoaded]);
 
   return (
     <div>
       <TopBanner2 />
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: "100%",
-          height: "100%",
-          zIndex: 0,
-          position: "relative",
-        }}
-        className={"firstFloorCanvas"}
-      />
-
+      <TransformWrapper>
+        <TransformComponent>
+          <Draggable>
+            <canvas
+              ref={canvasRef}
+              style={{
+                width: "100%",
+                height: "100%",
+                zIndex: 0,
+                position: "relative",
+              }}
+              className={"firstFloorCanvas"}
+            />
+          </Draggable>
+        </TransformComponent>
+      </TransformWrapper>
       <Floor callback={handleFloorChange} />
     </div>
   );
