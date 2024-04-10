@@ -27,14 +27,14 @@ const ServiceCard: React.FC<CardProps> = ({
       sx={{
         position: "relative",
         width: "100%",
-        height: "35vh",
+        height: "20%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center", // Center content horizontally
       }}
     >
       <CardMedia
-        sx={{ height: "30vh", position: "relative" }}
+        sx={{ height: "37vh", position: "relative" }}
         image={image}
         title={title}
       ></CardMedia>
