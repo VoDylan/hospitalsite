@@ -14,16 +14,37 @@ export default class BuildingFilter extends Filter {
     nodes.forEach((node) => {
       if (this.filterValues.length == 0) return;
 
-      let included: boolean = false;
+      let passesInclusiveFilters: boolean = false;
+      let passesExclusiveFilters: boolean = true;
+
+      const inclusionFilters: FilterValueType[] = [];
+      const exclusionFilters: FilterValueType[] = [];
+
       this.filterValues.forEach((filterParam: FilterValueType) => {
-        included =
-          included ||
-          (filterParam.exclude
-            ? node.building != filterParam.value
-            : node.building == filterParam.value);
+        filterParam.exclude
+          ? exclusionFilters.push(filterParam)
+          : inclusionFilters.push(filterParam);
       });
 
-      if (included) newNodes.push(node);
+      if (inclusionFilters.length == 0) {
+        passesInclusiveFilters = true;
+      } else {
+        inclusionFilters.forEach((filterParam: FilterValueType) => {
+          passesInclusiveFilters =
+            passesInclusiveFilters || node.building == filterParam.value;
+        });
+      }
+
+      if (exclusionFilters.length == 0) {
+        passesExclusiveFilters = true;
+      } else {
+        exclusionFilters.forEach((filterParam: FilterValueType) => {
+          passesExclusiveFilters =
+            passesExclusiveFilters && node.building != filterParam.value;
+        });
+      }
+
+      if (passesInclusiveFilters && passesExclusiveFilters) newNodes.push(node);
     });
 
     return newNodes;
