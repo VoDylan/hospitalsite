@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
-import { Coordinates } from "common/src/Coordinates.ts";
+// import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { nodesDistances } from "common/src/nodesDistances.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 
 function MapTestingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -13,7 +14,7 @@ function MapTestingPage() {
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]); // Declaring nodes state
   const [errorMessage, setErrorMesage] = useState<string>("");
-  const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
   const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
 
   const handleStartNodeChange = (
@@ -26,7 +27,7 @@ function MapTestingPage() {
     setEndNode(event.target.value);
   };
 
-  const updateNodesData = (newData: Coordinates[]) => {
+  const updateNodesData = (newData: IDCoordinates[]) => {
     setNodesData(newData);
   };
 
@@ -46,9 +47,7 @@ function MapTestingPage() {
       return;
     }
 
-    const distancesResponse = await axios.post("/api/testPath", {
-      headers: { "Content-Type": "application/json" },
-    });
+    const distancesResponse = await axios.get("/api/testPath");
     if (distancesResponse.status !== 200) {
       throw new Error("Failed to fetch data");
     }
@@ -57,8 +56,10 @@ function MapTestingPage() {
     console.log("distances", distanceData);
     updateDistancesData(distanceData);
 
+    const algorithm: string = "BFS";
+
     const request: LocationInfo = {
-      algorithm: "A*",
+      algorithm: algorithm,
       startNode: startNode,
       endNode: endNode,
     };
@@ -70,7 +71,7 @@ function MapTestingPage() {
       throw new Error("Failed to fetch data");
     }
     const data = await response.data;
-    // console.log(data);
+    console.log(data);
     const path = data.message;
     // console.log(path);
     updateNodesData(path);
@@ -111,8 +112,8 @@ function MapTestingPage() {
 
           // animation
           let currentTargetIndex = 0;
-          let currentX = nodesData[currentTargetIndex].x;
-          let currentY = nodesData[currentTargetIndex].y;
+          let currentX = nodesData[currentTargetIndex].coordinates.x;
+          let currentY = nodesData[currentTargetIndex].coordinates.y;
           const speed = 1;
 
           const moveDot = () => {
@@ -171,15 +172,24 @@ function MapTestingPage() {
             ctx.strokeStyle = "blue";
             for (let i = 0; i < nodesData.length; i++) {
               ctx.beginPath();
-              ctx.arc(nodesData[i].x, nodesData[i].y, 5, 0, 2 * Math.PI); // draw circle
+              ctx.arc(
+                nodesData[i].coordinates.x,
+                nodesData[i].coordinates.y,
+                5,
+                0,
+                2 * Math.PI,
+              ); // draw circle
               ctx.fill();
             }
 
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(nodesData[0].x, nodesData[0].y);
+            ctx.moveTo(nodesData[0].coordinates.x, nodesData[0].coordinates.y);
             for (let i = 1; i < nodesData.length; i++) {
-              ctx.lineTo(nodesData[i].x, nodesData[i].y);
+              ctx.lineTo(
+                nodesData[i].coordinates.x,
+                nodesData[i].coordinates.y,
+              );
             }
             ctx.stroke();
 
@@ -188,8 +198,8 @@ function MapTestingPage() {
             ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI); // draw circle
             ctx.fill();
 
-            const dx = nodesData[currentTargetIndex].x - currentX; // target coordinate
-            const dy = nodesData[currentTargetIndex].y - currentY; // target coordinate
+            const dx = nodesData[currentTargetIndex].coordinates.x - currentX; // target coordinate
+            const dy = nodesData[currentTargetIndex].coordinates.y - currentY; // target coordinate
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < speed) {
@@ -199,8 +209,8 @@ function MapTestingPage() {
               currentY += (dy / distance) * speed;
             }
             if (currentTargetIndex === 0) {
-              currentX = nodesData[0].x;
-              currentY = nodesData[0].y;
+              currentX = nodesData[0].coordinates.x;
+              currentY = nodesData[0].coordinates.y;
 
               currentTargetIndex = 1;
             }
