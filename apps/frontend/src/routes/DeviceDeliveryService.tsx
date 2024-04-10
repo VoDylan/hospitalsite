@@ -292,7 +292,6 @@ function DeviceDeliveryService() {
                 <TableCell component="th" scope="row" align={"right"}>
                   {item.name}
                 </TableCell>
-                <TableCell align={"right"}>{item.name}</TableCell>
                 <TableCell align={"right"}>{item.status}</TableCell>
                 <TableCell align={"right"}>{item.roomNum}</TableCell>
                 <TableCell align={"right"}>{item.priority}</TableCell>
@@ -303,7 +302,9 @@ function DeviceDeliveryService() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Typography>Sebastian Gurgol, Jingxu (Rick) Wang</Typography>
+      <Typography color={"white"}>
+        Sebastian Gurgol, Jingxu (Rick) Wang
+      </Typography>
     </Stack>
   );
 }
