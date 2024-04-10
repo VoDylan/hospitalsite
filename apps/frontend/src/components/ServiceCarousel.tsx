@@ -39,7 +39,7 @@ function ServiceCarousel() {
     {
       image: signL,
       title: "Room Scheduling",
-      description: "Schedule a room for yourself or a dependant!",
+      description: "Schedule a room for yourself or a dependant",
       buttonText: "Schedule Room",
       path: "/Services/RoomScheduling",
     },
@@ -50,7 +50,8 @@ function ServiceCarousel() {
       <Stack
         sx={{
           margin: "70px",
-          marginBottom: "10px",
+          marginBottom: "1%",
+          marginTop: "2.5%",
         }}
         direction={"row"}
         spacing={6}

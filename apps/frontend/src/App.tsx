@@ -9,6 +9,7 @@ import DisplayDatabase from "./routes/DisplayDatabase.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
 import SanitationService from "./routes/SanitationService.tsx";
+import DeviceDeliveryService from "./routes/DeviceDeliveryService.tsx";
 import GiftDeliveryService from "./routes/GiftDeliveryService.tsx";
 import SecurityService from "./routes/SecurityService.tsx";
 import MedicineDelivery from "./routes/MedicineDelivery.tsx";
@@ -52,6 +53,10 @@ function App() {
         {
           path: "/Services/SecurityService",
           element: <SecurityService />,
+        },
+        {
+          path: "/Services/DeviceDeliveryService",
+          element: <DeviceDeliveryService />,
         },
         {
           path: "/DisplayDatabase",
