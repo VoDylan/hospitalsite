@@ -20,8 +20,8 @@ function Legend(props: LegendProps) {
   return (
     <Box
       sx={{
-        width: "260px",
-        height: "400px",
+        width: "200px",
+        height: "300px",
         backgroundColor: "#F5F7FA",
         display: "flex",
         alignItems: "top",
@@ -32,16 +32,12 @@ function Legend(props: LegendProps) {
         marginTop: "1%",
         borderRadius: "1%",
         border: "3px solid rgba(0, 0, 0, 0.05)",
+        opacity: "0.9",
       }}
     >
-      <Stack direction={"column"} sx={{ marginLeft: "6%" }} spacing={1.5}>
+      <Stack direction={"column"} sx={{ marginLeft: "6%" }} spacing={0.2}>
         {/* Title */}
-        <Typography
-          color={"#767674"}
-          fontStyle={"Open Sans"}
-          fontSize={20}
-          sx={{ marginBottom: "2%" }} // Add margin to separate title from items
-        >
+        <Typography color={"#767674"} fontStyle={"Open Sans"} fontSize={18}>
           Map Symbols
         </Typography>
 
@@ -57,7 +53,7 @@ function Legend(props: LegendProps) {
             />
           ))}
         </Stack>
-        <Stack direction="column" spacing={0.5}>
+        <Stack direction="column" spacing={0.2}>
           {stack2.map((item, index) => (
             <Filter
               key={index}
@@ -68,7 +64,7 @@ function Legend(props: LegendProps) {
             />
           ))}
         </Stack>
-        <Stack direction="column" spacing={0.5}>
+        <Stack direction="column" spacing={0.2}>
           {stack3.map((item, index) => (
             <Filter
               key={index}

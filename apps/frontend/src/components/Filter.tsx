@@ -13,7 +13,7 @@ interface FilterProps {
 
 function Filter(props: FilterProps) {
   // Define icon size
-  const iconSize = 28;
+  const iconSize = 25;
 
   // Define default icon component
   let IconComponent = SquareIcon;
