@@ -56,7 +56,7 @@ function App() {
           element: <SecurityService />,
         },
         {
-          path: "/Services/MedicalDeviceDelivery",
+          path: "/Services/DeviceDeliveryService",
           element: <DeviceDeliveryService />,
         },
         {
