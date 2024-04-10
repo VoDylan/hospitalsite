@@ -27,6 +27,7 @@ function FlowerDeliveryService() {
 
   // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
+    window.scrollTo(0, 0);
     axios
       .get<NodeData[]>("/api/database/nodes")
       .then((response) =>
