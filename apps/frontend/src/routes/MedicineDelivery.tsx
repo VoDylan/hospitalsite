@@ -118,7 +118,9 @@ function MedicineDelivery() {
       <TopBanner2 />
       <Grid
         container
-        direction={"column"}
+        direction={"row"}
+        rowSpacing={1}
+        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -131,99 +133,94 @@ function MedicineDelivery() {
       >
         <Grid
           item
+          xs={12}
           sx={{
             backgroundColor: "#186BD9",
           }}
         >
-          <Typography
-            color={"white"}
-            align={"center"}
-            fontSize={40}
-            padding={1}
-          >
+          <Typography color={"white"} align={"center"} fontSize={40}>
             Medicine Delivery Form
           </Typography>
         </Grid>
-        <Grid container padding={2} direction={"row"}>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Name:</Typography>
-            <LeftAlignedTextbox
-              label={"Name"}
-              value={form.name}
-              onChange={handleNameInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Location:</Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.location}
-              handleChange={handleLocationInput}
-              items={nodeNumbers}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Medicine Needed:</Typography>
-            <DropDown
-              items={[
-                "Acetaminophen (Tylenol)",
-                "Ibuprofen (Advil)",
-                "Omeprazole (Prilosec)",
-                "Fexofenadine (Allegra)",
-                "Diphenhydramine (Benadryl)",
-              ]}
-              handleChange={handleServiceInput}
-              label={"Medicine"}
-              returnData={form.service}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Frequency Needed:</Typography>
-            <DropDown
-              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
-              handleChange={handleFrequencyInput}
-              label={"Frequency"}
-              returnData={form.frequency}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>
-              Priority of Medicine:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Priority"}
-              options={["Low", "Medium", "High", "Emergency"]}
-              returnData={form.priority}
-              handleChange={handlePriorityInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>
-              Status of the Request:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Status"}
-              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-              returnData={form.status}
-              handleChange={handleStatusInput}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: "flex",
-              my: 2,
-              justifyContent: "center",
-            }}
-          >
-            <MedicineSubmitButton
-              input={form}
-              text={"SUBMIT"}
-              clear={clear}
-              updateSubmissionList={updateSubmissionList}
-            />
-          </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Name:</Typography>
+          <LeftAlignedTextbox
+            label={"Name"}
+            value={form.name}
+            onChange={handleNameInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Location:</Typography>
+          <DropDown
+            label={"Location"}
+            returnData={form.location}
+            handleChange={handleLocationInput}
+            items={nodeNumbers}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Medicine Needed:</Typography>
+          <DropDown
+            items={[
+              "Acetaminophen (Tylenol)",
+              "Ibuprofen (Advil)",
+              "Omeprazole (Prilosec)",
+              "Fexofenadine (Allegra)",
+              "Diphenhydramine (Benadryl)",
+            ]}
+            handleChange={handleServiceInput}
+            label={"Medicine"}
+            returnData={form.service}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Frequency Needed:</Typography>
+          <DropDown
+            items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
+            handleChange={handleFrequencyInput}
+            label={"Frequency"}
+            returnData={form.frequency}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Priority of Medicine:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Priority"}
+            options={["Low", "Medium", "High", "Emergency"]}
+            returnData={form.priority}
+            handleChange={handlePriorityInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Status of the Request:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Status"}
+            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+            returnData={form.status}
+            handleChange={handleStatusInput}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            my: 2,
+            justifyContent: "center",
+            pr: 6,
+          }}
+        >
+          <MedicineSubmitButton
+            input={form}
+            text={"SUBMIT"}
+            clear={clear}
+            updateSubmissionList={updateSubmissionList}
+          />
         </Grid>
       </Grid>
       <TableContainer

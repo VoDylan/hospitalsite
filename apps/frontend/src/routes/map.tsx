@@ -45,6 +45,9 @@ import FFMapImage from "../images/01_thefirstfloor.png";
 import SFMapImage from "../images/02_thesecondfloor.png";
 import TFMapImage from "../images/03_thethirdfloor.png";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
+import { drawPentagon } from "../common/Pentagon.js";
+import { drawCircle } from "../common/Circle.ts";
+import { drawRectangle } from "../common/Rectangle.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -79,7 +82,7 @@ function Map() {
   const [checkedAS, setCheckedAS] = React.useState(false);
 
   const [algorithm, setAlgorithm] = React.useState("BFS");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
@@ -340,10 +343,13 @@ function Map() {
     setLL2IconState((prevState) => (prevState === "plus" ? "check" : "plus"));
     setFiltersApplied(false);
   };
+
+  // let restrooms: boolean = false;
   const handleFirstFloorIconState = () => {
     setFirstFloorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    // restrooms = true;tru
     setFiltersApplied(false);
   };
   const handleSecondFloorIconState = () => {
@@ -1219,6 +1225,114 @@ function Map() {
       if (includedNodesOnFloor.length != 0) {
         console.log("Processing canvas");
 
+        for (let i = 0; i < filteredNodes.length; i++) {
+          if (filteredNodes[i].nodeType == "ELEV") {
+            drawRectangle(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              20,
+              20,
+              "#1CA7EC",
+              "black",
+              2,
+            );
+          } else if (filteredNodes[i].nodeType == "STAI") {
+            drawRectangle(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              20,
+              20,
+              "#72c41c",
+              "black",
+              2,
+            );
+          } else if (filteredNodes[i].nodeType == "EXIT") {
+            drawRectangle(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              20,
+              20,
+              "red",
+              "black",
+              2,
+            );
+          } else if (filteredNodes[i].nodeType == "RETL") {
+            drawRectangle(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              20,
+              20,
+              "#e88911",
+              "black",
+              2,
+            );
+          } else if (filteredNodes[i].nodeType == "SERV") {
+            drawCircle(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              12,
+              "#e88911",
+              "black",
+              4,
+            );
+          } else if (filteredNodes[i].nodeType == "INFO") {
+            drawCircle(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              12,
+              "#1CA7EC",
+              "black",
+              4,
+            );
+          } else if (filteredNodes[i].nodeType == "REST") {
+            drawCircle(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              12,
+              "#72c41c",
+              "black",
+              4,
+            );
+          } else if (filteredNodes[i].nodeType == "CONF") {
+            drawPentagon(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              15,
+              "#1CA7EC",
+              "black",
+              4,
+            );
+          } else if (filteredNodes[i].nodeType == "DEPT") {
+            drawPentagon(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              15,
+              "#72c41c",
+              "black",
+              4,
+            );
+          } else if (filteredNodes[i].nodeType == "LABS") {
+            drawPentagon(
+              ctx,
+              filteredNodes[i].xcoord,
+              filteredNodes[i].ycoord,
+              15,
+              "#e88911",
+              "black",
+              4,
+            );
+          }
+        }
+
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
             setErrorMessage("There is no path between nodes");
@@ -1275,9 +1389,9 @@ function Map() {
 
             ctx.stroke();
 
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "black";
             ctx.beginPath();
-            ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI);
+            ctx.arc(currentX, currentY, 12, 0, 2 * Math.PI);
             ctx.fill();
 
             const dx =
@@ -1317,7 +1431,15 @@ function Map() {
       }
     }
     setReprocessNodes(false);
-  }, [endNode, floor, nodes, nodesData, reprocessNodes, startNode]);
+  }, [
+    endNode,
+    filteredNodes,
+    floor,
+    nodes,
+    nodesData,
+    reprocessNodes,
+    startNode,
+  ]);
 
   return (
     <Box sx={{ display: "flex" }}>
