@@ -5,6 +5,7 @@ import logger from "morgan";
 import databaseRouter from "./routes/databaseRouter";
 import sendPath from "./routes/sendPath";
 import sendTestPath from "./routes/sendTestPath.ts";
+import sendNodesEdgesPath from "./routes/sendNodesEdgesPath.ts";
 
 const app: Express = express(); // Set up the backend
 
@@ -28,6 +29,7 @@ app.use(cookieParser()); // Cookie parser
 app.use("/api/database", databaseRouter);
 app.use("/api/path", sendPath);
 app.use("/api/testPath", sendTestPath);
+app.use("/api/sendDistances", sendNodesEdgesPath);
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });

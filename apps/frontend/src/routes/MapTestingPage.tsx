@@ -47,7 +47,7 @@ function MapTestingPage() {
       return;
     }
 
-    const distancesResponse = await axios.get("/api/testPath");
+    const distancesResponse = await axios.post("/api/testPath", { req: "L1" });
     if (distancesResponse.status !== 200) {
       throw new Error("Failed to fetch data");
     }

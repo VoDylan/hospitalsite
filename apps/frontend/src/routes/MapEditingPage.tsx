@@ -1,34 +1,103 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { MapNodeType } from "common/src/map/MapNodeType.ts";
-import MapImage from "../images/00_thelowerlevel1.png";
+// import { MapNodeType } from "common/src/map/MapNodeType.ts";
+// import MapImage from "../images/00_thelowerlevel1.png";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import TopBanner2 from "../components/TopBanner2.tsx";
+import L1MapImage from "../images/00_thelowerlevel1.png";
+import L2MapImage from "../images/00_thelowerlevel2.png";
+import FFMapImage from "../images/01_thefirstfloor.png";
+import SFMapImage from "../images/02_thesecondfloor.png";
+import TFMapImage from "../images/03_thethirdfloor.png";
+import Floor from "../components/FloorTabs.tsx";
+import { sendRequest } from "common/src/sendRequest.ts";
+
+// type floorNodes = {
+//   l2: NodeFilter[];
+//   l1: NodeFilter[];
+//   f1: NodeFilter[];
+//   f2: NodeFilter[];
+//   f3: NodeFilter[];
+// };
 
 function MapEditingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [nodeData, setNodesData] = useState<MapNodeType[]>([]);
+  // const [nodeData, setNodesData] = useState<MapNodeType[]>([]);
   const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
+  const floor = useRef<string>("L1");
+  const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
+    const image = new Image();
+    image.src = L1MapImage;
+    return image;
+  });
 
-  async function loadNodeData() {
-    const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
-    setNodesData(data);
-  }
+  // async function loadNodeData() {
+  //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
+  //   setNodesData(data);
+  // }
 
-  async function loadEdgesDistance() {
-    const distancesResponse = await axios.get("/api/testPath");
+  async function loadEdgesDistance(request: sendRequest) {
+    // const req = { req: "L1" };
+    const distancesResponse = await axios.post("/api/sendDistances", request, {
+      headers: { "Content-Type": "application/json" },
+    });
     if (distancesResponse.status !== 200) {
       throw new Error("Failed to fetch data");
     }
     const distancePath = await distancesResponse.data;
     const distanceData = distancePath.message;
-    console.log("distances", distanceData);
+    // console.log("distances", distanceData);
     setDistancesData(distanceData);
+    console.log("Updated distancesData:", distancePath); // Log the updated value here
   }
 
+  const handleFloorChange = (newFloor: string) => {
+    const newImage = new Image();
+
+    switch (newFloor) {
+      case "L1":
+        loadEdgesDistance({ req: "L1" });
+        newImage.src = L1MapImage;
+        floor.current = "L1";
+        break;
+      case "L2":
+        loadEdgesDistance({ req: "L2" });
+        newImage.src = L2MapImage;
+        floor.current = "L2";
+        break;
+      case "1":
+        loadEdgesDistance({ req: "1" });
+        newImage.src = FFMapImage;
+        floor.current = "1";
+        break;
+      case "2":
+        loadEdgesDistance({ req: "2" });
+        newImage.src = SFMapImage;
+        floor.current = "2";
+        break;
+      case "3":
+        loadEdgesDistance({ req: "3" });
+        newImage.src = TFMapImage;
+        floor.current = "3";
+        break;
+      default:
+        console.error("Returned map floor is not assigned to an image");
+        return;
+    }
+    setCurrImage(newImage);
+  };
+
   useEffect(() => {
-    loadNodeData();
-    loadEdgesDistance();
+    // if (nodeData.length < 1) {
+    //   // console.log("Loading Data");
+    //   loadNodeData();
+    // }
+    if (distancesData.length < 1) {
+      // console.log("Loading Distances");
+      loadEdgesDistance({ req: "L1" });
+    }
+
+    // console.log(floor.current);
     // console.log(nodeData);
 
     const canvas = canvasRef.current;
@@ -37,44 +106,51 @@ function MapEditingPage() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const image = new Image();
-    image.src = MapImage;
-    image.onload = () => {
-      canvas.width = image.width;
-      canvas.height = image.height;
+    // image.src = MapImage;
+    currImage.onload = () => {
+      canvas.width = currImage.width;
+      canvas.height = currImage.height;
 
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, currImage.width, currImage.height);
+      ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
 
       ctx.lineWidth = 2;
       ctx.strokeStyle = "red";
       ctx.font = "15px Arial";
 
       for (let i = 0; i < distancesData.length; i++) {
-        ctx.beginPath();
-        ctx.moveTo(
-          distancesData[i].startCoords.x,
-          distancesData[i].startCoords.y,
-        );
-        ctx.lineTo(distancesData[i].endCoords.x, distancesData[i].endCoords.y);
-        ctx.stroke();
-        ctx.closePath();
+        if (distancesData[i]) {
+          ctx.beginPath();
+          ctx.moveTo(
+            distancesData[i].startCoords.x,
+            distancesData[i].startCoords.y,
+          );
+          ctx.lineTo(
+            distancesData[i].endCoords.x,
+            distancesData[i].endCoords.y,
+          );
+          ctx.stroke();
+          ctx.closePath();
 
-        ctx.fillText(
-          distancesData[i].distance.toString(),
-          (distancesData[i].startCoords.x + distancesData[i].endCoords.x) / 2,
-          (distancesData[i].startCoords.y + distancesData[i].endCoords.y) / 2,
-        );
+          ctx.fillText(
+            distancesData[i].distance.toString(),
+            (distancesData[i].startCoords.x + distancesData[i].endCoords.x) / 2,
+            (distancesData[i].startCoords.y + distancesData[i].endCoords.y) / 2,
+          );
+        }
       }
 
-      ctx.fillStyle = "blue";
-      ctx.strokeStyle = "blue";
-      for (let i = 0; i < nodeData.length; i++) {
-        ctx.beginPath();
-        ctx.arc(nodeData[i].xcoord, nodeData[i].ycoord, 5, 0, 2 * Math.PI); // draw circle
-        ctx.fill();
-      }
+      // ctx.fillStyle = "blue";
+      // ctx.strokeStyle = "blue";
+      // for (let i = 0; i < filteredNodes.length; i++) {
+      //   ctx.beginPath();
+      //   ctx.arc(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 5, 0, 2 * Math.PI); // draw circle
+      //   ctx.fill();
+      // }
     };
-  });
+
+    console.log(distancesData); // Log distancesData here to see the updated value
+  }, [currImage, distancesData]);
 
   return (
     <div>
@@ -89,6 +165,8 @@ function MapEditingPage() {
         }}
         className={"firstFloorCanvas"}
       />
+
+      <Floor callback={handleFloorChange} />
     </div>
   );
 }
