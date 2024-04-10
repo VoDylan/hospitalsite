@@ -317,10 +317,13 @@ function Map() {
     setLL2IconState((prevState) => (prevState === "plus" ? "check" : "plus"));
     setFiltersApplied(false);
   };
+
+  // let restrooms: boolean = false;
   const handleFirstFloorIconState = () => {
     setFirstFloorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    // restrooms = true;tru
     setFiltersApplied(false);
   };
   const handleSecondFloorIconState = () => {
@@ -1094,6 +1097,23 @@ function Map() {
 
         ctx.drawImage(image, 0, 0, image.width, image.height);
 
+        // ctx.fillStyle = "red";
+
+        for (let i = 0; i < filteredNodes.length; i++) {
+          if (filteredNodes[i].nodeType == "ELEV") {
+            console.log("Elevator");
+            console.log(filteredNodes[i].longName);
+            ctx.fillStyle = "red";
+            ctx.rect(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 20, 20);
+          }
+          ctx.beginPath();
+          // ctx.arc(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 10, 0, 2 * Math.PI);
+          // ctx.rect(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 20, 20);
+
+          ctx.fill();
+        }
+        // ctx.fill();
+
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
             setErrorMessage("There is no path between nodes");
@@ -1162,6 +1182,7 @@ function Map() {
     determineFilters,
     registerFilters,
     filtersApplied,
+    filteredNodes
   ]);
 
   return (
