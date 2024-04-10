@@ -53,6 +53,7 @@ function Map() {
   const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  const [pathNodeObjects, setPathNodeObjects] = useState<MapNode[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dbNodeData, setDBNodesData] = useState<MapNodeType[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
@@ -67,6 +68,8 @@ function Map() {
     image.src = L1MapImage;
     return image;
   });
+
+  const [floor, setFloor] = useState<string>("L1");
 
   //Pathfinder
   const [open, setOpen] = React.useState(false);
@@ -843,7 +846,7 @@ function Map() {
         {/*Floors*/}
         <Stack
           direction="column"
-          sx={{ display: "flex", justfiyContent: "start" }}
+          sx={{ display: "flex", justifyContent: "start" }}
           spacing={1}
         >
           <Stack
@@ -1063,8 +1066,22 @@ function Map() {
         headers: { "Content-Type": "application/json" },
       });
       const data = response.data;
-      const path = data.message;
+      const path = data.message.coordinate_path;
+
+      const nodeIDs = data.message.path;
+
+      const nodeObjectList: MapNode[] = [];
+
+      nodeIDs.forEach((nodeID: string) => {
+        nodeObjectList.push(GraphManager.getInstance().getNodeByID(nodeID)!);
+      });
+
+      console.log(path);
+      console.log(nodeIDs);
+      console.log(nodeObjectList);
+
       updateNodesData(path);
+      setPathNodeObjects(nodeObjectList);
       setNodes([startNode, endNode]);
       setErrorMessage("");
     } catch (error) {
@@ -1085,18 +1102,23 @@ function Map() {
     switch (newFloor) {
       case "L1":
         newImage.src = L1MapImage;
+        setFloor("L1");
         break;
       case "L2":
         newImage.src = L2MapImage;
+        setFloor("L2");
         break;
       case "1":
         newImage.src = FFMapImage;
+        setFloor("1");
         break;
       case "2":
         newImage.src = SFMapImage;
+        setFloor("2");
         break;
       case "3":
         newImage.src = TFMapImage;
+        setFloor("3");
         break;
       default:
         console.error("Returned map floor is not assigned to an image");
@@ -1156,6 +1178,7 @@ function Map() {
             ctx.fillStyle = "black";
 
             for (let i = 0; i < nodesData.length; i++) {
+              if (pathNodeObjects[i].floor != floor) continue;
               ctx.beginPath();
               ctx.arc(nodesData[i].x, nodesData[i].y, 5, 0, 2 * Math.PI);
               ctx.fill();
@@ -1163,34 +1186,53 @@ function Map() {
 
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(nodesData[0].x, nodesData[0].y);
-            for (let i = 1; i < nodesData.length; i++) {
-              ctx.lineTo(nodesData[i].x, nodesData[i].y);
+
+            let firstNodeOnFloorIndex = -1;
+
+            const includedNodesOnFloor: Coordinates[] = [];
+
+            for (let i = 0; i < nodesData.length; i++) {
+              if (pathNodeObjects[i].floor == floor) {
+                firstNodeOnFloorIndex = i;
+                break;
+              }
             }
-            ctx.stroke();
+            if (firstNodeOnFloorIndex >= 0) {
+              ctx.moveTo(
+                nodesData[firstNodeOnFloorIndex].x,
+                nodesData[firstNodeOnFloorIndex].y,
+              );
+              includedNodesOnFloor.push(nodesData[firstNodeOnFloorIndex]);
+              for (let i = firstNodeOnFloorIndex; i < nodesData.length; i++) {
+                if (pathNodeObjects[i].floor != floor) break;
+                ctx.lineTo(nodesData[i].x, nodesData[i].y);
+                includedNodesOnFloor.push(nodesData[i]);
+              }
+              ctx.stroke();
 
-            ctx.fillStyle = "blue";
-            ctx.beginPath();
-            ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI);
-            ctx.fill();
+              ctx.fillStyle = "blue";
+              ctx.beginPath();
+              ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI);
+              ctx.fill();
 
-            const dx = nodesData[currentTargetIndex].x - currentX;
-            const dy = nodesData[currentTargetIndex].y - currentY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+              const dx = includedNodesOnFloor[currentTargetIndex].x - currentX;
+              const dy = includedNodesOnFloor[currentTargetIndex].y - currentY;
+              const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < speed) {
-              currentTargetIndex = (currentTargetIndex + 1) % nodesData.length;
-            } else {
-              currentX += (dx / distance) * speed;
-              currentY += (dy / distance) * speed;
+              if (distance < speed) {
+                currentTargetIndex =
+                  (currentTargetIndex + 1) % includedNodesOnFloor.length;
+              } else {
+                currentX += (dx / distance) * speed;
+                currentY += (dy / distance) * speed;
+              }
+              if (currentTargetIndex === 0) {
+                currentX = includedNodesOnFloor[0].x;
+                currentY = includedNodesOnFloor[0].y;
+                currentTargetIndex = 1;
+              }
+              requestAnimationFrame(moveDot);
             }
-            if (currentTargetIndex === 0) {
-              currentX = nodesData[0].x;
-              currentY = nodesData[0].y;
-              currentTargetIndex = 1;
-            }
-
-            requestAnimationFrame(moveDot);
           };
           moveDot();
         }
@@ -1217,6 +1259,8 @@ function Map() {
     determineFilters,
     registerFilters,
     filtersApplied,
+    floor,
+    pathNodeObjects,
   ]);
 
   return (

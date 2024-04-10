@@ -143,7 +143,7 @@ export class BFSalgorithm {
             y: start_node.y_coordinate,
           });
           console.log(path.join(" -> "));
-          return coordinate_path;
+          return { coordinate_path, path };
         }
 
         for (let i = 0; i < current_node.neighbors.length; i++) {
