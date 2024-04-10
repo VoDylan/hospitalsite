@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Box, Typography, Zoom, Grid } from "@mui/material";
 import { ServiceCard } from "../components/ServiceCard.tsx";
 import TopBanner2 from "../components/TopBanner2.tsx";
-import Flower from "../../public/ServicePageImages/FlowerDelivery.svg";
-import Medicine from "../../public/ServicePageImages/MedicineDelivery.svg";
-import Sanitation from "../../public/ServicePageImages/SanitationServices.svg";
-import Security from "../../public/ServicePageImages/SecurityServices.svg";
-import Gift from "../../public/ServicePageImages/GiftDelivery.svg";
-import MedicalDevice from "../../public/ServicePageImages/MedicalDeviceDelivery.svg";
-import Room from "../../public/ServicePageImages/RoomScheduling.svg";
-import Template from "../../public/ServicePageImages/ServicesTemplate.svg";
+import Flower from "../images/ServicePageImages/FlowerDelivery.svg";
+import Medicine from "../images/ServicePageImages/MedicineDelivery.svg";
+import Sanitation from "../images/ServicePageImages/SanitationServices.svg";
+import Security from "../images/ServicePageImages/SecurityServices.svg";
+import Gift from "../images/ServicePageImages/GiftDelivery.svg";
+import MedicalDevice from "../images/ServicePageImages/MedicalDeviceDelivery.svg";
+import Room from "../images/ServicePageImages/RoomScheduling.svg";
+import Template from "../images/ServicePageImages/ServicesTemplate.svg";
 
 export default function ServicesPage() {
   const [showCards] = useState(true); // Initialize to true to show cards initially

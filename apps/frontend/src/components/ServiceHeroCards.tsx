@@ -27,17 +27,20 @@ const ServiceCard: React.FC<CardProps> = ({
       sx={{
         position: "relative",
         width: "100%",
-        height: "60vh",
+        height: "35vh",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center", // Center content horizontally
       }}
     >
       <CardMedia
-        sx={{ height: "25vh", position: "relative" }}
+        sx={{ height: "30vh", position: "relative" }}
         image={image}
         title={title}
       ></CardMedia>
-      <CardContent style={{ flex: 1, backgroundColor: "white" }}>
+      <CardContent
+        style={{ flex: 1, backgroundColor: "white", textAlign: "center" }}
+      >
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
@@ -45,14 +48,8 @@ const ServiceCard: React.FC<CardProps> = ({
           {description}
         </Typography>
       </CardContent>
-      <CardActions style={{ marginTop: "auto" }}>
-        <Link
-          to={path}
-          style={{
-            margin: "auto",
-            marginLeft: "1%",
-          }}
-        >
+      <CardActions style={{ marginTop: "auto", justifyContent: "center" }}>
+        <Link to={path}>
           <Button variant="contained" size="large" sx={{ width: "100%" }}>
             {buttonText}
           </Button>

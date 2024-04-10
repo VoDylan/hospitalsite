@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import SlidesPageLI from "../src/routes/SlidesPageLI.tsx";
+import MapTestingPage from "./routes/MapTestingPage.tsx";
 import Map from "./routes/map.tsx";
 import ServicesPage from "./routes/ServicesPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
@@ -8,6 +9,7 @@ import DisplayDatabase from "./routes/DisplayDatabase.tsx";
 import LoginForm from "./routes/LoginForm.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
 import SanitationService from "./routes/SanitationService.tsx";
+import DeviceDeliveryService from "./routes/DeviceDeliveryService.tsx";
 import GiftDeliveryService from "./routes/GiftDeliveryService.tsx";
 import SecurityService from "./routes/SecurityService.tsx";
 import MedicineDelivery from "./routes/MedicineDelivery.tsx";
@@ -53,6 +55,10 @@ function App() {
           element: <SecurityService />,
         },
         {
+          path: "/Services/DeviceDeliveryService",
+          element: <DeviceDeliveryService />,
+        },
+        {
           path: "/DisplayDatabase",
           element: <DisplayDatabase />,
         },
@@ -66,10 +72,13 @@ function App() {
           path: "/Map",
           element: <Map />,
         },
-
         {
           path: "/LoggedIn",
           element: <SlidesPageLI />,
+        },
+        {
+          path: "/MapTestingPage",
+          element: <MapTestingPage />,
         },
       ],
     },

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
@@ -13,29 +13,34 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import AddIcon from "@mui/icons-material/Add";
-import CheckIcon from "@mui/icons-material/Check";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import SyncIcon from "@mui/icons-material/Sync";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import MapImage from "../images/00_thelowerlevel1.png";
 import NestedList from "../components/PathfindingSelect.tsx";
 import "./map.css";
-import { Coordinates } from "common/src/Coordinates.ts";
+// import { Coordinates } from "common/src/Coordinates.ts";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/Legend.tsx";
 import { Typography } from "@mui/material";
-import FilterManager from "common/src/filter/FilterManager.ts";
+import FilterManager, {
+  generateFilterValue,
+} from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
 import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import NodeFilter from "common/src/filter/filters/Filter.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,7 +48,7 @@ function Map() {
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dbNodeData, setDBNodesData] = useState<MapNodeType[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
@@ -56,6 +61,9 @@ function Map() {
   const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("BFS");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
+  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
   const loadNodeData = async (): Promise<MapNodeType[]> => {
     const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
@@ -71,35 +79,14 @@ function Map() {
     return data;
   };
 
-  const populateAutocompleteData = () => {
-    const graphNodes: MapNode[] = GraphManager.getInstance().nodes;
-    const nodeAssociations: { label: string; node: string }[] = graphNodes.map(
-      (node) => {
-        console.log("Node ID:", node.nodeID, "Long Name:", node.longName);
-        return {
-          label: node.longName, // Assuming `longName` is the label you want to use
-          node: node.nodeID,
-        };
-      },
-    );
-
-    setAutocompleteNodeData(nodeAssociations);
-  };
-
-  const registerFilters = () => {
-    FilterManager.getInstance().registerFilter(
-      FilterName.TYPE,
-      () => new TypeFilter(),
-    );
-    FilterManager.getInstance().registerFilter(
-      FilterName.FLOOR,
-      () => new FloorFilter(),
-    );
-    FilterManager.getInstance().registerFilter(
-      FilterName.BUILDING,
-      () => new BuildingFilter(),
-    );
-  };
+  const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
+    console.log(nodes);
+    const filteredNodeAssociations = nodes.map((node) => ({
+      label: node.longName, // Assuming `longName` is the label you want to use
+      node: node.nodeID,
+    }));
+    setAutocompleteNodeData(filteredNodeAssociations);
+  }, []);
 
   const handleClick = () => {
     setOpen(!open);
@@ -123,8 +110,7 @@ function Map() {
 
   // Slide Container
   const [checked, setChecked] = React.useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [iconState, setIconState] = React.useState<"plus" | "check">("plus"); // State to track icon state
+  // const [iconState, setIconState] = React.useState<"plus" | "check">("plus"); // State to track icon state
 
   const handleButtonClick = () => {
     setChecked((prev) => !prev);
@@ -139,12 +125,27 @@ function Map() {
   const [exitsIconState, setExitsIconState] = React.useState<"plus" | "check">(
     "check",
   );
+  const [servIconState, setServIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
   const [infoIconState, setInfoIconState] = React.useState<"plus" | "check">(
     "check",
   );
   const [restroomsIconState, setRestroomsIconState] = React.useState<
     "plus" | "check"
   >("check");
+  const [confIconState, setConfIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [deptIconState, setDeptIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [labsIconState, setLabsIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [retlIconState, setRetlIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
   const [ll1IconState, setLL1IconState] = React.useState<"plus" | "check">(
     "check",
   );
@@ -161,48 +162,180 @@ function Map() {
     "plus" | "check"
   >("check");
 
+  const items = [
+    ...(confIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Conference",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(deptIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Department",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(labsIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Labs",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(servIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Service",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(infoIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Info",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(restroomsIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Restrooms",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(elevatorIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Elevators",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(stairsIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Stairs",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(exitsIconState === "check"
+      ? [
+          {
+            iconColor: "red",
+            filterName: "Exits",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(retlIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Retail",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+  ];
   const handleElevatorIconState = () => {
     setElevatorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
   };
   const handleStairsIconState = () => {
     setStairsIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
   };
   const handleExitsIconState = () => {
     setExitsIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleInfoIconState = () => {
     setInfoIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
+  };
+  const handleServIconState = () => {
+    setServIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleRestroomsIconState = () => {
     setRestroomsIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
+  };
+  const handleConfIconState = () => {
+    setConfIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
+  };
+  const handleDeptIconState = () => {
+    setDeptIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
+  };
+  const handleLabsIconState = () => {
+    setLabsIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
+  };
+  const handleRetlIconState = () => {
+    setRetlIconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
 
   const handleLL1IconState = () => {
     setLL1IconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleLL2IconState = () => {
     setLL2IconState((prevState) => (prevState === "plus" ? "check" : "plus"));
+    setFiltersApplied(false);
   };
   const handleFirstFloorIconState = () => {
     setFirstFloorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
   };
   const handleSecondFloorIconState = () => {
     setSecondFloorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
   };
   const handleThirdFloorIconState = () => {
     setThirdFloorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    setFiltersApplied(false);
   };
 
   const handleSelectAll = () => {
@@ -210,12 +343,18 @@ function Map() {
     setStairsIconState("check");
     setExitsIconState("check");
     setInfoIconState("check");
+    setServIconState("check");
     setRestroomsIconState("check");
+    setConfIconState("check");
+    setDeptIconState("check");
+    setLabsIconState("check");
+    setRetlIconState("check");
     setLL1IconState("check");
     setLL2IconState("check");
     setFirstFloorIconState("check");
     setSecondFloorIconState("check");
     setThirdFloorIconState("check");
+    setFiltersApplied(false);
   };
 
   const handleClearAll = () => {
@@ -223,17 +362,188 @@ function Map() {
     setStairsIconState("plus");
     setExitsIconState("plus");
     setInfoIconState("plus");
+    setServIconState("plus");
     setRestroomsIconState("plus");
+    setConfIconState("plus");
+    setDeptIconState("plus");
+    setLabsIconState("plus");
+    setRetlIconState("plus");
     setLL1IconState("plus");
     setLL2IconState("plus");
     setFirstFloorIconState("plus");
     setSecondFloorIconState("plus");
     setThirdFloorIconState("plus");
+    setFiltersApplied(false);
   };
+
+  const registerFilters = useCallback(() => {
+    FilterManager.getInstance().registerFilter(
+      FilterName.TYPE,
+      () => new TypeFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.FLOOR,
+      () => new FloorFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.BUILDING,
+      () => new BuildingFilter(),
+    );
+  }, []);
+
+  const determineFilters = useCallback(() => {
+    const filters: NodeFilter[] = [];
+    filters.push(
+      FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+        generateFilterValue(true, "HALL"),
+      ])!,
+    );
+
+    if (ll1IconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "L1"),
+        ])!,
+      );
+    }
+
+    if (ll2IconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "L2"),
+        ])!,
+      );
+    }
+
+    if (firstFloorIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "1"),
+        ])!,
+      );
+    }
+
+    if (secondFloorIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "2"),
+        ])!,
+      );
+    }
+
+    if (thirdFloorIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(true, "3"),
+        ])!,
+      );
+    }
+
+    if (elevatorIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "ELEV"),
+        ])!,
+      );
+    }
+
+    if (stairsIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "STAI"),
+        ])!,
+      );
+    }
+
+    if (servIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "SERV"),
+        ])!,
+      );
+    }
+
+    if (restroomsIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "REST"),
+        ])!,
+      );
+    }
+
+    if (exitsIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "EXIT"),
+        ])!,
+      );
+    }
+
+    if (confIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "CONF"),
+        ])!,
+      );
+    }
+
+    if (deptIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "DEPT"),
+        ])!,
+      );
+    }
+
+    if (labsIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "LABS"),
+        ])!,
+      );
+    }
+
+    if (retlIconState === "plus") {
+      filters.push(
+        FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+          generateFilterValue(true, "RETL"),
+        ])!,
+      );
+    }
+
+    console.log("Filtering");
+
+    const newFilteredNodes: MapNode[] =
+      FilterManager.getInstance().applyFilters(
+        filters,
+        GraphManager.getInstance().nodes,
+      );
+
+    setFilteredNodes(newFilteredNodes); // Update filteredNodes state with the filtered result
+
+    // Update autocomplete data based on the filtered nodes
+    populateAutocompleteData(newFilteredNodes);
+  }, [
+    populateAutocompleteData,
+    ll1IconState,
+    ll2IconState,
+    elevatorIconState,
+    stairsIconState,
+    servIconState,
+    restroomsIconState,
+    exitsIconState,
+    confIconState,
+    deptIconState,
+    labsIconState,
+    retlIconState,
+    firstFloorIconState,
+    secondFloorIconState,
+    thirdFloorIconState,
+  ]);
 
   const icon = (
     <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
-      <Stack direction="column" sx={{ position: "absolute", top: 4, left: 4 }}>
+      <Stack direction="column" sx={{ position: "absolute", top: 3, left: 4 }}>
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={handleButtonClick}
@@ -244,14 +554,14 @@ function Map() {
       </Stack>
 
       <Stack
-        spacing={"14%"}
+        spacing={"10%"}
         direction="column"
         sx={{
           display: "flex",
           justifyContent: "start",
           alignItems: "start",
           position: "relative",
-          marginTop: "28%",
+          marginTop: "18%",
           marginLeft: "10%",
         }}
       >
@@ -259,58 +569,75 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={4.8}
+            spacing={6}
           >
-            <Filter iconColor="#0000FF" filterName="Elevators" filterType={1} />
-            {elevatorIconState === "plus" ? (
-              <AddIcon
-                onClick={handleElevatorIconState}
+            <Filter
+              iconColor="#1CA7EC"
+              filterName="Conference"
+              filterType={1}
+              shape={"pentagon"}
+            />
+            {confIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleConfIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
-                onClick={handleElevatorIconState}
+              <CheckBoxIcon
+                onClick={handleConfIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
             )}
           </Stack>
+
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={8.8}
+            spacing={5.7}
           >
-            <Filter iconColor="#008000" filterName="Stairs" filterType={1} />
-            {stairsIconState === "plus" ? (
-              <AddIcon
-                onClick={handleStairsIconState}
+            <Filter
+              iconColor="#72c41c"
+              filterName="Department"
+              filterType={1}
+              shape={"pentagon"}
+            />
+            {deptIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleDeptIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
-                onClick={handleStairsIconState}
+              <CheckBoxIcon
+                onClick={handleDeptIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
             )}
           </Stack>
+
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={9.6}
+            spacing={11.2}
           >
-            <Filter iconColor="#FF0000" filterName="Exits" filterType={1} />
-            {exitsIconState === "plus" ? (
-              <AddIcon
-                onClick={handleExitsIconState}
+            <Filter
+              iconColor="#e88911"
+              filterName="Labs"
+              filterType={1}
+              shape={"pentagon"}
+            />
+            {labsIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleLabsIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
-                onClick={handleExitsIconState}
+              <CheckBoxIcon
+                onClick={handleLabsIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
@@ -321,17 +648,47 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={10.9}
+            spacing={9.3}
           >
-            <Filter iconColor="#8877CC" filterName="Info" filterType={1} />
-            {infoIconState === "plus" ? (
-              <AddIcon
-                onClick={handleInfoIconState}
+            <Filter
+              iconColor="#e88911"
+              filterName="Service"
+              filterType={1}
+              shape={"circle"}
+            />
+            {servIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleServIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleServIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={12}
+          >
+            <Filter
+              iconColor="#1CA7EC"
+              filterName="Info"
+              filterType={1}
+              shape={"circle"}
+            />
+            {infoIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleInfoIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
             ) : (
-              <CheckIcon
+              <CheckBoxIcon
                 onClick={handleInfoIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
@@ -341,18 +698,126 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={2.9}
+            spacing={6.4}
           >
-            <Filter iconColor="#63CA00" filterName="Restrooms" filterType={1} />
+            <Filter
+              iconColor="#72c41c"
+              filterName="Restrooms"
+              filterType={1}
+              shape={"circle"}
+            />
             {restroomsIconState === "plus" ? (
-              <AddIcon
+              <AddBoxIcon
+                onClick={handleRestroomsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
                 onClick={handleRestroomsIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
+            )}
+          </Stack>
+        </Stack>
+        <Stack direction="column" spacing={1}>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={7.8}
+          >
+            <Filter
+              iconColor="#1CA7EC"
+              filterName="Elevators"
+              filterType={1}
+              shape={"square"}
+            />
+            {elevatorIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleElevatorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
             ) : (
-              <CheckIcon
-                onClick={handleRestroomsIconState}
+              <CheckBoxIcon
+                onClick={handleElevatorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={10.5}
+          >
+            <Filter
+              iconColor="#72c41c"
+              filterName="Stairs"
+              filterType={1}
+              shape={"square"}
+            />
+            {stairsIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleStairsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleStairsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={11.2}
+          >
+            <Filter
+              iconColor="red"
+              filterName="Exits"
+              filterType={1}
+              shape={"square"}
+            />
+            {exitsIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleExitsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleExitsIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={10.6}
+          >
+            <Filter
+              iconColor="#e88911"
+              filterName="Retail"
+              filterType={1}
+              shape={"square"}
+            />
+            {retlIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleRetlIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleRetlIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
               />
@@ -363,87 +828,103 @@ function Map() {
         {/*Floors*/}
         <Stack
           direction="column"
-          sx={{ display: "flex", justfiyContent: "start", paddingLeft: "2%" }}
-          spacing={2}
+          sx={{ display: "flex", justfiyContent: "start" }}
+          spacing={1}
         >
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={14.7}
-          >
-            <Filter iconColor="#63CA00" filterName="LL 1" filterType={0} />
-            {ll1IconState === "plus" ? (
-              <AddIcon
-                onClick={handleLL1IconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleLL1IconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={14.7}
-          >
-            <Filter iconColor="#63CA00" filterName="LL 2" filterType={0} />
-            {ll2IconState === "plus" ? (
-              <AddIcon
-                onClick={handleLL2IconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleLL2IconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={9.5}
-          >
-            <Filter iconColor="#63CA00" filterName="1st Floor" filterType={0} />
-            {firstFloorIconState === "plus" ? (
-              <AddIcon
-                onClick={handleFirstFloorIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            ) : (
-              <CheckIcon
-                onClick={handleFirstFloorIconState}
-                fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
-              />
-            )}
-          </Stack>
-          <Stack
-            direction="row"
-            sx={{ display: "flex", alignItems: "center" }}
-            spacing={4.6}
+            spacing={13.2}
           >
             <Filter
-              iconColor="#63CA00"
+              iconColor="#012D5A"
+              filterName="L1"
+              filterType={0}
+              shape={"stairs"}
+            />
+            {ll1IconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleLL1IconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleLL1IconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={13.2}
+          >
+            <Filter
+              iconColor="#012D5A"
+              filterName="L2"
+              filterType={0}
+              shape={"stairs"}
+            />
+            {ll2IconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleLL2IconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleLL2IconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={8.1}
+          >
+            <Filter
+              iconColor="#012D5A"
+              filterName="1st Floor"
+              filterType={0}
+              shape={"stairs"}
+            />
+            {firstFloorIconState === "plus" ? (
+              <AddBoxIcon
+                onClick={handleFirstFloorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
+              />
+            ) : (
+              <CheckBoxIcon
+                onClick={handleFirstFloorIconState}
+                fontSize="medium"
+                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+              />
+            )}
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", alignItems: "center" }}
+            spacing={4.7}
+          >
+            <Filter
+              iconColor="#012D5A"
               filterName="Second Floor"
               filterType={0}
+              shape={"stairs"}
             />
             {secondFloorIconState === "plus" ? (
-              <AddIcon
+              <AddBoxIcon
                 onClick={handleSecondFloorIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
+              <CheckBoxIcon
                 onClick={handleSecondFloorIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
@@ -453,21 +934,22 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={7.2}
+            spacing={6.6}
           >
             <Filter
-              iconColor="#63CA00"
+              iconColor="#012D5A"
               filterName="Third Floor"
               filterType={0}
+              shape={"stairs"}
             />
             {thirdFloorIconState === "plus" ? (
-              <AddIcon
+              <AddBoxIcon
                 onClick={handleThirdFloorIconState}
                 fontSize="medium"
-                sx={{ color: "rgba(0, 0, 255, 0.5)" }}
+                sx={{ color: "rgba(0, 0, 0, 0.2)" }}
               />
             ) : (
-              <CheckIcon
+              <CheckBoxIcon
                 onClick={handleThirdFloorIconState}
                 fontSize="medium"
                 sx={{ color: "rgba(0, 0, 255, 0.5)" }}
@@ -484,8 +966,9 @@ function Map() {
             alignItems: "center",
             justifyContent: "center",
             width: "90%",
+            paddingBottom: "10%",
           }}
-          spacing={1}
+          spacing={0.5}
         >
           <Button
             variant={"contained"}
@@ -540,7 +1023,7 @@ function Map() {
     }
   };
 
-  const updateNodesData = (newData: Coordinates[]) => {
+  const updateNodesData = (newData: IDCoordinates[]) => {
     setNodesData(newData);
   };
 
@@ -574,23 +1057,25 @@ function Map() {
       setErrorMessage("Failed to fetch data. Please try again.");
     }
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function handleClear() {
-    setStartNode(""); // Clear startNode
-    setEndNode(""); // Clear endNode
-    //stop animation
-  }
+  //
+  // function handleClear() {
+  //   setStartNode(""); // Clear startNode
+  //   setEndNode(""); // Clear endNode
+  //   //stop animation
+  // }
 
   useEffect(() => {
     if (!nodeDataLoaded) {
-      registerFilters();
       loadNodeData().then((data: MapNodeType[]) => {
         setDBNodesData(data);
         setNodeDataLoaded(true);
       });
-    } else {
-      populateAutocompleteData();
+
+      registerFilters();
+    } else if (!filtersApplied) {
+      console.log("Applying filters");
+      determineFilters();
+      setFiltersApplied(true);
     }
 
     console.log(algorithm);
@@ -618,8 +1103,8 @@ function Map() {
           }
 
           let currentTargetIndex = 0;
-          let currentX = nodesData[currentTargetIndex].x;
-          let currentY = nodesData[currentTargetIndex].y;
+          let currentX = nodesData[currentTargetIndex].coordinates.x;
+          let currentY = nodesData[currentTargetIndex].coordinates.y;
           const speed = 1;
 
           const moveDot = () => {
@@ -629,15 +1114,24 @@ function Map() {
 
             for (let i = 0; i < nodesData.length; i++) {
               ctx.beginPath();
-              ctx.arc(nodesData[i].x, nodesData[i].y, 5, 0, 2 * Math.PI);
+              ctx.arc(
+                nodesData[i].coordinates.x,
+                nodesData[i].coordinates.y,
+                5,
+                0,
+                2 * Math.PI,
+              );
               ctx.fill();
             }
 
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(nodesData[0].x, nodesData[0].y);
+            ctx.moveTo(nodesData[0].coordinates.x, nodesData[0].coordinates.y);
             for (let i = 1; i < nodesData.length; i++) {
-              ctx.lineTo(nodesData[i].x, nodesData[i].y);
+              ctx.lineTo(
+                nodesData[i].coordinates.x,
+                nodesData[i].coordinates.y,
+              );
             }
             ctx.stroke();
 
@@ -646,8 +1140,8 @@ function Map() {
             ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI);
             ctx.fill();
 
-            const dx = nodesData[currentTargetIndex].x - currentX;
-            const dy = nodesData[currentTargetIndex].y - currentY;
+            const dx = nodesData[currentTargetIndex].coordinates.x - currentX;
+            const dy = nodesData[currentTargetIndex].coordinates.y - currentY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < speed) {
@@ -657,8 +1151,8 @@ function Map() {
               currentY += (dy / distance) * speed;
             }
             if (currentTargetIndex === 0) {
-              currentX = nodesData[0].x;
-              currentY = nodesData[0].y;
+              currentX = nodesData[0].coordinates.x;
+              currentY = nodesData[0].coordinates.y;
               currentTargetIndex = 1;
             }
 
@@ -668,7 +1162,18 @@ function Map() {
         }
       };
     }
-  }, [nodeDataLoaded, startNode, endNode, nodes, nodesData, algorithm]);
+  }, [
+    nodeDataLoaded,
+    startNode,
+    endNode,
+    nodes,
+    nodesData,
+    algorithm,
+    populateAutocompleteData,
+    determineFilters,
+    registerFilters,
+    filtersApplied,
+  ]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -681,7 +1186,6 @@ function Map() {
         sx={{
           [`& .MuiDrawer-paper`]: {
             width: "18%",
-            // marginTop: "7.2%",
             height: "100%",
             minWidth: "18%",
             boxSizing: "border-box",
@@ -718,12 +1222,16 @@ function Map() {
               onChange={(event, value) => handleStartNodeChange(value)}
               disablePortal
               id="startNode"
-              options={autocompleteNodeData.map((node) => node.label)}
+              options={autocompleteNodeData
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((node) => node.label)}
+              groupBy={(option) => option.charAt(0).toUpperCase()}
+              getOptionLabel={(option) => option}
               sx={{ width: "75%" }}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Starting Node"
+                  label="Starting Location"
                   value={startNode}
                 />
               )}
@@ -748,10 +1256,18 @@ function Map() {
               onChange={(event, value) => handleEndNodeChange(value)}
               disablePortal
               id="startNode"
-              options={autocompleteNodeData.map((node) => node.label)}
+              options={autocompleteNodeData
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((node) => node.label)}
+              groupBy={(option) => option.charAt(0).toUpperCase()}
+              getOptionLabel={(option) => option}
               sx={{ width: "75%" }}
               renderInput={(params) => (
-                <TextField {...params} label="Ending Node" value={endNode} />
+                <TextField
+                  {...params}
+                  label="Ending Location"
+                  value={endNode}
+                />
               )}
             />
           </Stack>
@@ -833,10 +1349,11 @@ function Map() {
                   zIndex: 1,
                   backgroundColor: "#F5F7FA",
                   position: "absolute",
-                  top: "13%",
-                  left: "2.5%",
-                  width: "95%",
-                  height: "84%",
+                  top: "14%",
+                  left: "0.5%",
+                  width: "100%",
+                  minWidth: "100%",
+                  height: "100%",
                 }}
               >
                 {icon}
@@ -869,7 +1386,7 @@ function Map() {
           </TransformComponent>
         </TransformWrapper>
       </Box>
-      <Legend />
+      <Legend filterItems={items} />
     </Box>
   );
 }

@@ -3,79 +3,114 @@ import {
   Typography,
   SelectChangeEvent,
   Stack,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
+  // MenuItem,
+  // FormControl,
+  // InputLabel,
+  // Select,
   TableRow,
   TableCell,
+  TableHead,
   TableBody,
+  Table,
+  TableContainer,
+  Paper,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
+import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
 import TopBanner from "../components/TopBanner.tsx";
-import giftbackground from "../images/giftbackground.jpg";
-import { GiftDeliverySubmitButton } from "../components/GiftDeliverySubmitButton.tsx";
-import React from "react";
-import Confetti from "react-confetti";
+import medDeviceBackground from "../images/medDeviceBackground.jpg";
+import { DeviceSubmitButton } from "../components/DeviceSubmitButton.tsx";
 import axios from "axios";
+// import MoreMenuItem from "../components/MoreMenuItem.tsx";
 
-function GiftDeliveryService() {
-  const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
+function DeviceDeliveryService() {
+  const [form, setFormResponses] = useState<DeviceDeliveryFormSubmission>({
     name: "",
-    recipientName: "",
+    roomNum: "",
+    device: "",
+    amount: "",
+    priority: "",
     status: "",
-    location: "",
-    message: "",
-    delivery: "",
-    giftSize: "",
-    giftAddOn: "",
   });
 
+  // Arrays for Medical Devices Categories and Devices
+  // const medDevices: string[] = [
+  //   "Analytical Instruments",
+  //   "Cardiology",
+  //   "Dental",
+  //   "Genetics",
+  //   "Imaging",
+  //   "Lab Equipment",
+  //   "Microscopy",
+  //   "Neurology",
+  //   "Physiotherapy",
+  //   "Refrigeration",
+  //   "Spectroscopy",
+  //   "Ultrasound",
+  // ];
+
+  // const analyticalInstruments: string[] = ["Blood Gas Analysis", "Electrolyte Analysis", "Flowmeter"];
+  // const cardiology: string[] = ["Automatic External Defibrillator", "Electrocardiograph", "Pacing System"];
+  // const dental: string[] = ["Dental Compressor System", "Elements Obturation Unit", "Intraoral Camera"];
+  // const genetics: string[] = ["DNA Sequencing System", "Flow Cytometer", "SPS Sample Preparation System"];
+  // const imaging: string[] = ["CT Scanner", "Fluoroscopy System", "MRI Scanner"];
+  // const labEquipment: string[] = ["Flame Sterilizer", "Medical Autoclave", "Optical Imaging System"];
+  // const microscopy: string[] = ["Atomic Force Microscopy", "Cell Analysis System", "Microbial Detector"];
+  // const neurology: string[] = ["Checkpoint Stimulator", "Nerve Monitoring System", "NIBP Simulator"];
+  // const physiotherapy: string[] = ["Power Shockwave Therapy", "Pressotherapy Device", "Pump Vacuum Therapy Unit"];
+  // const refrigeration: string[] = ["Plasma Refrigerator", "Vaccine Refigerator"];
+  // const spectroscopy: string[] = ["CD Spectropolarimeter", "NMR Spectrometer", "Rapid Kinetics Spectrometer"];
+  // const ultrasound: string[] = ["Display Doppler", "Ultrasonic Doppler", "Ultrasound Machine"];
+
+  // Nested Menu Functions
+  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // // const open = Boolean(anchorEl);
+  // // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  // //   setAnchorEl(event.currentTarget);
+  // // };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
+
+  // Form Functions
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
   }
-  function handlerecipientNameInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, recipientName: e.target.value });
+
+  function handleLocationInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, roomNum: e.target.value });
+    return e.target.value;
+  }
+
+  function handleDeviceInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, device: e.target.value });
+    // return e.target.value;
+  }
+
+  function handleAmountInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, amount: e.target.value });
+    return e.target.value;
+  }
+
+  function handlePriorityInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, priority: e.target.value });
   }
 
   function handleStatusInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, status: e.target.value });
   }
-  function handleLocationInput(e: SelectChangeEvent) {
-    setFormResponses({ ...form, location: e.target.value });
-    return e.target.value;
-  }
-  function handleMessageInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, message: e.target.value });
-  }
-  function handleDeliveryInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, delivery: e.target.value });
-  }
-
-  function handleGiftSizeInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, giftSize: e.target.value });
-    return e.target.value;
-  }
-
-  function handleGiftAddOnInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, giftAddOn: e.target.value });
-    return e.target.value;
-  }
 
   function clear() {
     setFormResponses({
       name: "",
-      recipientName: "",
+      roomNum: "",
+      priority: "",
+      device: "",
+      amount: "",
       status: "",
-      location: "",
-      message: "",
-      delivery: "",
-      giftSize: "",
-      giftAddOn: "",
     });
   }
 
@@ -89,7 +124,6 @@ function GiftDeliveryService() {
 
   // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
-    window.scrollTo(0, 0);
     axios
       .get<NodeData[]>("/api/database/nodes")
       .then((response) =>
@@ -99,21 +133,11 @@ function GiftDeliveryService() {
   }, []);
 
   const [submittedData, setSubmittedData] = useState<
-    GiftDeliveryFormSubmission[]
+    DeviceDeliveryFormSubmission[]
   >([]);
 
   function updateList() {
     setSubmittedData([...submittedData, form]);
-  }
-
-  const [showConfetti, setShowConfetti] = useState(false);
-
-  function displayConfetti() {
-    setShowConfetti(true);
-  }
-
-  function hideConfetti() {
-    setShowConfetti(false);
   }
 
   return (
@@ -127,7 +151,7 @@ function GiftDeliveryService() {
         display: "flex",
         alignItems: "center", // Center vertically
         justifyContent: "center", // Center horizontally
-        backgroundImage: `url(${giftbackground})`,
+        backgroundImage: `url(${medDeviceBackground})`,
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
         minHeight: "100vh",
@@ -161,10 +185,10 @@ function GiftDeliveryService() {
             fontSize={40}
             padding={1}
           >
-            Gift Delivery Service Form
+            Medical Device Request Form
           </Typography>
         </Grid>
-        <Grid container padding={4} direction={"row"}>
+        <Grid container padding={2} direction={"row"}>
           <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"}>Name:</Typography>
             <LeftAlignedTextbox
@@ -177,43 +201,38 @@ function GiftDeliveryService() {
             <Typography color={"black"}>Location:</Typography>
             <DropDown
               label={"Location"}
-              returnData={form.location}
+              returnData={form.roomNum}
               handleChange={handleLocationInput}
               items={nodeNumbers}
             />
           </Grid>
           <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Recipient Name:</Typography>
+            <Typography color={"black"}>Medical Device Needed:</Typography>
             <LeftAlignedTextbox
-              label={"Recipient Name"}
-              value={form.recipientName}
-              onChange={handlerecipientNameInput}
+              label={"Medical Device"}
+              value={form.device}
+              onChange={handleDeviceInput}
             />
           </Grid>
           <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Optional Message:</Typography>
+            <Typography color={"black"}>Amount Needed:</Typography>
             <LeftAlignedTextbox
-              label={"Optional Message"}
-              value={form.message}
-              onChange={handleMessageInput}
+              onChange={handleAmountInput}
+              label={"Amount"}
+              value={form.amount}
             />
           </Grid>
-
           <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Delivery:</Typography>
+            <Typography color={"black"} textAlign={"center"} paddingTop={3}>
+              Priority of Medical Device Delivery:
+            </Typography>
             <RadioButtonsGroup
-              label={"Delivery"}
-              options={[
-                "Standard Delivery",
-                "Express Delivery",
-                "Same Day Delivery",
-                "Emergency Delivery",
-              ]}
-              returnData={form.delivery}
-              handleChange={handleDeliveryInput}
+              label={"Priority"}
+              options={["Low", "Medium", "High", "Emergency"]}
+              returnData={form.priority}
+              handleChange={handlePriorityInput}
             />
           </Grid>
-
           <Grid item sx={{ m: "auto" }}>
             <Typography color={"black"} textAlign={"center"} paddingTop={3}>
               Status of the Request:
@@ -225,25 +244,6 @@ function GiftDeliveryService() {
               handleChange={handleStatusInput}
             />
           </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Gift Size:</Typography>
-            <RadioButtonsGroup
-              label={"Gift Size"}
-              options={["Small", "Medium", "Large", "Extra Large"]}
-              returnData={form.giftSize}
-              handleChange={handleGiftSizeInput}
-            />
-          </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Gift Add-on:</Typography>
-            <RadioButtonsGroup
-              label={"Gift Add-on"}
-              options={["Greeting Card", "Balloons", "Stuffed Animal", "None"]}
-              returnData={form.giftAddOn}
-              handleChange={handleGiftAddOnInput}
-            />
-          </Grid>
-
           <Grid
             item
             xs={12}
@@ -253,21 +253,11 @@ function GiftDeliveryService() {
               justifyContent: "center",
             }}
           >
-            {showConfetti && (
-              <Confetti
-                numberOfPieces={100}
-                width={innerWidth}
-                height={innerHeight}
-                //recycle={false}
-              />
-            )}
-            <GiftDeliverySubmitButton
-              text={"SUBMIT"}
+            <DeviceSubmitButton
               input={form}
+              text={"SUBMIT"}
               clear={clear}
               updateList={updateList}
-              displayConfetti={displayConfetti}
-              hideConfetti={hideConfetti}
             />
           </Grid>
         </Grid>
@@ -286,17 +276,15 @@ function GiftDeliveryService() {
           <TableHead>
             <TableRow>
               <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Recipient Name</TableCell>
               <TableCell align="right">Status</TableCell>
               <TableCell align="right">Location</TableCell>
-              <TableCell align="right">Optional Message</TableCell>
-              <TableCell align="right">Delivery</TableCell>
-              <TableCell align="right">Gift Size</TableCell>
-              <TableCell align="right">Gift Add-on</TableCell>
+              <TableCell align="right">Priority</TableCell>
+              <TableCell align="right">Device</TableCell>
+              <TableCell align={"right"}>Amount</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {submittedData.map((item: GiftDeliveryFormSubmission) => (
+            {submittedData.map((item: DeviceDeliveryFormSubmission) => (
               <TableRow
                 key={item.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -304,21 +292,21 @@ function GiftDeliveryService() {
                 <TableCell component="th" scope="row" align={"right"}>
                   {item.name}
                 </TableCell>
-                <TableCell align={"right"}>{item.recipientName}</TableCell>
                 <TableCell align={"right"}>{item.status}</TableCell>
-                <TableCell align={"right"}>{item.location}</TableCell>
-                <TableCell align={"right"}>{item.message}</TableCell>
-                <TableCell align={"right"}>{item.delivery}</TableCell>
-                <TableCell align={"right"}>{item.giftSize}</TableCell>
-                <TableCell align={"right"}>{item.giftAddOn}</TableCell>
+                <TableCell align={"right"}>{item.roomNum}</TableCell>
+                <TableCell align={"right"}>{item.priority}</TableCell>
+                <TableCell align={"right"}>{item.device}</TableCell>
+                <TableCell align={"right"}>{item.amount}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Typography>Yitao Hong, Arayah Remillard</Typography>
+      <Typography color={"white"}>
+        Sebastian Gurgol, Jingxu (Rick) Wang
+      </Typography>
     </Stack>
   );
 }
 
-export default GiftDeliveryService;
+export default DeviceDeliveryService;
