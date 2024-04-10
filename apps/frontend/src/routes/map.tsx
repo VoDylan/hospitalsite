@@ -649,7 +649,8 @@ function Map() {
 
       if (!ctx) return;
 
-      currImage.onload = () => {
+      const processCanvas = () => {
+        console.log("Processing canvas");
         canvas.width = currImage.width;
         canvas.height = currImage.height;
 
@@ -710,6 +711,14 @@ function Map() {
           };
           moveDot();
         }
+      };
+
+      if (currImage.complete) {
+        processCanvas();
+      }
+
+      currImage.onload = () => {
+        processCanvas();
       };
     }
   }, [
