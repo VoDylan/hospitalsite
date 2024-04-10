@@ -183,17 +183,21 @@ function MedicineDelivery() {
             returnData={form.frequency}
           />
         </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>Priority of Medicine:</Typography>
-            <RadioButtonsGroup
-              label={"Priority"}
-              options={["Low", "Medium", "High", "Emergency"]}
-              returnData={form.priority}
-              handleChange={handlePriorityInput}
-            />
-          </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>Status of the Request:</Typography>
+          <Typography color={"black"} paddingTop={3}>
+            Priority of Medicine:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Priority"}
+            options={["Low", "Medium", "High", "Emergency"]}
+            returnData={form.priority}
+            handleChange={handlePriorityInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Status of the Request:
+          </Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}

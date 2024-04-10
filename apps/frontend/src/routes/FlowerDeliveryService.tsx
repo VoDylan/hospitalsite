@@ -117,73 +117,73 @@ function FlowerDeliveryService() {
           </Typography>
         </Grid>
         <Grid container padding={2} direction={"row"}>
-        <Grid item xs={6}>
-          <Typography>Name:</Typography>
-          <LeftAlignedTextbox
-            label={"Name"}
-            value={form.name}
-            onChange={handleNameInput}
-            type={"text"}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography>Flower Type:</Typography>
-          <DropDown
-            items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
-            handleChange={handleFlowerTypeInput}
-            label={"Flower Type"}
-            returnData={form.flowerType}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Box>
-            <Typography>Recipient Name:</Typography>
+          <Grid item xs={6}>
+            <Typography>Name:</Typography>
             <LeftAlignedTextbox
-              label={"Recipient Name"}
-              value={form.recipientName}
-              onChange={handleRecipientNameInput}
+              label={"Name"}
+              value={form.name}
+              onChange={handleNameInput}
+              type={"text"}
             />
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          <Box>
-            <Typography>Room Number:</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>Flower Type:</Typography>
             <DropDown
-              items={nodeNumbers}
-              label={"Room Number"}
-              returnData={form.roomNumber}
-              handleChange={handleRoomNumberInput}
+              items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
+              handleChange={handleFlowerTypeInput}
+              label={"Flower Type"}
+              returnData={form.flowerType}
             />
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          <Box>
-            <Typography>Add a message (optional):</Typography>
-            <LeftAlignedTextbox
-              label={"Message"}
-              value={form.message}
-              onChange={handleMessageInput}
-            />
-          </Box>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            my: 2,
-            justifyContent: "center",
-            pr: 1,
-          }}
-        >
-          <Box>
-            <FlowerDeliverySubmitButton
-              text={"SUBMIT"}
-              input={form}
-              clear={clear}
-            />
-          </Box>
-        </Grid>
+          </Grid>
+          <Grid item xs={6}>
+            <Box>
+              <Typography>Recipient Name:</Typography>
+              <LeftAlignedTextbox
+                label={"Recipient Name"}
+                value={form.recipientName}
+                onChange={handleRecipientNameInput}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box>
+              <Typography>Room Number:</Typography>
+              <DropDown
+                items={nodeNumbers}
+                label={"Room Number"}
+                returnData={form.roomNumber}
+                handleChange={handleRoomNumberInput}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box>
+              <Typography>Add a message (optional):</Typography>
+              <LeftAlignedTextbox
+                label={"Message"}
+                value={form.message}
+                onChange={handleMessageInput}
+              />
+            </Box>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              my: 2,
+              justifyContent: "center",
+              pr: 1,
+            }}
+          >
+            <Box>
+              <FlowerDeliverySubmitButton
+                text={"SUBMIT"}
+                input={form}
+                clear={clear}
+              />
+            </Box>
+          </Grid>
         </Grid>
       </Grid>
     </Stack>

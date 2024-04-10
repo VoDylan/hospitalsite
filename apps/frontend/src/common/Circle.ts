@@ -1,5 +1,13 @@
 // circle.ts
-export function drawCircle(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, fillColor: string, strokeColor: string, lineWidth: number) {
+export function drawCircle(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+  fillColor: string,
+  strokeColor: string,
+  lineWidth: number,
+) {
   ctx.fillStyle = fillColor;
   ctx.strokeStyle = strokeColor;
   ctx.lineWidth = lineWidth;

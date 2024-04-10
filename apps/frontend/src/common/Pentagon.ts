@@ -1,5 +1,13 @@
 // pentagon.ts
-export function drawPentagon(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, sideLength: number, fillColor: string, strokeColor: string, lineWidth: number) {
+export function drawPentagon(
+  ctx: CanvasRenderingContext2D,
+  centerX: number,
+  centerY: number,
+  sideLength: number,
+  fillColor: string,
+  strokeColor: string,
+  lineWidth: number,
+) {
   ctx.fillStyle = fillColor;
   ctx.strokeStyle = strokeColor;
   ctx.lineWidth = lineWidth;
@@ -9,7 +17,7 @@ export function drawPentagon(ctx: CanvasRenderingContext2D, centerX: number, cen
 
   // Calculate the coordinates for the five points of the pentagon
   for (let j = 0; j < 5; j++) {
-    const angle = (j * 2 * Math.PI / 5) - angleOffset;
+    const angle = (j * 2 * Math.PI) / 5 - angleOffset;
     const x = centerX + sideLength * Math.cos(angle);
     const y = centerY + sideLength * Math.sin(angle);
     if (j === 0) {

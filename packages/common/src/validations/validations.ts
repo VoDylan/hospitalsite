@@ -17,6 +17,7 @@ export const validateNodeData = (nodeData: never) => {
 
 export const validateEdgeData = (edgeData: never) => {
   const edgeSchema: Joi.ObjectSchema = Joi.object({
+    edgeID: Joi.string().required(),
     startNodeID: Joi.string().required(),
     endNodeID: Joi.string().required(),
   });

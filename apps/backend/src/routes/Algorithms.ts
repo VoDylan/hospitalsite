@@ -1,7 +1,7 @@
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 
 interface Algorithms {
-  loadData(): void;
+  loadData(): Promise<void>;
   runAlgorithm(start: string, end: string): IDCoordinates[];
 }
 

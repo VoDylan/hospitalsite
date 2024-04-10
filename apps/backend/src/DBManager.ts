@@ -97,8 +97,9 @@ export default class DBManager {
     for (let i: number = 1; i < edges.length; i++) {
       if (edges[i][0] == "") continue;
       const edgeInfo: MapEdgeType = {
-        startNodeID: edges[i][0],
-        endNodeID: edges[i][1],
+        edgeID: edges[i][0],
+        startNodeID: edges[i][1],
+        endNodeID: edges[i][2],
       };
 
       await createEdgePrisma(edgeInfo);

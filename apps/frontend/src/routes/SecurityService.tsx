@@ -150,9 +150,7 @@ function SecurityService() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>
-            Name:
-          </Typography>
+          <Typography color={"black"}>Name:</Typography>
           <LeftAlignedTextbox
             label={"Name"}
             value={form.name}
@@ -160,9 +158,7 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>
-            Location:
-          </Typography>
+          <Typography color={"black"}>Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
@@ -171,9 +167,7 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>
-            Security Personnel:
-          </Typography>
+          <Typography color={"black"}>Security Personnel:</Typography>
           <DropDown
             items={["Local Security", "Local Police", "State Police", "Other"]}
             handleChange={handleSecurityPersonnelInput}
@@ -182,9 +176,7 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>
-            Why is Security Needed:
-          </Typography>
+          <Typography color={"black"}>Why is Security Needed:</Typography>
           <DropDown
             items={[
               "I feel generally unsafe",
@@ -200,9 +192,7 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>
-            Priority of Security:
-          </Typography>
+          <Typography color={"black"}>Priority of Security:</Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
@@ -211,9 +201,7 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>
-            Status of the Request:
-          </Typography>
+          <Typography color={"black"}>Status of the Request:</Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}

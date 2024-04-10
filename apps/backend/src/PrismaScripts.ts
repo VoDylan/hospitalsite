@@ -24,7 +24,7 @@ export async function createNodePrisma(node: MapNodeType) {
 
 export async function createEdgePrisma(edge: MapEdgeType) {
   console.log(
-    `Adding edge between ${edge.startNodeID} and ${edge.endNodeID} to DB`,
+    `Adding edge (ID: ${edge.edgeID}) between ${edge.startNodeID} and ${edge.endNodeID} to DB`,
   );
   try {
     await client.edge.create({
@@ -167,21 +167,15 @@ export async function getDBEdges(): Promise<MapEdgeType[] | null> {
   return edges;
 }
 
-export async function getDBEdgeByStartAndEndNode(
-  startNodeID: string,
-  endNodeID: string,
+export async function getDBEdgeByEdgeID(
+  edgeID: string,
 ): Promise<MapEdgeType | null> {
-  console.log(
-    `${loggingPrefix}Getting edge by startNodeID ${startNodeID} and endNodeID ${endNodeID}`,
-  );
+  console.log(`${loggingPrefix}Getting edge by ID: ${edgeID}`);
   let edge: MapEdgeType | null = null;
   try {
     edge = await client.edge.findUnique({
       where: {
-        pairID: {
-          startNodeID: startNodeID,
-          endNodeID: endNodeID,
-        },
+        edgeID: edgeID,
       },
     });
   } catch (e) {
@@ -189,13 +183,9 @@ export async function getDBEdgeByStartAndEndNode(
   }
 
   if (edge == null) {
-    console.log(
-      `${loggingPrefix}No edge found with startNodeID ${startNodeID} and endNodeID ${endNodeID}`,
-    );
+    console.log(`${loggingPrefix}No edge found with ID ${edgeID}`);
   } else {
-    console.log(
-      `${loggingPrefix}Edge found with startNodeID ${startNodeID} and endNodeID ${endNodeID}`,
-    );
+    console.log(`${loggingPrefix}Edge found with ID ${edgeID}`);
   }
 
   return edge;
