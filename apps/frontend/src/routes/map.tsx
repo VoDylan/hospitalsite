@@ -50,6 +50,7 @@ import { IDCoordinates } from "common/src/IDCoordinates.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pathCanvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]);
@@ -72,6 +73,7 @@ function Map() {
   });
 
   const [floor, setFloor] = useState<string>("L1");
+  const [renderBackground, setRenderBackground] = useState<boolean>(false);
 
   //Pathfinder
   const [open, setOpen] = React.useState(false);
@@ -1126,10 +1128,15 @@ function Map() {
         return;
     }
 
+    setRenderBackground(true);
     setCurrImage(newImage);
   };
 
+  /**
+   * useEffect to just load the node data. Only called when the flags determining loading data are changed
+   */
   useEffect(() => {
+    console.log("Loading Data");
     if (!nodeDataLoaded) {
       loadNodeData().then((data: MapNodeType[]) => {
         setDBNodesData(data);
@@ -1143,24 +1150,64 @@ function Map() {
       setFiltersApplied(true);
     }
 
-    console.log("Rendering Canvas");
+    setRenderBackground(true);
+  }, [
+    nodeDataLoaded,
+    filtersApplied,
+    determineFilters,
+    registerFilters,
+    populateAutocompleteData,
+  ]);
 
-    console.log(algorithm);
-    console.log(startNode);
-    console.log(endNode);
+  useEffect(() => {
+    currImage.onload = () => {
+      if (renderBackground) {
+        console.log("Rendering Canvas");
+        if (canvasRef.current) {
+          const canvas: HTMLCanvasElement = canvasRef.current;
+          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
+          if (!ctx) return;
+
+          canvas.width = currImage.width;
+          canvas.height = currImage.height;
+
+          ctx.drawImage(currImage, 0, 0, currImage.width, currImage.height);
+        }
+
+        if (pathCanvasRef.current) {
+          const canvas: HTMLCanvasElement = pathCanvasRef.current;
+          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          canvas.width = currImage.width;
+          canvas.height = currImage.height;
+
+          ctx.clearRect(0, 0, currImage.width, currImage.height);
+        }
+        setRenderBackground(false);
+      }
+    };
+  }, [currImage, renderBackground, floor]);
+
+  useEffect(() => {
+    // console.log(algorithm);
+    // console.log(startNode);
+    // console.log(endNode);
+
+    if (pathCanvasRef.current) {
+      const canvas = pathCanvasRef.current;
       const ctx = canvas.getContext("2d");
 
       if (!ctx) return;
 
       const processCanvas = () => {
         console.log("Processing canvas");
-        canvas.width = currImage.width;
-        canvas.height = currImage.height;
-
-        ctx.drawImage(currImage, 0, 0, currImage.width, currImage.height);
+        // canvas.width = currImage.width;
+        // canvas.height = currImage.height;
+        //
+        // ctx.drawImage(currImage, 0, 0, currImage.width, currImage.height);
 
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
@@ -1175,7 +1222,7 @@ function Map() {
 
           const moveDot = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
+            //ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "black";
 
             for (let i = 0; i < nodesData.length; i++) {
@@ -1256,12 +1303,11 @@ function Map() {
         processCanvas();
       }
 
-      currImage.onload = () => {
-        processCanvas();
-      };
+      // currImage.onload = () => {
+      //   processCanvas();
+      // };
     }
   }, [
-    nodeDataLoaded,
     startNode,
     endNode,
     nodes,
@@ -1269,9 +1315,6 @@ function Map() {
     algorithm,
     currImage,
     updateAnimation,
-    populateAutocompleteData,
-    determineFilters,
-    registerFilters,
     filtersApplied,
     floor,
     pathNodeObjects,
@@ -1478,17 +1521,30 @@ function Map() {
         <TransformWrapper>
           <TransformComponent>
             <Draggable>
-              <canvas
-                ref={canvasRef}
-                style={{
-                  position: "relative",
-                  top: 50,
-                  left: 0,
-                  minHeight: "100vh",
-                  maxHeight: "100%",
-                  maxWidth: "100%",
-                }}
-              />
+              <>
+                <canvas
+                  ref={canvasRef}
+                  style={{
+                    position: "relative",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                />
+                <canvas
+                  ref={pathCanvasRef}
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                />
+              </>
             </Draggable>
           </TransformComponent>
         </TransformWrapper>
