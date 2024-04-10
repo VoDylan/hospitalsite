@@ -338,7 +338,8 @@ function DisplayDatabase() {
     [],
   );
 
-  const handleProcessRowUpdateError = React.useCallback(() => {
+  const handleProcessRowUpdateError = React.useCallback((error: Error) => {
+    console.log(error);
     alert("status didn't save");
   }, []);
 
