@@ -77,7 +77,7 @@ function Map() {
   const [open, setOpen] = React.useState(false);
   const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const [algorithm, setAlgorithm] = React.useState("BFS");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
@@ -1062,7 +1062,11 @@ function Map() {
       return;
     }
 
-    const request: LocationInfo = { startNode: startNode, endNode: endNode };
+    const request: LocationInfo = {
+      algorithm: algorithm,
+      startNode: startNode,
+      endNode: endNode,
+    };
 
     try {
       const response = await axios.post("/api/path", request, {

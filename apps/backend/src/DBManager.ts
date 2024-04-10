@@ -106,52 +106,6 @@ export default class DBManager {
     }
   }
 
-  // /**
-  //  * Function to export the list of nodes and edges to a CSV file
-  //  */
-  // public exportNodesAndEdgesToCSV() {
-  //   const exportNodesFileName: string = "nodes.csv";
-  //   const exportEdgesFileName: string = "edges.csv";
-  //
-  //   //Check if the export directory already exists and create it if not
-  //   if (!fs.existsSync(this.exportDir)) {
-  //     fs.mkdirSync(this.exportDir);
-  //   }
-  //   //Open a new CSV file to write the node information to and write the CSV header to the file
-  //   fs.writeFileSync(
-  //     this.getCombinedFilepath(exportNodesFileName),
-  //     MapNode.csvHeader + "\n",
-  //     { encoding: "utf8", flag: "w" },
-  //   );
-  //
-  //   //Loop through all mapNodes and append their information in CSV format to the previously opened node CSV file
-  //   for (let i = 0; i < GraphManager.getInstance().nodes.length; i++) {
-  //     const data = GraphManager.getInstance().nodes[i].toCSV();
-  //     fs.appendFileSync(
-  //       this.getCombinedFilepath(exportNodesFileName),
-  //       data + (i != GraphManager.getInstance().nodes.length - 1 ? "\n" : ""),
-  //       { encoding: "utf8", flag: "a" },
-  //     );
-  //   }
-  //
-  //   //Open a new CSV file to write the edge information to and write the CSV header to the file
-  //   fs.writeFileSync(
-  //     this.getCombinedFilepath(exportEdgesFileName),
-  //     MapEdge.csvHeader + "\n",
-  //     { encoding: "utf8", flag: "w" },
-  //   );
-  //
-  //   //Loop through all mapEdges and append their information in CSV format to the previously opened edge CSV file
-  //   for (let i = 0; i < GraphManager.getInstance().edges.length; i++) {
-  //     const data = GraphManager.getInstance().edges[i].toCSV();
-  //     fs.appendFileSync(
-  //       this.getCombinedFilepath(exportEdgesFileName),
-  //       data + (i != GraphManager.getInstance().nodes.length - 1 ? "\n" : ""),
-  //       { encoding: "utf8", flag: "a" },
-  //     );
-  //   }
-  // }
-
   /**
    * Helper function to print the nodes in string format
    */
