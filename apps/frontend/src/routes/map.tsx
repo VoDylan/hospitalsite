@@ -1186,16 +1186,25 @@ function Map() {
 
   useEffect(() => {
     console.log("Determining nodes on floor...");
-    const includedNodesOnFloor: IDCoordinates[] = [];
+    const includedNodesOnFloor: IDCoordinates[][] = [];
+
+    let currPath: IDCoordinates[] = [];
 
     for (let i = 0; i < nodesData.length; i++) {
       if (
         GraphManager.getInstance().getNodeByID(nodesData[i].nodeID)!.floor ==
         floor.current
       ) {
-        includedNodesOnFloor.push(nodesData[i]);
+        currPath.push(nodesData[i]);
+      } else {
+        if (currPath.length != 0) {
+          includedNodesOnFloor.push(currPath);
+          currPath = [];
+        }
       }
     }
+
+    if (currPath.length != 0) includedNodesOnFloor.push(currPath);
 
     console.log(`Determined nodes on floor`);
     console.log(includedNodesOnFloor);
@@ -1217,8 +1226,13 @@ function Map() {
           }
 
           let currentTargetIndex = 0;
-          let currentX = includedNodesOnFloor[currentTargetIndex].coordinates.x;
-          let currentY = includedNodesOnFloor[currentTargetIndex].coordinates.y;
+          let currentPathIndex = 0;
+          let currentX =
+            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+              .coordinates.x;
+          let currentY =
+            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+              .coordinates.y;
           const speed = 1;
 
           const moveDot = (origFloor: string) => {
@@ -1230,31 +1244,35 @@ function Map() {
             ctx.fillStyle = "black";
 
             for (let i = 0; i < includedNodesOnFloor.length; i++) {
-              ctx.beginPath();
-              ctx.arc(
-                includedNodesOnFloor[i].coordinates.x,
-                includedNodesOnFloor[i].coordinates.y,
-                5,
-                0,
-                2 * Math.PI,
-              );
-              ctx.fill();
+              for (let j = 0; j < includedNodesOnFloor[i].length; j++) {
+                ctx.beginPath();
+                ctx.arc(
+                  includedNodesOnFloor[i][j].coordinates.x,
+                  includedNodesOnFloor[i][j].coordinates.y,
+                  5,
+                  0,
+                  2 * Math.PI,
+                );
+                ctx.fill();
+              }
             }
 
             ctx.lineWidth = 3;
             ctx.beginPath();
 
-            ctx.moveTo(
-              includedNodesOnFloor[0].coordinates.x,
-              includedNodesOnFloor[0].coordinates.y,
-            );
-
-            for (let i = 1; i < includedNodesOnFloor.length; i++) {
-              ctx.lineTo(
-                includedNodesOnFloor[i].coordinates.x,
-                includedNodesOnFloor[i].coordinates.y,
+            for (let i = 0; i < includedNodesOnFloor.length; i++) {
+              ctx.moveTo(
+                includedNodesOnFloor[i][0].coordinates.x,
+                includedNodesOnFloor[i][0].coordinates.y,
               );
+              for (let j = 1; j < includedNodesOnFloor[i].length; j++) {
+                ctx.lineTo(
+                  includedNodesOnFloor[i][j].coordinates.x,
+                  includedNodesOnFloor[i][j].coordinates.y,
+                );
+              }
             }
+
             ctx.stroke();
 
             ctx.fillStyle = "blue";
@@ -1263,21 +1281,30 @@ function Map() {
             ctx.fill();
 
             const dx =
-              includedNodesOnFloor[currentTargetIndex].coordinates.x - currentX;
+              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                .coordinates.x - currentX;
             const dy =
-              includedNodesOnFloor[currentTargetIndex].coordinates.y - currentY;
+              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                .coordinates.y - currentY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < speed) {
               currentTargetIndex =
-                (currentTargetIndex + 1) % includedNodesOnFloor.length;
+                (currentTargetIndex + 1) %
+                includedNodesOnFloor[currentPathIndex].length;
             } else {
               currentX += (dx / distance) * speed;
               currentY += (dy / distance) * speed;
             }
             if (currentTargetIndex === 0) {
-              currentX = includedNodesOnFloor[0].coordinates.x;
-              currentY = includedNodesOnFloor[0].coordinates.y;
+              currentPathIndex =
+                (currentPathIndex + 1) % includedNodesOnFloor.length;
+              currentX =
+                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                  .coordinates.x;
+              currentY =
+                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                  .coordinates.y;
               currentTargetIndex = 1;
             }
             requestAnimationFrame(() => moveDot(origFloor));

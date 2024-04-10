@@ -20,7 +20,6 @@ import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
-import TopBanner from "../components/TopBanner.tsx";
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/DeviceSubmitButton.tsx";
 import axios from "axios";
@@ -183,86 +182,82 @@ function DeviceDeliveryService() {
             backgroundColor: "#186BD9",
           }}
         >
-          <Typography
-            color={"white"}
-            align={"center"}
-            fontSize={40}
-          >
+          <Typography color={"white"} align={"center"} fontSize={40}>
             Medical Device Request Form
           </Typography>
         </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Name:</Typography>
-            <LeftAlignedTextbox
-              label={"Name"}
-              value={form.name}
-              onChange={handleNameInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Location:</Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.roomNum}
-              handleChange={handleLocationInput}
-              items={nodeNumbers}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Medical Device Needed:</Typography>
-            <LeftAlignedTextbox
-              label={"Medical Device"}
-              value={form.device}
-              onChange={handleDeviceInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Amount Needed:</Typography>
-            <LeftAlignedTextbox
-              onChange={handleAmountInput}
-              label={"Amount"}
-              value={form.amount}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>
-              Priority of Medical Device Delivery:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Priority"}
-              options={["Low", "Medium", "High", "Emergency"]}
-              returnData={form.priority}
-              handleChange={handlePriorityInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>
-              Status of the Request:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Status"}
-              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-              returnData={form.status}
-              handleChange={handleStatusInput}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: "flex",
-              my: 2,
-              justifyContent: "center",
-            }}
-          >
-            <DeviceSubmitButton
-              input={form}
-              text={"SUBMIT"}
-              clear={clear}
-              updateList={updateList}
-            />
-          </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Name:</Typography>
+          <LeftAlignedTextbox
+            label={"Name"}
+            value={form.name}
+            onChange={handleNameInput}
+          />
         </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Location:</Typography>
+          <DropDown
+            label={"Location"}
+            returnData={form.roomNum}
+            handleChange={handleLocationInput}
+            items={nodeNumbers}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Medical Device Needed:</Typography>
+          <LeftAlignedTextbox
+            label={"Medical Device"}
+            value={form.device}
+            onChange={handleDeviceInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Amount Needed:</Typography>
+          <LeftAlignedTextbox
+            onChange={handleAmountInput}
+            label={"Amount"}
+            value={form.amount}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Priority of Medical Device Delivery:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Priority"}
+            options={["Low", "Medium", "High", "Emergency"]}
+            returnData={form.priority}
+            handleChange={handlePriorityInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Status of the Request:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Status"}
+            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+            returnData={form.status}
+            handleChange={handleStatusInput}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            my: 2,
+            justifyContent: "center",
+          }}
+        >
+          <DeviceSubmitButton
+            input={form}
+            text={"SUBMIT"}
+            clear={clear}
+            updateList={updateList}
+          />
+        </Grid>
+      </Grid>
       <TableContainer
         component={Paper}
         sx={{

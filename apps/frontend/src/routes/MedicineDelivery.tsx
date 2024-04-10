@@ -135,54 +135,61 @@ function MedicineDelivery() {
             backgroundColor: "#186BD9",
           }}
         >
-          <Typography color={"white"} align={"center"} fontSize={40} padding={1}>
+          <Typography
+            color={"white"}
+            align={"center"}
+            fontSize={40}
+            padding={1}
+          >
             Medicine Delivery Form
           </Typography>
         </Grid>
         <Grid container padding={2} direction={"row"}>
-        <Grid item xs={6}>
-          <Typography color={"black"}>Name:</Typography>
-          <LeftAlignedTextbox
-            label={"Name"}
-            value={form.name}
-            onChange={handleNameInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"}>Location:</Typography>
-          <DropDown
-            label={"Location"}
-            returnData={form.location}
-            handleChange={handleLocationInput}
-            items={nodeNumbers}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"}>Medicine Needed:</Typography>
-          <DropDown
-            items={[
-              "Acetaminophen (Tylenol)",
-              "Ibuprofen (Advil)",
-              "Omeprazole (Prilosec)",
-              "Fexofenadine (Allegra)",
-              "Diphenhydramine (Benadryl)",
-            ]}
-            handleChange={handleServiceInput}
-            label={"Medicine"}
-            returnData={form.service}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"}>Frequency Needed:</Typography>
-          <DropDown
-            items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
-            handleChange={handleFrequencyInput}
-            label={"Frequency"}
-            returnData={form.frequency}
-          />
-        </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>Priority of Medicine:</Typography>
+            <Typography color={"black"}>Name:</Typography>
+            <LeftAlignedTextbox
+              label={"Name"}
+              value={form.name}
+              onChange={handleNameInput}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"}>Location:</Typography>
+            <DropDown
+              label={"Location"}
+              returnData={form.location}
+              handleChange={handleLocationInput}
+              items={nodeNumbers}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"}>Medicine Needed:</Typography>
+            <DropDown
+              items={[
+                "Acetaminophen (Tylenol)",
+                "Ibuprofen (Advil)",
+                "Omeprazole (Prilosec)",
+                "Fexofenadine (Allegra)",
+                "Diphenhydramine (Benadryl)",
+              ]}
+              handleChange={handleServiceInput}
+              label={"Medicine"}
+              returnData={form.service}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"}>Frequency Needed:</Typography>
+            <DropDown
+              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
+              handleChange={handleFrequencyInput}
+              label={"Frequency"}
+              returnData={form.frequency}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} paddingTop={3}>
+              Priority of Medicine:
+            </Typography>
             <RadioButtonsGroup
               label={"Priority"}
               options={["Low", "Medium", "High", "Emergency"]}
@@ -190,32 +197,34 @@ function MedicineDelivery() {
               handleChange={handlePriorityInput}
             />
           </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>Status of the Request:</Typography>
-          <RadioButtonsGroup
-            label={"Status"}
-            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-            returnData={form.status}
-            handleChange={handleStatusInput}
-          />
+          <Grid item xs={6}>
+            <Typography color={"black"} paddingTop={3}>
+              Status of the Request:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Status"}
+              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+              returnData={form.status}
+              handleChange={handleStatusInput}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              my: 2,
+              justifyContent: "center",
+            }}
+          >
+            <MedicineSubmitButton
+              input={form}
+              text={"SUBMIT"}
+              clear={clear}
+              updateSubmissionList={updateSubmissionList}
+            />
+          </Grid>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            my: 2,
-            justifyContent: "center",
-          }}
-        >
-          <MedicineSubmitButton
-            input={form}
-            text={"SUBMIT"}
-            clear={clear}
-            updateSubmissionList={updateSubmissionList}
-          />
-        </Grid>
-      </Grid>
       </Grid>
       <TableContainer
         component={Paper}

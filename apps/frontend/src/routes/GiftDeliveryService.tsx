@@ -158,120 +158,122 @@ function GiftDeliveryService() {
             backgroundColor: "#186BD9",
           }}
         >
-          <Typography
-            color={"white"}
-            align={"center"}
-            fontSize={40}
-          >
+          <Typography color={"white"} align={"center"} fontSize={40}>
             Gift Delivery Service Form
           </Typography>
         </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Name:</Typography>
-            <LeftAlignedTextbox
-              label={"Name"}
-              value={form.name}
-              onChange={handleNameInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Location:</Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.location}
-              handleChange={handleLocationInput}
-              items={nodeNumbers}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Recipient Name:</Typography>
-            <LeftAlignedTextbox
-              label={"Recipient Name"}
-              value={form.recipientName}
-              onChange={handlerecipientNameInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"}>Optional Message:</Typography>
-            <LeftAlignedTextbox
-              label={"Optional Message"}
-              value={form.message}
-              onChange={handleMessageInput}
-            />
-          </Grid>
-
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>Delivery:</Typography>
-            <RadioButtonsGroup
-              label={"Delivery"}
-              options={[
-                "Standard Delivery",
-                "Express Delivery",
-                "Same Day Delivery",
-                "Emergency Delivery",
-              ]}
-              returnData={form.delivery}
-              handleChange={handleDeliveryInput}
-            />
-          </Grid>
-
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>
-              Status of the Request:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Status"}
-              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-              returnData={form.status}
-              handleChange={handleStatusInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>Gift Size:</Typography>
-            <RadioButtonsGroup
-              label={"Gift Size"}
-              options={["Small", "Medium", "Large", "Extra Large"]}
-              returnData={form.giftSize}
-              handleChange={handleGiftSizeInput}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={"black"} paddingTop={3}>Gift Add-on:</Typography>
-            <RadioButtonsGroup
-              label={"Gift Add-on"}
-              options={["Greeting Card", "Balloons", "Stuffed Animal", "None"]}
-              returnData={form.giftAddOn}
-              handleChange={handleGiftAddOnInput}
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: "flex",
-              my: 2,
-              justifyContent: "center",
-            }}
-          >
-            {showConfetti && (
-              <Confetti
-                numberOfPieces={100}
-                width={innerWidth}
-                height={innerHeight}
-                //recycle={false}
-              />
-            )}
-            <GiftDeliverySubmitButton
-              text={"SUBMIT"}
-              input={form}
-              clear={clear}
-              updateList={updateList}
-              displayConfetti={displayConfetti}
-              hideConfetti={hideConfetti}
-            />
-          </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Name:</Typography>
+          <LeftAlignedTextbox
+            label={"Name"}
+            value={form.name}
+            onChange={handleNameInput}
+          />
         </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Location:</Typography>
+          <DropDown
+            label={"Location"}
+            returnData={form.location}
+            handleChange={handleLocationInput}
+            items={nodeNumbers}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Recipient Name:</Typography>
+          <LeftAlignedTextbox
+            label={"Recipient Name"}
+            value={form.recipientName}
+            onChange={handlerecipientNameInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Optional Message:</Typography>
+          <LeftAlignedTextbox
+            label={"Optional Message"}
+            value={form.message}
+            onChange={handleMessageInput}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Delivery:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Delivery"}
+            options={[
+              "Standard Delivery",
+              "Express Delivery",
+              "Same Day Delivery",
+              "Emergency Delivery",
+            ]}
+            returnData={form.delivery}
+            handleChange={handleDeliveryInput}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Status of the Request:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Status"}
+            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+            returnData={form.status}
+            handleChange={handleStatusInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Gift Size:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Gift Size"}
+            options={["Small", "Medium", "Large", "Extra Large"]}
+            returnData={form.giftSize}
+            handleChange={handleGiftSizeInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Gift Add-on:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Gift Add-on"}
+            options={["Greeting Card", "Balloons", "Stuffed Animal", "None"]}
+            returnData={form.giftAddOn}
+            handleChange={handleGiftAddOnInput}
+          />
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            my: 2,
+            justifyContent: "center",
+          }}
+        >
+          {showConfetti && (
+            <Confetti
+              numberOfPieces={100}
+              width={innerWidth}
+              height={innerHeight}
+              //recycle={false}
+            />
+          )}
+          <GiftDeliverySubmitButton
+            text={"SUBMIT"}
+            input={form}
+            clear={clear}
+            updateList={updateList}
+            displayConfetti={displayConfetti}
+            hideConfetti={hideConfetti}
+          />
+        </Grid>
+      </Grid>
       <TableContainer
         component={Paper}
         sx={{
