@@ -1171,9 +1171,6 @@ function Map() {
 
       if (!ctx) return;
 
-      canvas.width = currImage.width;
-      canvas.height = currImage.height;
-
       ctx.clearRect(0, 0, currImage.width, currImage.height);
 
       const filters: NodeFilter =
@@ -1327,6 +1324,20 @@ function Map() {
           canvas.height = currImage.height;
 
           ctx.clearRect(0, 0, currImage.width, currImage.height);
+        }
+
+        if (symbolCanvasRef.current) {
+          const canvas: HTMLCanvasElement = symbolCanvasRef.current;
+          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          canvas.width = currImage.width;
+          canvas.height = currImage.height;
+
+          ctx.clearRect(0, 0, currImage.width, currImage.height);
+
+          setRenderSymbolCanvas(true);
         }
         setRenderBackground(false);
       }
