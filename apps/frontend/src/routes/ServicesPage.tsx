@@ -21,7 +21,7 @@ export default function ServicesPage() {
     { path: "/Services/SanitationService", image: Sanitation },
     { path: "/Services/SecurityService", image: Security },
     { path: "/Services/GiftDelivery", image: Gift },
-    { path: "/Services/MedicalDeviceDelivery", image: MedicalDevice },
+    { path: "/Services/DeviceDeliveryService", image: MedicalDevice },
     { path: "/Services/RoomScheduling", image: Room },
     { path: "/Services/ServicesTemplate", image: Template },
   ];
