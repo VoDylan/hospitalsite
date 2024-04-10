@@ -52,6 +52,7 @@ import { drawRectangle } from "../common/Rectangle.ts";
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pathCanvasRef = useRef<HTMLCanvasElement>(null);
+  const symbolCanvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]);
@@ -59,6 +60,8 @@ function Map() {
 
   const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+
+  const [renderSymbolCanvas, setRenderSymbolCanvas] = useState<boolean>(false);
 
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
@@ -82,7 +85,7 @@ function Map() {
   const [checkedAS, setCheckedAS] = React.useState(false);
 
   const [algorithm, setAlgorithm] = React.useState("BFS");
-   
+
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
@@ -1127,6 +1130,7 @@ function Map() {
         return;
     }
 
+    setRenderSymbolCanvas(true);
     setRenderBackground(true);
     setReprocessNodes(true);
     setCurrImage(newImage);
@@ -1149,6 +1153,7 @@ function Map() {
       setFiltersApplied(true);
     }
 
+    setRenderSymbolCanvas(true);
     setRenderBackground(true);
   }, [
     nodeDataLoaded,
@@ -1157,6 +1162,144 @@ function Map() {
     registerFilters,
     populateAutocompleteData,
   ]);
+
+  useEffect(() => {
+    if (symbolCanvasRef.current && renderSymbolCanvas) {
+      console.log("Rendering symbol canvas");
+      const canvas: HTMLCanvasElement = symbolCanvasRef.current;
+      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+      if (!ctx) return;
+
+      canvas.width = currImage.width;
+      canvas.height = currImage.height;
+
+      ctx.clearRect(0, 0, currImage.width, currImage.height);
+
+      const filters: NodeFilter =
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(false, floor.current),
+        ])!;
+
+      const nodesOnFloor = FilterManager.getInstance().applyFilters(
+        [filters],
+        filteredNodes,
+      );
+
+      console.log("NodesOnFloor:");
+      console.log(nodesOnFloor);
+
+      for (let i = 0; i < nodesOnFloor.length; i++) {
+        console.log("Drawing shape");
+        if (nodesOnFloor[i].nodeType == "ELEV") {
+          drawRectangle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            20,
+            20,
+            "#1CA7EC",
+            "black",
+            2,
+          );
+        } else if (nodesOnFloor[i].nodeType == "STAI") {
+          drawRectangle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            20,
+            20,
+            "#72c41c",
+            "black",
+            2,
+          );
+        } else if (nodesOnFloor[i].nodeType == "EXIT") {
+          drawRectangle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            20,
+            20,
+            "red",
+            "black",
+            2,
+          );
+        } else if (nodesOnFloor[i].nodeType == "RETL") {
+          drawRectangle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            20,
+            20,
+            "#e88911",
+            "black",
+            2,
+          );
+        } else if (nodesOnFloor[i].nodeType == "SERV") {
+          drawCircle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            12,
+            "#e88911",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "INFO") {
+          drawCircle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            12,
+            "#1CA7EC",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "REST") {
+          drawCircle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            12,
+            "#72c41c",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "CONF") {
+          drawPentagon(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            15,
+            "#1CA7EC",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "DEPT") {
+          drawPentagon(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            15,
+            "#72c41c",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "LABS") {
+          drawPentagon(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            15,
+            "#e88911",
+            "black",
+            4,
+          );
+        }
+      }
+      setRenderSymbolCanvas(false);
+    }
+  }, [currImage.height, currImage.width, filteredNodes, renderSymbolCanvas]);
 
   useEffect(() => {
     currImage.onload = () => {
@@ -1225,114 +1368,6 @@ function Map() {
       if (includedNodesOnFloor.length != 0) {
         console.log("Processing canvas");
 
-        for (let i = 0; i < filteredNodes.length; i++) {
-          if (filteredNodes[i].nodeType == "ELEV") {
-            drawRectangle(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              20,
-              20,
-              "#1CA7EC",
-              "black",
-              2,
-            );
-          } else if (filteredNodes[i].nodeType == "STAI") {
-            drawRectangle(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              20,
-              20,
-              "#72c41c",
-              "black",
-              2,
-            );
-          } else if (filteredNodes[i].nodeType == "EXIT") {
-            drawRectangle(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              20,
-              20,
-              "red",
-              "black",
-              2,
-            );
-          } else if (filteredNodes[i].nodeType == "RETL") {
-            drawRectangle(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              20,
-              20,
-              "#e88911",
-              "black",
-              2,
-            );
-          } else if (filteredNodes[i].nodeType == "SERV") {
-            drawCircle(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              12,
-              "#e88911",
-              "black",
-              4,
-            );
-          } else if (filteredNodes[i].nodeType == "INFO") {
-            drawCircle(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              12,
-              "#1CA7EC",
-              "black",
-              4,
-            );
-          } else if (filteredNodes[i].nodeType == "REST") {
-            drawCircle(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              12,
-              "#72c41c",
-              "black",
-              4,
-            );
-          } else if (filteredNodes[i].nodeType == "CONF") {
-            drawPentagon(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              15,
-              "#1CA7EC",
-              "black",
-              4,
-            );
-          } else if (filteredNodes[i].nodeType == "DEPT") {
-            drawPentagon(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              15,
-              "#72c41c",
-              "black",
-              4,
-            );
-          } else if (filteredNodes[i].nodeType == "LABS") {
-            drawPentagon(
-              ctx,
-              filteredNodes[i].xcoord,
-              filteredNodes[i].ycoord,
-              15,
-              "#e88911",
-              "black",
-              4,
-            );
-          }
-        }
-
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
             setErrorMessage("There is no path between nodes");
@@ -1389,7 +1424,7 @@ function Map() {
 
             ctx.stroke();
 
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "blue";
             ctx.beginPath();
             ctx.arc(currentX, currentY, 12, 0, 2 * Math.PI);
             ctx.fill();
@@ -1647,6 +1682,17 @@ function Map() {
                   ref={canvasRef}
                   style={{
                     position: "relative",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                />
+                <canvas
+                  ref={symbolCanvasRef}
+                  style={{
+                    position: "absolute",
                     top: 50,
                     left: 0,
                     minHeight: "100vh",
