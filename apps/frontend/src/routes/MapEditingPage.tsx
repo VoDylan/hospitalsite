@@ -11,6 +11,8 @@ import SFMapImage from "../images/02_thesecondfloor.png";
 import TFMapImage from "../images/03_thethirdfloor.png";
 import Floor from "../components/FloorTabs.tsx";
 import { sendRequest } from "common/src/sendRequest.ts";
+import Draggable from "react-draggable";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
 // type floorNodes = {
 //   l2: NodeFilter[];
@@ -49,6 +51,7 @@ function MapEditingPage() {
     const distancePath = await distancesResponse.data;
     const distanceData = distancePath.message;
     // console.log("distances", distanceData);
+
     setDistancesData(distanceData);
     console.log("Updated distancesData:", distancePath); // Log the updated value here
   }
@@ -169,17 +172,22 @@ function MapEditingPage() {
   return (
     <div>
       <TopBanner2 />
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: "100%",
-          height: "100%",
-          zIndex: 0,
-          position: "relative",
-        }}
-        className={"firstFloorCanvas"}
-      />
-
+      <TransformWrapper>
+        <TransformComponent>
+          <Draggable>
+            <canvas
+              ref={canvasRef}
+              style={{
+                width: "100%",
+                height: "100%",
+                zIndex: 0,
+                position: "relative",
+              }}
+              className={"firstFloorCanvas"}
+            />
+          </Draggable>
+        </TransformComponent>
+      </TransformWrapper>
       <Floor callback={handleFloorChange} />
     </div>
   );
