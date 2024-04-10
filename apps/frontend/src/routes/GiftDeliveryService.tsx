@@ -138,7 +138,9 @@ function GiftDeliveryService() {
       <TopBanner />
       <Grid
         container
-        direction={"column"}
+        direction={"row"}
+        rowSpacing={1}
+        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -151,6 +153,7 @@ function GiftDeliveryService() {
       >
         <Grid
           item
+          xs={12}
           sx={{
             backgroundColor: "#186BD9",
           }}
@@ -159,13 +162,11 @@ function GiftDeliveryService() {
             color={"white"}
             align={"center"}
             fontSize={40}
-            padding={1}
           >
             Gift Delivery Service Form
           </Typography>
         </Grid>
-        <Grid container padding={4} direction={"row"}>
-          <Grid item sx={{ m: "auto" }}>
+          <Grid item xs={6}>
             <Typography color={"black"}>Name:</Typography>
             <LeftAlignedTextbox
               label={"Name"}
@@ -173,7 +174,7 @@ function GiftDeliveryService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item sx={{ m: "auto" }}>
+          <Grid item xs={6}>
             <Typography color={"black"}>Location:</Typography>
             <DropDown
               label={"Location"}
@@ -182,7 +183,7 @@ function GiftDeliveryService() {
               items={nodeNumbers}
             />
           </Grid>
-          <Grid item sx={{ m: "auto" }}>
+          <Grid item xs={6}>
             <Typography color={"black"}>Recipient Name:</Typography>
             <LeftAlignedTextbox
               label={"Recipient Name"}
@@ -190,7 +191,7 @@ function GiftDeliveryService() {
               onChange={handlerecipientNameInput}
             />
           </Grid>
-          <Grid item sx={{ m: "auto" }}>
+          <Grid item xs={6}>
             <Typography color={"black"}>Optional Message:</Typography>
             <LeftAlignedTextbox
               label={"Optional Message"}
@@ -199,8 +200,8 @@ function GiftDeliveryService() {
             />
           </Grid>
 
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Delivery:</Typography>
+          <Grid item xs={6}>
+            <Typography color={"black"} paddingTop={3}>Delivery:</Typography>
             <RadioButtonsGroup
               label={"Delivery"}
               options={[
@@ -214,8 +215,8 @@ function GiftDeliveryService() {
             />
           </Grid>
 
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"} textAlign={"center"} paddingTop={3}>
+          <Grid item xs={6}>
+            <Typography color={"black"} paddingTop={3}>
               Status of the Request:
             </Typography>
             <RadioButtonsGroup
@@ -225,8 +226,8 @@ function GiftDeliveryService() {
               handleChange={handleStatusInput}
             />
           </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Gift Size:</Typography>
+          <Grid item xs={6}>
+            <Typography color={"black"} paddingTop={3}>Gift Size:</Typography>
             <RadioButtonsGroup
               label={"Gift Size"}
               options={["Small", "Medium", "Large", "Extra Large"]}
@@ -234,8 +235,8 @@ function GiftDeliveryService() {
               handleChange={handleGiftSizeInput}
             />
           </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Gift Add-on:</Typography>
+          <Grid item xs={6}>
+            <Typography color={"black"} paddingTop={3}>Gift Add-on:</Typography>
             <RadioButtonsGroup
               label={"Gift Add-on"}
               options={["Greeting Card", "Balloons", "Stuffed Animal", "None"]}
@@ -271,7 +272,6 @@ function GiftDeliveryService() {
             />
           </Grid>
         </Grid>
-      </Grid>
       <TableContainer
         component={Paper}
         sx={{
