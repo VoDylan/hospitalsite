@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { testingDistance } from "../../tests/testingDistance.ts";
+import { testingDistance } from "../lib/testingDistance.ts";
 const router: Router = express.Router();
 
 router.get("/", async (req, res) => {
