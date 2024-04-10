@@ -6,4 +6,5 @@ export type GiftDeliveryFormSubmission = {
   message: string;
   delivery: string;
   giftSize: string;
+  giftAddOn: string;
 };
