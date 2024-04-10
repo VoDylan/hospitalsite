@@ -8,11 +8,13 @@ export class testingDistance {
   mapNodes: MapNodeType[];
   mapEdges: MapEdgeType[];
   nodesDistances: nodesDistances[];
+  floor: string;
 
-  public constructor() {
+  public constructor(floor: string) {
     this.mapNodes = [];
     this.mapEdges = [];
     this.nodesDistances = [];
+    this.floor = floor;
   }
 
   async putIntoTypes() {
@@ -20,23 +22,30 @@ export class testingDistance {
     this.mapEdges = await client.edge.findMany();
 
     for (let i = 0; i < this.mapEdges.length; i++) {
-      const startID: string = this.mapEdges[i].startNodeID;
-      const endID: string = this.mapEdges[i].endNodeID;
+      const startNode = this.mapNodes.find(
+        (node) => node.nodeID === this.mapEdges[i].startNodeID,
+      );
+      const endNode = this.mapNodes.find(
+        (node) => node.nodeID === this.mapEdges[i].endNodeID,
+      );
 
-      if (!startID || !endID) return;
+      if (!startNode || !endNode) return undefined; // Either startNode or endNode not found
 
-      const startCoordinates: { x: number; y: number } | null =
-        this.getCoordinates(startID);
-      const endCoordinates: { x: number; y: number } | null =
-        this.getCoordinates(endID);
+      // Check if both start and end nodes have the same floor
+      if (startNode.floor === this.floor && endNode.floor === this.floor) {
+        const startCoordinates: { x: number; y: number } | null =
+          this.getCoordinates(startNode.nodeID);
+        const endCoordinates: { x: number; y: number } | null =
+          this.getCoordinates(endNode.nodeID);
 
-      if (!startCoordinates || !endCoordinates) return;
+        if (!startCoordinates || !endCoordinates) return undefined;
 
-      this.nodesDistances[i] = {
-        startCoords: startCoordinates,
-        endCoords: endCoordinates,
-        distance: this.getDistance(startCoordinates, endCoordinates),
-      };
+        this.nodesDistances[i] = {
+          startCoords: startCoordinates,
+          endCoords: endCoordinates,
+          distance: this.getDistance(startCoordinates, endCoordinates),
+        };
+      }
     }
 
     this.print();

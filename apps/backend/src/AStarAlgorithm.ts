@@ -3,7 +3,6 @@ import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import client from "./bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
-import { testingDistance } from "../tests/testingDistance.ts";
 import Algorithms from "./routes/Algorithms.ts";
 
 export class AStarAlgorithm implements Algorithms {
@@ -151,9 +150,6 @@ export class AStarAlgorithm implements Algorithms {
 
         // console.log("Path found:", path);
         // console.log("Coordinates found:", coordinatesPath);
-
-        const TestingDistance = new testingDistance();
-        TestingDistance.putIntoTypes();
 
         return coordinatesPath;
       }

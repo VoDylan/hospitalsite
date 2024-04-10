@@ -3,7 +3,7 @@ import { testingDistance } from "../../tests/testingDistance.ts";
 const router: Router = express.Router();
 
 router.get("/", async (req, res) => {
-  const distances = new testingDistance();
+  const distances = new testingDistance("l1");
   async function runDistances() {
     return await distances.putIntoTypes();
   }
