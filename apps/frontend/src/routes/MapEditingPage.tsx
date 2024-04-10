@@ -1,14 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
-import MapImage from "../images/00_thelowerlevel1.png";
+// import MapImage from "../images/00_thelowerlevel1.png";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import TopBanner2 from "../components/TopBanner2.tsx";
+import L1MapImage from "../images/00_thelowerlevel1.png";
+import L2MapImage from "../images/00_thelowerlevel2.png";
+import FFMapImage from "../images/01_thefirstfloor.png";
+import SFMapImage from "../images/02_thesecondfloor.png";
+import TFMapImage from "../images/03_thethirdfloor.png";
+import Floor from "../components/FloorTabs.tsx";
 
 function MapEditingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [nodeData, setNodesData] = useState<MapNodeType[]>([]);
   const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
+  const floor = useRef<string>("L1");
+  const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
+    const image = new Image();
+    image.src = L1MapImage;
+    return image;
+  });
 
   async function loadNodeData() {
     const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
@@ -26,6 +38,37 @@ function MapEditingPage() {
     setDistancesData(distanceData);
   }
 
+  const handleFloorChange = (newFloor: string) => {
+    const newImage = new Image();
+
+    switch (newFloor) {
+      case "L1":
+        newImage.src = L1MapImage;
+        floor.current = "L1";
+        break;
+      case "L2":
+        newImage.src = L2MapImage;
+        floor.current = "L2";
+        break;
+      case "1":
+        newImage.src = FFMapImage;
+        floor.current = "1";
+        break;
+      case "2":
+        newImage.src = SFMapImage;
+        floor.current = "2";
+        break;
+      case "3":
+        newImage.src = TFMapImage;
+        floor.current = "3";
+        break;
+      default:
+        console.error("Returned map floor is not assigned to an image");
+        return;
+    }
+    setCurrImage(newImage);
+  };
+
   useEffect(() => {
     loadNodeData();
     loadEdgesDistance();
@@ -37,13 +80,12 @@ function MapEditingPage() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const image = new Image();
-    image.src = MapImage;
-    image.onload = () => {
-      canvas.width = image.width;
-      canvas.height = image.height;
+    // image.src = MapImage;
+    currImage.onload = () => {
+      canvas.width = currImage.width;
+      canvas.height = currImage.height;
 
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
 
       ctx.lineWidth = 2;
       ctx.strokeStyle = "red";
@@ -89,6 +131,8 @@ function MapEditingPage() {
         }}
         className={"firstFloorCanvas"}
       />
+
+      <Floor callback={handleFloorChange} />
     </div>
   );
 }
