@@ -5326,7 +5326,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 9e045267fee20fb970221256fa7b76ed62e89ab712aeaeafa23993a1121394974c2d97a52931901eb03d9f864d58bbe03afe9337654c10058481f1bd9af642cc
+  checksum: 10/9e045267fee20fb970221256fa7b76ed62e89ab712aeaeafa23993a1121394974c2d97a52931901eb03d9f864d58bbe03afe9337654c10058481f1bd9af642cc
   languageName: node
   linkType: hard
 
