@@ -4,8 +4,9 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import databaseRouter from "./routes/databaseRouter";
 import sendPath from "./routes/sendPath";
+import sendTestPath from "./routes/sendTestPath.ts";
 
-const app: Express = express(); // Setup the backend
+const app: Express = express(); // Set up the backend
 
 // Setup generic middlewear
 app.use(
@@ -26,6 +27,7 @@ app.use(cookieParser()); // Cookie parser
 //Open the /api/database endpoint and connect to the databaseRouter
 app.use("/api/database", databaseRouter);
 app.use("/api/path", sendPath);
+app.use("/api/testPath", sendTestPath);
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });

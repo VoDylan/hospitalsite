@@ -17,12 +17,13 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import SyncIcon from "@mui/icons-material/Sync";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/TopBanner2.tsx";
 import MapImage from "../images/00_thelowerlevel1.png";
 import NestedList from "../components/PathfindingSelect.tsx";
 import "./map.css";
-import { Coordinates } from "common/src/Coordinates.ts";
+// import { Coordinates } from "common/src/Coordinates.ts";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
@@ -39,6 +40,7 @@ import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -46,7 +48,7 @@ function Map() {
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [nodesData, setNodesData] = useState<Coordinates[]>([]);
+  const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dbNodeData, setDBNodesData] = useState<MapNodeType[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
@@ -1021,7 +1023,7 @@ function Map() {
     }
   };
 
-  const updateNodesData = (newData: Coordinates[]) => {
+  const updateNodesData = (newData: IDCoordinates[]) => {
     setNodesData(newData);
   };
 
@@ -1101,8 +1103,8 @@ function Map() {
           }
 
           let currentTargetIndex = 0;
-          let currentX = nodesData[currentTargetIndex].x;
-          let currentY = nodesData[currentTargetIndex].y;
+          let currentX = nodesData[currentTargetIndex].coordinates.x;
+          let currentY = nodesData[currentTargetIndex].coordinates.y;
           const speed = 1;
 
           const moveDot = () => {
@@ -1112,15 +1114,24 @@ function Map() {
 
             for (let i = 0; i < nodesData.length; i++) {
               ctx.beginPath();
-              ctx.arc(nodesData[i].x, nodesData[i].y, 5, 0, 2 * Math.PI);
+              ctx.arc(
+                nodesData[i].coordinates.x,
+                nodesData[i].coordinates.y,
+                5,
+                0,
+                2 * Math.PI,
+              );
               ctx.fill();
             }
 
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(nodesData[0].x, nodesData[0].y);
+            ctx.moveTo(nodesData[0].coordinates.x, nodesData[0].coordinates.y);
             for (let i = 1; i < nodesData.length; i++) {
-              ctx.lineTo(nodesData[i].x, nodesData[i].y);
+              ctx.lineTo(
+                nodesData[i].coordinates.x,
+                nodesData[i].coordinates.y,
+              );
             }
             ctx.stroke();
 
@@ -1129,8 +1140,8 @@ function Map() {
             ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI);
             ctx.fill();
 
-            const dx = nodesData[currentTargetIndex].x - currentX;
-            const dy = nodesData[currentTargetIndex].y - currentY;
+            const dx = nodesData[currentTargetIndex].coordinates.x - currentX;
+            const dy = nodesData[currentTargetIndex].coordinates.y - currentY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < speed) {
@@ -1140,8 +1151,8 @@ function Map() {
               currentY += (dy / distance) * speed;
             }
             if (currentTargetIndex === 0) {
-              currentX = nodesData[0].x;
-              currentY = nodesData[0].y;
+              currentX = nodesData[0].coordinates.x;
+              currentY = nodesData[0].coordinates.y;
               currentTargetIndex = 1;
             }
 
