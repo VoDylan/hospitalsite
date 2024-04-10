@@ -2,13 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import MapImage from "../images/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
-import TopBanner2 from "../components/TopBanner2";
 import { Coordinates } from "common/src/Coordinates.ts";
 import axios from "axios";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 
-function Map() {
+function MapTestingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
@@ -211,8 +210,7 @@ function Map() {
   }, [startNode, endNode, nodes, nodesData, distancesData]);
 
   return (
-    <div style={{ marginTop: "120px" }}>
-      <TopBanner2 />
+    <div>
       <div
         style={{
           display: "flex",
@@ -271,4 +269,4 @@ function Map() {
   );
 }
 
-export default Map;
+export default MapTestingPage;
