@@ -149,9 +149,9 @@ function SecurityService() {
             Security Service Form
           </Typography>
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"} fontWeight={"bold"}>
-            Name
+        <Grid item xs={6}>
+          <Typography color={"black"}>
+            Name:
           </Typography>
           <LeftAlignedTextbox
             label={"Name"}
@@ -159,9 +159,9 @@ function SecurityService() {
             onChange={handleNameInput}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"} fontWeight={"bold"}>
-            Location
+        <Grid item xs={6}>
+          <Typography color={"black"}>
+            Location:
           </Typography>
           <DropDown
             label={"Location"}
@@ -170,20 +170,9 @@ function SecurityService() {
             items={nodeNumbers}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"} fontWeight={"bold"}>
-            Priority of Security
-          </Typography>
-          <RadioButtonsGroup
-            label={"Priority"}
-            options={["Low", "Medium", "High", "Emergency"]}
-            returnData={form.priority}
-            handleChange={handlePriorityInput}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"} fontWeight={"bold"}>
-            Security Personnel
+        <Grid item xs={6}>
+          <Typography color={"black"}>
+            Security Personnel:
           </Typography>
           <DropDown
             items={["Local Security", "Local Police", "State Police", "Other"]}
@@ -192,9 +181,9 @@ function SecurityService() {
             returnData={form.securityPersonnel}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"} fontWeight={"bold"}>
-            Why is Security Needed
+        <Grid item xs={6}>
+          <Typography color={"black"}>
+            Why is Security Needed:
           </Typography>
           <DropDown
             items={[
@@ -210,25 +199,37 @@ function SecurityService() {
             returnData={form.securityCategory}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"} fontWeight={"bold"}>
-            Additional Details (optional)
+        <Grid item xs={6}>
+          <Typography color={"black"}>
+            Priority of Security:
           </Typography>
-          <LeftAlignedTextbox
-            label={"Details"}
-            value={form.securityDetail}
-            onChange={handleSecurityDetailInput}
+          <RadioButtonsGroup
+            label={"Priority"}
+            options={["Low", "Medium", "High", "Emergency"]}
+            returnData={form.priority}
+            handleChange={handlePriorityInput}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"} fontWeight={"bold"}>
-            Status of the request
+        <Grid item xs={6}>
+          <Typography color={"black"}>
+            Status of the Request:
           </Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
             returnData={form.status}
             handleChange={handleStatusInput}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <Typography color={"black"}>
+            Additional Details (optional):
+          </Typography>
+          <LeftAlignedTextbox
+            label={"Details"}
+            value={form.securityDetail}
+            onChange={handleSecurityDetailInput}
           />
         </Grid>
         <Grid
