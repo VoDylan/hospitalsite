@@ -19,10 +19,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/TopBanner2.tsx";
-import MapImage from "../images/00_thelowerlevel1.png";
 import NestedList from "../components/PathfindingSelect.tsx";
 import "./map.css";
-// import { Coordinates } from "common/src/Coordinates.ts";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
@@ -39,30 +37,60 @@ import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
+import Floor from "../components/FloorTabs.tsx";
+
+import L1MapImage from "../images/00_thelowerlevel1.png";
+import L2MapImage from "../images/00_thelowerlevel2.png";
+import FFMapImage from "../images/01_thefirstfloor.png";
+import SFMapImage from "../images/02_thesecondfloor.png";
+import TFMapImage from "../images/03_thethirdfloor.png";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
+import { drawPentagon } from "../common/Pentagon.js";
+import { drawCircle } from "../common/Circle.ts";
+import { drawRectangle } from "../common/Rectangle.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pathCanvasRef = useRef<HTMLCanvasElement>(null);
+  const symbolCanvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
   const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dbNodeData, setDBNodesData] = useState<MapNodeType[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+
+  const [renderSymbolCanvas, setRenderSymbolCanvas] = useState<boolean>(false);
+
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
   >([]);
+
+  const [updateAnimation, setUpdateAnimation] = useState<boolean>(false);
+
+  const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
+    const image = new Image();
+    image.src = L1MapImage;
+    return image;
+  });
+
+  const floor = useRef<string>("L1");
+  const [renderBackground, setRenderBackground] = useState<boolean>(false);
+  const [reprocessNodes, setReprocessNodes] = useState<boolean>(false);
 
   //Pathfinder
   const [open, setOpen] = React.useState(false);
   const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
+
   const [algorithm, setAlgorithm] = React.useState("BFS");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
+
+  //-----------------------------------------------------------------------------------------
+  //DATA LOADING
 
   const loadNodeData = async (): Promise<MapNodeType[]> => {
     const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
@@ -72,8 +100,6 @@ function Map() {
       if (!GraphManager.getInstance().getNodeByID(node.nodeID))
         GraphManager.getInstance().nodes.push(new MapNode(node));
     });
-
-    console.log(GraphManager.getInstance().nodes);
 
     return data;
   };
@@ -86,6 +112,8 @@ function Map() {
     }));
     setAutocompleteNodeData(filteredNodeAssociations);
   }, []);
+
+  //-----------------------------------------------------------------------------------------
 
   const handleClick = () => {
     setOpen(!open);
@@ -318,10 +346,13 @@ function Map() {
     setLL2IconState((prevState) => (prevState === "plus" ? "check" : "plus"));
     setFiltersApplied(false);
   };
+
+  // let restrooms: boolean = false;
   const handleFirstFloorIconState = () => {
     setFirstFloorIconState((prevState) =>
       prevState === "plus" ? "check" : "plus",
     );
+    // restrooms = true;tru
     setFiltersApplied(false);
   };
   const handleSecondFloorIconState = () => {
@@ -827,7 +858,7 @@ function Map() {
         {/*Floors*/}
         <Stack
           direction="column"
-          sx={{ display: "flex", justfiyContent: "start" }}
+          sx={{ display: "flex", justifyContent: "start" }}
           spacing={1}
         >
           <Stack
@@ -1052,6 +1083,9 @@ function Map() {
       });
       const data = response.data;
       const path = data.message;
+
+      console.log(path);
+
       updateNodesData(path);
       setNodes([startNode, endNode]);
       setErrorMessage("");
@@ -1067,10 +1101,48 @@ function Map() {
   //   //stop animation
   // }
 
+  const handleFloorChange = (newFloor: string) => {
+    const newImage = new Image();
+
+    switch (newFloor) {
+      case "L1":
+        newImage.src = L1MapImage;
+        floor.current = "L1";
+        break;
+      case "L2":
+        newImage.src = L2MapImage;
+        floor.current = "L2";
+        break;
+      case "1":
+        newImage.src = FFMapImage;
+        floor.current = "1";
+        break;
+      case "2":
+        newImage.src = SFMapImage;
+        floor.current = "2";
+        break;
+      case "3":
+        newImage.src = TFMapImage;
+        floor.current = "3";
+        break;
+      default:
+        console.error("Returned map floor is not assigned to an image");
+        return;
+    }
+
+    setRenderSymbolCanvas(true);
+    setRenderBackground(true);
+    setReprocessNodes(true);
+    setCurrImage(newImage);
+  };
+
+  /**
+   * useEffect to just load the node data. Only called when the flags determining loading data are changed
+   */
   useEffect(() => {
+    console.log("Loading Data");
     if (!nodeDataLoaded) {
-      loadNodeData().then((data: MapNodeType[]) => {
-        setDBNodesData(data);
+      loadNodeData().then(() => {
         setNodeDataLoaded(true);
       });
 
@@ -1081,23 +1153,220 @@ function Map() {
       setFiltersApplied(true);
     }
 
-    console.log(algorithm);
-    console.log(startNode);
-    console.log(endNode);
+    setRenderSymbolCanvas(true);
+    setRenderBackground(true);
+  }, [
+    nodeDataLoaded,
+    filtersApplied,
+    determineFilters,
+    registerFilters,
+    populateAutocompleteData,
+  ]);
 
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
+  useEffect(() => {
+    if (symbolCanvasRef.current && renderSymbolCanvas) {
+      console.log("Rendering symbol canvas");
+      const canvas: HTMLCanvasElement = symbolCanvasRef.current;
+      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
       if (!ctx) return;
 
-      const image = new Image();
-      image.src = MapImage;
-      image.onload = () => {
-        canvas.width = image.width;
-        canvas.height = image.height;
+      canvas.width = currImage.width;
+      canvas.height = currImage.height;
 
-        ctx.drawImage(image, 0, 0, image.width, image.height);
+      ctx.clearRect(0, 0, currImage.width, currImage.height);
+
+      const filters: NodeFilter =
+        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
+          generateFilterValue(false, floor.current),
+        ])!;
+
+      const nodesOnFloor = FilterManager.getInstance().applyFilters(
+        [filters],
+        filteredNodes,
+      );
+
+      console.log("NodesOnFloor:");
+      console.log(nodesOnFloor);
+
+      for (let i = 0; i < nodesOnFloor.length; i++) {
+        console.log("Drawing shape");
+        if (nodesOnFloor[i].nodeType == "ELEV") {
+          drawRectangle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            20,
+            20,
+            "#1CA7EC",
+            "black",
+            2,
+          );
+        } else if (nodesOnFloor[i].nodeType == "STAI") {
+          drawRectangle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            20,
+            20,
+            "#72c41c",
+            "black",
+            2,
+          );
+        } else if (nodesOnFloor[i].nodeType == "EXIT") {
+          drawRectangle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            20,
+            20,
+            "red",
+            "black",
+            2,
+          );
+        } else if (nodesOnFloor[i].nodeType == "RETL") {
+          drawRectangle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            20,
+            20,
+            "#e88911",
+            "black",
+            2,
+          );
+        } else if (nodesOnFloor[i].nodeType == "SERV") {
+          drawCircle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            12,
+            "#e88911",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "INFO") {
+          drawCircle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            12,
+            "#1CA7EC",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "REST") {
+          drawCircle(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            12,
+            "#72c41c",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "CONF") {
+          drawPentagon(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            15,
+            "#1CA7EC",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "DEPT") {
+          drawPentagon(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            15,
+            "#72c41c",
+            "black",
+            4,
+          );
+        } else if (nodesOnFloor[i].nodeType == "LABS") {
+          drawPentagon(
+            ctx,
+            nodesOnFloor[i].xcoord,
+            nodesOnFloor[i].ycoord,
+            15,
+            "#e88911",
+            "black",
+            4,
+          );
+        }
+      }
+      setRenderSymbolCanvas(false);
+    }
+  }, [currImage.height, currImage.width, filteredNodes, renderSymbolCanvas]);
+
+  useEffect(() => {
+    currImage.onload = () => {
+      if (renderBackground) {
+        console.log("Rendering Canvas");
+        if (canvasRef.current) {
+          const canvas: HTMLCanvasElement = canvasRef.current;
+          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          canvas.width = currImage.width;
+          canvas.height = currImage.height;
+
+          ctx.drawImage(currImage, 0, 0, currImage.width, currImage.height);
+        }
+
+        if (pathCanvasRef.current) {
+          const canvas: HTMLCanvasElement = pathCanvasRef.current;
+          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          canvas.width = currImage.width;
+          canvas.height = currImage.height;
+
+          ctx.clearRect(0, 0, currImage.width, currImage.height);
+        }
+        setRenderBackground(false);
+      }
+    };
+  }, [currImage, renderBackground, floor]);
+
+  useEffect(() => {
+    console.log("Determining nodes on floor...");
+    const includedNodesOnFloor: IDCoordinates[][] = [];
+
+    let currPath: IDCoordinates[] = [];
+
+    for (let i = 0; i < nodesData.length; i++) {
+      if (
+        GraphManager.getInstance().getNodeByID(nodesData[i].nodeID)!.floor ==
+        floor.current
+      ) {
+        currPath.push(nodesData[i]);
+      } else {
+        if (currPath.length != 0) {
+          includedNodesOnFloor.push(currPath);
+          currPath = [];
+        }
+      }
+    }
+
+    if (currPath.length != 0) includedNodesOnFloor.push(currPath);
+
+    console.log(`Determined nodes on floor`);
+    console.log(includedNodesOnFloor);
+    console.log(reprocessNodes);
+
+    if (pathCanvasRef.current) {
+      const canvas: HTMLCanvasElement = pathCanvasRef.current;
+      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+      if (!ctx) return;
+
+      if (includedNodesOnFloor.length != 0) {
+        console.log("Processing canvas");
 
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
@@ -1106,76 +1375,105 @@ function Map() {
           }
 
           let currentTargetIndex = 0;
-          let currentX = nodesData[currentTargetIndex].coordinates.x;
-          let currentY = nodesData[currentTargetIndex].coordinates.y;
+          let currentPathIndex = 0;
+          let currentX =
+            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+              .coordinates.x;
+          let currentY =
+            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+              .coordinates.y;
           const speed = 1;
 
-          const moveDot = () => {
+          const moveDot = (origFloor: string) => {
+            if (floor.current != origFloor) {
+              console.log("Floor changed, stopping previous animation");
+              return;
+            }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "black";
 
-            for (let i = 0; i < nodesData.length; i++) {
-              ctx.beginPath();
-              ctx.arc(
-                nodesData[i].coordinates.x,
-                nodesData[i].coordinates.y,
-                5,
-                0,
-                2 * Math.PI,
-              );
-              ctx.fill();
+            for (let i = 0; i < includedNodesOnFloor.length; i++) {
+              for (let j = 0; j < includedNodesOnFloor[i].length; j++) {
+                ctx.beginPath();
+                ctx.arc(
+                  includedNodesOnFloor[i][j].coordinates.x,
+                  includedNodesOnFloor[i][j].coordinates.y,
+                  5,
+                  0,
+                  2 * Math.PI,
+                );
+                ctx.fill();
+              }
             }
 
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(nodesData[0].coordinates.x, nodesData[0].coordinates.y);
-            for (let i = 1; i < nodesData.length; i++) {
-              ctx.lineTo(
-                nodesData[i].coordinates.x,
-                nodesData[i].coordinates.y,
+
+            for (let i = 0; i < includedNodesOnFloor.length; i++) {
+              ctx.moveTo(
+                includedNodesOnFloor[i][0].coordinates.x,
+                includedNodesOnFloor[i][0].coordinates.y,
               );
+              for (let j = 1; j < includedNodesOnFloor[i].length; j++) {
+                ctx.lineTo(
+                  includedNodesOnFloor[i][j].coordinates.x,
+                  includedNodesOnFloor[i][j].coordinates.y,
+                );
+              }
             }
+
             ctx.stroke();
 
             ctx.fillStyle = "blue";
             ctx.beginPath();
-            ctx.arc(currentX, currentY, 10, 0, 2 * Math.PI);
+            ctx.arc(currentX, currentY, 12, 0, 2 * Math.PI);
             ctx.fill();
 
-            const dx = nodesData[currentTargetIndex].coordinates.x - currentX;
-            const dy = nodesData[currentTargetIndex].coordinates.y - currentY;
+            const dx =
+              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                .coordinates.x - currentX;
+            const dy =
+              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                .coordinates.y - currentY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < speed) {
-              currentTargetIndex = (currentTargetIndex + 1) % nodesData.length;
+              currentTargetIndex =
+                (currentTargetIndex + 1) %
+                includedNodesOnFloor[currentPathIndex].length;
             } else {
               currentX += (dx / distance) * speed;
               currentY += (dy / distance) * speed;
             }
             if (currentTargetIndex === 0) {
-              currentX = nodesData[0].coordinates.x;
-              currentY = nodesData[0].coordinates.y;
+              currentPathIndex =
+                (currentPathIndex + 1) % includedNodesOnFloor.length;
+              currentX =
+                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                  .coordinates.x;
+              currentY =
+                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                  .coordinates.y;
               currentTargetIndex = 1;
             }
-
-            requestAnimationFrame(moveDot);
+            requestAnimationFrame(() => moveDot(origFloor));
           };
-          moveDot();
+          moveDot(floor.current);
         }
-      };
+      } else {
+        console.log("Clearing path canvas");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
     }
+    setReprocessNodes(false);
   }, [
-    nodeDataLoaded,
-    startNode,
     endNode,
+    filteredNodes,
+    floor,
     nodes,
     nodesData,
-    algorithm,
-    populateAutocompleteData,
-    determineFilters,
-    registerFilters,
-    filtersApplied,
+    reprocessNodes,
+    startNode,
   ]);
 
   return (
@@ -1306,7 +1604,11 @@ function Map() {
               startIcon={<AltRouteIcon />}
               variant={"contained"}
               sx={{ width: "80%", display: "flex", justifyContent: "center" }}
-              onClick={handleSubmit}
+              onClick={() => {
+                handleSubmit().then(() => {
+                  setUpdateAnimation(!updateAnimation);
+                });
+              }}
             >
               Find Path
             </Button>
@@ -1362,6 +1664,7 @@ function Map() {
                 {icon}
               </Slide>
             )}
+            <Floor callback={handleFloorChange} />
           </Stack>
         </Stack>
       </Drawer>
@@ -1374,17 +1677,41 @@ function Map() {
         <TransformWrapper>
           <TransformComponent>
             <Draggable>
-              <canvas
-                ref={canvasRef}
-                style={{
-                  position: "relative",
-                  top: 50,
-                  left: 0,
-                  minHeight: "100vh",
-                  maxHeight: "100%",
-                  maxWidth: "100%",
-                }}
-              />
+              <>
+                <canvas
+                  ref={canvasRef}
+                  style={{
+                    position: "relative",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                />
+                <canvas
+                  ref={symbolCanvasRef}
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                />
+                <canvas
+                  ref={pathCanvasRef}
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                />
+              </>
             </Draggable>
           </TransformComponent>
         </TransformWrapper>

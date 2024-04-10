@@ -20,10 +20,10 @@ import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
-import TopBanner from "../components/TopBanner.tsx";
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/DeviceSubmitButton.tsx";
 import axios from "axios";
+import TopBanner2 from "../components/TopBanner2.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
 
 function DeviceDeliveryService() {
@@ -159,10 +159,12 @@ function DeviceDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
+      <TopBanner2 />
       <Grid
         container
-        direction={"column"}
+        direction={"row"}
+        rowSpacing={1}
+        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -175,91 +177,86 @@ function DeviceDeliveryService() {
       >
         <Grid
           item
+          xs={12}
           sx={{
             backgroundColor: "#186BD9",
           }}
         >
-          <Typography
-            color={"white"}
-            align={"center"}
-            fontSize={40}
-            padding={1}
-          >
+          <Typography color={"white"} align={"center"} fontSize={40}>
             Medical Device Request Form
           </Typography>
         </Grid>
-        <Grid container padding={2} direction={"row"}>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Name:</Typography>
-            <LeftAlignedTextbox
-              label={"Name"}
-              value={form.name}
-              onChange={handleNameInput}
-            />
-          </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Location:</Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.roomNum}
-              handleChange={handleLocationInput}
-              items={nodeNumbers}
-            />
-          </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Medical Device Needed:</Typography>
-            <LeftAlignedTextbox
-              label={"Medical Device"}
-              value={form.device}
-              onChange={handleDeviceInput}
-            />
-          </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"}>Amount Needed:</Typography>
-            <LeftAlignedTextbox
-              onChange={handleAmountInput}
-              label={"Amount"}
-              value={form.amount}
-            />
-          </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"} textAlign={"center"} paddingTop={3}>
-              Priority of Medical Device Delivery:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Priority"}
-              options={["Low", "Medium", "High", "Emergency"]}
-              returnData={form.priority}
-              handleChange={handlePriorityInput}
-            />
-          </Grid>
-          <Grid item sx={{ m: "auto" }}>
-            <Typography color={"black"} textAlign={"center"} paddingTop={3}>
-              Status of the Request:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Status"}
-              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-              returnData={form.status}
-              handleChange={handleStatusInput}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: "flex",
-              my: 2,
-              justifyContent: "center",
-            }}
-          >
-            <DeviceSubmitButton
-              input={form}
-              text={"SUBMIT"}
-              clear={clear}
-              updateList={updateList}
-            />
-          </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Name:</Typography>
+          <LeftAlignedTextbox
+            label={"Name"}
+            value={form.name}
+            onChange={handleNameInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Location:</Typography>
+          <DropDown
+            label={"Location"}
+            returnData={form.roomNum}
+            handleChange={handleLocationInput}
+            items={nodeNumbers}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Medical Device Needed:</Typography>
+          <LeftAlignedTextbox
+            label={"Medical Device"}
+            value={form.device}
+            onChange={handleDeviceInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Amount Needed:</Typography>
+          <LeftAlignedTextbox
+            onChange={handleAmountInput}
+            label={"Amount"}
+            value={form.amount}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Priority of Medical Device Delivery:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Priority"}
+            options={["Low", "Medium", "High", "Emergency"]}
+            returnData={form.priority}
+            handleChange={handlePriorityInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Status of the Request:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Status"}
+            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+            returnData={form.status}
+            handleChange={handleStatusInput}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            my: 2,
+            justifyContent: "center",
+            pr: 6,
+          }}
+        >
+          <DeviceSubmitButton
+            input={form}
+            text={"SUBMIT"}
+            clear={clear}
+            updateList={updateList}
+          />
         </Grid>
       </Grid>
       <TableContainer

@@ -34,7 +34,7 @@ class MapEdge {
    * Header shows all data fields that should exist in the CSV version of the object
    */
   static get csvHeader(): string {
-    return "startNodeID, endNodeID";
+    return "edgeID, startNode, endNode";
   }
 
   /**

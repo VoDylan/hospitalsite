@@ -142,7 +142,7 @@ function MedicineDelivery() {
             Medicine Delivery Form
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Name:</Typography>
           <LeftAlignedTextbox
             label={"Name"}
@@ -150,7 +150,7 @@ function MedicineDelivery() {
             onChange={handleNameInput}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Location:</Typography>
           <DropDown
             label={"Location"}
@@ -159,16 +159,7 @@ function MedicineDelivery() {
             items={nodeNumbers}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"}>Priority of Medicine:</Typography>
-          <RadioButtonsGroup
-            label={"Priority"}
-            options={["Low", "Medium", "High", "Emergency"]}
-            returnData={form.priority}
-            handleChange={handlePriorityInput}
-          />
-        </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Medicine Needed:</Typography>
           <DropDown
             items={[
@@ -183,7 +174,7 @@ function MedicineDelivery() {
             returnData={form.service}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
@@ -192,8 +183,21 @@ function MedicineDelivery() {
             returnData={form.frequency}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"}>Status of the request:</Typography>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Priority of Medicine:
+          </Typography>
+          <RadioButtonsGroup
+            label={"Priority"}
+            options={["Low", "Medium", "High", "Emergency"]}
+            returnData={form.priority}
+            handleChange={handlePriorityInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"} paddingTop={3}>
+            Status of the Request:
+          </Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -208,6 +212,7 @@ function MedicineDelivery() {
             display: "flex",
             my: 2,
             justifyContent: "center",
+            pr: 6,
           }}
         >
           <MedicineSubmitButton

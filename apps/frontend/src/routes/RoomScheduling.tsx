@@ -142,7 +142,7 @@ function RoomScheduling() {
             Room Scheduling Form
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Name:</Typography>
           <LeftAlignedTextbox
             label={"Name"}
@@ -150,7 +150,7 @@ function RoomScheduling() {
             onChange={handleNameInput}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Location:</Typography>
           <DropDown
             label={"Location"}
@@ -159,16 +159,7 @@ function RoomScheduling() {
             items={nodeNumbers}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"}>Priority of Scheduling:</Typography>
-          <RadioButtonsGroup
-            label={"Priority"}
-            options={["Low", "Medium", "High", "Emergency"]}
-            returnData={form.priority}
-            handleChange={handlePriorityInput}
-          />
-        </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Room Needed:</Typography>
           <DropDown
             items={["MRI", "Surgery", "Conference", "Checkup", "Waiting Room"]}
@@ -177,7 +168,7 @@ function RoomScheduling() {
             returnData={form.service}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
@@ -186,8 +177,17 @@ function RoomScheduling() {
             returnData={form.frequency}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"}>Status of the request:</Typography>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Priority of Scheduling:</Typography>
+          <RadioButtonsGroup
+            label={"Priority"}
+            options={["Low", "Medium", "High", "Emergency"]}
+            returnData={form.priority}
+            handleChange={handlePriorityInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Status of the Request:</Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -202,6 +202,7 @@ function RoomScheduling() {
             display: "flex",
             my: 2,
             justifyContent: "center",
+            pr: 6,
           }}
         >
           <RoomSubmitButton

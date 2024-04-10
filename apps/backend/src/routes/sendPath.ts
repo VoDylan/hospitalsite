@@ -3,6 +3,7 @@ import { LocationInfo } from "common/src/LocationInfo.ts";
 import { BFSalgorithm } from "../BFSalgorithm.ts";
 import { AStarAlgorithm } from "../AStarAlgorithm.ts";
 import Algorithms from "./Algorithms.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 
 const router: Router = express.Router();
 
@@ -20,12 +21,12 @@ router.post("/", async (req, res) => {
     algorithm = new BFSalgorithm();
   }
 
-  async function runAlgo() {
+  async function runAlgo(): Promise<IDCoordinates[]> {
     await algorithm.loadData();
     return algorithm.runAlgorithm(startID, endID);
   }
 
-  const path = await runAlgo();
+  const path: IDCoordinates[] = await runAlgo();
 
   res.status(200).json({
     message: path,

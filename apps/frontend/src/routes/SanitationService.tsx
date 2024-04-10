@@ -142,7 +142,7 @@ function SanitationService() {
             Sanitation Service Form
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Name:</Typography>
           <LeftAlignedTextbox
             label={"Name"}
@@ -150,7 +150,7 @@ function SanitationService() {
             onChange={handleNameInput}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Location:</Typography>
           <DropDown
             label={"Location"}
@@ -159,16 +159,7 @@ function SanitationService() {
             items={nodeNumbers}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"}>Priority of Sanitation:</Typography>
-          <RadioButtonsGroup
-            label={"Priority"}
-            options={["Low", "Medium", "High", "Emergency"]}
-            returnData={form.priority}
-            handleChange={handlePriorityInput}
-          />
-        </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Service Needed:</Typography>
           <DropDown
             items={[
@@ -184,7 +175,7 @@ function SanitationService() {
             returnData={form.service}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography color={"black"}>Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
@@ -193,8 +184,17 @@ function SanitationService() {
             returnData={form.frequency}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color={"black"}>Status of the request:</Typography>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Priority of Sanitation:</Typography>
+          <RadioButtonsGroup
+            label={"Priority"}
+            options={["Low", "Medium", "High", "Emergency"]}
+            returnData={form.priority}
+            handleChange={handlePriorityInput}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography color={"black"}>Status of the Request:</Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -209,6 +209,7 @@ function SanitationService() {
             display: "flex",
             my: 2,
             justifyContent: "center",
+            pr: 6,
           }}
         >
           <SanitationSubmitButton

@@ -8,11 +8,11 @@ export type FilterValueType = {
 };
 
 export const generateFilterValue = (
-  inverted: boolean,
+  exclude: boolean,
   value: number | string,
 ): FilterValueType => {
   return {
-    exclude: inverted,
+    exclude: exclude,
     value: value,
   };
 };
