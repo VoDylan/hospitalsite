@@ -10,8 +10,8 @@ import Stack from "@mui/material/Stack";
 import CustomCard from "../components/Card.tsx"; // Update path to Card component
 import ServiceCarousel from "../components/ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
-import LowerLevel from "../../public/00_thelowerlevel1.png";
-import noLady from "../../public/noLady.jpg";
+import LowerLevel from "../images/00_thelowerlevel1.png";
+import noLady from "../images/noLady.jpg";
 
 interface CardData {
   image: string;
