@@ -149,8 +149,8 @@ export class AStarAlgorithm implements Algorithms {
         });
         path.unshift(start);
 
-        console.log("Path found:", path);
-        console.log("Coordinates found:", coordinatesPath);
+        // console.log("Path found:", path);
+        // console.log("Coordinates found:", coordinatesPath);
 
         const TestingDistance = new testingDistance();
         TestingDistance.putIntoTypes();
@@ -160,7 +160,7 @@ export class AStarAlgorithm implements Algorithms {
 
       const currentNode = this.nodes[currentNodeIndex];
 
-      console.log(currentNode);
+      // console.log(currentNode);
       if (currentNode === undefined) {
         console.error("Invalid node");
         return [];

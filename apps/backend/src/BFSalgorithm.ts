@@ -140,7 +140,7 @@ export class BFSalgorithm implements Algorithms {
               y: start_node.y_coordinate,
             },
           });
-          console.log(path.join(" -> "));
+          // console.log(path.join(" -> "));
           return coordinate_path;
         }
 

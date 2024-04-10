@@ -14,6 +14,7 @@ import GiftDeliveryService from "./routes/GiftDeliveryService.tsx";
 import SecurityService from "./routes/SecurityService.tsx";
 import MedicineDelivery from "./routes/MedicineDelivery.tsx";
 import RoomScheduling from "./routes/RoomScheduling.tsx";
+import MapEditingPage from "./routes/MapEditingPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -79,6 +80,10 @@ function App() {
         {
           path: "/MapTestingPage",
           element: <MapTestingPage />,
+        },
+        {
+          path: "/MapEditingPage",
+          element: <MapEditingPage />,
         },
       ],
     },
