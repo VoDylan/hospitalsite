@@ -439,7 +439,7 @@ function Map() {
 
   const icon = (
     <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
-      <Stack direction="column" sx={{ position: "absolute", top: 1, left: 4 }}>
+      <Stack direction="column" sx={{ position: "absolute", top: 3, left: 4 }}>
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={handleButtonClick}
@@ -517,7 +517,7 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={11.3}
+            spacing={11.2}
           >
             <Filter
               iconColor="#e88911"
@@ -594,7 +594,7 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={6.5}
+            spacing={6.4}
           >
             <Filter
               iconColor="#72c41c"
@@ -671,7 +671,7 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={11.3}
+            spacing={11.2}
           >
             <Filter
               iconColor="red"
@@ -830,7 +830,7 @@ function Map() {
           <Stack
             direction="row"
             sx={{ display: "flex", alignItems: "center" }}
-            spacing={6.5}
+            spacing={6.6}
           >
             <Filter
               iconColor="#012D5A"
@@ -1236,10 +1236,11 @@ function Map() {
                   zIndex: 1,
                   backgroundColor: "#F5F7FA",
                   position: "absolute",
-                  top: "12%",
-                  left: "2.5%",
-                  width: "96%",
-                  height: "99%",
+                  top: "14%",
+                  left: "0.5%",
+                  width: "100%",
+                  minWidth: "100%",
+                  height: "100%",
                 }}
               >
                 {icon}
