@@ -39,11 +39,11 @@ import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import Floor from "../components/map/FloorTabs.tsx";
 
-import L1MapImage from "../images/00_thelowerlevel1.png";
-import L2MapImage from "../images/00_thelowerlevel2.png";
-import FFMapImage from "../images/01_thefirstfloor.png";
-import SFMapImage from "../images/02_thesecondfloor.png";
-import TFMapImage from "../images/03_thethirdfloor.png";
+import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
+import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
+import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
+import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
+import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Draw } from "../common/Draw.ts";
 
