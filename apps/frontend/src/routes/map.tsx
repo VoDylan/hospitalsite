@@ -77,18 +77,22 @@ function Map() {
   const [renderBackground, setRenderBackground] = useState<boolean>(false);
   const [reprocessNodes, setReprocessNodes] = useState<boolean>(false);
 
-  //Pathfinder
+  /**
+   * Pathfinder selection
+   */
   const [open, setOpen] = React.useState(false);
   const [checkedBFS, setCheckedBFS] = React.useState(true);
   const [checkedAS, setCheckedAS] = React.useState(false);
-
   const [algorithm, setAlgorithm] = React.useState("BFS");
 
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
   //-----------------------------------------------------------------------------------------
-  //DATA LOADING
+
+  /**
+   * DATA LOADING
+   */
 
   const loadNodeData = async (): Promise<MapNodeType[]> => {
     const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
@@ -133,14 +137,20 @@ function Map() {
     setAlgorithm("A*");
   };
 
-  // Slide Container
+  /**
+   * Slide Container
+   */
+
   const [checked, setChecked] = React.useState(false);
 
   const handleButtonClick = () => {
     setChecked((prev) => !prev);
   };
 
-  // FILTER USE STATES
+  /**
+   * FILTER USE STATES
+   */
+
   const [elevatorIconState, setElevatorIconState] = React.useState<
     "plus" | "check"
   >("check");
@@ -186,6 +196,10 @@ function Map() {
   const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
     "plus" | "check"
   >("check");
+
+  /**
+    Update filters in legend when they are selected
+   */
 
   const filterIcons = [
     ...(confIconState === "check"
@@ -290,6 +304,11 @@ function Map() {
       : []),
   ];
 
+  /**
+   * Update state of icons to selected or not
+   * @param stateSetter change state of set use state
+   */
+
   const handleIconStateToggle = (
     stateSetter: React.Dispatch<React.SetStateAction<"plus" | "check">>,
   ) => {
@@ -359,7 +378,10 @@ function Map() {
     setFiltersApplied(false);
   };
 
-  //APPLY FILTERS
+  /**
+   * Create Type, Floor, and Building filters
+   */
+
   const registerFilters = useCallback(() => {
     FilterManager.getInstance().registerFilter(
       FilterName.TYPE,
@@ -374,6 +396,10 @@ function Map() {
       () => new BuildingFilter(),
     );
   }, []);
+
+  /**
+   * Change list of nodes based on applied filters
+   */
 
   const determineFilters = useCallback(() => {
     const filters: NodeFilter[] = []; // Define the filters array here
@@ -421,8 +447,8 @@ function Map() {
         GraphManager.getInstance().nodes,
       );
 
-    setFilteredNodes(newFilteredNodes); // Update filteredNodes state with the filtered result
-
+    // Update filteredNodes state with the filtered result
+    setFilteredNodes(newFilteredNodes);
     // Update autocomplete data based on the filtered nodes
     populateAutocompleteData(newFilteredNodes);
   }, [
@@ -443,6 +469,10 @@ function Map() {
     secondFloorIconState,
     thirdFloorIconState,
   ]);
+
+  /**
+   * Pop up window with filters on side bar
+   */
 
   const icon = (
     <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
