@@ -13,19 +13,16 @@ import Floor from "../components/FloorTabs.tsx";
 import { sendRequest } from "common/src/sendRequest.ts";
 import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-
-// type floorNodes = {
-//   l2: NodeFilter[];
-//   l1: NodeFilter[];
-//   f1: NodeFilter[];
-//   f2: NodeFilter[];
-//   f3: NodeFilter[];
-// };
+import { Coordinates } from "common/src/Coordinates.ts";
 
 function MapEditingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // const [nodeData, setNodesData] = useState<MapNodeType[]>([]);
   const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
+  const [nodesData, setNodesData] = useState<
+    { nodeID: string; coordinates: Coordinates }[]
+  >([]);
+
   const floor = useRef<string>("L1");
   const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
     const image = new Image();
@@ -34,11 +31,6 @@ function MapEditingPage() {
   });
 
   const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
-
-  // async function loadNodeData() {
-  //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
-  //   setNodesData(data);
-  // }
 
   async function loadEdgesDistance(request: sendRequest) {
     // const req = { req: "L1" };
@@ -50,10 +42,24 @@ function MapEditingPage() {
     }
     const distancePath = await distancesResponse.data;
     const distanceData = distancePath.message;
-    // console.log("distances", distanceData);
 
     setDistancesData(distanceData);
-    console.log("Updated distancesData:", distancePath); // Log the updated value here
+    // console.log("Updated distancesData:", distancePath);
+  }
+
+  async function loadNodesData(request: sendRequest) {
+    const nodesResponse = await axios.post("/api/sendNodes", request, {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (nodesResponse.status !== 200) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const nodesPath = await nodesResponse.data;
+    const nodesData = nodesPath.message;
+
+    setNodesData(nodesData);
+    console.log("nodesData", nodesData);
   }
 
   const handleFloorChange = (newFloor: string) => {
@@ -61,11 +67,13 @@ function MapEditingPage() {
 
     switch (newFloor) {
       case "L1":
+        loadNodesData({ req: "L1" });
         loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
         newImage.src = L1MapImage;
         floor.current = "L1";
         break;
       case "L2":
+        loadNodesData({ req: "L2" });
         loadEdgesDistance({ req: "L2" }).then(() => setEdgeDataLoaded(true));
         newImage.src = L2MapImage;
         floor.current = "L2";
@@ -93,17 +101,10 @@ function MapEditingPage() {
   };
 
   useEffect(() => {
-    // if (nodeData.length < 1) {
-    //   // console.log("Loading Data");
-    //   loadNodeData();
-    // }
     if (distancesData.length < 1) {
       // console.log("Loading Distances");
       loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
     }
-
-    // console.log(floor.current);
-    // console.log(nodeData);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -153,21 +154,13 @@ function MapEditingPage() {
       processCanvas();
     }
 
-    // image.src = MapImage;
     currImage.onload = () => {
       processCanvas();
     };
-
-    // ctx.fillStyle = "blue";
-    // ctx.strokeStyle = "blue";
-    // for (let i = 0; i < filteredNodes.length; i++) {
-    //   ctx.beginPath();
-    //   ctx.arc(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 5, 0, 2 * Math.PI); // draw circle
-    //   ctx.fill();
-    // }
+    console.log(nodesData);
 
     console.log(distancesData); // Log distancesData here to see the updated value
-  }, [currImage, distancesData, currImage.complete, edgeDataLoaded]);
+  }, [currImage, distancesData, currImage.complete, edgeDataLoaded, nodesData]);
 
   return (
     <div>
