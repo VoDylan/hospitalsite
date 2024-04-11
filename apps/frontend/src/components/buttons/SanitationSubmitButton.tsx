@@ -2,16 +2,16 @@ import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 // import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 // import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
-import { RoomSchedulingFormSubmission } from "../common/RoomSchedulingFormSubmission.ts";
+import { SanitationRequestFormSubmission } from "../../common/formSubmission/SanitationRequestFormSubmission.ts";
 
 interface ButtonProps {
   text: string;
-  input: RoomSchedulingFormSubmission;
+  input: SanitationRequestFormSubmission;
   clear: () => void;
   updateSubmissionList: () => void;
 }
 
-export function RoomSubmitButton(props: ButtonProps) {
+export function SanitationSubmitButton(props: ButtonProps) {
   // Logic for snackbar alert
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");

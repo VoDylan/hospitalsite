@@ -12,13 +12,13 @@ import {
   TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
+import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { SecurityRequestFormSubmission } from "../common/SecurityRequestFormSubmission.ts";
+import { SecurityRequestFormSubmission } from "../common/formSubmission/SecurityRequestFormSubmission.ts";
 import securitybackground from "../images/security_background.jpg";
-import TopBanner from "../components/TopBanner.tsx";
-import { SecuritySubmitButton } from "../components/SecuritySubmitButton.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
+import { SecuritySubmitButton } from "../components/buttons/SecuritySubmitButton.tsx";
 import axios from "axios";
 
 function SecurityService() {

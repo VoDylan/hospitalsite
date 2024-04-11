@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Box, Typography, Zoom, Grid } from "@mui/material";
-import { ServiceCard } from "../components/ServiceCard.tsx";
-import TopBanner2 from "../components/TopBanner2.tsx";
-import Flower from "../images/ServicePageImages/FlowerDelivery.svg";
-import Medicine from "../images/ServicePageImages/MedicineDelivery.svg";
-import Sanitation from "../images/ServicePageImages/SanitationServices.svg";
-import Security from "../images/ServicePageImages/SecurityServices.svg";
-import Gift from "../images/ServicePageImages/GiftDelivery.svg";
-import MedicalDevice from "../images/ServicePageImages/MedicalDeviceDelivery.svg";
-import Room from "../images/ServicePageImages/RoomScheduling.svg";
-import Template from "../images/ServicePageImages/ServicesTemplate.svg";
+import { ServiceCard } from "../components/homepage/ServiceCard.tsx";
+import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import Flower from "../images/servicePageImages/FlowerDelivery.svg";
+import Medicine from "../images/servicePageImages/MedicineDelivery.svg";
+import Sanitation from "../images/servicePageImages/SanitationServices.svg";
+import Security from "../images/servicePageImages/SecurityServices.svg";
+import Gift from "../images/servicePageImages/GiftDelivery.svg";
+import MedicalDevice from "../images/servicePageImages/MedicalDeviceDelivery.svg";
+import Room from "../images/servicePageImages/RoomScheduling.svg";
+import Template from "../images/servicePageImages/ServicesTemplate.svg";
 
 export default function ServicesPage() {
   const [showCards] = useState(true); // Initialize to true to show cards initially
