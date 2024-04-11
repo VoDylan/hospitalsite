@@ -45,9 +45,7 @@ import FFMapImage from "../images/01_thefirstfloor.png";
 import SFMapImage from "../images/02_thesecondfloor.png";
 import TFMapImage from "../images/03_thethirdfloor.png";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
-import { drawPentagon } from "../common/Pentagon.js";
-import { drawCircle } from "../common/Circle.ts";
-import { drawRectangle } from "../common/Rectangle.ts";
+import { Draw } from "../common/Draw.ts";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -1171,6 +1169,8 @@ function Map() {
 
       if (!ctx) return;
 
+      const draw = new Draw(ctx);
+
       ctx.clearRect(0, 0, currImage.width, currImage.height);
 
       const filters: NodeFilter =
@@ -1187,10 +1187,8 @@ function Map() {
       console.log(nodesOnFloor);
 
       for (let i = 0; i < nodesOnFloor.length; i++) {
-        console.log("Drawing shape");
         if (nodesOnFloor[i].nodeType == "ELEV") {
-          drawRectangle(
-            ctx,
+          draw.drawRectangle(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             20,
@@ -1200,8 +1198,7 @@ function Map() {
             2,
           );
         } else if (nodesOnFloor[i].nodeType == "STAI") {
-          drawRectangle(
-            ctx,
+          draw.drawRectangle(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             20,
@@ -1211,8 +1208,7 @@ function Map() {
             2,
           );
         } else if (nodesOnFloor[i].nodeType == "EXIT") {
-          drawRectangle(
-            ctx,
+          draw.drawRectangle(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             20,
@@ -1222,8 +1218,7 @@ function Map() {
             2,
           );
         } else if (nodesOnFloor[i].nodeType == "RETL") {
-          drawRectangle(
-            ctx,
+          draw.drawRectangle(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             20,
@@ -1233,8 +1228,7 @@ function Map() {
             2,
           );
         } else if (nodesOnFloor[i].nodeType == "SERV") {
-          drawCircle(
-            ctx,
+          draw.drawCircle(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             12,
@@ -1243,8 +1237,7 @@ function Map() {
             4,
           );
         } else if (nodesOnFloor[i].nodeType == "INFO") {
-          drawCircle(
-            ctx,
+          draw.drawCircle(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             12,
@@ -1253,8 +1246,7 @@ function Map() {
             4,
           );
         } else if (nodesOnFloor[i].nodeType == "REST") {
-          drawCircle(
-            ctx,
+          draw.drawCircle(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             12,
@@ -1263,8 +1255,7 @@ function Map() {
             4,
           );
         } else if (nodesOnFloor[i].nodeType == "CONF") {
-          drawPentagon(
-            ctx,
+          draw.drawPentagon(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             15,
@@ -1273,8 +1264,7 @@ function Map() {
             4,
           );
         } else if (nodesOnFloor[i].nodeType == "DEPT") {
-          drawPentagon(
-            ctx,
+          draw.drawPentagon(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             15,
@@ -1283,8 +1273,7 @@ function Map() {
             4,
           );
         } else if (nodesOnFloor[i].nodeType == "LABS") {
-          drawPentagon(
-            ctx,
+          draw.drawPentagon(
             nodesOnFloor[i].xcoord,
             nodesOnFloor[i].ycoord,
             15,
