@@ -1,7 +1,7 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
-// import axios, { isAxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
 import React, { forwardRef, useState } from "react";
-// import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
 
 interface ButtonProps {
@@ -46,7 +46,7 @@ export function DeviceSubmitButton(props: ButtonProps) {
   }
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
-  function handleSubmit() {
+  async function handleSubmit() {
     if (props.input.roomNum === "") {
       openWithError("Please select a room");
     } else if (props.input.name === "") {
@@ -61,19 +61,19 @@ export function DeviceSubmitButton(props: ButtonProps) {
       openWithError("Please select an amount");
     } else {
       // Not needed for iteration 2
-      // const submission = props.input;
+      const submission = props.input;
       console.log(props.input);
 
-      // const result: { success: boolean; data: HTTPResponseType } =
-      //   await pushToDB(submission);
+      const result: { success: boolean; data: HTTPResponseType } =
+      await pushToDB(submission);
 
-      // if (!result.success) {
-      //   openWithError(
-      //     `Failed to post form data to database: ${result.data.message}`,
-      //   );
-      // } else {
-      //   handleClear();
-      //   openWithSuccess();
+      if (!result.success) {
+      openWithError(
+      'Failed to post form data to database: ${result.data.message}',
+         );
+       } else {
+      handleClear();
+      openWithSuccess();
 
       // Remove these once connected to DB
       handleListUpdate();
@@ -81,7 +81,7 @@ export function DeviceSubmitButton(props: ButtonProps) {
       openWithSuccess();
     }
   }
-  // }
+ }
 
   function handleClear() {
     props.clear();
@@ -91,13 +91,12 @@ export function DeviceSubmitButton(props: ButtonProps) {
     props.updateList();
   }
 
-  /* Commenting this out for iteration 2
   // Function for posting the form submission to the database
-  async function pushToDB(form: SanitationRequestFormSubmission) {
+  async function pushToDB(form: DeviceDeliveryFormSubmission) {
     const returnData = {
       userID: "admin",
-      nodeID: form.location,
-      serviceType: "flower-delivery",
+      nodeID: form.roomNum,
+      serviceType: "device-delivery",
       services: form,
     };
 
@@ -145,7 +144,6 @@ export function DeviceSubmitButton(props: ButtonProps) {
       data: data!,
     };
   }
-  */
 
   return (
     <Button
