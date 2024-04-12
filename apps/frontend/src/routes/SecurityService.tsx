@@ -32,6 +32,10 @@ function SecurityService() {
     status: "",
   });
 
+  interface NodeData {
+    nodeID: string;
+  }
+
   const [submittedData, setSubmittedData] = useState<
     SecurityRequestFormSubmission[]
   >([]);
@@ -98,7 +102,7 @@ function SecurityService() {
     axios
       .get<NodeData[]>("/api/database/nodes")
       .then((response) =>
-        setNodeNumbers(response.data.map((node) => node.longName)),
+        setNodeNumbers(response.data.map((node) => node.nodeID)),
       )
       .catch((error) => console.error(error));
   }, []);
