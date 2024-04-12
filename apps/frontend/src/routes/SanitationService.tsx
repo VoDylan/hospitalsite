@@ -79,6 +79,7 @@ function SanitationService() {
 
   // Define an interface for the node data
   interface NodeData {
+    nodeID: string;
     longName: string;
   }
 
@@ -91,7 +92,7 @@ function SanitationService() {
     axios
       .get<NodeData[]>("/api/database/nodes")
       .then((response) =>
-        setNodeNumbers(response.data.map((node) => node.longName)),
+        setNodeNumbers(response.data.map((node) => node.nodeID)),
       )
       .catch((error) => console.error(error));
   }, []);
