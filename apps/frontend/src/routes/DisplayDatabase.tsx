@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Button, Box, Dialog, DialogTitle, DialogContent, Typography } from "@mui/material";
+import {
+  Button,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
@@ -54,8 +61,11 @@ function parseCSVFromString(data: string) {
 }
 
 function DisplayDatabase() {
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
-  const [selectedServiceDetails, setSelectedServiceDetails] = useState<ServiceParams | null>(null); // State to keep track of selected service details
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
+    {},
+  );
+  const [selectedServiceDetails, setSelectedServiceDetails] =
+    useState<ServiceParams | null>(null); // State to keep track of selected service details
 
   // Function to handle the click event of the details button
   const handleDetailsClick = (service: ServiceParams) => {
@@ -105,10 +115,13 @@ function DisplayDatabase() {
       headerName: "Service Details",
       width: 200,
       renderCell: (params) => (
-        <Button variant="outlined" onClick={() => handleDetailsClick(params.row as ServiceParams)}>
+        <Button
+          variant="outlined"
+          onClick={() => handleDetailsClick(params.row as ServiceParams)}
+        >
           Details
         </Button>
-      )
+      ),
     },
     {
       field: "status",
@@ -412,11 +425,20 @@ function DisplayDatabase() {
             <DialogContent>
               {selectedServiceDetails && (
                 <div>
-                  <Typography>User ID: {selectedServiceDetails.userID}</Typography>
-                  <Typography>Node ID: {selectedServiceDetails.nodeID}</Typography>
-                  <Typography>Service Type: {selectedServiceDetails.serviceType}</Typography>
-                  <Typography>Services: {selectedServiceDetails.services}</Typography>
-                  <Typography>Status: {selectedServiceDetails.status}</Typography>
+                  {selectedServiceDetails.services && (
+                    <div>
+                      {Object.entries(
+                        JSON.parse(selectedServiceDetails.services),
+                      ).map(([key, value]) => (
+                        <Typography key={key}>
+                          {key}: {String(value)}
+                        </Typography>
+                      ))}
+                    </div>
+                  )}
+                  <Typography>
+                    Status: {selectedServiceDetails.status}
+                  </Typography>
                 </div>
               )}
             </DialogContent>
@@ -507,7 +529,6 @@ function DisplayDatabase() {
         </Box>
       </div>
     </>
-
   );
 }
 
