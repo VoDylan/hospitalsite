@@ -12,13 +12,13 @@ import {
   TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
+import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
-import TopBanner from "../components/TopBanner.tsx";
+import { GiftDeliveryFormSubmission } from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import giftbackground from "../images/giftbackground.jpg";
-import { GiftDeliverySubmitButton } from "../components/GiftDeliverySubmitButton.tsx";
+import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubmitButton.tsx";
 import React from "react";
 import Confetti from "react-confetti";
 import axios from "axios";

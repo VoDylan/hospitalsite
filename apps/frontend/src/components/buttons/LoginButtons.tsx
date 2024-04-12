@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Box } from "@mui/material";
-import { Login } from "../common/LoginForm.ts";
+import { Login } from "../../common/formSubmission/LoginForm.ts";
 
 type LoginButtonsProps = {
   input: Login;

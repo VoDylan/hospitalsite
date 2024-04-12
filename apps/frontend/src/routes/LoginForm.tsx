@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
-import { Login } from "../common/LoginForm.ts";
-import Textbox from "../components/Textbox.tsx";
-import Buttons from "../components/LoginButtons.tsx";
+import { Login } from "../common/formSubmission/LoginForm.ts";
+import Textbox from "../components/textbox/Textbox.tsx";
+import Buttons from "../components/buttons/LoginButtons.tsx";
 import { Typography, Box } from "@mui/material";
 import background from "../images/Cover.jpg";
 import logo from "../images/bwh-logo.svg";

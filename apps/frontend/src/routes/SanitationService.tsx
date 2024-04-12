@@ -12,14 +12,14 @@ import {
   TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
+import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { SanitationRequestFormSubmission } from "../common/SanitationRequestFormSubmission.ts";
+import { SanitationRequestFormSubmission } from "../common/formSubmission/SanitationRequestFormSubmission.ts";
 import sanitationBackground from "../images/sanitationBackground.webp";
-import { SanitationSubmitButton } from "../components/SanitationSubmitButton.tsx";
+import { SanitationSubmitButton } from "../components/buttons/SanitationSubmitButton.tsx";
 import axios from "axios";
-import TopBanner2 from "../components/TopBanner2.tsx";
+import TopBanner2 from "../components/banner/TopBanner2.tsx";
 
 function SanitationService() {
   const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
