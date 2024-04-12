@@ -16,14 +16,14 @@ import {
   Paper,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
+import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
+import { DeviceDeliveryFormSubmission } from "../common/formSubmission/DeviceDeliveryFormSubmission.ts";
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
-import { DeviceSubmitButton } from "../components/DeviceSubmitButton.tsx";
+import { DeviceSubmitButton } from "../components/buttons/DeviceSubmitButton.tsx";
 import axios from "axios";
-import TopBanner2 from "../components/TopBanner2.tsx";
+import TopBanner2 from "../components/banner/TopBanner2.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
 
 function DeviceDeliveryService() {

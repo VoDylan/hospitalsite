@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios, { AxiosResponse } from "axios";
-import TopBanner2 from "../components/TopBanner2.tsx";
+import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import {
   DataGrid,
   GridColDef,

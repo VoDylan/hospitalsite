@@ -1,17 +1,18 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import React, { forwardRef, useState } from "react";
+import { forwardRef, useState } from "react";
+import { SecurityRequestFormSubmission } from "../../common/formSubmission/SecurityRequestFormSubmission.ts";
+import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
-import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
 
 interface ButtonProps {
   text: string;
-  input: DeviceDeliveryFormSubmission;
+  input: SecurityRequestFormSubmission;
   clear: () => void;
-  updateList: () => void;
+  updateSubmissionList: () => void;
 }
 
-export function DeviceSubmitButton(props: ButtonProps) {
+export function SecuritySubmitButton(props: ButtonProps) {
   // Logic for snackbar alert
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
@@ -24,7 +25,7 @@ export function DeviceSubmitButton(props: ButtonProps) {
   );
 
   const handleClose = (
-    _event?: React.SyntheticEvent | Event,
+    event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -47,56 +48,50 @@ export function DeviceSubmitButton(props: ButtonProps) {
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
   async function handleSubmit() {
-    if (props.input.roomNum === "") {
+    if (props.input.location === "") {
       openWithError("Please select a room");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.priority === "") {
       openWithError("Please select a priority");
-    } else if (props.input.device === "") {
-      openWithError("Please select a device");
+    } else if (props.input.securityCategory === "") {
+      openWithError("Please select a category");
     } else if (props.input.status === "") {
       openWithError("Please select a status");
-    } else if (props.input.amount === "") {
-      openWithError("Please select an amount");
+    } else if (props.input.securityPersonnel === "") {
+      openWithError("Please select a personnel");
     } else {
-      // Not needed for iteration 2
       const submission = props.input;
       console.log(props.input);
 
       const result: { success: boolean; data: HTTPResponseType } =
-      await pushToDB(submission);
+        await pushToDB(submission);
 
       if (!result.success) {
-      openWithError(
-      'Failed to post form data to database: ${result.data.message}',
-         );
-       } else {
-      handleClear();
-      openWithSuccess();
+        openWithError(
+          `Failed to post form data to database: ${result.data.message}`,
+        );
+      } else {
+        handleClear();
+        openWithSuccess();
 
-      // Remove these once connected to DB
-      handleListUpdate();
-      handleClear();
-      openWithSuccess();
+        // Remove these once connected to DB
+        // props.updateSubmissionList();
+        // handleClear();
+        // openWithSuccess();
+      }
     }
   }
- }
 
   function handleClear() {
     props.clear();
   }
 
-  function handleListUpdate() {
-    props.updateList();
-  }
-
-  // Function for posting the form submission to the database
-  async function pushToDB(form: DeviceDeliveryFormSubmission) {
+  async function pushToDB(form: SecurityRequestFormSubmission) {
     const returnData = {
       userID: "admin",
-      nodeID: form.roomNum,
-      serviceType: "device-delivery",
+      nodeID: form.location,
+      serviceType: "security-request",
       services: form,
     };
 
