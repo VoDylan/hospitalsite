@@ -13,7 +13,7 @@ import {
   TableBody,
   Table,
   TableContainer,
-  Paper,
+  Paper, Box,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
@@ -251,12 +251,13 @@ function DeviceDeliveryService() {
             pr: 6,
           }}
         >
+          <Box>
           <DeviceSubmitButton
             input={form}
             text={"SUBMIT"}
             clear={clear}
-            updateList={updateList}
           />
+          </Box>
         </Grid>
       </Grid>
       <TableContainer
