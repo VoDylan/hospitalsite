@@ -7,11 +7,11 @@ import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
 import InfoIcon from "@mui/icons-material/Info";
 import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
-import CustomCard from "../components/Card.tsx"; // Update path to Card component
-import ServiceCarousel from "../components/ServiceCarousel.tsx";
+import CustomCard from "./Card.tsx"; // Update path to Card component
+import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
-import LowerLevel from "../images/00_thelowerlevel1.png";
-import noLady from "../images/noLady.jpg";
+import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
+import noLady from "../../images/noLady.jpg";
 
 interface CardData {
   image: string;

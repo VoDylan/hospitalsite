@@ -12,7 +12,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { makeStyles } from "@mui/styles";
 import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
-import NavBar from "./NavBar.tsx";
+import NavBar from "../navMenu/NavBar.tsx";
 
 // {
 //   /*WITH NAV BAR*/
@@ -65,7 +65,7 @@ function TopBanner() {
       sx={{
         backgroundColor: "white",
         height: "120px",
-        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.1)",
         elevation: 1,
       }}
     >
@@ -127,7 +127,7 @@ function TopBanner() {
             to="/Login"
             variant="contained"
           >
-            Sign In
+            Sign Out
           </Button>
 
           {/*Profile button links to login page for now*/}
