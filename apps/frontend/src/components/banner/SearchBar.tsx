@@ -1,10 +1,9 @@
 import { styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import {useState} from "react";
-import {Stack} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 function SearchBar() {
   const Search = styled("div")(({ theme }) => ({
@@ -28,15 +27,20 @@ function SearchBar() {
   }));
 
   const results = [
-    "Flower Delivery"
+    {label: "Flower Delivery", link: "/services/FlowerDelivery"},
+    {label: "Sanitation Service", link: "/services/SanitationService"},
   ];
 
   const [value, setValue] = useState<string | null>("");
 
+  const navigate = useNavigate();
+
   const handleSelectedValue = (selectedValue: string | null) => {
     if (selectedValue) {
       console.log(`Selected value: ${selectedValue}`);
-      // Do something with the selected value, e.g., navigate, fetch data, etc.
+      console.log(`Selected link: ${selectedValue.link}`);
+      //@ts-expect-error The selected value's link works perfectly fine
+      navigate(selectedValue.link);
     }
   };
 
@@ -51,6 +55,7 @@ function SearchBar() {
         }}
         freeSolo
         options={results}
+        getOptionLabel={(option) => (typeof option === 'string' ? option : option.label)}
         renderInput={(params) => (
           <TextField
             {...params}
