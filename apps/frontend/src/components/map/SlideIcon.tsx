@@ -1,7 +1,7 @@
 import {Button, Paper, Stack } from "@mui/material";
 import FilterWithIcon from "../filters/FilterSelect.tsx";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useState } from "react";
+import React from "react";
 
 
 export default function Icon(props: {
