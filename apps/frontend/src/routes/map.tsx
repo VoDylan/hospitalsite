@@ -1,29 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import Drawer from "@mui/material/Drawer";
 import Paper from "@mui/material/Paper";
-import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
-import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Toolbar from "@mui/material/Toolbar";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
-import NestedList from "../components/map/PathfindingSelect.tsx";
 import "./map.css";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
-import { Typography } from "@mui/material";
 
 import FilterManager, {
   generateFilterValue,
@@ -37,7 +27,6 @@ import NodeFilter from "common/src/filter/filters/Filter.ts";
 
 import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import Floor from "../components/map/FloorTabs.tsx";
 
 import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
 import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
@@ -46,6 +35,7 @@ import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
 import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Draw } from "../common/Draw.ts";
+import MapSideBar from "../components/map/MapSideBar.tsx";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -476,7 +466,7 @@ function Map() {
 
   const icon = (
     <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
-      <Stack direction="column" sx={{ position: "absolute", top: 3, left: 4 }}>
+      <Stack direction="column" sx={{ position: "absolute", top: 4, left: 4 }}>
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={handleButtonClick}
@@ -490,12 +480,15 @@ function Map() {
         spacing={"10%"}
         direction="column"
         sx={{
+          backgroundColor: "white",
           display: "flex",
           justifyContent: "start",
           alignItems: "start",
           position: "relative",
-          marginTop: "18%",
-          marginLeft: "10%",
+          marginTop: "16%",
+          paddingTop: "6%",
+          marginLeft: "1%",
+          paddingLeft: "8%",
         }}
       >
         <Stack direction="column" spacing={1}>
@@ -1125,192 +1118,39 @@ function Map() {
       <TopBanner2 />
 
       {/*Side Bar*/}
-      <Drawer
-        variant="permanent"
-        sx={{
-          [`& .MuiDrawer-paper`]: {
-            width: "18%",
-            height: "100%",
-            minWidth: "18%",
-            boxSizing: "border-box",
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-            elevation: 100,
-            zIndex: 1,
-            border: "3px solid rgba(0, 0, 0, 0.05)",
-          },
+      <MapSideBar
+        title="Navigation"
+        onChange={(event, value) => handleStartNodeChange(value)}
+        autocompleteNodeData={autocompleteNodeData}
+        compareFn={(a, b) => a.label.localeCompare(b.label)}
+        nodeToLabelIdCallback={(node) => node.label}
+        groupBy={(option) => option.charAt(0).toUpperCase()}
+        optionLabel={(option) => option}
+        renderInput={(params) => (
+          <TextField {...params} label="Starting Location" value={startNode} />
+        )}
+        onChange1={(event, value) => handleEndNodeChange(value)}
+        renderInput1={(params) => (
+          <TextField {...params} label="Ending Location" value={endNode} />
+        )}
+        open={open}
+        handleClick={handleClick}
+        checkedBFS={checkedBFS}
+        handleSelectBFS={handleSelectBFS}
+        checkedAS={checkedAS}
+        handleSelectAS={handleSelectAS}
+        errorMessage={errorMessage}
+        onClick={() => {
+          handleSubmit().then(() => {
+            setUpdateAnimation(!updateAnimation);
+          });
         }}
-      >
-        <Toolbar />
-
-        <Stack display={"flex"} direction={"column"} sx={{ marginLeft: "4%" }}>
-          <Typography
-            color={"#003A96"}
-            align={"center"}
-            fontStyle={"Open Sans"}
-            fontSize={30}
-            sx={{ marginBottom: "10%", marginRight: "4%", marginTop: "30%" }}
-          >
-            Navigation
-          </Typography>
-
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            <RadioButtonCheckedIcon
-              sx={{ color: "blue" }}
-            ></RadioButtonCheckedIcon>
-
-            <Autocomplete
-              onChange={(event, value) => handleStartNodeChange(value)}
-              disablePortal
-              id="startNode"
-              options={autocompleteNodeData
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((node) => node.label)}
-              groupBy={(option) => option.charAt(0).toUpperCase()}
-              getOptionLabel={(option) => option}
-              sx={{ width: "75%" }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Starting Location"
-                  value={startNode}
-                />
-              )}
-            />
-          </Stack>
-
-          <Stack>
-            <MoreVertIcon fontSize={"medium"}></MoreVertIcon>
-          </Stack>
-
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            <LocationOnIcon
-              fontSize={"medium"}
-              sx={{ color: "red" }}
-            ></LocationOnIcon>
-
-            <Autocomplete
-              onChange={(event, value) => handleEndNodeChange(value)}
-              disablePortal
-              id="startNode"
-              options={autocompleteNodeData
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((node) => node.label)}
-              groupBy={(option) => option.charAt(0).toUpperCase()}
-              getOptionLabel={(option) => option}
-              sx={{ width: "75%" }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Ending Location"
-                  value={endNode}
-                />
-              )}
-            />
-          </Stack>
-
-          {/*Pathfinding selection dropdown*/}
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: "8%",
-              marginLeft: "2%",
-            }}
-          >
-            <NestedList
-              open={open}
-              handleClick={handleClick}
-              checkedBFS={checkedBFS}
-              handleSelectBFS={handleSelectBFS}
-              checkedAS={checkedAS}
-              handleSelectAS={handleSelectAS}
-            />
-          </Stack>
-
-          <Stack
-            direction={"column"}
-            spacing={2}
-            sx={{ marginLeft: "10%", marginTop: "4%" }}
-          >
-            <p style={{ color: "red" }}>{errorMessage}</p>
-            <Button
-              startIcon={<AltRouteIcon />}
-              variant={"contained"}
-              sx={{ width: "80%", display: "flex", justifyContent: "center" }}
-              onClick={() => {
-                handleSubmit().then(() => {
-                  setUpdateAnimation(!updateAnimation);
-                });
-              }}
-            >
-              Find Path
-            </Button>
-          </Stack>
-
-          <Box
-            sx={{
-              width: "90%",
-              height: "0.2vh",
-              backgroundColor: "#808080",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: "20%",
-              marginLeft: "2%",
-            }}
-          ></Box>
-
-          <Stack
-            direction={"column"}
-            spacing={2}
-            sx={{ marginLeft: "10%", marginTop: "20%" }}
-          >
-            <Button
-              variant={"contained"}
-              sx={{ width: "80%" }}
-              onClick={handleButtonClick}
-            >
-              {checked ? "Add Filters" : "Add Filters"}
-            </Button>
-            <Button
-              variant={"contained"}
-              sx={{ width: "80%", backgroundColor: "#D9D9D9" }}
-              onClick={handleSelectAll}
-            >
-              Clear Filters
-            </Button>
-            {checked && (
-              <Slide
-                in={checked}
-                direction="up"
-                style={{
-                  zIndex: 1,
-                  backgroundColor: "#F5F7FA",
-                  position: "absolute",
-                  top: "14%",
-                  left: "0.5%",
-                  width: "100%",
-                  minWidth: "100%",
-                  height: "100%",
-                }}
-              >
-                {icon}
-              </Slide>
-            )}
-            <Floor callback={handleFloorChange} />
-          </Stack>
-        </Stack>
-      </Drawer>
+        onClick1={handleButtonClick}
+        checked={checked}
+        onClick2={handleSelectAll}
+        icon={icon}
+        callback={handleFloorChange}
+      />
 
       <Box
         width={window.innerWidth}

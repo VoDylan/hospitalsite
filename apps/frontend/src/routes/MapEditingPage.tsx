@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 // import { MapNodeType } from "common/src/map/MapNodeType.ts";
 // import MapImage from "../images/00_thelowerlevel1.png";
@@ -9,10 +9,16 @@ import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
 import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
 import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
 import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
-import Floor from "../components/map/FloorTabs.tsx";
 import { sendRequest } from "common/src/sendRequest.ts";
-import Draggable from "react-draggable";
+import MapSideBar from "../components/map/MapSideBar.tsx";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+
+import TextField from "@mui/material/TextField";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import Draggable from "react-draggable";
+import { Button } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 // type floorNodes = {
 //   l2: NodeFilter[];
@@ -32,8 +38,77 @@ function MapEditingPage() {
     image.src = L1MapImage;
     return image;
   });
-
   const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
+
+  /**
+   * Use states for side bar
+   */
+
+  const [autocompleteNodeData, setAutocompleteNodeData] = useState<
+    { label: string; node: string }[]
+  >([]);
+  const [startNode, setStartNode] = useState<string>("");
+  const [endNode, setEndNode] = useState<string>("");
+  const handleStartNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setStartNode(selectedNode.node);
+      }
+    } else {
+      setStartNode(""); // Handle null value if necessary
+    }
+  };
+  const handleEndNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setEndNode(selectedNode.node);
+      }
+    } else {
+      setEndNode(""); // Handle null value if necessary
+    }
+  };
+  const [checked, setChecked] = React.useState(false);
+  const handleButtonClick = () => {
+    setChecked((prev) => !prev);
+  };
+
+  const icon = (
+    <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
+      <Stack direction="column" sx={{ position: "absolute", top: 4, left: 4 }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={handleButtonClick}
+          variant="text"
+        >
+          {checked ? "back" : "back"}
+        </Button>
+      </Stack>
+
+      <Stack
+        spacing={"10%"}
+        direction="column"
+        sx={{
+          backgroundColor: "white",
+          display: "flex",
+          justifyContent: "start",
+          alignItems: "start",
+          position: "relative",
+          marginTop: "16%",
+          paddingTop: "6%",
+          marginLeft: "1%",
+          paddingLeft: "8%",
+        }}
+      ></Stack>
+    </Paper>
+  );
 
   // async function loadNodeData() {
   //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
@@ -172,6 +247,27 @@ function MapEditingPage() {
   return (
     <div>
       <TopBanner2 />
+      {/*Side Bar*/}
+      <MapSideBar
+        title="Map Editing"
+        onChange={(event, value) => handleStartNodeChange(value)}
+        autocompleteNodeData={autocompleteNodeData}
+        compareFn={(a, b) => a.label.localeCompare(b.label)}
+        nodeToLabelIdCallback={(node) => node.label}
+        groupBy={(option) => option.charAt(0).toUpperCase()}
+        optionLabel={(option) => option}
+        renderInput={(params) => (
+          <TextField {...params} label="Starting Location" value={startNode} />
+        )}
+        onChange1={(event, value) => handleEndNodeChange(value)}
+        renderInput1={(params) => (
+          <TextField {...params} label="Ending Location" value={endNode} />
+        )}
+        onClick1={handleButtonClick}
+        checked={checked}
+        icon={icon}
+        callback={handleFloorChange}
+      />
       <TransformWrapper>
         <TransformComponent>
           <Draggable>
@@ -188,7 +284,6 @@ function MapEditingPage() {
           </Draggable>
         </TransformComponent>
       </TransformWrapper>
-      <Floor callback={handleFloorChange} />
     </div>
   );
 }
