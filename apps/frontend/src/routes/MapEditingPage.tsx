@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-// import { MapNodeType } from "common/src/map/MapNodeType.ts";
-// import MapImage from "../images/00_thelowerlevel1.png";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
@@ -11,14 +9,10 @@ import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
 import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
 import { sendRequest } from "common/src/sendRequest.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-
 import TextField from "@mui/material/TextField";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import Draggable from "react-draggable";
-import { Button } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Icon from "../components/map/SlideIcon.tsx";
 
 // type floorNodes = {
 //   l2: NodeFilter[];
@@ -79,36 +73,6 @@ function MapEditingPage() {
   const handleButtonClick = () => {
     setChecked((prev) => !prev);
   };
-
-  const icon = (
-    <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
-      <Stack direction="column" sx={{ position: "absolute", top: 4, left: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={handleButtonClick}
-          variant="text"
-        >
-          {checked ? "back" : "back"}
-        </Button>
-      </Stack>
-
-      <Stack
-        spacing={"10%"}
-        direction="column"
-        sx={{
-          backgroundColor: "white",
-          display: "flex",
-          justifyContent: "start",
-          alignItems: "start",
-          position: "relative",
-          marginTop: "16%",
-          paddingTop: "6%",
-          marginLeft: "1%",
-          paddingLeft: "8%",
-        }}
-      ></Stack>
-    </Paper>
-  );
 
   // async function loadNodeData() {
   //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
@@ -244,6 +208,128 @@ function MapEditingPage() {
     console.log(distancesData); // Log distancesData here to see the updated value
   }, [currImage, distancesData, currImage.complete, edgeDataLoaded]);
 
+  /**
+   * FILTER USE STATES
+   */
+
+  const [elevatorIconState, setElevatorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [stairsIconState, setStairsIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [exitsIconState, setExitsIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [servIconState, setServIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [infoIconState, setInfoIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [restroomsIconState, setRestroomsIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [confIconState, setConfIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [deptIconState, setDeptIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [labsIconState, setLabsIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [retlIconState, setRetlIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [ll1IconState, setLL1IconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [ll2IconState, setLL2IconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [firstFloorIconState, setFirstFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [secondFloorIconState, setSecondFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+
+  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
+
+
+  const handleIconStateToggle = (
+    stateSetter: React.Dispatch<React.SetStateAction<"plus" | "check">>,
+  ) => {
+    return () => {
+      stateSetter((prevState) => (prevState === "plus" ? "check" : "plus"));
+      setFiltersApplied(false);
+    };
+  };
+
+  const handleElevatorIconState = handleIconStateToggle(setElevatorIconState);
+  const handleStairsIconState = handleIconStateToggle(setStairsIconState);
+  const handleExitsIconState = handleIconStateToggle(setExitsIconState);
+  const handleInfoIconState = handleIconStateToggle(setInfoIconState);
+  const handleServIconState = handleIconStateToggle(setServIconState);
+  const handleRestroomsIconState = handleIconStateToggle(setRestroomsIconState);
+  const handleConfIconState = handleIconStateToggle(setConfIconState);
+  const handleDeptIconState = handleIconStateToggle(setDeptIconState);
+  const handleLabsIconState = handleIconStateToggle(setLabsIconState);
+  const handleRetlIconState = handleIconStateToggle(setRetlIconState);
+  const handleLL1IconState = handleIconStateToggle(setLL1IconState);
+  const handleLL2IconState = handleIconStateToggle(setLL2IconState);
+  const handleFirstFloorIconState = handleIconStateToggle(
+    setFirstFloorIconState,
+  );
+  const handleSecondFloorIconState = handleIconStateToggle(
+    setSecondFloorIconState,
+  );
+  const handleThirdFloorIconState = handleIconStateToggle(
+    setThirdFloorIconState,
+  );
+
+  const handleSelectAll = () => {
+    setElevatorIconState("check");
+    setStairsIconState("check");
+    setExitsIconState("check");
+    setInfoIconState("check");
+    setServIconState("check");
+    setRestroomsIconState("check");
+    setConfIconState("check");
+    setDeptIconState("check");
+    setLabsIconState("check");
+    setRetlIconState("check");
+    setLL1IconState("check");
+    setLL2IconState("check");
+    setFirstFloorIconState("check");
+    setSecondFloorIconState("check");
+    setThirdFloorIconState("check");
+    setFiltersApplied(false);
+  };
+
+  const handleClearAll = () => {
+    setElevatorIconState("plus");
+    setStairsIconState("plus");
+    setExitsIconState("plus");
+    setInfoIconState("plus");
+    setServIconState("plus");
+    setRestroomsIconState("plus");
+    setConfIconState("plus");
+    setDeptIconState("plus");
+    setLabsIconState("plus");
+    setRetlIconState("plus");
+    setLL1IconState("plus");
+    setLL2IconState("plus");
+    setFirstFloorIconState("plus");
+    setSecondFloorIconState("plus");
+    setThirdFloorIconState("plus");
+    setFiltersApplied(false);
+  };
+
   return (
     <div>
       <TopBanner2 />
@@ -265,7 +351,43 @@ function MapEditingPage() {
         )}
         onClick1={handleButtonClick}
         checked={checked}
-        icon={icon}
+        onClick2={handleSelectAll}
+        icon={<Icon
+          handleButtonClick={handleButtonClick}
+          checked={false}
+          confIconState={confIconState}
+          deptIconState={deptIconState}
+          labsIconState={labsIconState}
+          servIconState={servIconState}
+          infoIconState={infoIconState}
+          restroomsIconState={restroomsIconState}
+          elevatorIconState={elevatorIconState}
+          stairsIconState={stairsIconState}
+          exitsIconState={exitsIconState}
+          retlIconState={retlIconState}
+          ll1IconState={ll1IconState}
+          ll2IconState={ll2IconState}
+          firstFloorIconState={firstFloorIconState}
+          secondFloorIconState={secondFloorIconState}
+          thirdFloorIconState={thirdFloorIconState}
+          handleConfIconState={handleConfIconState}
+          handleDeptIconState={handleDeptIconState}
+          handleLabsIconState={handleLabsIconState}
+          handleServIconState={handleServIconState}
+          handleInfoIconState={handleInfoIconState}
+          handleRestroomsIconState={handleRestroomsIconState}
+          handleElevatorIconState={handleElevatorIconState}
+          handleStairsIconState={handleStairsIconState}
+          handleExitsIconState={handleExitsIconState}
+          handleRetlIconState={handleRetlIconState}
+          handleLL1IconState={handleLL1IconState}
+          handleLL2IconState={handleLL2IconState}
+          handleFirstFloorIconState={handleFirstFloorIconState}
+          handleSecondFloorIconState={handleSecondFloorIconState}
+          handleThirdFloorIconState={handleThirdFloorIconState}
+          handleSelectAll={handleSelectAll}
+          handleClearAll={handleClearAll}
+        />}
         callback={handleFloorChange}
       />
       <TransformWrapper>

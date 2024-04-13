@@ -1,12 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import "./map.css";
 import { LocationInfo } from "common/src/LocationInfo.ts";
@@ -19,15 +15,9 @@ import FilterManager, {
   generateFilterValue,
 } from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
-import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
-import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
-import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
-import FilterWithIcon from "../components/filters/FilterSelect.tsx";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
-
 import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-
 import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
 import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
 import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
@@ -36,6 +26,7 @@ import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Draw } from "../common/Draw.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
+import Icon from "../components/map/SlideIcon.tsx";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -444,211 +435,6 @@ function Map() {
     secondFloorIconState,
     thirdFloorIconState,
   ]);
-
-  /**
-   * Pop up window with filters on side bar
-   */
-
-  const icon = (
-    <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
-      <Stack direction="column" sx={{ position: "absolute", top: 4, left: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={handleButtonClick}
-          variant="text"
-        >
-          {checked ? "back" : "back"}
-        </Button>
-      </Stack>
-
-      <Stack
-        spacing={"10%"}
-        direction="column"
-        sx={{
-          backgroundColor: "white",
-          display: "flex",
-          justifyContent: "start",
-          alignItems: "start",
-          position: "relative",
-          marginTop: "16%",
-          paddingTop: "6%",
-          marginLeft: "1%",
-          paddingLeft: "8%",
-        }}
-      >
-        <Stack direction="column" spacing={1}>
-          <FilterWithIcon
-            iconColor="#1CA7EC"
-            filterName="Conference"
-            filterType={1}
-            shape={"pentagon"}
-            iconState={confIconState}
-            handleIconState={handleConfIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#72c41c"
-            filterName="Department"
-            filterType={1}
-            shape={"pentagon"}
-            iconState={deptIconState}
-            handleIconState={handleDeptIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#e88911"
-            filterName="Labs"
-            filterType={1}
-            shape={"pentagon"}
-            iconState={labsIconState}
-            handleIconState={handleLabsIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#e88911"
-            filterName="Service"
-            filterType={1}
-            shape={"circle"}
-            iconState={servIconState}
-            handleIconState={handleServIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#1CA7EC"
-            filterName="Info"
-            filterType={1}
-            shape={"circle"}
-            iconState={infoIconState}
-            handleIconState={handleInfoIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#72c41c"
-            filterName="Restrooms"
-            filterType={1}
-            shape={"circle"}
-            iconState={restroomsIconState}
-            handleIconState={handleRestroomsIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#1CA7EC"
-            filterName="Elevators"
-            filterType={1}
-            shape={"square"}
-            iconState={elevatorIconState}
-            handleIconState={handleElevatorIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#72c41c"
-            filterName="Stairs"
-            filterType={1}
-            shape={"square"}
-            iconState={stairsIconState}
-            handleIconState={handleStairsIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="red"
-            filterName="Exits"
-            filterType={1}
-            shape={"square"}
-            iconState={exitsIconState}
-            handleIconState={handleExitsIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#e88911"
-            filterName="Retail"
-            filterType={1}
-            shape={"square"}
-            iconState={retlIconState}
-            handleIconState={handleRetlIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="L1"
-            filterType={0}
-            shape={"stairs"}
-            iconState={ll1IconState}
-            handleIconState={handleLL1IconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="L2"
-            filterType={0}
-            shape={"stairs"}
-            iconState={ll2IconState}
-            handleIconState={handleLL2IconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="1st Floor"
-            filterType={0}
-            shape={"stairs"}
-            iconState={firstFloorIconState}
-            handleIconState={handleFirstFloorIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="Second Floor"
-            filterType={0}
-            shape={"stairs"}
-            iconState={secondFloorIconState}
-            handleIconState={handleSecondFloorIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="Third Floor"
-            filterType={0}
-            shape={"stairs"}
-            iconState={thirdFloorIconState}
-            handleIconState={handleThirdFloorIconState}
-          />
-        </Stack>
-
-        {/*Buttons*/}
-        <Stack
-          direction="column"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "90%",
-            paddingBottom: "10%",
-          }}
-          spacing={0.5}
-        >
-          <Button
-            variant={"contained"}
-            sx={{ display: "flex", justifyContent: "center", minWidth: "90%" }}
-            onClick={handleSelectAll}
-          >
-            Select All
-          </Button>
-
-          <Button
-            variant={"contained"}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              minWidth: "90%",
-              backgroundColor: "#D9D9D9",
-            }}
-            onClick={handleClearAll}
-          >
-            Clear All
-          </Button>
-        </Stack>
-      </Stack>
-    </Paper>
-  );
 
   const handleStartNodeChange = (value: string | null) => {
     if (value) {
@@ -1130,7 +916,42 @@ function Map() {
         onClick1={handleButtonClick}
         checked={checked}
         onClick2={handleSelectAll}
-        icon={icon}
+        icon={<Icon
+          handleButtonClick={handleButtonClick}
+          checked={false}
+          confIconState={confIconState}
+          deptIconState={deptIconState}
+          labsIconState={labsIconState}
+          servIconState={servIconState}
+          infoIconState={infoIconState}
+          restroomsIconState={restroomsIconState}
+          elevatorIconState={elevatorIconState}
+          stairsIconState={stairsIconState}
+          exitsIconState={exitsIconState}
+          retlIconState={retlIconState}
+          ll1IconState={ll1IconState}
+          ll2IconState={ll2IconState}
+          firstFloorIconState={firstFloorIconState}
+          secondFloorIconState={secondFloorIconState}
+          thirdFloorIconState={thirdFloorIconState}
+          handleConfIconState={handleConfIconState}
+          handleDeptIconState={handleDeptIconState}
+          handleLabsIconState={handleLabsIconState}
+          handleServIconState={handleServIconState}
+          handleInfoIconState={handleInfoIconState}
+          handleRestroomsIconState={handleRestroomsIconState}
+          handleElevatorIconState={handleElevatorIconState}
+          handleStairsIconState={handleStairsIconState}
+          handleExitsIconState={handleExitsIconState}
+          handleRetlIconState={handleRetlIconState}
+          handleLL1IconState={handleLL1IconState}
+          handleLL2IconState={handleLL2IconState}
+          handleFirstFloorIconState={handleFirstFloorIconState}
+          handleSecondFloorIconState={handleSecondFloorIconState}
+          handleThirdFloorIconState={handleThirdFloorIconState}
+          handleSelectAll={handleSelectAll}
+          handleClearAll={handleClearAll}
+        />}
         callback={handleFloorChange}
       />
 
