@@ -9,6 +9,7 @@
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
+    "eslint-plugin-unused-imports": "^3.1.0",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
     "tsconfig-custom": "workspace:*",
