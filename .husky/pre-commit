@@ -6,7 +6,7 @@ FILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
 
 # Prettify all selected files
 yarn run lint:fix
-yarn run lint:pre-commit
+#yarn run lint:pre-commit # Not sure if needed, if issues arise, uncomment and delete the line above
 
 # Add back the modified/prettified files to staging
 echo "$FILES" | xargs git add

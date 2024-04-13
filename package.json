@@ -30,7 +30,7 @@
     "test:stop": "docker-compose -f docker-compose.dev.yaml down --volumes --rmi local",
     "lint": "turbo run lint",
     "lint:fix": "yarn eslint --fix '{apps,packages}/**/src/**/*.{ts,tsx}'",
-    "lint:pre-commit": "yarn run lint:fix",
+    "lint:pre-commit": "turbo run lint:fix",
     "postinstall": "husky install || exit 0",
     "build": "turbo run build",
     "docker:upload": "turbo run docker:upload --concurrency=1"
