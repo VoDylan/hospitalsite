@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
@@ -7,11 +7,17 @@ import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
 import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
 import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
 import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
-import Floor from "../components/map/FloorTabs.tsx";
 import { sendRequest } from "common/src/sendRequest.ts";
-import Draggable from "react-draggable";
+import MapSideBar from "../components/map/MapSideBar.tsx";
+import TextField from "@mui/material/TextField";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+
+import Draggable from "react-draggable";
+import Icon from "../components/map/SlideIcon.tsx";
+
+
 import { Coordinates } from "common/src/Coordinates.ts";
+
 
 function MapEditingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -27,8 +33,53 @@ function MapEditingPage() {
     image.src = L1MapImage;
     return image;
   });
-
   const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
+
+
+  /**
+   * Use states for side bar
+   */
+
+  const [autocompleteNodeData, setAutocompleteNodeData] = useState<
+    { label: string; node: string }[]
+  >([]);
+  const [startNode, setStartNode] = useState<string>("");
+  const [endNode, setEndNode] = useState<string>("");
+  const handleStartNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setStartNode(selectedNode.node);
+      }
+    } else {
+      setStartNode(""); // Handle null value if necessary
+    }
+  };
+  const handleEndNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setEndNode(selectedNode.node);
+      }
+    } else {
+      setEndNode(""); // Handle null value if necessary
+    }
+  };
+  const [checked, setChecked] = React.useState(false);
+  const handleButtonClick = () => {
+    setChecked((prev) => !prev);
+  };
+
+  // async function loadNodeData() {
+  //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
+  //   setNodesData(data);
+  // }
 
   async function loadEdgesDistance(request: sendRequest) {
     // const req = { req: "L1" };
@@ -160,9 +211,188 @@ function MapEditingPage() {
     console.log(distancesData); // Log distancesData here to see the updated value
   }, [currImage, distancesData, currImage.complete, edgeDataLoaded, nodesData]);
 
+  /**
+   * FILTER USE STATES
+   */
+
+  const [elevatorIconState, setElevatorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [stairsIconState, setStairsIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [exitsIconState, setExitsIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [servIconState, setServIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [infoIconState, setInfoIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [restroomsIconState, setRestroomsIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [confIconState, setConfIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [deptIconState, setDeptIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [labsIconState, setLabsIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [retlIconState, setRetlIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [ll1IconState, setLL1IconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [ll2IconState, setLL2IconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [firstFloorIconState, setFirstFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [secondFloorIconState, setSecondFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+
+  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
+
+
+  const handleIconStateToggle = (
+    stateSetter: React.Dispatch<React.SetStateAction<"plus" | "check">>,
+  ) => {
+    return () => {
+      stateSetter((prevState) => (prevState === "plus" ? "check" : "plus"));
+      setFiltersApplied(false);
+    };
+  };
+
+  const handleElevatorIconState = handleIconStateToggle(setElevatorIconState);
+  const handleStairsIconState = handleIconStateToggle(setStairsIconState);
+  const handleExitsIconState = handleIconStateToggle(setExitsIconState);
+  const handleInfoIconState = handleIconStateToggle(setInfoIconState);
+  const handleServIconState = handleIconStateToggle(setServIconState);
+  const handleRestroomsIconState = handleIconStateToggle(setRestroomsIconState);
+  const handleConfIconState = handleIconStateToggle(setConfIconState);
+  const handleDeptIconState = handleIconStateToggle(setDeptIconState);
+  const handleLabsIconState = handleIconStateToggle(setLabsIconState);
+  const handleRetlIconState = handleIconStateToggle(setRetlIconState);
+  const handleLL1IconState = handleIconStateToggle(setLL1IconState);
+  const handleLL2IconState = handleIconStateToggle(setLL2IconState);
+  const handleFirstFloorIconState = handleIconStateToggle(
+    setFirstFloorIconState,
+  );
+  const handleSecondFloorIconState = handleIconStateToggle(
+    setSecondFloorIconState,
+  );
+  const handleThirdFloorIconState = handleIconStateToggle(
+    setThirdFloorIconState,
+  );
+
+  const handleSelectAll = () => {
+    setElevatorIconState("check");
+    setStairsIconState("check");
+    setExitsIconState("check");
+    setInfoIconState("check");
+    setServIconState("check");
+    setRestroomsIconState("check");
+    setConfIconState("check");
+    setDeptIconState("check");
+    setLabsIconState("check");
+    setRetlIconState("check");
+    setLL1IconState("check");
+    setLL2IconState("check");
+    setFirstFloorIconState("check");
+    setSecondFloorIconState("check");
+    setThirdFloorIconState("check");
+    setFiltersApplied(false);
+  };
+
+  const handleClearAll = () => {
+    setElevatorIconState("plus");
+    setStairsIconState("plus");
+    setExitsIconState("plus");
+    setInfoIconState("plus");
+    setServIconState("plus");
+    setRestroomsIconState("plus");
+    setConfIconState("plus");
+    setDeptIconState("plus");
+    setLabsIconState("plus");
+    setRetlIconState("plus");
+    setLL1IconState("plus");
+    setLL2IconState("plus");
+    setFirstFloorIconState("plus");
+    setSecondFloorIconState("plus");
+    setThirdFloorIconState("plus");
+    setFiltersApplied(false);
+  };
+
   return (
     <div>
       <TopBanner2 />
+      {/*Side Bar*/}
+      <MapSideBar
+        title="Map Editing"
+        onChange={(event, value) => handleStartNodeChange(value)}
+        autocompleteNodeData={autocompleteNodeData}
+        compareFn={(a, b) => a.label.localeCompare(b.label)}
+        nodeToLabelIdCallback={(node) => node.label}
+        groupBy={(option) => option.charAt(0).toUpperCase()}
+        optionLabel={(option) => option}
+        renderInput={(params) => (
+          <TextField {...params} label="Starting Location" value={startNode} />
+        )}
+        onChange1={(event, value) => handleEndNodeChange(value)}
+        renderInput1={(params) => (
+          <TextField {...params} label="Ending Location" value={endNode} />
+        )}
+        onClick1={handleButtonClick}
+        checked={checked}
+        onClick2={handleSelectAll}
+        icon={<Icon
+          handleButtonClick={handleButtonClick}
+          checked={false}
+          confIconState={confIconState}
+          deptIconState={deptIconState}
+          labsIconState={labsIconState}
+          servIconState={servIconState}
+          infoIconState={infoIconState}
+          restroomsIconState={restroomsIconState}
+          elevatorIconState={elevatorIconState}
+          stairsIconState={stairsIconState}
+          exitsIconState={exitsIconState}
+          retlIconState={retlIconState}
+          ll1IconState={ll1IconState}
+          ll2IconState={ll2IconState}
+          firstFloorIconState={firstFloorIconState}
+          secondFloorIconState={secondFloorIconState}
+          thirdFloorIconState={thirdFloorIconState}
+          handleConfIconState={handleConfIconState}
+          handleDeptIconState={handleDeptIconState}
+          handleLabsIconState={handleLabsIconState}
+          handleServIconState={handleServIconState}
+          handleInfoIconState={handleInfoIconState}
+          handleRestroomsIconState={handleRestroomsIconState}
+          handleElevatorIconState={handleElevatorIconState}
+          handleStairsIconState={handleStairsIconState}
+          handleExitsIconState={handleExitsIconState}
+          handleRetlIconState={handleRetlIconState}
+          handleLL1IconState={handleLL1IconState}
+          handleLL2IconState={handleLL2IconState}
+          handleFirstFloorIconState={handleFirstFloorIconState}
+          handleSecondFloorIconState={handleSecondFloorIconState}
+          handleThirdFloorIconState={handleThirdFloorIconState}
+          handleSelectAll={handleSelectAll}
+          handleClearAll={handleClearAll}
+        />}
+        callback={handleFloorChange}
+      />
       <TransformWrapper>
         <TransformComponent>
           <Draggable>
@@ -179,7 +409,6 @@ function MapEditingPage() {
           </Draggable>
         </TransformComponent>
       </TransformWrapper>
-      <Floor callback={handleFloorChange} />
     </div>
   );
 }
