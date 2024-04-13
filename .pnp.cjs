@@ -85,6 +85,7 @@ const RAW_RUNTIME_STATE =
           ["dotenv-cli", "npm:7.4.0"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+          ["eslint-plugin-unused-imports", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.1.0"],\
           ["express", "npm:4.19.2"],\
           ["fs", "npm:0.0.1-security"],\
           ["fs-fs", "npm:1.0.0"],\
@@ -4403,6 +4404,7 @@ const RAW_RUNTIME_STATE =
           ["database", "workspace:packages/database"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+          ["eslint-plugin-unused-imports", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.1.0"],\
           ["express", "npm:4.19.2"],\
           ["express-oauth2-jwt-bearer", "npm:1.6.0"],\
           ["http-errors", "npm:2.0.0"],\
@@ -5033,6 +5035,7 @@ const RAW_RUNTIME_STATE =
           ["@types/node", "npm:20.12.5"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+          ["eslint-plugin-unused-imports", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.1.0"],\
           ["joi", "npm:17.12.3"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
@@ -5317,6 +5320,7 @@ const RAW_RUNTIME_STATE =
           ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:5.12.1"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+          ["eslint-plugin-unused-imports", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.1.0"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
           ["prisma", "npm:5.12.1"],\
@@ -6053,6 +6057,42 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["eslint-plugin-unused-imports", [\
+      ["npm:3.1.0", {\
+        "packageLocation": "./.yarn/cache/eslint-plugin-unused-imports-npm-3.1.0-eade80d8ae-8ad49d6d34.zip/node_modules/eslint-plugin-unused-imports/",\
+        "packageDependencies": [\
+          ["eslint-plugin-unused-imports", "npm:3.1.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.1.0", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-plugin-unused-imports-virtual-83b1728542/0/cache/eslint-plugin-unused-imports-npm-3.1.0-eade80d8ae-8ad49d6d34.zip/node_modules/eslint-plugin-unused-imports/",\
+        "packageDependencies": [\
+          ["eslint-plugin-unused-imports", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.1.0"],\
+          ["@types/eslint", null],\
+          ["@types/typescript-eslint__eslint-plugin", null],\
+          ["@typescript-eslint/eslint-plugin", null],\
+          ["eslint", "npm:8.56.0"],\
+          ["eslint-rule-composer", "npm:0.3.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/eslint",\
+          "@types/typescript-eslint__eslint-plugin",\
+          "@typescript-eslint/eslint-plugin",\
+          "eslint"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["eslint-rule-composer", [\
+      ["npm:0.3.0", {\
+        "packageLocation": "./.yarn/cache/eslint-rule-composer-npm-0.3.0-0188afafaa-c751e71243.zip/node_modules/eslint-rule-composer/",\
+        "packageDependencies": [\
+          ["eslint-rule-composer", "npm:0.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["eslint-scope", [\
       ["npm:7.2.2", {\
         "packageLocation": "./.yarn/cache/eslint-scope-npm-7.2.2-53cb0df8e8-5c660fb905.zip/node_modules/eslint-scope/",\
@@ -6670,6 +6710,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["eslint-plugin-react-hooks", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.6.0"],\
           ["eslint-plugin-react-refresh", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.4.5"],\
+          ["eslint-plugin-unused-imports", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.1.0"],\
           ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.25"],\
           ["localforage", "npm:1.10.0"],\
           ["match-sorter", "npm:6.3.3"],\
@@ -10624,6 +10665,7 @@ const RAW_RUNTIME_STATE =
           ["dotenv-cli", "npm:7.4.0"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+          ["eslint-plugin-unused-imports", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.1.0"],\
           ["express", "npm:4.19.2"],\
           ["fs", "npm:0.0.1-security"],\
           ["fs-fs", "npm:1.0.0"],\
