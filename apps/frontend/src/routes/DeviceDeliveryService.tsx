@@ -25,6 +25,7 @@ import { DeviceSubmitButton } from "../components/buttons/DeviceSubmitButton.tsx
 import axios from "axios";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
+import ServiceSpeedDial from "../components/serviceNav/speedDial/ServiceSpeedDial.tsx";
 
 function DeviceDeliveryService() {
   const [form, setFormResponses] = useState<DeviceDeliveryFormSubmission>({
@@ -159,6 +160,7 @@ function DeviceDeliveryService() {
         overflowX: "hidden",
       }}
     >
+      <ServiceSpeedDial/>
       <TopBanner2 />
       <Grid
         container
