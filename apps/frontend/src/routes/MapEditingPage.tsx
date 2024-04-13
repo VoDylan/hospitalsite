@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-// import { MapNodeType } from "common/src/map/MapNodeType.ts";
-// import MapImage from "../images/00_thelowerlevel1.png";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
