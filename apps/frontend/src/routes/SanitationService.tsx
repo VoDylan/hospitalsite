@@ -12,14 +12,14 @@ import {
   TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
+import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { SanitationRequestFormSubmission } from "../common/SanitationRequestFormSubmission.ts";
+import { SanitationRequestFormSubmission } from "../common/formSubmission/SanitationRequestFormSubmission.ts";
 import sanitationBackground from "../images/sanitationBackground.webp";
-import { SanitationSubmitButton } from "../components/SanitationSubmitButton.tsx";
+import { SanitationSubmitButton } from "../components/buttons/SanitationSubmitButton.tsx";
 import axios from "axios";
-import TopBanner2 from "../components/TopBanner2.tsx";
+import TopBanner2 from "../components/banner/TopBanner2.tsx";
 
 function SanitationService() {
   const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
@@ -79,20 +79,33 @@ function SanitationService() {
 
   // Define an interface for the node data
   interface NodeData {
+    nodeID: string;
     longName: string;
   }
 
   // Storing the node numbers in a use state so that we only make a get request once
-  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+  const [nodes, updateNodes] = useState<NodeData[]>([]);
 
   // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
     axios
       .get<NodeData[]>("/api/database/nodes")
-      .then((response) =>
-        setNodeNumbers(response.data.map((node) => node.longName)),
-      )
+      .then((response) => {
+        const nodeIDs = response.data.map((node) => node.nodeID);
+        const longNames = response.data.map((node) => node.longName);
+
+        const updatedNodes: NodeData[] = [];
+
+        for (let i = 0; i < nodeIDs.length; i++) {
+          updatedNodes.push({
+            nodeID: nodeIDs[i],
+            longName: longNames[i]
+          });
+        }
+
+        updateNodes(updatedNodes);
+      })
       .catch((error) => console.error(error));
   }, []);
 
@@ -156,7 +169,7 @@ function SanitationService() {
             label={"Location"}
             returnData={form.location}
             handleChange={handleLocationInput}
-            items={nodeNumbers}
+            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
           />
         </Grid>
         <Grid item xs={6}>

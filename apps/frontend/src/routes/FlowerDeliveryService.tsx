@@ -1,10 +1,10 @@
 import { Box, Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
-import { FlowerDeliveryFormSubmission } from "../common/FlowerDeliveryFormSubmission.ts";
+import { FlowerDeliveryFormSubmission } from "../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
-import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import { FlowerDeliverySubmitButton } from "../components/FlowerDeliverySubmitButton.tsx";
-import TopBanner2 from "../components/TopBanner2.tsx";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
+import { FlowerDeliverySubmitButton } from "../components/buttons/FlowerDeliverySubmitButton.tsx";
+import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
 

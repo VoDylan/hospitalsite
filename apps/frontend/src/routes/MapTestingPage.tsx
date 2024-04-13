@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import MapImage from "../images/00_thelowerlevel1.png";
+import MapImage from "../images/mapImages/00_thelowerlevel1.png";
 import { TextField, Button } from "@mui/material";
 import "./map.css";
 // import { Coordinates } from "common/src/Coordinates.ts";

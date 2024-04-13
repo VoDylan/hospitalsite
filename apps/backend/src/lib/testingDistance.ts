@@ -1,5 +1,5 @@
 import { Coordinates } from "common/src/Coordinates.ts";
-import client from "../src/bin/database-connection.ts";
+import client from "../bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import { nodesDistances } from "common/src/nodesDistances.ts";

@@ -1,17 +1,16 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
-// import axios, { isAxiosError } from "axios";
+import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
+import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
-// import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
-import { RoomSchedulingFormSubmission } from "../common/RoomSchedulingFormSubmission.ts";
+import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 
 interface ButtonProps {
   text: string;
-  input: RoomSchedulingFormSubmission;
+  input: FlowerDeliveryFormSubmission;
   clear: () => void;
-  updateSubmissionList: () => void;
 }
 
-export function RoomSubmitButton(props: ButtonProps) {
+export function FlowerDeliverySubmitButton(props: ButtonProps) {
   // Logic for snackbar alert
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
@@ -46,53 +45,42 @@ export function RoomSubmitButton(props: ButtonProps) {
   }
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
-  function handleSubmit() {
-    if (props.input.location === "") {
-      openWithError("Please select a room");
+  async function handleSubmit() {
+    if (props.input.flowerType === "") {
+      openWithError("Please select a flower type");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
-    } else if (props.input.priority === "") {
-      openWithError("Please select a priority");
-    } else if (props.input.service === "") {
-      openWithError("Please select a service");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
-    } else if (props.input.frequency === "") {
-      openWithError("Please select a frequency");
+    } else if (props.input.recipientName === "") {
+      openWithError("Please enter the recipient's name");
+    } else if (props.input.roomNumber === "") {
+      openWithError("Please enter a valid room number");
     } else {
-      // Not needed for iteration 2
-      // const submission = props.input;
+      const submission = props.input;
       console.log(props.input);
 
-      // const result: { success: boolean; data: HTTPResponseType } =
-      //   await pushToDB(submission);
+      const result: { success: boolean; data: HTTPResponseType } =
+        await pushToDB(submission);
 
-      // if (!result.success) {
-      //   openWithError(
-      //     `Failed to post form data to database: ${result.data.message}`,
-      //   );
-      // } else {
-      //   handleClear();
-      //   openWithSuccess();
-
-      // Remove these once connected to DB
-      props.updateSubmissionList();
-      handleClear();
-      openWithSuccess();
+      if (!result.success) {
+        openWithError(
+          `Failed to post form data to database: ${result.data.message}`,
+        );
+      } else {
+        handleClear();
+        openWithSuccess();
+      }
     }
   }
-  // }
 
   function handleClear() {
     props.clear();
   }
 
-  /* Commenting this out for iteration 2
   // Function for posting the form submission to the database
-  async function pushToDB(form: SanitationRequestFormSubmission) {
+  async function pushToDB(form: FlowerDeliveryFormSubmission) {
     const returnData = {
       userID: "admin",
-      nodeID: form.location,
+      nodeID: form.roomNumber,
       serviceType: "flower-delivery",
       services: form,
     };
@@ -141,7 +129,6 @@ export function RoomSubmitButton(props: ButtonProps) {
       data: data!,
     };
   }
-  */
 
   return (
     <Button

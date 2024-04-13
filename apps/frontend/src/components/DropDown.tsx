@@ -7,12 +7,21 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 
+interface LabelValuePair {
+  value: string;
+  label: string;
+}
+
 interface DropDownProps {
-  items: string[];
+  items: LabelValuePair[] | string[];
   handleChange: (event: SelectChangeEvent) => string;
   label: string;
   returnData: string;
 }
+
+const isOptionArray = (items: LabelValuePair[] | string[]): items is LabelValuePair[] => {
+  return items.length > 0 && typeof items[0] === "object" && "value" in items[0] && "label" in items[0];
+};
 
 const useStyles = makeStyles({
   centeredLabel: {
@@ -26,6 +35,22 @@ export function DropDown(props: DropDownProps) {
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     props.handleChange(event);
+  };
+
+  const renderItems = () => {
+    if (isOptionArray(props.items)) {
+      return props.items.map((item) => (
+        <MenuItem key={item.value} value={item.value}>
+          {item.label}
+        </MenuItem>
+      ));
+    } else {
+      return props.items.map((item) => (
+        <MenuItem key={item} value={item}>
+          {item}
+        </MenuItem>
+      ));
+    }
   };
 
   return (
@@ -56,10 +81,7 @@ export function DropDown(props: DropDownProps) {
             }
           }
         >
-          {props.items.map((item) => (
-            <MenuItem value={item}>{item}</MenuItem>
-          ))}
-          ;
+          {renderItems()}
         </Select>
       </FormControl>
     </div>

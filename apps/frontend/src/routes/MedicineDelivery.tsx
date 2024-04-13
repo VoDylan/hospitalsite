@@ -12,14 +12,14 @@ import {
   TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/LeftAlignedTextbox.tsx";
-import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
+import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
-import { MedicineDeliveryFormSubmission } from "../common/MedicineDeliveryFormSubmission.ts";
+import { MedicineDeliveryFormSubmission } from "../common/formSubmission/MedicineDeliveryFormSubmission.ts";
 import MedicineBackground from "../images/MedicineDelivery.jpeg";
-import { MedicineSubmitButton } from "../components/MedicineSubmitButton.tsx";
+import { MedicineSubmitButton } from "../components/buttons/MedicineSubmitButton.tsx";
 import axios from "axios";
-import TopBanner2 from "../components/TopBanner2.tsx";
+import TopBanner2 from "../components/banner/TopBanner2.tsx";
 
 function MedicineDelivery() {
   const [form, setFormResponses] = useState<MedicineDeliveryFormSubmission>({

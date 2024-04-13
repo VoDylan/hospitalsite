@@ -1,5 +1,5 @@
-import TopBanner from "../components/TopBanner.tsx";
-import MainCarousel from "../components/Carousel.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
+import MainCarousel from "../components/homepage/Carousel.tsx";
 
 function MapPage() {
   return (

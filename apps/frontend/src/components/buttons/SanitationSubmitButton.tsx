@@ -1,19 +1,17 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
-// import axios, { isAxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
-// import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
-import { GiftDeliveryFormSubmission } from "../common/GiftDeliveryFormSubmission.ts";
+import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import { SanitationRequestFormSubmission } from "../../common/formSubmission/SanitationRequestFormSubmission.ts";
 
 interface ButtonProps {
   text: string;
-  input: GiftDeliveryFormSubmission;
+  input: SanitationRequestFormSubmission;
   clear: () => void;
-  displayConfetti: () => void;
-  hideConfetti: () => void;
-  updateList: () => void;
+  updateSubmissionList: () => void;
 }
 
-export function GiftDeliverySubmitButton(props: ButtonProps) {
+export function SanitationSubmitButton(props: ButtonProps) {
   // Logic for snackbar alert
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
@@ -24,16 +22,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       return <Alert elevation={6} ref={ref} {...props} />;
     },
   );
-
-  function handleShowConfetti() {
-    props.displayConfetti();
-
-    const duration = 7000; // 7 seconds
-
-    setTimeout(() => {
-      props.hideConfetti();
-    }, duration);
-  }
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -58,46 +46,47 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   }
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
-  function handleSubmit() {
+  async function handleSubmit() {
     if (props.input.location === "") {
       openWithError("Please select a room");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
-    } else if (props.input.delivery === "") {
+    } else if (props.input.priority === "") {
       openWithError("Please select a priority");
+    } else if (props.input.service === "") {
+      openWithError("Please select a service");
     } else if (props.input.status === "") {
       openWithError("Please select a status");
-    } else if (props.input.giftSize === "") {
-      openWithError("Please select a Gift Size");
-    } else if (props.input.giftAddOn === "") {
-      openWithError("Please select the Gift Add-on");
-    } else if (props.input.recipientName === "") {
-      openWithError("Please enter a Recipient Name");
+    } else if (props.input.frequency === "") {
+      openWithError("Please select a frequency");
     } else {
+      const submission = props.input;
       console.log(props.input);
-      handleListUpdate();
-      handleClear();
-      handleShowConfetti();
-      openWithSuccess();
+
+      const result: { success: boolean; data: HTTPResponseType } =
+        await pushToDB(submission);
+
+      if (!result.success) {
+        openWithError(
+          `Failed to post form data to database: ${result.data.message}`,
+        );
+      } else {
+        handleClear();
+        openWithSuccess();
+      }
     }
   }
-  // }
 
   function handleClear() {
     props.clear();
   }
 
-  function handleListUpdate() {
-    props.updateList();
-  }
-
-  /* Commenting this out for iteration 2
   // Function for posting the form submission to the database
   async function pushToDB(form: SanitationRequestFormSubmission) {
     const returnData = {
       userID: "admin",
       nodeID: form.location,
-      serviceType: "flower-delivery",
+      serviceType: "sanitation-request",
       services: form,
     };
 
@@ -145,7 +134,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       data: data!,
     };
   }
-  */
 
   return (
     <Button

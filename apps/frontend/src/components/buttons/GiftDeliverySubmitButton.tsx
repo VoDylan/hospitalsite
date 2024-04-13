@@ -1,17 +1,19 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 // import axios, { isAxiosError } from "axios";
-import React, { forwardRef, useState } from "react";
+import { forwardRef, useState } from "react";
 // import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
-import { DeviceDeliveryFormSubmission } from "../common/DeviceDeliveryFormSubmission.ts";
+import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 
 interface ButtonProps {
   text: string;
-  input: DeviceDeliveryFormSubmission;
+  input: GiftDeliveryFormSubmission;
   clear: () => void;
+  displayConfetti: () => void;
+  hideConfetti: () => void;
   updateList: () => void;
 }
 
-export function DeviceSubmitButton(props: ButtonProps) {
+export function GiftDeliverySubmitButton(props: ButtonProps) {
   // Logic for snackbar alert
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
@@ -23,8 +25,18 @@ export function DeviceSubmitButton(props: ButtonProps) {
     },
   );
 
+  function handleShowConfetti() {
+    props.displayConfetti();
+
+    const duration = 7000; // 7 seconds
+
+    setTimeout(() => {
+      props.hideConfetti();
+    }, duration);
+  }
+
   const handleClose = (
-    _event?: React.SyntheticEvent | Event,
+    event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -47,37 +59,25 @@ export function DeviceSubmitButton(props: ButtonProps) {
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
   function handleSubmit() {
-    if (props.input.roomNum === "") {
+    if (props.input.location === "") {
       openWithError("Please select a room");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
-    } else if (props.input.priority === "") {
+    } else if (props.input.delivery === "") {
       openWithError("Please select a priority");
-    } else if (props.input.device === "") {
-      openWithError("Please select a device");
     } else if (props.input.status === "") {
       openWithError("Please select a status");
-    } else if (props.input.amount === "") {
-      openWithError("Please select an amount");
+    } else if (props.input.giftSize === "") {
+      openWithError("Please select a Gift Size");
+    } else if (props.input.giftAddOn === "") {
+      openWithError("Please select the Gift Add-on");
+    } else if (props.input.recipientName === "") {
+      openWithError("Please enter a Recipient Name");
     } else {
-      // Not needed for iteration 2
-      // const submission = props.input;
       console.log(props.input);
-
-      // const result: { success: boolean; data: HTTPResponseType } =
-      //   await pushToDB(submission);
-
-      // if (!result.success) {
-      //   openWithError(
-      //     `Failed to post form data to database: ${result.data.message}`,
-      //   );
-      // } else {
-      //   handleClear();
-      //   openWithSuccess();
-
-      // Remove these once connected to DB
       handleListUpdate();
       handleClear();
+      handleShowConfetti();
       openWithSuccess();
     }
   }
