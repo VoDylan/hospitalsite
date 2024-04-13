@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { createAuth0Client } from "@auth0/auth0-spa-js";
+import Button from "@mui/material/Button";
 
 const LoginButton = () => {
   useEffect(() => {
@@ -10,29 +11,38 @@ const LoginButton = () => {
       });
 
       const loginButton = document.getElementById("login");
+      const handleClick = async () => {
+        await auth0.loginWithRedirect();
+      };
+
       if (loginButton) {
-        loginButton.addEventListener("click", async () => {
-          await auth0.loginWithRedirect({
-            authorizationParams: {
-              redirect_uri: "http://localhost:3000/",
-            },
-          });
-        });
+        loginButton.addEventListener("click", handleClick);
       }
+
+      return () => {
+        // Cleanup event listener if component unmounts
+        if (loginButton) {
+          loginButton.removeEventListener("click", handleClick);
+        }
+      };
     };
 
     initializeAuth0();
-
-    return () => {
-      // Cleanup event listener if component unmounts
-      const loginButton = document.getElementById("login");
-      if (loginButton) {
-        loginButton.removeEventListener("click", () => {});
-      }
-    };
   }, []);
 
-  return <button id="login">Click to Login</button>;
+  return (
+    <Button id="login" sx={{ width: 220 }} variant="contained">
+      Sign In
+    </Button>
+  );
 };
 
 export default LoginButton;
+
+//const token = await getAccessTokenSilently();
+
+//await axios.delete("/api/computer-requests/" + key, config: {
+//  headers: {
+//    Authorization: `Bearer ${token}`,
+//  },
+//});
