@@ -1,6 +1,10 @@
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import {useState} from "react";
+import {Stack} from "@mui/material";
 
 function SearchBar() {
   const Search = styled("div")(({ theme }) => ({
@@ -15,9 +19,7 @@ function SearchBar() {
   }));
 
   const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
     height: "100%",
-    position: "absolute",
     color: "#1976d2",
     pointerEvents: "none",
     display: "flex",
@@ -25,31 +27,51 @@ function SearchBar() {
     justifyContent: "center",
   }));
 
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "gray",
-    width: "100%",
-    "& .MuiInputBase-input": {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create("width"),
-      [theme.breakpoints.up("sm")]: {
-        width: "12ch",
-        "&:focus": {
-          width: "20ch",
-        },
-      },
-    },
-  }));
+  const results = [
+    "Flower Delivery"
+  ];
+
+  const [value, setValue] = useState<string | null>("");
+
+  const handleSelectedValue = (selectedValue: string | null) => {
+    if (selectedValue) {
+      console.log(`Selected value: ${selectedValue}`);
+      // Do something with the selected value, e.g., navigate, fetch data, etc.
+    }
+  };
 
   return (
     <Search>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
-      <StyledInputBase
-        placeholder="Search…"
-        inputProps={{ "aria-label": "search" }}
+      <Autocomplete
+        id="free-solo-demo"
+        value={value}
+        onChange={(event, newValue: string | null) => {
+          setValue(newValue);
+          handleSelectedValue(newValue); // handle the selected value here
+        }}
+        freeSolo
+        options={results}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            id={"standard-basic"}
+            label="Search"
+            focused={false}
+            InputProps={{
+              ...params.InputProps,
+              startAdornment: (
+                <>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                </>
+              ),
+            }}
+          />
+        )}
+        sx={{
+          width: "15vw"
+        }}
       />
     </Search>
   );
