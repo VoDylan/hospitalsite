@@ -27,8 +27,15 @@ function SearchBar() {
   }));
 
   const results = [
-    {label: "Flower Delivery", link: "/services/FlowerDelivery"},
+    {label: "Flower Delivery", route: "/services/FlowerDelivery"},
     {label: "Sanitation Service", link: "/services/SanitationService"},
+    {label: "Medicine Delivery Service", link: "/services/MedicineDelivery"},
+    {label: "Security Service", link: "/services/SecurityService"},
+    {label: "Gift Delivery Service", link: "/services/GiftDelivery"},
+    {label: "Medical Device Service", link: "/services/DeviceDeliveryService"},
+    {label: "Room Scheduling Service", link: "/services/RoomScheduling"},
+    {label: "Map Page", link: "/Map"},
+    {label: "All Services", link: "/services"},
   ];
 
   const [value, setValue] = useState<string | null>("");
@@ -39,7 +46,7 @@ function SearchBar() {
     if (selectedValue) {
       console.log(`Selected value: ${selectedValue}`);
       console.log(`Selected link: ${selectedValue.link}`);
-      //@ts-expect-error The selected value's link works perfectly fine
+      //@ts-expect-error The selected value's route works perfectly fine
       navigate(selectedValue.link);
     }
   };
