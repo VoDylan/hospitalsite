@@ -17,6 +17,7 @@ import Icon from "../components/map/SlideIcon.tsx";
 
 
 import { Coordinates } from "common/src/Coordinates.ts";
+// import {node} from "prop-types";
 
 
 function MapEditingPage() {
@@ -34,7 +35,7 @@ function MapEditingPage() {
     return image;
   });
   const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
-
+  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
 
   /**
    * Use states for side bar
@@ -108,7 +109,7 @@ function MapEditingPage() {
     const nodesData = nodesPath.message;
 
     setNodesData(nodesData);
-    console.log("nodesData", nodesData);
+    // console.log("nodesData", nodesData);
   }
 
   const handleFloorChange = (newFloor: string) => {
@@ -116,28 +117,31 @@ function MapEditingPage() {
 
     switch (newFloor) {
       case "L1":
-        loadNodesData({ req: "L1" });
+        loadNodesData({ req: "L1" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
         newImage.src = L1MapImage;
         floor.current = "L1";
         break;
       case "L2":
-        loadNodesData({ req: "L2" });
+        loadNodesData({ req: "L2" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "L2" }).then(() => setEdgeDataLoaded(true));
         newImage.src = L2MapImage;
         floor.current = "L2";
         break;
       case "1":
+        loadNodesData({ req: "1" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "1" }).then(() => setEdgeDataLoaded(true));
         newImage.src = FFMapImage;
         floor.current = "1";
         break;
       case "2":
+        loadNodesData({ req: "2" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "2" }).then(() => setEdgeDataLoaded(true));
         newImage.src = SFMapImage;
         floor.current = "2";
         break;
       case "3":
+        loadNodesData({ req: "3" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "3" }).then(() => setEdgeDataLoaded(true));
         newImage.src = TFMapImage;
         floor.current = "3";
@@ -150,9 +154,10 @@ function MapEditingPage() {
   };
 
   useEffect(() => {
-    if (distancesData.length < 1) {
+    if (distancesData.length < 1 && nodesData.length < 1) {
       // console.log("Loading Distances");
       loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
+      loadNodesData({ req: "L1" }).then(() => setNodeDataLoaded(true));
     }
 
     const canvas = canvasRef.current;
@@ -162,7 +167,7 @@ function MapEditingPage() {
     if (!ctx) return;
 
     const processCanvas = () => {
-      if (edgeDataLoaded) {
+      if (edgeDataLoaded && nodeDataLoaded) {
         canvas.width = currImage.width;
         canvas.height = currImage.height;
 
@@ -206,10 +211,10 @@ function MapEditingPage() {
     currImage.onload = () => {
       processCanvas();
     };
-    console.log(nodesData);
+    // console.log(nodesData);
 
-    console.log(distancesData); // Log distancesData here to see the updated value
-  }, [currImage, distancesData, currImage.complete, edgeDataLoaded, nodesData]);
+    // console.log(distancesData); // Log distancesData here to see the updated value
+  }, [currImage, distancesData, currImage.complete, edgeDataLoaded, nodesData, nodeDataLoaded]);
 
   /**
    * FILTER USE STATES
