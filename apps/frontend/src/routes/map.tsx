@@ -372,21 +372,6 @@ function Map() {
    * Create Type, Floor, and Building filters
    */
 
-  const registerFilters = useCallback(() => {
-    FilterManager.getInstance().registerFilter(
-      FilterName.TYPE,
-      () => new TypeFilter(),
-    );
-    FilterManager.getInstance().registerFilter(
-      FilterName.FLOOR,
-      () => new FloorFilter(),
-    );
-    FilterManager.getInstance().registerFilter(
-      FilterName.BUILDING,
-      () => new BuildingFilter(),
-    );
-  }, []);
-
   /**
    * Change list of nodes based on applied filters
    */
@@ -779,8 +764,6 @@ function Map() {
       loadNodeData().then(() => {
         setNodeDataLoaded(true);
       });
-
-      registerFilters();
     } else if (!filtersApplied) {
       console.log("Applying filters");
       determineFilters();
@@ -793,7 +776,6 @@ function Map() {
     nodeDataLoaded,
     filtersApplied,
     determineFilters,
-    registerFilters,
     populateAutocompleteData,
   ]);
 
