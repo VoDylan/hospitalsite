@@ -2,7 +2,6 @@ import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { SecurityRequestFormSubmission } from "../../common/formSubmission/SecurityRequestFormSubmission.ts";
-import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 
 interface ButtonProps {
