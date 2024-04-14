@@ -44,6 +44,19 @@ import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
 import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
 import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
 import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
+
+import L2FloorIconNextSrc from "../images/mapIcons/L2FloorMarkerNextIcon.png";
+import L1FloorIconNextSrc from "../images/mapIcons/L1FloorMarkerNextIcon.png";
+import F1FloorIconNextSrc from "../images/mapIcons/F1FloorMarkerNextIcon.png";
+import F2FloorIconNextSrc from "../images/mapIcons/F2FloorMarkerNextIcon.png";
+import F3FloorIconNextSrc from "../images/mapIcons/F3FloorMarkerNextIcon.png";
+
+import L2FloorIconPrevSrc from "../images/mapIcons/L2FloorMarkerPrevIcon.png";
+import L1FloorIconPrevSrc from "../images/mapIcons/L1FloorMarkerPrevIcon.png";
+import F1FloorIconPrevSrc from "../images/mapIcons/F1FloorMarkerPrevIcon.png";
+import F2FloorIconPrevSrc from "../images/mapIcons/F2FloorMarkerPrevIcon.png";
+import F3FloorIconPrevSrc from "../images/mapIcons/F3FloorMarkerPrevIcon.png";
+
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Draw } from "../common/Draw.ts";
 
@@ -76,6 +89,66 @@ function Map() {
   const floor = useRef<string>("L1");
   const [renderBackground, setRenderBackground] = useState<boolean>(false);
   const [reprocessNodes, setReprocessNodes] = useState<boolean>(false);
+
+  const [L1FloorIconNext] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = L1FloorIconNextSrc;
+    return img;
+  });
+
+  const [L1FloorIconPrev] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = L1FloorIconPrevSrc;
+    return img;
+  });
+
+  const [L2FloorIconNext] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = L2FloorIconNextSrc;
+    return img;
+  });
+
+  const [L2FloorIconPrev] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = L2FloorIconPrevSrc;
+    return img;
+  });
+
+  const [F1FloorIconNext] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = F1FloorIconNextSrc;
+    return img;
+  });
+
+  const [F1FloorIconPrev] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = F1FloorIconPrevSrc;
+    return img;
+  });
+
+  const [F2FloorIconNext] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = F2FloorIconNextSrc;
+    return img;
+  });
+
+  const [F2FloorIconPrev] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = F2FloorIconPrevSrc;
+    return img;
+  });
+
+  const [F3FloorIconNext] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = F3FloorIconNextSrc;
+    return img;
+  });
+
+  const [F3FloorIconPrev] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = F3FloorIconPrevSrc;
+    return img;
+  });
 
   /**
    * Pathfinder selection
@@ -926,9 +999,26 @@ function Map() {
           );
         }
       }
+
+      draw.drawFloorIcon(2000, 2000, 1/3, F3FloorIconPrev);
       setRenderSymbolCanvas(false);
     }
-  }, [currImage.height, currImage.width, filteredNodes, renderSymbolCanvas]);
+  }, [
+    F1FloorIconNext,
+    F2FloorIconNext,
+    F3FloorIconNext,
+    L1FloorIconNext,
+    L2FloorIconNext,
+    F1FloorIconPrev,
+    F2FloorIconPrev,
+    F3FloorIconPrev,
+    L1FloorIconPrev,
+    L2FloorIconPrev,
+    currImage.height,
+    currImage.width,
+    filteredNodes,
+    renderSymbolCanvas
+  ]);
 
   useEffect(() => {
     currImage.onload = () => {
