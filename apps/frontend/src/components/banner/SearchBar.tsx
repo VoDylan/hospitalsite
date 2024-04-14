@@ -17,6 +17,7 @@ function SearchBar() {
     },
   }));
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const SearchIconWrapper = styled("div")(({ theme }) => ({
     height: "100%",
     color: "#009CA6",
