@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { BFSalgorithm } from "../BFSalgorithm.ts";
 import { AStarAlgorithm } from "../AStarAlgorithm.ts";
-import Algorithms from "./Algorithms.ts";
+import Algorithms from "../Algorithms.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 
 const router: Router = express.Router();
