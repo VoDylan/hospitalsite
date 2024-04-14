@@ -171,7 +171,6 @@ function FlowerDeliveryService() {
               display: "flex",
               my: 2,
               justifyContent: "center",
-              pr: 1,
             }}
           >
             <Box>

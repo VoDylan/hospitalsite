@@ -218,7 +218,7 @@ function DeviceDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3} align={"center"}>
+          <Typography color={"black"} align={"center"}>
             Priority of Medical Device Delivery:
           </Typography>
           <RadioButtonsGroup
@@ -229,7 +229,7 @@ function DeviceDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3} align={"center"}>
+          <Typography color={"black"} align={"center"}>
             Status of the Request:
           </Typography>
           <RadioButtonsGroup
@@ -246,7 +246,6 @@ function DeviceDeliveryService() {
             display: "flex",
             my: 2,
             justifyContent: "center",
-            pr: 6,
           }}
         >
           <DeviceSubmitButton

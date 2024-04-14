@@ -60,7 +60,7 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div className={classes.root}>
-      <FormControl sx={{ width: 220, height: 70}}>
+      <FormControl sx={{ width: 223, height: 75}}>
         <InputLabel
           id="demo-simple-select-label"
           className={classes.centeredLabel}

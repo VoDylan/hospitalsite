@@ -12,7 +12,6 @@ import {
   TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { MedicineDeliveryFormSubmission } from "../common/formSubmission/MedicineDeliveryFormSubmission.ts";
@@ -20,6 +19,7 @@ import MedicineBackground from "../images/MedicineDelivery.jpeg";
 import { MedicineSubmitButton } from "../components/buttons/MedicineSubmitButton.tsx";
 import axios from "axios";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 
 function MedicineDelivery() {
   const [form, setFormResponses] = useState<MedicineDeliveryFormSubmission>({
@@ -119,9 +119,6 @@ function MedicineDelivery() {
       <Grid
         container
         direction={"row"}
-        rowSpacing={1}
-        columnSpacing={5}
-        justifyContent={"center"}
         boxShadow={4}
         sx={{
           backgroundColor: "white",
@@ -143,15 +140,15 @@ function MedicineDelivery() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Name:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Name:</Typography>
+          <CenterAlignedTextbox
             label={"Name"}
             value={form.name}
             onChange={handleNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Location:</Typography>
+          <Typography color={"black"} align={"center"}>Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
@@ -160,7 +157,7 @@ function MedicineDelivery() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Medicine Needed:</Typography>
+          <Typography color={"black"} align={"center"}>Medicine Needed:</Typography>
           <DropDown
             items={[
               "Acetaminophen (Tylenol)",
@@ -175,7 +172,7 @@ function MedicineDelivery() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Frequency Needed:</Typography>
+          <Typography color={"black"} align={"center"}>Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
             handleChange={handleFrequencyInput}
@@ -184,7 +181,7 @@ function MedicineDelivery() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} align={"center"}>
             Priority of Medicine:
           </Typography>
           <RadioButtonsGroup
@@ -195,7 +192,7 @@ function MedicineDelivery() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} align={"center"}>
             Status of the Request:
           </Typography>
           <RadioButtonsGroup
@@ -212,7 +209,6 @@ function MedicineDelivery() {
             display: "flex",
             my: 2,
             justifyContent: "center",
-            pr: 6,
           }}
         >
           <MedicineSubmitButton
