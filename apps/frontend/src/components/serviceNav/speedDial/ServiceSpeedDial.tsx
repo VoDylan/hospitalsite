@@ -5,7 +5,6 @@ import { JSX } from "react/jsx-runtime";
 import React from "react";
 
 export default function ServiceSpeedDial() {
-
   const linkIcon = (href: string, children: JSX.Element) => <Link href={href}>{children}</Link>;
 
   // Define service paths and images
@@ -20,17 +19,20 @@ export default function ServiceSpeedDial() {
   ];
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClick = () =>
+    {if(open) {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }};
 
   return (
     <>
       <SpeedDial
         ariaLabel={"Services Speed Dial"}
-        sx={{ position: 'absolute', bottom: 50, right: 200 }}
+        sx={{ position: 'fixed', bottom: 50, right: 150 }}
         icon={<SpeedDialIcon/>}
-        onClose={handleClose}
-        onClick={handleOpen}
+        onClick={handleClick}
         open={open}
       >
         {serviceData.map((service) => (
@@ -38,7 +40,6 @@ export default function ServiceSpeedDial() {
             key={service.name}
             icon={service.icon}
             tooltipTitle={service.name}
-            onClick={handleClose}
           />
         ))}
       </SpeedDial>

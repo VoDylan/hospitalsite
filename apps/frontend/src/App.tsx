@@ -15,6 +15,7 @@ import SecurityService from "./routes/SecurityService.tsx";
 import MedicineDelivery from "./routes/MedicineDelivery.tsx";
 import RoomScheduling from "./routes/RoomScheduling.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
+import AllServiceFormsNav from "./routes/AllServiceFormsNav.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -30,6 +31,10 @@ function App() {
         {
           path: "/Services",
           element: <ServicesPage />,
+        },
+        {
+          path: "/Services/Test",
+          element: <AllServiceFormsNav />,
         },
         {
           path: "/Services/FlowerDelivery",
