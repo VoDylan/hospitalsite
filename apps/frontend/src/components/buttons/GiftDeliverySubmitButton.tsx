@@ -10,7 +10,6 @@ interface ButtonProps {
   clear: () => void;
   displayConfetti: () => void;
   hideConfetti: () => void;
-  updateList: () => void;
 }
 
 export function GiftDeliverySubmitButton(props: ButtonProps) {
@@ -75,7 +74,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       openWithError("Please enter a Recipient Name");
     } else {
       console.log(props.input);
-      handleListUpdate();
       handleClear();
       handleShowConfetti();
       openWithSuccess();
@@ -85,10 +83,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
 
   function handleClear() {
     props.clear();
-  }
-
-  function handleListUpdate() {
-    props.updateList();
   }
 
   /* Commenting this out for iteration 2

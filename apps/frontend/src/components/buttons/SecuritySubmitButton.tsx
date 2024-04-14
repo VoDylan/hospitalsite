@@ -8,7 +8,6 @@ interface ButtonProps {
   text: string;
   input: SecurityRequestFormSubmission;
   clear: () => void;
-  updateSubmissionList: () => void;
 }
 
 export function SecuritySubmitButton(props: ButtonProps) {
@@ -75,7 +74,6 @@ export function SecuritySubmitButton(props: ButtonProps) {
         openWithSuccess();
 
         // Remove these once connected to DB
-        // props.updateSubmissionList();
         // handleClear();
         // openWithSuccess();
       }

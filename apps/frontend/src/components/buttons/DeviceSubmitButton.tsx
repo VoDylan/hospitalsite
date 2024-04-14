@@ -8,7 +8,6 @@ interface ButtonProps {
   text: string;
   input: DeviceDeliveryFormSubmission;
   clear: () => void;
-  updateList: () => void;
 }
 
 export function DeviceSubmitButton(props: ButtonProps) {
@@ -76,7 +75,6 @@ export function DeviceSubmitButton(props: ButtonProps) {
       //   openWithSuccess();
 
       // Remove these once connected to DB
-      handleListUpdate();
       handleClear();
       openWithSuccess();
     }
@@ -85,10 +83,6 @@ export function DeviceSubmitButton(props: ButtonProps) {
 
   function handleClear() {
     props.clear();
-  }
-
-  function handleListUpdate() {
-    props.updateList();
   }
 
   /* Commenting this out for iteration 2
