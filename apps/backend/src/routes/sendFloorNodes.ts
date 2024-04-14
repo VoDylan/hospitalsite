@@ -7,7 +7,9 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   try {
     const request: { req: string } = req.body;
+    console.log(request);
     const floor = request.req;
+    console.log(floor);
 
     const nodes = new FloorNodes(floor);
 

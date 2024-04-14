@@ -20,12 +20,19 @@ export class FloorNodes {
     this.mapNodes = await client.node.findMany();
 
     console.log("Floor:", this.floor);
+    console.log(this.mapNodes);
 
     for (let i = 0; i < this.mapNodes.length; i++) {
       if (this.mapNodes[i].floor === this.floor) {
-        this.nodes[i].nodeID = this.mapNodes[i].nodeID;
-        this.nodes[i].coordinates.x = this.mapNodes[i].xcoord;
-        this.nodes[i].coordinates.y = this.mapNodes[i].ycoord;
+        console.log("Printing possible values");
+        this.nodes[i] = {
+          nodeID: this.mapNodes[i].nodeID,
+          coordinates: {
+            x: this.mapNodes[i].xcoord,
+            y: this.mapNodes[i].ycoord,
+          },
+        };
+        console.log(this.nodes[i]);
       }
     }
 
