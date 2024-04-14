@@ -19,7 +19,7 @@ function SearchBar() {
 
   const SearchIconWrapper = styled("div")(({ theme }) => ({
     height: "100%",
-    color: "#1976d2",
+    color: "#009CA6",
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
@@ -27,7 +27,7 @@ function SearchBar() {
   }));
 
   const results = [
-    {label: "Flower Delivery", route: "/services/FlowerDelivery"},
+    {label: "Flower Delivery", link: "/services/FlowerDelivery"},
     {label: "Sanitation Service", link: "/services/SanitationService"},
     {label: "Medicine Delivery Service", link: "/services/MedicineDelivery"},
     {label: "Security Service", link: "/services/SecurityService"},
