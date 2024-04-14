@@ -4,7 +4,7 @@ import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { NodeBFS } from "common/src/NodeBFS.ts";
 import client from "./bin/database-connection.ts";
 import Algorithms from "./Algorithms.ts";
-import {Coordinates} from "common/src/Coordinates.ts";
+import { Coordinates } from "common/src/Coordinates.ts";
 
 export class BFSalgorithm extends Algorithms {
   all_nodes: NodeBFS[];

@@ -1,13 +1,13 @@
 import Algorithms from "./Algorithms.ts";
-import {IDCoordinates} from "common/src/IDCoordinates.ts";
-import {Coordinates} from "common/src/Coordinates.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
+import { Coordinates } from "common/src/Coordinates.ts";
 
 export class DFSalgorithm extends Algorithms {
   constructor() {
     super();
   }
 
-  async loadData(){
+  async loadData() {
     await super.loadData();
   }
 
@@ -36,16 +36,20 @@ export class DFSalgorithm extends Algorithms {
     const stack: string[] = [];
     const visited: string[] = [];
     const parents: string[] = [];
-    const startNodeIndex: number = this.nodes.findIndex((node) => node.startNodeID === start);
-    stack[startNodeIndex] = start;
-    visited[startNodeIndex] = start;
+    const startNodeIndex: number = this.nodes.findIndex(
+      (node) => node.startNodeID === start,
+    );
+    stack.push(start);
+    visited.push(start);
     parents[startNodeIndex] = "";
 
     while (stack.length > 0) {
       const currentNodeID = stack.shift();
-      const currentNode = this.nodes.find((node) => node.startNodeID === currentNodeID)!;
+      const currentNode = this.nodes.find(
+        (node) => node.startNodeID === currentNodeID,
+      )!;
 
-      if (currentNodeID === end){
+      if (currentNodeID === end) {
         const coordinatesPath: IDCoordinates[] = [];
         const path: string[] = [];
         let current: string | null = currentNodeID;
@@ -69,8 +73,7 @@ export class DFSalgorithm extends Algorithms {
         });
         path.unshift(start);
 
-        // console.log("Path found:", path);
-        // console.log("Coordinates found:", coordinatesPath);
+        console.log("Path found:", path);
 
         return coordinatesPath;
       }
@@ -78,8 +81,10 @@ export class DFSalgorithm extends Algorithms {
       for (let i = 0; i < currentNode.neighbors.length; i++) {
         const neighborID = currentNode.neighbors[i];
 
-        if (!visited.includes(neighborID)){
-          const neighborIndex = this.nodes.findIndex((node) => node.startNodeID === neighborID);
+        if (!visited.includes(neighborID)) {
+          const neighborIndex = this.nodes.findIndex(
+            (node) => node.startNodeID === neighborID,
+          );
           parents[neighborIndex] = currentNodeID!;
 
           visited.push(neighborID);
@@ -88,8 +93,6 @@ export class DFSalgorithm extends Algorithms {
       }
     }
 
-
     return [];
   }
 }
-

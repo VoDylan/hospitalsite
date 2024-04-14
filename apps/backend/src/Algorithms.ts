@@ -52,8 +52,6 @@ abstract class Algorithms {
     return { x: Node.xcoord, y: Node.ycoord };
   }
 
-
-
   abstract runAlgorithm(start: string, end: string): IDCoordinates[];
 }
 

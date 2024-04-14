@@ -6,7 +6,6 @@ import { sendRequest } from "common/src/sendRequest.ts";
 router.post("/", async (req, res) => {
   const body: sendRequest = req.body;
   const request = body.req;
-  console.log(request);
   const distances = new testingDistance(request);
   async function runDistances() {
     return await distances.putIntoTypes();

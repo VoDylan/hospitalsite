@@ -18,13 +18,8 @@ export class FloorNodes {
 
   async putIntoTypes() {
     this.mapNodes = await client.node.findMany();
-
-    console.log("Floor:", this.floor);
-    console.log(this.mapNodes);
-
     for (let i = 0; i < this.mapNodes.length; i++) {
       if (this.mapNodes[i].floor === this.floor) {
-        console.log("Printing possible values");
         this.nodes[i] = {
           nodeID: this.mapNodes[i].nodeID,
           coordinates: {
@@ -32,7 +27,6 @@ export class FloorNodes {
             y: this.mapNodes[i].ycoord,
           },
         };
-        console.log(this.nodes[i]);
       }
     }
 

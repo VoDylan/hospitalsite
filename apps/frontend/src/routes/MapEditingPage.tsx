@@ -15,7 +15,9 @@ import Draggable from "react-draggable";
 import Icon from "../components/map/SlideIcon.tsx";
 
 
-import { Coordinates } from "common/src/Coordinates.ts";
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
+import GraphManager from "../common/GraphManager.ts";
+import MapNode from "common/src/map/MapNode.ts";
 // import {node} from "prop-types";
 
 
@@ -24,7 +26,7 @@ function MapEditingPage() {
   // const [nodeData, setNodesData] = useState<MapNodeType[]>([]);
   const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
   const [nodesData, setNodesData] = useState<
-    { nodeID: string; coordinates: Coordinates }[]
+    MapNodeType[]
   >([]);
 
   const floor = useRef<string>("L1");
@@ -92,19 +94,17 @@ function MapEditingPage() {
     // console.log("Updated distancesData:", distancePath);
   }
 
-  async function loadNodesData(request: {req: string}) {
-    const nodesResponse = await axios.post("/api/sendNodes", request, {
-      headers: { "Content-Type": "application/json" },
-    });
-    if (nodesResponse.status !== 200) {
-      throw new Error("Failed to fetch data");
-    }
+  async function loadNodesData() {
+      const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
+        .data as MapNodeType[];
 
-    const nodesPath = await nodesResponse.data;
-    const nodesData: { nodeID: string; coordinates: Coordinates }[] = nodesPath.message;
+      data.forEach((node) => {
+        if (!GraphManager.getInstance().getNodeByID(node.nodeID))
+          GraphManager.getInstance().nodes.push(new MapNode(node));
+      });
 
-    setNodesData(nodesData);
-    // console.log("nodesData", nodesData);
+      console.log("NODES DATA", data);
+      setNodesData(data);
   }
 
   const handleFloorChange = (newFloor: string) => {
@@ -112,31 +112,26 @@ function MapEditingPage() {
 
     switch (newFloor) {
       case "L1":
-        loadNodesData({ req: "L1" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
         newImage.src = L1MapImage;
         floor.current = "L1";
         break;
       case "L2":
-        loadNodesData({ req: "L2" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "L2" }).then(() => setEdgeDataLoaded(true));
         newImage.src = L2MapImage;
         floor.current = "L2";
         break;
       case "1":
-        loadNodesData({ req: "1" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "1" }).then(() => setEdgeDataLoaded(true));
         newImage.src = FFMapImage;
         floor.current = "1";
         break;
       case "2":
-        loadNodesData({ req: "2" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "2" }).then(() => setEdgeDataLoaded(true));
         newImage.src = SFMapImage;
         floor.current = "2";
         break;
       case "3":
-        loadNodesData({ req: "3" }).then(() => setNodeDataLoaded(true));
         loadEdgesDistance({ req: "3" }).then(() => setEdgeDataLoaded(true));
         newImage.src = TFMapImage;
         floor.current = "3";
@@ -152,7 +147,7 @@ function MapEditingPage() {
     if (distancesData.length < 1 && nodesData.length < 1) {
       // console.log("Loading Distances");
       loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
-      loadNodesData({ req: "L1" }).then(() => setNodeDataLoaded(true));
+      loadNodesData().then(() => setNodeDataLoaded(true));
     }
 
     const canvas = canvasRef.current;
