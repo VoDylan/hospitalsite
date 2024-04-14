@@ -3,13 +3,6 @@ import {
   Typography,
   SelectChangeEvent,
   Stack,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
@@ -30,10 +23,6 @@ function MedicineDelivery() {
     frequency: "",
     status: "",
   });
-
-  const [submittedData, setSubmittedData] = useState<
-    MedicineDeliveryFormSubmission[]
-  >([]);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
@@ -73,26 +62,35 @@ function MedicineDelivery() {
     });
   }
 
-  function updateSubmissionList() {
-    setSubmittedData([...submittedData, form]);
-  }
-
   // Define an interface for the node data
   interface NodeData {
+    nodeID: string;
     longName: string;
   }
 
   // Storing the node numbers in a use state so that we only make a get request once
-  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+  const [nodes, updateNodes] = useState<NodeData[]>([]);
 
   // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
     axios
       .get<NodeData[]>("/api/database/nodes")
-      .then((response) =>
-        setNodeNumbers(response.data.map((node) => node.longName)),
-      )
+      .then((response) => {
+        const nodeIDs = response.data.map((node) => node.nodeID);
+        const longNames = response.data.map((node) => node.longName);
+
+        const updatedNodes: NodeData[] = [];
+
+        for (let i = 0; i < nodeIDs.length; i++) {
+          updatedNodes.push({
+            nodeID: nodeIDs[i],
+            longName: longNames[i]
+          });
+        }
+
+        updateNodes(updatedNodes);
+      })
       .catch((error) => console.error(error));
   }, []);
 
@@ -153,7 +151,7 @@ function MedicineDelivery() {
             label={"Location"}
             returnData={form.location}
             handleChange={handleLocationInput}
-            items={nodeNumbers}
+            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
           />
         </Grid>
         <Grid item xs={6}>
@@ -215,50 +213,9 @@ function MedicineDelivery() {
             input={form}
             text={"SUBMIT"}
             clear={clear}
-            updateSubmissionList={updateSubmissionList}
           />
         </Grid>
       </Grid>
-      <TableContainer
-        component={Paper}
-        sx={{
-          minWidth: "40vw",
-          backgroundColor: "white",
-          width: "60vw", //Adjust this to change the width of the table
-          height: "auto",
-          mb: "5vh",
-        }}
-      >
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Location</TableCell>
-              <TableCell align="right">Priority</TableCell>
-              <TableCell align="right">Service</TableCell>
-              <TableCell align="right">Frequency</TableCell>
-              <TableCell align="right">Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {submittedData.map((item: MedicineDeliveryFormSubmission) => (
-              <TableRow
-                key={item.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align={"right"}>
-                  {item.name}
-                </TableCell>
-                <TableCell align={"right"}>{item.location}</TableCell>
-                <TableCell align={"right"}>{item.priority}</TableCell>
-                <TableCell align={"right"}>{item.service}</TableCell>
-                <TableCell align={"right"}>{item.frequency}</TableCell>
-                <TableCell align={"right"}>{item.status}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
       <Typography>Jacob Murphy, Spencer Trautz</Typography>
     </Stack>
   );
