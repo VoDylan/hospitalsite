@@ -28,7 +28,23 @@ export class DFSalgorithm extends Algorithms{
           push neighbor in the stack
      */
 
+    const stack: string[] = [];
+    const visited: string[] = [];
+    const startNodeIndex: number = this.nodes.findIndex((node) => node.startNodeID === start);
+    stack[startNodeIndex] = start;
+    visited[startNodeIndex] = start;
 
+    while (stack.length > 0) {
+      const currentNodeID = stack.shift();
+      const currentNode = this.nodes.find((node) => node.startNodeID === currentNodeID)!;
+
+      for (let i = 0; i < currentNode.neighbors.length; i++) {
+        if (!visited.includes(currentNode.neighbors[i])){
+          visited.push(currentNode.neighbors[i]);
+          stack.push(currentNode.neighbors[i]);
+        }
+      }
+    }
 
     return [];
   }
