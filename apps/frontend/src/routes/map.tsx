@@ -46,6 +46,7 @@ import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
 import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Draw } from "../common/Draw.ts";
+// import startIcon from "../images/mapImages/startIcon.jpg";
 
 function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -1011,6 +1012,7 @@ function Map() {
       if (includedNodesOnFloor.length != 0) {
         console.log("Processing canvas");
 
+
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
           if (!nodesData) {
             setErrorMessage("There is no path between nodes");
@@ -1035,19 +1037,43 @@ function Map() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "black";
 
+
             for (let i = 0; i < includedNodesOnFloor.length; i++) {
               for (let j = 0; j < includedNodesOnFloor[i].length; j++) {
                 ctx.beginPath();
-                ctx.arc(
-                  includedNodesOnFloor[i][j].coordinates.x,
-                  includedNodesOnFloor[i][j].coordinates.y,
-                  5,
-                  0,
-                  2 * Math.PI,
-                );
+
+                if (includedNodesOnFloor[i][j].nodeID === startNode) { // Check if it's the first element
+                    ctx.rect(
+                      includedNodesOnFloor[i][j].coordinates.x - 12, // Adjusting x-coordinate to center the rectangle
+                      includedNodesOnFloor[i][j].coordinates.y - 12, // Adjusting y-coordinate to center the rectangle
+                      35, // Width of the rectangle
+                      35 // Height of the rectangle
+                    );
+                }
+
+                if (includedNodesOnFloor[i][j].nodeID === endNode) { // Check if it's the last element
+                  ctx.fillStyle = "red";
+                  ctx.rect(
+                    includedNodesOnFloor[i][j].coordinates.x - 12, // Adjusting x-coordinate to center the rectangle
+                    includedNodesOnFloor[i][j].coordinates.y - 12, // Adjusting y-coordinate to center the rectangle
+                    35, // Width of the rectangle
+                    35 // Height of the rectangle
+                  );
+                }
+
+                else {
+                  ctx.arc(
+                    includedNodesOnFloor[i][j].coordinates.x,
+                    includedNodesOnFloor[i][j].coordinates.y,
+                    5,
+                    0,
+                    2 * Math.PI,
+                  );
+                }
                 ctx.fill();
               }
             }
+
 
             ctx.lineWidth = 3;
             ctx.beginPath();
