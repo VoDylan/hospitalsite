@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -20,6 +20,11 @@ import SecurityService from "./routes/SecurityService.tsx";
 import MedicineDelivery from "./routes/MedicineDelivery.tsx";
 import RoomScheduling from "./routes/RoomScheduling.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
+import FilterManager from "common/src/filter/FilterManager.ts";
+import { FilterName } from "common/src/filter/FilterName.ts";
+import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
+import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
+import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
 
 function App() {
@@ -95,6 +100,22 @@ function App() {
     },
   ]);
 
+  const registerFilters = useCallback(() => {
+    FilterManager.getInstance().registerFilter(
+      FilterName.TYPE,
+      () => new TypeFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.FLOOR,
+      () => new FloorFilter(),
+    );
+    FilterManager.getInstance().registerFilter(
+      FilterName.BUILDING,
+      () => new BuildingFilter(),
+    );
+  }, []);
+
+  registerFilters();
   return <RouterProvider router={router} />;
   function Root() {
     const navigate = useNavigate();
