@@ -2,7 +2,7 @@ import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import SlidesPageLI from "../src/routes/SlidesPageLI.tsx";
 import MapTestingPage from "./routes/MapTestingPage.tsx";
-import Map from "./routes/map.tsx";
+import MapRoute from "./routes/mapRoute.tsx";
 import ServicesPage from "./routes/ServicesPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import DisplayDatabase from "./routes/DisplayDatabase.tsx";
@@ -71,7 +71,7 @@ function App() {
 
         {
           path: "/Map",
-          element: <Map />,
+          element: <MapRoute />,
         },
         {
           path: "/LoggedIn",

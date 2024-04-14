@@ -60,17 +60,26 @@ import F3FloorIconPrevSrc from "../images/mapIcons/F3FloorMarkerPrevIcon.png";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Draw } from "../common/Draw.ts";
 
-function Map() {
+function MapRoute() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pathCanvasRef = useRef<HTMLCanvasElement>(null);
   const symbolCanvasRef = useRef<HTMLCanvasElement>(null);
+  const floorIconCanvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [pathsOnFloor, setPathsOnFloor] = useState<IDCoordinates[][]>([]);
   const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [nodesToPrevFloor, setNodesToPrevFloor] = useState<Map<IDCoordinates, string>>(new Map<IDCoordinates, string>());
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [nodesToNextFloor, setNodesToNextFloor] = useState<Map<IDCoordinates, string>>(new Map<IDCoordinates, string>());
+  const [renderFloorIcons, setRenderFloorIcons] = useState<boolean>(false);
 
   const [renderSymbolCanvas, setRenderSymbolCanvas] = useState<boolean>(false);
 
@@ -877,6 +886,9 @@ function Map() {
     populateAutocompleteData,
   ]);
 
+  /**
+   * useEffect hook to render the map legend symbols onto the corresponding canvas
+   */
   useEffect(() => {
     if (symbolCanvasRef.current && renderSymbolCanvas) {
       console.log("Rendering symbol canvas");
@@ -889,11 +901,14 @@ function Map() {
 
       ctx.clearRect(0, 0, currImage.width, currImage.height);
 
+      //Filter for all nodes on the floor
       const filters: NodeFilter =
         FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
           generateFilterValue(false, floor.current),
         ])!;
 
+      //Apply the filters to the list of nodes that have the selected filters applied, so only the nodes that the user wants
+      //are displayed
       const nodesOnFloor = FilterManager.getInstance().applyFilters(
         [filters],
         filteredNodes,
@@ -1000,7 +1015,6 @@ function Map() {
         }
       }
 
-      draw.drawFloorIcon(2000, 2000, 1/3, F3FloorIconPrev);
       setRenderSymbolCanvas(false);
     }
   }, [
@@ -1061,44 +1075,171 @@ function Map() {
 
           setRenderSymbolCanvas(true);
         }
+
+        if(floorIconCanvasRef.current) {
+          const canvas: HTMLCanvasElement = floorIconCanvasRef.current;
+          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          canvas.width = currImage.width;
+          canvas.height = currImage.height;
+
+          ctx.clearRect(0, 0, currImage.width, currImage.height);
+        }
         setRenderBackground(false);
       }
     };
   }, [currImage, renderBackground, floor]);
 
   useEffect(() => {
+    if(floorIconCanvasRef.current && renderFloorIcons) {
+      console.log("Rendering floor icons");
+      const canvas: HTMLCanvasElement = floorIconCanvasRef.current;
+      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+      if(!ctx) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const draw: Draw = new Draw(ctx);
+
+      for(let i = 0; i < pathsOnFloor.length; i++) {
+        for(let j = 0; j < pathsOnFloor[i].length; j++) {
+          const currNode: IDCoordinates = pathsOnFloor[i][j];
+
+          const prevFloor: string | undefined = nodesToPrevFloor.get(currNode);
+          const nextFloor: string | undefined = nodesToNextFloor.get(currNode);
+
+          if(prevFloor) {
+            let prevFloorIcon: HTMLImageElement | null = null;
+            switch(prevFloor) {
+              case "L2":
+                prevFloorIcon = L2FloorIconPrev;
+                break;
+              case "L1":
+                prevFloorIcon = L1FloorIconPrev;
+                break;
+              case "1":
+                prevFloorIcon = F1FloorIconPrev;
+                break;
+              case "2":
+                prevFloorIcon = F2FloorIconPrev;
+                break;
+              case "3":
+                prevFloorIcon = F3FloorIconPrev;
+                break;
+              default:
+                console.log(`Previous floor string not valid ${prevFloor}`);
+                break;
+            }
+            if(prevFloorIcon) {
+              console.log("Drawing previous floor icon");
+              draw.drawFloorIcon(currNode.coordinates.x, currNode.coordinates.y, 1 / 3, prevFloorIcon);
+            }
+          }
+
+          if(nextFloor) {
+            let nextFloorIcon: HTMLImageElement | null = null;
+            switch(prevFloor) {
+              case "L2":
+                nextFloorIcon = L2FloorIconNext;
+                break;
+              case "L1":
+                nextFloorIcon = L1FloorIconNext;
+                break;
+              case "1":
+                nextFloorIcon = F1FloorIconNext;
+                break;
+              case "2":
+                nextFloorIcon = F2FloorIconNext;
+                break;
+              case "3":
+                nextFloorIcon = F3FloorIconNext;
+                break;
+              default:
+                console.log(`Next floor string not valid ${nextFloor}`);
+                break;
+            }
+            if(nextFloorIcon) {
+              console.log("Drawing next floor icon");
+              draw.drawFloorIcon(currNode.coordinates.x, currNode.coordinates.y, 1 / 3, nextFloorIcon);
+            }
+          }
+        }
+      }
+    }
+    setRenderFloorIcons(false);
+  }, [
+    F1FloorIconNext,
+    F1FloorIconPrev,
+    F2FloorIconNext,
+    F2FloorIconPrev,
+    F3FloorIconNext,
+    F3FloorIconPrev,
+    L1FloorIconNext,
+    L1FloorIconPrev,
+    L2FloorIconNext,
+    L2FloorIconPrev,
+    nodesToNextFloor,
+    nodesToPrevFloor,
+    pathsOnFloor,
+    renderFloorIcons
+  ]);
+
+  useEffect(() => {
     console.log("Determining nodes on floor...");
-    const includedNodesOnFloor: IDCoordinates[][] = [];
+    const includedPathsOnFloor: IDCoordinates[][] = [];
 
     let currPath: IDCoordinates[] = [];
 
+    const nodesToPrevFloor: Map<IDCoordinates, string> = new Map<IDCoordinates, string>();
+    const nodesToNextFloor: Map<IDCoordinates, string> = new Map<IDCoordinates, string>();
+
+    let lastVisitedFloor = "";
+
     for (let i = 0; i < nodesData.length; i++) {
-      if (
-        GraphManager.getInstance().getNodeByID(nodesData[i].nodeID)!.floor ==
-        floor.current
-      ) {
+      const node: MapNode | null = GraphManager.getInstance().getNodeByID(nodesData[i].nodeID);
+      if(!node) continue;
+
+      if (node.floor == floor.current) {
+        lastVisitedFloor = node.floor;
         currPath.push(nodesData[i]);
       } else {
+        if(lastVisitedFloor !== "" && lastVisitedFloor !== node.floor) {
+          nodesToNextFloor.set(currPath[currPath.length - 1], node.floor);
+          nodesToPrevFloor.set(nodesData[i], lastVisitedFloor);
+          lastVisitedFloor = node.floor;
+        }
+
         if (currPath.length != 0) {
-          includedNodesOnFloor.push(currPath);
+          includedPathsOnFloor.push(currPath);
           currPath = [];
         }
       }
     }
 
-    if (currPath.length != 0) includedNodesOnFloor.push(currPath);
+    if (currPath.length != 0) includedPathsOnFloor.push(currPath);
 
     console.log(`Determined nodes on floor`);
-    console.log(includedNodesOnFloor);
+    console.log(includedPathsOnFloor);
     console.log(reprocessNodes);
+
+    console.log(nodesToNextFloor);
+    console.log(nodesToPrevFloor);
+
+    setPathsOnFloor(includedPathsOnFloor);
+    setNodesToNextFloor(nodesToNextFloor);
+    setNodesToPrevFloor(nodesToPrevFloor);
+    setRenderFloorIcons(true);
 
     if (pathCanvasRef.current) {
       const canvas: HTMLCanvasElement = pathCanvasRef.current;
       const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
-      if (!ctx) return;
+      if(!ctx) return;
 
-      if (includedNodesOnFloor.length != 0) {
+      if (includedPathsOnFloor.length != 0) {
         console.log("Processing canvas");
 
         if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
@@ -1110,10 +1251,10 @@ function Map() {
           let currentTargetIndex = 0;
           let currentPathIndex = 0;
           let currentX =
-            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+            includedPathsOnFloor[currentPathIndex][currentTargetIndex]
               .coordinates.x;
           let currentY =
-            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+            includedPathsOnFloor[currentPathIndex][currentTargetIndex]
               .coordinates.y;
           const speed = 1;
 
@@ -1125,12 +1266,12 @@ function Map() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "black";
 
-            for (let i = 0; i < includedNodesOnFloor.length; i++) {
-              for (let j = 0; j < includedNodesOnFloor[i].length; j++) {
+            for (let i = 0; i < includedPathsOnFloor.length; i++) {
+              for (let j = 0; j < includedPathsOnFloor[i].length; j++) {
                 ctx.beginPath();
                 ctx.arc(
-                  includedNodesOnFloor[i][j].coordinates.x,
-                  includedNodesOnFloor[i][j].coordinates.y,
+                  includedPathsOnFloor[i][j].coordinates.x,
+                  includedPathsOnFloor[i][j].coordinates.y,
                   5,
                   0,
                   2 * Math.PI,
@@ -1142,15 +1283,15 @@ function Map() {
             ctx.lineWidth = 3;
             ctx.beginPath();
 
-            for (let i = 0; i < includedNodesOnFloor.length; i++) {
+            for (let i = 0; i < includedPathsOnFloor.length; i++) {
               ctx.moveTo(
-                includedNodesOnFloor[i][0].coordinates.x,
-                includedNodesOnFloor[i][0].coordinates.y,
+                includedPathsOnFloor[i][0].coordinates.x,
+                includedPathsOnFloor[i][0].coordinates.y,
               );
-              for (let j = 1; j < includedNodesOnFloor[i].length; j++) {
+              for (let j = 1; j < includedPathsOnFloor[i].length; j++) {
                 ctx.lineTo(
-                  includedNodesOnFloor[i][j].coordinates.x,
-                  includedNodesOnFloor[i][j].coordinates.y,
+                  includedPathsOnFloor[i][j].coordinates.x,
+                  includedPathsOnFloor[i][j].coordinates.y,
                 );
               }
             }
@@ -1163,29 +1304,29 @@ function Map() {
             ctx.fill();
 
             const dx =
-              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+              includedPathsOnFloor[currentPathIndex][currentTargetIndex]
                 .coordinates.x - currentX;
             const dy =
-              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+              includedPathsOnFloor[currentPathIndex][currentTargetIndex]
                 .coordinates.y - currentY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < speed) {
               currentTargetIndex =
                 (currentTargetIndex + 1) %
-                includedNodesOnFloor[currentPathIndex].length;
+                includedPathsOnFloor[currentPathIndex].length;
             } else {
               currentX += (dx / distance) * speed;
               currentY += (dy / distance) * speed;
             }
             if (currentTargetIndex === 0) {
               currentPathIndex =
-                (currentPathIndex + 1) % includedNodesOnFloor.length;
+                (currentPathIndex + 1) % includedPathsOnFloor.length;
               currentX =
-                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                includedPathsOnFloor[currentPathIndex][currentTargetIndex]
                   .coordinates.x;
               currentY =
-                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
+                includedPathsOnFloor[currentPathIndex][currentTargetIndex]
                   .coordinates.y;
               currentTargetIndex = 1;
             }
@@ -1199,15 +1340,7 @@ function Map() {
       }
     }
     setReprocessNodes(false);
-  }, [
-    endNode,
-    filteredNodes,
-    floor,
-    nodes,
-    nodesData,
-    reprocessNodes,
-    startNode,
-  ]);
+  }, [F1FloorIconNext, F1FloorIconPrev, F2FloorIconNext, F2FloorIconPrev, F3FloorIconNext, F3FloorIconPrev, L1FloorIconNext, L1FloorIconPrev, L2FloorIconNext, L2FloorIconPrev, endNode, filteredNodes, floor, nodes, nodesData, reprocessNodes, startNode]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -1444,6 +1577,17 @@ function Map() {
                     maxWidth: "100%",
                   }}
                 />
+                <canvas
+                  ref={floorIconCanvasRef}
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                />
               </>
             </Draggable>
           </TransformComponent>
@@ -1454,4 +1598,4 @@ function Map() {
   );
 }
 
-export default Map;
+export default MapRoute;
