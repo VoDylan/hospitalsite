@@ -1,7 +1,7 @@
 import Algorithms from "./Algorithms.ts";
 import {IDCoordinates} from "common/src/IDCoordinates.ts";
 
-export class DFSalgorithm extends Algorithms{
+export class DFSalgorithm extends Algorithms {
   constructor() {
     super();
   }
