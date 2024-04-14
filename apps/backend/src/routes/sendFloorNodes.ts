@@ -4,21 +4,22 @@ import { IDCoordinates } from "common/src/IDCoordinates.ts";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const request: { req: string } = req.body;
-  const floor = request.req;
+  try {
+    const request: { req: string } = req.body;
+    const floor = request.req;
 
-  const nodes = new FloorNodes(floor);
+    const nodes = new FloorNodes(floor);
 
-  async function run(): Promise<IDCoordinates[]> {
-    return await nodes.putIntoTypes();
+    const path: IDCoordinates[] = await nodes.putIntoTypes();
+    console.log(path);
+
+    res.status(200).json({
+      message: path,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Router: Internal Server Error" });
   }
-
-  const path: IDCoordinates[] = await run();
-  console.log(path);
-
-  res.status(200).json({
-    message: path,
-  });
 });
 
 export default router;
