@@ -1,5 +1,6 @@
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import Algorithms from "./Algorithms.ts";
+import {Coordinates} from "common/src/Coordinates.ts";
 
 export class AStarAlgorithm extends Algorithms {
   public constructor() {
@@ -52,14 +53,8 @@ export class AStarAlgorithm extends Algorithms {
     return minKey;
   }
 
-  private getCoordinates(currentNode: string) {
-    const Node = this.mapNodes.find((node) => node.nodeID === currentNode);
-    if (!Node) {
-      console.log("Could not get coordinates");
-      return { x: 0, y: 0 };
-    }
-
-    return { x: Node.xcoord, y: Node.ycoord };
+  getCoordinates(currentNode: string): Coordinates {
+    return super.getCoordinates(currentNode);
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {

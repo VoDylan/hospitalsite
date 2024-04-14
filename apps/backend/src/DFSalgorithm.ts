@@ -1,5 +1,6 @@
 import Algorithms from "./Algorithms.ts";
 import {IDCoordinates} from "common/src/IDCoordinates.ts";
+import {Coordinates} from "common/src/Coordinates.ts";
 
 export class DFSalgorithm extends Algorithms {
   constructor() {
@@ -8,6 +9,10 @@ export class DFSalgorithm extends Algorithms {
 
   async loadData(){
     await super.loadData();
+  }
+
+  getCoordinates(currentNode: string): Coordinates {
+    return super.getCoordinates(currentNode);
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
@@ -30,18 +35,55 @@ export class DFSalgorithm extends Algorithms {
 
     const stack: string[] = [];
     const visited: string[] = [];
+    const parents: string[] = [];
     const startNodeIndex: number = this.nodes.findIndex((node) => node.startNodeID === start);
     stack[startNodeIndex] = start;
     visited[startNodeIndex] = start;
+    parents[startNodeIndex] = "";
 
     while (stack.length > 0) {
       const currentNodeID = stack.shift();
       const currentNode = this.nodes.find((node) => node.startNodeID === currentNodeID)!;
 
+      if (currentNodeID === end){
+        const coordinatesPath: IDCoordinates[] = [];
+        const path: string[] = [];
+        let current: string | null = currentNodeID;
+        while (current !== start) {
+          let currentIdx: number = -1;
+          if (current) {
+            path.unshift(current);
+            coordinatesPath.unshift({
+              nodeID: current,
+              coordinates: this.getCoordinates(current),
+            });
+            currentIdx = this.nodes.findIndex(
+              (node) => node.startNodeID === current,
+            );
+          }
+          current = parents[currentIdx];
+        }
+        coordinatesPath.unshift({
+          nodeID: start,
+          coordinates: this.getCoordinates(start),
+        });
+        path.unshift(start);
+
+        // console.log("Path found:", path);
+        // console.log("Coordinates found:", coordinatesPath);
+
+        return coordinatesPath;
+      }
+
       for (let i = 0; i < currentNode.neighbors.length; i++) {
-        if (!visited.includes(currentNode.neighbors[i])){
-          visited.push(currentNode.neighbors[i]);
-          stack.push(currentNode.neighbors[i]);
+        const neighborID = currentNode.neighbors[i];
+
+        if (!visited.includes(neighborID)){
+          const neighborIndex = this.nodes.findIndex((node) => node.startNodeID === neighborID);
+          parents[neighborIndex] = currentNodeID!;
+
+          visited.push(neighborID);
+          stack.push(neighborID);
         }
       }
     }

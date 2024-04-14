@@ -41,6 +41,19 @@ abstract class Algorithms {
       updateNode(neighbor, currentNode);
     }
   }
+
+  getCoordinates(currentNode: string) {
+    const Node = this.mapNodes.find((node) => node.nodeID === currentNode);
+    if (!Node) {
+      console.log("Could not get coordinates");
+      return { x: 0, y: 0 };
+    }
+
+    return { x: Node.xcoord, y: Node.ycoord };
+  }
+
+
+
   abstract runAlgorithm(start: string, end: string): IDCoordinates[];
 }
 
