@@ -29,7 +29,8 @@
     "test:docker": "docker-compose -f docker-compose.test.yaml up --build --renew-anon-volumes -d",
     "test:stop": "docker-compose -f docker-compose.dev.yaml down --volumes --rmi local",
     "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
+    "lint:fix": "yarn eslint --fix '{apps,packages}/**/src/**/*.{ts,tsx}'",
+    "lint:pre-commit": "turbo run lint:fix",
     "postinstall": "husky install || exit 0",
     "build": "turbo run build",
     "docker:upload": "turbo run docker:upload --concurrency=1"
@@ -44,6 +45,7 @@
     "@vitest/ui": "^1.4.0",
     "eslint": "^8.56.0",
     "eslint-config-custom": "workspace:*",
+    "eslint-plugin-unused-imports": "^3.1.0",
     "happy-dom": "^10.6.3",
     "husky": "^8.0.0",
     "prettier": "2.8.8",
