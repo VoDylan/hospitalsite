@@ -7,7 +7,6 @@ import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
 import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
 import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
 import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
-import { sendRequest } from "common/src/sendRequest.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import TextField from "@mui/material/TextField";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
@@ -77,12 +76,8 @@ function MapEditingPage() {
     setChecked((prev) => !prev);
   };
 
-  // async function loadNodeData() {
-  //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
-  //   setNodesData(data);
-  // }
 
-  async function loadEdgesDistance(request: sendRequest) {
+  async function loadEdgesDistance(request: {req: string}) {
     // const req = { req: "L1" };
     const distancesResponse = await axios.post("/api/sendDistances", request, {
       headers: { "Content-Type": "application/json" },
@@ -97,7 +92,7 @@ function MapEditingPage() {
     // console.log("Updated distancesData:", distancePath);
   }
 
-  async function loadNodesData(request: sendRequest) {
+  async function loadNodesData(request: {req: string}) {
     const nodesResponse = await axios.post("/api/sendNodes", request, {
       headers: { "Content-Type": "application/json" },
     });
@@ -106,7 +101,7 @@ function MapEditingPage() {
     }
 
     const nodesPath = await nodesResponse.data;
-    const nodesData = nodesPath.message;
+    const nodesData: { nodeID: string; coordinates: Coordinates }[] = nodesPath.message;
 
     setNodesData(nodesData);
     // console.log("nodesData", nodesData);

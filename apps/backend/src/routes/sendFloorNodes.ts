@@ -1,6 +1,7 @@
 import express from "express";
 import { FloorNodes } from "../FloorNodes.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
+
 const router = express.Router();
 
 router.post("/", async (req, res) => {
