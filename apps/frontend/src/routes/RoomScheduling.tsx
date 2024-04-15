@@ -5,6 +5,7 @@ import {
   Stack,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { RoomSchedulingFormSubmission } from "../common/formSubmission/RoomSchedulingFormSubmission.ts";
@@ -12,7 +13,6 @@ import RoomBackground from "../images/RoomScheduling.jpg";
 import { RoomSubmitButton } from "../components/buttons/RoomSubmitButton.tsx";
 import axios from "axios";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 
 function RoomScheduling() {
   const [form, setFormResponses] = useState<RoomSchedulingFormSubmission>({
@@ -118,6 +118,8 @@ function RoomScheduling() {
       <Grid
         container
         direction={"row"}
+        rowSpacing={1}
+        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -140,15 +142,16 @@ function RoomScheduling() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Name:</Typography>
-          <CenterAlignedTextbox
+          <Typography color={"black"}>Name:</Typography>
+          <LeftAlignedTextbox
             label={"Name"}
             value={form.name}
             onChange={handleNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Location:</Typography>
+          <Typography color={"black"}>
+            Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
@@ -157,8 +160,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Room Needed:</Typography>
-            Room Needed:
+          <Typography color={"black"}>
+            Room Needed:</Typography>
           <DropDown
             items={["MRI", "Surgery", "Conference", "Checkup", "Waiting Room"]}
             handleChange={handleServiceInput}
@@ -167,7 +170,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Frequency Needed:</Typography>
+          <Typography color={"black"}>
+            Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
             handleChange={handleFrequencyInput}
@@ -176,7 +180,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Priority of Scheduling:</Typography>
+          <Typography color={"black"}>
+            Priority of Scheduling:</Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
@@ -185,7 +190,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Status of the Request:</Typography>
+          <Typography color={"black"}>
+            Status of the Request:</Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -200,6 +206,7 @@ function RoomScheduling() {
             display: "flex",
             my: 2,
             justifyContent: "center",
+            pr: 6,
           }}
         >
           <RoomSubmitButton
@@ -210,7 +217,7 @@ function RoomScheduling() {
         </Grid>
       </Grid>
       <Typography>Jacob Murphy, Spencer Trautz</Typography>
-  </Stack>
+    </Stack>
   );
 }
 
