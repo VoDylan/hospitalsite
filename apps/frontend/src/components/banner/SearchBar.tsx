@@ -17,6 +17,7 @@ function SearchBar() {
     },
   }));
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const SearchIconWrapper = styled("div")(({ theme }) => ({
     height: "100%",
     color: "#009CA6",
@@ -72,7 +73,7 @@ function SearchBar() {
           <TextField
             {...params}
             id={"standard-basic"}
-            label="Search"
+            placeholder="Search"
             focused={false}
             InputProps={{
               ...params.InputProps,
@@ -83,11 +84,19 @@ function SearchBar() {
                   </SearchIconWrapper>
                 </>
               ),
+              style: {
+                height: "2.3rem",
+                fontSize: "1rem", // Reduce font size if needed
+                padding: "0rem .4rem", // Adjust padding to reduce vertical space
+                display: "flex", // Use flexbox
+                alignItems: "center", // Center align vertically
+                lineHeight: "2vh",
+              },
             }}
           />
         )}
         sx={{
-          width: "15vw"
+          width: "15vw",
         }}
       />
     </Search>
