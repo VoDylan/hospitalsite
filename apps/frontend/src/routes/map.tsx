@@ -27,8 +27,12 @@ import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Draw } from "../common/Draw.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
+import startIcon from "../images/mapImages/starticon3.png";
+import endIcon from "../images/mapImages/5632658.png";
+
 
 function Map() {
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pathCanvasRef = useRef<HTMLCanvasElement>(null);
   const symbolCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -794,7 +798,7 @@ function Map() {
               return;
             }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "blue";
 
 
             for (let i = 0; i < includedNodesOnFloor.length; i++) {
@@ -802,22 +806,34 @@ function Map() {
                 ctx.beginPath();
 
                 if (includedNodesOnFloor[i][j].nodeID === startNode) { // Check if it's the first element
-                    ctx.rect(
-                      includedNodesOnFloor[i][j].coordinates.x - 12, // Adjusting x-coordinate to center the rectangle
-                      includedNodesOnFloor[i][j].coordinates.y - 12, // Adjusting y-coordinate to center the rectangle
-                      35, // Width of the rectangle
-                      35 // Height of the rectangle
-                    );
+                  const image: HTMLImageElement | null = document.querySelector(`.start`);                  // const startNodeX = includedNodesOnFloor[i][j].coordinates.x;
+                  // const startNodeY = includedNodesOnFloor[i][j].coordinates.y;
+                  if (!image) return;
+
+                  ctx.drawImage(image, includedNodesOnFloor[i][j].coordinates.x - 67, includedNodesOnFloor[i][j].coordinates.y - 50, 130, 100); // Adjust iconWidth and iconHeight as needed
+
+                  // ctx.rect(
+                  //     includedNodesOnFloor[i][j].coordinates.x - 12, // Adjusting x-coordinate to center the rectangle
+                  //     includedNodesOnFloor[i][j].coordinates.y - 12, // Adjusting y-coordinate to center the rectangle
+                  //     35, // Width of the rectangle
+                  //     35 // Height of the rectangle
+                  //   );
                 }
 
                 if (includedNodesOnFloor[i][j].nodeID === endNode) { // Check if it's the last element
-                  ctx.fillStyle = "red";
-                  ctx.rect(
-                    includedNodesOnFloor[i][j].coordinates.x - 12, // Adjusting x-coordinate to center the rectangle
-                    includedNodesOnFloor[i][j].coordinates.y - 12, // Adjusting y-coordinate to center the rectangle
-                    35, // Width of the rectangle
-                    35 // Height of the rectangle
-                  );
+                  const image2: HTMLImageElement | null = document.querySelector(`.end`);                  // const startNodeX = includedNodesOnFloor[i][j].coordinates.x;
+
+                  if (!image2) return;
+
+                  ctx.drawImage(image2, includedNodesOnFloor[i][j].coordinates.x - 31, includedNodesOnFloor[i][j].coordinates.y - 50, 60, 60); // Adjust iconWidth and iconHeight as needed
+
+                  // ctx.fillStyle = "red";
+                  // ctx.rect(
+                  //   includedNodesOnFloor[i][j].coordinates.x - 12, // Adjusting x-coordinate to center the rectangle
+                  //   includedNodesOnFloor[i][j].coordinates.y - 12, // Adjusting y-coordinate to center the rectangle
+                  //   35, // Width of the rectangle
+                  //   35 // Height of the rectangle
+                  // );
                 }
 
                 else {
@@ -833,7 +849,8 @@ function Map() {
               }
             }
 
-            ctx.lineWidth = 3;
+            ctx.strokeStyle = "#0000FF";
+            ctx.lineWidth = 10;
             ctx.beginPath();
 
             for (let i = 0; i < includedNodesOnFloor.length; i++) {
@@ -849,12 +866,20 @@ function Map() {
               }
             }
 
+
             ctx.stroke();
 
             ctx.fillStyle = "blue";
             ctx.beginPath();
             ctx.arc(currentX, currentY, 12, 0, 2 * Math.PI);
             ctx.fill();
+
+            ctx.strokeStyle = "white"; // Set the stroke color to black
+            ctx.lineWidth = 4; // Set the border width
+            ctx.beginPath();
+            ctx.arc(currentX, currentY, 14, 0, 2 * Math.PI);
+            ctx.stroke();
+
 
             const dx =
               includedNodesOnFloor[currentPathIndex][currentTargetIndex]
@@ -904,129 +929,157 @@ function Map() {
   ]);
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <TopBanner2 />
-
-      {/*Side Bar*/}
-      <MapSideBar
-        title="Navigation"
-        onChange={(event, value) => handleStartNodeChange(value)}
-        autocompleteNodeData={autocompleteNodeData}
-        compareFn={(a, b) => a.label.localeCompare(b.label)}
-        nodeToLabelIdCallback={(node) => node.label}
-        groupBy={(option) => option.charAt(0).toUpperCase()}
-        optionLabel={(option) => option}
-        renderInput={(params) => (
-          <TextField {...params} label="Starting Location" value={startNode} />
-        )}
-        onChange1={(event, value) => handleEndNodeChange(value)}
-        renderInput1={(params) => (
-          <TextField {...params} label="Ending Location" value={endNode} />
-        )}
-        open={open}
-        handleClick={handleClick}
-        checkedBFS={checkedBFS}
-        handleSelectBFS={handleSelectBFS}
-        checkedAS={checkedAS}
-        handleSelectAS={handleSelectAS}
-        errorMessage={errorMessage}
-        onClick={() => {
-          handleSubmit().then(() => {
-            setUpdateAnimation(!updateAnimation);
-          });
+    <div style={{position: "relative"}}>
+      <img
+        src={startIcon}
+        className={"start"}
+        alt="icon"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          opacity: 0,
+          zIndex: -1,
         }}
-        onClick1={handleButtonClick}
-        checked={checked}
-        onClick2={handleSelectAll}
-        icon={<Icon
-          handleButtonClick={handleButtonClick}
-          checked={false}
-          confIconState={confIconState}
-          deptIconState={deptIconState}
-          labsIconState={labsIconState}
-          servIconState={servIconState}
-          infoIconState={infoIconState}
-          restroomsIconState={restroomsIconState}
-          elevatorIconState={elevatorIconState}
-          stairsIconState={stairsIconState}
-          exitsIconState={exitsIconState}
-          retlIconState={retlIconState}
-          ll1IconState={ll1IconState}
-          ll2IconState={ll2IconState}
-          firstFloorIconState={firstFloorIconState}
-          secondFloorIconState={secondFloorIconState}
-          thirdFloorIconState={thirdFloorIconState}
-          handleConfIconState={handleConfIconState}
-          handleDeptIconState={handleDeptIconState}
-          handleLabsIconState={handleLabsIconState}
-          handleServIconState={handleServIconState}
-          handleInfoIconState={handleInfoIconState}
-          handleRestroomsIconState={handleRestroomsIconState}
-          handleElevatorIconState={handleElevatorIconState}
-          handleStairsIconState={handleStairsIconState}
-          handleExitsIconState={handleExitsIconState}
-          handleRetlIconState={handleRetlIconState}
-          handleLL1IconState={handleLL1IconState}
-          handleLL2IconState={handleLL2IconState}
-          handleFirstFloorIconState={handleFirstFloorIconState}
-          handleSecondFloorIconState={handleSecondFloorIconState}
-          handleThirdFloorIconState={handleThirdFloorIconState}
-          handleSelectAll={handleSelectAll}
-          handleClearAll={handleClearAll}
-        />}
-        callback={handleFloorChange}
       />
+      <img
+        src={endIcon}
+        className={"end"}
+        alt="icon"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          opacity: 0,
+          zIndex: -1,
+        }}
+      />
+      <Box sx={{display: "flex"}}>
 
-      <Box
-        width={window.innerWidth}
-        height={window.innerHeight}
-        overflow={"clip"}
-      >
-        <TransformWrapper>
-          <TransformComponent>
-            <Draggable>
-              <>
-                <canvas
-                  ref={canvasRef}
-                  style={{
-                    position: "relative",
-                    top: 50,
-                    left: 0,
-                    minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                />
-                <canvas
-                  ref={symbolCanvasRef}
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                />
-                <canvas
-                  ref={pathCanvasRef}
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                />
-              </>
-            </Draggable>
-          </TransformComponent>
-        </TransformWrapper>
+
+        <CssBaseline/>
+        <TopBanner2/>
+
+        {/*Side Bar*/}
+        <MapSideBar
+          title="Navigation"
+          onChange={(event, value) => handleStartNodeChange(value)}
+          autocompleteNodeData={autocompleteNodeData}
+          compareFn={(a, b) => a.label.localeCompare(b.label)}
+          nodeToLabelIdCallback={(node) => node.label}
+          groupBy={(option) => option.charAt(0).toUpperCase()}
+          optionLabel={(option) => option}
+          renderInput={(params) => (
+            <TextField {...params} label="Starting Location" value={startNode}/>
+          )}
+          onChange1={(event, value) => handleEndNodeChange(value)}
+          renderInput1={(params) => (
+            <TextField {...params} label="Ending Location" value={endNode}/>
+          )}
+          open={open}
+          handleClick={handleClick}
+          checkedBFS={checkedBFS}
+          handleSelectBFS={handleSelectBFS}
+          checkedAS={checkedAS}
+          handleSelectAS={handleSelectAS}
+          errorMessage={errorMessage}
+          onClick={() => {
+            handleSubmit().then(() => {
+              setUpdateAnimation(!updateAnimation);
+            });
+          }}
+          onClick1={handleButtonClick}
+          checked={checked}
+          onClick2={handleSelectAll}
+          icon={<Icon
+            handleButtonClick={handleButtonClick}
+            checked={false}
+            confIconState={confIconState}
+            deptIconState={deptIconState}
+            labsIconState={labsIconState}
+            servIconState={servIconState}
+            infoIconState={infoIconState}
+            restroomsIconState={restroomsIconState}
+            elevatorIconState={elevatorIconState}
+            stairsIconState={stairsIconState}
+            exitsIconState={exitsIconState}
+            retlIconState={retlIconState}
+            ll1IconState={ll1IconState}
+            ll2IconState={ll2IconState}
+            firstFloorIconState={firstFloorIconState}
+            secondFloorIconState={secondFloorIconState}
+            thirdFloorIconState={thirdFloorIconState}
+            handleConfIconState={handleConfIconState}
+            handleDeptIconState={handleDeptIconState}
+            handleLabsIconState={handleLabsIconState}
+            handleServIconState={handleServIconState}
+            handleInfoIconState={handleInfoIconState}
+            handleRestroomsIconState={handleRestroomsIconState}
+            handleElevatorIconState={handleElevatorIconState}
+            handleStairsIconState={handleStairsIconState}
+            handleExitsIconState={handleExitsIconState}
+            handleRetlIconState={handleRetlIconState}
+            handleLL1IconState={handleLL1IconState}
+            handleLL2IconState={handleLL2IconState}
+            handleFirstFloorIconState={handleFirstFloorIconState}
+            handleSecondFloorIconState={handleSecondFloorIconState}
+            handleThirdFloorIconState={handleThirdFloorIconState}
+            handleSelectAll={handleSelectAll}
+            handleClearAll={handleClearAll}
+          />}
+          callback={handleFloorChange}
+        />
+
+        <Box
+          width={window.innerWidth}
+          height={window.innerHeight}
+          overflow={"clip"}
+        >
+          <TransformWrapper>
+            <TransformComponent>
+              <Draggable>
+                <>
+                  <canvas
+                    ref={canvasRef}
+                    style={{
+                      position: "relative",
+                      top: 50,
+                      left: 0,
+                      minHeight: "100vh",
+                      maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                  />
+                  <canvas
+                    ref={symbolCanvasRef}
+                    style={{
+                      position: "absolute",
+                      top: 50,
+                      left: 0,
+                      minHeight: "100vh",
+                      maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                  />
+                  <canvas
+                    ref={pathCanvasRef}
+                    style={{
+                      position: "absolute",
+                      top: 50,
+                      left: 0,
+                      minHeight: "100vh",
+                      maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                  />
+                </>
+              </Draggable>
+            </TransformComponent>
+          </TransformWrapper>
+        </Box>
+        <Legend filterItems={filterIcons}/>
       </Box>
-      <Legend filterItems={filterIcons} />
-    </Box>
+    </div>
   );
 }
 
