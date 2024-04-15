@@ -33,6 +33,7 @@ const useStyles = makeStyles({
       marginLeft: "37.5%",
       marginRight: "37.5%",
       width: "200px", // Adjust width as needed
+      minHeight: "75px"
     },
   },
 });

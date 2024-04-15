@@ -9,7 +9,6 @@ import {
   // Select,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { DeviceDeliveryFormSubmission } from "../common/formSubmission/DeviceDeliveryFormSubmission.ts";
@@ -17,6 +16,7 @@ import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/buttons/DeviceSubmitButton.tsx";
 import axios from "axios";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
 
 function DeviceDeliveryService() {
@@ -148,8 +148,6 @@ function DeviceDeliveryService() {
       <Grid
         container
         direction={"row"}
-        rowSpacing={1}
-        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -172,15 +170,15 @@ function DeviceDeliveryService() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Name:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Name:</Typography>
+          <CenterAlignedTextbox
             label={"Name"}
             value={form.name}
             onChange={handleNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Location:</Typography>
+          <Typography color={"black"} align={"center"}>Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.roomNum}
@@ -189,23 +187,23 @@ function DeviceDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Medical Device Needed:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Medical Device Needed:</Typography>
+          <CenterAlignedTextbox
             label={"Medical Device"}
             value={form.device}
             onChange={handleDeviceInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Amount Needed:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Amount Needed:</Typography>
+          <CenterAlignedTextbox
             onChange={handleAmountInput}
             label={"Amount"}
             value={form.amount}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} align={"center"}>
             Priority of Medical Device Delivery:
           </Typography>
           <RadioButtonsGroup
@@ -216,7 +214,7 @@ function DeviceDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} align={"center"}>
             Status of the Request:
           </Typography>
           <RadioButtonsGroup
@@ -233,7 +231,6 @@ function DeviceDeliveryService() {
             display: "flex",
             my: 2,
             justifyContent: "center",
-            pr: 6,
           }}
         >
           <DeviceSubmitButton
