@@ -24,6 +24,11 @@ const isOptionArray = (items: LabelValuePair[] | string[]): items is LabelValueP
 };
 
 const useStyles = makeStyles({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    minWidth: "150px", // Adjust width as needed
+  },
   centeredLabel: {
     textAlign: "left", // Center text within the label
     width: "100%", // Ensure full width
@@ -54,7 +59,7 @@ export function DropDown(props: DropDownProps) {
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <FormControl sx={{ width: 223, height: 75}}>
         <InputLabel
           id="demo-simple-select-label"
