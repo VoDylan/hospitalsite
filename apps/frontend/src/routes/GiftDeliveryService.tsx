@@ -3,16 +3,8 @@ import {
   Typography,
   SelectChangeEvent,
   Stack,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
@@ -22,6 +14,7 @@ import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubm
 import React from "react";
 import Confetti from "react-confetti";
 import axios from "axios";
+import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -98,14 +91,6 @@ function GiftDeliveryService() {
       .catch((error) => console.error(error));
   }, []);
 
-  const [submittedData, setSubmittedData] = useState<
-    GiftDeliveryFormSubmission[]
-  >([]);
-
-  function updateList() {
-    setSubmittedData([...submittedData, form]);
-  }
-
   const [showConfetti, setShowConfetti] = useState(false);
 
   function displayConfetti() {
@@ -139,8 +124,6 @@ function GiftDeliveryService() {
       <Grid
         container
         direction={"row"}
-        rowSpacing={1}
-        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -163,15 +146,15 @@ function GiftDeliveryService() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Name:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Name:</Typography>
+          <CenterAlignedTextbox
             label={"Name"}
             value={form.name}
             onChange={handleNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Location:</Typography>
+          <Typography color={"black"} align={"center"}>Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
@@ -180,16 +163,16 @@ function GiftDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Recipient Name:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Recipient Name:</Typography>
+          <CenterAlignedTextbox
             label={"Recipient Name"}
             value={form.recipientName}
             onChange={handlerecipientNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Optional Message:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Optional Message:</Typography>
+          <CenterAlignedTextbox
             label={"Optional Message"}
             value={form.message}
             onChange={handleMessageInput}
@@ -197,7 +180,7 @@ function GiftDeliveryService() {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} align={"center"}>
             Delivery:
           </Typography>
           <RadioButtonsGroup
@@ -214,7 +197,7 @@ function GiftDeliveryService() {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} align={"center"}>
             Status of the Request:
           </Typography>
           <RadioButtonsGroup
@@ -225,7 +208,7 @@ function GiftDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} paddingTop={2} align={"center"}>
             Gift Size:
           </Typography>
           <RadioButtonsGroup
@@ -236,7 +219,7 @@ function GiftDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} paddingTop={2} align={"center"}>
             Gift Add-on:
           </Typography>
           <RadioButtonsGroup
@@ -254,7 +237,6 @@ function GiftDeliveryService() {
             display: "flex",
             my: 2,
             justifyContent: "center",
-            pr: 6,
           }}
         >
           {showConfetti && (
@@ -269,56 +251,11 @@ function GiftDeliveryService() {
             text={"SUBMIT"}
             input={form}
             clear={clear}
-            updateList={updateList}
             displayConfetti={displayConfetti}
             hideConfetti={hideConfetti}
           />
         </Grid>
       </Grid>
-      <TableContainer
-        component={Paper}
-        sx={{
-          minWidth: "40vw",
-          backgroundColor: "white",
-          width: "60vw", //Adjust this to change the width of the table
-          height: "auto",
-          mb: "5vh",
-        }}
-      >
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Recipient Name</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Location</TableCell>
-              <TableCell align="right">Optional Message</TableCell>
-              <TableCell align="right">Delivery</TableCell>
-              <TableCell align="right">Gift Size</TableCell>
-              <TableCell align="right">Gift Add-on</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {submittedData.map((item: GiftDeliveryFormSubmission) => (
-              <TableRow
-                key={item.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align={"right"}>
-                  {item.name}
-                </TableCell>
-                <TableCell align={"right"}>{item.recipientName}</TableCell>
-                <TableCell align={"right"}>{item.status}</TableCell>
-                <TableCell align={"right"}>{item.location}</TableCell>
-                <TableCell align={"right"}>{item.message}</TableCell>
-                <TableCell align={"right"}>{item.delivery}</TableCell>
-                <TableCell align={"right"}>{item.giftSize}</TableCell>
-                <TableCell align={"right"}>{item.giftAddOn}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
       <Typography>Yitao Hong, Arayah Remillard</Typography>
     </Stack>
   );

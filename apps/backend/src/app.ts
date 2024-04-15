@@ -6,6 +6,7 @@ import databaseRouter from "./routes/databaseRouter";
 import sendPath from "./routes/sendPath";
 import sendTestPath from "./routes/sendTestPath.ts";
 import sendNodesEdgesPath from "./routes/sendNodesEdgesPath.ts";
+import sendFloorNodes from "./routes/sendFloorNodes.ts";
 
 const app: Express = express(); // Set up the backend
 
@@ -30,6 +31,7 @@ app.use("/api/database", databaseRouter);
 app.use("/api/path", sendPath);
 app.use("/api/testPath", sendTestPath);
 app.use("/api/sendDistances", sendNodesEdgesPath);
+app.use("/api/sendNodes", sendFloorNodes);
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });

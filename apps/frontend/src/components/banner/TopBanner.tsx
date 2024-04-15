@@ -1,11 +1,4 @@
-import {
-  AppBar,
-  Button,
-  Stack,
-  Toolbar,
-  styled,
-  IconButton,
-} from "@mui/material";
+import { AppBar, Stack, Toolbar, styled, IconButton } from "@mui/material";
 import React from "react";
 import bwhLogo from "frontend/src/images/bwh-logo.svg";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -13,26 +6,18 @@ import { makeStyles } from "@mui/styles";
 import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
 import NavBar from "../navMenu/NavBar.tsx";
-
-// {
-//   /*WITH NAV BAR*/
-// }
-// import {useLocation} from 'react-router-dom';
-// import Tabs from "@mui/material/Tabs";
-// import {Box, Tab} from "@mui/material";
-// import { TabContext } from '@mui/lab';
+import LoginButton from "../buttons/LoginButton.tsx"; // Import the LoginButton component
 
 const useStyles = makeStyles({
   logoImage: {
     display: "flex",
-    minWidth: "450px", // Set the minimum width
-    maxWidth: "450px", // Set the minimum width
-    minHeight: "120px", // Set the minimum height
-    flexShrink: 0, // Prevent shrinking
+    minWidth: "450px",
+    maxWidth: "450px",
+    minHeight: "120px",
+    flexShrink: 0,
   },
 });
 
-// Customize BWH Logo to have just a link and no button outline
 const LogoIconButton = styled("button")({
   cursor: "pointer",
   background: "transparent",
@@ -48,16 +33,6 @@ const LogoIconButton = styled("button")({
 
 function TopBanner() {
   const classes = useStyles();
-
-  {
-    /*WITH NAV BAR*/
-  }
-  // const location = useLocation();
-  // Set tab values when switching pages
-  // const [value, setValue] = React.useState(getTabIndex(location.pathname));
-  // const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-  //     setValue(newValue);
-  // };
 
   return (
     <AppBar
@@ -90,47 +65,14 @@ function TopBanner() {
 
         <Stack
           direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          display={"flex"}
-          marginRight={10}
-          sx={{ flexGrow: 2 }}
-        >
-          {/*WITH NAV BAR*/}
-          {/*<TabContext value={value}>*/}
-          {/*    <Box>*/}
-          {/*        <Tabs*/}
-          {/*            value={value}*/}
-          {/*            onChange={handleChange}*/}
-          {/*            aria-label="nav tabs example"*/}
-          {/*            role="navigation"*/}
-          {/*        >*/}
-          {/*            <Tab label="Home" component={Link} to='/' />*/}
-          {/*            <Tab label="Directions" component={Link} to="/Map" />*/}
-          {/*            <Tab label="Services" component={Link} to="/Services" />*/}
-          {/*        </Tabs>*/}
-          {/*    </Box>*/}
-          {/*</TabContext>*/}
-        </Stack>
-
-        <Stack
-          direction="row"
           spacing={2}
           alignItems="center"
           display={"flex"}
           sx={{ flexGrow: 1 }}
         >
           <SearchBar />
-          <Button
-            sx={{ width: 220 }}
-            component={Link}
-            to="/Login"
-            variant="contained"
-          >
-            Sign In
-          </Button>
-
-          {/*Profile button links to login page for now*/}
+          {/* Replace Sign In button and profile button with LoginButton */}
+          <LoginButton />
           <Link to="/Login">
             <IconButton
               sx={{ color: "#012D5A" }}
@@ -146,19 +88,4 @@ function TopBanner() {
   );
 }
 
-{
-  /*WITH NAV BAR*/
-}
-// function getTabIndex(path: string): number {
-//     switch (path) {
-//         case "/":
-//             return 0;
-//         case "/Map":
-//             return 1;
-//         case "/Services":
-//             return 2;
-//         default:
-//             return 0;
-//     }
-// }
 export default TopBanner;
