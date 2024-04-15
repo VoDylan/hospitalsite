@@ -1,46 +1,14 @@
-import { NodeAStar } from "common/src/NodeAStar.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
-import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
-import client from "./bin/database-connection.ts";
-import { MapNodeType } from "common/src/map/MapNodeType.ts";
-import Algorithms from "./routes/Algorithms.ts";
+import Algorithms from "./Algorithms.ts";
+import { Coordinates } from "common/src/Coordinates.ts";
 
-export class AStarAlgorithm implements Algorithms {
-  nodes: NodeAStar[];
-  mapNodes: MapNodeType[];
-  mapEdges: MapEdgeType[];
-
+export class AStarAlgorithm extends Algorithms {
   public constructor() {
-    this.nodes = [];
-    this.mapNodes = [];
-    this.mapEdges = [];
+    super();
   }
 
   async loadData() {
-    this.mapNodes = await client.node.findMany();
-    this.mapEdges = await client.edge.findMany();
-
-    for (let i = 0; i < this.mapEdges.length; i++) {
-      const currentNode: string = this.mapEdges[i].startNodeID;
-      const neighbor: string = this.mapEdges[i].endNodeID;
-
-      const updateNode = (nodeID: string, neighborID: string) => {
-        const index = this.nodes.findIndex(
-          (node) => node.startNodeID === nodeID,
-        );
-        if (index === -1) {
-          this.nodes.push({
-            startNodeID: nodeID,
-            neighbors: [neighborID],
-          });
-        } else {
-          this.nodes[index].neighbors.push(neighborID);
-        }
-      };
-
-      updateNode(currentNode, neighbor);
-      updateNode(neighbor, currentNode);
-    }
+    await super.loadData();
   }
 
   private distance(startNodeID: string, endNodeID: string) {
@@ -85,14 +53,8 @@ export class AStarAlgorithm implements Algorithms {
     return minKey;
   }
 
-  private getCoordinates(currentNode: string) {
-    const Node = this.mapNodes.find((node) => node.nodeID === currentNode);
-    if (!Node) {
-      console.log("Could not get coordinates");
-      return { x: 0, y: 0 };
-    }
-
-    return { x: Node.xcoord, y: Node.ycoord };
+  getCoordinates(currentNode: string): Coordinates {
+    return super.getCoordinates(currentNode);
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
@@ -110,6 +72,8 @@ export class AStarAlgorithm implements Algorithms {
     const startNodeIndex = this.nodes.findIndex(
       (node) => node.startNodeID === start,
     );
+
+    console.log(this.nodes);
 
     gScores[startNodeIndex] = 0;
     fScores[startNodeIndex] = this.distance(start, end);

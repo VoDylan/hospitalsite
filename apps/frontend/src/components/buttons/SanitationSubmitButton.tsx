@@ -8,7 +8,6 @@ interface ButtonProps {
   text: string;
   input: SanitationRequestFormSubmission;
   clear: () => void;
-  updateSubmissionList: () => void;
 }
 
 export function SanitationSubmitButton(props: ButtonProps) {

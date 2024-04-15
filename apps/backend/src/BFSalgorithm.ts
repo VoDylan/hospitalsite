@@ -3,15 +3,15 @@ import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { NodeBFS } from "common/src/NodeBFS.ts";
 import client from "./bin/database-connection.ts";
-import Algorithms from "./routes/Algorithms.ts";
+import Algorithms from "./Algorithms.ts";
+import { Coordinates } from "common/src/Coordinates.ts";
 
-export class BFSalgorithm implements Algorithms {
+export class BFSalgorithm extends Algorithms {
   all_nodes: NodeBFS[];
-  count: number;
 
-  public constructor() {
+  constructor() {
+    super();
     this.all_nodes = [];
-    this.count = 0;
   }
 
   async loadData(): Promise<void> {
@@ -61,15 +61,11 @@ export class BFSalgorithm implements Algorithms {
       );
 
       if (!isStartNodePresent) {
-        start_node_now.index = this.count;
         this.all_nodes.push(start_node_now);
-        this.count++;
       }
 
       if (!isNeighborNodePresent) {
-        end_neighbor_now.index = this.count;
         this.all_nodes.push(end_neighbor_now);
-        this.count++;
       }
 
       // adds neighboring nodes
@@ -80,6 +76,10 @@ export class BFSalgorithm implements Algorithms {
           this.all_nodes[j].neighbors.push(start_node_now.current_node);
       }
     }
+  }
+
+  getCoordinates(currentNode: string): Coordinates {
+    return super.getCoordinates(currentNode);
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
