@@ -49,7 +49,7 @@ function LoginForm() {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        minWidth: "100wh",
+        minWidth: "100vh",
         background: `url(${background})`, // Set the background image
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -64,7 +64,8 @@ function LoginForm() {
           paddingBottom: "4%",
           width: "40%",
           height: "60%",
-          minHeight: "80",
+          minWidth: "40%",
+          minHeight: "60%",
           position: "relative",
           zIndex: 0,
           display: "flex",

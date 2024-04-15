@@ -21,7 +21,7 @@ function LoginButtons(props: LoginButtonsProps) {
         onClick={props.onClick}
         sx={{
           borderRadius: "8px",
-          marginRight: "5px",
+          marginRight: "25px",
         }}
       >
         Submit
@@ -32,7 +32,6 @@ function LoginButtons(props: LoginButtonsProps) {
         onClick={handleClear}
         sx={{
           borderRadius: "8px",
-          marginRight: "-1px",
         }}
       >
         Clear
