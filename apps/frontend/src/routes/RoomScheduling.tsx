@@ -158,7 +158,7 @@ function RoomScheduling() {
         </Grid>
         <Grid item xs={6}>
           <Typography color={"black"} align={"center"}>Room Needed:</Typography>
-            Room Needed:</Typography>
+            Room Needed:
           <DropDown
             items={["MRI", "Surgery", "Conference", "Checkup", "Waiting Room"]}
             handleChange={handleServiceInput}
@@ -210,7 +210,7 @@ function RoomScheduling() {
         </Grid>
       </Grid>
       <Typography>Jacob Murphy, Spencer Trautz</Typography>
-    </Stack>
+  </Stack>
   );
 }
 
