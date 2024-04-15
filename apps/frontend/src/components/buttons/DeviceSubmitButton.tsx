@@ -1,7 +1,7 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
-import axios, { isAxiosError } from "axios";
+// import axios, { isAxiosError } from "axios";
 import React, { forwardRef, useState } from "react";
-import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+// import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import { DeviceDeliveryFormSubmission } from "../../common/formSubmission/DeviceDeliveryFormSubmission.ts";
 
 interface ButtonProps {
@@ -45,7 +45,7 @@ export function DeviceSubmitButton(props: ButtonProps) {
   }
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
-  async function handleSubmit() {
+  function handleSubmit() {
     if (props.input.roomNum === "") {
       openWithError("Please select a room");
     } else if (props.input.name === "") {
@@ -59,105 +59,107 @@ export function DeviceSubmitButton(props: ButtonProps) {
     } else if (props.input.amount === "") {
       openWithError("Please select an amount");
     } else {
-      const submission = props.input;
+      // Not needed for iteration 2
+      // const submission = props.input;
       console.log(props.input);
 
-      const result: { success: boolean; data: HTTPResponseType } =
-        await pushToDB(submission);
+      // const result: { success: boolean; data: HTTPResponseType } =
+      //   await pushToDB(submission);
 
-      if (!result.success) {
-        openWithError(
-          `Failed to post form data to database: ${result.data.message}`,
-        );
-      } else {
-        handleClear();
-        openWithSuccess();
+      // if (!result.success) {
+      //   openWithError(
+      //     `Failed to post form data to database: ${result.data.message}`,
+      //   );
+      // } else {
+      //   handleClear();
+      //   openWithSuccess();
 
-        // Remove these once connected to DB
-        //handleListUpdate();
-        //handleClear();
-        //openWithSuccess();
-      }
+      // Remove these once connected to DB
+      handleClear();
+      openWithSuccess();
     }
   }
+  // }
 
-    function handleClear() {
-      props.clear();
-    }
+  function handleClear() {
+    props.clear();
+  }
 
-    // Function for posting the form submission to the database
-    async function pushToDB(form: DeviceDeliveryFormSubmission) {
-      const returnData = {
-        userID: "admin",
-        nodeID: form.roomNum,
-        serviceType: "device-delivery",
-        services: form,
-      };
+  /* Commenting this out for iteration 2
+  // Function for posting the form submission to the database
+  async function pushToDB(form: SanitationRequestFormSubmission) {
+    const returnData = {
+      userID: "admin",
+      nodeID: form.location,
+      serviceType: "flower-delivery",
+      services: form,
+    };
 
-      let statusCode = undefined;
-      let data: HTTPResponseType;
+    let statusCode = undefined;
+    let data: HTTPResponseType;
 
-      try {
-        const res = await axios.post("/api/database/servicerequest", returnData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+    try {
+      const res = await axios.post("/api/database/servicerequest", returnData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-        statusCode = res.status;
-        data = JSON.parse(JSON.stringify(res.data));
-      } catch (e) {
-        if (isAxiosError(e)) {
-          if (e.response != null) {
-            data = JSON.parse(JSON.stringify(e.response!.data));
-            console.log(`Failed to send form data to database: ${data.message}`);
-          } else {
-            data = {
-              message: "Unknown error",
-            };
-            console.log(`Failed to send form data to database: ${data.message}`);
-          }
+      statusCode = res.status;
+      data = JSON.parse(JSON.stringify(res.data));
+    } catch (e) {
+      if (isAxiosError(e)) {
+        if (e.response != null) {
+          data = JSON.parse(JSON.stringify(e.response!.data));
+          console.log(`Failed to send form data to database: ${data.message}`);
         } else {
           data = {
             message: "Unknown error",
           };
           console.log(`Failed to send form data to database: ${data.message}`);
         }
-      }
-
-      if (statusCode != undefined) {
-        console.log(`Success: response code - ${statusCode}`);
-        return {
-          success: true,
-          data: data!,
+      } else {
+        data = {
+          message: "Unknown error",
         };
+        console.log(`Failed to send form data to database: ${data.message}`);
       }
+    }
 
+    if (statusCode != undefined) {
+      console.log(`Success: response code - ${statusCode}`);
       return {
-        success: false,
+        success: true,
         data: data!,
       };
     }
 
-    return (
-      <Button
-        variant="contained"
-        id={"submitButton"}
-        onClick={() => handleSubmit()}
-      >
-        {props.text}
-        <Snackbar
-          open={open}
-          autoHideDuration={5000}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-        >
-          {/*@ts-expect-error Severity will only be of type "success" or "error"*/}
-          <SnackbarAlert severity={type}>{message}</SnackbarAlert>
-        </Snackbar>
-      </Button>
-    );
+    return {
+      success: false,
+      data: data!,
+    };
   }
+  */
+
+  return (
+    <Button
+      variant="contained"
+      id={"submitButton"}
+      onClick={() => handleSubmit()}
+    >
+      {props.text}
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        {/*@ts-expect-error Severity will only be of type "success" or "error"*/}
+        <SnackbarAlert severity={type}>{message}</SnackbarAlert>
+      </Snackbar>
+    </Button>
+  );
+}
