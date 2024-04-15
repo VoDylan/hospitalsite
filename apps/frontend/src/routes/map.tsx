@@ -541,6 +541,35 @@ function Map() {
     setCurrImage(newImage);
   };
 
+  const handleNodeClick = (event: {clientX: number, clientY: number}) => {
+    console.log("entered handleNodeClick");
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext("2d")!;
+    const rect = canvas.getBoundingClientRect();
+
+    const ratioWidth = canvas.width / window.innerWidth;
+    const ratioHeight = canvas.height / window.innerHeight;
+    const xcoord = event.clientX * window.devicePixelRatio;
+    const ycoord = event.clientY * window.devicePixelRatio;
+
+    for (let i = 0; i < filteredNodes.length; i++) {
+      const node: MapNode = filteredNodes[i];
+      console.log("actual: ", canvas.width, canvas.height);
+      console.log("rectCoords ", rect.left, rect.top);
+      console.log("rectDimensions ", rect.width, rect.height);
+      console.log("coords ", xcoord, ycoord);
+      console.log("node ", node.xcoord, node.ycoord);
+      const distance = Math.sqrt((node.xcoord - xcoord) ** 2 + (node.ycoord - ycoord) ** 2);
+      console.log("distance", distance);
+      console.log("\n");
+      if (distance < 50) {
+        alert(`Clicked on node: ${node.nodeID}`);
+        break;
+      }
+    }
+  };
+
+
   /**
    * useEffect to just load the node data. Only called when the flags determining loading data are changed
    */
@@ -569,9 +598,12 @@ function Map() {
     if (symbolCanvasRef.current && renderSymbolCanvas) {
       console.log("Rendering symbol canvas");
       const canvas: HTMLCanvasElement = symbolCanvasRef.current;
+
       const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
       if (!ctx) return;
+
+
 
       const draw = new Draw(ctx);
 
@@ -690,6 +722,17 @@ function Map() {
       setRenderSymbolCanvas(false);
     }
   }, [currImage.height, currImage.width, filteredNodes, renderSymbolCanvas]);
+
+
+  // adding event listener to get the nodes
+  // useEffect(() => {
+  //   if (!canvasRef.current) console.error("elene: canvas does not exist");
+  //   console.log("trying to add mouse pressing?");
+  //
+  //   const canvas: HTMLCanvasElement = canvasRef.current!;
+  //   canvas.addEventListener("click", handleNodeClick);
+  //   return () => canvas.removeEventListener("click", handleNodeClick);
+  // }, [filteredNodes, handleNodeClick]);
 
   useEffect(() => {
     currImage.onload = () => {
@@ -974,6 +1017,7 @@ function Map() {
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
+                  // onClick={handleNodeClick}
                 />
                 <canvas
                   ref={symbolCanvasRef}
@@ -985,6 +1029,7 @@ function Map() {
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
+                  // onClick={handleNodeClick}
                 />
                 <canvas
                   ref={pathCanvasRef}
@@ -996,6 +1041,7 @@ function Map() {
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
+                  onClick={handleNodeClick}
                 />
               </>
             </Draggable>
