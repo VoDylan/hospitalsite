@@ -17,41 +17,26 @@ import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
 import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 
-import L2FloorIconNextSrc from "../images/mapIcons/L2FloorMarkerNextIcon.png";
-import L1FloorIconNextSrc from "../images/mapIcons/L1FloorMarkerNextIcon.png";
-import F1FloorIconNextSrc from "../images/mapIcons/F1FloorMarkerNextIcon.png";
-import F2FloorIconNextSrc from "../images/mapIcons/F2FloorMarkerNextIcon.png";
-import F3FloorIconNextSrc from "../images/mapIcons/F3FloorMarkerNextIcon.png";
-
-import L2FloorIconPrevSrc from "../images/mapIcons/L2FloorMarkerPrevIcon.png";
-import L1FloorIconPrevSrc from "../images/mapIcons/L1FloorMarkerPrevIcon.png";
-import F1FloorIconPrevSrc from "../images/mapIcons/F1FloorMarkerPrevIcon.png";
-import F2FloorIconPrevSrc from "../images/mapIcons/F2FloorMarkerPrevIcon.png";
-import F3FloorIconPrevSrc from "../images/mapIcons/F3FloorMarkerPrevIcon.png";
-
 import {IDCoordinates} from "common/src/IDCoordinates.ts";
-import {Draw} from "../common/Draw.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
 import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
-import {Floor} from "common/src/map/Floor.ts";
+import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
 import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
 import PathCanvas from "../components/map/PathCanvas.tsx";
+import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
 
 function MapRoute() {
-  const floorIconCanvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const [pathsOnFloor, setPathsOnFloor] = useState<IDCoordinates[][]>([]);
   const [pathNodesData, setPathNodesData] = useState<IDCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
 
-  const [nodesToPrevFloor, setNodesToPrevFloor] = useState<Map<IDCoordinates, string>>(new Map<IDCoordinates, string>());
-
-  const [nodesToNextFloor, setNodesToNextFloor] = useState<Map<IDCoordinates, string>>(new Map<IDCoordinates, string>());
-  const [renderFloorIcons, setRenderFloorIcons] = useState<boolean>(false);
+  const nodesToNextFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
+  const nodesToPrevFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
+  const [pathRenderStatus, setPathRenderStatus] = useState<boolean>(false);
 
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
@@ -64,66 +49,6 @@ function MapRoute() {
   const [canvasHeight, setCanvasHeight] = useState<number>(0);
 
   const [floor, setFloor] = useState<Floor>(Floor.L1);
-
-  const [L1FloorIconNext] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = L1FloorIconNextSrc;
-    return img;
-  });
-
-  const [L1FloorIconPrev] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = L1FloorIconPrevSrc;
-    return img;
-  });
-
-  const [L2FloorIconNext] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = L2FloorIconNextSrc;
-    return img;
-  });
-
-  const [L2FloorIconPrev] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = L2FloorIconPrevSrc;
-    return img;
-  });
-
-  const [F1FloorIconNext] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = F1FloorIconNextSrc;
-    return img;
-  });
-
-  const [F1FloorIconPrev] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = F1FloorIconPrevSrc;
-    return img;
-  });
-
-  const [F2FloorIconNext] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = F2FloorIconNextSrc;
-    return img;
-  });
-
-  const [F2FloorIconPrev] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = F2FloorIconPrevSrc;
-    return img;
-  });
-
-  const [F3FloorIconNext] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = F3FloorIconNextSrc;
-    return img;
-  });
-
-  const [F3FloorIconPrev] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = F3FloorIconPrevSrc;
-    return img;
-  });
 
   /**
    * Pathfinder selection
@@ -573,26 +498,14 @@ function MapRoute() {
   }
 
   const handleFloorChange = (newFloor: string) => {
-    switch (newFloor) {
-      case "L1":
-        setFloor(Floor.L1);
-        break;
-      case "L2":
-        setFloor(Floor.L2);
-        break;
-      case "1":
-        setFloor(Floor.F1);
-        break;
-      case "2":
-        setFloor(Floor.F2);
-        break;
-      case "3":
-        setFloor(Floor.F3);
-        break;
-      default:
-        console.error("Returned map floor is not assigned to an image");
-        return;
+    const newFloorObj = floorStrToObj(newFloor);
+
+    if(!newFloorObj) {
+      console.error("New map floor is not a valid floor!");
+      return;
     }
+
+    setFloor(newFloorObj);
   };
 
   /**
@@ -616,123 +529,19 @@ function MapRoute() {
     populateAutocompleteData,
   ]);
 
-  useEffect(() => {
-    if (backgroundRenderStatus) {
-      console.log("Rendering Canvas");
-
-      if(floorIconCanvasRef.current) {
-        const canvas: HTMLCanvasElement = floorIconCanvasRef.current;
-        const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-        if (!ctx) return;
-
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-      }
-    }
-  }, [backgroundRenderStatus, canvasHeight, canvasWidth, floor]);
-
-  useEffect(() => {
-    if(floorIconCanvasRef.current && renderFloorIcons) {
-      console.log("Rendering floor icons");
-      const canvas: HTMLCanvasElement = floorIconCanvasRef.current;
-      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-      if(!ctx) return;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const draw: Draw = new Draw(ctx);
-
-      for(let i = 0; i < pathsOnFloor.length; i++) {
-        for(let j = 0; j < pathsOnFloor[i].length; j++) {
-          const currNode: IDCoordinates = pathsOnFloor[i][j];
-
-          const prevFloor: string | undefined = nodesToPrevFloor.get(currNode);
-          const nextFloor: string | undefined = nodesToNextFloor.get(currNode);
-
-          if(prevFloor) {
-            let prevFloorIcon: HTMLImageElement | null = null;
-            switch(prevFloor) {
-              case "L2":
-                prevFloorIcon = L2FloorIconPrev;
-                break;
-              case "L1":
-                prevFloorIcon = L1FloorIconPrev;
-                break;
-              case "1":
-                prevFloorIcon = F1FloorIconPrev;
-                break;
-              case "2":
-                prevFloorIcon = F2FloorIconPrev;
-                break;
-              case "3":
-                prevFloorIcon = F3FloorIconPrev;
-                break;
-              default:
-                console.log(`Previous floor string not valid ${prevFloor}`);
-                break;
-            }
-            if(prevFloorIcon) {
-              console.log("Drawing previous floor icon");
-              draw.drawFloorIcon(currNode.coordinates.x, currNode.coordinates.y, 1 / 3, prevFloorIcon);
-            }
-          }
-
-          if(nextFloor) {
-            let nextFloorIcon: HTMLImageElement | null = null;
-            switch(prevFloor) {
-              case "L2":
-                nextFloorIcon = L2FloorIconNext;
-                break;
-              case "L1":
-                nextFloorIcon = L1FloorIconNext;
-                break;
-              case "1":
-                nextFloorIcon = F1FloorIconNext;
-                break;
-              case "2":
-                nextFloorIcon = F2FloorIconNext;
-                break;
-              case "3":
-                nextFloorIcon = F3FloorIconNext;
-                break;
-              default:
-                console.log(`Next floor string not valid ${nextFloor}`);
-                break;
-            }
-            if(nextFloorIcon) {
-              console.log("Drawing next floor icon");
-              draw.drawFloorIcon(currNode.coordinates.x, currNode.coordinates.y, 1 / 3, nextFloorIcon);
-            }
-          }
-        }
-      }
-    }
-    setRenderFloorIcons(false);
-  }, [
-    F1FloorIconNext,
-    F1FloorIconPrev,
-    F2FloorIconNext,
-    F2FloorIconPrev,
-    F3FloorIconNext,
-    F3FloorIconPrev,
-    L1FloorIconNext,
-    L1FloorIconPrev,
-    L2FloorIconNext,
-    L2FloorIconPrev,
-    nodesToNextFloor,
-    nodesToPrevFloor,
-    pathsOnFloor,
-    renderFloorIcons
-  ]);
-
   const handleBackgroundRenderStatus = (status: boolean, width: number, height: number) => {
     setBackgroundRenderStatus(status);
     setCanvasWidth(width);
     setCanvasHeight(height);
+  };
+
+  const handleNodeToFloorCallback = (newNodesToNextFloor: Map<IDCoordinates, Floor>, newNodesToPrevFloor: Map<IDCoordinates, Floor>) => {
+    nodesToNextFloor.current = newNodesToNextFloor;
+    nodesToPrevFloor.current = newNodesToPrevFloor;
+  };
+
+  const handlePathRenderStatus = (status: boolean) => {
+    setPathRenderStatus(status);
   };
 
   return (
@@ -861,9 +670,28 @@ function MapRoute() {
                   height={canvasHeight}
                   floor={floor}
                   pathNodesData={pathNodesData}
+                  floorConnectionCallback={handleNodeToFloorCallback}
+                  pathRenderStatusCallback={handlePathRenderStatus}
+                />
+                <FloorIconsCanvas
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                  backgroundRendered={backgroundRenderStatus}
+                  pathRendered={pathRenderStatus}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  floor={floor}
+                  nodesToNextFloor={nodesToNextFloor.current}
+                  nodesToPrevFloor={nodesToPrevFloor.current}
                 />
                 {/*<canvas*/}
-                {/*  ref={pathCanvasRef}*/}
+                {/*  ref={floorIconCanvasRef}*/}
                 {/*  style={{*/}
                 {/*    position: "absolute",*/}
                 {/*    top: 50,*/}
@@ -873,17 +701,6 @@ function MapRoute() {
                 {/*    maxWidth: "100%",*/}
                 {/*  }}*/}
                 {/*/>*/}
-                <canvas
-                  ref={floorIconCanvasRef}
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                />
               </>
             </Draggable>
           </TransformComponent>

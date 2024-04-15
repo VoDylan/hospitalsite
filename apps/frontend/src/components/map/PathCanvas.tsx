@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from "react";
-import {Floor} from "common/src/map/Floor.ts";
+import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
 import {IDCoordinates} from "common/src/IDCoordinates.ts";
 import MapNode from "common/src/map/MapNode.ts";
@@ -12,13 +12,18 @@ interface PathCanvasProps {
   height: number;
   floor: Floor;
   pathNodesData: IDCoordinates[];
-
+  floorConnectionCallback: (nodesToNextFloor: Map<IDCoordinates, Floor>, nodesToPrevFloor: Map<IDCoordinates, Floor>) => void;
+  pathRenderStatusCallback: (status: boolean) => void;
 }
 
 export default function PathCanvas(props: PathCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const animationFrameRequestID = useRef<number>();
+
+  const floorConnectionCallback = props.floorConnectionCallback;
+
+  const pathRenderStatusCallback = props.pathRenderStatusCallback;
 
   useEffect(() => {
     initializeLayeredCanvas(canvasRef.current, props.width, props.height);
@@ -31,23 +36,23 @@ export default function PathCanvas(props: PathCanvasProps) {
 
     let currPath: IDCoordinates[] = [];
 
-    const nodesToPrevFloor: Map<IDCoordinates, string> = new Map<IDCoordinates, string>();
-    const nodesToNextFloor: Map<IDCoordinates, string> = new Map<IDCoordinates, string>();
+    const nodesToPrevFloor: Map<IDCoordinates, Floor> = new Map<IDCoordinates, Floor>();
+    const nodesToNextFloor: Map<IDCoordinates, Floor> = new Map<IDCoordinates, Floor>();
 
-    let lastVisitedFloor = "";
+    let lastVisitedFloor: Floor | null = null;
 
     for (let i = 0; i < props.pathNodesData.length; i++) {
       const node: MapNode | null = GraphManager.getInstance().getNodeByID(props.pathNodesData[i].nodeID);
       if(!node) continue;
 
       if (node.floor == props.floor) {
-        lastVisitedFloor = node.floor;
+        lastVisitedFloor = floorStrToObj(node.floor);
         currPath.push(props.pathNodesData[i]);
       } else {
-        if(lastVisitedFloor !== "" && lastVisitedFloor !== node.floor) {
-          nodesToNextFloor.set(currPath[currPath.length - 1], node.floor);
+        if(lastVisitedFloor && lastVisitedFloor !== node.floor) {
+          nodesToNextFloor.set(currPath[currPath.length - 1], floorStrToObj(node.floor)!);
           nodesToPrevFloor.set(props.pathNodesData[i], lastVisitedFloor);
-          lastVisitedFloor = node.floor;
+          lastVisitedFloor = floorStrToObj(node.floor);
         }
 
         if (currPath.length != 0) {
@@ -64,6 +69,9 @@ export default function PathCanvas(props: PathCanvasProps) {
 
     console.log(nodesToNextFloor);
     console.log(nodesToPrevFloor);
+
+    floorConnectionCallback(nodesToNextFloor, nodesToPrevFloor);
+    pathRenderStatusCallback(true);
 
     if (canvasRef.current) {
       const canvas: HTMLCanvasElement = canvasRef.current;
@@ -170,7 +178,7 @@ export default function PathCanvas(props: PathCanvasProps) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
-  }, [props.floor, props.height, props.pathNodesData, props.width]);
+  }, [floorConnectionCallback, pathRenderStatusCallback, props.floor, props.height, props.pathNodesData, props.width]);
 
   return (
     <canvas
