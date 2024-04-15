@@ -43,6 +43,7 @@ function MapEditingPage() {
    */
 
   const [autocompleteNodeData] = useState<
+
     { label: string; node: string }[]
   >([]);
   const [startNode, setStartNode] = useState<string>("");
