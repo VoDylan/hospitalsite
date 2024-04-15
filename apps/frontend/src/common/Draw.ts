@@ -35,12 +35,14 @@ export class Draw {
     strokeColor: string,
     lineWidth: number,
   ) {
+    const topLeftX = x - (width / 2);
+    const topLeftY = y - (height / 2);
     this.ctx.fillStyle = fillColor;
     this.ctx.strokeStyle = strokeColor;
     this.ctx.lineWidth = lineWidth;
 
     this.ctx.beginPath();
-    this.ctx.rect(x, y, width, height);
+    this.ctx.rect(topLeftX, topLeftY, width, height);
     this.ctx.closePath();
 
     this.ctx.stroke();

@@ -1,28 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import "./map.css";
-import { LocationInfo } from "common/src/LocationInfo.ts";
-import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import {LocationInfo} from "common/src/LocationInfo.ts";
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
-import FilterManager, {
-  generateFilterValue,
-} from "common/src/filter/FilterManager.ts";
-import { FilterName } from "common/src/filter/FilterName.ts";
+import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
+import {FilterName} from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
-import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
-import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
-import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
-import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
+import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 
 import L2FloorIconNextSrc from "../images/mapIcons/L2FloorMarkerNextIcon.png";
 import L1FloorIconNextSrc from "../images/mapIcons/L1FloorMarkerNextIcon.png";
@@ -36,33 +29,29 @@ import F1FloorIconPrevSrc from "../images/mapIcons/F1FloorMarkerPrevIcon.png";
 import F2FloorIconPrevSrc from "../images/mapIcons/F2FloorMarkerPrevIcon.png";
 import F3FloorIconPrevSrc from "../images/mapIcons/F3FloorMarkerPrevIcon.png";
 
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
-import { Draw } from "../common/Draw.ts";
+import {IDCoordinates} from "common/src/IDCoordinates.ts";
+import {Draw} from "../common/Draw.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
+import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
+import {Floor} from "common/src/map/Floor.ts";
+import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
+import PathCanvas from "../components/map/PathCanvas.tsx";
 
 function MapRoute() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pathCanvasRef = useRef<HTMLCanvasElement>(null);
-  const symbolCanvasRef = useRef<HTMLCanvasElement>(null);
   const floorIconCanvasRef = useRef<HTMLCanvasElement>(null);
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
-  const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pathsOnFloor, setPathsOnFloor] = useState<IDCoordinates[][]>([]);
-  const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
+  const [pathNodesData, setPathNodesData] = useState<IDCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [nodesToPrevFloor, setNodesToPrevFloor] = useState<Map<IDCoordinates, string>>(new Map<IDCoordinates, string>());
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [nodesToNextFloor, setNodesToNextFloor] = useState<Map<IDCoordinates, string>>(new Map<IDCoordinates, string>());
   const [renderFloorIcons, setRenderFloorIcons] = useState<boolean>(false);
-
-  const [renderSymbolCanvas, setRenderSymbolCanvas] = useState<boolean>(false);
 
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
@@ -70,15 +59,11 @@ function MapRoute() {
 
   const [updateAnimation, setUpdateAnimation] = useState<boolean>(false);
 
-  const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
-    const image = new Image();
-    image.src = L1MapImage;
-    return image;
-  });
+  const [backgroundRenderStatus, setBackgroundRenderStatus] = useState<boolean>(false);
+  const [canvasWidth, setCanvasWidth] = useState<number>(0);
+  const [canvasHeight, setCanvasHeight] = useState<number>(0);
 
-  const floor = useRef<string>("L1");
-  const [renderBackground, setRenderBackground] = useState<boolean>(false);
-  const [reprocessNodes, setReprocessNodes] = useState<boolean>(false);
+  const [floor, setFloor] = useState<Floor>(Floor.L1);
 
   const [L1FloorIconNext] = useState<HTMLImageElement>(() => {
     const img: HTMLImageElement = new Image();
@@ -547,7 +532,7 @@ function MapRoute() {
   };
 
   const updateNodesData = (newData: IDCoordinates[]) => {
-    setNodesData(newData);
+    setPathNodesData(newData);
   };
 
   async function handleSubmit() {
@@ -580,8 +565,7 @@ function MapRoute() {
       console.log(path);
 
       updateNodesData(path);
-      setNodes([startNode, endNode]);
-      setErrorMessage("");
+      !path ? setErrorMessage("There is no path between nodes") : setErrorMessage("");
     } catch (error) {
       console.error("Failed to fetch data:", error);
       setErrorMessage("Failed to fetch data. Please try again.");
@@ -589,38 +573,26 @@ function MapRoute() {
   }
 
   const handleFloorChange = (newFloor: string) => {
-    const newImage = new Image();
-
     switch (newFloor) {
       case "L1":
-        newImage.src = L1MapImage;
-        floor.current = "L1";
+        setFloor(Floor.L1);
         break;
       case "L2":
-        newImage.src = L2MapImage;
-        floor.current = "L2";
+        setFloor(Floor.L2);
         break;
       case "1":
-        newImage.src = FFMapImage;
-        floor.current = "1";
+        setFloor(Floor.F1);
         break;
       case "2":
-        newImage.src = SFMapImage;
-        floor.current = "2";
+        setFloor(Floor.F2);
         break;
       case "3":
-        newImage.src = TFMapImage;
-        floor.current = "3";
+        setFloor(Floor.F3);
         break;
       default:
         console.error("Returned map floor is not assigned to an image");
         return;
     }
-
-    setRenderSymbolCanvas(true);
-    setRenderBackground(true);
-    setReprocessNodes(true);
-    setCurrImage(newImage);
   };
 
   /**
@@ -637,9 +609,6 @@ function MapRoute() {
       determineFilters();
       setFiltersApplied(true);
     }
-
-    setRenderSymbolCanvas(true);
-    setRenderBackground(true);
   }, [
     nodeDataLoaded,
     filtersApplied,
@@ -647,211 +616,23 @@ function MapRoute() {
     populateAutocompleteData,
   ]);
 
-  /**
-   * useEffect hook to render the map legend symbols onto the corresponding canvas
-   */
   useEffect(() => {
-    if (symbolCanvasRef.current && renderSymbolCanvas) {
-      console.log("Rendering symbol canvas");
-      const canvas: HTMLCanvasElement = symbolCanvasRef.current;
-      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+    if (backgroundRenderStatus) {
+      console.log("Rendering Canvas");
 
-      if (!ctx) return;
+      if(floorIconCanvasRef.current) {
+        const canvas: HTMLCanvasElement = floorIconCanvasRef.current;
+        const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
-      const draw = new Draw(ctx);
+        if (!ctx) return;
 
-      ctx.clearRect(0, 0, currImage.width, currImage.height);
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
 
-      //Filter for all nodes on the floor
-      const filters: NodeFilter =
-        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
-          generateFilterValue(false, floor.current),
-        ])!;
-
-      //Apply the filters to the list of nodes that have the selected filters applied, so only the nodes that the user wants
-      //are displayed
-      const nodesOnFloor = FilterManager.getInstance().applyFilters(
-        [filters],
-        filteredNodes,
-      );
-
-      console.log("NodesOnFloor:");
-      console.log(nodesOnFloor);
-
-      for (let i = 0; i < nodesOnFloor.length; i++) {
-        if (nodesOnFloor[i].nodeType == "ELEV") {
-          draw.drawRectangle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            20,
-            20,
-            "#1CA7EC",
-            "black",
-            2,
-          );
-        } else if (nodesOnFloor[i].nodeType == "STAI") {
-          draw.drawRectangle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            20,
-            20,
-            "#72c41c",
-            "black",
-            2,
-          );
-        } else if (nodesOnFloor[i].nodeType == "EXIT") {
-          draw.drawRectangle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            20,
-            20,
-            "red",
-            "black",
-            2,
-          );
-        } else if (nodesOnFloor[i].nodeType == "RETL") {
-          draw.drawRectangle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            20,
-            20,
-            "#e88911",
-            "black",
-            2,
-          );
-        } else if (nodesOnFloor[i].nodeType == "SERV") {
-          draw.drawCircle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            12,
-            "#e88911",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "INFO") {
-          draw.drawCircle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            12,
-            "#1CA7EC",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "REST") {
-          draw.drawCircle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            12,
-            "#72c41c",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "CONF") {
-          draw.drawPentagon(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            15,
-            "#1CA7EC",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "DEPT") {
-          draw.drawPentagon(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            15,
-            "#72c41c",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "LABS") {
-          draw.drawPentagon(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            15,
-            "#e88911",
-            "black",
-            4,
-          );
-        }
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
       }
-
-      setRenderSymbolCanvas(false);
     }
-  }, [
-    F1FloorIconNext,
-    F2FloorIconNext,
-    F3FloorIconNext,
-    L1FloorIconNext,
-    L2FloorIconNext,
-    F1FloorIconPrev,
-    F2FloorIconPrev,
-    F3FloorIconPrev,
-    L1FloorIconPrev,
-    L2FloorIconPrev,
-    currImage.height,
-    currImage.width,
-    filteredNodes,
-    renderSymbolCanvas
-  ]);
-
-  useEffect(() => {
-    currImage.onload = () => {
-      if (renderBackground) {
-        console.log("Rendering Canvas");
-        if (canvasRef.current) {
-          const canvas: HTMLCanvasElement = canvasRef.current;
-          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-          if (!ctx) return;
-
-          canvas.width = currImage.width;
-          canvas.height = currImage.height;
-
-          ctx.drawImage(currImage, 0, 0, currImage.width, currImage.height);
-        }
-
-        if (pathCanvasRef.current) {
-          const canvas: HTMLCanvasElement = pathCanvasRef.current;
-          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-          if (!ctx) return;
-
-          canvas.width = currImage.width;
-          canvas.height = currImage.height;
-
-          ctx.clearRect(0, 0, currImage.width, currImage.height);
-        }
-
-        if (symbolCanvasRef.current) {
-          const canvas: HTMLCanvasElement = symbolCanvasRef.current;
-          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-          if (!ctx) return;
-
-          canvas.width = currImage.width;
-          canvas.height = currImage.height;
-
-          ctx.clearRect(0, 0, currImage.width, currImage.height);
-
-          setRenderSymbolCanvas(true);
-        }
-
-        if(floorIconCanvasRef.current) {
-          const canvas: HTMLCanvasElement = floorIconCanvasRef.current;
-          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-          if (!ctx) return;
-
-          canvas.width = currImage.width;
-          canvas.height = currImage.height;
-
-          ctx.clearRect(0, 0, currImage.width, currImage.height);
-        }
-        setRenderBackground(false);
-      }
-    };
-  }, [currImage, renderBackground, floor]);
+  }, [backgroundRenderStatus, canvasHeight, canvasWidth, floor]);
 
   useEffect(() => {
     if(floorIconCanvasRef.current && renderFloorIcons) {
@@ -948,160 +729,11 @@ function MapRoute() {
     renderFloorIcons
   ]);
 
-  useEffect(() => {
-    console.log("Determining nodes on floor...");
-    const includedPathsOnFloor: IDCoordinates[][] = [];
-
-    let currPath: IDCoordinates[] = [];
-
-    const nodesToPrevFloor: Map<IDCoordinates, string> = new Map<IDCoordinates, string>();
-    const nodesToNextFloor: Map<IDCoordinates, string> = new Map<IDCoordinates, string>();
-
-    let lastVisitedFloor = "";
-
-    for (let i = 0; i < nodesData.length; i++) {
-      const node: MapNode | null = GraphManager.getInstance().getNodeByID(nodesData[i].nodeID);
-      if(!node) continue;
-
-      if (node.floor == floor.current) {
-        lastVisitedFloor = node.floor;
-        currPath.push(nodesData[i]);
-      } else {
-        if(lastVisitedFloor !== "" && lastVisitedFloor !== node.floor) {
-          nodesToNextFloor.set(currPath[currPath.length - 1], node.floor);
-          nodesToPrevFloor.set(nodesData[i], lastVisitedFloor);
-          lastVisitedFloor = node.floor;
-        }
-
-        if (currPath.length != 0) {
-          includedPathsOnFloor.push(currPath);
-          currPath = [];
-        }
-      }
-    }
-
-    if (currPath.length != 0) includedPathsOnFloor.push(currPath);
-
-    console.log(`Determined nodes on floor`);
-    console.log(includedPathsOnFloor);
-    console.log(reprocessNodes);
-
-    console.log(nodesToNextFloor);
-    console.log(nodesToPrevFloor);
-
-    setPathsOnFloor(includedPathsOnFloor);
-    setNodesToNextFloor(nodesToNextFloor);
-    setNodesToPrevFloor(nodesToPrevFloor);
-    setRenderFloorIcons(true);
-
-    if (pathCanvasRef.current) {
-      const canvas: HTMLCanvasElement = pathCanvasRef.current;
-      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-      if(!ctx) return;
-
-      if (includedPathsOnFloor.length != 0) {
-        console.log("Processing canvas");
-
-        if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
-          if (!nodesData) {
-            setErrorMessage("There is no path between nodes");
-            return;
-          }
-
-          let currentTargetIndex = 0;
-          let currentPathIndex = 0;
-          let currentX =
-            includedPathsOnFloor[currentPathIndex][currentTargetIndex]
-              .coordinates.x;
-          let currentY =
-            includedPathsOnFloor[currentPathIndex][currentTargetIndex]
-              .coordinates.y;
-          const speed = 1;
-
-          const moveDot = (origFloor: string) => {
-            if (floor.current != origFloor) {
-              console.log("Floor changed, stopping previous animation");
-              return;
-            }
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "black";
-
-            for (let i = 0; i < includedPathsOnFloor.length; i++) {
-              for (let j = 0; j < includedPathsOnFloor[i].length; j++) {
-                ctx.beginPath();
-                ctx.arc(
-                  includedPathsOnFloor[i][j].coordinates.x,
-                  includedPathsOnFloor[i][j].coordinates.y,
-                  5,
-                  0,
-                  2 * Math.PI,
-                );
-                ctx.fill();
-              }
-            }
-
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-
-            for (let i = 0; i < includedPathsOnFloor.length; i++) {
-              ctx.moveTo(
-                includedPathsOnFloor[i][0].coordinates.x,
-                includedPathsOnFloor[i][0].coordinates.y,
-              );
-              for (let j = 1; j < includedPathsOnFloor[i].length; j++) {
-                ctx.lineTo(
-                  includedPathsOnFloor[i][j].coordinates.x,
-                  includedPathsOnFloor[i][j].coordinates.y,
-                );
-              }
-            }
-
-            ctx.stroke();
-
-            ctx.fillStyle = "blue";
-            ctx.beginPath();
-            ctx.arc(currentX, currentY, 12, 0, 2 * Math.PI);
-            ctx.fill();
-
-            const dx =
-              includedPathsOnFloor[currentPathIndex][currentTargetIndex]
-                .coordinates.x - currentX;
-            const dy =
-              includedPathsOnFloor[currentPathIndex][currentTargetIndex]
-                .coordinates.y - currentY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < speed) {
-              currentTargetIndex =
-                (currentTargetIndex + 1) %
-                includedPathsOnFloor[currentPathIndex].length;
-            } else {
-              currentX += (dx / distance) * speed;
-              currentY += (dy / distance) * speed;
-            }
-            if (currentTargetIndex === 0) {
-              currentPathIndex =
-                (currentPathIndex + 1) % includedPathsOnFloor.length;
-              currentX =
-                includedPathsOnFloor[currentPathIndex][currentTargetIndex]
-                  .coordinates.x;
-              currentY =
-                includedPathsOnFloor[currentPathIndex][currentTargetIndex]
-                  .coordinates.y;
-              currentTargetIndex = 1;
-            }
-            requestAnimationFrame(() => moveDot(origFloor));
-          };
-          moveDot(floor.current);
-        }
-      } else {
-        console.log("Clearing path canvas");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
-    setReprocessNodes(false);
-  }, [F1FloorIconNext, F1FloorIconPrev, F2FloorIconNext, F2FloorIconPrev, F3FloorIconNext, F3FloorIconPrev, L1FloorIconNext, L1FloorIconPrev, L2FloorIconNext, L2FloorIconPrev, endNode, filteredNodes, floor, nodes, nodesData, reprocessNodes, startNode]);
+  const handleBackgroundRenderStatus = (status: boolean, width: number, height: number) => {
+    setBackgroundRenderStatus(status);
+    setCanvasWidth(width);
+    setCanvasHeight(height);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -1187,8 +819,7 @@ function MapRoute() {
           <TransformComponent>
             <Draggable>
               <>
-                <canvas
-                  ref={canvasRef}
+                <BackgroundCanvas
                   style={{
                     position: "relative",
                     top: 50,
@@ -1197,9 +828,10 @@ function MapRoute() {
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
+                  floor={floor}
+                  renderStatusCallback={handleBackgroundRenderStatus}
                 />
-                <canvas
-                  ref={symbolCanvasRef}
+                <SymbolCanvas
                   style={{
                     position: "absolute",
                     top: 50,
@@ -1208,9 +840,14 @@ function MapRoute() {
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
+                  backgroundRendered={backgroundRenderStatus}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  filtersApplied={filtersApplied}
+                  filteredNodes={filteredNodes}
+                  floor={floor}
                 />
-                <canvas
-                  ref={pathCanvasRef}
+                <PathCanvas
                   style={{
                     position: "absolute",
                     top: 50,
@@ -1219,7 +856,23 @@ function MapRoute() {
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
+                  backgroundRendered={backgroundRenderStatus}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  floor={floor}
+                  pathNodesData={pathNodesData}
                 />
+                {/*<canvas*/}
+                {/*  ref={pathCanvasRef}*/}
+                {/*  style={{*/}
+                {/*    position: "absolute",*/}
+                {/*    top: 50,*/}
+                {/*    left: 0,*/}
+                {/*    minHeight: "100vh",*/}
+                {/*    maxHeight: "100%",*/}
+                {/*    maxWidth: "100%",*/}
+                {/*  }}*/}
+                {/*/>*/}
                 <canvas
                   ref={floorIconCanvasRef}
                   style={{
