@@ -49,8 +49,13 @@ function SearchBar() {
       console.log(`Selected link: ${selectedValue.link}`);
       //@ts-expect-error The selected value's route works perfectly fine
       navigate(selectedValue.link);
+      clearValue();
     }
   };
+
+  function clearValue(){
+    setValue("");
+  }
 
   return (
     <Search>

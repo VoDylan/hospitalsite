@@ -1,44 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import Drawer from "@mui/material/Drawer";
-import Paper from "@mui/material/Paper";
-import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
-import Slide from "@mui/material/Slide";
-import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Toolbar from "@mui/material/Toolbar";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import AltRouteIcon from "@mui/icons-material/AltRoute";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
-import NestedList from "../components/map/PathfindingSelect.tsx";
 import "./map.css";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
-import { Typography } from "@mui/material";
 
 import FilterManager, {
   generateFilterValue,
 } from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
-import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
-import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
-import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
-import FilterWithIcon from "../components/filters/FilterSelect.tsx";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
-
 import Draggable from "react-draggable";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import Floor from "../components/map/FloorTabs.tsx";
-
 import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
 import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
 import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
@@ -59,6 +38,8 @@ import F3FloorIconPrevSrc from "../images/mapIcons/F3FloorMarkerPrevIcon.png";
 
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Draw } from "../common/Draw.ts";
+import MapSideBar from "../components/map/MapSideBar.tsx";
+import Icon from "../components/map/SlideIcon.tsx";
 
 function MapRoute() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -464,21 +445,6 @@ function MapRoute() {
    * Create Type, Floor, and Building filters
    */
 
-  const registerFilters = useCallback(() => {
-    FilterManager.getInstance().registerFilter(
-      FilterName.TYPE,
-      () => new TypeFilter(),
-    );
-    FilterManager.getInstance().registerFilter(
-      FilterName.FLOOR,
-      () => new FloorFilter(),
-    );
-    FilterManager.getInstance().registerFilter(
-      FilterName.BUILDING,
-      () => new BuildingFilter(),
-    );
-  }, []);
-
   /**
    * Change list of nodes based on applied filters
    */
@@ -551,208 +517,6 @@ function MapRoute() {
     secondFloorIconState,
     thirdFloorIconState,
   ]);
-
-  /**
-   * Pop up window with filters on side bar
-   */
-
-  const icon = (
-    <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
-      <Stack direction="column" sx={{ position: "absolute", top: 3, left: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={handleButtonClick}
-          variant="text"
-        >
-          {checked ? "back" : "back"}
-        </Button>
-      </Stack>
-
-      <Stack
-        spacing={"10%"}
-        direction="column"
-        sx={{
-          display: "flex",
-          justifyContent: "start",
-          alignItems: "start",
-          position: "relative",
-          marginTop: "18%",
-          marginLeft: "10%",
-        }}
-      >
-        <Stack direction="column" spacing={1}>
-          <FilterWithIcon
-            iconColor="#1CA7EC"
-            filterName="Conference"
-            filterType={1}
-            shape={"pentagon"}
-            iconState={confIconState}
-            handleIconState={handleConfIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#72c41c"
-            filterName="Department"
-            filterType={1}
-            shape={"pentagon"}
-            iconState={deptIconState}
-            handleIconState={handleDeptIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#e88911"
-            filterName="Labs"
-            filterType={1}
-            shape={"pentagon"}
-            iconState={labsIconState}
-            handleIconState={handleLabsIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#e88911"
-            filterName="Service"
-            filterType={1}
-            shape={"circle"}
-            iconState={servIconState}
-            handleIconState={handleServIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#1CA7EC"
-            filterName="Info"
-            filterType={1}
-            shape={"circle"}
-            iconState={infoIconState}
-            handleIconState={handleInfoIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#72c41c"
-            filterName="Restrooms"
-            filterType={1}
-            shape={"circle"}
-            iconState={restroomsIconState}
-            handleIconState={handleRestroomsIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#1CA7EC"
-            filterName="Elevators"
-            filterType={1}
-            shape={"square"}
-            iconState={elevatorIconState}
-            handleIconState={handleElevatorIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#72c41c"
-            filterName="Stairs"
-            filterType={1}
-            shape={"square"}
-            iconState={stairsIconState}
-            handleIconState={handleStairsIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="red"
-            filterName="Exits"
-            filterType={1}
-            shape={"square"}
-            iconState={exitsIconState}
-            handleIconState={handleExitsIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#e88911"
-            filterName="Retail"
-            filterType={1}
-            shape={"square"}
-            iconState={retlIconState}
-            handleIconState={handleRetlIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="L1"
-            filterType={0}
-            shape={"stairs"}
-            iconState={ll1IconState}
-            handleIconState={handleLL1IconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="L2"
-            filterType={0}
-            shape={"stairs"}
-            iconState={ll2IconState}
-            handleIconState={handleLL2IconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="1st Floor"
-            filterType={0}
-            shape={"stairs"}
-            iconState={firstFloorIconState}
-            handleIconState={handleFirstFloorIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="Second Floor"
-            filterType={0}
-            shape={"stairs"}
-            iconState={secondFloorIconState}
-            handleIconState={handleSecondFloorIconState}
-          />
-
-          <FilterWithIcon
-            iconColor="#012D5A"
-            filterName="Third Floor"
-            filterType={0}
-            shape={"stairs"}
-            iconState={thirdFloorIconState}
-            handleIconState={handleThirdFloorIconState}
-          />
-        </Stack>
-
-        {/*Buttons*/}
-        <Stack
-          direction="column"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "90%",
-            paddingBottom: "10%",
-          }}
-          spacing={0.5}
-        >
-          <Button
-            variant={"contained"}
-            sx={{ display: "flex", justifyContent: "center", minWidth: "90%" }}
-            onClick={handleSelectAll}
-          >
-            Select All
-          </Button>
-
-          <Button
-            variant={"contained"}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              minWidth: "90%",
-              backgroundColor: "#D9D9D9",
-            }}
-            onClick={handleClearAll}
-          >
-            Clear All
-          </Button>
-        </Stack>
-      </Stack>
-    </Paper>
-  );
 
   const handleStartNodeChange = (value: string | null) => {
     if (value) {
@@ -868,8 +632,6 @@ function MapRoute() {
       loadNodeData().then(() => {
         setNodeDataLoaded(true);
       });
-
-      registerFilters();
     } else if (!filtersApplied) {
       console.log("Applying filters");
       determineFilters();
@@ -882,7 +644,6 @@ function MapRoute() {
     nodeDataLoaded,
     filtersApplied,
     determineFilters,
-    registerFilters,
     populateAutocompleteData,
   ]);
 
@@ -1348,192 +1109,74 @@ function MapRoute() {
       <TopBanner2 />
 
       {/*Side Bar*/}
-      <Drawer
-        variant="permanent"
-        sx={{
-          [`& .MuiDrawer-paper`]: {
-            width: "18%",
-            height: "100%",
-            minWidth: "18%",
-            boxSizing: "border-box",
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-            elevation: 100,
-            zIndex: 1,
-            border: "3px solid rgba(0, 0, 0, 0.05)",
-          },
+      <MapSideBar
+        title="Navigation"
+        onChange={(event, value) => handleStartNodeChange(value)}
+        autocompleteNodeData={autocompleteNodeData}
+        compareFn={(a, b) => a.label.localeCompare(b.label)}
+        nodeToLabelIdCallback={(node) => node.label}
+        groupBy={(option) => option.charAt(0).toUpperCase()}
+        optionLabel={(option) => option}
+        renderInput={(params) => (
+          <TextField {...params} label="Starting Location" value={startNode} />
+        )}
+        onChange1={(event, value) => handleEndNodeChange(value)}
+        renderInput1={(params) => (
+          <TextField {...params} label="Ending Location" value={endNode} />
+        )}
+        open={open}
+        handleClick={handleClick}
+        checkedBFS={checkedBFS}
+        handleSelectBFS={handleSelectBFS}
+        checkedAS={checkedAS}
+        handleSelectAS={handleSelectAS}
+        errorMessage={errorMessage}
+        onClick={() => {
+          handleSubmit().then(() => {
+            setUpdateAnimation(!updateAnimation);
+          });
         }}
-      >
-        <Toolbar />
-
-        <Stack display={"flex"} direction={"column"} sx={{ marginLeft: "4%" }}>
-          <Typography
-            color={"#003A96"}
-            align={"center"}
-            fontStyle={"Open Sans"}
-            fontSize={30}
-            sx={{ marginBottom: "10%", marginRight: "4%", marginTop: "30%" }}
-          >
-            Navigation
-          </Typography>
-
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            <RadioButtonCheckedIcon
-              sx={{ color: "blue" }}
-            ></RadioButtonCheckedIcon>
-
-            <Autocomplete
-              onChange={(event, value) => handleStartNodeChange(value)}
-              disablePortal
-              id="startNode"
-              options={autocompleteNodeData
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((node) => node.label)}
-              groupBy={(option) => option.charAt(0).toUpperCase()}
-              getOptionLabel={(option) => option}
-              sx={{ width: "75%" }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Starting Location"
-                  value={startNode}
-                />
-              )}
-            />
-          </Stack>
-
-          <Stack>
-            <MoreVertIcon fontSize={"medium"}></MoreVertIcon>
-          </Stack>
-
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            <LocationOnIcon
-              fontSize={"medium"}
-              sx={{ color: "red" }}
-            ></LocationOnIcon>
-
-            <Autocomplete
-              onChange={(event, value) => handleEndNodeChange(value)}
-              disablePortal
-              id="startNode"
-              options={autocompleteNodeData
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((node) => node.label)}
-              groupBy={(option) => option.charAt(0).toUpperCase()}
-              getOptionLabel={(option) => option}
-              sx={{ width: "75%" }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Ending Location"
-                  value={endNode}
-                />
-              )}
-            />
-          </Stack>
-
-          {/*Pathfinding selection dropdown*/}
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: "8%",
-              marginLeft: "2%",
-            }}
-          >
-            <NestedList
-              open={open}
-              handleClick={handleClick}
-              checkedBFS={checkedBFS}
-              handleSelectBFS={handleSelectBFS}
-              checkedAS={checkedAS}
-              handleSelectAS={handleSelectAS}
-            />
-          </Stack>
-
-          <Stack
-            direction={"column"}
-            spacing={2}
-            sx={{ marginLeft: "10%", marginTop: "4%" }}
-          >
-            <p style={{ color: "red" }}>{errorMessage}</p>
-            <Button
-              startIcon={<AltRouteIcon />}
-              variant={"contained"}
-              sx={{ width: "80%", display: "flex", justifyContent: "center" }}
-              onClick={() => {
-                handleSubmit().then(() => {
-                  setUpdateAnimation(!updateAnimation);
-                });
-              }}
-            >
-              Find Path
-            </Button>
-          </Stack>
-
-          <Box
-            sx={{
-              width: "90%",
-              height: "0.2vh",
-              backgroundColor: "#808080",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: "20%",
-              marginLeft: "2%",
-            }}
-          ></Box>
-
-          <Stack
-            direction={"column"}
-            spacing={2}
-            sx={{ marginLeft: "10%", marginTop: "20%" }}
-          >
-            <Button
-              variant={"contained"}
-              sx={{ width: "80%" }}
-              onClick={handleButtonClick}
-            >
-              {checked ? "Add Filters" : "Add Filters"}
-            </Button>
-            <Button
-              variant={"contained"}
-              sx={{ width: "80%", backgroundColor: "#D9D9D9" }}
-              onClick={handleSelectAll}
-            >
-              Clear Filters
-            </Button>
-            {checked && (
-              <Slide
-                in={checked}
-                direction="up"
-                style={{
-                  zIndex: 1,
-                  backgroundColor: "#F5F7FA",
-                  position: "absolute",
-                  top: "14%",
-                  left: "0.5%",
-                  width: "100%",
-                  minWidth: "100%",
-                  height: "100%",
-                }}
-              >
-                {icon}
-              </Slide>
-            )}
-            <Floor callback={handleFloorChange} />
-          </Stack>
-        </Stack>
-      </Drawer>
+        onClick1={handleButtonClick}
+        checked={checked}
+        onClick2={handleSelectAll}
+        icon={<Icon
+          handleButtonClick={handleButtonClick}
+          checked={false}
+          confIconState={confIconState}
+          deptIconState={deptIconState}
+          labsIconState={labsIconState}
+          servIconState={servIconState}
+          infoIconState={infoIconState}
+          restroomsIconState={restroomsIconState}
+          elevatorIconState={elevatorIconState}
+          stairsIconState={stairsIconState}
+          exitsIconState={exitsIconState}
+          retlIconState={retlIconState}
+          ll1IconState={ll1IconState}
+          ll2IconState={ll2IconState}
+          firstFloorIconState={firstFloorIconState}
+          secondFloorIconState={secondFloorIconState}
+          thirdFloorIconState={thirdFloorIconState}
+          handleConfIconState={handleConfIconState}
+          handleDeptIconState={handleDeptIconState}
+          handleLabsIconState={handleLabsIconState}
+          handleServIconState={handleServIconState}
+          handleInfoIconState={handleInfoIconState}
+          handleRestroomsIconState={handleRestroomsIconState}
+          handleElevatorIconState={handleElevatorIconState}
+          handleStairsIconState={handleStairsIconState}
+          handleExitsIconState={handleExitsIconState}
+          handleRetlIconState={handleRetlIconState}
+          handleLL1IconState={handleLL1IconState}
+          handleLL2IconState={handleLL2IconState}
+          handleFirstFloorIconState={handleFirstFloorIconState}
+          handleSecondFloorIconState={handleSecondFloorIconState}
+          handleThirdFloorIconState={handleThirdFloorIconState}
+          handleSelectAll={handleSelectAll}
+          handleClearAll={handleClearAll}
+        />}
+        callback={handleFloorChange}
+      />
 
       <Box
         width={window.innerWidth}

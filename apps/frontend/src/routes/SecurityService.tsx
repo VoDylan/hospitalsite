@@ -3,13 +3,6 @@ import {
   Typography,
   SelectChangeEvent,
   Stack,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
@@ -35,10 +28,6 @@ function SecurityService() {
   interface NodeData {
     nodeID: string;
   }
-
-  const [submittedData, setSubmittedData] = useState<
-    SecurityRequestFormSubmission[]
-  >([]);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
@@ -82,10 +71,6 @@ function SecurityService() {
       securityPersonnel: "",
       status: "",
     });
-  }
-
-  function updateSubmissionList() {
-    setSubmittedData([...submittedData, form]);
   }
 
   // Define an interface for the node data
@@ -238,52 +223,9 @@ function SecurityService() {
             input={form}
             text={"SUBMIT"}
             clear={clear}
-            updateSubmissionList={updateSubmissionList}
           />
         </Grid>
       </Grid>
-      <TableContainer
-        component={Paper}
-        sx={{
-          minWidth: "40vw",
-          backgroundColor: "white",
-          width: "60vw", //Adjust this to change the width of the table
-          height: "auto",
-          mb: "5vh",
-        }}
-      >
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Location</TableCell>
-              <TableCell align="right">Priority</TableCell>
-              <TableCell align="right">Security Personnel</TableCell>
-              <TableCell align="right">Security Category</TableCell>
-              <TableCell align="right">Security Detail</TableCell>
-              <TableCell align="right">Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {submittedData.map((item: SecurityRequestFormSubmission) => (
-              <TableRow
-                key={item.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align={"right"}>
-                  {item.name}
-                </TableCell>
-                <TableCell align={"right"}>{item.location}</TableCell>
-                <TableCell align={"right"}>{item.priority}</TableCell>
-                <TableCell align={"right"}>{item.securityPersonnel}</TableCell>
-                <TableCell align={"right"}>{item.securityCategory}</TableCell>
-                <TableCell align={"right"}>{item.securityDetail}</TableCell>
-                <TableCell align={"right"}>{item.status}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
       <Typography>Dylan Vo, Robert Mellen</Typography>
     </Stack>
   );
