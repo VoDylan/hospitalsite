@@ -42,7 +42,7 @@ function MapEditingPage() {
    * Use states for side bar
    */
 
-  const [autocompleteNodeData, ] = useState<
+  const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
   >([]);
   const [startNode, setStartNode] = useState<string>("");
@@ -256,7 +256,7 @@ function MapEditingPage() {
     "plus" | "check"
   >("check");
 
-  const [, setFiltersApplied] = useState<boolean>(false);
+  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
 
   const handleIconStateToggle = (
