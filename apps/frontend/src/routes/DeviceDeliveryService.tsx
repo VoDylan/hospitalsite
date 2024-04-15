@@ -143,166 +143,170 @@ function DeviceDeliveryService() {
   }
 
   return (
-    <Stack
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{
-        width: "100vw",
-        height: "auto",
-        display: "flex",
-        alignItems: "center", // Center vertically
-        justifyContent: "center", // Center horizontally
-        backgroundImage: `url(${medDeviceBackground})`,
-        backgroundSize: "cover",
-        backgroundAttachment: "fixed",
-        minHeight: "100vh",
-        maxWidth: "100%",
-        overflowX: "hidden",
-      }}
-    >
-      <ServiceSpeedDial/>
-      <TopBanner2 />
-      <Grid
-        container
-        direction={"row"}
-        boxShadow={4}
+    <>
+      <Stack>
+        <ServiceSpeedDial/>
+      </Stack>
+      <Stack
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
         sx={{
-          backgroundColor: "white",
-          width: "40vw", //Adjust this to change the width of the form
+          width: "100vw",
           height: "auto",
-          mt: "25vh",
-          mb: "5vh",
+          display: "flex",
+          alignItems: "center", // Center vertically
+          justifyContent: "center", // Center horizontally
+          backgroundImage: `url(${medDeviceBackground})`,
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+          minHeight: "100vh",
+          maxWidth: "100%",
+          overflowX: "hidden",
         }}
       >
+        <TopBanner2 />
         <Grid
-          item
-          xs={12}
+          container
+          direction={"row"}
+          boxShadow={4}
           sx={{
-            backgroundColor: "#186BD9",
+            backgroundColor: "white",
+            width: "40vw", //Adjust this to change the width of the form
+            height: "auto",
+            mt: "25vh",
+            mb: "5vh",
           }}
         >
-          <Typography color={"white"} align={"center"} fontSize={40}>
-            Medical Device Request Form
-          </Typography>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              backgroundColor: "#186BD9",
+            }}
+          >
+            <Typography color={"white"} align={"center"} fontSize={40}>
+              Medical Device Request Form
+            </Typography>
+          </Grid>
+          <Grid item xs={6} >
+            <Typography color={"black"} align={"center"}>Name:</Typography>
+            <CenterAlignedTextbox
+              label={"Name"}
+              value={form.name}
+              onChange={handleNameInput}
+            />
+          </Grid>
+          <Grid item xs={6} >
+            <Typography color={"black"} align={"center"}>Location:</Typography>
+            <DropDown
+              label={"Location"}
+              returnData={form.roomNum}
+              handleChange={handleLocationInput}
+              items={nodeNumbers}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>Medical Device Needed:</Typography>
+            <CenterAlignedTextbox
+              label={"Medical Device"}
+              value={form.device}
+              onChange={handleDeviceInput}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>Amount Needed:</Typography>
+            <CenterAlignedTextbox
+              onChange={handleAmountInput}
+              label={"Amount"}
+              value={form.amount}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>
+              Priority of Medical Device Delivery:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Priority"}
+              options={["Low", "Medium", "High", "Emergency"]}
+              returnData={form.priority}
+              handleChange={handlePriorityInput}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>
+              Status of the Request:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Status"}
+              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+              returnData={form.status}
+              handleChange={handleStatusInput}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              my: 2,
+              justifyContent: "center",
+            }}
+          >
+            <Box>
+              <DeviceSubmitButton
+                input={form}
+                text={"SUBMIT"}
+                clear={clear}
+              />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={6} >
-          <Typography color={"black"} align={"center"}>Name:</Typography>
-          <CenterAlignedTextbox
-            label={"Name"}
-            value={form.name}
-            onChange={handleNameInput}
-          />
-        </Grid>
-        <Grid item xs={6} >
-          <Typography color={"black"} align={"center"}>Location:</Typography>
-          <DropDown
-            label={"Location"}
-            returnData={form.roomNum}
-            handleChange={handleLocationInput}
-            items={nodeNumbers}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Medical Device Needed:</Typography>
-          <CenterAlignedTextbox
-            label={"Medical Device"}
-            value={form.device}
-            onChange={handleDeviceInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Amount Needed:</Typography>
-          <CenterAlignedTextbox
-            onChange={handleAmountInput}
-            label={"Amount"}
-            value={form.amount}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Priority of Medical Device Delivery:
-          </Typography>
-          <RadioButtonsGroup
-            label={"Priority"}
-            options={["Low", "Medium", "High", "Emergency"]}
-            returnData={form.priority}
-            handleChange={handlePriorityInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Status of the Request:
-          </Typography>
-          <RadioButtonsGroup
-            label={"Status"}
-            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-            returnData={form.status}
-            handleChange={handleStatusInput}
-          />
-        </Grid>
-        <Grid
-          item
-          xs={12}
+        <TableContainer
+          component={Paper}
           sx={{
-            display: "flex",
-            my: 2,
-            justifyContent: "center",
+            minWidth: "40vw",
+            backgroundColor: "white",
+            width: "60vw", //Adjust this to change the width of the table
+            height: "auto",
+            mb: "5vh",
           }}
         >
-          <Box>
-          <DeviceSubmitButton
-            input={form}
-            text={"SUBMIT"}
-            clear={clear}
-          />
-          </Box>
-        </Grid>
-      </Grid>
-      <TableContainer
-        component={Paper}
-        sx={{
-          minWidth: "40vw",
-          backgroundColor: "white",
-          width: "60vw", //Adjust this to change the width of the table
-          height: "auto",
-          mb: "5vh",
-        }}
-      >
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Location</TableCell>
-              <TableCell align="right">Priority</TableCell>
-              <TableCell align="right">Device</TableCell>
-              <TableCell align={"right"}>Amount</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {submittedData.map((item: DeviceDeliveryFormSubmission) => (
-              <TableRow
-                key={item.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align={"right"}>
-                  {item.name}
-                </TableCell>
-                <TableCell align={"right"}>{item.status}</TableCell>
-                <TableCell align={"right"}>{item.roomNum}</TableCell>
-                <TableCell align={"right"}>{item.priority}</TableCell>
-                <TableCell align={"right"}>{item.device}</TableCell>
-                <TableCell align={"right"}>{item.amount}</TableCell>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="right">Name</TableCell>
+                <TableCell align="right">Status</TableCell>
+                <TableCell align="right">Location</TableCell>
+                <TableCell align="right">Priority</TableCell>
+                <TableCell align="right">Device</TableCell>
+                <TableCell align={"right"}>Amount</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Typography color={"white"}>
-        Sebastian Gurgol, Jingxu (Rick) Wang
-      </Typography>
-    </Stack>
+            </TableHead>
+            <TableBody>
+              {submittedData.map((item: DeviceDeliveryFormSubmission) => (
+                <TableRow
+                  key={item.name}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row" align={"right"}>
+                    {item.name}
+                  </TableCell>
+                  <TableCell align={"right"}>{item.status}</TableCell>
+                  <TableCell align={"right"}>{item.roomNum}</TableCell>
+                  <TableCell align={"right"}>{item.priority}</TableCell>
+                  <TableCell align={"right"}>{item.device}</TableCell>
+                  <TableCell align={"right"}>{item.amount}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Typography color={"white"}>
+          Sebastian Gurgol, Jingxu (Rick) Wang
+        </Typography>
+      </Stack>
+    </>
   );
 }
 

@@ -1,8 +1,20 @@
-import {Link, SpeedDial, SpeedDialAction, SpeedDialIcon} from "@mui/material";
+import {Link, SpeedDial, SpeedDialAction, SpeedDialIcon, SpeedDialProps, styled} from "@mui/material";
 import {LocalFloristOutlined, CardGiftcardOutlined, MedicationOutlined, TroubleshootOutlined,
         CleanHandsOutlined, HealthAndSafetyOutlined, CalendarMonthOutlined} from '@mui/icons-material';
 import { JSX } from "react/jsx-runtime";
 import React from "react";
+
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  position: 'absolute',
+  '&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft': {
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  '&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight': {
+    top: theme.spacing(15),
+    left: theme.spacing(50),
+  },
+}));
 
 export default function ServiceSpeedDial() {
   const linkIcon = (href: string, children: JSX.Element) => <Link href={href}>{children}</Link>;
@@ -18,6 +30,9 @@ export default function ServiceSpeedDial() {
     { name: "Room Scheduling", icon: linkIcon("/Services/RoomScheduling", <CalendarMonthOutlined/>)},
   ];
 
+  const [direction, setDirection] =
+    React.useState<SpeedDialProps['direction']>('right');
+
   const [open, setOpen] = React.useState(false);
   const handleClick = () =>
     {if(open) {
@@ -28,12 +43,13 @@ export default function ServiceSpeedDial() {
 
   return (
     <>
-      <SpeedDial
+      <StyledSpeedDial
         ariaLabel={"Services Speed Dial"}
-        sx={{ position: 'fixed', bottom: 50, right: 150 }}
+        // sx={{ position: 'absolute', bottom: 300 }}
         icon={<SpeedDialIcon/>}
         onClick={handleClick}
         open={open}
+        direction={direction}
       >
         {serviceData.map((service) => (
           <SpeedDialAction
@@ -42,7 +58,7 @@ export default function ServiceSpeedDial() {
             tooltipTitle={service.name}
           />
         ))}
-      </SpeedDial>
+      </StyledSpeedDial>
     </>
   );
 }
