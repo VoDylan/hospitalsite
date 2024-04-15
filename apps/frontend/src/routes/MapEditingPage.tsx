@@ -42,7 +42,8 @@ function MapEditingPage() {
    * Use states for side bar
    */
 
-  const [autocompleteNodeData, ] = useState<
+  const [autocompleteNodeData] = useState<
+
     { label: string; node: string }[]
   >([]);
   const [startNode, setStartNode] = useState<string>("");
