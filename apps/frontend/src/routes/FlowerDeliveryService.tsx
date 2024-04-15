@@ -2,11 +2,11 @@ import { Box, Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import { FlowerDeliverySubmitButton } from "../components/buttons/FlowerDeliverySubmitButton.tsx";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
@@ -102,7 +102,8 @@ function FlowerDeliveryService() {
       <TopBanner2 />
       <Grid
         container
-        direction={"row"}
+        direction={"column"}
+        justifyContent={"center"}
         boxShadow={4}
         sx={{
           backgroundColor: "white",
@@ -128,9 +129,10 @@ function FlowerDeliveryService() {
             Flower Delivery Service Form
           </Typography>
         </Grid>
+        <Grid container padding={2} direction={"row"}>
           <Grid item xs={6}>
-            <Typography align={"center"}>Name:</Typography>
-            <CenterAlignedTextbox
+            <Typography>Name:</Typography>
+            <LeftAlignedTextbox
               label={"Name"}
               value={form.name}
               onChange={handleNameInput}
@@ -138,7 +140,7 @@ function FlowerDeliveryService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography align={"center"}>Flower Type:</Typography>
+            <Typography>Flower Type:</Typography>
             <DropDown
               items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
               handleChange={handleFlowerTypeInput}
@@ -148,8 +150,8 @@ function FlowerDeliveryService() {
           </Grid>
           <Grid item xs={6}>
             <Box>
-              <Typography align={"center"}>Recipient Name:</Typography>
-              <CenterAlignedTextbox
+              <Typography>Recipient Name:</Typography>
+              <LeftAlignedTextbox
                 label={"Recipient Name"}
                 value={form.recipientName}
                 onChange={handleRecipientNameInput}
@@ -158,7 +160,7 @@ function FlowerDeliveryService() {
           </Grid>
           <Grid item xs={6}>
             <Box>
-              <Typography align={"center"}>Room Number:</Typography>
+              <Typography>Room:</Typography>
               <DropDown
                 items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
                 label={"Room Number"}
@@ -169,8 +171,8 @@ function FlowerDeliveryService() {
           </Grid>
           <Grid item xs={6}>
             <Box>
-              <Typography align={"center"}>Add a message (optional):</Typography>
-              <CenterAlignedTextbox
+              <Typography>Add a message (optional):</Typography>
+              <LeftAlignedTextbox
                 label={"Message"}
                 value={form.message}
                 onChange={handleMessageInput}
@@ -184,6 +186,7 @@ function FlowerDeliveryService() {
               display: "flex",
               my: 2,
               justifyContent: "center",
+              pr: 1,
             }}
           >
             <Box>
@@ -195,6 +198,7 @@ function FlowerDeliveryService() {
             </Box>
           </Grid>
         </Grid>
+      </Grid>
     </Stack>
   );
 }
