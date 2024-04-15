@@ -1,11 +1,9 @@
 import {Drawer, IconButton,  Button, Box, Typography, Divider, List, ListItem} from "@mui/material";
-//Stack,
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from '@mui/icons-material/Home';
 import MapIcon from '@mui/icons-material/Map';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
-//import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import StorageIcon from '@mui/icons-material/Storage';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { blue } from '@mui/material/colors';
@@ -34,8 +32,6 @@ export const NavBar = () => {
             height: 'stretch',
             width: 'fit-content'
         }} >
-{/*        <Stack direction={"column"} p={2} width={"10vw"} role={"presentation"}
-               sx={{ display: "flex", alignItems: "start" }}>*/}
           <List
           sx={{
             padding:2
@@ -78,7 +74,6 @@ export const NavBar = () => {
             </Typography></Button>
           </ListItem>
             </List>
-            {/*</Stack>*/}
         </Box>
       </Drawer>
     </>
