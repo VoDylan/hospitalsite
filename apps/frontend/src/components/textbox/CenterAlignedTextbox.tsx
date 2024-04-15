@@ -28,12 +28,11 @@ export const CenterAlignedTextbox = (props: TextboxProps) => {
 const useStyles = makeStyles({
   root: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     "& .MuiTextField-root": {
-      //marginLeft: "37.5%",
-      //marginRight: "37.5%",
-      minWidth: "150px", // Adjust width as needed
-      minHeight: "75px"
+      marginLeft: "37.5%",
+      marginRight: "37.5%",
+      width: "200px", // Adjust width as needed
     },
   },
 });

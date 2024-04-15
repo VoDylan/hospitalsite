@@ -5,6 +5,7 @@ import {
   Stack,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
+import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
@@ -14,7 +15,6 @@ import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubm
 import React from "react";
 import Confetti from "react-confetti";
 import axios from "axios";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -124,6 +124,8 @@ function GiftDeliveryService() {
       <Grid
         container
         direction={"row"}
+        rowSpacing={1}
+        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -146,15 +148,15 @@ function GiftDeliveryService() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Name:</Typography>
-          <CenterAlignedTextbox
+          <Typography color={"black"}>Name:</Typography>
+          <LeftAlignedTextbox
             label={"Name"}
             value={form.name}
             onChange={handleNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Location:</Typography>
+          <Typography color={"black"}>Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
@@ -163,16 +165,16 @@ function GiftDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Recipient Name:</Typography>
-          <CenterAlignedTextbox
+          <Typography color={"black"}>Recipient Name:</Typography>
+          <LeftAlignedTextbox
             label={"Recipient Name"}
             value={form.recipientName}
             onChange={handlerecipientNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Optional Message:</Typography>
-          <CenterAlignedTextbox
+          <Typography color={"black"}>Optional Message:</Typography>
+          <LeftAlignedTextbox
             label={"Optional Message"}
             value={form.message}
             onChange={handleMessageInput}
@@ -180,7 +182,7 @@ function GiftDeliveryService() {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
+          <Typography color={"black"} paddingTop={3}>
             Delivery:
           </Typography>
           <RadioButtonsGroup
@@ -197,7 +199,7 @@ function GiftDeliveryService() {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
+          <Typography color={"black"} paddingTop={3}>
             Status of the Request:
           </Typography>
           <RadioButtonsGroup
@@ -208,7 +210,7 @@ function GiftDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={2} align={"center"}>
+          <Typography color={"black"} paddingTop={3}>
             Gift Size:
           </Typography>
           <RadioButtonsGroup
@@ -219,7 +221,7 @@ function GiftDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={2} align={"center"}>
+          <Typography color={"black"} paddingTop={3}>
             Gift Add-on:
           </Typography>
           <RadioButtonsGroup
@@ -237,6 +239,7 @@ function GiftDeliveryService() {
             display: "flex",
             my: 2,
             justifyContent: "center",
+            pr: 6,
           }}
         >
           {showConfetti && (
