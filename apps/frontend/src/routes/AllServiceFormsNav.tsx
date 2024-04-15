@@ -10,7 +10,7 @@ import * as React from 'react';
 // import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import {Box, Tabs} from "@mui/material";
-import { Link } from 'react-router-dom';
+import {Link, matchPath, useLocation} from 'react-router-dom';
 
 function samePageLinkNavigation(
   event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -46,48 +46,33 @@ function LinkTab(props: LinkTabProps) {
   );
 }
 
-export default function AllServiceFormsNav() {
-  const [value, setValue] = React.useState(0);
+function useRouteMatch(patterns: string[]) {
+  const { pathname } = useLocation();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    // event.type can be equal to focus with selectionFollowsFocus.
-    if (
-      event.type !== 'click' ||
-      (event.type === 'click' &&
-        samePageLinkNavigation(
-          event as React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-        ))
-    ) {
-      setValue(newValue);
+  for (let i = 0; i < patterns.length; i += 1) {
+    const pattern = patterns[i];
+    const possibleMatch = matchPath(pattern, pathname);
+    if (possibleMatch !== null) {
+      return possibleMatch;
     }
-  };
+  }
+  return null;
+}
 
+export default function AllServiceFormsNav() {
+  const routeMatch = useRouteMatch(['Services/FlowerDelivery', 'Services/MedicineDelivery', 'Services/GiftDelivery']);
+  const currentTab = routeMatch?.pattern?.path;
   return (
     <>
-      {/*<Box sx={{ width: '100%', typography: 'body1' }}>*/}
-      {/*  <TabContext value={value}>*/}
-      {/*    <Box sx={{ borderBottom: 1, borderColor: 'divider',backgroundColor:"lightgray", opacity: "0.5", width: "30%" }}>*/}
-      {/*      <TabList onChange={handleChange} aria-label="lab API tabs example">*/}
-      {/*        <Tab label="Item One" value="1" />*/}
-      {/*        <Tab label="Item Two" value="2" />*/}
-      {/*        <Tab label="Item Three" value="3" />*/}
-      {/*      </TabList>*/}
-      {/*    </Box>*/}
-      {/*    <TabPanel value="1"><FlowerDeliveryService/></TabPanel>*/}
-      {/*    <TabPanel value="2"><GiftDeliveryService/></TabPanel>*/}
-      {/*    <TabPanel value="3"><MedicineDelivery/></TabPanel>*/}
-      {/*  </TabContext>*/}
-      {/*</Box>*/}
       <Box sx={{ width: '100%' }}>
         <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="Services Navigation Tabs"
-          role="navigation"
+          value={currentTab}
+          aria-label={"Service Navigation Tabs"}
+          centered
         >
-          <Tab component={Link} label="Flowers" to="/Services/FlowerDelivery" />
-          <Tab component={Link} label="Gifts" to="/Services/GiftDelivery" />
-          <Tab component={Link} label="Medicine" to="/Services/MedicineDelivery" />
+          <Tab component={Link} label="Flowers" value="Services/FlowerDelivery" to="/Services/FlowerDelivery" />
+          <Tab component={Link} label="Gifts" value="Services/GiftDelivery" to="/Services/GiftDelivery" />
+          <Tab component={Link} label="Medicine" value="Services/MedicineDelivery" to="/Services/MedicineDelivery" />
         </Tabs>
       </Box>
     </>

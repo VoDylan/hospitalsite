@@ -7,6 +7,7 @@ import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import AllServiceFormsNav from "./AllServiceFormsNav.tsx";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
@@ -112,6 +113,7 @@ function FlowerDeliveryService() {
           mb: "5vh",
         }}
       >
+        <AllServiceFormsNav/>
         <Grid
           item
           xs={12}
