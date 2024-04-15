@@ -31,12 +31,14 @@ function MapRoute() {
   const [endNode, setEndNode] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const [pathNodesData, setPathNodesData] = useState<IDCoordinates[]>([]);
+  const pathNodesData = useRef<IDCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+  const [updateNodesBetweenFloors, setUpdateNodesBetweenFloors] = useState<boolean>(false);
 
   const nodesToNextFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
   const nodesToPrevFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
   const [pathRenderStatus, setPathRenderStatus] = useState<boolean>(false);
+  const [updateFloorIcons, setUpdateFloorIcons] = useState<boolean>(false);
 
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
@@ -80,7 +82,6 @@ function MapRoute() {
   };
 
   const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
-    console.log(nodes);
     const filteredNodeAssociations = nodes.map((node) => ({
       label: node.longName, // Assuming `longName` is the label you want to use
       node: node.nodeID,
@@ -457,13 +458,10 @@ function MapRoute() {
   };
 
   const updateNodesData = (newData: IDCoordinates[]) => {
-    setPathNodesData(newData);
+    pathNodesData.current = newData;
   };
 
   async function handleSubmit() {
-    console.log(startNode);
-    console.log(endNode);
-
     if (startNode.trim() === "" || endNode.trim() === "") {
       setErrorMessage("Please enter both start and end nodes");
       return;
@@ -487,10 +485,10 @@ function MapRoute() {
       const data = response.data;
       const path = data.message;
 
-      console.log(path);
-
       updateNodesData(path);
       !path ? setErrorMessage("There is no path between nodes") : setErrorMessage("");
+
+      setUpdateNodesBetweenFloors(true);
     } catch (error) {
       console.error("Failed to fetch data:", error);
       setErrorMessage("Failed to fetch data. Please try again.");
@@ -522,12 +520,7 @@ function MapRoute() {
       determineFilters();
       setFiltersApplied(true);
     }
-  }, [
-    nodeDataLoaded,
-    filtersApplied,
-    determineFilters,
-    populateAutocompleteData,
-  ]);
+  }, [determineFilters, filtersApplied, nodeDataLoaded]);
 
   const handleBackgroundRenderStatus = (status: boolean, width: number, height: number) => {
     setBackgroundRenderStatus(status);
@@ -538,6 +531,10 @@ function MapRoute() {
   const handleNodeToFloorCallback = (newNodesToNextFloor: Map<IDCoordinates, Floor>, newNodesToPrevFloor: Map<IDCoordinates, Floor>) => {
     nodesToNextFloor.current = newNodesToNextFloor;
     nodesToPrevFloor.current = newNodesToPrevFloor;
+
+    setUpdateFloorIcons(true);
+    setUpdateNodesBetweenFloors(false);
+    console.log("Updated node to next and previous floor");
   };
 
   const handlePathRenderStatus = (status: boolean) => {
@@ -666,10 +663,11 @@ function MapRoute() {
                     maxWidth: "100%",
                   }}
                   backgroundRendered={backgroundRenderStatus}
+                  updateNodesBetweenFloors={updateNodesBetweenFloors}
                   width={canvasWidth}
                   height={canvasHeight}
                   floor={floor}
-                  pathNodesData={pathNodesData}
+                  pathNodesData={pathNodesData.current}
                   floorConnectionCallback={handleNodeToFloorCallback}
                   pathRenderStatusCallback={handlePathRenderStatus}
                 />
@@ -684,23 +682,13 @@ function MapRoute() {
                   }}
                   backgroundRendered={backgroundRenderStatus}
                   pathRendered={pathRenderStatus}
+                  updateFloorIcons={updateFloorIcons}
                   width={canvasWidth}
                   height={canvasHeight}
                   floor={floor}
                   nodesToNextFloor={nodesToNextFloor.current}
                   nodesToPrevFloor={nodesToPrevFloor.current}
                 />
-                {/*<canvas*/}
-                {/*  ref={floorIconCanvasRef}*/}
-                {/*  style={{*/}
-                {/*    position: "absolute",*/}
-                {/*    top: 50,*/}
-                {/*    left: 0,*/}
-                {/*    minHeight: "100vh",*/}
-                {/*    maxHeight: "100%",*/}
-                {/*    maxWidth: "100%",*/}
-                {/*  }}*/}
-                {/*/>*/}
               </>
             </Draggable>
           </TransformComponent>

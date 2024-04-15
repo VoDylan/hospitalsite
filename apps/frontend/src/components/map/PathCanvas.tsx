@@ -8,6 +8,7 @@ import GraphManager from "../../common/GraphManager.ts";
 interface PathCanvasProps {
   style: React.CSSProperties;
   backgroundRendered: boolean;
+  updateNodesBetweenFloors: boolean;
   width: number;
   height: number;
   floor: Floor;
@@ -18,40 +19,62 @@ interface PathCanvasProps {
 
 export default function PathCanvas(props: PathCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
   const animationFrameRequestID = useRef<number>();
 
   const floorConnectionCallback = props.floorConnectionCallback;
-
-  const pathRenderStatusCallback = props.pathRenderStatusCallback;
+  // const pathRenderStatusCallback = props.pathRenderStatusCallback;
 
   useEffect(() => {
-    initializeLayeredCanvas(canvasRef.current, props.width, props.height);
-  }, [props.height, props.width]);
+    if(props.backgroundRendered) initializeLayeredCanvas(canvasRef.current, props.width, props.height);
+  }, [props.backgroundRendered, props.height, props.width]);
+
+  useEffect(() => {
+    if(props.updateNodesBetweenFloors) {
+      if (!props.pathNodesData || props.pathNodesData.length == 0) return;
+      console.log("Determining interfloor nodes");
+
+      const nodesToPrevFloor: Map<IDCoordinates, Floor> = new Map<IDCoordinates, Floor>();
+      const nodesToNextFloor: Map<IDCoordinates, Floor> = new Map<IDCoordinates, Floor>();
+
+      let lastVisitedFloor: Floor = floorStrToObj(GraphManager.getInstance().getNodeByID(props.pathNodesData[0].nodeID)!.floor)!;
+      let lastVisitedNode: IDCoordinates = props.pathNodesData[0];
+
+      for (let i = 0; i < props.pathNodesData.length; i++) {
+        const node: MapNode | null = GraphManager.getInstance().getNodeByID(props.pathNodesData[i].nodeID);
+        if (!node) continue;
+
+        if (node.floor != lastVisitedFloor) {
+          nodesToNextFloor.set(lastVisitedNode, floorStrToObj(node.floor)!);
+          nodesToPrevFloor.set(props.pathNodesData[i], lastVisitedFloor);
+        }
+
+        lastVisitedFloor = floorStrToObj(node.floor)!;
+        lastVisitedNode = props.pathNodesData[i];
+      }
+
+      floorConnectionCallback(nodesToNextFloor, nodesToPrevFloor);
+    }
+  }, [floorConnectionCallback, props.pathNodesData, props.updateNodesBetweenFloors]);
 
   useEffect(() => {
     if(animationFrameRequestID.current) cancelAnimationFrame(animationFrameRequestID.current);
-    console.log("Determining nodes on floor...");
+
+    if (!props.pathNodesData) return;
     const includedPathsOnFloor: IDCoordinates[][] = [];
 
     let currPath: IDCoordinates[] = [];
-
-    const nodesToPrevFloor: Map<IDCoordinates, Floor> = new Map<IDCoordinates, Floor>();
-    const nodesToNextFloor: Map<IDCoordinates, Floor> = new Map<IDCoordinates, Floor>();
 
     let lastVisitedFloor: Floor | null = null;
 
     for (let i = 0; i < props.pathNodesData.length; i++) {
       const node: MapNode | null = GraphManager.getInstance().getNodeByID(props.pathNodesData[i].nodeID);
-      if(!node) continue;
+      if (!node) continue;
 
       if (node.floor == props.floor) {
         lastVisitedFloor = floorStrToObj(node.floor);
         currPath.push(props.pathNodesData[i]);
       } else {
-        if(lastVisitedFloor && lastVisitedFloor !== node.floor) {
-          nodesToNextFloor.set(currPath[currPath.length - 1], floorStrToObj(node.floor)!);
-          nodesToPrevFloor.set(props.pathNodesData[i], lastVisitedFloor);
+        if (lastVisitedFloor && (lastVisitedFloor !== node.floor)) {
           lastVisitedFloor = floorStrToObj(node.floor);
         }
 
@@ -64,15 +87,6 @@ export default function PathCanvas(props: PathCanvasProps) {
 
     if (currPath.length != 0) includedPathsOnFloor.push(currPath);
 
-    console.log(`Determined nodes on floor`);
-    console.log(includedPathsOnFloor);
-
-    console.log(nodesToNextFloor);
-    console.log(nodesToPrevFloor);
-
-    floorConnectionCallback(nodesToNextFloor, nodesToPrevFloor);
-    pathRenderStatusCallback(true);
-
     if (canvasRef.current) {
       const canvas: HTMLCanvasElement = canvasRef.current;
       const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
@@ -83,9 +97,6 @@ export default function PathCanvas(props: PathCanvasProps) {
 
       if (includedPathsOnFloor.length != 0) {
         console.log("Processing canvas");
-        if (!props.pathNodesData) {
-          return;
-        }
 
         let currentTargetIndex = 0;
         let currentPathIndex = 0;
@@ -98,7 +109,6 @@ export default function PathCanvas(props: PathCanvasProps) {
         const speed = 1;
 
         const moveDot = (origFloor: Floor) => {
-          //console.log(`Current Floor: ${props.floor} | Original Floor: ${origFloor}`);
           if (props.floor != origFloor) {
             console.log("Floor changed, stopping previous animation");
             return;
@@ -175,10 +185,11 @@ export default function PathCanvas(props: PathCanvasProps) {
         requestAnimationFrame(() => moveDot(props.floor));
       } else {
         console.log("Clearing path canvas");
+        if(animationFrameRequestID.current) cancelAnimationFrame(animationFrameRequestID.current);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
-  }, [floorConnectionCallback, pathRenderStatusCallback, props.floor, props.height, props.pathNodesData, props.width]);
+  }, [props.floor, props.height, props.pathNodesData, props.width]);
 
   return (
     <canvas

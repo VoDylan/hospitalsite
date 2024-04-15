@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Floor} from "common/src/map/Floor.ts";
 import {IDCoordinates} from "common/src/IDCoordinates.ts";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
@@ -19,6 +19,7 @@ interface FloorIconsCanvasProps {
   style: React.CSSProperties;
   backgroundRendered: boolean;
   pathRendered: boolean;
+  updateFloorIcons: boolean;
   width: number;
   height: number;
   floor: Floor;
@@ -27,7 +28,7 @@ interface FloorIconsCanvasProps {
 }
 
 export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
-  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [L1FloorIconNext] = useState<HTMLImageElement>(() => {
     const img: HTMLImageElement = new Image();
@@ -90,8 +91,8 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
   });
 
   useEffect(() => {
-    initializeLayeredCanvas(canvasRef.current, props.width, props.height);
-  }, [props.height, props.width]);
+    if(props.backgroundRendered) initializeLayeredCanvas(canvasRef.current, props.width, props.height);
+  }, [props.backgroundRendered, props.height, props.width]);
 
   useEffect(() => {
     const floorToNextIcon = (floor: Floor) => {
@@ -124,7 +125,7 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
       }
     };
 
-    if(canvasRef.current && props.backgroundRendered && props.pathRendered) {
+    if(canvasRef.current && props.backgroundRendered && props.updateFloorIcons) {
       console.log("Rendering floor icons");
       const canvas: HTMLCanvasElement = canvasRef.current;
       const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
@@ -135,17 +136,24 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
 
       const draw: Draw = new Draw(ctx);
 
+      console.log(`Nodes to next floor:`);
+      console.log(props.nodesToNextFloor);
+      console.log(`Nodes to previous floor:`);
+      console.log(props.nodesToPrevFloor);
+
       props.nodesToNextFloor.forEach((value: Floor, key: IDCoordinates) => {
+        console.log(key, value);
         if(GraphManager.getInstance().getNodeByID(key.nodeID)!.floor == props.floor)
           draw.drawFloorIcon(key.coordinates.x, key.coordinates.y, 1/3, floorToNextIcon(value));
       });
 
       props.nodesToPrevFloor.forEach((value: Floor, key: IDCoordinates) => {
+        console.log(key, value);
         if(GraphManager.getInstance().getNodeByID(key.nodeID)!.floor == props.floor)
           draw.drawFloorIcon(key.coordinates.x, key.coordinates.y, 1/3, floorToPrevIcon(value));
       });
     }
-  }, [F1FloorIconNext, F1FloorIconPrev, F2FloorIconNext, F2FloorIconPrev, F3FloorIconNext, F3FloorIconPrev, L1FloorIconNext, L1FloorIconPrev, L2FloorIconNext, L2FloorIconPrev, props.backgroundRendered, props.floor, props.nodesToNextFloor, props.nodesToPrevFloor, props.pathRendered]);
+  }, [F1FloorIconNext, F1FloorIconPrev, F2FloorIconNext, F2FloorIconPrev, F3FloorIconNext, F3FloorIconPrev, L1FloorIconNext, L1FloorIconPrev, L2FloorIconNext, L2FloorIconPrev, props.backgroundRendered, props.floor, props.nodesToNextFloor, props.nodesToPrevFloor, props.updateFloorIcons]);
 
   return (
     <canvas

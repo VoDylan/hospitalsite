@@ -21,8 +21,8 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    initializeLayeredCanvas(canvasRef.current, props.width, props.height);
-  }, [props.height, props.width]);
+    if(props.backgroundRendered) initializeLayeredCanvas(canvasRef.current, props.width, props.height);
+  }, [props.backgroundRendered, props.height, props.width]);
 
   /**
    * useEffect hook to render the map legend symbols onto the corresponding canvas
@@ -51,9 +51,6 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         [filters],
         props.filteredNodes,
       );
-
-      console.log("NodesOnFloor:");
-      console.log(nodesOnFloor);
 
       for (let i = 0; i < nodesOnFloor.length; i++) {
         switch (nodesOnFloor[i].nodeType) {
