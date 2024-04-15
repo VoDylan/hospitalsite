@@ -1,7 +1,14 @@
-import { Drawer, Typography, IconButton, Stack } from "@mui/material";
+import {Drawer, IconButton,  Button, Box, Typography, Divider, List, ListItem} from "@mui/material";
+//Stack,
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import NavButton from "./NavButton.tsx";
+import HomeIcon from '@mui/icons-material/Home';
+import MapIcon from '@mui/icons-material/Map';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+//import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
+import StorageIcon from '@mui/icons-material/Storage';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { blue } from '@mui/material/colors';
 
 export const NavBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -21,26 +28,58 @@ export const NavBar = () => {
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
       >
-        <Stack direction={"column"} p={4} width={"15vw"} role={"presentation"}>
-          <Typography
-            variant={"h6"}
-            component={"div"}
-            sx={{ marginBottom: "10%" }}
-          >
-            Side Panel
-          </Typography>
-          <Stack
-            direction="column"
-            spacing={2}
-            sx={{ display: "flex", alignItems: "start" }}
-          >
-            <NavButton name={"Home"} path={"/"} />
-            <NavButton name={"Directions"} path={"/Map"} />
-            <NavButton name={"Services"} path={"/Services"} />
-            <NavButton path={"/DisplayDatabase"} name={"Database"} />
-            <NavButton path={"/MapEditingPage"} name={"EDITING PAGE"} />
-          </Stack>
-        </Stack>
+        <Box
+          sx={{
+            bgcolor:'#003A96',
+            height: 'stretch',
+            width: 'fit-content'
+        }} >
+{/*        <Stack direction={"column"} p={2} width={"10vw"} role={"presentation"}
+               sx={{ display: "flex", alignItems: "start" }}>*/}
+          <List
+          sx={{
+            padding:2
+          }}>
+            <ListItem>
+          <Button variant="text" href={"/"} startIcon={<HomeIcon sx={{ color: blue[200] }}/>}>
+              <Typography color='white'>
+              Home
+              </Typography>
+            </Button>
+            </ListItem>
+            <Divider sx={{ bgcolor: 'white' }}
+            />
+          <ListItem>
+            <Button variant="text" href={"/Map"} startIcon={<MapIcon sx={{ color: blue[200] }} />}>
+              <Typography color='white'>
+                Directions
+              </Typography></Button>
+        </ListItem>
+          <ListItem >
+            <Button variant="text" href={"/MapEditingPage"} startIcon={<ModeEditIcon sx={{ color: blue[200] }} />}>
+              <Typography color='white'>
+                Map Editor
+              </Typography></Button>
+          </ListItem>
+            <Divider
+              sx={{
+                bgcolor: 'white',
+              }}/>
+          <ListItem>
+            <Button variant="text" href={"/Services"}         startIcon={<AnnouncementIcon sx={{ color: blue[200] }} />}>
+              <Typography color='white'>
+                Services
+              </Typography></Button>
+          </ListItem>
+          <ListItem>
+            <Button variant="text" href={"/DisplayDatabase"}  startIcon={<StorageIcon sx={{ color: blue[200] }} />}>
+              <Typography color='white'>
+              Database
+            </Typography></Button>
+          </ListItem>
+            </List>
+            {/*</Stack>*/}
+        </Box>
       </Drawer>
     </>
   );
