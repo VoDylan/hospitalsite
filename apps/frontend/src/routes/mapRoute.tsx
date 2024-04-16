@@ -633,9 +633,17 @@ function MapRoute() {
 
   const handleStartingLocationClick = () => {
     closeModal();
-    setStartNode(nodeClicked?.longName || '');
-    console.log(nodeClicked!.longName);
-    console.log(startNode);
+    setStartNode(nodeClicked!.nodeID);
+    // console.log(nodeClicked!.longName);
+    // console.log(startNode);
+  };
+
+  const handleEndingLocationClick = () => {
+    closeModal();
+    setEndNode(nodeClicked!.nodeID);
+
+    // console.log(nodeClicked!.longName);
+    // console.log(startNode);
   };
 
   const Modal = () => {
@@ -693,7 +701,7 @@ function MapRoute() {
             border: "none",
             backgroundColor: "white",
             boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
-          }}>
+          }} onClick={handleEndingLocationClick}>
             Ending Location
           </button>
         </div>
@@ -702,17 +710,6 @@ function MapRoute() {
 
     return;
   };
-
-  const textFieldRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    // Focus on the TextField after startNode has been updated
-    console.log("startNode updated:", startNode);
-    if (textFieldRef.current) {
-      textFieldRef.current.select();
-      console.log("textFieldRef:", textFieldRef.current);
-    }
-  }, [startNode]);
 
   return (
     <>
@@ -754,7 +751,7 @@ function MapRoute() {
           groupBy={(option) => option.charAt(0).toUpperCase()}
           optionLabel={(option) => option}
           renderInput={(params) => (
-            <TextField hiddenLabel {...params} label="Starting Location" value={startNode} inputRef={textFieldRef}/>
+            <TextField {...params} label="Starting Location" value={startNode} />
           )}
           onChange1={(event, value) => handleEndNodeChange(value)}
           renderInput1={(params) => (
