@@ -25,6 +25,10 @@ import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
 import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
 import PathCanvas from "../components/map/PathCanvas.tsx";
 import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
+import startIcon from "../images/mapImages/starticon3.png";
+import endIcon from "../images/mapImages/endIcon.png";
+import IconCanvas from "../components/map/IconCanvas.tsx";
+
 
 interface TransformState {
   scale: number;
@@ -33,6 +37,8 @@ interface TransformState {
 }
 
 function MapRoute() {
+  const iconCanvasRef = useRef<HTMLCanvasElement | null>(null);
+
   const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
   const transformState = useRef<TransformState>({
     scale: 0,
@@ -69,10 +75,10 @@ function MapRoute() {
    * Pathfinder selection
    */
   const [open, setOpen] = React.useState(false);
-  const [checkedBFS, setCheckedBFS] = React.useState(true);
-  const [checkedAS, setCheckedAS] = React.useState(false);
-  const [algorithm, setAlgorithm] = React.useState("BFS");
-
+  const [checkedBFS, setCheckedBFS] = React.useState(false);
+  const [checkedAS, setCheckedAS] = React.useState(true);
+  const [checkedDFS, setCheckedDFS] = React.useState(false);
+  const [algorithm, setAlgorithm] = React.useState("A*");
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
@@ -112,7 +118,10 @@ function MapRoute() {
     if (checkedAS) {
       setCheckedAS(false);
     }
-    setCheckedBFS(!checkedBFS);
+    else if (checkedDFS) {
+      setCheckedDFS(false);
+    }
+    setCheckedBFS(true);
     setAlgorithm("BFS");
   };
 
@@ -120,8 +129,22 @@ function MapRoute() {
     if (checkedBFS) {
       setCheckedBFS(false);
     }
-    setCheckedAS(!checkedAS);
+    else if (checkedDFS) {
+      setCheckedDFS(false);
+    }
+    setCheckedAS(true);
     setAlgorithm("A*");
+  };
+
+  const handleSelectDFS = () => {
+    if (checkedBFS) {
+      setCheckedBFS(false);
+    }
+    else if (checkedAS) {
+      setCheckedAS(false);
+    }
+    setCheckedDFS(true);
+    setAlgorithm("DFS");
   };
 
   /**
@@ -365,9 +388,6 @@ function MapRoute() {
     setFiltersApplied(false);
   };
 
-  /**
-   * Create Type, Floor, and Building filters
-   */
 
   /**
    * Change list of nodes based on applied filters
@@ -554,6 +574,10 @@ function MapRoute() {
     setPathRenderStatus(status);
   };
 
+  const handleIconCallback = (ref: HTMLCanvasElement) => {
+    iconCanvasRef.current = ref;
+  };
+
   const handleTransform = (ref: ReactZoomPanPinchRef, state: { scale: number; positionX: number; positionY: number }) => {
     if(!transformRef.current) transformRef.current = ref;
     transformState.current = state;
@@ -569,79 +593,108 @@ function MapRoute() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <TopBanner2 />
-
-      {/*Side Bar*/}
-      <MapSideBar
-        title="Navigation"
-        onChange={(event, value) => handleStartNodeChange(value)}
-        autocompleteNodeData={autocompleteNodeData}
-        compareFn={(a, b) => a.label.localeCompare(b.label)}
-        nodeToLabelIdCallback={(node) => node.label}
-        groupBy={(option) => option.charAt(0).toUpperCase()}
-        optionLabel={(option) => option}
-        renderInput={(params) => (
-          <TextField {...params} label="Starting Location" value={startNode} />
-        )}
-        onChange1={(event, value) => handleEndNodeChange(value)}
-        renderInput1={(params) => (
-          <TextField {...params} label="Ending Location" value={endNode} />
-        )}
-        open={open}
-        handleClick={handleClick}
-        checkedBFS={checkedBFS}
-        handleSelectBFS={handleSelectBFS}
-        checkedAS={checkedAS}
-        handleSelectAS={handleSelectAS}
-        errorMessage={errorMessage}
-        onClick={() => {
-          handleSubmit().then(() => {
-            setUpdateAnimation(!updateAnimation);
-          });
+    <>
+      <img
+          src={startIcon}
+          className={"start"}
+          alt="icon"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            opacity: 0,
+            zIndex: -1,
+          }}
+        />
+        <img
+          src={endIcon}
+          className={"end"}
+          alt="icon"
+          style={{
+        position: "absolute",
+          top: 0,
+          left: 0,
+          opacity: 0,
+          zIndex: -1,
         }}
-        onClick1={handleButtonClick}
-        checked={checked}
-        onClick2={handleSelectAll}
-        icon={<Icon
-          handleButtonClick={handleButtonClick}
-          checked={false}
-          confIconState={confIconState}
-          deptIconState={deptIconState}
-          labsIconState={labsIconState}
-          servIconState={servIconState}
-          infoIconState={infoIconState}
-          restroomsIconState={restroomsIconState}
-          elevatorIconState={elevatorIconState}
-          stairsIconState={stairsIconState}
-          exitsIconState={exitsIconState}
-          retlIconState={retlIconState}
-          ll1IconState={ll1IconState}
-          ll2IconState={ll2IconState}
-          firstFloorIconState={firstFloorIconState}
-          secondFloorIconState={secondFloorIconState}
-          thirdFloorIconState={thirdFloorIconState}
-          handleConfIconState={handleConfIconState}
-          handleDeptIconState={handleDeptIconState}
-          handleLabsIconState={handleLabsIconState}
-          handleServIconState={handleServIconState}
-          handleInfoIconState={handleInfoIconState}
-          handleRestroomsIconState={handleRestroomsIconState}
-          handleElevatorIconState={handleElevatorIconState}
-          handleStairsIconState={handleStairsIconState}
-          handleExitsIconState={handleExitsIconState}
-          handleRetlIconState={handleRetlIconState}
-          handleLL1IconState={handleLL1IconState}
-          handleLL2IconState={handleLL2IconState}
-          handleFirstFloorIconState={handleFirstFloorIconState}
-          handleSecondFloorIconState={handleSecondFloorIconState}
-          handleThirdFloorIconState={handleThirdFloorIconState}
-          handleSelectAll={handleSelectAll}
-          handleClearAll={handleClearAll}
-        />}
-        callback={handleFloorChange}
       />
+      <Box sx={{display: "flex"}}>
+
+
+        <CssBaseline/>
+        <TopBanner2/>
+
+        {/*Side Bar*/}
+        <MapSideBar
+          title="Navigation"
+          onChange={(event, value) => handleStartNodeChange(value)}
+          autocompleteNodeData={autocompleteNodeData}
+          compareFn={(a, b) => a.label.localeCompare(b.label)}
+          nodeToLabelIdCallback={(node) => node.label}
+          groupBy={(option) => option.charAt(0).toUpperCase()}
+          optionLabel={(option) => option}
+          renderInput={(params) => (
+            <TextField {...params} label="Starting Location" value={startNode}/>
+          )}
+          onChange1={(event, value) => handleEndNodeChange(value)}
+          renderInput1={(params) => (
+            <TextField {...params} label="Ending Location" value={endNode}/>
+          )}
+          open={open}
+          handleClick={handleClick}
+          checkedBFS={checkedBFS}
+          handleSelectBFS={handleSelectBFS}
+          checkedAS={checkedAS}
+          handleSelectAS={handleSelectAS}
+          checkedDFS={checkedDFS}
+          handleSelectDFS={handleSelectDFS}
+          errorMessage={errorMessage}
+          onClick={() => {
+            handleSubmit().then(() => {
+              setUpdateAnimation(!updateAnimation);
+            });
+          }}
+          onClick1={handleButtonClick}
+          checked={checked}
+          onClick2={handleSelectAll}
+          icon={<Icon
+            handleButtonClick={handleButtonClick}
+            checked={false}
+            confIconState={confIconState}
+            deptIconState={deptIconState}
+            labsIconState={labsIconState}
+            servIconState={servIconState}
+            infoIconState={infoIconState}
+            restroomsIconState={restroomsIconState}
+            elevatorIconState={elevatorIconState}
+            stairsIconState={stairsIconState}
+            exitsIconState={exitsIconState}
+            retlIconState={retlIconState}
+            ll1IconState={ll1IconState}
+            ll2IconState={ll2IconState}
+            firstFloorIconState={firstFloorIconState}
+            secondFloorIconState={secondFloorIconState}
+            thirdFloorIconState={thirdFloorIconState}
+            handleConfIconState={handleConfIconState}
+            handleDeptIconState={handleDeptIconState}
+            handleLabsIconState={handleLabsIconState}
+            handleServIconState={handleServIconState}
+            handleInfoIconState={handleInfoIconState}
+            handleRestroomsIconState={handleRestroomsIconState}
+            handleElevatorIconState={handleElevatorIconState}
+            handleStairsIconState={handleStairsIconState}
+            handleExitsIconState={handleExitsIconState}
+            handleRetlIconState={handleRetlIconState}
+            handleLL1IconState={handleLL1IconState}
+            handleLL2IconState={handleLL2IconState}
+            handleFirstFloorIconState={handleFirstFloorIconState}
+            handleSecondFloorIconState={handleSecondFloorIconState}
+            handleThirdFloorIconState={handleThirdFloorIconState}
+            handleSelectAll={handleSelectAll}
+            handleClearAll={handleClearAll}
+          />}
+          callback={handleFloorChange}
+        />
 
       <Box
         width={window.innerWidth}
@@ -699,6 +752,23 @@ function MapRoute() {
                   pathNodesData={pathNodesData.current}
                   floorConnectionCallback={handleNodeToFloorCallback}
                   pathRenderStatusCallback={handlePathRenderStatus}
+                  startNode={startNode}
+                  endNode={endNode}
+                  iconCanvasRef={iconCanvasRef.current!}
+                />
+                <IconCanvas
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                  backgroundRendered={backgroundRenderStatus}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  refCallback={handleIconCallback}
                 />
                 <FloorIconsCanvas
                   style={{
@@ -726,6 +796,7 @@ function MapRoute() {
       </Box>
       <Legend filterItems={filterIcons} />
     </Box>
+    </>
   );
 }
 
