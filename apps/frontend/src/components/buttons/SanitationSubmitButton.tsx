@@ -1,14 +1,13 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
-// import axios, { isAxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
-// import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import { SanitationRequestFormSubmission } from "../../common/formSubmission/SanitationRequestFormSubmission.ts";
 
 interface ButtonProps {
   text: string;
   input: SanitationRequestFormSubmission;
   clear: () => void;
-  updateSubmissionList: () => void;
 }
 
 export function SanitationSubmitButton(props: ButtonProps) {
@@ -46,7 +45,7 @@ export function SanitationSubmitButton(props: ButtonProps) {
   }
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
-  function handleSubmit() {
+  async function handleSubmit() {
     if (props.input.location === "") {
       openWithError("Please select a room");
     } else if (props.input.name === "") {
@@ -60,40 +59,33 @@ export function SanitationSubmitButton(props: ButtonProps) {
     } else if (props.input.frequency === "") {
       openWithError("Please select a frequency");
     } else {
-      // Not needed for iteration 2
-      // const submission = props.input;
+      const submission = props.input;
       console.log(props.input);
 
-      // const result: { success: boolean; data: HTTPResponseType } =
-      //   await pushToDB(submission);
+      const result: { success: boolean; data: HTTPResponseType } =
+        await pushToDB(submission);
 
-      // if (!result.success) {
-      //   openWithError(
-      //     `Failed to post form data to database: ${result.data.message}`,
-      //   );
-      // } else {
-      //   handleClear();
-      //   openWithSuccess();
-
-      // Remove these once connected to DB
-      props.updateSubmissionList();
-      handleClear();
-      openWithSuccess();
+      if (!result.success) {
+        openWithError(
+          `Failed to post form data to database: ${result.data.message}`,
+        );
+      } else {
+        handleClear();
+        openWithSuccess();
+      }
     }
   }
-  // }
 
   function handleClear() {
     props.clear();
   }
 
-  /* Commenting this out for iteration 2
   // Function for posting the form submission to the database
   async function pushToDB(form: SanitationRequestFormSubmission) {
     const returnData = {
       userID: "admin",
       nodeID: form.location,
-      serviceType: "flower-delivery",
+      serviceType: "sanitation-request",
       services: form,
     };
 
@@ -141,7 +133,6 @@ export function SanitationSubmitButton(props: ButtonProps) {
       data: data!,
     };
   }
-  */
 
   return (
     <Button

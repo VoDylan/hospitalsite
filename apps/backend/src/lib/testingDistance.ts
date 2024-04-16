@@ -48,7 +48,7 @@ export class testingDistance {
       }
     }
 
-    this.print();
+    // this.print();
 
     return this.nodesDistances;
   }

@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-// import { MapNodeType } from "common/src/map/MapNodeType.ts";
-// import MapImage from "../images/00_thelowerlevel1.png";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
@@ -9,38 +7,84 @@ import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
 import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
 import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
 import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
-import Floor from "../components/map/FloorTabs.tsx";
-import { sendRequest } from "common/src/sendRequest.ts";
-import Draggable from "react-draggable";
+import MapSideBar from "../components/map/MapSideBar.tsx";
+import TextField from "@mui/material/TextField";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
-// type floorNodes = {
-//   l2: NodeFilter[];
-//   l1: NodeFilter[];
-//   f1: NodeFilter[];
-//   f2: NodeFilter[];
-//   f3: NodeFilter[];
-// };
+import Draggable from "react-draggable";
+import Icon from "../components/map/SlideIcon.tsx";
+
+
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
+import GraphManager from "../common/GraphManager.ts";
+import MapNode from "common/src/map/MapNode.ts";
+import NodeFilter from "common/src/filter/filters/Filter.ts";
+import FilterManager, {generateFilterValue} from "common/src/filter/FilterManager.ts";
+import {FilterName} from "common/src/filter/FilterName.ts";
+// import {node} from "prop-types";
+
 
 function MapEditingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // const [nodeData, setNodesData] = useState<MapNodeType[]>([]);
   const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
+  const [nodesData, setNodesData] = useState<
+    MapNodeType[]
+  >([]);
+  const [renderSymbolCanvas, setRenderSymbolCanvas] = useState<boolean>(false);
+
   const floor = useRef<string>("L1");
   const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
     const image = new Image();
     image.src = L1MapImage;
     return image;
   });
-
   const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
+  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+  const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
 
-  // async function loadNodeData() {
-  //   const data: MapNodeType[] = (await axios.get("/api/database/nodes")).data;
-  //   setNodesData(data);
-  // }
+  /**
+   * Use states for side bar
+   */
 
-  async function loadEdgesDistance(request: sendRequest) {
+  const [autocompleteNodeData, setAutocompleteNodeData] = useState<
+    { label: string; node: string }[]
+  >([]);
+  const [startNode, setStartNode] = useState<string>("");
+  const [endNode, setEndNode] = useState<string>("");
+  const handleStartNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setStartNode(selectedNode.node);
+      }
+    } else {
+      setStartNode(""); // Handle null value if necessary
+    }
+  };
+  const handleEndNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setEndNode(selectedNode.node);
+      }
+    } else {
+      setEndNode(""); // Handle null value if necessary
+    }
+  };
+  const [checked, setChecked] = React.useState(false);
+  const handleButtonClick = () => {
+    setChecked((prev) => !prev);
+  };
+
+
+  async function loadEdgesDistance(request: {req: string}) {
     // const req = { req: "L1" };
     const distancesResponse = await axios.post("/api/sendDistances", request, {
       headers: { "Content-Type": "application/json" },
@@ -50,11 +94,32 @@ function MapEditingPage() {
     }
     const distancePath = await distancesResponse.data;
     const distanceData = distancePath.message;
-    // console.log("distances", distanceData);
 
     setDistancesData(distanceData);
-    console.log("Updated distancesData:", distancePath); // Log the updated value here
+    // console.log("Updated distancesData:", distancePath);
   }
+
+  async function loadNodesData() {
+      const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
+        .data as MapNodeType[];
+
+      data.forEach((node) => {
+        if (!GraphManager.getInstance().getNodeByID(node.nodeID))
+          GraphManager.getInstance().nodes.push(new MapNode(node));
+      });
+
+      console.log("NODES DATA", data);
+      setNodesData(data);
+  }
+
+  const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
+    console.log(nodes);
+    const filteredNodeAssociations = nodes.map((node) => ({
+      label: node.longName, // Assuming `longName` is the label you want to use
+      node: node.nodeID,
+    }));
+    setAutocompleteNodeData(filteredNodeAssociations);
+  }, []);
 
   const handleFloorChange = (newFloor: string) => {
     const newImage = new Image();
@@ -92,18 +157,13 @@ function MapEditingPage() {
     setCurrImage(newImage);
   };
 
+
   useEffect(() => {
-    // if (nodeData.length < 1) {
-    //   // console.log("Loading Data");
-    //   loadNodeData();
-    // }
-    if (distancesData.length < 1) {
+    if (distancesData.length < 1 && nodesData.length < 1) {
       // console.log("Loading Distances");
       loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
+      loadNodesData().then(() => setNodeDataLoaded(true));
     }
-
-    // console.log(floor.current);
-    // console.log(nodeData);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -112,7 +172,7 @@ function MapEditingPage() {
     if (!ctx) return;
 
     const processCanvas = () => {
-      if (edgeDataLoaded) {
+      if (edgeDataLoaded && nodeDataLoaded) {
         canvas.width = currImage.width;
         canvas.height = currImage.height;
 
@@ -153,25 +213,288 @@ function MapEditingPage() {
       processCanvas();
     }
 
-    // image.src = MapImage;
     currImage.onload = () => {
       processCanvas();
     };
+    // console.log(nodesData);
 
-    // ctx.fillStyle = "blue";
-    // ctx.strokeStyle = "blue";
-    // for (let i = 0; i < filteredNodes.length; i++) {
-    //   ctx.beginPath();
-    //   ctx.arc(filteredNodes[i].xcoord, filteredNodes[i].ycoord, 5, 0, 2 * Math.PI); // draw circle
-    //   ctx.fill();
-    // }
+    // console.log(distancesData); // Log distancesData here to see the updated value
+  }, [currImage, distancesData, currImage.complete, edgeDataLoaded, nodesData, nodeDataLoaded]);
 
-    console.log(distancesData); // Log distancesData here to see the updated value
-  }, [currImage, distancesData, currImage.complete, edgeDataLoaded]);
+  /**
+   * FILTER USE STATES
+   */
+
+  const [elevatorIconState, setElevatorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [stairsIconState, setStairsIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [exitsIconState, setExitsIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [servIconState, setServIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [infoIconState, setInfoIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [restroomsIconState, setRestroomsIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [confIconState, setConfIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [deptIconState, setDeptIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [labsIconState, setLabsIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [retlIconState, setRetlIconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [ll1IconState, setLL1IconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [ll2IconState, setLL2IconState] = React.useState<"plus" | "check">(
+    "check",
+  );
+  const [firstFloorIconState, setFirstFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [secondFloorIconState, setSecondFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+  const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
+    "plus" | "check"
+  >("check");
+
+  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
+
+
+  const handleIconStateToggle = (
+    stateSetter: React.Dispatch<React.SetStateAction<"plus" | "check">>,
+  ) => {
+    return () => {
+      stateSetter((prevState) => (prevState === "plus" ? "check" : "plus"));
+      setFiltersApplied(false);
+    };
+  };
+
+  const handleElevatorIconState = handleIconStateToggle(setElevatorIconState);
+  const handleStairsIconState = handleIconStateToggle(setStairsIconState);
+  const handleExitsIconState = handleIconStateToggle(setExitsIconState);
+  const handleInfoIconState = handleIconStateToggle(setInfoIconState);
+  const handleServIconState = handleIconStateToggle(setServIconState);
+  const handleRestroomsIconState = handleIconStateToggle(setRestroomsIconState);
+  const handleConfIconState = handleIconStateToggle(setConfIconState);
+  const handleDeptIconState = handleIconStateToggle(setDeptIconState);
+  const handleLabsIconState = handleIconStateToggle(setLabsIconState);
+  const handleRetlIconState = handleIconStateToggle(setRetlIconState);
+  const handleLL1IconState = handleIconStateToggle(setLL1IconState);
+  const handleLL2IconState = handleIconStateToggle(setLL2IconState);
+  const handleFirstFloorIconState = handleIconStateToggle(
+    setFirstFloorIconState,
+  );
+  const handleSecondFloorIconState = handleIconStateToggle(
+    setSecondFloorIconState,
+  );
+  const handleThirdFloorIconState = handleIconStateToggle(
+    setThirdFloorIconState,
+  );
+
+  const handleSelectAll = () => {
+    setElevatorIconState("check");
+    setStairsIconState("check");
+    setExitsIconState("check");
+    setInfoIconState("check");
+    setServIconState("check");
+    setRestroomsIconState("check");
+    setConfIconState("check");
+    setDeptIconState("check");
+    setLabsIconState("check");
+    setRetlIconState("check");
+    setLL1IconState("check");
+    setLL2IconState("check");
+    setFirstFloorIconState("check");
+    setSecondFloorIconState("check");
+    setThirdFloorIconState("check");
+    setFiltersApplied(false);
+  };
+
+  const handleClearAll = () => {
+    setElevatorIconState("plus");
+    setStairsIconState("plus");
+    setExitsIconState("plus");
+    setInfoIconState("plus");
+    setServIconState("plus");
+    setRestroomsIconState("plus");
+    setConfIconState("plus");
+    setDeptIconState("plus");
+    setLabsIconState("plus");
+    setRetlIconState("plus");
+    setLL1IconState("plus");
+    setLL2IconState("plus");
+    setFirstFloorIconState("plus");
+    setSecondFloorIconState("plus");
+    setThirdFloorIconState("plus");
+    setFiltersApplied(false);
+  };
+
+  const determineFilters = useCallback(() => {
+    const filters: NodeFilter[] = []; // Define the filters array here
+    // filters.push(
+    //   FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+    //     generateFilterValue(true, "HALL"),
+    //   ])!,
+    // );
+
+    const applyIconFilter = (
+      iconState: string,
+      filterName: FilterName,
+      filterValue: string,
+    ) => {
+      if (iconState === "plus") {
+        filters.push(
+          FilterManager.getInstance().getConfiguredFilter(filterName, [
+            generateFilterValue(true, filterValue),
+          ])!,
+        );
+      }
+    };
+
+    applyIconFilter(ll1IconState, FilterName.FLOOR, "L1");
+    applyIconFilter(ll2IconState, FilterName.FLOOR, "L2");
+    applyIconFilter(firstFloorIconState, FilterName.FLOOR, "1");
+    applyIconFilter(secondFloorIconState, FilterName.FLOOR, "2");
+    applyIconFilter(thirdFloorIconState, FilterName.FLOOR, "3");
+    applyIconFilter(elevatorIconState, FilterName.TYPE, "ELEV");
+    applyIconFilter(stairsIconState, FilterName.TYPE, "STAI");
+    applyIconFilter(servIconState, FilterName.TYPE, "SERV");
+    applyIconFilter(infoIconState, FilterName.TYPE, "INFO");
+    applyIconFilter(restroomsIconState, FilterName.TYPE, "REST");
+    applyIconFilter(exitsIconState, FilterName.TYPE, "EXIT");
+    applyIconFilter(confIconState, FilterName.TYPE, "CONF");
+    applyIconFilter(deptIconState, FilterName.TYPE, "DEPT");
+    applyIconFilter(labsIconState, FilterName.TYPE, "LABS");
+    applyIconFilter(retlIconState, FilterName.TYPE, "RETL");
+
+    console.log("Filtering");
+
+    const newFilteredNodes: MapNode[] =
+      FilterManager.getInstance().applyFilters(
+        filters,
+        GraphManager.getInstance().nodes,
+      );
+
+    // Update filteredNodes state with the filtered result
+    setFilteredNodes(newFilteredNodes);
+    // Update autocomplete data based on the filtered nodes
+    populateAutocompleteData(newFilteredNodes);
+  }, [
+    populateAutocompleteData,
+    ll1IconState,
+    ll2IconState,
+    elevatorIconState,
+    stairsIconState,
+    servIconState,
+    infoIconState,
+    restroomsIconState,
+    exitsIconState,
+    confIconState,
+    deptIconState,
+    labsIconState,
+    retlIconState,
+    firstFloorIconState,
+    secondFloorIconState,
+    thirdFloorIconState,
+  ]);
+
+  useEffect(() => {
+    console.log("Loading Data");
+    if (!nodeDataLoaded) {
+      loadNodesData().then(() => {
+        setNodeDataLoaded(true);
+      });
+    } else if (!filtersApplied) {
+      console.log("Applying filters");
+      determineFilters();
+      setFiltersApplied(true);
+    }
+
+    setRenderSymbolCanvas(true);
+    // setRenderBackground(true);
+  }, [
+    nodeDataLoaded,
+    setNodeDataLoaded,
+    filtersApplied,
+    determineFilters,
+    populateAutocompleteData,
+  ]);
+
 
   return (
     <div>
       <TopBanner2 />
+      {/*Side Bar*/}
+      <MapSideBar
+        title="Map Editing"
+        onChange={(event, value) => handleStartNodeChange(value)}
+        autocompleteNodeData={autocompleteNodeData}
+        compareFn={(a, b) => a.label.localeCompare(b.label)}
+        nodeToLabelIdCallback={(node) => node.label}
+        groupBy={(option) => option.charAt(0).toUpperCase()}
+        optionLabel={(option) => option}
+        renderInput={(params) => (
+          <TextField {...params} label="Starting Location" value={startNode} />
+        )}
+        onChange1={(event, value) => handleEndNodeChange(value)}
+        renderInput1={(params) => (
+          <TextField {...params} label="Ending Location" value={endNode} />
+        )}
+        onClick1={handleButtonClick}
+        checked={checked}
+        onClick2={handleSelectAll}
+        icon={<Icon
+          handleButtonClick={handleButtonClick}
+          checked={false}
+          confIconState={confIconState}
+          deptIconState={deptIconState}
+          labsIconState={labsIconState}
+          servIconState={servIconState}
+          infoIconState={infoIconState}
+          restroomsIconState={restroomsIconState}
+          elevatorIconState={elevatorIconState}
+          stairsIconState={stairsIconState}
+          exitsIconState={exitsIconState}
+          retlIconState={retlIconState}
+          ll1IconState={ll1IconState}
+          ll2IconState={ll2IconState}
+          firstFloorIconState={firstFloorIconState}
+          secondFloorIconState={secondFloorIconState}
+          thirdFloorIconState={thirdFloorIconState}
+          handleConfIconState={handleConfIconState}
+          handleDeptIconState={handleDeptIconState}
+          handleLabsIconState={handleLabsIconState}
+          handleServIconState={handleServIconState}
+          handleInfoIconState={handleInfoIconState}
+          handleRestroomsIconState={handleRestroomsIconState}
+          handleElevatorIconState={handleElevatorIconState}
+          handleStairsIconState={handleStairsIconState}
+          handleExitsIconState={handleExitsIconState}
+          handleRetlIconState={handleRetlIconState}
+          handleLL1IconState={handleLL1IconState}
+          handleLL2IconState={handleLL2IconState}
+          handleFirstFloorIconState={handleFirstFloorIconState}
+          handleSecondFloorIconState={handleSecondFloorIconState}
+          handleThirdFloorIconState={handleThirdFloorIconState}
+          handleSelectAll={handleSelectAll}
+          handleClearAll={handleClearAll}
+        />}
+        callback={handleFloorChange}
+      />
       <TransformWrapper>
         <TransformComponent>
           <Draggable>
@@ -188,7 +511,6 @@ function MapEditingPage() {
           </Draggable>
         </TransformComponent>
       </TransformWrapper>
-      <Floor callback={handleFloorChange} />
     </div>
   );
 }

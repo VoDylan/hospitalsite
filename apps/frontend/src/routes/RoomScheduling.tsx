@@ -3,16 +3,8 @@ import {
   Typography,
   SelectChangeEvent,
   Stack,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { RoomSchedulingFormSubmission } from "../common/formSubmission/RoomSchedulingFormSubmission.ts";
@@ -20,6 +12,7 @@ import RoomBackground from "../images/RoomScheduling.jpg";
 import { RoomSubmitButton } from "../components/buttons/RoomSubmitButton.tsx";
 import axios from "axios";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 
 function RoomScheduling() {
   const [form, setFormResponses] = useState<RoomSchedulingFormSubmission>({
@@ -30,10 +23,6 @@ function RoomScheduling() {
     frequency: "",
     status: "",
   });
-
-  const [submittedData, setSubmittedData] = useState<
-    RoomSchedulingFormSubmission[]
-  >([]);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
@@ -73,26 +62,36 @@ function RoomScheduling() {
     });
   }
 
-  function updateSubmissionList() {
-    setSubmittedData([...submittedData, form]);
-  }
-
   // Define an interface for the node data
   interface NodeData {
+    nodeID: string;
     longName: string;
+
   }
 
   // Storing the node numbers in a use state so that we only make a get request once
-  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+  const [nodes, updateNodes] = useState<NodeData[]>([]);
 
   // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
     axios
       .get<NodeData[]>("/api/database/nodes")
-      .then((response) =>
-        setNodeNumbers(response.data.map((node) => node.longName)),
-      )
+      .then((response) => {
+        const nodeIDs = response.data.map((node) => node.nodeID);
+        const longNames = response.data.map((node) => node.longName);
+
+        const updatedNodes: NodeData[] = [];
+
+        for (let i = 0; i < nodeIDs.length; i++) {
+          updatedNodes.push({
+            nodeID: nodeIDs[i],
+            longName: longNames[i]
+          });
+        }
+
+        updateNodes(updatedNodes);
+      })
       .catch((error) => console.error(error));
   }, []);
 
@@ -119,8 +118,6 @@ function RoomScheduling() {
       <Grid
         container
         direction={"row"}
-        rowSpacing={1}
-        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -142,25 +139,27 @@ function RoomScheduling() {
             Room Scheduling Form
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"}>Name:</Typography>
-          <LeftAlignedTextbox
+        <Grid item xs={6} >
+          <Typography color={"black"} align={"center"}>Name:</Typography>
+          <CenterAlignedTextbox
             label={"Name"}
             value={form.name}
             onChange={handleNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Location:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
             handleChange={handleLocationInput}
-            items={nodeNumbers}
+            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Room Needed:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Room Needed:</Typography>
           <DropDown
             items={["MRI", "Surgery", "Conference", "Checkup", "Waiting Room"]}
             handleChange={handleServiceInput}
@@ -169,7 +168,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Frequency Needed:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
             handleChange={handleFrequencyInput}
@@ -178,7 +178,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Priority of Scheduling:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Priority of Scheduling:</Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
@@ -187,7 +188,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Status of the Request:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Status of the Request:</Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -202,57 +204,15 @@ function RoomScheduling() {
             display: "flex",
             my: 2,
             justifyContent: "center",
-            pr: 6,
           }}
         >
           <RoomSubmitButton
             input={form}
             text={"SUBMIT"}
             clear={clear}
-            updateSubmissionList={updateSubmissionList}
           />
         </Grid>
       </Grid>
-      <TableContainer
-        component={Paper}
-        sx={{
-          minWidth: "40vw",
-          backgroundColor: "white",
-          width: "60vw", //Adjust this to change the width of the table
-          height: "auto",
-          mb: "5vh",
-        }}
-      >
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Location</TableCell>
-              <TableCell align="right">Priority</TableCell>
-              <TableCell align="right">Service</TableCell>
-              <TableCell align="right">Frequency</TableCell>
-              <TableCell align="right">Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {submittedData.map((item: RoomSchedulingFormSubmission) => (
-              <TableRow
-                key={item.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align={"right"}>
-                  {item.name}
-                </TableCell>
-                <TableCell align={"right"}>{item.location}</TableCell>
-                <TableCell align={"right"}>{item.priority}</TableCell>
-                <TableCell align={"right"}>{item.service}</TableCell>
-                <TableCell align={"right"}>{item.frequency}</TableCell>
-                <TableCell align={"right"}>{item.status}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
       <Typography>Jacob Murphy, Spencer Trautz</Typography>
     </Stack>
   );

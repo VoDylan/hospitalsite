@@ -3,16 +3,8 @@ import {
   Typography,
   SelectChangeEvent,
   Stack,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
@@ -22,6 +14,7 @@ import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubm
 import React from "react";
 import Confetti from "react-confetti";
 import axios from "axios";
+import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -81,30 +74,35 @@ function GiftDeliveryService() {
 
   // Define an interface for the node data
   interface NodeData {
+    nodeID: string;
     longName: string;
   }
 
   // Storing the node numbers in a use state so that we only make a get request once
-  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+  const [nodes, updateNodes] = useState<NodeData[]>([]);
 
   // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
     axios
       .get<NodeData[]>("/api/database/nodes")
-      .then((response) =>
-        setNodeNumbers(response.data.map((node) => node.longName)),
-      )
+      .then((response) => {
+        const nodeIDs = response.data.map((node) => node.nodeID);
+        const longNames = response.data.map((node) => node.longName);
+
+        const updatedNodes: NodeData[] = [];
+
+        for (let i = 0; i < nodeIDs.length; i++) {
+          updatedNodes.push({
+            nodeID: nodeIDs[i],
+            longName: longNames[i]
+          });
+        }
+
+        updateNodes(updatedNodes);
+      })
       .catch((error) => console.error(error));
   }, []);
-
-  const [submittedData, setSubmittedData] = useState<
-    GiftDeliveryFormSubmission[]
-  >([]);
-
-  function updateList() {
-    setSubmittedData([...submittedData, form]);
-  }
 
   const [showConfetti, setShowConfetti] = useState(false);
 
@@ -139,8 +137,6 @@ function GiftDeliveryService() {
       <Grid
         container
         direction={"row"}
-        rowSpacing={1}
-        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -163,33 +159,33 @@ function GiftDeliveryService() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Name:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Name:</Typography>
+          <CenterAlignedTextbox
             label={"Name"}
             value={form.name}
             onChange={handleNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Location:</Typography>
+          <Typography color={"black"} align={"center"}>Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
             handleChange={handleLocationInput}
-            items={nodeNumbers}
+            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Recipient Name:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Recipient Name:</Typography>
+          <CenterAlignedTextbox
             label={"Recipient Name"}
             value={form.recipientName}
             onChange={handlerecipientNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Optional Message:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Optional Message:</Typography>
+          <CenterAlignedTextbox
             label={"Optional Message"}
             value={form.message}
             onChange={handleMessageInput}
@@ -197,7 +193,7 @@ function GiftDeliveryService() {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} align={"center"}>
             Delivery:
           </Typography>
           <RadioButtonsGroup
@@ -214,7 +210,7 @@ function GiftDeliveryService() {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} align={"center"}>
             Status of the Request:
           </Typography>
           <RadioButtonsGroup
@@ -225,7 +221,7 @@ function GiftDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} paddingTop={2} align={"center"}>
             Gift Size:
           </Typography>
           <RadioButtonsGroup
@@ -236,7 +232,7 @@ function GiftDeliveryService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={3}>
+          <Typography color={"black"} paddingTop={2} align={"center"}>
             Gift Add-on:
           </Typography>
           <RadioButtonsGroup
@@ -254,7 +250,6 @@ function GiftDeliveryService() {
             display: "flex",
             my: 2,
             justifyContent: "center",
-            pr: 6,
           }}
         >
           {showConfetti && (
@@ -269,7 +264,6 @@ function GiftDeliveryService() {
             text={"SUBMIT"}
             input={form}
             clear={clear}
-            updateList={updateList}
             displayConfetti={displayConfetti}
             hideConfetti={hideConfetti}
           />
