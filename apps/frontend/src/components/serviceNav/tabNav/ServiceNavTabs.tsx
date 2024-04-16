@@ -3,6 +3,9 @@ import Tab from '@mui/material/Tab';
 import {Box, Tabs} from "@mui/material";
 import {Link, matchPath, useLocation} from 'react-router-dom';
 
+import {LocalFloristOutlined, CardGiftcardOutlined, MedicationOutlined, TroubleshootOutlined,
+  CleanHandsOutlined, HealthAndSafetyOutlined, CalendarMonthOutlined} from '@mui/icons-material';
+
 function samePageLinkNavigation(
   event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
 ) {
@@ -61,17 +64,23 @@ export default function ServiceNavTabs() {
           width: '100%',
           opacity: "80%",
           backgroundColor: "lightgray",
-          borderRadius: 10,
+          borderRadius: 5,
         }}
       >
         <Tabs
           value={currentTab}
           aria-label={"Service Navigation Tabs"}
-          centered
+          variant="scrollable"
+          scrollButtons
+          allowScrollButtonsMobile
         >
-          <Tab component={Link} label="Flowers" value="Services/FlowerDelivery" to="/Services/FlowerDelivery" />
-          <Tab component={Link} label="Gifts" value="Services/GiftDelivery" to="/Services/GiftDelivery" />
-          <Tab component={Link} label="Medicine" value="Services/MedicineDelivery" to="/Services/MedicineDelivery" />
+          <Tab component={Link} label="Flowers" icon={<LocalFloristOutlined/>} value="Services/FlowerDelivery" to="/Services/FlowerDelivery" />
+          <Tab component={Link} label="Gifts" icon={<CardGiftcardOutlined/>} value="Services/GiftDelivery" to="/Services/GiftDelivery" />
+          <Tab component={Link} label="Medicine" icon={<MedicationOutlined/>} value="Services/MedicineDelivery" to="/Services/MedicineDelivery" />
+          <Tab component={Link} label="Scheduling" icon={<CalendarMonthOutlined/>} value="Services/RoomScheduling" to="/Services/RoomScheduling" />
+          <Tab component={Link} label="Sanitation" icon={<CleanHandsOutlined/>} value="Services/SanitationService" to="/Services/SanitationService" />
+          <Tab component={Link} label="Security" icon={<HealthAndSafetyOutlined/>} value="Services/SecurityService" to="/Services/SecurityService" />
+          <Tab component={Link} label="Med Device" icon={<TroubleshootOutlined/>} value="Services/DeviceDeliveryService" to="/Services/DeviceDeliveryService" />
         </Tabs>
       </Box>
     </>
