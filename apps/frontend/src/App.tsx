@@ -26,6 +26,7 @@ import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
+import MapEditingPage2 from "./routes/MapEditingPage2.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -96,6 +97,10 @@ function App() {
           path: "/MapEditingPage",
           element: <MapEditingPage />,
         },
+        {
+          path: "/mapeditingpage2",
+          element: <MapEditingPage2 />
+        }
       ],
     },
   ]);
