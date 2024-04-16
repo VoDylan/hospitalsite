@@ -585,21 +585,6 @@ function MapRoute() {
     // console.log(state);
   };
 
-  // const handleCanvasClick = (event: React.MouseEvent) => {
-  //   const viewFinderWidth = window.innerWidth - (window.innerWidth * 0.18);
-  //   const viewFinderHeight = window.innerHeight - 120;
-  //
-  //   const viewFinderAspectRatio = viewFinderHeight / viewFinderWidth;
-  //
-  //   const imgWidthWithAR = 5000;
-  //   const imgHeightWithAR = viewFinderAspectRatio * imgWidthWithAR;
-  //
-  //   const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
-  //   const heightRatio = canvasHeight / (window.innerHeight - 120);
-  //   console.log(`Adjusted X: ${((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio}`);
-  //   console.log(`Adjusted Y: ${(((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio)}`);
-  // };
-
   const handleCanvasClick = (event: React.MouseEvent) => {
     if (!iconCanvasRef.current) return;
     const rect = iconCanvasRef.current.getBoundingClientRect();
