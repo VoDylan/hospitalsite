@@ -17,17 +17,16 @@ import Draggable from "react-draggable";
 import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 
 import {IDCoordinates} from "common/src/IDCoordinates.ts";
-import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
 import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
 import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
 import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
-import PathCanvas from "../components/map/PathCanvas.tsx";
 import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
 import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
 import IconCanvas from "../components/map/IconCanvas.tsx";
 import NodeInfo from "../components/map/NodeInfo.tsx";
+import MapEditorSideBar from "../components/map/MapEditorSideBar.tsx";
 
 
 interface TransformState {
@@ -50,13 +49,9 @@ function MapEditingPage2() {
   const [selectedNode2, setSelectedNode2] = useState<MapNode | null>(null);
   const [node1LastUpdated, setNode1LastUpdated] = useState<boolean>(false);
 
-  const [startNode, setStartNode] = useState<string>("");
-  const [endNode, setEndNode] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const pathNodesData = useRef<IDCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
-  const [updateNodesBetweenFloors, setUpdateNodesBetweenFloors] = useState<boolean>(false);
 
   const nodesToNextFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
   const nodesToPrevFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
@@ -488,19 +483,6 @@ function MapEditingPage2() {
     setCanvasHeight(height);
   };
 
-  const handleNodeToFloorCallback = (newNodesToNextFloor: Map<IDCoordinates, Floor>, newNodesToPrevFloor: Map<IDCoordinates, Floor>) => {
-    nodesToNextFloor.current = newNodesToNextFloor;
-    nodesToPrevFloor.current = newNodesToPrevFloor;
-
-    setUpdateFloorIcons(true);
-    setUpdateNodesBetweenFloors(false);
-    console.log("Updated node to next and previous floor");
-  };
-
-  const handlePathRenderStatus = (status: boolean) => {
-    setPathRenderStatus(status);
-  };
-
   const handleIconCallback = (ref: HTMLCanvasElement) => {
     iconCanvasRef.current = ref;
   };
@@ -553,18 +535,20 @@ function MapEditingPage2() {
 
   const handleClearNode1 = () => {
     setSelectedNode1(null);
+    setNode1LastUpdated(false);
   };
 
-  const handleClearNode2 = (event: React.MouseEvent) => {
+  const handleClearNode2 = () => {
     setSelectedNode2(null);
+    setNode1LastUpdated(true);
   };
 
-  const handleEditNode1 = () => {
-    alert("Editing Node 1");
+  const handleEditNode1 = (event: React.MouseEvent) => {
+    alert(`Editing Node ${selectedNode1!.nodeID}`);
   };
 
   const handleEditNode2 = (event: React.MouseEvent) => {
-    alert("Editing Node 2");
+    alert(`Editing Node ${selectedNode2!.nodeID}`);
   };
 
   return (
@@ -612,13 +596,15 @@ function MapEditingPage2() {
           flexGrow: 1,
           flexShrink: 1,
         }}>
-          <Box sx={{
-            width: "18%",
-            minWidth: "18%",
-            minHeight: 0,
-          }}>
+          <Box
+            sx={{
+              width: "18%",
+              minWidth: "18%",
+              minHeight: 0,
+            }}
+          >
             {/*Side Bar*/}
-            <MapSideBar
+            <MapEditorSideBar
               title="Map Editing"
               onChange={(event, value) => handleStartNodeChange(value)}
               autocompleteNodeData={autocompleteNodeData}
@@ -720,25 +706,6 @@ function MapEditingPage2() {
                       filteredNodes={filteredNodes}
                       floor={floor}
                     />
-                    <PathCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      updateNodesBetweenFloors={updateNodesBetweenFloors}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      pathNodesData={pathNodesData.current}
-                      floorConnectionCallback={handleNodeToFloorCallback}
-                      pathRenderStatusCallback={handlePathRenderStatus}
-                      startNode={startNode}
-                      endNode={endNode}
-                      iconCanvasRef={iconCanvasRef.current!}
-                    />
                     <IconCanvas
                       style={{
                         position: "absolute",
@@ -774,42 +741,50 @@ function MapEditingPage2() {
             </TransformWrapper>
           </Box>
         </Box>
-        <Box
-          sx={{
-            width: "250px",
-            position: "fixed",
-            left: "18%",
-            top: "120px",
-            marginLeft: "1%",
-            marginTop: "1%",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <NodeInfo
-            style={{
-              opacity: "1",
-              marginBottom: "10px",
+        {!selectedNode1 && !selectedNode2 ?
+          <></> :
+          <Box
+            sx={{
+              width: "15%",
+              minWidth: "230px",
+              position: "fixed",
+              left: "18%",
+              top: "120px",
+              marginLeft: "1%",
+              marginTop: "1%",
+              display: "flex",
+              flexDirection: "column",
             }}
-            title={"Selected Node 1"}
-            nodeInfo={selectedNode1 ? selectedNode1.nodeInfo : emptyNodeInfo}
-            textColor={"#535353"}
-            hidden={!selectedNode1}
-            clearNodeCallback={handleClearNode1}
-            editNodeCallback={handleEditNode1}
-          />
-          <NodeInfo
-            style={{
-              opacity: "1"
-            }}
-            title={"Selected Node 2"}
-            nodeInfo={selectedNode2 ? selectedNode2.nodeInfo : emptyNodeInfo}
-            textColor={"#535353"}
-            hidden={!selectedNode2}
-            clearNodeCallback={handleClearNode2}
-            editNodeCallback={handleEditNode2}
-          />
-        </Box>
+          >
+            {selectedNode1 ?
+              <NodeInfo
+                style={{
+                  opacity: "1",
+                  marginBottom: "10px",
+                }}
+                title={"Selected Node 1"}
+                nodeInfo={selectedNode1 ? selectedNode1.nodeInfo : emptyNodeInfo}
+                textColor={"#535353"}
+                clearNodeCallback={handleClearNode1}
+                editNodeCallback={handleEditNode1}
+              /> :
+              <></>
+            }
+            {selectedNode2 ?
+              <NodeInfo
+                style={{
+                  opacity: "1"
+                }}
+                title={"Selected Node 2"}
+                nodeInfo={selectedNode2 ? selectedNode2.nodeInfo : emptyNodeInfo}
+                textColor={"#535353"}
+                clearNodeCallback={handleClearNode2}
+                editNodeCallback={handleEditNode2}
+              /> :
+              <></>
+            }
+          </Box>
+        }
         <Legend filterItems={filterIcons} />
       </Box>
     </>

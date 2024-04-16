@@ -1,38 +1,22 @@
 import {Box, Button, Divider, Paper, Typography} from "@mui/material";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
-import React, {useEffect, useRef, useState} from "react";
+import React from "react";
 
 interface NodeInfoProps {
   style: React.CSSProperties;
   title: string;
   nodeInfo: MapNodeType;
   textColor: string;
-  hidden: boolean;
   clearNodeCallback: () => void;
   editNodeCallback: (event: React.MouseEvent) => void;
 }
 
 export default function NodeInfo(props: NodeInfoProps) {
-  const style = useRef<React.CSSProperties>(props.style);
-  const origOpacity = useRef(style.current.opacity);
-  const [newOpacity, setNewOpacity] = useState(origOpacity.current);
-
-  useEffect(() => {
-    if(props.hidden) {
-      setNewOpacity("0");
-    } else {
-      setNewOpacity(origOpacity.current);
-    }
-  }, [props.hidden]);
-
   return (
     <Paper
       square={false}
       elevation={3}
-      style={{
-        ...style.current,
-        opacity: newOpacity,
-      }}
+      style={props.style}
     >
       <Box
         marginTop={"10px"}
@@ -212,12 +196,18 @@ export default function NodeInfo(props: NodeInfoProps) {
           <Button
             variant={"contained"}
             onClick={props.clearNodeCallback}
+            sx={{
+              marginRight: "5px",
+            }}
           >
             Clear Node
           </Button>
           <Button
             variant={"contained"}
             onClick={props.editNodeCallback}
+            sx={{
+              marginLeft: "5px",
+            }}
           >
             Edit Node
           </Button>
