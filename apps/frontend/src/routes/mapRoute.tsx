@@ -11,8 +11,6 @@ import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
-import Modal from 'react-modal';
-
 import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
 import {FilterName} from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
@@ -624,8 +622,8 @@ function MapRoute() {
 
 
         if (distance < 25){
-          alert(`you have clicked the node ${node.nodeID}`);
           setNodeClicked(node);
+          openModal();
           console.log("clicked the node", nodeClicked);
           break;
         }
@@ -633,11 +631,94 @@ function MapRoute() {
     }
   };
 
+  const handleStartingLocationClick = () => {
+    closeModal();
+    setStartNode(nodeClicked?.longName || '');
+    console.log(nodeClicked!.longName);
+    console.log(startNode);
+  };
+
+  const Modal = () => {
+
+    if (modalIsOpen) {
+      const widthRatio = canvasWidth / window.innerWidth;
+      const heightRatio = canvasHeight / window.innerHeight;
+
+      const xcoord = nodeClicked!.xcoord / widthRatio;
+      const ycoord = nodeClicked!.ycoord / heightRatio;
+
+      return (
+        <div style={{
+          zIndex: 10,
+          left: xcoord + 10 + "px",
+          top: ycoord + 10 + "px",
+          position: "absolute",
+          width: "12%",
+          height: "12%",
+          backgroundColor: "white",
+          border: 2 + "px",
+          borderStyle: "solid",
+          borderColor: "#186BD9",
+          borderRadius: 5 + "px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+        }}>
+          <button style={{
+            width: "96%",
+            height: "40%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "90%",
+            color: "#186BD9",
+            fontWeight: "bold",
+            margin: "2%",
+            border: "none",
+            backgroundColor: "white",
+            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+          }} onClick={handleStartingLocationClick}>
+            Starting Location
+          </button>
+          <button style={{
+            width: "96%",
+            height: "40%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "90%",
+            color: "#186BD9",
+            fontWeight: "bold",
+            margin: "2%",
+            border: "none",
+            backgroundColor: "white",
+            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+          }}>
+            Ending Location
+          </button>
+        </div>
+      );
+    }
+
+    return;
+  };
+
+  const textFieldRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Focus on the TextField after startNode has been updated
+    console.log("startNode updated:", startNode);
+    if (textFieldRef.current) {
+      textFieldRef.current.select();
+      console.log("textFieldRef:", textFieldRef.current);
+    }
+  }, [startNode]);
+
   return (
     <>
       <img
-          src={startIcon}
-          className={"start"}
+        src={startIcon}
+        className={"start"}
           alt="icon"
           style={{
             position: "absolute",
@@ -660,8 +741,6 @@ function MapRoute() {
         }}
       />
       <Box sx={{display: "flex"}}>
-
-
         <CssBaseline/>
         <TopBanner2/>
 
@@ -675,7 +754,7 @@ function MapRoute() {
           groupBy={(option) => option.charAt(0).toUpperCase()}
           optionLabel={(option) => option}
           renderInput={(params) => (
-            <TextField {...params} label="Starting Location" value={startNode}/>
+            <TextField hiddenLabel {...params} label="Starting Location" value={startNode} inputRef={textFieldRef}/>
           )}
           onChange1={(event, value) => handleEndNodeChange(value)}
           renderInput1={(params) => (
@@ -748,18 +827,7 @@ function MapRoute() {
           <TransformComponent>
             <Draggable>
               <>
-                <div style={{zIndex: 10, left: "300px", top: "300px", position: "absolute"}}>hello
-                  from clickable
-                </div>
-                <Modal
-                  isOpen={modalIsOpen}
-                  onRequestClose={closeModal}
-                  contentLabel={"Example"}
-                  >
-                  <h2>Modal Title</h2>
-                  <button onClick={closeModal}>Close</button>
-                  <div>Modal Content</div>
-                </Modal>
+                <Modal/>
                 <BackgroundCanvas
                   style={{
                     position: "relative",
@@ -847,7 +915,6 @@ function MapRoute() {
                   nodesToPrevFloor={nodesToPrevFloor.current}
                   onClick={handleCanvasClick}
                 />
-
               </>
             </Draggable>
           </TransformComponent>
