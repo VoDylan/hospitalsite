@@ -15,7 +15,7 @@ import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManag
 import {FilterName} from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
-import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
+import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 
 import {IDCoordinates} from "common/src/IDCoordinates.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
@@ -26,7 +26,20 @@ import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
 import PathCanvas from "../components/map/PathCanvas.tsx";
 import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
 
+interface TransformState {
+  scale: number;
+  positionX: number;
+  positionY: number
+}
+
 function MapRoute() {
+  const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
+  const transformState = useRef<TransformState>({
+    scale: 0,
+    positionX: 0,
+    positionY: 0,
+  });
+
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -541,6 +554,20 @@ function MapRoute() {
     setPathRenderStatus(status);
   };
 
+  const handleTransform = (ref: ReactZoomPanPinchRef, state: { scale: number; positionX: number; positionY: number }) => {
+    if(!transformRef.current) transformRef.current = ref;
+    transformState.current = state;
+
+    // console.log(state);
+  };
+
+  const handleCanvasClick = (event: React.MouseEvent) => {
+    const widthRatio = canvasWidth / window.innerWidth;
+    const heightRatio = canvasHeight / window.innerHeight;
+    console.log(`Adjusted X: ${((event.clientX - transformState.current.positionX) / transformState.current.scale) * widthRatio}`);
+    console.log(`Adjusted Y: ${((event.clientY - transformState.current.positionY) / transformState.current.scale) * heightRatio}`);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -621,7 +648,9 @@ function MapRoute() {
         height={window.innerHeight}
         overflow={"clip"}
       >
-        <TransformWrapper>
+        <TransformWrapper
+          onTransformed={handleTransform}
+        >
           <TransformComponent>
             <Draggable>
               <>
@@ -630,7 +659,7 @@ function MapRoute() {
                     position: "relative",
                     top: 50,
                     left: 0,
-                    minHeight: "100vh",
+                    // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
@@ -642,7 +671,7 @@ function MapRoute() {
                     position: "absolute",
                     top: 50,
                     left: 0,
-                    minHeight: "100vh",
+                    // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
@@ -658,7 +687,7 @@ function MapRoute() {
                     position: "absolute",
                     top: 50,
                     left: 0,
-                    minHeight: "100vh",
+                    // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
@@ -676,7 +705,7 @@ function MapRoute() {
                     position: "absolute",
                     top: 50,
                     left: 0,
-                    minHeight: "100vh",
+                    // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
@@ -688,6 +717,7 @@ function MapRoute() {
                   floor={floor}
                   nodesToNextFloor={nodesToNextFloor.current}
                   nodesToPrevFloor={nodesToPrevFloor.current}
+                  onClick={handleCanvasClick}
                 />
               </>
             </Draggable>
