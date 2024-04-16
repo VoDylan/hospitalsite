@@ -690,6 +690,22 @@ function MapRoute() {
                   floor={floor}
                   renderStatusCallback={handleBackgroundRenderStatus}
                 />
+                <SymbolCanvas
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                  backgroundRendered={backgroundRenderStatus}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  filtersApplied={filtersApplied}
+                  filteredNodes={filteredNodes}
+                  floor={floor}
+                />
                 <PathCanvas
                   style={{
                     position: "absolute",
@@ -710,22 +726,6 @@ function MapRoute() {
                   startNode={startNode}
                   endNode={endNode}
                   iconCanvasRef={iconCanvasRef.current!}
-                />
-                <SymbolCanvas
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                  backgroundRendered={backgroundRenderStatus}
-                  width={canvasWidth}
-                  height={canvasHeight}
-                  filtersApplied={filtersApplied}
-                  filteredNodes={filteredNodes}
-                  floor={floor}
                 />
                 <IconCanvas
                   style={{
