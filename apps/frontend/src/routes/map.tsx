@@ -547,24 +547,52 @@ function Map() {
     const ctx = canvas.getContext("2d")!;
     const rect = canvas.getBoundingClientRect();
 
-    const ratioWidth = canvas.width / window.innerWidth;
-    const ratioHeight = canvas.height / window.innerHeight;
-    const xcoord = event.clientX * window.devicePixelRatio;
-    const ycoord = event.clientY * window.devicePixelRatio;
+    // console.log("bottom: ", rect.height - window.innerHeight);
+
+    const initialWidthRatio = window.innerWidth / canvas.width;
+    const initialHeightRatio = window.innerHeight / canvas.height;
+    console.log("initial ratios: ", initialWidthRatio, initialHeightRatio);
+
+    const canvasRectWidth = (rect.width - (rect.width - window.innerWidth)) / canvas.width;
+    const canvasRectHeight = (rect.height - (rect.height - window.innerHeight)) / canvas.height;
+    console.log("ratios now: ", canvasRectWidth, canvasRectHeight);
+
+    const afterWidthRatio = initialWidthRatio / canvasRectWidth;
+    const afterHeightRatio = initialHeightRatio / canvasRectHeight;
+    console.log("after ratios: ", afterWidthRatio, afterHeightRatio);
+
+    let leftoverHeightRation: number;
+
+    if (rect.height == rect.bottom)
+      leftoverHeightRation = window.innerHeight / rect.height;
+    else
+      leftoverHeightRation = -(window.innerHeight - rect.height) / rect.height;
+    console.log("leftover ratios: ", leftoverHeightRation);
+    // console.log(event.clientY);
+
+    const ratioWidth = (window.innerWidth / (rect.width - (rect.width - window.innerWidth)));
+    const ratioHeight =  (window.innerHeight / (rect.height - (rect.height - window.innerHeight)));
+    const xcoord = event.clientX * (currImage.width / (rect.width - (rect.width - window.innerWidth))) / afterWidthRatio;
+    const ycoord = (event.clientY * (currImage.height / (rect.height - (rect.height - window.innerHeight))) / afterHeightRatio) * leftoverHeightRation;
 
     for (let i = 0; i < filteredNodes.length; i++) {
-      const node: MapNode = filteredNodes[i];
-      console.log("actual: ", canvas.width, canvas.height);
-      console.log("rectCoords ", rect.left, rect.top);
-      console.log("rectDimensions ", rect.width, rect.height);
-      console.log("coords ", xcoord, ycoord);
-      console.log("node ", node.xcoord, node.ycoord);
-      const distance = Math.sqrt((node.xcoord - xcoord) ** 2 + (node.ycoord - ycoord) ** 2);
-      console.log("distance", distance);
-      console.log("\n");
-      if (distance < 50) {
-        alert(`Clicked on node: ${node.nodeID}`);
-        break;
+      if ((filteredNodes[i].floor === floor.current) && (filteredNodes[i].nodeID === "CLABS005L1")){
+        const node: MapNode = filteredNodes[i];
+        console.log("window: ", window.innerWidth, window.innerHeight);
+        console.log("actual: ", canvas.width, canvas.height);
+        console.log("differences ", (rect.width - window.innerWidth), (rect.height - window.innerHeight));
+        console.log("rect top coors:", rect.left, rect.top);
+        console.log("rectBottomCoords ", rect.right, rect.bottom);
+        console.log("rectDimensions ", rect.width, rect.height);
+        console.log("coords ", xcoord, ycoord);
+        console.log("node ", node.xcoord, node.ycoord);
+        const distance = Math.sqrt((node.xcoord - xcoord) ** 2 + (node.ycoord - ycoord) ** 2);
+        console.log("distance", distance);
+        console.log("\n");
+        if (distance < 20) {
+          alert(`Clicked on node: ${node.nodeID}`);
+          break;
+        }
       }
     }
   };
@@ -747,7 +775,7 @@ function Map() {
           canvas.width = currImage.width;
           canvas.height = currImage.height;
 
-          ctx.drawImage(currImage, 0, 0, currImage.width, currImage.height);
+          ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
         }
 
         if (pathCanvasRef.current) {
@@ -1011,7 +1039,7 @@ function Map() {
                   ref={canvasRef}
                   style={{
                     position: "relative",
-                    top: 50,
+                    top: 0,
                     left: 0,
                     minHeight: "100vh",
                     maxHeight: "100%",
@@ -1023,7 +1051,7 @@ function Map() {
                   ref={symbolCanvasRef}
                   style={{
                     position: "absolute",
-                    top: 50,
+                    top: 0,
                     left: 0,
                     minHeight: "100vh",
                     maxHeight: "100%",
@@ -1035,7 +1063,7 @@ function Map() {
                   ref={pathCanvasRef}
                   style={{
                     position: "absolute",
-                    top: 50,
+                    top: 0,
                     left: 0,
                     minHeight: "100vh",
                     maxHeight: "100%",
