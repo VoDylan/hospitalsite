@@ -69,9 +69,10 @@ function TopBanner() {
         elevation: 1,
       }}
     >
-      <Toolbar sx={{ flexGrow: 2, marginLeft: 2 }}>
-        <Stack sx={{ marginRight: 2, color: "#012D5A" }}>
-          <NavBar />
+
+      <Toolbar sx={{flexGrow: 2, marginLeft: 2}}>
+        <Stack sx={{marginRight: 2, color: "#012D5A"}}>
+          <NavBar/>
         </Stack>
 
         <Stack
@@ -79,11 +80,11 @@ function TopBanner() {
           justifyContent="space-between"
           alignItems="center"
           display={"flex"}
-          sx={{ flexGrow: 8 }}
+          sx={{flexGrow: 8}}
         >
           <Link to="/">
             <LogoIconButton as="span" color="inherit" aria-label="logo">
-              <img src={bwhLogo} className={classes.logoImage} alt="bwh logo" />
+              <img src={bwhLogo} className={classes.logoImage} alt="bwh logo"/>
             </LogoIconButton>
           </Link>
         </Stack>
@@ -94,7 +95,7 @@ function TopBanner() {
           alignItems="center"
           display={"flex"}
           marginRight={10}
-          sx={{ flexGrow: 2 }}
+          sx={{flexGrow: 2}}
         >
           {/*WITH NAV BAR*/}
           {/*<TabContext value={value}>*/}
@@ -118,11 +119,11 @@ function TopBanner() {
           spacing={2}
           alignItems="center"
           display={"flex"}
-          sx={{ flexGrow: 1 }}
+          sx={{flexGrow: 1}}
         >
-          <SearchBar />
+          <SearchBar/>
           <Button
-            sx={{ width: 220 }}
+            sx={{width: 220}}
             component={Link}
             to="/Login"
             variant="contained"
@@ -133,11 +134,11 @@ function TopBanner() {
           {/*Profile button links to login page for now*/}
           <Link to="/Login">
             <IconButton
-              sx={{ color: "#012D5A" }}
+              sx={{color: "#012D5A"}}
               size="large"
               aria-label="account of current user"
             >
-              <AccountCircle />
+              <AccountCircle/>
             </IconButton>
           </Link>
         </Stack>
