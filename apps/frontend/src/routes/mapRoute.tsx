@@ -586,10 +586,18 @@ function MapRoute() {
   };
 
   const handleCanvasClick = (event: React.MouseEvent) => {
-    const widthRatio = canvasWidth / window.innerWidth;
-    const heightRatio = canvasHeight / window.innerHeight;
-    console.log(`Adjusted X: ${((event.clientX - transformState.current.positionX) / transformState.current.scale) * widthRatio}`);
-    console.log(`Adjusted Y: ${((event.clientY - transformState.current.positionY) / transformState.current.scale) * heightRatio}`);
+    const viewFinderWidth = window.innerWidth - (window.innerWidth * 0.18);
+    const viewFinderHeight = window.innerHeight - 120;
+
+    const viewFinderAspectRatio = viewFinderHeight / viewFinderWidth;
+
+    const imgWidthWithAR = 5000;
+    const imgHeightWithAR = viewFinderAspectRatio * imgWidthWithAR;
+
+    const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+    const heightRatio = canvasHeight / (window.innerHeight - 120);
+    console.log(`Adjusted X: ${((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio}`);
+    console.log(`Adjusted Y: ${(((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio)}`);
   };
 
   return (
@@ -618,184 +626,203 @@ function MapRoute() {
           zIndex: -1,
         }}
       />
-      <Box sx={{display: "flex"}}>
+      <Box sx={{
+        display: "flex",
+        flexDirection: "column",
+        maxHeight: window.innerHeight,
+      }}>
+        <Box sx={{height: "120px", minHeight: "120px"}}>
+          <CssBaseline/>
+          <TopBanner2/>
+        </Box>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "row",
+          height: "100%",
+          maxHeight: window.innerHeight,
+          minHeight: 0,
+          overflow: "clip",
+          flexGrow: 1,
+          flexShrink: 1,
+        }}>
+          <Box sx={{
+            width: "18%",
+            minWidth: "18%",
+            minHeight: 0,
+          }}>
+            {/*Side Bar*/}
+            <MapSideBar
+              title="Navigation"
+              onChange={(event, value) => handleStartNodeChange(value)}
+              autocompleteNodeData={autocompleteNodeData}
+              compareFn={(a, b) => a.label.localeCompare(b.label)}
+              nodeToLabelIdCallback={(node) => node.label}
+              groupBy={(option) => option.charAt(0).toUpperCase()}
+              optionLabel={(option) => option}
+              renderInput={(params) => (
+                <TextField {...params} label="Starting Location" value={startNode}/>
+              )}
+              onChange1={(event, value) => handleEndNodeChange(value)}
+              renderInput1={(params) => (
+                <TextField {...params} label="Ending Location" value={endNode}/>
+              )}
+              open={open}
+              handleClick={handleClick}
+              checkedBFS={checkedBFS}
+              handleSelectBFS={handleSelectBFS}
+              checkedAS={checkedAS}
+              handleSelectAS={handleSelectAS}
+              checkedDFS={checkedDFS}
+              handleSelectDFS={handleSelectDFS}
+              errorMessage={errorMessage}
+              onClick={() => {
+                handleSubmit().then(() => {
+                  setUpdateAnimation(!updateAnimation);
+                });
+              }}
+              onClick1={handleButtonClick}
+              checked={checked}
+              onClick2={handleSelectAll}
+              icon={<Icon
+                handleButtonClick={handleButtonClick}
+                checked={false}
+                confIconState={confIconState}
+                deptIconState={deptIconState}
+                labsIconState={labsIconState}
+                servIconState={servIconState}
+                infoIconState={infoIconState}
+                restroomsIconState={restroomsIconState}
+                elevatorIconState={elevatorIconState}
+                stairsIconState={stairsIconState}
+                exitsIconState={exitsIconState}
+                retlIconState={retlIconState}
+                ll1IconState={ll1IconState}
+                ll2IconState={ll2IconState}
+                firstFloorIconState={firstFloorIconState}
+                secondFloorIconState={secondFloorIconState}
+                thirdFloorIconState={thirdFloorIconState}
+                handleConfIconState={handleConfIconState}
+                handleDeptIconState={handleDeptIconState}
+                handleLabsIconState={handleLabsIconState}
+                handleServIconState={handleServIconState}
+                handleInfoIconState={handleInfoIconState}
+                handleRestroomsIconState={handleRestroomsIconState}
+                handleElevatorIconState={handleElevatorIconState}
+                handleStairsIconState={handleStairsIconState}
+                handleExitsIconState={handleExitsIconState}
+                handleRetlIconState={handleRetlIconState}
+                handleLL1IconState={handleLL1IconState}
+                handleLL2IconState={handleLL2IconState}
+                handleFirstFloorIconState={handleFirstFloorIconState}
+                handleSecondFloorIconState={handleSecondFloorIconState}
+                handleThirdFloorIconState={handleThirdFloorIconState}
+                handleSelectAll={handleSelectAll}
+                handleClearAll={handleClearAll}
+              />}
+              callback={handleFloorChange}
+            />
+          </Box>
 
+          <Box
+            height={"100%"}
+            overflow={"clip"}
+          >
+            <TransformWrapper
+              onTransformed={handleTransform}
+              minScale={0.8}
+              // initialScale={1.5}
+              initialScale={1.0}
+              // initialPositionX={-400}
+              // initialPositionY={-150}
+              initialPositionX={0}
+              initialPositionY={0}
+            >
+              <TransformComponent>
+                <Draggable
+                  defaultPosition={{x: 0, y: 0}}
+                >
+                  <>
+                    <BackgroundCanvas
+                      style={{
+                        position: "relative",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      floor={floor}
+                      renderStatusCallback={handleBackgroundRenderStatus}
+                    />
+                    <SymbolCanvas
+                      style={{
+                        position: "absolute",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      filtersApplied={filtersApplied}
+                      filteredNodes={filteredNodes}
+                      floor={floor}
+                    />
+                    <PathCanvas
+                      style={{
+                        position: "absolute",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      updateNodesBetweenFloors={updateNodesBetweenFloors}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      floor={floor}
+                      pathNodesData={pathNodesData.current}
+                      floorConnectionCallback={handleNodeToFloorCallback}
+                      pathRenderStatusCallback={handlePathRenderStatus}
+                      startNode={startNode}
+                      endNode={endNode}
+                      iconCanvasRef={iconCanvasRef.current!}
+                    />
+                    <IconCanvas
+                      style={{
+                        position: "absolute",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      refCallback={handleIconCallback}
+                    />
+                    <FloorIconsCanvas
+                      style={{
+                        position: "absolute",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      pathRendered={pathRenderStatus}
+                      updateFloorIcons={updateFloorIcons}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      floor={floor}
+                      nodesToNextFloor={nodesToNextFloor.current}
+                      nodesToPrevFloor={nodesToPrevFloor.current}
+                      onClick={handleCanvasClick}
+                    />
+                  </>
+                </Draggable>
+              </TransformComponent>
+            </TransformWrapper>
+          </Box>
+        </Box>
 
-        <CssBaseline/>
-        <TopBanner2/>
-
-        {/*Side Bar*/}
-        <MapSideBar
-          title="Navigation"
-          onChange={(event, value) => handleStartNodeChange(value)}
-          autocompleteNodeData={autocompleteNodeData}
-          compareFn={(a, b) => a.label.localeCompare(b.label)}
-          nodeToLabelIdCallback={(node) => node.label}
-          groupBy={(option) => option.charAt(0).toUpperCase()}
-          optionLabel={(option) => option}
-          renderInput={(params) => (
-            <TextField {...params} label="Starting Location" value={startNode}/>
-          )}
-          onChange1={(event, value) => handleEndNodeChange(value)}
-          renderInput1={(params) => (
-            <TextField {...params} label="Ending Location" value={endNode}/>
-          )}
-          open={open}
-          handleClick={handleClick}
-          checkedBFS={checkedBFS}
-          handleSelectBFS={handleSelectBFS}
-          checkedAS={checkedAS}
-          handleSelectAS={handleSelectAS}
-          checkedDFS={checkedDFS}
-          handleSelectDFS={handleSelectDFS}
-          errorMessage={errorMessage}
-          onClick={() => {
-            handleSubmit().then(() => {
-              setUpdateAnimation(!updateAnimation);
-            });
-          }}
-          onClick1={handleButtonClick}
-          checked={checked}
-          onClick2={handleSelectAll}
-          icon={<Icon
-            handleButtonClick={handleButtonClick}
-            checked={false}
-            confIconState={confIconState}
-            deptIconState={deptIconState}
-            labsIconState={labsIconState}
-            servIconState={servIconState}
-            infoIconState={infoIconState}
-            restroomsIconState={restroomsIconState}
-            elevatorIconState={elevatorIconState}
-            stairsIconState={stairsIconState}
-            exitsIconState={exitsIconState}
-            retlIconState={retlIconState}
-            ll1IconState={ll1IconState}
-            ll2IconState={ll2IconState}
-            firstFloorIconState={firstFloorIconState}
-            secondFloorIconState={secondFloorIconState}
-            thirdFloorIconState={thirdFloorIconState}
-            handleConfIconState={handleConfIconState}
-            handleDeptIconState={handleDeptIconState}
-            handleLabsIconState={handleLabsIconState}
-            handleServIconState={handleServIconState}
-            handleInfoIconState={handleInfoIconState}
-            handleRestroomsIconState={handleRestroomsIconState}
-            handleElevatorIconState={handleElevatorIconState}
-            handleStairsIconState={handleStairsIconState}
-            handleExitsIconState={handleExitsIconState}
-            handleRetlIconState={handleRetlIconState}
-            handleLL1IconState={handleLL1IconState}
-            handleLL2IconState={handleLL2IconState}
-            handleFirstFloorIconState={handleFirstFloorIconState}
-            handleSecondFloorIconState={handleSecondFloorIconState}
-            handleThirdFloorIconState={handleThirdFloorIconState}
-            handleSelectAll={handleSelectAll}
-            handleClearAll={handleClearAll}
-          />}
-          callback={handleFloorChange}
-        />
-
-      <Box
-        width={window.innerWidth}
-        height={window.innerHeight}
-        overflow={"clip"}
-      >
-        <TransformWrapper
-          onTransformed={handleTransform}
-        >
-          <TransformComponent>
-            <Draggable>
-              <>
-                <BackgroundCanvas
-                  style={{
-                    position: "relative",
-                    top: 50,
-                    left: 0,
-                    // minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                  floor={floor}
-                  renderStatusCallback={handleBackgroundRenderStatus}
-                />
-                <SymbolCanvas
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    // minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                  backgroundRendered={backgroundRenderStatus}
-                  width={canvasWidth}
-                  height={canvasHeight}
-                  filtersApplied={filtersApplied}
-                  filteredNodes={filteredNodes}
-                  floor={floor}
-                />
-                <PathCanvas
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    // minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                  backgroundRendered={backgroundRenderStatus}
-                  updateNodesBetweenFloors={updateNodesBetweenFloors}
-                  width={canvasWidth}
-                  height={canvasHeight}
-                  floor={floor}
-                  pathNodesData={pathNodesData.current}
-                  floorConnectionCallback={handleNodeToFloorCallback}
-                  pathRenderStatusCallback={handlePathRenderStatus}
-                  startNode={startNode}
-                  endNode={endNode}
-                  iconCanvasRef={iconCanvasRef.current!}
-                />
-                <IconCanvas
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                  backgroundRendered={backgroundRenderStatus}
-                  width={canvasWidth}
-                  height={canvasHeight}
-                  refCallback={handleIconCallback}
-                />
-                <FloorIconsCanvas
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    // minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                  backgroundRendered={backgroundRenderStatus}
-                  pathRendered={pathRenderStatus}
-                  updateFloorIcons={updateFloorIcons}
-                  width={canvasWidth}
-                  height={canvasHeight}
-                  floor={floor}
-                  nodesToNextFloor={nodesToNextFloor.current}
-                  nodesToPrevFloor={nodesToPrevFloor.current}
-                  onClick={handleCanvasClick}
-                />
-              </>
-            </Draggable>
-          </TransformComponent>
-        </TransformWrapper>
+        <Legend filterItems={filterIcons} />
       </Box>
-      <Legend filterItems={filterIcons} />
-    </Box>
     </>
   );
 }
