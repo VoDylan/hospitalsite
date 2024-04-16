@@ -95,14 +95,14 @@ model FlowerServiceRequest {
   message       String
 }
 
-model GiftDeliveryService {
-  id            Int    @id @default(autoincrement())
-  name          string
-  recipientName string
-  status        string
-  location      string
-  message       string
-  delivery      string
-  giftSize      string
-  giftAddOn     string
-}
+// model GiftDeliveryService {
+// id            Int    @id @default(autoincrement())
+// name          string
+// recipientName string
+// status        string
+// location      string
+// message       string
+// delivery      string
+// giftSize      string
+// giftAddOn     string
+// }

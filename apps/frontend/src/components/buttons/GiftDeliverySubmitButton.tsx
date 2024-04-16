@@ -10,7 +10,7 @@ interface ButtonProps {
   clear: () => void;
   displayConfetti: () => void;
   hideConfetti: () => void;
-  updateList: () => void;
+  //updateList: () => void;
 }
 
 export function GiftDeliverySubmitButton(props: ButtonProps) {
