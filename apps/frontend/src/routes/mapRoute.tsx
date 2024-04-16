@@ -27,10 +27,11 @@ import PathCanvas from "../components/map/PathCanvas.tsx";
 import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
 import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
+import IconCanvas from "../components/map/IconCanvas.tsx";
 
 
 function MapRoute() {
-  const iconCanvasRef = useRef<HTMLCanvasElement>(null);
+  const iconCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
@@ -560,202 +561,9 @@ function MapRoute() {
     setPathRenderStatus(status);
   };
 
-  /*
-  if (iconCanvasRef.current) {
-          const canvas: HTMLCanvasElement = iconCanvasRef.current;
-          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-          if (!ctx) return;
-
-          canvas.width = currImage.width;
-          canvas.height = currImage.height;
-
-          ctx.clearRect(0, 0, currImage.width, currImage.height);
-
-          setRenderSymbolCanvas(true);
-        }
-   */
-
-  /*
-  useEffect(() => {
-    console.log("Determining nodes on floor...");
-    const includedNodesOnFloor: IDCoordinates[][] = [];
-
-    let currPath: IDCoordinates[] = [];
-
-    for (let i = 0; i < nodesData.length; i++) {
-      if (
-        GraphManager.getInstance().getNodeByID(nodesData[i].nodeID)!.floor ==
-        floor.current
-      ) {
-        currPath.push(nodesData[i]);
-      } else {
-        if (currPath.length != 0) {
-          includedNodesOnFloor.push(currPath);
-          currPath = [];
-        }
-      }
-    }
-
-    if (currPath.length != 0) includedNodesOnFloor.push(currPath);
-
-    console.log(`Determined nodes on floor`);
-    console.log(includedNodesOnFloor);
-    console.log(reprocessNodes);
-
-    if (pathCanvasRef.current && iconCanvasRef.current) {
-      const canvas: HTMLCanvasElement = pathCanvasRef.current;
-      const iconCanvas: HTMLCanvasElement = iconCanvasRef.current;
-
-      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-      const iconCtx: CanvasRenderingContext2D | null = iconCanvas.getContext("2d");
-
-
-      if (!ctx) return;
-      if (!iconCtx) return;
-
-
-      if (includedNodesOnFloor.length != 0) {
-        console.log("Processing canvas");
-
-        if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
-          if (!nodesData) {
-            setErrorMessage("There is no path between nodes");
-            return;
-          }
-
-          let currentTargetIndex = 0;
-          let currentPathIndex = 0;
-          let currentX =
-            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-              .coordinates.x;
-          let currentY =
-            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-              .coordinates.y;
-          const speed = 1;
-
-          const moveDot = (origFloor: string) => {
-            if (floor.current != origFloor) {
-              console.log("Floor changed, stopping previous animation");
-              return;
-            }
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "blue";
-
-
-            for (let i = 0; i < includedNodesOnFloor.length; i++) {
-              for (let j = 0; j < includedNodesOnFloor[i].length; j++) {
-                ctx.beginPath();
-
-                if (includedNodesOnFloor[i][j].nodeID === startNode) { // Check if it's the first element
-                  const image: HTMLImageElement | null = document.querySelector(`.start`);
-                  if (!image) return;
-
-                  iconCtx.drawImage(image, includedNodesOnFloor[i][j].coordinates.x - 60, includedNodesOnFloor[i][j].coordinates.y - 45, 115, 85);
-
-                }
-
-                if (includedNodesOnFloor[i][j].nodeID === endNode) { // Check if it's the last element
-                  const image2: HTMLImageElement | null = document.querySelector(`.end`);
-                  if (!image2) return;
-
-                  iconCtx.drawImage(image2, includedNodesOnFloor[i][j].coordinates.x - 63, includedNodesOnFloor[i][j].coordinates.y - 65, 180, 150); // Adjust iconWidth and iconHeight as needed
-
-                }
-
-                else {
-                  ctx.arc(
-                    includedNodesOnFloor[i][j].coordinates.x,
-                    includedNodesOnFloor[i][j].coordinates.y,
-                    5,
-                    0,
-                    2 * Math.PI,
-                  );
-                }
-                ctx.fill();
-              }
-            }
-
-            ctx.strokeStyle = "#0000FF";
-            ctx.lineWidth = 7;
-            ctx.beginPath();
-
-            for (let i = 0; i < includedNodesOnFloor.length; i++) {
-              ctx.moveTo(
-                includedNodesOnFloor[i][0].coordinates.x,
-                includedNodesOnFloor[i][0].coordinates.y,
-              );
-              for (let j = 1; j < includedNodesOnFloor[i].length; j++) {
-                ctx.lineTo(
-                  includedNodesOnFloor[i][j].coordinates.x,
-                  includedNodesOnFloor[i][j].coordinates.y,
-                );
-              }
-            }
-
-            ctx.stroke();
-
-
-
-            ctx.fillStyle = "blue";
-            ctx.beginPath();
-            ctx.arc(currentX, currentY, 12, 0, 2 * Math.PI);
-            ctx.fill();
-
-            ctx.strokeStyle = "white"; // Set the stroke color to black
-            ctx.lineWidth = 4; // Set the border width
-            ctx.beginPath();
-            ctx.arc(currentX, currentY, 14, 0, 2 * Math.PI);
-            ctx.stroke();
-
-
-            const dx =
-              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-                .coordinates.x - currentX;
-            const dy =
-              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-                .coordinates.y - currentY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < speed) {
-              currentTargetIndex =
-                (currentTargetIndex + 1) %
-                includedNodesOnFloor[currentPathIndex].length;
-            } else {
-              currentX += (dx / distance) * speed;
-              currentY += (dy / distance) * speed;
-            }
-            if (currentTargetIndex === 0) {
-              currentPathIndex =
-                (currentPathIndex + 1) % includedNodesOnFloor.length;
-              currentX =
-                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-                  .coordinates.x;
-              currentY =
-                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-                  .coordinates.y;
-              currentTargetIndex = 1;
-            }
-            requestAnimationFrame(() => moveDot(origFloor));
-          };
-          moveDot(floor.current);
-        }
-      } else {
-        console.log("Clearing path canvas");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
-    setReprocessNodes(false);
-  }, [
-    endNode,
-    filteredNodes,
-    floor,
-    nodes,
-    nodesData,
-    reprocessNodes,
-    startNode,
-  ]);
-   */
+  const handleIconCallback = (ref: HTMLCanvasElement) => {
+    iconCanvasRef.current = ref;
+  };
 
   return (
     <>
@@ -882,22 +690,6 @@ function MapRoute() {
                   floor={floor}
                   renderStatusCallback={handleBackgroundRenderStatus}
                 />
-                <SymbolCanvas
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
-                  backgroundRendered={backgroundRenderStatus}
-                  width={canvasWidth}
-                  height={canvasHeight}
-                  filtersApplied={filtersApplied}
-                  filteredNodes={filteredNodes}
-                  floor={floor}
-                />
                 <PathCanvas
                   style={{
                     position: "absolute",
@@ -915,6 +707,39 @@ function MapRoute() {
                   pathNodesData={pathNodesData.current}
                   floorConnectionCallback={handleNodeToFloorCallback}
                   pathRenderStatusCallback={handlePathRenderStatus}
+                  startNode={startNode}
+                  endNode={endNode}
+                  iconCanvasRef={iconCanvasRef.current!}
+                />
+                <SymbolCanvas
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                  backgroundRendered={backgroundRenderStatus}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  filtersApplied={filtersApplied}
+                  filteredNodes={filteredNodes}
+                  floor={floor}
+                />
+                <IconCanvas
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                  backgroundRendered={backgroundRenderStatus}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  refCallback={handleIconCallback}
                 />
                 <FloorIconsCanvas
                   style={{
@@ -933,17 +758,6 @@ function MapRoute() {
                   floor={floor}
                   nodesToNextFloor={nodesToNextFloor.current}
                   nodesToPrevFloor={nodesToPrevFloor.current}
-                />
-                <canvas
-                  ref={iconCanvasRef}
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    left: 0,
-                    minHeight: "100vh",
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  }}
                 />
               </>
             </Draggable>
