@@ -586,10 +586,35 @@ function MapRoute() {
   };
 
   const handleCanvasClick = (event: React.MouseEvent) => {
+    if (!iconCanvasRef.current) return;
+    const rect = iconCanvasRef.current.getBoundingClientRect();
+
+    const leftOverHeight = window.innerHeight/ (rect.height / transformState.current.scale);
+    console.log(leftOverHeight);
+
     const widthRatio = canvasWidth / window.innerWidth;
     const heightRatio = canvasHeight / window.innerHeight;
-    console.log(`Adjusted X: ${((event.clientX - transformState.current.positionX) / transformState.current.scale) * widthRatio}`);
-    console.log(`Adjusted Y: ${((event.clientY - transformState.current.positionY) / transformState.current.scale) * heightRatio}`);
+
+    const actualX = ((event.clientX - transformState.current.positionX) / transformState.current.scale) * widthRatio;
+    const actualY = ((event.clientY - transformState.current.positionY) / transformState.current.scale) * heightRatio * leftOverHeight;
+    console.log(`Adjusted ${actualX} ${actualY}`);
+
+    for (let i = 0; i < filteredNodes.length; i++){
+      if (filteredNodes[i].floor === floor){
+        const node = filteredNodes[i];
+        const distance = Math.sqrt((actualX - node.xcoord)**2 + (actualY - node.ycoord)**2);
+
+        console.log("node: ", node.xcoord, node.ycoord);
+        console.log("distance: ", distance);
+        console.log("\n");
+
+
+        if (distance < 25){
+          alert(`you have clicked the node ${node.nodeID}`);
+          break;
+        }
+      }
+    }
   };
 
   return (
@@ -710,7 +735,7 @@ function MapRoute() {
                 <BackgroundCanvas
                   style={{
                     position: "relative",
-                    top: 50,
+                    top: 0,
                     left: 0,
                     // minHeight: "100vh",
                     maxHeight: "100%",
@@ -722,7 +747,7 @@ function MapRoute() {
                 <SymbolCanvas
                   style={{
                     position: "absolute",
-                    top: 50,
+                    top: 0,
                     left: 0,
                     // minHeight: "100vh",
                     maxHeight: "100%",
@@ -738,7 +763,7 @@ function MapRoute() {
                 <PathCanvas
                   style={{
                     position: "absolute",
-                    top: 50,
+                    top: 0,
                     left: 0,
                     // minHeight: "100vh",
                     maxHeight: "100%",
@@ -759,7 +784,7 @@ function MapRoute() {
                 <IconCanvas
                   style={{
                     position: "absolute",
-                    top: 50,
+                    top: 0,
                     left: 0,
                     minHeight: "100vh",
                     maxHeight: "100%",
@@ -773,7 +798,7 @@ function MapRoute() {
                 <FloorIconsCanvas
                   style={{
                     position: "absolute",
-                    top: 50,
+                    top: 0,
                     left: 0,
                     // minHeight: "100vh",
                     maxHeight: "100%",
