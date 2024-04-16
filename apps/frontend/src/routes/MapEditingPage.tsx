@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { nodesDistances } from "common/src/nodesDistances.ts";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
 import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
 import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
@@ -330,7 +330,7 @@ function MapEditingPage() {
 
   return (
     <div>
-      <TopBanner2 />
+      <TopBanner />
       {/*Side Bar*/}
       <MapSideBar
         title="Map Editing"

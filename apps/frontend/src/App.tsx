@@ -5,13 +5,13 @@ import {
   Outlet,
   useNavigate,
 } from "react-router-dom";
-import SlidesPageLI from "../src/routes/SlidesPageLI.tsx";
+//import SlidesPageLI from "../src/routes/SlidesPageLI.tsx";
 import MapTestingPage from "./routes/MapTestingPage.tsx";
 import MapRoute from "./routes/mapRoute.tsx";
 import ServicesPage from "./routes/ServicesPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import DisplayDatabase from "./routes/DisplayDatabase.tsx";
-import LoginForm from "./routes/LoginForm.tsx";
+//import LoginForm from "./routes/LoginForm.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
 import SanitationService from "./routes/SanitationService.tsx";
 import DeviceDeliveryService from "./routes/DeviceDeliveryService.tsx";
@@ -75,19 +75,19 @@ function App() {
           element: <DisplayDatabase />,
         },
 
-        {
+/*        {
           path: "/Login",
           element: <LoginForm />,
-        },
+        },*/
 
         {
           path: "/Map",
           element: <MapRoute />,
         },
-        {
+        /*{
           path: "/LoggedIn",
           element: <SlidesPageLI />,
-        },
+        },*/
         {
           path: "/MapTestingPage",
           element: <MapTestingPage />,

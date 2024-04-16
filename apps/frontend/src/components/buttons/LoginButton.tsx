@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Button } from '@mui/material';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const LoginButton: React.FC = () => {
-  const { loginWithRedirect, user } = useAuth0();
-  const {logout} = useAuth0();
+  const { loginWithRedirect, user, logout, isAuthenticated, getAccessTokenSilently, isLoading   } = useAuth0();
+
 
   const handleLogin = async () => {
     try {
@@ -30,6 +30,31 @@ const LoginButton: React.FC = () => {
       });
       };
 
+  useEffect( () => {
+    const getToken = async () => {
+      try {
+        await getAccessTokenSilently();
+      } catch (error) {
+        await loginWithRedirect({
+          appState: {
+            returnTo: location.pathname,
+          },
+        });
+      }
+  };
+
+  if (!isLoading && isAuthenticated) {
+    getToken();
+  }
+}, [
+  getAccessTokenSilently,
+  isAuthenticated,
+  isLoading,
+  loginWithRedirect,
+  ]);
+
+
+
 
   return (
     <Button
@@ -45,10 +70,12 @@ const LoginButton: React.FC = () => {
 export default LoginButton;
 
 
-//const token = await getAccessTokenSilently();
 
-//await axios.delete("/api/computer-requests/" + key, config: {
-//  headers: {
-//    Authorization: `Bearer ${token}`,
-//  },
-//});
+
+
+
+/*await axios.delete("/api/computer-requests/" + key, config: {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});*/

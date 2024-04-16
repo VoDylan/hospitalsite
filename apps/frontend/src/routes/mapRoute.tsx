@@ -3,7 +3,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import "./map.css";
 import {LocationInfo} from "common/src/LocationInfo.ts";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
@@ -544,7 +544,7 @@ function MapRoute() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <TopBanner2 />
+      <TopBanner />
 
       {/*Side Bar*/}
       <MapSideBar

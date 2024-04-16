@@ -3,7 +3,7 @@ import { FlowerDeliveryFormSubmission } from "../common/formSubmission/FlowerDel
 import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
 import { FlowerDeliverySubmitButton } from "../components/buttons/FlowerDeliverySubmitButton.tsx";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
@@ -99,7 +99,7 @@ function FlowerDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner2 />
+      <TopBanner />
       <Grid
         container
         direction={"row"}
