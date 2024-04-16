@@ -3,16 +3,8 @@ import {
   Typography,
   SelectChangeEvent,
   Stack,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LeftAlignedTextbox } from "../components/textbox/LeftAlignedTextbox.tsx";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { SecurityRequestFormSubmission } from "../common/formSubmission/SecurityRequestFormSubmission.ts";
@@ -20,6 +12,7 @@ import securitybackground from "../images/security_background.jpg";
 import TopBanner from "../components/banner/TopBanner.tsx";
 import { SecuritySubmitButton } from "../components/buttons/SecuritySubmitButton.tsx";
 import axios from "axios";
+import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 
 function SecurityService() {
   const [form, setFormResponses] = useState<SecurityRequestFormSubmission>({
@@ -31,14 +24,6 @@ function SecurityService() {
     securityDetail: "",
     status: "",
   });
-
-  interface NodeData {
-    nodeID: string;
-  }
-
-  const [submittedData, setSubmittedData] = useState<
-    SecurityRequestFormSubmission[]
-  >([]);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, name: e.target.value });
@@ -84,26 +69,35 @@ function SecurityService() {
     });
   }
 
-  function updateSubmissionList() {
-    setSubmittedData([...submittedData, form]);
-  }
-
   // Define an interface for the node data
   interface NodeData {
+    nodeID: string;
     longName: string;
   }
 
   // Storing the node numbers in a use state so that we only make a get request once
-  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+  const [nodes, updateNodes] = useState<NodeData[]>([]);
 
   // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
     axios
       .get<NodeData[]>("/api/database/nodes")
-      .then((response) =>
-        setNodeNumbers(response.data.map((node) => node.nodeID)),
-      )
+      .then((response) => {
+        const nodeIDs = response.data.map((node) => node.nodeID);
+        const longNames = response.data.map((node) => node.longName);
+
+        const updatedNodes: NodeData[] = [];
+
+        for (let i = 0; i < nodeIDs.length; i++) {
+          updatedNodes.push({
+            nodeID: nodeIDs[i],
+            longName: longNames[i]
+          });
+        }
+
+        updateNodes(updatedNodes);
+      })
       .catch((error) => console.error(error));
   }, []);
 
@@ -130,8 +124,6 @@ function SecurityService() {
       <Grid
         container
         direction={"row"}
-        rowSpacing={1}
-        columnSpacing={5}
         justifyContent={"center"}
         boxShadow={4}
         sx={{
@@ -154,24 +146,24 @@ function SecurityService() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Name:</Typography>
-          <LeftAlignedTextbox
+          <Typography color={"black"} align={"center"}>Name:</Typography>
+          <CenterAlignedTextbox
             label={"Name"}
             value={form.name}
             onChange={handleNameInput}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Location:</Typography>
+          <Typography color={"black"} align={"center"}>Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
             handleChange={handleLocationInput}
-            items={nodeNumbers}
+            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Security Personnel:</Typography>
+          <Typography color={"black"} align={"center"}>Security Personnel:</Typography>
           <DropDown
             items={["Local Security", "Local Police", "State Police", "Other"]}
             handleChange={handleSecurityPersonnelInput}
@@ -180,7 +172,7 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Why is Security Needed:</Typography>
+          <Typography color={"black"} align={"center"}>Why is Security Needed:</Typography>
           <DropDown
             items={[
               "I feel generally unsafe",
@@ -196,7 +188,7 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Priority of Security:</Typography>
+          <Typography color={"black"} align={"center"}>Priority of Security:</Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
@@ -205,7 +197,7 @@ function SecurityService() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"}>Status of the Request:</Typography>
+          <Typography color={"black"} align={"center"}>Status of the Request:</Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -215,10 +207,10 @@ function SecurityService() {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography color={"black"}>
+          <Typography color={"black"} align={"center"}>
             Additional Details (optional):
           </Typography>
-          <LeftAlignedTextbox
+          <CenterAlignedTextbox
             label={"Details"}
             value={form.securityDetail}
             onChange={handleSecurityDetailInput}
@@ -231,59 +223,15 @@ function SecurityService() {
             display: "flex",
             my: 2,
             justifyContent: "center",
-            pr: 7,
           }}
         >
           <SecuritySubmitButton
             input={form}
             text={"SUBMIT"}
             clear={clear}
-            updateSubmissionList={updateSubmissionList}
           />
         </Grid>
       </Grid>
-      <TableContainer
-        component={Paper}
-        sx={{
-          minWidth: "40vw",
-          backgroundColor: "white",
-          width: "60vw", //Adjust this to change the width of the table
-          height: "auto",
-          mb: "5vh",
-        }}
-      >
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Location</TableCell>
-              <TableCell align="right">Priority</TableCell>
-              <TableCell align="right">Security Personnel</TableCell>
-              <TableCell align="right">Security Category</TableCell>
-              <TableCell align="right">Security Detail</TableCell>
-              <TableCell align="right">Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {submittedData.map((item: SecurityRequestFormSubmission) => (
-              <TableRow
-                key={item.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align={"right"}>
-                  {item.name}
-                </TableCell>
-                <TableCell align={"right"}>{item.location}</TableCell>
-                <TableCell align={"right"}>{item.priority}</TableCell>
-                <TableCell align={"right"}>{item.securityPersonnel}</TableCell>
-                <TableCell align={"right"}>{item.securityCategory}</TableCell>
-                <TableCell align={"right"}>{item.securityDetail}</TableCell>
-                <TableCell align={"right"}>{item.status}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
       <Typography>Dylan Vo, Robert Mellen</Typography>
     </Stack>
   );
