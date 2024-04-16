@@ -30,8 +30,6 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     "& .MuiTextField-root": {
-      //marginLeft: "37.5%",
-      //marginRight: "37.5%",
       minWidth: "150px", // Adjust width as needed
       minHeight: "75px"
     },

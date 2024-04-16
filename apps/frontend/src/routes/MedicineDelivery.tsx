@@ -117,6 +117,7 @@ function MedicineDelivery() {
       <Grid
         container
         direction={"row"}
+        justifyContent={"center"}
         boxShadow={4}
         sx={{
           backgroundColor: "white",

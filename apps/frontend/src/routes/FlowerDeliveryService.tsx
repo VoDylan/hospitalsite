@@ -1,4 +1,4 @@
-import { Box, Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
+import {Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
@@ -104,6 +104,8 @@ function FlowerDeliveryService() {
       <Grid
         container
         direction={"row"}
+        justifyContent={"center"}
+        boxShadow={4}
         sx={{
           backgroundColor: "transparent",
           width: "40vw", //Adjust this to change the width of the form
@@ -158,35 +160,29 @@ function FlowerDeliveryService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Box>
               <Typography align={"center"}>Recipient Name:</Typography>
               <CenterAlignedTextbox
                 label={"Recipient Name"}
                 value={form.recipientName}
                 onChange={handleRecipientNameInput}
               />
-            </Box>
           </Grid>
           <Grid item xs={6}>
-            <Box>
-              <Typography align={"center"}>Room Number:</Typography>
+              <Typography align={"center"}>Room:</Typography>
               <DropDown
                 items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
                 label={"Room Number"}
                 returnData={form.roomNumber}
                 handleChange={handleRoomNumberInput}
               />
-            </Box>
           </Grid>
           <Grid item xs={6}>
-            <Box>
               <Typography align={"center"}>Add a message (optional):</Typography>
               <CenterAlignedTextbox
                 label={"Message"}
                 value={form.message}
                 onChange={handleMessageInput}
               />
-            </Box>
           </Grid>
           <Grid
             item
@@ -197,13 +193,11 @@ function FlowerDeliveryService() {
               justifyContent: "center",
             }}
           >
-            <Box>
               <FlowerDeliverySubmitButton
                 text={"SUBMIT"}
                 input={form}
                 clear={clear}
               />
-            </Box>
           </Grid>
         </Grid>
         </Grid>

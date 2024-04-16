@@ -139,7 +139,7 @@ function RoomScheduling() {
             Room Scheduling Form
           </Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} >
           <Typography color={"black"} align={"center"}>Name:</Typography>
           <CenterAlignedTextbox
             label={"Name"}
@@ -148,7 +148,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Location:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Location:</Typography>
           <DropDown
             label={"Location"}
             returnData={form.location}
@@ -157,8 +158,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Room Needed:</Typography>
-            Room Needed:
+          <Typography color={"black"} align={"center"}>
+            Room Needed:</Typography>
           <DropDown
             items={["MRI", "Surgery", "Conference", "Checkup", "Waiting Room"]}
             handleChange={handleServiceInput}
@@ -167,7 +168,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Frequency Needed:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Frequency Needed:</Typography>
           <DropDown
             items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
             handleChange={handleFrequencyInput}
@@ -176,7 +178,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Priority of Scheduling:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Priority of Scheduling:</Typography>
           <RadioButtonsGroup
             label={"Priority"}
             options={["Low", "Medium", "High", "Emergency"]}
@@ -185,7 +188,8 @@ function RoomScheduling() {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Status of the Request:</Typography>
+          <Typography color={"black"} align={"center"}>
+            Status of the Request:</Typography>
           <RadioButtonsGroup
             label={"Status"}
             options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -210,7 +214,7 @@ function RoomScheduling() {
         </Grid>
       </Grid>
       <Typography>Jacob Murphy, Spencer Trautz</Typography>
-  </Stack>
+    </Stack>
   );
 }
 

@@ -16,7 +16,6 @@ export default function RadioButtonsGroup(props: ButtonProps) {
     props.handleChange(event);
   };
 
-
   return (
     <FormControl sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
       <RadioGroup
@@ -24,8 +23,6 @@ export default function RadioButtonsGroup(props: ButtonProps) {
         name="radio-buttons-group"
         onChange={handleButtonChange}
         value={props.returnData}
-        sx={{
-        }}
       >
         {props.options.map((item) => (
           // @ts-expect-error this works as intended

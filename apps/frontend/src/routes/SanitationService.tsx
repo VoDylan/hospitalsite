@@ -139,7 +139,7 @@ function SanitationService() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Name:</Typography>
+          <Typography color={"black" } align={"center"}>Name:</Typography>
           <CenterAlignedTextbox
             label={"Name"}
             value={form.name}
