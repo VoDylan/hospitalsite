@@ -585,19 +585,51 @@ function MapRoute() {
     // console.log(state);
   };
 
+  // const handleCanvasClick = (event: React.MouseEvent) => {
+  //   const viewFinderWidth = window.innerWidth - (window.innerWidth * 0.18);
+  //   const viewFinderHeight = window.innerHeight - 120;
+  //
+  //   const viewFinderAspectRatio = viewFinderHeight / viewFinderWidth;
+  //
+  //   const imgWidthWithAR = 5000;
+  //   const imgHeightWithAR = viewFinderAspectRatio * imgWidthWithAR;
+  //
+  //   const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+  //   const heightRatio = canvasHeight / (window.innerHeight - 120);
+  //   console.log(`Adjusted X: ${((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio}`);
+  //   console.log(`Adjusted Y: ${(((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio)}`);
+  // };
+
   const handleCanvasClick = (event: React.MouseEvent) => {
-    const viewFinderWidth = window.innerWidth - (window.innerWidth * 0.18);
-    const viewFinderHeight = window.innerHeight - 120;
+    if (!iconCanvasRef.current) return;
+    const rect = iconCanvasRef.current.getBoundingClientRect();
 
-    const viewFinderAspectRatio = viewFinderHeight / viewFinderWidth;
-
-    const imgWidthWithAR = 5000;
-    const imgHeightWithAR = viewFinderAspectRatio * imgWidthWithAR;
+    const leftOverHeight = (window.innerHeight - 120)/ (rect.height / transformState.current.scale);
+    console.log(leftOverHeight);
 
     const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
     const heightRatio = canvasHeight / (window.innerHeight - 120);
-    console.log(`Adjusted X: ${((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio}`);
-    console.log(`Adjusted Y: ${(((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio)}`);
+
+    const actualX = ((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio;
+    const actualY = ((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio * leftOverHeight;
+    console.log(`Adjusted ${actualX} ${actualY}`);
+
+    for (let i = 0; i < filteredNodes.length; i++){
+      if (filteredNodes[i].floor === floor){
+        const node = filteredNodes[i];
+        const distance = Math.sqrt((actualX - node.xcoord)**2 + (actualY - node.ycoord)**2);
+
+        console.log("node: ", node.xcoord, node.ycoord);
+        console.log("distance: ", distance);
+        console.log("\n");
+
+
+        if (distance < 25){
+          alert(`you have clicked the node ${node.nodeID}`);
+          break;
+        }
+      }
+    }
   };
 
   return (
