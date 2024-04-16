@@ -11,6 +11,8 @@ import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
+import {Modal} from "react-modal";
+
 import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
 import {FilterName} from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
@@ -45,6 +47,10 @@ function MapRoute() {
     positionX: 0,
     positionY: 0,
   });
+
+  // adding setting the node click
+  const [nodeClicked, setNodeClicked] = useState<MapNode | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
@@ -585,6 +591,14 @@ function MapRoute() {
     // console.log(state);
   };
 
+  function openModal(){
+    setModalIsOpen(true);
+  }
+
+  function closeModal(){
+    setModalIsOpen(false);
+  }
+
   const handleCanvasClick = (event: React.MouseEvent) => {
     if (!iconCanvasRef.current) return;
     const rect = iconCanvasRef.current.getBoundingClientRect();
@@ -611,6 +625,8 @@ function MapRoute() {
 
         if (distance < 25){
           alert(`you have clicked the node ${node.nodeID}`);
+          setNodeClicked(node);
+          console.log("clicked the node", nodeClicked);
           break;
         }
       }
@@ -732,12 +748,25 @@ function MapRoute() {
           <TransformComponent>
             <Draggable>
               <>
+                <div style={{zIndex: 10, left: "300px", top: "300px", position: "absolute"}}>hello
+                  from clickable
+                </div>
+                <Modal
+                  isOpen={modalIsOpen}
+                  onRequestClose={closeModal}
+                  contentLabel={"Example"}
+                  >
+                  <h2>Modal Title</h2>
+                  <button onClick={closeModal}>Close</button>
+                  <div>Modal Content</div>
+                </Modal>
                 <BackgroundCanvas
                   style={{
                     position: "relative",
                     top: 0,
                     left: 0,
                     // minHeight: "100vh",
+                    zIndex: 1,
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
@@ -749,6 +778,7 @@ function MapRoute() {
                     position: "absolute",
                     top: 0,
                     left: 0,
+                    zIndex: 1,
                     // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
@@ -765,6 +795,7 @@ function MapRoute() {
                     position: "absolute",
                     top: 0,
                     left: 0,
+                    zIndex: 1,
                     // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
@@ -786,6 +817,7 @@ function MapRoute() {
                     position: "absolute",
                     top: 0,
                     left: 0,
+                    zIndex: 1,
                     minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
@@ -800,6 +832,7 @@ function MapRoute() {
                     position: "absolute",
                     top: 0,
                     left: 0,
+                    zIndex: 1,
                     // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
@@ -814,12 +847,13 @@ function MapRoute() {
                   nodesToPrevFloor={nodesToPrevFloor.current}
                   onClick={handleCanvasClick}
                 />
+
               </>
             </Draggable>
           </TransformComponent>
         </TransformWrapper>
       </Box>
-      <Legend filterItems={filterIcons} />
+        <Legend filterItems={filterIcons} />
     </Box>
     </>
   );
