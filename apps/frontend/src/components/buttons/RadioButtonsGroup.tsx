@@ -17,16 +17,12 @@ export default function RadioButtonsGroup(props: ButtonProps) {
   };
 
   return (
-    <FormControl>
+    <FormControl sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="female"
         name="radio-buttons-group"
         onChange={handleButtonChange}
         value={props.returnData}
-        sx={{
-          mx: "1vw",
-        }}
       >
         {props.options.map((item) => (
           // @ts-expect-error this works as intended

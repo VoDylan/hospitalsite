@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
@@ -18,6 +18,9 @@ import Icon from "../components/map/SlideIcon.tsx";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
+import NodeFilter from "common/src/filter/filters/Filter.ts";
+import FilterManager, {generateFilterValue} from "common/src/filter/FilterManager.ts";
+import {FilterName} from "common/src/filter/FilterName.ts";
 // import {node} from "prop-types";
 
 
@@ -28,6 +31,7 @@ function MapEditingPage() {
   const [nodesData, setNodesData] = useState<
     MapNodeType[]
   >([]);
+  const [renderSymbolCanvas, setRenderSymbolCanvas] = useState<boolean>(false);
 
   const floor = useRef<string>("L1");
   const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
@@ -37,6 +41,7 @@ function MapEditingPage() {
   });
   const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+  const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
 
   /**
    * Use states for side bar
@@ -107,6 +112,15 @@ function MapEditingPage() {
       setNodesData(data);
   }
 
+  const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
+    console.log(nodes);
+    const filteredNodeAssociations = nodes.map((node) => ({
+      label: node.longName, // Assuming `longName` is the label you want to use
+      node: node.nodeID,
+    }));
+    setAutocompleteNodeData(filteredNodeAssociations);
+  }, []);
+
   const handleFloorChange = (newFloor: string) => {
     const newImage = new Image();
 
@@ -142,6 +156,7 @@ function MapEditingPage() {
     }
     setCurrImage(newImage);
   };
+
 
   useEffect(() => {
     if (distancesData.length < 1 && nodesData.length < 1) {
@@ -327,6 +342,98 @@ function MapEditingPage() {
     setThirdFloorIconState("plus");
     setFiltersApplied(false);
   };
+
+  const determineFilters = useCallback(() => {
+    const filters: NodeFilter[] = []; // Define the filters array here
+    // filters.push(
+    //   FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+    //     generateFilterValue(true, "HALL"),
+    //   ])!,
+    // );
+
+    const applyIconFilter = (
+      iconState: string,
+      filterName: FilterName,
+      filterValue: string,
+    ) => {
+      if (iconState === "plus") {
+        filters.push(
+          FilterManager.getInstance().getConfiguredFilter(filterName, [
+            generateFilterValue(true, filterValue),
+          ])!,
+        );
+      }
+    };
+
+    applyIconFilter(ll1IconState, FilterName.FLOOR, "L1");
+    applyIconFilter(ll2IconState, FilterName.FLOOR, "L2");
+    applyIconFilter(firstFloorIconState, FilterName.FLOOR, "1");
+    applyIconFilter(secondFloorIconState, FilterName.FLOOR, "2");
+    applyIconFilter(thirdFloorIconState, FilterName.FLOOR, "3");
+    applyIconFilter(elevatorIconState, FilterName.TYPE, "ELEV");
+    applyIconFilter(stairsIconState, FilterName.TYPE, "STAI");
+    applyIconFilter(servIconState, FilterName.TYPE, "SERV");
+    applyIconFilter(infoIconState, FilterName.TYPE, "INFO");
+    applyIconFilter(restroomsIconState, FilterName.TYPE, "REST");
+    applyIconFilter(exitsIconState, FilterName.TYPE, "EXIT");
+    applyIconFilter(confIconState, FilterName.TYPE, "CONF");
+    applyIconFilter(deptIconState, FilterName.TYPE, "DEPT");
+    applyIconFilter(labsIconState, FilterName.TYPE, "LABS");
+    applyIconFilter(retlIconState, FilterName.TYPE, "RETL");
+
+    console.log("Filtering");
+
+    const newFilteredNodes: MapNode[] =
+      FilterManager.getInstance().applyFilters(
+        filters,
+        GraphManager.getInstance().nodes,
+      );
+
+    // Update filteredNodes state with the filtered result
+    setFilteredNodes(newFilteredNodes);
+    // Update autocomplete data based on the filtered nodes
+    populateAutocompleteData(newFilteredNodes);
+  }, [
+    populateAutocompleteData,
+    ll1IconState,
+    ll2IconState,
+    elevatorIconState,
+    stairsIconState,
+    servIconState,
+    infoIconState,
+    restroomsIconState,
+    exitsIconState,
+    confIconState,
+    deptIconState,
+    labsIconState,
+    retlIconState,
+    firstFloorIconState,
+    secondFloorIconState,
+    thirdFloorIconState,
+  ]);
+
+  useEffect(() => {
+    console.log("Loading Data");
+    if (!nodeDataLoaded) {
+      loadNodesData().then(() => {
+        setNodeDataLoaded(true);
+      });
+    } else if (!filtersApplied) {
+      console.log("Applying filters");
+      determineFilters();
+      setFiltersApplied(true);
+    }
+
+    setRenderSymbolCanvas(true);
+    // setRenderBackground(true);
+  }, [
+    nodeDataLoaded,
+    setNodeDataLoaded,
+    filtersApplied,
+    determineFilters,
+    populateAutocompleteData,
+  ]);
+
 
   return (
     <div>

@@ -1,46 +1,57 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import "./map.css";
-import { LocationInfo } from "common/src/LocationInfo.ts";
-import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import {LocationInfo} from "common/src/LocationInfo.ts";
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
-import FilterManager, {
-  generateFilterValue,
-} from "common/src/filter/FilterManager.ts";
-import { FilterName } from "common/src/filter/FilterName.ts";
+import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
+import {FilterName} from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
-import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
-import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
-import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
-import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
-import { Draw } from "../common/Draw.ts";
+import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
+
+import {IDCoordinates} from "common/src/IDCoordinates.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
+import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
+import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
+import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
+import PathCanvas from "../components/map/PathCanvas.tsx";
+import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
 
-function Map() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pathCanvasRef = useRef<HTMLCanvasElement>(null);
-  const symbolCanvasRef = useRef<HTMLCanvasElement>(null);
+interface TransformState {
+  scale: number;
+  positionX: number;
+  positionY: number
+}
+
+function MapRoute() {
+  const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
+  const transformState = useRef<TransformState>({
+    scale: 0,
+    positionX: 0,
+    positionY: 0,
+  });
+
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
-  const [nodes, setNodes] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const [nodesData, setNodesData] = useState<IDCoordinates[]>([]);
+  const pathNodesData = useRef<IDCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+  const [updateNodesBetweenFloors, setUpdateNodesBetweenFloors] = useState<boolean>(false);
 
-  const [renderSymbolCanvas, setRenderSymbolCanvas] = useState<boolean>(false);
+  const nodesToNextFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
+  const nodesToPrevFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
+  const [pathRenderStatus, setPathRenderStatus] = useState<boolean>(false);
+  const [updateFloorIcons, setUpdateFloorIcons] = useState<boolean>(false);
 
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
@@ -48,15 +59,11 @@ function Map() {
 
   const [updateAnimation, setUpdateAnimation] = useState<boolean>(false);
 
-  const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
-    const image = new Image();
-    image.src = L1MapImage;
-    return image;
-  });
+  const [backgroundRenderStatus, setBackgroundRenderStatus] = useState<boolean>(false);
+  const [canvasWidth, setCanvasWidth] = useState<number>(0);
+  const [canvasHeight, setCanvasHeight] = useState<number>(0);
 
-  const floor = useRef<string>("L1");
-  const [renderBackground, setRenderBackground] = useState<boolean>(false);
-  const [reprocessNodes, setReprocessNodes] = useState<boolean>(false);
+  const [floor, setFloor] = useState<Floor>(Floor.L1);
 
   /**
    * Pathfinder selection
@@ -88,7 +95,6 @@ function Map() {
   };
 
   const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
-    console.log(nodes);
     const filteredNodeAssociations = nodes.map((node) => ({
       label: node.longName, // Assuming `longName` is the label you want to use
       node: node.nodeID,
@@ -465,13 +471,10 @@ function Map() {
   };
 
   const updateNodesData = (newData: IDCoordinates[]) => {
-    setNodesData(newData);
+    pathNodesData.current = newData;
   };
 
   async function handleSubmit() {
-    console.log(startNode);
-    console.log(endNode);
-
     if (startNode.trim() === "" || endNode.trim() === "") {
       setErrorMessage("Please enter both start and end nodes");
       return;
@@ -495,11 +498,10 @@ function Map() {
       const data = response.data;
       const path = data.message;
 
-      console.log(path);
-
       updateNodesData(path);
-      setNodes([startNode, endNode]);
-      setErrorMessage("");
+      !path ? setErrorMessage("There is no path between nodes") : setErrorMessage("");
+
+      setUpdateNodesBetweenFloors(true);
     } catch (error) {
       console.error("Failed to fetch data:", error);
       setErrorMessage("Failed to fetch data. Please try again.");
@@ -507,96 +509,15 @@ function Map() {
   }
 
   const handleFloorChange = (newFloor: string) => {
-    const newImage = new Image();
+    const newFloorObj = floorStrToObj(newFloor);
 
-    switch (newFloor) {
-      case "L1":
-        newImage.src = L1MapImage;
-        floor.current = "L1";
-        break;
-      case "L2":
-        newImage.src = L2MapImage;
-        floor.current = "L2";
-        break;
-      case "1":
-        newImage.src = FFMapImage;
-        floor.current = "1";
-        break;
-      case "2":
-        newImage.src = SFMapImage;
-        floor.current = "2";
-        break;
-      case "3":
-        newImage.src = TFMapImage;
-        floor.current = "3";
-        break;
-      default:
-        console.error("Returned map floor is not assigned to an image");
-        return;
+    if(!newFloorObj) {
+      console.error("New map floor is not a valid floor!");
+      return;
     }
 
-    setRenderSymbolCanvas(true);
-    setRenderBackground(true);
-    setReprocessNodes(true);
-    setCurrImage(newImage);
+    setFloor(newFloorObj);
   };
-
-  const handleNodeClick = (event: {clientX: number, clientY: number}) => {
-    console.log("entered handleNodeClick");
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
-    const rect = canvas.getBoundingClientRect();
-
-    // console.log("bottom: ", rect.height - window.innerHeight);
-
-    const initialWidthRatio = window.innerWidth / canvas.width;
-    const initialHeightRatio = window.innerHeight / canvas.height;
-    console.log("initial ratios: ", initialWidthRatio, initialHeightRatio);
-
-    const canvasRectWidth = (rect.width - (rect.width - window.innerWidth)) / canvas.width;
-    const canvasRectHeight = (rect.height - (rect.height - window.innerHeight)) / canvas.height;
-    console.log("ratios now: ", canvasRectWidth, canvasRectHeight);
-
-    const afterWidthRatio = initialWidthRatio / canvasRectWidth;
-    const afterHeightRatio = initialHeightRatio / canvasRectHeight;
-    console.log("after ratios: ", afterWidthRatio, afterHeightRatio);
-
-    let leftoverHeightRation: number;
-
-    if (rect.height == rect.bottom)
-      leftoverHeightRation = window.innerHeight / rect.height;
-    else
-      leftoverHeightRation = -(window.innerHeight - rect.height) / rect.height;
-    console.log("leftover ratios: ", leftoverHeightRation);
-    // console.log(event.clientY);
-
-    const ratioWidth = (window.innerWidth / (rect.width - (rect.width - window.innerWidth)));
-    const ratioHeight =  (window.innerHeight / (rect.height - (rect.height - window.innerHeight)));
-    const xcoord = event.clientX * (currImage.width / (rect.width - (rect.width - window.innerWidth))) / afterWidthRatio;
-    const ycoord = (event.clientY * (currImage.height / (rect.height - (rect.height - window.innerHeight))) / afterHeightRatio) * leftoverHeightRation;
-
-    for (let i = 0; i < filteredNodes.length; i++) {
-      if ((filteredNodes[i].floor === floor.current) && (filteredNodes[i].nodeID === "CLABS005L1")){
-        const node: MapNode = filteredNodes[i];
-        console.log("window: ", window.innerWidth, window.innerHeight);
-        console.log("actual: ", canvas.width, canvas.height);
-        console.log("differences ", (rect.width - window.innerWidth), (rect.height - window.innerHeight));
-        console.log("rect top coors:", rect.left, rect.top);
-        console.log("rectBottomCoords ", rect.right, rect.bottom);
-        console.log("rectDimensions ", rect.width, rect.height);
-        console.log("coords ", xcoord, ycoord);
-        console.log("node ", node.xcoord, node.ycoord);
-        const distance = Math.sqrt((node.xcoord - xcoord) ** 2 + (node.ycoord - ycoord) ** 2);
-        console.log("distance", distance);
-        console.log("\n");
-        if (distance < 20) {
-          alert(`Clicked on node: ${node.nodeID}`);
-          break;
-        }
-      }
-    }
-  };
-
 
   /**
    * useEffect to just load the node data. Only called when the flags determining loading data are changed
@@ -612,344 +533,40 @@ function Map() {
       determineFilters();
       setFiltersApplied(true);
     }
+  }, [determineFilters, filtersApplied, nodeDataLoaded]);
 
-    setRenderSymbolCanvas(true);
-    setRenderBackground(true);
-  }, [
-    nodeDataLoaded,
-    filtersApplied,
-    determineFilters,
-    populateAutocompleteData,
-  ]);
+  const handleBackgroundRenderStatus = (status: boolean, width: number, height: number) => {
+    setBackgroundRenderStatus(status);
+    setCanvasWidth(width);
+    setCanvasHeight(height);
+  };
 
-  useEffect(() => {
-    if (symbolCanvasRef.current && renderSymbolCanvas) {
-      console.log("Rendering symbol canvas");
-      const canvas: HTMLCanvasElement = symbolCanvasRef.current;
+  const handleNodeToFloorCallback = (newNodesToNextFloor: Map<IDCoordinates, Floor>, newNodesToPrevFloor: Map<IDCoordinates, Floor>) => {
+    nodesToNextFloor.current = newNodesToNextFloor;
+    nodesToPrevFloor.current = newNodesToPrevFloor;
 
-      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+    setUpdateFloorIcons(true);
+    setUpdateNodesBetweenFloors(false);
+    console.log("Updated node to next and previous floor");
+  };
 
-      if (!ctx) return;
+  const handlePathRenderStatus = (status: boolean) => {
+    setPathRenderStatus(status);
+  };
 
+  const handleTransform = (ref: ReactZoomPanPinchRef, state: { scale: number; positionX: number; positionY: number }) => {
+    if(!transformRef.current) transformRef.current = ref;
+    transformState.current = state;
 
+    // console.log(state);
+  };
 
-      const draw = new Draw(ctx);
-
-      ctx.clearRect(0, 0, currImage.width, currImage.height);
-
-      const filters: NodeFilter =
-        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
-          generateFilterValue(false, floor.current),
-        ])!;
-
-      const nodesOnFloor = FilterManager.getInstance().applyFilters(
-        [filters],
-        filteredNodes,
-      );
-
-      console.log("NodesOnFloor:");
-      console.log(nodesOnFloor);
-
-      for (let i = 0; i < nodesOnFloor.length; i++) {
-        if (nodesOnFloor[i].nodeType == "ELEV") {
-          draw.drawRectangle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            20,
-            20,
-            "#1CA7EC",
-            "black",
-            2,
-          );
-        } else if (nodesOnFloor[i].nodeType == "STAI") {
-          draw.drawRectangle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            20,
-            20,
-            "#72c41c",
-            "black",
-            2,
-          );
-        } else if (nodesOnFloor[i].nodeType == "EXIT") {
-          draw.drawRectangle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            20,
-            20,
-            "red",
-            "black",
-            2,
-          );
-        } else if (nodesOnFloor[i].nodeType == "RETL") {
-          draw.drawRectangle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            20,
-            20,
-            "#e88911",
-            "black",
-            2,
-          );
-        } else if (nodesOnFloor[i].nodeType == "SERV") {
-          draw.drawCircle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            12,
-            "#e88911",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "INFO") {
-          draw.drawCircle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            12,
-            "#1CA7EC",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "REST") {
-          draw.drawCircle(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            12,
-            "#72c41c",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "CONF") {
-          draw.drawPentagon(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            15,
-            "#1CA7EC",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "DEPT") {
-          draw.drawPentagon(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            15,
-            "#72c41c",
-            "black",
-            4,
-          );
-        } else if (nodesOnFloor[i].nodeType == "LABS") {
-          draw.drawPentagon(
-            nodesOnFloor[i].xcoord,
-            nodesOnFloor[i].ycoord,
-            15,
-            "#e88911",
-            "black",
-            4,
-          );
-        }
-      }
-      setRenderSymbolCanvas(false);
-    }
-  }, [currImage.height, currImage.width, filteredNodes, renderSymbolCanvas]);
-
-
-  // adding event listener to get the nodes
-  // useEffect(() => {
-  //   if (!canvasRef.current) console.error("elene: canvas does not exist");
-  //   console.log("trying to add mouse pressing?");
-  //
-  //   const canvas: HTMLCanvasElement = canvasRef.current!;
-  //   canvas.addEventListener("click", handleNodeClick);
-  //   return () => canvas.removeEventListener("click", handleNodeClick);
-  // }, [filteredNodes, handleNodeClick]);
-
-  useEffect(() => {
-    currImage.onload = () => {
-      if (renderBackground) {
-        console.log("Rendering Canvas");
-        if (canvasRef.current) {
-          const canvas: HTMLCanvasElement = canvasRef.current;
-          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-          if (!ctx) return;
-
-          canvas.width = currImage.width;
-          canvas.height = currImage.height;
-
-          ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
-        }
-
-        if (pathCanvasRef.current) {
-          const canvas: HTMLCanvasElement = pathCanvasRef.current;
-          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-          if (!ctx) return;
-
-          canvas.width = currImage.width;
-          canvas.height = currImage.height;
-
-          ctx.clearRect(0, 0, currImage.width, currImage.height);
-        }
-
-        if (symbolCanvasRef.current) {
-          const canvas: HTMLCanvasElement = symbolCanvasRef.current;
-          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-          if (!ctx) return;
-
-          canvas.width = currImage.width;
-          canvas.height = currImage.height;
-
-          ctx.clearRect(0, 0, currImage.width, currImage.height);
-
-          setRenderSymbolCanvas(true);
-        }
-        setRenderBackground(false);
-      }
-    };
-  }, [currImage, renderBackground, floor]);
-
-  useEffect(() => {
-    console.log("Determining nodes on floor...");
-    const includedNodesOnFloor: IDCoordinates[][] = [];
-
-    let currPath: IDCoordinates[] = [];
-
-    for (let i = 0; i < nodesData.length; i++) {
-      if (
-        GraphManager.getInstance().getNodeByID(nodesData[i].nodeID)!.floor ==
-        floor.current
-      ) {
-        currPath.push(nodesData[i]);
-      } else {
-        if (currPath.length != 0) {
-          includedNodesOnFloor.push(currPath);
-          currPath = [];
-        }
-      }
-    }
-
-    if (currPath.length != 0) includedNodesOnFloor.push(currPath);
-
-    console.log(`Determined nodes on floor`);
-    console.log(includedNodesOnFloor);
-    console.log(reprocessNodes);
-
-    if (pathCanvasRef.current) {
-      const canvas: HTMLCanvasElement = pathCanvasRef.current;
-      const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-      if (!ctx) return;
-
-      if (includedNodesOnFloor.length != 0) {
-        console.log("Processing canvas");
-
-        if (startNode.trim() === nodes[0] && endNode.trim() === nodes[1]) {
-          if (!nodesData) {
-            setErrorMessage("There is no path between nodes");
-            return;
-          }
-
-          let currentTargetIndex = 0;
-          let currentPathIndex = 0;
-          let currentX =
-            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-              .coordinates.x;
-          let currentY =
-            includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-              .coordinates.y;
-          const speed = 1;
-
-          const moveDot = (origFloor: string) => {
-            if (floor.current != origFloor) {
-              console.log("Floor changed, stopping previous animation");
-              return;
-            }
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "black";
-
-            for (let i = 0; i < includedNodesOnFloor.length; i++) {
-              for (let j = 0; j < includedNodesOnFloor[i].length; j++) {
-                ctx.beginPath();
-                ctx.arc(
-                  includedNodesOnFloor[i][j].coordinates.x,
-                  includedNodesOnFloor[i][j].coordinates.y,
-                  5,
-                  0,
-                  2 * Math.PI,
-                );
-                ctx.fill();
-              }
-            }
-
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-
-            for (let i = 0; i < includedNodesOnFloor.length; i++) {
-              ctx.moveTo(
-                includedNodesOnFloor[i][0].coordinates.x,
-                includedNodesOnFloor[i][0].coordinates.y,
-              );
-              for (let j = 1; j < includedNodesOnFloor[i].length; j++) {
-                ctx.lineTo(
-                  includedNodesOnFloor[i][j].coordinates.x,
-                  includedNodesOnFloor[i][j].coordinates.y,
-                );
-              }
-            }
-
-            ctx.stroke();
-
-            ctx.fillStyle = "blue";
-            ctx.beginPath();
-            ctx.arc(currentX, currentY, 12, 0, 2 * Math.PI);
-            ctx.fill();
-
-            const dx =
-              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-                .coordinates.x - currentX;
-            const dy =
-              includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-                .coordinates.y - currentY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < speed) {
-              currentTargetIndex =
-                (currentTargetIndex + 1) %
-                includedNodesOnFloor[currentPathIndex].length;
-            } else {
-              currentX += (dx / distance) * speed;
-              currentY += (dy / distance) * speed;
-            }
-            if (currentTargetIndex === 0) {
-              currentPathIndex =
-                (currentPathIndex + 1) % includedNodesOnFloor.length;
-              currentX =
-                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-                  .coordinates.x;
-              currentY =
-                includedNodesOnFloor[currentPathIndex][currentTargetIndex]
-                  .coordinates.y;
-              currentTargetIndex = 1;
-            }
-            requestAnimationFrame(() => moveDot(origFloor));
-          };
-          moveDot(floor.current);
-        }
-      } else {
-        console.log("Clearing path canvas");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
-    setReprocessNodes(false);
-  }, [
-    endNode,
-    filteredNodes,
-    floor,
-    nodes,
-    nodesData,
-    reprocessNodes,
-    startNode,
-  ]);
+  const handleCanvasClick = (event: React.MouseEvent) => {
+    const widthRatio = canvasWidth / window.innerWidth;
+    const heightRatio = canvasHeight / window.innerHeight;
+    console.log(`Adjusted X: ${((event.clientX - transformState.current.positionX) / transformState.current.scale) * widthRatio}`);
+    console.log(`Adjusted Y: ${((event.clientY - transformState.current.positionY) / transformState.current.scale) * heightRatio}`);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -1031,45 +648,76 @@ function Map() {
         height={window.innerHeight}
         overflow={"clip"}
       >
-        <TransformWrapper>
+        <TransformWrapper
+          onTransformed={handleTransform}
+        >
           <TransformComponent>
             <Draggable>
               <>
-                <canvas
-                  ref={canvasRef}
+                <BackgroundCanvas
                   style={{
                     position: "relative",
-                    top: 0,
+                    top: 50,
                     left: 0,
-                    minHeight: "100vh",
+                    // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
-                  // onClick={handleNodeClick}
+                  floor={floor}
+                  renderStatusCallback={handleBackgroundRenderStatus}
                 />
-                <canvas
-                  ref={symbolCanvasRef}
+                <SymbolCanvas
                   style={{
                     position: "absolute",
-                    top: 0,
+                    top: 50,
                     left: 0,
-                    minHeight: "100vh",
+                    // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
-                  // onClick={handleNodeClick}
+                  backgroundRendered={backgroundRenderStatus}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  filtersApplied={filtersApplied}
+                  filteredNodes={filteredNodes}
+                  floor={floor}
                 />
-                <canvas
-                  ref={pathCanvasRef}
+                <PathCanvas
                   style={{
                     position: "absolute",
-                    top: 0,
+                    top: 50,
                     left: 0,
-                    minHeight: "100vh",
+                    // minHeight: "100vh",
                     maxHeight: "100%",
                     maxWidth: "100%",
                   }}
-                  onClick={handleNodeClick}
+                  backgroundRendered={backgroundRenderStatus}
+                  updateNodesBetweenFloors={updateNodesBetweenFloors}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  floor={floor}
+                  pathNodesData={pathNodesData.current}
+                  floorConnectionCallback={handleNodeToFloorCallback}
+                  pathRenderStatusCallback={handlePathRenderStatus}
+                />
+                <FloorIconsCanvas
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    left: 0,
+                    // minHeight: "100vh",
+                    maxHeight: "100%",
+                    maxWidth: "100%",
+                  }}
+                  backgroundRendered={backgroundRenderStatus}
+                  pathRendered={pathRenderStatus}
+                  updateFloorIcons={updateFloorIcons}
+                  width={canvasWidth}
+                  height={canvasHeight}
+                  floor={floor}
+                  nodesToNextFloor={nodesToNextFloor.current}
+                  nodesToPrevFloor={nodesToPrevFloor.current}
+                  onClick={handleCanvasClick}
                 />
               </>
             </Draggable>
@@ -1081,4 +729,4 @@ function Map() {
   );
 }
 
-export default Map;
+export default MapRoute;
