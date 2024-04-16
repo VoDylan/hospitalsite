@@ -26,6 +26,7 @@ import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
+import CalenderPage from "./routes/CalenderPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -73,6 +74,11 @@ function App() {
         {
           path: "/DisplayDatabase",
           element: <DisplayDatabase />,
+        },
+
+        {
+          path: "/Calender",
+          element: <CalenderPage />,
         },
 
         {
