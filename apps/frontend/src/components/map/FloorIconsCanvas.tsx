@@ -25,6 +25,7 @@ interface FloorIconsCanvasProps {
   floor: Floor;
   nodesToNextFloor: Map<IDCoordinates, Floor>;
   nodesToPrevFloor: Map<IDCoordinates, Floor>;
+  onClick: (event: React.MouseEvent) => void;
 }
 
 export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
@@ -159,6 +160,7 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
     <canvas
       ref={canvasRef}
       style={props.style}
+      onClick={props.onClick}
     />
   );
 };
