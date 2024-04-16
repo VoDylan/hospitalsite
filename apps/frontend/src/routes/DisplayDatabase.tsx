@@ -2,9 +2,6 @@ import * as React from "react";
 import {
   Button,
   Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -29,6 +26,7 @@ import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import "./TableSlide.css";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -60,16 +58,43 @@ function parseCSVFromString(data: string) {
   });
 }
 
+  function ServiceDetailsTable({ service, isVisible }: { service: ServiceParams; isVisible: boolean }) {
+    return (
+      <Box mt={2} className={`slide-in ${isVisible ? 'slide-in--visible' : 'slide-in--hidden'}`} sx={{zIndex: -9999}}>
+        <Typography variant="h6" fontWeight="bold" sx={{ textDecoration: "underline" }}>Service Details</Typography>
+        <Box>
+          {service.services && (
+            <div>
+              {Object.entries(JSON.parse(service.services)).map(([key, value]) => (
+                <Typography key={key}>
+                  {key}: {String(value)}
+                </Typography>
+              ))}
+            </div>
+          )}
+        </Box>
+      </Box>
+    );
+  }
+
 function DisplayDatabase() {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {},
   );
+
+  const [isServiceDetailsVisible, setServiceDetailsVisible] = useState(false);
+
   const [selectedServiceDetails, setSelectedServiceDetails] =
     useState<ServiceParams | null>(null); // State to keep track of selected service details
 
   // Function to handle the click event of the details button
   const handleDetailsClick = (service: ServiceParams) => {
-    setSelectedServiceDetails(service);
+    if (selectedServiceDetails?.id === service.id) {
+      setServiceDetailsVisible(!isServiceDetailsVisible); // Toggle visibility
+    } else {
+      setSelectedServiceDetails(service);
+      setServiceDetailsVisible(true); // Show details for the selected service
+    }
   };
 
   // Function to close the details modal
@@ -106,18 +131,20 @@ function DisplayDatabase() {
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
 
+  const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
+
   const serviceColumns: GridColDef[] = [
-    { field: "userID", headerName: "User ID", width: 200 },
-    { field: "nodeID", headerName: "Node ID", width: 200 },
-    { field: "serviceType", headerName: "Service Type", width: 200 },
+    { field: "userID", headerName: "User ID", width: 100 },
+    { field: "nodeID", headerName: "Node ID", width: 125 },
+    { field: "serviceType", headerName: "Service Type", width: 125 },
     {
-      field: "services",
-      headerName: "Service Details",
-      width: 200,
+      field: "details",
+      headerName: "Details",
+      width: 125,
       renderCell: (params) => (
         <Button
           variant="outlined"
-          onClick={() => handleDetailsClick(params.row as ServiceParams)}
+          onClick={() => handleDetailsClick(params.row)}
         >
           Details
         </Button>
@@ -126,7 +153,7 @@ function DisplayDatabase() {
     {
       field: "status",
       headerName: "Status",
-      width: 200,
+      width: 150,
       editable: true,
       type: "singleSelect",
       valueOptions: ["Unassigned", "Assigned", "InProgress", "Closed"],
@@ -135,7 +162,7 @@ function DisplayDatabase() {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 200,
+      width: 100,
       cellClassName: "actions",
       getActions: ({ row }) => [
         <GridActionsCellItem
@@ -420,29 +447,6 @@ function DisplayDatabase() {
             }}
             pageSizeOptions={[5, 10]}
           />
-          <Dialog open={!!selectedServiceDetails} onClose={handleCloseDetails}>
-            <DialogTitle>Service Details</DialogTitle>
-            <DialogContent>
-              {selectedServiceDetails && (
-                <div>
-                  {selectedServiceDetails.services && (
-                    <div>
-                      {Object.entries(
-                        JSON.parse(selectedServiceDetails.services),
-                      ).map(([key, value]) => (
-                        <Typography key={key}>
-                          {key}: {String(value)}
-                        </Typography>
-                      ))}
-                    </div>
-                  )}
-                  <Typography>
-                    Status: {selectedServiceDetails.status}
-                  </Typography>
-                </div>
-              )}
-            </DialogContent>
-          </Dialog>
           <Button
             component="label"
             role={undefined}
@@ -501,31 +505,36 @@ function DisplayDatabase() {
             Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
-
-          <DataGrid
-            slots={{ toolbar: GridToolbar }}
-            sx={{
-              padding: "40px",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              //alignItems: "center",
-            }}
-            columns={serviceColumns}
-            rows={serviceRowData}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            editMode={"row"}
-            rowModesModel={rowModesModel}
-            pageSizeOptions={[5, 10]}
-            processRowUpdate={(newRow: GridRowModel) =>
-              processRowUpdate(newRow, parseInt(newRow["id"]))
-            }
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-          />
+          <Box display="flex" sx={{zIndex: 9999}}>
+            {/* Container for the service request table and service details table */}
+            <Box flex="1" mr={2} sx={{zIndex: 9999}}>
+              <DataGrid
+                slots={{ toolbar: GridToolbar }}
+                sx={{
+                  padding: "40px",
+                  position: "relative",
+                  display: "flex",
+                  justifyContent: "center",
+                  zIndex: 9999,
+                  background: "white",
+                }}
+                columns={serviceColumns}
+                rows={serviceRowData}
+                editMode={"row"}
+                rowModesModel={rowModesModel}
+                pageSizeOptions={[5, 10]}
+                processRowUpdate={(newRow: GridRowModel) =>
+                  processRowUpdate(newRow, parseInt(newRow["id"]))
+                }
+                onProcessRowUpdateError={handleProcessRowUpdateError}
+              />
+            </Box>
+            <Box width="400px">
+              {selectedServiceDetails && (
+                <ServiceDetailsTable service={selectedServiceDetails} isVisible={isServiceDetailsVisible} />
+              )}
+              </Box>
+            </Box>
         </Box>
       </div>
     </>
