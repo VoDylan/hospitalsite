@@ -105,7 +105,7 @@ function FlowerDeliveryService() {
         container
         direction={"row"}
         justifyContent={"center"}
-        boxShadow={4}
+        // boxShadow={4}
         sx={{
           backgroundColor: "transparent",
           width: "40vw", //Adjust this to change the width of the form
@@ -117,13 +117,13 @@ function FlowerDeliveryService() {
         <Grid
           item
           xs={12}
+          paddingBottom={2}
           sx={{
             backgroundColor: "transparent",
           }}
         >
           <ServiceNavTabs/>
         </Grid>
-
         <Grid
           item
           xs={12}
@@ -200,7 +200,7 @@ function FlowerDeliveryService() {
               />
           </Grid>
         </Grid>
-        </Grid>
+      </Grid>
     </Stack>
   );
 }
