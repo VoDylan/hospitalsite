@@ -101,9 +101,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     props.clear();
   }
 
-  /*function handleListUpdate() {
-    props.updateList();
-  }*/
 
   // Commenting this out for iteration 2
   // Function for posting the form submission to the database
