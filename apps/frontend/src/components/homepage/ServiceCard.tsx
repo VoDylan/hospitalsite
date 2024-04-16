@@ -1,8 +1,11 @@
-import { Card, CardActionArea, CardMedia, Box } from "@mui/material";
+import { Card, CardMedia, Box, Typography, Stack, Button, CardActions, Link as MuiLink } from "@mui/material";
 
 interface ServiceProps {
   servicePath: string;
   imagePath: string;
+  title: string;
+  description: string;
+  buttonContent?: string | undefined | null;
 }
 
 export function ServiceCard(props: ServiceProps) {
@@ -19,13 +22,39 @@ export function ServiceCard(props: ServiceProps) {
       }}
     >
       <Box sx={{ position: "relative", display: "flex" }}>
-        <CardActionArea href={props.servicePath}>
+        <Stack>
           <CardMedia
             component={"img"}
             image={props.imagePath}
-            sx={{ width: "100%", height: "100%", display: "flex" }} // Ensure the image fills the entire card
+            sx={{ width: "350px", height: "310px", display: "flex", marginBottom: "15px"}} // Ensure the image fills the entire card
           />
-        </CardActionArea>
+          <Typography
+            gutterBottom variant="h5" component="div"
+            sx={{
+              textAlign: "center",
+            }}
+          >
+            {props.title}
+          </Typography>
+          <Typography
+            variant="body2" color="text.secondary"
+            sx={{
+              textAlign: "center",
+              marginBottom: "15px"
+            }}
+          >
+            {props.description}
+          </Typography>
+          <CardActions style={{ marginTop: "auto", justifyContent: "center" }}>
+            {props.buttonContent && ( // Render button only if buttonContent is provided
+              <MuiLink href={props.servicePath} underline="none">
+                <Button variant="contained" size="large" sx={{ width: "100%" }}>
+                  {props.buttonContent}
+                </Button>
+              </MuiLink>
+            )}
+          </CardActions>
+        </Stack>
       </Box>
     </Card>
   );
