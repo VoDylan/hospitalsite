@@ -78,4 +78,6 @@ export class Draw {
     this.ctx.stroke();
     this.ctx.fill();
   }
+
 }
+

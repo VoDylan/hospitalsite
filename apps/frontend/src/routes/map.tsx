@@ -28,7 +28,7 @@ import { Draw } from "../common/Draw.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
 import startIcon from "../images/mapImages/starticon3.png";
-import endIcon from "../images/mapImages/5632658.png";
+import endIcon from "../images/mapImages/endIcon.png";
 
 
 function Map() {
@@ -36,6 +36,8 @@ function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pathCanvasRef = useRef<HTMLCanvasElement>(null);
   const symbolCanvasRef = useRef<HTMLCanvasElement>(null);
+  const iconCanvasRef = useRef<HTMLCanvasElement>(null);
+
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [nodes, setNodes] = useState<string[]>([]);
@@ -66,10 +68,10 @@ function Map() {
    * Pathfinder selection
    */
   const [open, setOpen] = React.useState(false);
-  const [checkedBFS, setCheckedBFS] = React.useState(true);
-  const [checkedAS, setCheckedAS] = React.useState(false);
-  const [algorithm, setAlgorithm] = React.useState("BFS");
-
+  const [checkedBFS, setCheckedBFS] = React.useState(false);
+  const [checkedAS, setCheckedAS] = React.useState(true);
+  const [checkedDFS, setCheckedDFS] = React.useState(false);
+  const [algorithm, setAlgorithm] = React.useState("A*");
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
@@ -106,11 +108,18 @@ function Map() {
     setOpen(!open);
   };
 
+  useEffect(() => {
+    console.log(algorithm); // This will log the updated value of `algorithm` whenever it changes
+  }, [algorithm]);
+
   const handleSelectBFS = () => {
     if (checkedAS) {
       setCheckedAS(false);
     }
-    setCheckedBFS(!checkedBFS);
+    else if (checkedDFS) {
+      setCheckedDFS(false);
+    }
+    setCheckedBFS(true);
     setAlgorithm("BFS");
   };
 
@@ -118,8 +127,22 @@ function Map() {
     if (checkedBFS) {
       setCheckedBFS(false);
     }
-    setCheckedAS(!checkedAS);
+    else if (checkedDFS) {
+      setCheckedDFS(false);
+    }
+    setCheckedAS(true);
     setAlgorithm("A*");
+  };
+
+  const handleSelectDFS = () => {
+    if (checkedBFS) {
+      setCheckedBFS(false);
+    }
+    else if (checkedAS) {
+      setCheckedAS(false);
+    }
+    setCheckedDFS(true);
+    setAlgorithm("DFS");
   };
 
   /**
@@ -363,9 +386,6 @@ function Map() {
     setFiltersApplied(false);
   };
 
-  /**
-   * Create Type, Floor, and Building filters
-   */
 
   /**
    * Change list of nodes based on applied filters
@@ -736,6 +756,20 @@ function Map() {
 
           setRenderSymbolCanvas(true);
         }
+
+        if (iconCanvasRef.current) {
+          const canvas: HTMLCanvasElement = iconCanvasRef.current;
+          const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          canvas.width = currImage.width;
+          canvas.height = currImage.height;
+
+          ctx.clearRect(0, 0, currImage.width, currImage.height);
+
+          setRenderSymbolCanvas(true);
+        }
         setRenderBackground(false);
       }
     };
@@ -767,11 +801,17 @@ function Map() {
     console.log(includedNodesOnFloor);
     console.log(reprocessNodes);
 
-    if (pathCanvasRef.current) {
+    if (pathCanvasRef.current && iconCanvasRef.current) {
       const canvas: HTMLCanvasElement = pathCanvasRef.current;
+      const iconCanvas: HTMLCanvasElement = iconCanvasRef.current;
+
       const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+      const iconCtx: CanvasRenderingContext2D | null = iconCanvas.getContext("2d");
+
 
       if (!ctx) return;
+      if (!iconCtx) return;
+
 
       if (includedNodesOnFloor.length != 0) {
         console.log("Processing canvas");
@@ -806,34 +846,19 @@ function Map() {
                 ctx.beginPath();
 
                 if (includedNodesOnFloor[i][j].nodeID === startNode) { // Check if it's the first element
-                  const image: HTMLImageElement | null = document.querySelector(`.start`);                  // const startNodeX = includedNodesOnFloor[i][j].coordinates.x;
-                  // const startNodeY = includedNodesOnFloor[i][j].coordinates.y;
+                  const image: HTMLImageElement | null = document.querySelector(`.start`);
                   if (!image) return;
 
-                  ctx.drawImage(image, includedNodesOnFloor[i][j].coordinates.x - 67, includedNodesOnFloor[i][j].coordinates.y - 50, 130, 100); // Adjust iconWidth and iconHeight as needed
+                  iconCtx.drawImage(image, includedNodesOnFloor[i][j].coordinates.x - 60, includedNodesOnFloor[i][j].coordinates.y - 45, 115, 85);
 
-                  // ctx.rect(
-                  //     includedNodesOnFloor[i][j].coordinates.x - 12, // Adjusting x-coordinate to center the rectangle
-                  //     includedNodesOnFloor[i][j].coordinates.y - 12, // Adjusting y-coordinate to center the rectangle
-                  //     35, // Width of the rectangle
-                  //     35 // Height of the rectangle
-                  //   );
                 }
 
                 if (includedNodesOnFloor[i][j].nodeID === endNode) { // Check if it's the last element
-                  const image2: HTMLImageElement | null = document.querySelector(`.end`);                  // const startNodeX = includedNodesOnFloor[i][j].coordinates.x;
-
+                  const image2: HTMLImageElement | null = document.querySelector(`.end`);
                   if (!image2) return;
 
-                  ctx.drawImage(image2, includedNodesOnFloor[i][j].coordinates.x - 31, includedNodesOnFloor[i][j].coordinates.y - 50, 60, 60); // Adjust iconWidth and iconHeight as needed
+                  iconCtx.drawImage(image2, includedNodesOnFloor[i][j].coordinates.x - 63, includedNodesOnFloor[i][j].coordinates.y - 65, 180, 150); // Adjust iconWidth and iconHeight as needed
 
-                  // ctx.fillStyle = "red";
-                  // ctx.rect(
-                  //   includedNodesOnFloor[i][j].coordinates.x - 12, // Adjusting x-coordinate to center the rectangle
-                  //   includedNodesOnFloor[i][j].coordinates.y - 12, // Adjusting y-coordinate to center the rectangle
-                  //   35, // Width of the rectangle
-                  //   35 // Height of the rectangle
-                  // );
                 }
 
                 else {
@@ -850,7 +875,7 @@ function Map() {
             }
 
             ctx.strokeStyle = "#0000FF";
-            ctx.lineWidth = 10;
+            ctx.lineWidth = 7;
             ctx.beginPath();
 
             for (let i = 0; i < includedNodesOnFloor.length; i++) {
@@ -866,8 +891,9 @@ function Map() {
               }
             }
 
-
             ctx.stroke();
+
+
 
             ctx.fillStyle = "blue";
             ctx.beginPath();
@@ -929,25 +955,37 @@ function Map() {
   ]);
 
   return (
-    <div style={{position: "relative"}}>
-      <img
-        src={startIcon}
-        className={"start"}
-        alt="icon"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          opacity: 0,
-          zIndex: -1,
-        }}
-      />
-      <img
-        src={endIcon}
-        className={"end"}
-        alt="icon"
-        style={{
-          position: "absolute",
+    <>
+      {/*<svg style={{*/}
+      {/*  position: "absolute",*/}
+      {/*  top: 0,*/}
+      {/*  left: 0,*/}
+      {/*  opacity: 0,*/}
+      {/*  zIndex: -1,*/}
+      {/*}} version="1.1" className="p-svg-pulse" xmlns="http://www.w3.org/2000/svg"*/}
+      {/*     xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 80 80" xmlSpace="preserve">*/}
+      {/*  <circle className="pulse" fill="none" stroke="lightBlue" cx="40" cy="40" r="14"/>*/}
+      {/*  <circle className="center" fill="blue" cx="40" cy="40" r="9"/>*/}
+      {/*</svg>*/}
+      {/*<div style={{position: "relative"}}>*/}
+        <img
+          src={startIcon}
+          className={"start"}
+          alt="icon"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            opacity: 0,
+            zIndex: -1,
+          }}
+        />
+        <img
+          src={endIcon}
+          className={"end"}
+          alt="icon"
+          style={{
+        position: "absolute",
           top: 0,
           left: 0,
           opacity: 0,
@@ -982,6 +1020,8 @@ function Map() {
           handleSelectBFS={handleSelectBFS}
           checkedAS={checkedAS}
           handleSelectAS={handleSelectAS}
+          checkedDFS={checkedDFS}
+          handleSelectDFS={handleSelectDFS}
           errorMessage={errorMessage}
           onClick={() => {
             handleSubmit().then(() => {
@@ -1072,6 +1112,17 @@ function Map() {
                       maxWidth: "100%",
                     }}
                   />
+                  <canvas
+                    ref={iconCanvasRef}
+                    style={{
+                      position: "absolute",
+                      top: 50,
+                      left: 0,
+                      minHeight: "100vh",
+                      maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                  />
                 </>
               </Draggable>
             </TransformComponent>
@@ -1079,7 +1130,8 @@ function Map() {
         </Box>
         <Legend filterItems={filterIcons}/>
       </Box>
-    </div>
+      {/*</div>*/}
+    </>
   );
 }
 

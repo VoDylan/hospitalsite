@@ -83,6 +83,7 @@ function App() {
         {
           path: "/Map",
           element: <Map />,
+
         },
         {
           path: "/LoggedIn",
