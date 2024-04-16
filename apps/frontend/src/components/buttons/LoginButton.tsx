@@ -1,43 +1,49 @@
-import React, { useEffect } from "react";
-import { createAuth0Client } from "@auth0/auth0-spa-js";
-import Button from "@mui/material/Button";
+import React from 'react';
+import { Button } from '@mui/material';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const LoginButton = () => {
-  useEffect(() => {
-    const initializeAuth0 = async () => {
-      const auth0 = await createAuth0Client({
-        domain: "dev-1bg6tdr43pzdkebi.us.auth0.com",
-        clientId: "0GjFZHbJMAaFS5GabTqBigkvkkMxneR9",
-      });
+const LoginButton: React.FC = () => {
+  const { loginWithRedirect, user } = useAuth0();
+  const {logout} = useAuth0();
 
-      const loginButton = document.getElementById("login");
-      const handleClick = async () => {
-        await auth0.loginWithRedirect();
-      };
-
-      if (loginButton) {
-        loginButton.addEventListener("click", handleClick);
-      }
-
-      return () => {
-        // Cleanup event listener if component unmounts
-        if (loginButton) {
-          loginButton.removeEventListener("click", handleClick);
+  const handleLogin = async () => {
+    try {
+      await loginWithRedirect({
+        authorizationParams: {
+          redirect_uri: 'http://localhost:3000/'
         }
-      };
-    };
+      });
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
+  };
 
-    initializeAuth0();
-  }, []);
+  const handleLogout =  () => {
+      logout({
+        logoutParams: {
+          returnTo: window.location.origin,
+        },
+      }).then(() => {
+
+      }).catch(error => {
+      console.error('Error logging out:', error);
+      });
+      };
+
 
   return (
-    <Button id="login" sx={{ width: 220 }} variant="contained">
-      Sign In
+    <Button
+      variant="contained"
+      sx={{ width: 220 }}
+      onClick={user ? handleLogout : handleLogin}
+    >
+      {user ? 'Logout' : 'Login'}
     </Button>
   );
 };
 
 export default LoginButton;
+
 
 //const token = await getAccessTokenSilently();
 
