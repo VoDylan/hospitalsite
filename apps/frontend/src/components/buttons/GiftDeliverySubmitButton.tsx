@@ -75,10 +75,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       openWithError("Please enter a Recipient Name");
     } else {
       console.log(props.input);
-      /*handleListUpdate();
-      handleClear();
-      handleShowConfetti();
-      openWithSuccess();*/
       const submission = props.input;
       console.log(props.input);
 
@@ -100,7 +96,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   function handleClear() {
     props.clear();
   }
-
 
   // Commenting this out for iteration 2
   // Function for posting the form submission to the database
