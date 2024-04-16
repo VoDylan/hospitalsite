@@ -11,7 +11,7 @@ import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
-import {Modal} from "react-modal";
+import Modal from 'react-modal';
 
 import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
 import {FilterName} from "common/src/filter/FilterName.ts";
