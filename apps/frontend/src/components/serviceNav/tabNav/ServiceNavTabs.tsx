@@ -1,13 +1,4 @@
-// import FlowerDeliveryService from "./FlowerDeliveryService.tsx";
-// import SanitationService from "./SanitationService.tsx";
-// import DeviceDeliveryService from "./DeviceDeliveryService.tsx";
-// import GiftDeliveryService from "./GiftDeliveryService.tsx";
-// import SecurityService from "./SecurityService.tsx";
-// import MedicineDelivery from "./MedicineDelivery.tsx";
-// import RoomScheduling from "./RoomScheduling.tsx";
-
 import * as React from 'react';
-// import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import {Box, Tabs} from "@mui/material";
 import {Link, matchPath, useLocation} from 'react-router-dom';
@@ -59,12 +50,20 @@ function useRouteMatch(patterns: string[]) {
   return null;
 }
 
-export default function AllServiceFormsNav() {
-  const routeMatch = useRouteMatch(['Services/FlowerDelivery', 'Services/MedicineDelivery', 'Services/GiftDelivery']);
+export default function ServiceNavTabs() {
+  const routeMatch = useRouteMatch([
+    'Services/FlowerDelivery', 'Services/MedicineDelivery', 'Services/GiftDelivery']);
   const currentTab = routeMatch?.pattern?.path;
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box
+        sx={{
+          width: '100%',
+          opacity: "50%",
+          backgroundColor: "gray",
+          borderRadius: 10,
+        }}
+      >
         <Tabs
           value={currentTab}
           aria-label={"Service Navigation Tabs"}

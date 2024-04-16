@@ -15,7 +15,7 @@ import React from "react";
 import Confetti from "react-confetti";
 import axios from "axios";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
-import AllServiceFormsNav from "./AllServiceFormsNav.tsx";
+import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -121,7 +121,7 @@ function GiftDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <AllServiceFormsNav/>
+      <ServiceNavTabs/>
       <TopBanner />
       <Grid
         container
@@ -136,7 +136,7 @@ function GiftDeliveryService() {
           mb: "5vh",
         }}
       >
-        <AllServiceFormsNav/>
+        <ServiceNavTabs/>
         <Grid
           item
           xs={12}

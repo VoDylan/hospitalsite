@@ -20,7 +20,7 @@ import SecurityService from "./routes/SecurityService.tsx";
 import MedicineDelivery from "./routes/MedicineDelivery.tsx";
 import RoomScheduling from "./routes/RoomScheduling.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
-import AllServiceFormsNav from "./routes/AllServiceFormsNav.tsx";
+import ServiceNavTabs from "./components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import FilterManager from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
 import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
@@ -45,7 +45,7 @@ function App() {
         },
         {
           path: "/Services/Test",
-          element: <AllServiceFormsNav />,
+          element: <ServiceNavTabs />,
         },
         {
           path: "/Services/FlowerDelivery",

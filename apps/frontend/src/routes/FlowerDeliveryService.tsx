@@ -7,7 +7,7 @@ import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
-import AllServiceFormsNav from "./AllServiceFormsNav.tsx";
+import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
@@ -104,16 +104,24 @@ function FlowerDeliveryService() {
       <Grid
         container
         direction={"row"}
-        boxShadow={4}
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "transparent",
           width: "40vw", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
         }}
       >
-        <AllServiceFormsNav/>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            backgroundColor: "transparent",
+          }}
+        >
+          <ServiceNavTabs/>
+        </Grid>
+
         <Grid
           item
           xs={12}
@@ -130,6 +138,7 @@ function FlowerDeliveryService() {
             Flower Delivery Service Form
           </Typography>
         </Grid>
+        <Grid container xs={12} sx={{backgroundColor: "white"}} boxShadow={4}>
           <Grid item xs={6}>
             <Typography align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
@@ -196,6 +205,7 @@ function FlowerDeliveryService() {
               />
             </Box>
           </Grid>
+        </Grid>
         </Grid>
     </Stack>
   );
