@@ -1,8 +1,8 @@
 import ServiceCards from "./ServiceHeroCards.tsx";
 import Stack from "@mui/material/Stack";
-import flower from "../../images/Flower.jpg";
-import gift from "../../images/giftBasket.jpg";
-import medicine from "../../images/medicineCard.jpg";
+import flower from "../../images/servicePageImages/Flower.jpg";
+import gift from "../../images/servicePageImages/giftBasket.jpg";
+import medicine from "../../images/servicePageImages/medicineCard.jpg";
 import signL from "../../images/language.webp";
 
 interface secondaryCardData {
