@@ -68,22 +68,32 @@ export default function ServicesPage() {
       <TopBanner2 />
       <Box
         sx={{
-          mt: 20,
+          mt: 15,
           backgroundColor: "#ffffff",
         }}
       >
-        <Typography
-          variant={"h1"}
-          align={"center"}
-          color={"#003A96"}
-          gutterBottom={true}
-          fontSize={36}
-          //fontWeight={'bold'}
-          fontStyle={"inherit"}
-          fontFamily={"sans-serif"}
-        >
-          Services
-        </Typography>
+        <Box sx={{
+          backgroundColor: "#003A96",
+          position: "relative",
+          marginBottom: "2rem",
+          height: "6rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: "90%",
+        }}>
+          <Typography
+            variant={"h1"}
+            color={"white"}
+            gutterBottom={true}
+            fontSize={46}
+            //fontWeight={'bold'}
+            fontStyle={"inherit"}
+            fontFamily={"sans-serif"}
+          >
+            Services
+          </Typography>
+        </Box>
       </Box>
       <div
         style={{

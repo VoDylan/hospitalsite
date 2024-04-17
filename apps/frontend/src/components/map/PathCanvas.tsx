@@ -129,7 +129,7 @@ export default function PathCanvas(props: PathCanvasProps) {
                 const image: HTMLImageElement | null = document.querySelector(`.start`);
                 if (!image) return;
 
-                props.iconCanvasRef.getContext("2d")!.drawImage(image, includedPathsOnFloor[i][j].coordinates.x - 60, includedPathsOnFloor[i][j].coordinates.y - 45, 115, 85);
+                props.iconCanvasRef.getContext("2d")!.drawImage(image, includedPathsOnFloor[i][j].coordinates.x - 58, includedPathsOnFloor[i][j].coordinates.y - 42, 110, 80);
 
               }
 
@@ -140,7 +140,7 @@ export default function PathCanvas(props: PathCanvasProps) {
                 props.iconCanvasRef.getContext("2d")!.drawImage(image2, includedPathsOnFloor[i][j].coordinates.x - 63, includedPathsOnFloor[i][j].coordinates.y - 65, 180, 150); // Adjust iconWidth and iconHeight as needed
 
               }
-              
+
               ctx.arc(
                 includedPathsOnFloor[i][j].coordinates.x,
                 includedPathsOnFloor[i][j].coordinates.y,
@@ -153,9 +153,12 @@ export default function PathCanvas(props: PathCanvasProps) {
           }
 
           // Path color
-          ctx.strokeStyle = "#0000FF";
+          ctx.strokeStyle = "#0F53FF";
           ctx.lineWidth = 9;
           ctx.beginPath();
+
+
+
 
           for (let i = 0; i < includedPathsOnFloor.length; i++) {
             ctx.moveTo(
@@ -172,7 +175,7 @@ export default function PathCanvas(props: PathCanvasProps) {
 
           // Dot color
           ctx.stroke();
-          ctx.fillStyle = "blue";
+          ctx.fillStyle = "#0F53FF";
           ctx.beginPath();
           ctx.arc(currentX, currentY, 12, 0, 2 * Math.PI);
           ctx.fill();
@@ -182,6 +185,15 @@ export default function PathCanvas(props: PathCanvasProps) {
           ctx.beginPath();
           ctx.arc(currentX, currentY, 14, 0, 2 * Math.PI);
           ctx.stroke();
+
+          // Set the stroke color to blue with reduced opacity
+          // Set the stroke color to light blue with reduced opacity
+          ctx.strokeStyle = "rgba(15, 150, 220, 0.4)"; // Light blue with 60% opacity
+          ctx.lineWidth = 9; // Set the border width
+          ctx.beginPath();
+          ctx.arc(currentX, currentY, 20, 0, 2 * Math.PI);
+          ctx.stroke();
+
 
 
           const dx =

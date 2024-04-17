@@ -231,6 +231,8 @@ function MainCarousel() {
             fontSize: 40,
             //textDecoration: "underline",
             marginLeft: "2%",
+            fontStyle: "inherit",
+            fontFamily: "sans-serif"
           }}
         >
           Services

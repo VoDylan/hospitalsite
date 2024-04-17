@@ -34,7 +34,7 @@ const ServiceCard: React.FC<CardProps> = ({
       }}
     >
       <CardMedia
-        sx={{ height: "37vh", position: "relative" }}
+        sx={{ height: "35vh", position: "relative" }}
         image={image}
         title={title}
       ></CardMedia>
@@ -48,7 +48,7 @@ const ServiceCard: React.FC<CardProps> = ({
           {description}
         </Typography>
       </CardContent>
-      <CardActions style={{ marginTop: "auto", justifyContent: "center" }}>
+      <CardActions style={{ justifyContent: "center" }}>
         <Link to={path}>
           <Button variant="contained" size="large" sx={{ width: "100%" }}>
             {buttonText}
