@@ -78,29 +78,29 @@ function parseCSVFromString(data: string) {
   }
 
 function DisplayDatabase() {
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {},
-  );
-
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [isServiceDetailsVisible, setServiceDetailsVisible] = useState(false);
-
-  const [selectedServiceDetails, setSelectedServiceDetails] =
-    useState<ServiceParams | null>(null); // State to keep track of selected service details
+  const [isDetailsTableInitialized, setDetailsTableInitialized] = useState(false);
+  const [selectedServiceDetails, setSelectedServiceDetails] = useState<ServiceParams | null>(null);
 
   // Function to handle the click event of the details button
   const handleDetailsClick = (service: ServiceParams) => {
-    if (selectedServiceDetails?.id === service.id) {
-      setServiceDetailsVisible(!isServiceDetailsVisible); // Toggle visibility
+    if (!isDetailsTableInitialized) {
+      setSelectedServiceDetails(service);
+      setDetailsTableInitialized(true);
     } else {
       setSelectedServiceDetails(service);
-      setServiceDetailsVisible(true); // Show details for the selected service
+      setServiceDetailsVisible(!isServiceDetailsVisible);
     }
   };
 
-  // Function to close the details modal
-  const handleCloseDetails = () => {
-    setSelectedServiceDetails(null);
-  };
+  // Update visibility when initialization state changes
+  useEffect(() => {
+    if (isDetailsTableInitialized) {
+      setServiceDetailsVisible(true);
+    }
+  }, [isDetailsTableInitialized]);
+
 
   const handleEditClick = (id: GridRowId) => () => {
     console.log(rowModesModel);
