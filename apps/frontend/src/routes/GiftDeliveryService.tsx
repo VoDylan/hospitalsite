@@ -265,8 +265,7 @@ function GiftDeliveryService() {
             input={form}
             clear={clear}
             displayConfetti={displayConfetti}
-            hideConfetti={hideConfetti}
-          />
+            hideConfetti={hideConfetti}/>
         </Grid>
       </Grid>
       <Typography>Yitao Hong, Arayah Remillard</Typography>
