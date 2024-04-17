@@ -3,7 +3,6 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import "./map.css";
 import {LocationInfo} from "common/src/LocationInfo.ts";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
@@ -768,7 +767,6 @@ function MapRoute() {
       }}>
         <Box sx={{height: "120px", minHeight: "120px"}}>
           <CssBaseline/>
-          <TopBanner/>
         </Box>
         <Box sx={{
           display: "flex",
