@@ -6,7 +6,7 @@ import { makeStyles } from "@mui/styles";
 import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
 import NavBar from "../navMenu/NavBar.tsx";
-import LoginButton from "../buttons/LoginButton.tsx"; // Import the LoginButton component
+import LoginButton from "../auth0/LoginButton.tsx"; // Import the LoginButton component
 
 const useStyles = makeStyles({
   logoImage: {
