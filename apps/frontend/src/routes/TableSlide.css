@@ -1,5 +1,5 @@
 .slide-in {
-    transition: transform 1s ease;
+    transition: transform 0.5s ease;
     transform: translateX(100%);
     color: white;
     background-color: #2074D4;
@@ -13,5 +13,5 @@
 }
 
 .slide-in--hidden {
-    transform: translateX(-150%);
+    transform: translateX(-110%);
 }
