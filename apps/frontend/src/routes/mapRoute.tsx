@@ -3,7 +3,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import "./map.css";
 import {LocationInfo} from "common/src/LocationInfo.ts";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
@@ -45,6 +45,10 @@ function MapRoute() {
     positionX: 0,
     positionY: 0,
   });
+
+  // adding setting the node click
+  const [nodeClicked, setNodeClicked] = useState<MapNode | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
@@ -585,6 +589,14 @@ function MapRoute() {
     // console.log(state);
   };
 
+  function openModal(){
+    setModalIsOpen(true);
+  }
+
+  function closeModal(){
+    setModalIsOpen(false);
+  }
+
   const handleCanvasClick = (event: React.MouseEvent) => {
     if (!iconCanvasRef.current) return;
     const rect = iconCanvasRef.current.getBoundingClientRect();
@@ -610,7 +622,9 @@ function MapRoute() {
 
 
         if (distance < 25){
-          // alert(`you have clicked the node ${node.nodeID}`);
+          setNodeClicked(node);
+          openModal();
+          console.log("clicked the node", nodeClicked);
 
           // Switch to floor when clicking next/prev floor icons
           for (const key of nodesToNextFloor.current.keys()) {
@@ -627,9 +641,88 @@ function MapRoute() {
 
           break;
         }
-
       }
     }
+  };
+
+  const handleStartingLocationClick = () => {
+    closeModal();
+    setStartNode(nodeClicked!.nodeID);
+    // console.log(nodeClicked!.longName);
+    // console.log(startNode);
+  };
+
+  const handleEndingLocationClick = () => {
+    closeModal();
+    setEndNode(nodeClicked!.nodeID);
+
+    // console.log(nodeClicked!.longName);
+    // console.log(startNode);
+  };
+
+  const Modal = () => {
+
+    if (modalIsOpen) {
+      const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+      const heightRatio = canvasHeight / (window.innerHeight - 120);
+
+      const xcoord = nodeClicked!.xcoord / widthRatio;
+      const ycoord = nodeClicked!.ycoord / heightRatio;
+
+      return (
+        <div style={{
+          zIndex: 10,
+          left: xcoord + 10 + "px",
+          top: ycoord + 10 + "px",
+          position: "absolute",
+          width: "12%",
+          height: "12%",
+          backgroundColor: "white",
+          border: 2 + "px",
+          borderStyle: "solid",
+          borderColor: "#186BD9",
+          borderRadius: 5 + "px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+        }}>
+          <button style={{
+            width: "96%",
+            height: "40%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "90%",
+            color: "#186BD9",
+            fontWeight: "bold",
+            margin: "2%",
+            border: "none",
+            backgroundColor: "white",
+            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+          }} onClick={handleStartingLocationClick}>
+            Starting Location
+          </button>
+          <button style={{
+            width: "96%",
+            height: "40%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "90%",
+            color: "#186BD9",
+            fontWeight: "bold",
+            margin: "2%",
+            border: "none",
+            backgroundColor: "white",
+            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+          }} onClick={handleEndingLocationClick}>
+            Ending Location
+          </button>
+        </div>
+      );
+    }
+
+    return;
   };
 
   return (
@@ -665,7 +758,7 @@ function MapRoute() {
       }}>
         <Box sx={{height: "120px", minHeight: "120px"}}>
           <CssBaseline/>
-          <TopBanner2/>
+          <TopBanner/>
         </Box>
         <Box sx={{
           display: "flex",
@@ -774,6 +867,7 @@ function MapRoute() {
                   defaultPosition={{x: 0, y: 0}}
                 >
                   <>
+                    <Modal/>
                     <BackgroundCanvas
                       style={{
                         position: "relative",

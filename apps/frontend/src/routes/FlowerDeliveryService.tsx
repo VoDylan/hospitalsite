@@ -3,10 +3,11 @@ import { FlowerDeliveryFormSubmission } from "../common/formSubmission/FlowerDel
 import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
 import { FlowerDeliverySubmitButton } from "../components/buttons/FlowerDeliverySubmitButton.tsx";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
@@ -99,20 +100,30 @@ function FlowerDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner2 />
+      <TopBanner />
       <Grid
         container
         direction={"row"}
         justifyContent={"center"}
-        boxShadow={4}
+        // boxShadow={4}
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "transparent",
           width: "40vw", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
         }}
       >
+        <Grid
+          item
+          xs={12}
+          paddingBottom={2}
+          sx={{
+            backgroundColor: "transparent",
+          }}
+        >
+          <ServiceNavTabs/>
+        </Grid>
         <Grid
           item
           xs={12}
@@ -129,7 +140,8 @@ function FlowerDeliveryService() {
             Flower Delivery Service Form
           </Typography>
         </Grid>
-          <Grid item xs={6}>
+        <Grid container xs={12} sx={{backgroundColor: "white"}} boxShadow={4}>
+          <Grid item xs={6} mt={2}>
             <Typography align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
               label={"Name"}
@@ -138,7 +150,7 @@ function FlowerDeliveryService() {
               type={"text"}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} mt={2}>
             <Typography align={"center"}>Flower Type:</Typography>
             <DropDown
               items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
@@ -188,6 +200,7 @@ function FlowerDeliveryService() {
               />
           </Grid>
         </Grid>
+      </Grid>
     </Stack>
   );
 }

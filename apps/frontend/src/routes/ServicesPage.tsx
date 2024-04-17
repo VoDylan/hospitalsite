@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Box, Typography, Zoom, Grid } from "@mui/material";
 import { ServiceCard } from "../components/homepage/ServiceCard.tsx";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
 //import Flower from "../images/servicePageImages/FlowerDelivery.svg";
 //import Medicine from "../images/servicePageImages/MedicineDelivery.svg";
 import sanitation from "../images/servicePageImages/janitorService.jpg";
@@ -25,11 +24,21 @@ export default function ServicesPage() {
       title: 'Flower Delivery',
       description: 'Deliver flowers to a friend or loved one',
       buttonContent: 'Get Flowers'},
+    { path: "/Services/GiftDelivery",
+      image: gift,
+      title: 'Gift Delivery',
+      description: 'Send a gift to a friend or loved one',
+      buttonContent: 'Get Gift'},
     { path: "/Services/MedicineDelivery",
       image: medicine,
       title: 'Medicine Delivery',
       description: 'Get medicine for yourself or a dependent',
       buttonContent: 'Get Medicine'},
+    { path: "/Services/RoomScheduling",
+      image: signL,
+      title: 'Room Scheduling',
+      description: 'Schedule a room for yourself or a dependent',
+      buttonContent: 'Schedule Room'},
     { path: "/Services/SanitationService",
       image: sanitation,
       title: 'Sanitation Service',
@@ -40,21 +49,11 @@ export default function ServicesPage() {
       title: 'Security',
       description: 'Request security at a location',
       buttonContent: 'Request Security'},
-    { path: "/Services/GiftDelivery",
-      image: gift,
-      title: 'Gift Delivery',
-      description: 'Send a gift to a friend or loved one',
-      buttonContent: 'Get Gift'},
     { path: "/Services/DeviceDeliveryService",
       image: medicalDevice,
       title: 'Medical Device Delivery',
       description: 'Get medical devices for yourself or a dependent',
       buttonContent: 'Get Device'},
-    { path: "/Services/RoomScheduling",
-      image: signL,
-      title: 'Room Scheduling',
-      description: 'Schedule a room for yourself or a dependent',
-      buttonContent: 'Schedule Room'},
     { path: "",
       image: Template,
       title: 'More Services Soon',
@@ -69,7 +68,6 @@ export default function ServicesPage() {
 
   return (
     <>
-      <TopBanner2 />
       <Box
         sx={{
           mt: 15,

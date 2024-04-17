@@ -27,7 +27,7 @@ const ServiceCard: React.FC<CardProps> = ({
       sx={{
         position: "relative",
         width: "100%",
-        height: "20%",
+        minHeight: "20%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center", // Center content horizontally
