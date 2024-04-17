@@ -1,8 +1,8 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
-// import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
-// import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
+import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import axios, { isAxiosError } from "axios";
 
 interface ButtonProps {
   text: string;
@@ -10,6 +10,7 @@ interface ButtonProps {
   clear: () => void;
   displayConfetti: () => void;
   hideConfetti: () => void;
+  //updateList: () => void;
 }
 
 export function GiftDeliverySubmitButton(props: ButtonProps) {
@@ -57,7 +58,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   }
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
-  function handleSubmit() {
+  async function handleSubmit() {
     if (props.input.location === "") {
       openWithError("Please select a room");
     } else if (props.input.name === "") {
@@ -74,24 +75,35 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       openWithError("Please enter a Recipient Name");
     } else {
       console.log(props.input);
-      handleClear();
-      handleShowConfetti();
-      openWithSuccess();
+      const submission = props.input;
+      console.log(props.input);
+
+      const result: { success: boolean; data: HTTPResponseType } =
+        await pushToDB(submission);
+
+      if (!result.success) {
+        openWithError(
+          `Failed to post form data to database: ${result.data.message}`,
+        );
+      } else {
+        handleClear();
+        handleShowConfetti();
+        openWithSuccess();
+      }
     }
   }
-  // }
 
   function handleClear() {
     props.clear();
   }
 
-  /* Commenting this out for iteration 2
+  // Commenting this out for iteration 2
   // Function for posting the form submission to the database
-  async function pushToDB(form: SanitationRequestFormSubmission) {
+  async function pushToDB(form: GiftDeliveryFormSubmission) {
     const returnData = {
       userID: "admin",
       nodeID: form.location,
-      serviceType: "flower-delivery",
+      serviceType: "gift-delivery",
       services: form,
     };
 
@@ -139,7 +151,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       data: data!,
     };
   }
-  */
 
   return (
     <Button
