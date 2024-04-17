@@ -610,9 +610,24 @@ function MapRoute() {
 
 
         if (distance < 25){
-          alert(`you have clicked the node ${node.nodeID}`);
+          // alert(`you have clicked the node ${node.nodeID}`);
+
+          // Switch to floor when clicking next/prev floor icons
+          for (const key of nodesToNextFloor.current.keys()) {
+            if (key.nodeID === filteredNodes[i].nodeID) {
+              setFloor(nodesToNextFloor.current.get(key)!);
+            }
+          }
+
+          for (const key of nodesToPrevFloor.current.keys()) {
+            if (key.nodeID === filteredNodes[i].nodeID) {
+              setFloor(nodesToPrevFloor.current.get(key)!);
+            }
+          }
+
           break;
         }
+
       }
     }
   };

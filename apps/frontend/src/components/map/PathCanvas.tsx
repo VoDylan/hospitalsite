@@ -154,7 +154,7 @@ export default function PathCanvas(props: PathCanvasProps) {
 
           // Path color
           ctx.strokeStyle = "#0F53FF";
-          ctx.lineWidth = 9;
+          ctx.lineWidth = 8;
           ctx.beginPath();
 
 

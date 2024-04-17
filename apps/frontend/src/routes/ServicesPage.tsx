@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Box, Typography, Zoom, Grid } from "@mui/material";
 import { ServiceCard } from "../components/homepage/ServiceCard.tsx";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
@@ -63,6 +63,10 @@ export default function ServicesPage() {
       },
   ];
 
+  useEffect(() => {
+    scrollTo(0,0);
+  }, []);
+
   return (
     <>
       <TopBanner2 />
@@ -108,7 +112,7 @@ export default function ServicesPage() {
         >
         <Grid container spacing={5} direction={"row"}>
           {serviceData.map((service:{path: string, image: string, title: string, description: string, buttonContent: string}, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
+            <Grid item xs={12} sm={8} md={6} lg={4} xl={3} key={index}>
               <Zoom
                 in={showCards}
                 style={{
