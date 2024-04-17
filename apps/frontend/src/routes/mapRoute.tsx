@@ -625,6 +625,20 @@ function MapRoute() {
           setNodeClicked(node);
           openModal();
           console.log("clicked the node", nodeClicked);
+
+          // Switch to floor when clicking next/prev floor icons
+          for (const key of nodesToNextFloor.current.keys()) {
+            if (key.nodeID === filteredNodes[i].nodeID) {
+              setFloor(nodesToNextFloor.current.get(key)!);
+            }
+          }
+
+          for (const key of nodesToPrevFloor.current.keys()) {
+            if (key.nodeID === filteredNodes[i].nodeID) {
+              setFloor(nodesToPrevFloor.current.get(key)!);
+            }
+          }
+
           break;
         }
       }

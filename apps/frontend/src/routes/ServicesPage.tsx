@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Box, Typography, Zoom, Grid } from "@mui/material";
 import { ServiceCard } from "../components/homepage/ServiceCard.tsx";
 //import Flower from "../images/servicePageImages/FlowerDelivery.svg";
@@ -62,26 +62,40 @@ export default function ServicesPage() {
       },
   ];
 
+  useEffect(() => {
+    scrollTo(0,0);
+  }, []);
+
   return (
     <>
       <Box
         sx={{
-          mt: 20,
+          mt: 15,
           backgroundColor: "#ffffff",
         }}
       >
-        <Typography
-          variant={"h1"}
-          align={"center"}
-          color={"#003A96"}
-          gutterBottom={true}
-          fontSize={36}
-          //fontWeight={'bold'}
-          fontStyle={"inherit"}
-          fontFamily={"sans-serif"}
-        >
-          Services
-        </Typography>
+        <Box sx={{
+          backgroundColor: "#003A96",
+          position: "relative",
+          marginBottom: "2rem",
+          height: "6rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: "90%",
+        }}>
+          <Typography
+            variant={"h1"}
+            color={"white"}
+            gutterBottom={true}
+            fontSize={46}
+            //fontWeight={'bold'}
+            fontStyle={"inherit"}
+            fontFamily={"sans-serif"}
+          >
+            Services
+          </Typography>
+        </Box>
       </Box>
       <div
         style={{
@@ -96,7 +110,7 @@ export default function ServicesPage() {
         >
         <Grid container spacing={5} direction={"row"}>
           {serviceData.map((service:{path: string, image: string, title: string, description: string, buttonContent: string}, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
+            <Grid item xs={12} sm={8} md={6} lg={4} xl={3} key={index}>
               <Zoom
                 in={showCards}
                 style={{
