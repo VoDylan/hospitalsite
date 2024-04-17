@@ -134,7 +134,6 @@ function GiftDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <ServiceNavTabs/>
       <TopBanner />
       <Grid
         container
@@ -279,6 +278,30 @@ function GiftDeliveryService() {
               displayConfetti={displayConfetti}
               hideConfetti={hideConfetti}
             />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              my: 2,
+              justifyContent: "center",
+            }}
+          >
+            {showConfetti && (
+              <Confetti
+                numberOfPieces={100}
+                width={innerWidth}
+                height={innerHeight}
+                //recycle={false}
+              />
+            )}
+            <GiftDeliverySubmitButton
+              text={"SUBMIT"}
+              input={form}
+              clear={clear}
+              displayConfetti={displayConfetti}
+              hideConfetti={hideConfetti}/>
           </Grid>
         </Grid>
       </Grid>

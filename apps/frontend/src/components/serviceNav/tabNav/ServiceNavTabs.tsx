@@ -6,40 +6,6 @@ import {Link, matchPath, useLocation} from 'react-router-dom';
 import {LocalFloristOutlined, CardGiftcardOutlined, MedicationOutlined, TroubleshootOutlined,
   CleanHandsOutlined, HealthAndSafetyOutlined, CalendarMonthOutlined} from '@mui/icons-material';
 
-function samePageLinkNavigation(
-  event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-) {
-  return !(event.defaultPrevented ||
-    event.button !== 0 || // ignore everything but left-click
-    event.metaKey ||
-    event.ctrlKey ||
-    event.altKey ||
-    event.shiftKey);
-}
-
-interface LinkTabProps {
-  label?: string,
-  href?: string,
-  selected?: boolean,
-  Link: React.ElementType
-}
-
-function LinkTab(props: LinkTabProps) {
-  return (
-    <Tab
-      component={props.Link}
-      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        // Routing libraries handle this, you can remove the onClick handle when using them.
-        if (samePageLinkNavigation(event)) {
-          event.preventDefault();
-        }
-      }}
-      aria-current={props.selected && 'page'}
-      {...props}
-    />
-  );
-}
-
 function useRouteMatch(patterns: string[]) {
   const { pathname } = useLocation();
 
@@ -54,8 +20,10 @@ function useRouteMatch(patterns: string[]) {
 }
 
 export default function ServiceNavTabs() {
+
   const routeMatch = useRouteMatch([
-    'Services/FlowerDelivery', 'Services/MedicineDelivery', 'Services/GiftDelivery']);
+    'Services/FlowerDelivery', 'Services/MedicineDelivery', 'Services/GiftDelivery',
+    'Services/RoomScheduling',]);
   const currentTab = routeMatch?.pattern?.path;
   return (
     <>
