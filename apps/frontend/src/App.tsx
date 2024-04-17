@@ -26,6 +26,7 @@ import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
+import TopBanner from "./components/banner/TopBanner.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -135,6 +136,7 @@ function App() {
         }}
       >
         <div className="w-full flex flex-col px-0 gap-5">
+          <TopBanner />
           <Outlet />
         </div>
       </Auth0Provider>

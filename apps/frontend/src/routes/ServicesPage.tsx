@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Box, Typography, Zoom, Grid } from "@mui/material";
 import { ServiceCard } from "../components/homepage/ServiceCard.tsx";
-import TopBanner2from "../components/banner/TopBanner.tsx";
 //import Flower from "../images/servicePageImages/FlowerDelivery.svg";
 //import Medicine from "../images/servicePageImages/MedicineDelivery.svg";
 import sanitation from "../images/servicePageImages/janitorService.jpg";
@@ -65,7 +64,6 @@ export default function ServicesPage() {
 
   return (
     <>
-      <TopBanner />
       <Box
         sx={{
           mt: 20,
