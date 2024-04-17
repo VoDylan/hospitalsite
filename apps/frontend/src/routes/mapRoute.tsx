@@ -641,6 +641,11 @@ function MapRoute() {
   const handleEndingLocationClick = () => {
     closeModal();
     setEndNode(nodeClicked!.nodeID);
+    // const handleFocus = (event) => event.target.select();
+    // if (!el_down) return;
+    // el_down.innerHTML = startNode;
+
+
 
     // console.log(nodeClicked!.longName);
     // console.log(startNode);
@@ -775,7 +780,7 @@ function MapRoute() {
               )}
               onChange1={(event, value) => handleEndNodeChange(value)}
               renderInput1={(params) => (
-                <TextField {...params} label="Ending Location" value={endNode}/>
+                <TextField {...params} id={"endNodeID"} label="Ending Location" value={endNode}/>
               )}
               open={open}
               handleClick={handleClick}
@@ -853,90 +858,90 @@ function MapRoute() {
                   defaultPosition={{x: 0, y: 0}}
                 >
                   <>
-                    <Modal/>
-                    <BackgroundCanvas
-                      style={{
-                        position: "relative",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      floor={floor}
-                      renderStatusCallback={handleBackgroundRenderStatus}
-                    />
-                    <SymbolCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      filtersApplied={filtersApplied}
-                      filteredNodes={filteredNodes}
-                      floor={floor}
-                    />
-                    <PathCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      updateNodesBetweenFloors={updateNodesBetweenFloors}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      pathNodesData={pathNodesData.current}
-                      floorConnectionCallback={handleNodeToFloorCallback}
-                      pathRenderStatusCallback={handlePathRenderStatus}
-                      startNode={startNode}
-                      endNode={endNode}
-                      iconCanvasRef={iconCanvasRef.current!}
-                    />
-                    <IconCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      refCallback={handleIconCallback}
-                    />
-                    <FloorIconsCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      pathRendered={pathRenderStatus}
-                      updateFloorIcons={updateFloorIcons}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      nodesToNextFloor={nodesToNextFloor.current}
-                      nodesToPrevFloor={nodesToPrevFloor.current}
-                      onClick={handleCanvasClick}
-                    />
-                  </>
+                      <Modal/>
+                      <BackgroundCanvas
+                        style={{
+                          position: "relative",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        floor={floor}
+                        renderStatusCallback={handleBackgroundRenderStatus}
+                      />
+                      <SymbolCanvas
+                        style={{
+                          position: "absolute",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        backgroundRendered={backgroundRenderStatus}
+                        width={canvasWidth}
+                        height={canvasHeight}
+                        filtersApplied={filtersApplied}
+                        filteredNodes={filteredNodes}
+                        floor={floor}
+                      />
+                      <PathCanvas
+                        style={{
+                          position: "absolute",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        backgroundRendered={backgroundRenderStatus}
+                        updateNodesBetweenFloors={updateNodesBetweenFloors}
+                        width={canvasWidth}
+                        height={canvasHeight}
+                        floor={floor}
+                        pathNodesData={pathNodesData.current}
+                        floorConnectionCallback={handleNodeToFloorCallback}
+                        pathRenderStatusCallback={handlePathRenderStatus}
+                        startNode={startNode}
+                        endNode={endNode}
+                        iconCanvasRef={iconCanvasRef.current!}
+                      />
+                      <IconCanvas
+                        style={{
+                          position: "absolute",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        backgroundRendered={backgroundRenderStatus}
+                        width={canvasWidth}
+                        height={canvasHeight}
+                        refCallback={handleIconCallback}
+                      />
+                      <FloorIconsCanvas
+                        style={{
+                          position: "absolute",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        backgroundRendered={backgroundRenderStatus}
+                        pathRendered={pathRenderStatus}
+                        updateFloorIcons={updateFloorIcons}
+                        width={canvasWidth}
+                        height={canvasHeight}
+                        floor={floor}
+                        nodesToNextFloor={nodesToNextFloor.current}
+                        nodesToPrevFloor={nodesToPrevFloor.current}
+                        onClick={handleCanvasClick}
+                      />
+                    </>
                 </Draggable>
               </TransformComponent>
             </TransformWrapper>
           </Box>
         </Box>
 
-        <Legend filterItems={filterIcons} />
+        <Legend filterItems={filterIcons}/>
       </Box>
     </>
-  );
+);
 }
 
 export default MapRoute;
