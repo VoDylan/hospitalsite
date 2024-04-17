@@ -103,7 +103,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     const returnData = {
       userID: "admin",
       nodeID: form.location,
-      serviceType: "flower-delivery",
+      serviceType: "gift-delivery",
       services: form,
     };
 
