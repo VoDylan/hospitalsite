@@ -23,7 +23,8 @@ export default function ServiceNavTabs() {
 
   const routeMatch = useRouteMatch([
     'Services/FlowerDelivery', 'Services/MedicineDelivery', 'Services/GiftDelivery',
-    'Services/RoomScheduling',]);
+    'Services/RoomScheduling', 'Services/SanitationService', 'Services/SecurityService',
+    'Services/DeviceDeliveryService',]);
   const currentTab = routeMatch?.pattern?.path;
   return (
     <>
