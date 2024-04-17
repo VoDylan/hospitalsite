@@ -32,6 +32,7 @@ export default function RadioButtonsGroup(props: ButtonProps) {
             value={item}
             control={<Radio />}
             label={item}
+            key={item.trim().toLowerCase()}
             sx={{
               color: "black",
             }}
