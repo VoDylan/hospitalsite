@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios, { AxiosResponse } from "axios";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import {
   DataGrid,
   GridColDef,
@@ -405,7 +405,7 @@ function DisplayDatabase() {
 
   return (
     <>
-      <TopBanner2 />
+      <TopBanner />
       <div
         style={{
           position: "relative",
@@ -461,7 +461,7 @@ function DisplayDatabase() {
               borderRadius: "8px", // Change border radius
               marginRight: "-1px", // Adjust spacing
               marginTop: "15px",
-              marginBottom: "15px",
+              marginBottom: "30px",
             }}
           >
             Import Nodes (CSV File)
@@ -499,7 +499,7 @@ function DisplayDatabase() {
               borderRadius: "8px", // Change border radius
               marginRight: "-1px", // Adjust spacing
               marginTop: "15px",
-              marginBottom: "15px",
+              marginBottom: "30px",
             }}
           >
             Import Edges (CSV File)
@@ -507,7 +507,7 @@ function DisplayDatabase() {
           </Button>
           <Box display="flex" sx={{zIndex: 9999}}>
             {/* Container for the service request table and service details table */}
-            <Box flex="1" mr={2} sx={{zIndex: 9999}}>
+            <Box flex="1" ml={"27em"} sx={{zIndex: 9999}}>
               <DataGrid
                 slots={{ toolbar: GridToolbar }}
                 sx={{
@@ -529,11 +529,11 @@ function DisplayDatabase() {
                 onProcessRowUpdateError={handleProcessRowUpdateError}
               />
             </Box>
-            <Box width="400px">
+            <Box width="400px" ml={2}>
               {selectedServiceDetails && (
                 <ServiceDetailsTable service={selectedServiceDetails} isVisible={isServiceDetailsVisible} />
               )}
-              </Box>
+            </Box>
             </Box>
         </Box>
       </div>
