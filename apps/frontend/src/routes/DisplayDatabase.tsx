@@ -80,18 +80,24 @@ function DisplayDatabase() {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [isServiceDetailsVisible, setServiceDetailsVisible] = useState(false);
   const [isDetailsTableInitialized, setDetailsTableInitialized] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
   const [selectedServiceDetails, setSelectedServiceDetails] = useState<ServiceParams | null>(null);
+  const [hasSlideAnimationTriggered, setHasSlideAnimationTriggered] = useState(false);
 
   // Function to handle the click event of the details button
   const handleDetailsClick = (service: ServiceParams) => {
-    if (!isDetailsTableInitialized) {
-      setSelectedServiceDetails(service);
-      setDetailsTableInitialized(true);
+    if (selectedServiceId === service.id) {
+      setServiceDetailsVisible(!isServiceDetailsVisible); // Toggle visibility
     } else {
+      setSelectedServiceId(service.id);
       setSelectedServiceDetails(service);
-      setServiceDetailsVisible(!isServiceDetailsVisible);
+      setHasSlideAnimationTriggered(true); // Trigger slide animation on the first click
+      setTimeout(() => {
+        setServiceDetailsVisible(true); // Show details for the selected service after the animation
+      }, hasSlideAnimationTriggered ? 0 : 50); // Delay the visibility change if animation has triggered
     }
   };
+
 
   // Update visibility when initialization state changes
   useEffect(() => {
