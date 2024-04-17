@@ -141,7 +141,7 @@ function FlowerDeliveryService() {
           </Typography>
         </Grid>
         <Grid container xs={12} sx={{backgroundColor: "white"}} boxShadow={4}>
-          <Grid item xs={6}>
+          <Grid item xs={6} mt={2}>
             <Typography align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
               label={"Name"}
@@ -150,7 +150,7 @@ function FlowerDeliveryService() {
               type={"text"}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} mt={2}>
             <Typography align={"center"}>Flower Type:</Typography>
             <DropDown
               items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
