@@ -57,7 +57,9 @@ DelayLink.propTypes = {
 DelayLink.defaultProps = {
   replace: false,
   delay: 0,
+  // eslint-disable-next-line no-empty-function
   onDelayStart: () => {},
+  // eslint-disable-next-line no-empty-function
   onDelayEnd: () => {}
 };
 

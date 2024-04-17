@@ -18,7 +18,6 @@ import GiftDeliveryService from "./routes/GiftDeliveryService.tsx";
 import SecurityService from "./routes/SecurityService.tsx";
 import MedicineDelivery from "./routes/MedicineDelivery.tsx";
 import RoomScheduling from "./routes/RoomScheduling.tsx";
-import MapEditingPage from "./routes/MapEditingPage.tsx";
 import FilterManager from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
 import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
@@ -27,7 +26,7 @@ import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
 import TopBanner from "./components/banner/TopBanner.tsx";
 import { Auth0Protection} from "./components/auth0/Auth0Protection.tsx";
-import MapEditingPage2 from "./routes/MapEditingPage2.tsx";
+import MapEditingPage from "./routes/MapEditingPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -89,10 +88,6 @@ function App() {
         {
           path: "/MapEditingPage",
           element: <Auth0Protection  component={MapEditingPage}/>,
-        },
-        {
-          path: "/mapeditingpage2",
-          element: <MapEditingPage2 />
         }
       ],
     },

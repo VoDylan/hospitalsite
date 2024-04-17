@@ -79,6 +79,7 @@ function parseCSVFromString(data: string) {
 function DisplayDatabase() {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [isServiceDetailsVisible, setServiceDetailsVisible] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isDetailsTableInitialized, setDetailsTableInitialized] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
   const [selectedServiceDetails, setSelectedServiceDetails] = useState<ServiceParams | null>(null);
@@ -136,6 +137,7 @@ function DisplayDatabase() {
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
 
   const serviceColumns: GridColDef[] = [

@@ -7,8 +7,6 @@ import { IDCoordinates } from "common/src/IDCoordinates.ts";
 export class DetermineAlgorithm {
   algorithm: Algorithms | undefined;
 
-  constructor() {}
-
   chooseAlgorithm(algorithmName: string) {
     if (algorithmName === "A*") this.algorithm = new AStarAlgorithm();
     else if (algorithmName === "BFS") this.algorithm = new BFSalgorithm();

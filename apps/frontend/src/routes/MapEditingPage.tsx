@@ -1,119 +1,95 @@
-import React, {useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import axios from "axios";
-import { nodesDistances } from "common/src/nodesDistances.ts";
-
-import L1MapImage from "../images/mapImages/00_thelowerlevel1.png";
-import L2MapImage from "../images/mapImages/00_thelowerlevel2.png";
-import FFMapImage from "../images/mapImages/01_thefirstfloor.png";
-import SFMapImage from "../images/mapImages/02_thesecondfloor.png";
-import TFMapImage from "../images/mapImages/03_thethirdfloor.png";
-import MapSideBar from "../components/map/MapSideBar.tsx";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-
-import Draggable from "react-draggable";
-import Icon from "../components/map/SlideIcon.tsx";
-
-
+import TopBanner2 from "../components/banner/TopBanner.tsx";
+import "./map.css";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
-import NodeFilter from "common/src/filter/filters/Filter.ts";
-import FilterManager, {generateFilterValue} from "common/src/filter/FilterManager.ts";
-import {FilterName} from "common/src/filter/FilterName.ts";
-// import {node} from "prop-types";
+import Legend from "../components/map/Legend.tsx";
 
+import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
+import {FilterName} from "common/src/filter/FilterName.ts";
+import NodeFilter from "common/src/filter/filters/Filter.ts";
+import Draggable from "react-draggable";
+import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
+
+import Icon from "../components/map/SlideIcon.tsx";
+import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
+import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
+import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
+import startIcon from "../images/mapImages/starticon3.png";
+import endIcon from "../images/mapImages/endIcon.png";
+import IconCanvas from "../components/map/IconCanvas.tsx";
+import MapEditorSideBar from "../components/map/MapEditorSideBar.tsx";
+import EdgeCanvas from "../components/map/EdgeCanvas.tsx";
+import ClickableCanvas from "../components/map/ClickableCanvas.tsx";
+
+
+interface TransformState {
+  scale: number;
+  positionX: number;
+  positionY: number
+}
 
 function MapEditingPage() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  // const [nodeData, setNodesData] = useState<MapNodeType[]>([]);
-  const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
-  const [nodesData, setNodesData] = useState<
-    MapNodeType[]
-  >([]);
-  const [renderSymbolCanvas, setRenderSymbolCanvas] = useState<boolean>(false);
+  const iconCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const floor = useRef<string>("L1");
-  const [currImage, setCurrImage] = useState<HTMLImageElement>(() => {
-    const image = new Image();
-    image.src = L1MapImage;
-    return image;
+  const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
+  const transformState = useRef<TransformState>({
+    scale: 1,
+    positionX: 0,
+    positionY: 0,
   });
-  const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
-  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
-  const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
 
-  /**
-   * Use states for side bar
-   */
+  const [selectedNode1, setSelectedNode1] = useState<MapNode | null>(null);
+  const [selectedNode2, setSelectedNode2] = useState<MapNode | null>(null);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
 
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
   >([]);
-  const [startNode, setStartNode] = useState<string>("");
-  const [endNode, setEndNode] = useState<string>("");
-  const handleStartNodeChange = (value: string | null) => {
-    if (value) {
-      // Find the corresponding node for the selected label
-      const selectedNode = autocompleteNodeData.find(
-        (node) => node.label === value,
-      );
-      if (selectedNode) {
-        setStartNode(selectedNode.node);
-      }
-    } else {
-      setStartNode(""); // Handle null value if necessary
-    }
-  };
-  const handleEndNodeChange = (value: string | null) => {
-    if (value) {
-      // Find the corresponding node for the selected label
-      const selectedNode = autocompleteNodeData.find(
-        (node) => node.label === value,
-      );
-      if (selectedNode) {
-        setEndNode(selectedNode.node);
-      }
-    } else {
-      setEndNode(""); // Handle null value if necessary
-    }
-  };
-  const [checked, setChecked] = React.useState(false);
-  const handleButtonClick = () => {
-    setChecked((prev) => !prev);
-  };
 
+  const [backgroundRenderStatus, setBackgroundRenderStatus] = useState<boolean>(false);
+  const [canvasWidth, setCanvasWidth] = useState<number>(0);
+  const [canvasHeight, setCanvasHeight] = useState<number>(0);
 
-  async function loadEdgesDistance(request: {req: string}) {
-    // const req = { req: "L1" };
-    const distancesResponse = await axios.post("/api/sendDistances", request, {
-      headers: { "Content-Type": "application/json" },
+  const [floor, setFloor] = useState<Floor>(Floor.L1);
+
+  /**
+   * Pathfinder selection
+   */
+  const [open] = React.useState(false);
+  const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
+  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
+
+  //-----------------------------------------------------------------------------------------
+
+  /**
+   * DATA LOADING
+   */
+
+  const loadNodeData = async (): Promise<MapNodeType[]> => {
+    const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
+      .data as MapNodeType[];
+
+    GraphManager.getInstance().resetData();
+
+    data.forEach((node) => {
+      if (!GraphManager.getInstance().getNodeByID(node.nodeID))
+        GraphManager.getInstance().nodes.push(new MapNode(node));
     });
-    if (distancesResponse.status !== 200) {
-      throw new Error("Failed to fetch data");
-    }
-    const distancePath = await distancesResponse.data;
-    const distanceData = distancePath.message;
 
-    setDistancesData(distanceData);
-    // console.log("Updated distancesData:", distancePath);
-  }
-
-  async function loadNodesData() {
-      const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
-        .data as MapNodeType[];
-
-      data.forEach((node) => {
-        if (!GraphManager.getInstance().getNodeByID(node.nodeID))
-          GraphManager.getInstance().nodes.push(new MapNode(node));
-      });
-
-      console.log("NODES DATA", data);
-      setNodesData(data);
-  }
+    return data;
+  };
 
   const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
-    console.log(nodes);
     const filteredNodeAssociations = nodes.map((node) => ({
       label: node.longName, // Assuming `longName` is the label you want to use
       node: node.nodeID,
@@ -121,104 +97,17 @@ function MapEditingPage() {
     setAutocompleteNodeData(filteredNodeAssociations);
   }, []);
 
-  const handleFloorChange = (newFloor: string) => {
-    const newImage = new Image();
+  //-----------------------------------------------------------------------------------------
 
-    switch (newFloor) {
-      case "L1":
-        loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
-        newImage.src = L1MapImage;
-        floor.current = "L1";
-        break;
-      case "L2":
-        loadEdgesDistance({ req: "L2" }).then(() => setEdgeDataLoaded(true));
-        newImage.src = L2MapImage;
-        floor.current = "L2";
-        break;
-      case "1":
-        loadEdgesDistance({ req: "1" }).then(() => setEdgeDataLoaded(true));
-        newImage.src = FFMapImage;
-        floor.current = "1";
-        break;
-      case "2":
-        loadEdgesDistance({ req: "2" }).then(() => setEdgeDataLoaded(true));
-        newImage.src = SFMapImage;
-        floor.current = "2";
-        break;
-      case "3":
-        loadEdgesDistance({ req: "3" }).then(() => setEdgeDataLoaded(true));
-        newImage.src = TFMapImage;
-        floor.current = "3";
-        break;
-      default:
-        console.error("Returned map floor is not assigned to an image");
-        return;
-    }
-    setCurrImage(newImage);
+  /**
+   * Slide Container
+   */
+
+  const [checked, setChecked] = React.useState(false);
+
+  const handleButtonClick = () => {
+    setChecked((prev) => !prev);
   };
-
-  useEffect(() => {
-    if (distancesData.length < 1 && nodesData.length < 1) {
-      // console.log("Loading Distances");
-      loadEdgesDistance({ req: "L1" }).then(() => setEdgeDataLoaded(true));
-      loadNodesData().then(() => setNodeDataLoaded(true));
-    }
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const processCanvas = () => {
-      if (edgeDataLoaded && nodeDataLoaded) {
-        canvas.width = currImage.width;
-        canvas.height = currImage.height;
-
-        ctx.clearRect(0, 0, currImage.width, currImage.height);
-        ctx.drawImage(currImage, 0, 0, canvas.width, canvas.height);
-
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "red";
-        ctx.font = "15px Arial";
-
-        for (let i = 0; i < distancesData.length; i++) {
-          if (distancesData[i]) {
-            ctx.beginPath();
-            ctx.moveTo(
-              distancesData[i].startCoords.x,
-              distancesData[i].startCoords.y,
-            );
-            ctx.lineTo(
-              distancesData[i].endCoords.x,
-              distancesData[i].endCoords.y,
-            );
-            ctx.stroke();
-            ctx.closePath();
-
-            ctx.fillText(
-              distancesData[i].distance.toString(),
-              (distancesData[i].startCoords.x + distancesData[i].endCoords.x) /
-                2,
-              (distancesData[i].startCoords.y + distancesData[i].endCoords.y) /
-                2,
-            );
-          }
-        }
-      }
-    };
-
-    if (currImage.complete) {
-      processCanvas();
-    }
-
-    currImage.onload = () => {
-      processCanvas();
-    };
-    // console.log(nodesData);
-
-    // console.log(distancesData); // Log distancesData here to see the updated value
-  }, [currImage, distancesData, currImage.complete, edgeDataLoaded, nodesData, nodeDataLoaded]);
 
   /**
    * FILTER USE STATES
@@ -270,8 +159,117 @@ function MapEditingPage() {
     "plus" | "check"
   >("check");
 
-  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
+  /**
+    Update filters in legend when they are selected
+   */
 
+  const filterIcons = [
+    ...(confIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Conference",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(deptIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Department",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(labsIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Labs",
+            filterType: 1,
+            shape: "pentagon",
+          },
+        ]
+      : []),
+    ...(servIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Service",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(infoIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Info",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(restroomsIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Restrooms",
+            filterType: 1,
+            shape: "circle",
+          },
+        ]
+      : []),
+    ...(elevatorIconState === "check"
+      ? [
+          {
+            iconColor: "#1CA7EC",
+            filterName: "Elevators",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(stairsIconState === "check"
+      ? [
+          {
+            iconColor: "#72c41c",
+            filterName: "Stairs",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(exitsIconState === "check"
+      ? [
+          {
+            iconColor: "red",
+            filterName: "Exits",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+    ...(retlIconState === "check"
+      ? [
+          {
+            iconColor: "#e88911",
+            filterName: "Retail",
+            filterType: 1,
+            shape: "square",
+          },
+        ]
+      : []),
+  ];
+
+  /**
+   * Update state of icons to selected or not
+   * @param stateSetter change state of set use state
+   */
 
   const handleIconStateToggle = (
     stateSetter: React.Dispatch<React.SetStateAction<"plus" | "check">>,
@@ -342,13 +340,18 @@ function MapEditingPage() {
     setFiltersApplied(false);
   };
 
+
+  /**
+   * Change list of nodes based on applied filters
+   */
+
   const determineFilters = useCallback(() => {
     const filters: NodeFilter[] = []; // Define the filters array here
-    // filters.push(
-    //   FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
-    //     generateFilterValue(true, "HALL"),
-    //   ])!,
-    // );
+    filters.push(
+      FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
+        generateFilterValue(true, "HALL"),
+      ])!,
+    );
 
     const applyIconFilter = (
       iconState: string,
@@ -411,105 +414,347 @@ function MapEditingPage() {
     thirdFloorIconState,
   ]);
 
+  const handleStartNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setSelectedNode1(GraphManager.getInstance().getNodeByID(selectedNode.node)!);
+      }
+    } else {
+      setSelectedNode1(null); // Handle null value if necessary
+    }
+  };
+
+  const handleEndNodeChange = (value: string | null) => {
+    if (value) {
+      // Find the corresponding node for the selected label
+      const selectedNode = autocompleteNodeData.find(
+        (node) => node.label === value,
+      );
+      if (selectedNode) {
+        setSelectedNode2(GraphManager.getInstance().getNodeByID(selectedNode.node)!);
+      }
+    } else {
+      setSelectedNode2(null); // Handle null value if necessary
+    }
+  };
+
+  const handleFloorChange = (newFloor: string) => {
+    const newFloorObj = floorStrToObj(newFloor);
+
+    if(!newFloorObj) {
+      console.error("New map floor is not a valid floor!");
+      return;
+    }
+
+    setFloor(newFloorObj);
+  };
+
+  /**
+   * useEffect to just load the node data. Only called when the flags determining loading data are changed
+   */
   useEffect(() => {
     console.log("Loading Data");
     if (!nodeDataLoaded) {
-      loadNodesData().then(() => {
+      loadNodeData().then(() => {
         setNodeDataLoaded(true);
       });
+      setFiltersApplied(false);
     } else if (!filtersApplied) {
       console.log("Applying filters");
       determineFilters();
       setFiltersApplied(true);
     }
+  }, [determineFilters, filtersApplied, nodeDataLoaded]);
 
-    setRenderSymbolCanvas(true);
-    // setRenderBackground(true);
-  }, [
-    nodeDataLoaded,
-    setNodeDataLoaded,
-    filtersApplied,
-    determineFilters,
-    populateAutocompleteData,
-  ]);
+  const handleBackgroundRenderStatus = (status: boolean, width: number, height: number) => {
+    setBackgroundRenderStatus(status);
+    setCanvasWidth(width);
+    setCanvasHeight(height);
+  };
 
+  const handleIconCallback = (ref: HTMLCanvasElement) => {
+    iconCanvasRef.current = ref;
+  };
+
+  const handleTransform = (ref: ReactZoomPanPinchRef, state: { scale: number; positionX: number; positionY: number }) => {
+    if(!transformRef.current) transformRef.current = ref;
+    transformState.current = state;
+  };
+
+  const handleCanvasClick = (event: React.MouseEvent) => {
+    if (!iconCanvasRef.current) return;
+    const rect = iconCanvasRef.current.getBoundingClientRect();
+
+    const leftOverHeight = (window.innerHeight - 120)/ (rect.height / transformState.current.scale);
+    console.log(leftOverHeight);
+
+    const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+    const heightRatio = canvasHeight / (window.innerHeight - 120);
+
+    const actualX = ((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio;
+    const actualY = ((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio * leftOverHeight;
+    console.log(`Adjusted ${actualX} ${actualY}`);
+
+    for (let i = 0; i < filteredNodes.length; i++){
+      if (filteredNodes[i].floor === floor){
+        const node = filteredNodes[i];
+        const distance = Math.sqrt((actualX - node.xcoord)**2 + (actualY - node.ycoord)**2);
+
+        if (distance < 25){
+          if(selectedNode1 && selectedNode2) {
+            setSelectedNode1(filteredNodes[i]);
+            setSelectedNode2(null);
+            return;
+          } else if(selectedNode1) {
+            setSelectedNode2(filteredNodes[i]);
+            console.log("Set node 2");
+            return;
+          } else {
+            setSelectedNode1(filteredNodes[i]);
+            console.log("Set node 1");
+            return;
+          }
+        }
+      }
+    }
+  };
+
+  const handleClearNode1 = () => {
+    setSelectedNode1(null);
+  };
+
+  const handleClearNode2 = () => {
+    setSelectedNode2(null);
+  };
+
+  const handleEditNode = (node: MapNode) => {
+    try {
+      axios.put("/api/database/nodes/updatenode", node.nodeInfo, {
+        headers: {"Content-Type": "application/json"},
+      }).then((res) => {
+        console.log("Updated node!");
+        console.log(res.data);
+      });
+    } catch (e) {
+      console.log("Failed to update node");
+    }
+    setNodeDataLoaded(false);
+  };
+
+  const handleDeleteNode = (node: MapNode) => {
+    try {
+      axios.put(`/api/database/nodes/deletenode/${node.nodeID}`, {}, {
+        headers: {"Content-Type": "application/json"},
+      }).then((res) => {
+        console.log("Deleted node!");
+        console.log(res.data);
+      });
+    } catch (e) {
+      console.log("Failed to delete node");
+    }
+    setNodeDataLoaded(false);
+  };
 
   return (
-    <div>
-      {/*Side Bar*/}
-      <MapSideBar
-        title="Map Editing"
-        onChange={(event, value) => handleStartNodeChange(value)}
-        autocompleteNodeData={autocompleteNodeData}
-        compareFn={(a, b) => a.label.localeCompare(b.label)}
-        nodeToLabelIdCallback={(node) => node.label}
-        groupBy={(option) => option.charAt(0).toUpperCase()}
-        optionLabel={(option) => option}
-        renderInput={(params) => (
-          <TextField {...params} label="Starting Location" value={startNode} />
-        )}
-        onChange1={(event, value) => handleEndNodeChange(value)}
-        renderInput1={(params) => (
-          <TextField {...params} label="Ending Location" value={endNode} />
-        )}
-        onClick1={handleButtonClick}
-        checked={checked}
-        onClick2={handleSelectAll}
-        icon={<Icon
-          handleButtonClick={handleButtonClick}
-          checked={false}
-          confIconState={confIconState}
-          deptIconState={deptIconState}
-          labsIconState={labsIconState}
-          servIconState={servIconState}
-          infoIconState={infoIconState}
-          restroomsIconState={restroomsIconState}
-          elevatorIconState={elevatorIconState}
-          stairsIconState={stairsIconState}
-          exitsIconState={exitsIconState}
-          retlIconState={retlIconState}
-          ll1IconState={ll1IconState}
-          ll2IconState={ll2IconState}
-          firstFloorIconState={firstFloorIconState}
-          secondFloorIconState={secondFloorIconState}
-          thirdFloorIconState={thirdFloorIconState}
-          handleConfIconState={handleConfIconState}
-          handleDeptIconState={handleDeptIconState}
-          handleLabsIconState={handleLabsIconState}
-          handleServIconState={handleServIconState}
-          handleInfoIconState={handleInfoIconState}
-          handleRestroomsIconState={handleRestroomsIconState}
-          handleElevatorIconState={handleElevatorIconState}
-          handleStairsIconState={handleStairsIconState}
-          handleExitsIconState={handleExitsIconState}
-          handleRetlIconState={handleRetlIconState}
-          handleLL1IconState={handleLL1IconState}
-          handleLL2IconState={handleLL2IconState}
-          handleFirstFloorIconState={handleFirstFloorIconState}
-          handleSecondFloorIconState={handleSecondFloorIconState}
-          handleThirdFloorIconState={handleThirdFloorIconState}
-          handleSelectAll={handleSelectAll}
-          handleClearAll={handleClearAll}
-        />}
-        callback={handleFloorChange}
+    <>
+      <img
+          src={startIcon}
+          className={"start"}
+          alt="icon"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            opacity: 0,
+            zIndex: -1,
+          }}
+        />
+        <img
+          src={endIcon}
+          className={"end"}
+          alt="icon"
+          style={{
+        position: "absolute",
+          top: 0,
+          left: 0,
+          opacity: 0,
+          zIndex: -1,
+        }}
       />
-      <TransformWrapper>
-        <TransformComponent>
-          <Draggable>
-            <canvas
-              ref={canvasRef}
-              style={{
-                width: "100%",
-                height: "100%",
-                zIndex: 0,
-                position: "relative",
-              }}
-              className={"firstFloorCanvas"}
+      <Box sx={{
+        display: "flex",
+        flexDirection: "column",
+        maxHeight: window.innerHeight,
+      }}>
+        <Box sx={{height: "120px", minHeight: "120px"}}>
+          <CssBaseline/>
+          <TopBanner2/>
+        </Box>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "row",
+          height: "100%",
+          maxHeight: window.innerHeight,
+          minHeight: 0,
+          overflow: "clip",
+          flexGrow: 1,
+          flexShrink: 1,
+        }}>
+          <Box
+            sx={{
+              width: "18%",
+              minWidth: "18%",
+              minHeight: 0,
+            }}
+          >
+            {/*Side Bar*/}
+            <MapEditorSideBar
+              title="Map Editing"
+              onChange={(event, value) => handleStartNodeChange(value)}
+              autocompleteNodeData={autocompleteNodeData}
+              compareFn={(a, b) => a.label.localeCompare(b.label)}
+              nodeToLabelIdCallback={(node) => node.label}
+              groupBy={(option) => option.charAt(0).toUpperCase()}
+              optionLabel={(option) => option}
+              renderInput={(params) => (
+                <TextField {...params} label="First Node Location" value={selectedNode1 ? selectedNode1.nodeID : ""}/>
+              )}
+              onChange1={(event, value) => handleEndNodeChange(value)}
+              renderInput1={(params) => (
+                <TextField {...params} label="Second Node Location" value={selectedNode2 ? selectedNode2.nodeID : ""}/>
+              )}
+              open={open}
+              onClick1={handleButtonClick}
+              checked={checked}
+              onClick2={handleSelectAll}
+              icon={<Icon
+                handleButtonClick={handleButtonClick}
+                checked={false}
+                confIconState={confIconState}
+                deptIconState={deptIconState}
+                labsIconState={labsIconState}
+                servIconState={servIconState}
+                infoIconState={infoIconState}
+                restroomsIconState={restroomsIconState}
+                elevatorIconState={elevatorIconState}
+                stairsIconState={stairsIconState}
+                exitsIconState={exitsIconState}
+                retlIconState={retlIconState}
+                ll1IconState={ll1IconState}
+                ll2IconState={ll2IconState}
+                firstFloorIconState={firstFloorIconState}
+                secondFloorIconState={secondFloorIconState}
+                thirdFloorIconState={thirdFloorIconState}
+                handleConfIconState={handleConfIconState}
+                handleDeptIconState={handleDeptIconState}
+                handleLabsIconState={handleLabsIconState}
+                handleServIconState={handleServIconState}
+                handleInfoIconState={handleInfoIconState}
+                handleRestroomsIconState={handleRestroomsIconState}
+                handleElevatorIconState={handleElevatorIconState}
+                handleStairsIconState={handleStairsIconState}
+                handleExitsIconState={handleExitsIconState}
+                handleRetlIconState={handleRetlIconState}
+                handleLL1IconState={handleLL1IconState}
+                handleLL2IconState={handleLL2IconState}
+                handleFirstFloorIconState={handleFirstFloorIconState}
+                handleSecondFloorIconState={handleSecondFloorIconState}
+                handleThirdFloorIconState={handleThirdFloorIconState}
+                handleSelectAll={handleSelectAll}
+                handleClearAll={handleClearAll}
+              />}
+              callback={handleFloorChange}
+              selectedNode1={selectedNode1}
+              selectedNode2={selectedNode2}
+              handleClearNode1={handleClearNode1}
+              handleClearNode2={handleClearNode2}
+              handleEditNode={handleEditNode}
+              handleDeleteNode={handleDeleteNode}
             />
-          </Draggable>
-        </TransformComponent>
-      </TransformWrapper>
-    </div>
+          </Box>
+
+          <Box
+            height={"100%"}
+            overflow={"clip"}
+          >
+            <TransformWrapper
+              onTransformed={handleTransform}
+              minScale={0.8}
+              initialScale={1.0}
+              initialPositionX={0}
+              initialPositionY={0}
+            >
+              <TransformComponent>
+                <Draggable
+                  defaultPosition={{x: 0, y: 0}}
+                >
+                  <>
+                    <BackgroundCanvas
+                      style={{
+                        position: "relative",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      floor={floor}
+                      renderStatusCallback={handleBackgroundRenderStatus}
+                    />
+                    <EdgeCanvas
+                      style={{
+                        position: "absolute",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      floor={floor}
+                      nodeDataLoaded={nodeDataLoaded}
+                    />
+                    <SymbolCanvas
+                      style={{
+                        position: "absolute",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      filtersApplied={filtersApplied}
+                      filteredNodes={filteredNodes}
+                      floor={floor}
+                    />
+                    <IconCanvas
+                      style={{
+                        position: "absolute",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      refCallback={handleIconCallback}
+                    />
+                    <ClickableCanvas
+                      style={{
+                        position: "absolute",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      onClick={handleCanvasClick}
+                    />
+                  </>
+                </Draggable>
+              </TransformComponent>
+            </TransformWrapper>
+          </Box>
+        </Box>
+        <Legend filterItems={filterIcons} />
+      </Box>
+    </>
   );
 }
 
