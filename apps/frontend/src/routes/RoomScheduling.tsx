@@ -150,7 +150,7 @@ function RoomScheduling() {
           </Typography>
         </Grid>
         <Grid container xs={12} boxShadow={4} sx={{backgroundColor: "white"}}>
-          <Grid item xs={6} >
+          <Grid item xs={6} mt={2}>
             <Typography color={"black"} align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
               label={"Name"}
@@ -158,7 +158,7 @@ function RoomScheduling() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} mt={2}>
             <Typography color={"black"} align={"center"}>
               Location:</Typography>
             <DropDown
