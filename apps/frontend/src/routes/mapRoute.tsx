@@ -601,14 +601,14 @@ function MapRoute() {
     if (!iconCanvasRef.current) return;
     const rect = iconCanvasRef.current.getBoundingClientRect();
 
-    const leftOverHeight = window.innerHeight/ (rect.height / transformState.current.scale);
+    const leftOverHeight = (window.innerHeight - 120)/ (rect.height / transformState.current.scale);
     console.log(leftOverHeight);
 
-    const widthRatio = canvasWidth / window.innerWidth;
-    const heightRatio = canvasHeight / window.innerHeight;
+    const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+    const heightRatio = canvasHeight / (window.innerHeight - 120);
 
-    const actualX = ((event.clientX - transformState.current.positionX) / transformState.current.scale) * widthRatio;
-    const actualY = ((event.clientY - transformState.current.positionY) / transformState.current.scale) * heightRatio * leftOverHeight;
+    const actualX = ((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio;
+    const actualY = ((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio * leftOverHeight;
     console.log(`Adjusted ${actualX} ${actualY}`);
 
     for (let i = 0; i < filteredNodes.length; i++){
