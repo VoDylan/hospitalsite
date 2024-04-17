@@ -34,6 +34,11 @@ class GraphManager {
     return null;
   }
 
+  public resetData() {
+    this.nodes = [];
+    this.edges = [];
+  }
+
   public get nodes(): MapNode[] {
     return this._nodes;
   }

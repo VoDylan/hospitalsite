@@ -12,7 +12,6 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {Box, Divider, Typography} from "@mui/material";
 import NodeInfo from "./NodeInfo.tsx";
-import {emptyNodeInfo} from "common/src/map/MapNodeType.ts";
 import MapNode from "common/src/map/MapNode.ts";
 
 export default function MapEditorSideBar(props: {
@@ -48,8 +47,8 @@ export default function MapEditorSideBar(props: {
   selectedNode2: MapNode | null;
   handleClearNode1: () => void;
   handleClearNode2: () => void;
-  handleEditNode1: (event: React.MouseEvent) => void;
-  handleEditNode2: (event: React.MouseEvent) => void;
+  handleEditNode: (node: MapNode) => void;
+  handleDeleteNode: (node: MapNode) => void;
 }) {
   return (
     <Drawer
@@ -173,10 +172,11 @@ export default function MapEditorSideBar(props: {
                   marginTop: "20px",
                 }}
                 title={"Selected Node 1"}
-                nodeInfo={props.selectedNode1 ? props.selectedNode1.nodeInfo : emptyNodeInfo}
+                node={props.selectedNode1}
                 textColor={"#535353"}
                 clearNodeCallback={props.handleClearNode1}
-                editNodeCallback={props.handleEditNode1}
+                editNodeCallback={props.handleEditNode}
+                deleteNodeCallback={props.handleDeleteNode}
               /> :
               <></>
             }
@@ -187,10 +187,11 @@ export default function MapEditorSideBar(props: {
                   marginTop: "20px",
                 }}
                 title={"Selected Node 2"}
-                nodeInfo={props.selectedNode2 ? props.selectedNode2.nodeInfo : emptyNodeInfo}
+                node={props.selectedNode2}
                 textColor={"#535353"}
                 clearNodeCallback={props.handleClearNode2}
-                editNodeCallback={props.handleEditNode2}
+                editNodeCallback={props.handleEditNode}
+                deleteNodeCallback={props.handleDeleteNode}
               /> :
               <></>
             }

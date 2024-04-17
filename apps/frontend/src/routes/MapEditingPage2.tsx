@@ -84,6 +84,8 @@ function MapEditingPage2() {
     const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
       .data as MapNodeType[];
 
+    GraphManager.getInstance().resetData();
+
     data.forEach((node) => {
       if (!GraphManager.getInstance().getNodeByID(node.nodeID))
         GraphManager.getInstance().nodes.push(new MapNode(node));
@@ -469,6 +471,7 @@ function MapEditingPage2() {
       loadNodeData().then(() => {
         setNodeDataLoaded(true);
       });
+      setFiltersApplied(false);
     } else if (!filtersApplied) {
       console.log("Applying filters");
       determineFilters();
@@ -542,12 +545,32 @@ function MapEditingPage2() {
     setNode1LastUpdated(true);
   };
 
-  const handleEditNode1 = (event: React.MouseEvent) => {
-    alert(`Editing Node ${selectedNode1!.nodeID}`);
+  const handleEditNode = (node: MapNode) => {
+    try {
+      axios.put("/api/database/nodes/updatenode", node.nodeInfo, {
+        headers: {"Content-Type": "application/json"},
+      }).then((res) => {
+        console.log("Updated node!");
+        console.log(res.data);
+      });
+    } catch (e) {
+      console.log("Failed to update node");
+    }
+    setNodeDataLoaded(false);
   };
 
-  const handleEditNode2 = (event: React.MouseEvent) => {
-    alert(`Editing Node ${selectedNode2!.nodeID}`);
+  const handleDeleteNode = (node: MapNode) => {
+    try {
+      axios.put(`/api/database/nodes/deletenode/${node.nodeID}`, {}, {
+        headers: {"Content-Type": "application/json"},
+      }).then((res) => {
+        console.log("Deleted node!");
+        console.log(res.data);
+      });
+    } catch (e) {
+      console.log("Failed to delete node");
+    }
+    setNodeDataLoaded(false);
   };
 
   return (
@@ -663,8 +686,8 @@ function MapEditingPage2() {
               selectedNode2={selectedNode2}
               handleClearNode1={handleClearNode1}
               handleClearNode2={handleClearNode2}
-              handleEditNode1={handleEditNode1}
-              handleEditNode2={handleEditNode2}
+              handleEditNode={handleEditNode}
+              handleDeleteNode={handleDeleteNode}
             />
           </Box>
 
@@ -675,10 +698,7 @@ function MapEditingPage2() {
             <TransformWrapper
               onTransformed={handleTransform}
               minScale={0.8}
-              // initialScale={1.5}
               initialScale={1.0}
-              // initialPositionX={-400}
-              // initialPositionY={-150}
               initialPositionX={0}
               initialPositionY={0}
             >
@@ -700,8 +720,6 @@ function MapEditingPage2() {
                     <SymbolCanvas
                       style={{
                         position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
                         maxWidth: "100%",
                       }}
                       backgroundRendered={backgroundRenderStatus}
@@ -714,8 +732,6 @@ function MapEditingPage2() {
                     <IconCanvas
                       style={{
                         position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
                         maxWidth: "100%",
                       }}
                       backgroundRendered={backgroundRenderStatus}
@@ -726,8 +742,6 @@ function MapEditingPage2() {
                     <FloorIconsCanvas
                       style={{
                         position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
                         maxWidth: "100%",
                       }}
                       backgroundRendered={backgroundRenderStatus}
