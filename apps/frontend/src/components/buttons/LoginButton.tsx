@@ -42,7 +42,7 @@ const LoginButton: React.FC = () => {
         });
       }
   };
-
+//get token if authenticated
   if (!isLoading && isAuthenticated) {
     getToken();
   }
