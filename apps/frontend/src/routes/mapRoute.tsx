@@ -649,8 +649,8 @@ function MapRoute() {
   const Modal = () => {
 
     if (modalIsOpen) {
-      const widthRatio = canvasWidth / window.innerWidth;
-      const heightRatio = canvasHeight / window.innerHeight;
+      const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+      const heightRatio = canvasHeight / (window.innerHeight - 120);
 
       const xcoord = nodeClicked!.xcoord / widthRatio;
       const ycoord = nodeClicked!.ycoord / heightRatio;
