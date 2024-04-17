@@ -629,18 +629,23 @@ function MapRoute() {
           // Switch to floor when clicking next/prev floor icons
           for (const key of nodesToNextFloor.current.keys()) {
             if (key.nodeID === filteredNodes[i].nodeID) {
+              closeModal();
               setFloor(nodesToNextFloor.current.get(key)!);
             }
           }
 
           for (const key of nodesToPrevFloor.current.keys()) {
             if (key.nodeID === filteredNodes[i].nodeID) {
+              closeModal();
               setFloor(nodesToPrevFloor.current.get(key)!);
             }
           }
 
+
           break;
         }
+        else
+          closeModal();
       }
     }
   };
