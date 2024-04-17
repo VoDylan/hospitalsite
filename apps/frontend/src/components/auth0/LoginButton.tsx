@@ -23,12 +23,10 @@ const LoginButton: React.FC = () => {
         logoutParams: {
           returnTo: window.location.origin,
         },
-      }).then(() => {
-
-      }).catch(error => {
+      }).then().catch(error => {
       console.error('Error logging out:', error);
       });
-      };
+  };
 
   useEffect( () => {
     const getToken = async () => {

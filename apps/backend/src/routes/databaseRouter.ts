@@ -5,12 +5,14 @@ import {
   clearDBEdges,
   clearDBNodes,
   createServiceRequest,
+  deleteNodePrisma,
   getDBEdgeByEdgeID,
   getDBNodeByID,
   getServiceRequestFromDBByNodeID,
   getServiceRequestFromDBByType,
   getServiceRequestFromDBByUserID,
   getServiceRequestsFromDB,
+  updateNodePrisma,
 } from "../PrismaScripts.ts";
 import {
   validateEdgeData,
@@ -40,6 +42,47 @@ router.get("/nodes/:nodeid", async (req, res) => {
   } else {
     res.status(200).json(nodeData!);
   }
+});
+
+router.put("/nodes/updatenode", async (req, res) => {
+  if (validateNodeData(req.body as never).error != undefined) {
+    console.log("Node data badly formatted. Skipping...");
+    res.status(400).json({
+      message: "Sent data is badly formatted",
+    });
+    return;
+  }
+
+  const nodeData: MapNodeType = req.body;
+  const result: number = await updateNodePrisma(nodeData);
+
+  let message: string = "";
+
+  if (result == 200) {
+    message = `Successfully updated node information for node: ${nodeData.nodeID}!`;
+  } else if (result == 400) {
+    message = `Node information for node: ${nodeData.nodeID} not updated successfully!`;
+  }
+
+  res.status(result).json({
+    message: message,
+  });
+});
+
+router.put("/nodes/deletenode/:nodeid", async (req, res) => {
+  const result: number = await deleteNodePrisma(req.params.nodeid);
+
+  let message: string = "";
+
+  if (result == 200) {
+    message = `Successfully deleted node: ${req.params.nodeid}!`;
+  } else if (result == 400) {
+    message = `Unable to delete node ${req.params.nodeid}`;
+  }
+
+  res.status(result).json({
+    message: message,
+  });
 });
 
 //Accepts a GET request to the /api/database/edges endpoint and returns all edges stored in the database as an array of JSON

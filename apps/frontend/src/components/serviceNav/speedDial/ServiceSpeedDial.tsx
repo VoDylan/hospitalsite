@@ -30,6 +30,7 @@ export default function ServiceSpeedDial() {
     { name: "Room Scheduling", icon: linkIcon("/Services/RoomScheduling", <CalendarMonthOutlined/>)},
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [direction, setDirection] =
     React.useState<SpeedDialProps['direction']>('right');
 

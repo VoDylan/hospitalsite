@@ -22,6 +22,35 @@ export async function createNodePrisma(node: MapNodeType) {
   }
 }
 
+export async function updateNodePrisma(node: MapNodeType) {
+  try {
+    await client.node.update({
+      where: {
+        nodeID: node.nodeID,
+      },
+      data: node,
+    });
+    return 200;
+  } catch (e) {
+    console.error(e);
+    return 400;
+  }
+}
+
+export async function deleteNodePrisma(nodeID: string) {
+  try {
+    await client.node.delete({
+      where: {
+        nodeID: nodeID,
+      },
+    });
+    return 200;
+  } catch (e) {
+    console.error(e);
+    return 400;
+  }
+}
+
 export async function createEdgePrisma(edge: MapEdgeType) {
   console.log(
     `Adding edge (ID: ${edge.edgeID}) between ${edge.startNodeID} and ${edge.endNodeID} to DB`,
