@@ -1,26 +1,32 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import "./map.css";
-import {LocationInfo} from "common/src/LocationInfo.ts";
-import {MapNodeType} from "common/src/map/MapNodeType.ts";
+import { LocationInfo } from "common/src/LocationInfo.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
-import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
-import {FilterName} from "common/src/filter/FilterName.ts";
+import FilterManager, {
+  generateFilterValue,
+} from "common/src/filter/FilterManager.ts";
+import { FilterName } from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
-import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
+import {
+  ReactZoomPanPinchRef,
+  TransformComponent,
+  TransformWrapper,
+} from "react-zoom-pan-pinch";
 
-import {IDCoordinates} from "common/src/IDCoordinates.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
 import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
-import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
+import { Floor, floorStrToObj } from "common/src/map/Floor.ts";
 import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
 import PathCanvas from "../components/map/PathCanvas.tsx";
 import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
@@ -28,11 +34,10 @@ import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
 import IconCanvas from "../components/map/IconCanvas.tsx";
 
-
 interface TransformState {
   scale: number;
   positionX: number;
-  positionY: number
+  positionY: number;
 }
 
 function MapRoute() {
@@ -55,10 +60,15 @@ function MapRoute() {
 
   const pathNodesData = useRef<IDCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
-  const [updateNodesBetweenFloors, setUpdateNodesBetweenFloors] = useState<boolean>(false);
+  const [updateNodesBetweenFloors, setUpdateNodesBetweenFloors] =
+    useState<boolean>(false);
 
-  const nodesToNextFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
-  const nodesToPrevFloor = useRef<Map<IDCoordinates, Floor>>(new Map<IDCoordinates, Floor>());
+  const nodesToNextFloor = useRef<Map<IDCoordinates, Floor>>(
+    new Map<IDCoordinates, Floor>(),
+  );
+  const nodesToPrevFloor = useRef<Map<IDCoordinates, Floor>>(
+    new Map<IDCoordinates, Floor>(),
+  );
   const [pathRenderStatus, setPathRenderStatus] = useState<boolean>(false);
   const [updateFloorIcons, setUpdateFloorIcons] = useState<boolean>(false);
 
@@ -68,7 +78,8 @@ function MapRoute() {
 
   const [updateAnimation, setUpdateAnimation] = useState<boolean>(false);
 
-  const [backgroundRenderStatus, setBackgroundRenderStatus] = useState<boolean>(false);
+  const [backgroundRenderStatus, setBackgroundRenderStatus] =
+    useState<boolean>(false);
   const [canvasWidth, setCanvasWidth] = useState<number>(0);
   const [canvasHeight, setCanvasHeight] = useState<number>(0);
 
@@ -120,8 +131,7 @@ function MapRoute() {
   const handleSelectBFS = () => {
     if (checkedAS) {
       setCheckedAS(false);
-    }
-    else if (checkedDFS) {
+    } else if (checkedDFS) {
       setCheckedDFS(false);
     }
     setCheckedBFS(true);
@@ -131,8 +141,7 @@ function MapRoute() {
   const handleSelectAS = () => {
     if (checkedBFS) {
       setCheckedBFS(false);
-    }
-    else if (checkedDFS) {
+    } else if (checkedDFS) {
       setCheckedDFS(false);
     }
     setCheckedAS(true);
@@ -142,8 +151,7 @@ function MapRoute() {
   const handleSelectDFS = () => {
     if (checkedBFS) {
       setCheckedBFS(false);
-    }
-    else if (checkedAS) {
+    } else if (checkedAS) {
       setCheckedAS(false);
     }
     setCheckedDFS(true);
@@ -391,7 +399,6 @@ function MapRoute() {
     setFiltersApplied(false);
   };
 
-
   /**
    * Change list of nodes based on applied filters
    */
@@ -522,7 +529,9 @@ function MapRoute() {
       const path = data.message;
 
       updateNodesData(path);
-      !path ? setErrorMessage("There is no path between nodes") : setErrorMessage("");
+      !path
+        ? setErrorMessage("There is no path between nodes")
+        : setErrorMessage("");
 
       setUpdateNodesBetweenFloors(true);
     } catch (error) {
@@ -534,7 +543,7 @@ function MapRoute() {
   const handleFloorChange = (newFloor: string) => {
     const newFloorObj = floorStrToObj(newFloor);
 
-    if(!newFloorObj) {
+    if (!newFloorObj) {
       console.error("New map floor is not a valid floor!");
       return;
     }
@@ -558,13 +567,20 @@ function MapRoute() {
     }
   }, [determineFilters, filtersApplied, nodeDataLoaded]);
 
-  const handleBackgroundRenderStatus = (status: boolean, width: number, height: number) => {
+  const handleBackgroundRenderStatus = (
+    status: boolean,
+    width: number,
+    height: number,
+  ) => {
     setBackgroundRenderStatus(status);
     setCanvasWidth(width);
     setCanvasHeight(height);
   };
 
-  const handleNodeToFloorCallback = (newNodesToNextFloor: Map<IDCoordinates, Floor>, newNodesToPrevFloor: Map<IDCoordinates, Floor>) => {
+  const handleNodeToFloorCallback = (
+    newNodesToNextFloor: Map<IDCoordinates, Floor>,
+    newNodesToPrevFloor: Map<IDCoordinates, Floor>,
+  ) => {
     nodesToNextFloor.current = newNodesToNextFloor;
     nodesToPrevFloor.current = newNodesToPrevFloor;
 
@@ -581,18 +597,21 @@ function MapRoute() {
     iconCanvasRef.current = ref;
   };
 
-  const handleTransform = (ref: ReactZoomPanPinchRef, state: { scale: number; positionX: number; positionY: number }) => {
-    if(!transformRef.current) transformRef.current = ref;
+  const handleTransform = (
+    ref: ReactZoomPanPinchRef,
+    state: { scale: number; positionX: number; positionY: number },
+  ) => {
+    if (!transformRef.current) transformRef.current = ref;
     transformState.current = state;
 
     // console.log(state);
   };
 
-  function openModal(){
+  function openModal() {
     setModalIsOpen(true);
   }
 
-  function closeModal(){
+  function closeModal() {
     setModalIsOpen(false);
   }
 
@@ -600,27 +619,39 @@ function MapRoute() {
     if (!iconCanvasRef.current) return;
     const rect = iconCanvasRef.current.getBoundingClientRect();
 
-    const leftOverHeight = (window.innerHeight - 120)/ (rect.height / transformState.current.scale);
+    const leftOverHeight =
+      (window.innerHeight - 120) / (rect.height / transformState.current.scale);
     console.log(leftOverHeight);
 
-    const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+    const widthRatio =
+      canvasWidth / (window.innerWidth - window.innerWidth * 0.18);
     const heightRatio = canvasHeight / (window.innerHeight - 120);
 
-    const actualX = ((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio;
-    const actualY = ((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio * leftOverHeight;
+    const actualX =
+      ((event.clientX -
+        transformState.current.positionX -
+        window.innerWidth * 0.18) /
+        transformState.current.scale) *
+      widthRatio;
+    const actualY =
+      ((event.clientY - transformState.current.positionY - 120) /
+        transformState.current.scale) *
+      heightRatio *
+      leftOverHeight;
     console.log(`Adjusted ${actualX} ${actualY}`);
 
-    for (let i = 0; i < filteredNodes.length; i++){
-      if (filteredNodes[i].floor === floor){
+    for (let i = 0; i < filteredNodes.length; i++) {
+      if (filteredNodes[i].floor === floor) {
         const node = filteredNodes[i];
-        const distance = Math.sqrt((actualX - node.xcoord)**2 + (actualY - node.ycoord)**2);
+        const distance = Math.sqrt(
+          (actualX - node.xcoord) ** 2 + (actualY - node.ycoord) ** 2,
+        );
 
         console.log("node: ", node.xcoord, node.ycoord);
         console.log("distance: ", distance);
         console.log("\n");
 
-
-        if (distance < 25){
+        if (distance < 25) {
           setNodeClicked(node);
           openModal();
           console.log("clicked the node", nodeClicked);
@@ -640,11 +671,8 @@ function MapRoute() {
             }
           }
 
-
           break;
-        }
-        else
-          closeModal();
+        } else closeModal();
       }
     }
   };
@@ -663,68 +691,74 @@ function MapRoute() {
     // if (!el_down) return;
     // el_down.innerHTML = startNode;
 
-
-
     // console.log(nodeClicked!.longName);
     // console.log(startNode);
   };
 
   const Modal = () => {
-
     if (modalIsOpen) {
-      const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+      const widthRatio =
+        canvasWidth / (window.innerWidth - window.innerWidth * 0.18);
       const heightRatio = canvasHeight / (window.innerHeight - 120);
 
       const xcoord = nodeClicked!.xcoord / widthRatio;
       const ycoord = nodeClicked!.ycoord / heightRatio;
 
       return (
-        <div style={{
-          zIndex: 10,
-          left: xcoord + 10 + "px",
-          top: ycoord + 10 + "px",
-          position: "absolute",
-          width: "12%",
-          height: "12%",
-          backgroundColor: "white",
-          border: 2 + "px",
-          borderStyle: "solid",
-          borderColor: "#186BD9",
-          borderRadius: 5 + "px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-        }}>
-          <button style={{
-            width: "96%",
-            height: "40%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontSize: "90%",
-            color: "#186BD9",
-            fontWeight: "bold",
-            margin: "2%",
-            border: "none",
+        <div
+          style={{
+            zIndex: 10,
+            left: xcoord + 10 + "px",
+            top: ycoord + 10 + "px",
+            position: "absolute",
+            width: "12%",
+            height: "12%",
             backgroundColor: "white",
-            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
-          }} onClick={handleStartingLocationClick}>
+            border: 2 + "px",
+            borderStyle: "solid",
+            borderColor: "#186BD9",
+            borderRadius: 5 + "px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <button
+            style={{
+              width: "96%",
+              height: "40%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "90%",
+              color: "#186BD9",
+              fontWeight: "bold",
+              margin: "2%",
+              border: "none",
+              backgroundColor: "white",
+              boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+            }}
+            onClick={handleStartingLocationClick}
+          >
             Starting Location
           </button>
-          <button style={{
-            width: "96%",
-            height: "40%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontSize: "90%",
-            color: "#186BD9",
-            fontWeight: "bold",
-            margin: "2%",
-            border: "none",
-            backgroundColor: "white",
-            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
-          }} onClick={handleEndingLocationClick}>
+          <button
+            style={{
+              width: "96%",
+              height: "40%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "90%",
+              color: "#186BD9",
+              fontWeight: "bold",
+              margin: "2%",
+              border: "none",
+              backgroundColor: "white",
+              boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+            }}
+            onClick={handleEndingLocationClick}
+          >
             Ending Location
           </button>
         </div>
@@ -737,52 +771,58 @@ function MapRoute() {
   return (
     <>
       <img
-          src={startIcon}
-          className={"start"}
-          alt="icon"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            opacity: 0,
-            zIndex: -1,
-          }}
-        />
-        <img
-          src={endIcon}
-          className={"end"}
-          alt="icon"
-          style={{
-        position: "absolute",
+        src={startIcon}
+        className={"start"}
+        alt="icon"
+        style={{
+          position: "absolute",
           top: 0,
           left: 0,
           opacity: 0,
           zIndex: -1,
         }}
       />
-      <Box sx={{
-        display: "flex",
-        flexDirection: "column",
-        maxHeight: window.innerHeight,
-      }}>
-        <Box sx={{height: "120px", minHeight: "120px"}}>
-          <CssBaseline/>
-        </Box>
-        <Box sx={{
+      <img
+        src={endIcon}
+        className={"end"}
+        alt="icon"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          opacity: 0,
+          zIndex: -1,
+        }}
+      />
+      <Box
+        sx={{
           display: "flex",
-          flexDirection: "row",
-          height: "100%",
+          flexDirection: "column",
           maxHeight: window.innerHeight,
-          minHeight: 0,
-          overflow: "clip",
-          flexGrow: 1,
-          flexShrink: 1,
-        }}>
-          <Box sx={{
-            width: "18%",
-            minWidth: "18%",
+        }}
+      >
+        <Box sx={{ height: "120px", minHeight: "120px" }}>
+          <CssBaseline />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            height: "100%",
+            maxHeight: window.innerHeight,
             minHeight: 0,
-          }}>
+            overflow: "clip",
+            flexGrow: 1,
+            flexShrink: 1,
+          }}
+        >
+          <Box
+            sx={{
+              width: "18%",
+              minWidth: "18%",
+              minHeight: 0,
+            }}
+          >
             {/*Side Bar*/}
             <MapSideBar
               title="Navigation"
@@ -793,11 +833,20 @@ function MapRoute() {
               groupBy={(option) => option.charAt(0).toUpperCase()}
               optionLabel={(option) => option}
               renderInput={(params) => (
-                <TextField {...params} label="Starting Location" value={startNode}/>
+                <TextField
+                  {...params}
+                  label="Starting Location"
+                  value={startNode}
+                />
               )}
               onChange1={(event, value) => handleEndNodeChange(value)}
               renderInput1={(params) => (
-                <TextField {...params} id={"endNodeID"} label="Ending Location" value={endNode}/>
+                <TextField
+                  {...params}
+                  id={"endNodeID"}
+                  label="Ending Location"
+                  value={endNode}
+                />
               )}
               open={open}
               handleClick={handleClick}
@@ -816,50 +865,49 @@ function MapRoute() {
               onClick1={handleButtonClick}
               checked={checked}
               onClick2={handleSelectAll}
-              icon={<Icon
-                handleButtonClick={handleButtonClick}
-                checked={false}
-                confIconState={confIconState}
-                deptIconState={deptIconState}
-                labsIconState={labsIconState}
-                servIconState={servIconState}
-                infoIconState={infoIconState}
-                restroomsIconState={restroomsIconState}
-                elevatorIconState={elevatorIconState}
-                stairsIconState={stairsIconState}
-                exitsIconState={exitsIconState}
-                retlIconState={retlIconState}
-                ll1IconState={ll1IconState}
-                ll2IconState={ll2IconState}
-                firstFloorIconState={firstFloorIconState}
-                secondFloorIconState={secondFloorIconState}
-                thirdFloorIconState={thirdFloorIconState}
-                handleConfIconState={handleConfIconState}
-                handleDeptIconState={handleDeptIconState}
-                handleLabsIconState={handleLabsIconState}
-                handleServIconState={handleServIconState}
-                handleInfoIconState={handleInfoIconState}
-                handleRestroomsIconState={handleRestroomsIconState}
-                handleElevatorIconState={handleElevatorIconState}
-                handleStairsIconState={handleStairsIconState}
-                handleExitsIconState={handleExitsIconState}
-                handleRetlIconState={handleRetlIconState}
-                handleLL1IconState={handleLL1IconState}
-                handleLL2IconState={handleLL2IconState}
-                handleFirstFloorIconState={handleFirstFloorIconState}
-                handleSecondFloorIconState={handleSecondFloorIconState}
-                handleThirdFloorIconState={handleThirdFloorIconState}
-                handleSelectAll={handleSelectAll}
-                handleClearAll={handleClearAll}
-              />}
+              icon={
+                <Icon
+                  handleButtonClick={handleButtonClick}
+                  checked={false}
+                  confIconState={confIconState}
+                  deptIconState={deptIconState}
+                  labsIconState={labsIconState}
+                  servIconState={servIconState}
+                  infoIconState={infoIconState}
+                  restroomsIconState={restroomsIconState}
+                  elevatorIconState={elevatorIconState}
+                  stairsIconState={stairsIconState}
+                  exitsIconState={exitsIconState}
+                  retlIconState={retlIconState}
+                  ll1IconState={ll1IconState}
+                  ll2IconState={ll2IconState}
+                  firstFloorIconState={firstFloorIconState}
+                  secondFloorIconState={secondFloorIconState}
+                  thirdFloorIconState={thirdFloorIconState}
+                  handleConfIconState={handleConfIconState}
+                  handleDeptIconState={handleDeptIconState}
+                  handleLabsIconState={handleLabsIconState}
+                  handleServIconState={handleServIconState}
+                  handleInfoIconState={handleInfoIconState}
+                  handleRestroomsIconState={handleRestroomsIconState}
+                  handleElevatorIconState={handleElevatorIconState}
+                  handleStairsIconState={handleStairsIconState}
+                  handleExitsIconState={handleExitsIconState}
+                  handleRetlIconState={handleRetlIconState}
+                  handleLL1IconState={handleLL1IconState}
+                  handleLL2IconState={handleLL2IconState}
+                  handleFirstFloorIconState={handleFirstFloorIconState}
+                  handleSecondFloorIconState={handleSecondFloorIconState}
+                  handleThirdFloorIconState={handleThirdFloorIconState}
+                  handleSelectAll={handleSelectAll}
+                  handleClearAll={handleClearAll}
+                />
+              }
               callback={handleFloorChange}
             />
           </Box>
 
-          <Box
-            height={"100%"}
-            overflow={"clip"}
-          >
+          <Box height={"100%"} overflow={"clip"}>
             <TransformWrapper
               onTransformed={handleTransform}
               minScale={0.8}
@@ -871,94 +919,92 @@ function MapRoute() {
               initialPositionY={0}
             >
               <TransformComponent>
-                <Draggable
-                  defaultPosition={{x: 0, y: 0}}
-                >
+                <Draggable defaultPosition={{ x: 0, y: 0 }}>
                   <>
-                      <Modal/>
-                      <BackgroundCanvas
-                        style={{
-                          position: "relative",
-                          // minHeight: "100vh",
-                          // maxHeight: "100%",
-                          maxWidth: "100%",
-                        }}
-                        floor={floor}
-                        renderStatusCallback={handleBackgroundRenderStatus}
-                      />
-                      <SymbolCanvas
-                        style={{
-                          position: "absolute",
-                          // minHeight: "100vh",
-                          // maxHeight: "100%",
-                          maxWidth: "100%",
-                        }}
-                        backgroundRendered={backgroundRenderStatus}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                        filtersApplied={filtersApplied}
-                        filteredNodes={filteredNodes}
-                        floor={floor}
-                      />
-                      <PathCanvas
-                        style={{
-                          position: "absolute",
-                          // minHeight: "100vh",
-                          // maxHeight: "100%",
-                          maxWidth: "100%",
-                        }}
-                        backgroundRendered={backgroundRenderStatus}
-                        updateNodesBetweenFloors={updateNodesBetweenFloors}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                        floor={floor}
-                        pathNodesData={pathNodesData.current}
-                        floorConnectionCallback={handleNodeToFloorCallback}
-                        pathRenderStatusCallback={handlePathRenderStatus}
-                        startNode={startNode}
-                        endNode={endNode}
-                        iconCanvasRef={iconCanvasRef.current!}
-                      />
-                      <IconCanvas
-                        style={{
-                          position: "absolute",
-                          // minHeight: "100vh",
-                          // maxHeight: "100%",
-                          maxWidth: "100%",
-                        }}
-                        backgroundRendered={backgroundRenderStatus}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                        refCallback={handleIconCallback}
-                      />
-                      <FloorIconsCanvas
-                        style={{
-                          position: "absolute",
-                          // minHeight: "100vh",
-                          // maxHeight: "100%",
-                          maxWidth: "100%",
-                        }}
-                        backgroundRendered={backgroundRenderStatus}
-                        pathRendered={pathRenderStatus}
-                        updateFloorIcons={updateFloorIcons}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                        floor={floor}
-                        nodesToNextFloor={nodesToNextFloor.current}
-                        nodesToPrevFloor={nodesToPrevFloor.current}
-                        onClick={handleCanvasClick}
-                      />
-                    </>
+                    <Modal />
+                    <BackgroundCanvas
+                      style={{
+                        position: "relative",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      floor={floor}
+                      renderStatusCallback={handleBackgroundRenderStatus}
+                    />
+                    <SymbolCanvas
+                      style={{
+                        position: "absolute",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      filtersApplied={filtersApplied}
+                      filteredNodes={filteredNodes}
+                      floor={floor}
+                    />
+                    <PathCanvas
+                      style={{
+                        position: "absolute",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      updateNodesBetweenFloors={updateNodesBetweenFloors}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      floor={floor}
+                      pathNodesData={pathNodesData.current}
+                      floorConnectionCallback={handleNodeToFloorCallback}
+                      pathRenderStatusCallback={handlePathRenderStatus}
+                      startNode={startNode}
+                      endNode={endNode}
+                      iconCanvasRef={iconCanvasRef.current!}
+                    />
+                    <IconCanvas
+                      style={{
+                        position: "absolute",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      refCallback={handleIconCallback}
+                    />
+                    <FloorIconsCanvas
+                      style={{
+                        position: "absolute",
+                        // minHeight: "100vh",
+                        // maxHeight: "100%",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      pathRendered={pathRenderStatus}
+                      updateFloorIcons={updateFloorIcons}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      floor={floor}
+                      nodesToNextFloor={nodesToNextFloor.current}
+                      nodesToPrevFloor={nodesToPrevFloor.current}
+                      onClick={handleCanvasClick}
+                    />
+                  </>
                 </Draggable>
               </TransformComponent>
             </TransformWrapper>
           </Box>
         </Box>
 
-        <Legend filterItems={filterIcons}/>
+        <Legend filterItems={filterIcons} />
       </Box>
     </>
-);
+  );
 }
 
 export default MapRoute;

@@ -1,8 +1,7 @@
-import {Button, Paper, Stack } from "@mui/material";
+import { Button, Paper, Stack } from "@mui/material";
 import FilterWithIcon from "../filters/FilterSelect.tsx";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React from "react";
-
 
 export default function Icon(props: {
   handleButtonClick: () => void;
@@ -42,10 +41,7 @@ export default function Icon(props: {
 }) {
   return (
     <>
-      <Stack
-        width={"100%"}
-        height={"100%"}
-      >
+      <Stack width={"100%"} height={"100%"}>
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={props.handleButtonClick}
@@ -58,7 +54,7 @@ export default function Icon(props: {
         >
           {props.checked ? "back" : "back"}
         </Button>
-        <Paper sx={{ width: "100%", height: "100%"}} elevation={4}>
+        <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
           <Stack
             spacing={"10%"}
             direction="column"
@@ -225,7 +221,11 @@ export default function Icon(props: {
             >
               <Button
                 variant={"contained"}
-                sx={{ display: "flex", justifyContent: "center", minWidth: "90%" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  minWidth: "90%",
+                }}
                 onClick={props.handleSelectAll}
               >
                 Select All

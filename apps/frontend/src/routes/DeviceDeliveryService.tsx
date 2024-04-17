@@ -15,7 +15,7 @@ import { DeviceDeliveryFormSubmission } from "../common/formSubmission/DeviceDel
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/buttons/DeviceSubmitButton.tsx";
 import axios from "axios";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
 
@@ -130,7 +130,7 @@ function DeviceDeliveryService() {
         for (let i = 0; i < nodeIDs.length; i++) {
           updatedNodes.push({
             nodeID: nodeIDs[i],
-            longName: longNames[i]
+            longName: longNames[i],
           });
         }
 
@@ -178,7 +178,7 @@ function DeviceDeliveryService() {
             backgroundColor: "transparent",
           }}
         >
-          <ServiceNavTabs/>
+          <ServiceNavTabs />
         </Grid>
         <Grid
           item
@@ -191,9 +191,11 @@ function DeviceDeliveryService() {
             Medical Device Request Form
           </Typography>
         </Grid>
-        <Grid container xs={12} boxShadow={4} sx={{backgroundColor: "white"}}>
+        <Grid container xs={12} boxShadow={4} sx={{ backgroundColor: "white" }}>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Name:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Name:
+            </Typography>
             <CenterAlignedTextbox
               label={"Name"}
               value={form.name}
@@ -201,16 +203,23 @@ function DeviceDeliveryService() {
             />
           </Grid>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Location:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Location:
+            </Typography>
             <DropDown
               label={"Location"}
               returnData={form.roomNum}
               handleChange={handleLocationInput}
-              items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Medical Device Needed:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Medical Device Needed:
+            </Typography>
             <CenterAlignedTextbox
               label={"Medical Device"}
               value={form.device}
@@ -218,7 +227,9 @@ function DeviceDeliveryService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Amount Needed:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Amount Needed:
+            </Typography>
             <CenterAlignedTextbox
               onChange={handleAmountInput}
               label={"Amount"}
@@ -256,11 +267,7 @@ function DeviceDeliveryService() {
               justifyContent: "center",
             }}
           >
-            <DeviceSubmitButton
-              input={form}
-              text={"SUBMIT"}
-              clear={clear}
-            />
+            <DeviceSubmitButton input={form} text={"SUBMIT"} clear={clear} />
           </Grid>
         </Grid>
       </Grid>

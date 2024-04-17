@@ -1,5 +1,5 @@
-import React, {useEffect, useRef} from "react";
-import {jsx} from "@emotion/react";
+import React, { useEffect, useRef } from "react";
+import { jsx } from "@emotion/react";
 import JSX = jsx.JSX;
 
 import L1MapImage from "../../images/mapImages/00_thelowerlevel1.png";
@@ -8,19 +8,25 @@ import F1MapImage from "../../images/mapImages/01_thefirstfloor.png";
 import F2MapImage from "../../images/mapImages/02_thesecondfloor.png";
 import F3MapImage from "../../images/mapImages/03_thethirdfloor.png";
 
-import {Floor} from "common/src/map/Floor.ts";
+import { Floor } from "common/src/map/Floor.ts";
 
 interface BackgroundCanvasProps {
   style: React.CSSProperties;
   floor: Floor;
-  renderStatusCallback: (status: boolean, width: number, height: number) => void;
+  renderStatusCallback: (
+    status: boolean,
+    width: number,
+    height: number,
+  ) => void;
 }
 
-export default function BackgroundCanvas(props: BackgroundCanvasProps): JSX.Element {
+export default function BackgroundCanvas(
+  props: BackgroundCanvasProps,
+): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const floorToImage = (floor: Floor): string => {
-    switch(floor) {
+    switch (floor) {
       case Floor.L1:
         return L1MapImage;
       case Floor.L2:
@@ -39,10 +45,11 @@ export default function BackgroundCanvas(props: BackgroundCanvasProps): JSX.Elem
     currImage.src = floorToImage(props.floor);
 
     currImage.onload = () => {
-      if(canvasRef.current) {
-        const ctx: CanvasRenderingContext2D | null = canvasRef.current.getContext("2d");
+      if (canvasRef.current) {
+        const ctx: CanvasRenderingContext2D | null =
+          canvasRef.current.getContext("2d");
 
-        if(!ctx) return;
+        if (!ctx) return;
 
         canvasRef.current.width = currImage.width;
         canvasRef.current.height = currImage.height;
@@ -56,10 +63,5 @@ export default function BackgroundCanvas(props: BackgroundCanvasProps): JSX.Elem
     };
   }, [props, props.floor]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={props.style}
-    />
-  );
-};
+  return <canvas ref={canvasRef} style={props.style} />;
+}

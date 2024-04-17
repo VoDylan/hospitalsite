@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
 
 interface IconProps {
@@ -14,17 +14,12 @@ export default function IconCanvas(props: IconProps) {
   const refCallback = props.refCallback;
 
   useEffect(() => {
-    if (props.backgroundRendered) initializeLayeredCanvas(canvasRef.current, props.width, props.height);
+    if (props.backgroundRendered)
+      initializeLayeredCanvas(canvasRef.current, props.width, props.height);
     if (canvasRef.current) {
       refCallback(canvasRef.current);
     }
   }, [props.backgroundRendered, props.height, props.width, refCallback]);
 
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={props.style}
-    />
-  );
+  return <canvas ref={canvasRef} style={props.style} />;
 }

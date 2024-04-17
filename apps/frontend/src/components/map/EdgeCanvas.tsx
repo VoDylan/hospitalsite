@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
-import {Floor} from "common/src/map/Floor.ts";
-import {nodesDistances} from "common/src/nodesDistances.ts";
+import { Floor } from "common/src/map/Floor.ts";
+import { nodesDistances } from "common/src/nodesDistances.ts";
 import axios from "axios";
 
 interface EdgeCanvasProps {
@@ -19,7 +19,7 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
   const [distancesData, setDistancesData] = useState<nodesDistances[]>([]);
   const [edgeDataLoaded, setEdgeDataLoaded] = useState<boolean>(false);
 
-  async function loadEdgesDistance(request: {req: string}) {
+  async function loadEdgesDistance(request: { req: string }) {
     // const req = { req: "L1" };
     const distancesResponse = await axios.post("/api/sendDistances", request, {
       headers: { "Content-Type": "application/json" },
@@ -35,11 +35,12 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
   }
 
   useEffect(() => {
-    if(props.backgroundRendered) initializeLayeredCanvas(canvasRef.current, props.width, props.height);
+    if (props.backgroundRendered)
+      initializeLayeredCanvas(canvasRef.current, props.width, props.height);
   }, [props.backgroundRendered, props.height, props.width]);
 
   useEffect(() => {
-    loadEdgesDistance({req: props.floor}).then(() => setEdgeDataLoaded(true));
+    loadEdgesDistance({ req: props.floor }).then(() => setEdgeDataLoaded(true));
   }, [props.floor, props.nodeDataLoaded]);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
       const canvas: HTMLCanvasElement = canvasRef.current;
       const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
-      if(!ctx) return;
+      if (!ctx) return;
 
       ctx.clearRect(0, 0, props.width, props.height);
 
@@ -71,20 +72,19 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
 
           ctx.fillText(
             distancesData[i].distance.toString(),
-            (distancesData[i].startCoords.x + distancesData[i].endCoords.x) /
-              2,
-            (distancesData[i].startCoords.y + distancesData[i].endCoords.y) /
-              2,
+            (distancesData[i].startCoords.x + distancesData[i].endCoords.x) / 2,
+            (distancesData[i].startCoords.y + distancesData[i].endCoords.y) / 2,
           );
         }
       }
     }
-  }, [distancesData, edgeDataLoaded, props.height, props.nodeDataLoaded, props.width]);
+  }, [
+    distancesData,
+    edgeDataLoaded,
+    props.height,
+    props.nodeDataLoaded,
+    props.width,
+  ]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={props.style}
-    />
-  );
+  return <canvas ref={canvasRef} style={props.style} />;
 }

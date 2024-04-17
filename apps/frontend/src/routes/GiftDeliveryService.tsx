@@ -1,9 +1,4 @@
-import {
-  Grid,
-  Typography,
-  SelectChangeEvent,
-  Stack,
-} from "@mui/material";
+import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
@@ -13,7 +8,7 @@ import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubm
 import React from "react";
 import Confetti from "react-confetti";
 import axios from "axios";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function GiftDeliveryService() {
@@ -95,7 +90,7 @@ function GiftDeliveryService() {
         for (let i = 0; i < nodeIDs.length; i++) {
           updatedNodes.push({
             nodeID: nodeIDs[i],
-            longName: longNames[i]
+            longName: longNames[i],
           });
         }
 
@@ -153,7 +148,7 @@ function GiftDeliveryService() {
             backgroundColor: "transparent",
           }}
         >
-          <ServiceNavTabs/>
+          <ServiceNavTabs />
         </Grid>
         <Grid
           item
@@ -166,9 +161,11 @@ function GiftDeliveryService() {
             Gift Delivery Service Form
           </Typography>
         </Grid>
-        <Grid container xs={12} boxShadow={4} sx={{backgroundColor: "white"}}>
+        <Grid container xs={12} boxShadow={4} sx={{ backgroundColor: "white" }}>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Name:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Name:
+            </Typography>
             <CenterAlignedTextbox
               label={"Name"}
               value={form.name}
@@ -176,16 +173,23 @@ function GiftDeliveryService() {
             />
           </Grid>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Location:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Location:
+            </Typography>
             <DropDown
               label={"Location"}
               returnData={form.location}
               handleChange={handleLocationInput}
-              items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Recipient Name:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Recipient Name:
+            </Typography>
             <CenterAlignedTextbox
               label={"Recipient Name"}
               value={form.recipientName}
@@ -193,7 +197,9 @@ function GiftDeliveryService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Optional Message:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Optional Message:
+            </Typography>
             <CenterAlignedTextbox
               label={"Optional Message"}
               value={form.message}
@@ -299,7 +305,8 @@ function GiftDeliveryService() {
               input={form}
               clear={clear}
               displayConfetti={displayConfetti}
-              hideConfetti={hideConfetti}/>
+              hideConfetti={hideConfetti}
+            />
           </Grid>
         </Grid>
       </Grid>

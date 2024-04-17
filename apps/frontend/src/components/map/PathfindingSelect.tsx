@@ -27,8 +27,8 @@ const NestedList: React.FC<NestedListProps> = ({
   handleSelectBFS,
   checkedAS,
   handleSelectAS,
-                                                 checkedDFS,
-                                                 handleSelectDFS,
+  checkedDFS,
+  handleSelectDFS,
 }) => {
   return (
     <List

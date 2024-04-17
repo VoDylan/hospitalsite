@@ -10,7 +10,7 @@ import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {Divider, Typography} from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import NodeInfo from "./NodeInfo.tsx";
 import MapNode from "common/src/map/MapNode.ts";
 
@@ -79,8 +79,9 @@ export default function MapEditorSideBar(props: {
           marginRight: "4%",
           marginTop: "4%",
           marginBottom: "4%",
-          paddingBottom: "5vh"
-        }}>
+          paddingBottom: "5vh",
+        }}
+      >
         <Typography
           color={"#003A96"}
           align={"center"}
@@ -125,7 +126,7 @@ export default function MapEditorSideBar(props: {
             display: "flex",
             alignItems: "center",
             marginBottom: "20px",
-        }}
+          }}
         >
           <LocationOnIcon
             fontSize={"medium"}
@@ -153,12 +154,13 @@ export default function MapEditorSideBar(props: {
           aria-hidden={"true"}
           sx={{
             borderBottom: "2px solid",
-            opacity: "0.5"
+            opacity: "0.5",
           }}
         />
 
-        {!props.selectedNode1 && !props.selectedNode2 ?
-          <></> :
+        {!props.selectedNode1 && !props.selectedNode2 ? (
+          <></>
+        ) : (
           <Box
             sx={{
               width: "100%",
@@ -166,7 +168,7 @@ export default function MapEditorSideBar(props: {
               flexDirection: "column",
             }}
           >
-            {props.selectedNode1 ?
+            {props.selectedNode1 ? (
               <NodeInfo
                 style={{
                   opacity: "1",
@@ -178,10 +180,11 @@ export default function MapEditorSideBar(props: {
                 clearNodeCallback={props.handleClearNode1}
                 editNodeCallback={props.handleEditNode}
                 deleteNodeCallback={props.handleDeleteNode}
-              /> :
+              />
+            ) : (
               <></>
-            }
-            {props.selectedNode2 ?
+            )}
+            {props.selectedNode2 ? (
               <NodeInfo
                 style={{
                   opacity: "1",
@@ -193,11 +196,12 @@ export default function MapEditorSideBar(props: {
                 clearNodeCallback={props.handleClearNode2}
                 editNodeCallback={props.handleEditNode}
                 deleteNodeCallback={props.handleDeleteNode}
-              /> :
+              />
+            ) : (
               <></>
-            }
+            )}
           </Box>
-        }
+        )}
 
         <Stack
           direction={"column"}

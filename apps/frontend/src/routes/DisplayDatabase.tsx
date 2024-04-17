@@ -1,9 +1,5 @@
 import * as React from "react";
-import {
-  Button,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
@@ -57,33 +53,58 @@ function parseCSVFromString(data: string) {
   });
 }
 
-  function ServiceDetailsTable({ service, isVisible }: { service: ServiceParams; isVisible: boolean }) {
-    return (
-      <Box mt={2} className={`slide-in ${isVisible ? 'slide-in--visible' : 'slide-in--hidden'}`} sx={{zIndex: -9999}}>
-        <Typography variant="h6" fontWeight="bold" sx={{ textDecoration: "underline" }}>Service Details</Typography>
-        <Box>
-          {service.services && (
-            <div>
-              {Object.entries(JSON.parse(service.services)).map(([key, value]) => (
+function ServiceDetailsTable({
+  service,
+  isVisible,
+}: {
+  service: ServiceParams;
+  isVisible: boolean;
+}) {
+  return (
+    <Box
+      mt={2}
+      className={`slide-in ${isVisible ? "slide-in--visible" : "slide-in--hidden"}`}
+      sx={{ zIndex: -9999 }}
+    >
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        sx={{ textDecoration: "underline" }}
+      >
+        Service Details
+      </Typography>
+      <Box>
+        {service.services && (
+          <div>
+            {Object.entries(JSON.parse(service.services)).map(
+              ([key, value]) => (
                 <Typography key={key}>
                   {key}: {String(value)}
                 </Typography>
-              ))}
-            </div>
-          )}
-        </Box>
+              ),
+            )}
+          </div>
+        )}
       </Box>
-    );
-  }
+    </Box>
+  );
+}
 
 function DisplayDatabase() {
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
+    {},
+  );
   const [isServiceDetailsVisible, setServiceDetailsVisible] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isDetailsTableInitialized, setDetailsTableInitialized] = useState(false);
-  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
-  const [selectedServiceDetails, setSelectedServiceDetails] = useState<ServiceParams | null>(null);
-  const [hasSlideAnimationTriggered, setHasSlideAnimationTriggered] = useState(false);
+  const [isDetailsTableInitialized, setDetailsTableInitialized] =
+    useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(
+    null,
+  );
+  const [selectedServiceDetails, setSelectedServiceDetails] =
+    useState<ServiceParams | null>(null);
+  const [hasSlideAnimationTriggered, setHasSlideAnimationTriggered] =
+    useState(false);
 
   // Function to handle the click event of the details button
   const handleDetailsClick = (service: ServiceParams) => {
@@ -93,12 +114,14 @@ function DisplayDatabase() {
       setSelectedServiceId(service.id);
       setSelectedServiceDetails(service);
       setHasSlideAnimationTriggered(true); // Trigger slide animation on the first click
-      setTimeout(() => {
-        setServiceDetailsVisible(true); // Show details for the selected service after the animation
-      }, hasSlideAnimationTriggered ? 0 : 50); // Delay the visibility change if animation has triggered
+      setTimeout(
+        () => {
+          setServiceDetailsVisible(true); // Show details for the selected service after the animation
+        },
+        hasSlideAnimationTriggered ? 0 : 50,
+      ); // Delay the visibility change if animation has triggered
     }
   };
-
 
   // Update visibility when initialization state changes
   useEffect(() => {
@@ -106,7 +129,6 @@ function DisplayDatabase() {
       setServiceDetailsVisible(true);
     }
   }, [isDetailsTableInitialized]);
-
 
   const handleEditClick = (id: GridRowId) => () => {
     console.log(rowModesModel);
@@ -511,9 +533,9 @@ function DisplayDatabase() {
             Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
-          <Box display="flex" sx={{zIndex: 9999}}>
+          <Box display="flex" sx={{ zIndex: 9999 }}>
             {/* Container for the service request table and service details table */}
-            <Box flex="1" ml={"27em"} sx={{zIndex: 9999}}>
+            <Box flex="1" ml={"27em"} sx={{ zIndex: 9999 }}>
               <DataGrid
                 slots={{ toolbar: GridToolbar }}
                 sx={{
@@ -537,10 +559,13 @@ function DisplayDatabase() {
             </Box>
             <Box width="400px" ml={2}>
               {selectedServiceDetails && (
-                <ServiceDetailsTable service={selectedServiceDetails} isVisible={isServiceDetailsVisible} />
+                <ServiceDetailsTable
+                  service={selectedServiceDetails}
+                  isVisible={isServiceDetailsVisible}
+                />
               )}
             </Box>
-            </Box>
+          </Box>
         </Box>
       </div>
     </>

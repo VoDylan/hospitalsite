@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, { useCallback } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -25,7 +25,7 @@ import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
 import TopBanner from "./components/banner/TopBanner.tsx";
-import { Auth0Protection} from "./components/auth0/Auth0Protection.tsx";
+import { Auth0Protection } from "./components/auth0/Auth0Protection.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
 
 function App() {
@@ -41,39 +41,39 @@ function App() {
         },
         {
           path: "/Services",
-          element: <Auth0Protection  component={ServicesPage}/>,
+          element: <Auth0Protection component={ServicesPage} />,
         },
         {
           path: "/Services/FlowerDelivery",
-          element: <Auth0Protection  component={FlowerDeliveryService}/>,
+          element: <Auth0Protection component={FlowerDeliveryService} />,
         },
         {
           path: "/Services/GiftDelivery",
-          element: <Auth0Protection  component={GiftDeliveryService}/>,
+          element: <Auth0Protection component={GiftDeliveryService} />,
         },
         {
           path: "/Services/MedicineDelivery",
-          element: <Auth0Protection  component={MedicineDelivery}/>,
+          element: <Auth0Protection component={MedicineDelivery} />,
         },
         {
           path: "/Services/RoomScheduling",
-          element: <Auth0Protection  component={RoomScheduling}/>,
+          element: <Auth0Protection component={RoomScheduling} />,
         },
         {
           path: "/Services/SanitationService",
-          element: <Auth0Protection  component={SanitationService}/>,
+          element: <Auth0Protection component={SanitationService} />,
         },
         {
           path: "/Services/SecurityService",
-          element: <Auth0Protection  component={SecurityService}/>,
+          element: <Auth0Protection component={SecurityService} />,
         },
         {
           path: "/Services/DeviceDeliveryService",
-          element: <Auth0Protection  component={DeviceDeliveryService}/>,
+          element: <Auth0Protection component={DeviceDeliveryService} />,
         },
         {
           path: "/DisplayDatabase",
-          element: <Auth0Protection  component={DisplayDatabase}/>,
+          element: <Auth0Protection component={DisplayDatabase} />,
         },
 
         {
@@ -83,12 +83,12 @@ function App() {
 
         {
           path: "/MapTestingPage",
-          element: <Auth0Protection  component={MapTestingPage}/>,
+          element: <Auth0Protection component={MapTestingPage} />,
         },
         {
           path: "/MapEditingPage",
-          element: <Auth0Protection  component={MapEditingPage}/>,
-        }
+          element: <Auth0Protection component={MapEditingPage} />,
+        },
       ],
     },
   ]);
