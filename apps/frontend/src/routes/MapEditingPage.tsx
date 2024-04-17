@@ -157,7 +157,6 @@ function MapEditingPage() {
     setCurrImage(newImage);
   };
 
-
   useEffect(() => {
     if (distancesData.length < 1 && nodesData.length < 1) {
       // console.log("Loading Distances");

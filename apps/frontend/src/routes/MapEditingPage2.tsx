@@ -3,7 +3,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner2 from "../components/banner/TopBanner.tsx";
 import "./map.css";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
@@ -26,6 +26,7 @@ import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
 import IconCanvas from "../components/map/IconCanvas.tsx";
 import MapEditorSideBar from "../components/map/MapEditorSideBar.tsx";
+import EdgeCanvas from "../components/map/EdgeCanvas.tsx";
 
 
 interface TransformState {
@@ -716,6 +717,17 @@ function MapEditingPage2() {
                       }}
                       floor={floor}
                       renderStatusCallback={handleBackgroundRenderStatus}
+                    />
+                    <EdgeCanvas
+                      style={{
+                        position: "absolute",
+                        maxWidth: "100%",
+                      }}
+                      backgroundRendered={backgroundRenderStatus}
+                      width={canvasWidth}
+                      height={canvasHeight}
+                      floor={floor}
+                      nodeDataLoaded={nodeDataLoaded}
                     />
                     <SymbolCanvas
                       style={{
