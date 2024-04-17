@@ -1,4 +1,4 @@
-import { AppBar, Stack, Toolbar, styled, IconButton } from "@mui/material";
+import { AppBar, IconButton, Stack, Toolbar, styled } from "@mui/material";
 import React from "react";
 import bwhLogo from "frontend/src/images/bwh-logo.svg";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -6,7 +6,7 @@ import { makeStyles } from "@mui/styles";
 import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
 import NavBar from "../navMenu/NavBar.tsx";
-import LoginButton from "../auth0/LoginButton.tsx"; // Import the LoginButton component
+import LoginButton from "../auth0/LoginButton.tsx";
 
 const useStyles = makeStyles({
   logoImage: {
@@ -73,7 +73,7 @@ function TopBanner() {
           <SearchBar />
           {/* Replace Sign In button and profile button with LoginButton */}
           <LoginButton />
-          <Link to="/Login">
+          <Link to="/">
             <IconButton
               sx={{ color: "#012D5A" }}
               size="large"

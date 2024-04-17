@@ -8,7 +8,6 @@ import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios, { AxiosResponse } from "axios";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import {
   DataGrid,
   GridColDef,
@@ -405,7 +404,6 @@ function DisplayDatabase() {
 
   return (
     <>
-      <TopBanner />
       <div
         style={{
           position: "relative",

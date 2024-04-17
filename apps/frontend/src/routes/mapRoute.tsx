@@ -3,7 +3,6 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import "./map.css";
 import {LocationInfo} from "common/src/LocationInfo.ts";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
@@ -629,18 +628,23 @@ function MapRoute() {
           // Switch to floor when clicking next/prev floor icons
           for (const key of nodesToNextFloor.current.keys()) {
             if (key.nodeID === filteredNodes[i].nodeID) {
+              closeModal();
               setFloor(nodesToNextFloor.current.get(key)!);
             }
           }
 
           for (const key of nodesToPrevFloor.current.keys()) {
             if (key.nodeID === filteredNodes[i].nodeID) {
+              closeModal();
               setFloor(nodesToPrevFloor.current.get(key)!);
             }
           }
 
+
           break;
         }
+        else
+          closeModal();
       }
     }
   };
@@ -655,6 +659,11 @@ function MapRoute() {
   const handleEndingLocationClick = () => {
     closeModal();
     setEndNode(nodeClicked!.nodeID);
+    // const handleFocus = (event) => event.target.select();
+    // if (!el_down) return;
+    // el_down.innerHTML = startNode;
+
+
 
     // console.log(nodeClicked!.longName);
     // console.log(startNode);
@@ -758,7 +767,6 @@ function MapRoute() {
       }}>
         <Box sx={{height: "120px", minHeight: "120px"}}>
           <CssBaseline/>
-          <TopBanner/>
         </Box>
         <Box sx={{
           display: "flex",
@@ -789,7 +797,7 @@ function MapRoute() {
               )}
               onChange1={(event, value) => handleEndNodeChange(value)}
               renderInput1={(params) => (
-                <TextField {...params} label="Ending Location" value={endNode}/>
+                <TextField {...params} id={"endNodeID"} label="Ending Location" value={endNode}/>
               )}
               open={open}
               handleClick={handleClick}
@@ -867,90 +875,90 @@ function MapRoute() {
                   defaultPosition={{x: 0, y: 0}}
                 >
                   <>
-                    <Modal/>
-                    <BackgroundCanvas
-                      style={{
-                        position: "relative",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      floor={floor}
-                      renderStatusCallback={handleBackgroundRenderStatus}
-                    />
-                    <SymbolCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      filtersApplied={filtersApplied}
-                      filteredNodes={filteredNodes}
-                      floor={floor}
-                    />
-                    <PathCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      updateNodesBetweenFloors={updateNodesBetweenFloors}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      pathNodesData={pathNodesData.current}
-                      floorConnectionCallback={handleNodeToFloorCallback}
-                      pathRenderStatusCallback={handlePathRenderStatus}
-                      startNode={startNode}
-                      endNode={endNode}
-                      iconCanvasRef={iconCanvasRef.current!}
-                    />
-                    <IconCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      refCallback={handleIconCallback}
-                    />
-                    <FloorIconsCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      pathRendered={pathRenderStatus}
-                      updateFloorIcons={updateFloorIcons}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      nodesToNextFloor={nodesToNextFloor.current}
-                      nodesToPrevFloor={nodesToPrevFloor.current}
-                      onClick={handleCanvasClick}
-                    />
-                  </>
+                      <Modal/>
+                      <BackgroundCanvas
+                        style={{
+                          position: "relative",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        floor={floor}
+                        renderStatusCallback={handleBackgroundRenderStatus}
+                      />
+                      <SymbolCanvas
+                        style={{
+                          position: "absolute",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        backgroundRendered={backgroundRenderStatus}
+                        width={canvasWidth}
+                        height={canvasHeight}
+                        filtersApplied={filtersApplied}
+                        filteredNodes={filteredNodes}
+                        floor={floor}
+                      />
+                      <PathCanvas
+                        style={{
+                          position: "absolute",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        backgroundRendered={backgroundRenderStatus}
+                        updateNodesBetweenFloors={updateNodesBetweenFloors}
+                        width={canvasWidth}
+                        height={canvasHeight}
+                        floor={floor}
+                        pathNodesData={pathNodesData.current}
+                        floorConnectionCallback={handleNodeToFloorCallback}
+                        pathRenderStatusCallback={handlePathRenderStatus}
+                        startNode={startNode}
+                        endNode={endNode}
+                        iconCanvasRef={iconCanvasRef.current!}
+                      />
+                      <IconCanvas
+                        style={{
+                          position: "absolute",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        backgroundRendered={backgroundRenderStatus}
+                        width={canvasWidth}
+                        height={canvasHeight}
+                        refCallback={handleIconCallback}
+                      />
+                      <FloorIconsCanvas
+                        style={{
+                          position: "absolute",
+                          // minHeight: "100vh",
+                          // maxHeight: "100%",
+                          maxWidth: "100%",
+                        }}
+                        backgroundRendered={backgroundRenderStatus}
+                        pathRendered={pathRenderStatus}
+                        updateFloorIcons={updateFloorIcons}
+                        width={canvasWidth}
+                        height={canvasHeight}
+                        floor={floor}
+                        nodesToNextFloor={nodesToNextFloor.current}
+                        nodesToPrevFloor={nodesToPrevFloor.current}
+                        onClick={handleCanvasClick}
+                      />
+                    </>
                 </Draggable>
               </TransformComponent>
             </TransformWrapper>
           </Box>
         </Box>
 
-        <Legend filterItems={filterIcons} />
+        <Legend filterItems={filterIcons}/>
       </Box>
     </>
-  );
+);
 }
 
 export default MapRoute;

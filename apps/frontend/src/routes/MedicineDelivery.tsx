@@ -11,7 +11,6 @@ import { MedicineDeliveryFormSubmission } from "../common/formSubmission/Medicin
 import MedicineBackground from "../images/MedicineDelivery.jpeg";
 import { MedicineSubmitButton } from "../components/buttons/MedicineSubmitButton.tsx";
 import axios from "axios";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
@@ -114,7 +113,6 @@ function MedicineDelivery() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
       <Grid
         container
         direction={"row"}
