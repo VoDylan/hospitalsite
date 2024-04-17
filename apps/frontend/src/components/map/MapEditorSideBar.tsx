@@ -10,7 +10,10 @@ import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Typography } from "@mui/material";
+import {Box, Divider, Typography} from "@mui/material";
+import NodeInfo from "./NodeInfo.tsx";
+import {emptyNodeInfo} from "common/src/map/MapNodeType.ts";
+import MapNode from "common/src/map/MapNode.ts";
 
 export default function MapEditorSideBar(props: {
   title: string;
@@ -41,6 +44,12 @@ export default function MapEditorSideBar(props: {
   onClick2?: () => void;
   icon?: React.JSX.Element;
   callback?: (newFloor: string) => void;
+  selectedNode1: MapNode | null;
+  selectedNode2: MapNode | null;
+  handleClearNode1: () => void;
+  handleClearNode2: () => void;
+  handleEditNode1: (event: React.MouseEvent) => void;
+  handleEditNode2: (event: React.MouseEvent) => void;
 }) {
   return (
     <Drawer
@@ -62,7 +71,16 @@ export default function MapEditorSideBar(props: {
         },
       }}
     >
-      <Stack display={"flex"} direction={"column"} sx={{ marginLeft: "4%" }}>
+      <Stack
+        display={"flex"}
+        direction={"column"}
+        sx={{
+          marginLeft: "4%",
+          marginRight: "4%",
+          marginTop: "4%",
+          marginBottom: "4%",
+          paddingBottom: "5vh"
+        }}>
         <Typography
           color={"#003A96"}
           align={"center"}
@@ -103,7 +121,11 @@ export default function MapEditorSideBar(props: {
         <Stack
           direction={"row"}
           spacing={1}
-          sx={{ display: "flex", alignItems: "center" }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "20px",
+        }}
         >
           <LocationOnIcon
             fontSize={"medium"}
@@ -123,6 +145,57 @@ export default function MapEditorSideBar(props: {
             renderInput={props.renderInput1}
           />
         </Stack>
+
+        <Divider
+          variant={"middle"}
+          orientation={"horizontal"}
+          flexItem
+          aria-hidden={"true"}
+          sx={{
+            borderBottom: "2px solid",
+            opacity: "0.5"
+          }}
+        />
+
+        {!props.selectedNode1 && !props.selectedNode2 ?
+          <></> :
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {props.selectedNode1 ?
+              <NodeInfo
+                style={{
+                  opacity: "1",
+                  marginTop: "20px",
+                }}
+                title={"Selected Node 1"}
+                nodeInfo={props.selectedNode1 ? props.selectedNode1.nodeInfo : emptyNodeInfo}
+                textColor={"#535353"}
+                clearNodeCallback={props.handleClearNode1}
+                editNodeCallback={props.handleEditNode1}
+              /> :
+              <></>
+            }
+            {props.selectedNode2 ?
+              <NodeInfo
+                style={{
+                  opacity: "1",
+                  marginTop: "20px",
+                }}
+                title={"Selected Node 2"}
+                nodeInfo={props.selectedNode2 ? props.selectedNode2.nodeInfo : emptyNodeInfo}
+                textColor={"#535353"}
+                clearNodeCallback={props.handleClearNode2}
+                editNodeCallback={props.handleEditNode2}
+              /> :
+              <></>
+            }
+          </Box>
+        }
 
         <Stack
           direction={"column"}

@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import "./map.css";
-import {emptyNodeInfo, MapNodeType} from "common/src/map/MapNodeType.ts";
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
@@ -25,7 +25,6 @@ import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
 import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
 import IconCanvas from "../components/map/IconCanvas.tsx";
-import NodeInfo from "../components/map/NodeInfo.tsx";
 import MapEditorSideBar from "../components/map/MapEditorSideBar.tsx";
 
 
@@ -660,6 +659,12 @@ function MapEditingPage2() {
                 handleClearAll={handleClearAll}
               />}
               callback={handleFloorChange}
+              selectedNode1={selectedNode1}
+              selectedNode2={selectedNode2}
+              handleClearNode1={handleClearNode1}
+              handleClearNode2={handleClearNode2}
+              handleEditNode1={handleEditNode1}
+              handleEditNode2={handleEditNode2}
             />
           </Box>
 
@@ -741,50 +746,6 @@ function MapEditingPage2() {
             </TransformWrapper>
           </Box>
         </Box>
-        {!selectedNode1 && !selectedNode2 ?
-          <></> :
-          <Box
-            sx={{
-              width: "15%",
-              minWidth: "230px",
-              position: "fixed",
-              left: "18%",
-              top: "120px",
-              marginLeft: "1%",
-              marginTop: "1%",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {selectedNode1 ?
-              <NodeInfo
-                style={{
-                  opacity: "1",
-                  marginBottom: "10px",
-                }}
-                title={"Selected Node 1"}
-                nodeInfo={selectedNode1 ? selectedNode1.nodeInfo : emptyNodeInfo}
-                textColor={"#535353"}
-                clearNodeCallback={handleClearNode1}
-                editNodeCallback={handleEditNode1}
-              /> :
-              <></>
-            }
-            {selectedNode2 ?
-              <NodeInfo
-                style={{
-                  opacity: "1"
-                }}
-                title={"Selected Node 2"}
-                nodeInfo={selectedNode2 ? selectedNode2.nodeInfo : emptyNodeInfo}
-                textColor={"#535353"}
-                clearNodeCallback={handleClearNode2}
-                editNodeCallback={handleEditNode2}
-              /> :
-              <></>
-            }
-          </Box>
-        }
         <Legend filterItems={filterIcons} />
       </Box>
     </>
