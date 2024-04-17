@@ -5,7 +5,6 @@ import {
   Outlet,
   useNavigate,
 } from "react-router-dom";
-//import SlidesPageLI from "../src/routes/SlidesPageLI.tsx";
 import MapTestingPage from "./routes/MapTestingPage.tsx";
 import MapRoute from "./routes/mapRoute.tsx";
 import ServicesPage from "./routes/ServicesPage.tsx";
@@ -27,6 +26,7 @@ import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
 import TopBanner from "./components/banner/TopBanner.tsx";
+import { Auth0Protection} from "./components/auth0/Auth0Protection.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -41,61 +41,53 @@ function App() {
         },
         {
           path: "/Services",
-          element: <ServicesPage />,
+          element: <Auth0Protection  component={ServicesPage}/>,
         },
         {
           path: "/Services/FlowerDelivery",
-          element: <FlowerDeliveryService />,
+          element: <Auth0Protection  component={FlowerDeliveryService}/>,
         },
         {
           path: "/Services/GiftDelivery",
-          element: <GiftDeliveryService />,
+          element: <Auth0Protection  component={GiftDeliveryService}/>,
         },
         {
           path: "/Services/MedicineDelivery",
-          element: <MedicineDelivery />,
+          element: <Auth0Protection  component={MedicineDelivery}/>,
         },
         {
           path: "/Services/RoomScheduling",
-          element: <RoomScheduling />,
+          element: <Auth0Protection  component={RoomScheduling}/>,
         },
         {
           path: "/Services/SanitationService",
-          element: <SanitationService />,
+          element: <Auth0Protection  component={SanitationService}/>,
         },
         {
           path: "/Services/SecurityService",
-          element: <SecurityService />,
+          element: <Auth0Protection  component={SecurityService}/>,
         },
         {
           path: "/Services/DeviceDeliveryService",
-          element: <DeviceDeliveryService />,
+          element: <Auth0Protection  component={DeviceDeliveryService}/>,
         },
         {
           path: "/DisplayDatabase",
-          element: <DisplayDatabase />,
+          element: <Auth0Protection  component={DisplayDatabase}/>,
         },
-
-/*        {
-          path: "/Login",
-          element: <LoginForm />,
-        },*/
 
         {
           path: "/Map",
           element: <MapRoute />,
         },
-        /*{
-          path: "/LoggedIn",
-          element: <SlidesPageLI />,
-        },*/
+        
         {
           path: "/MapTestingPage",
-          element: <MapTestingPage />,
+          element: <Auth0Protection  component={MapTestingPage}/>,
         },
         {
           path: "/MapEditingPage",
-          element: <MapEditingPage />,
+          element: <Auth0Protection  component={MapEditingPage}/>,
         },
       ],
     },
