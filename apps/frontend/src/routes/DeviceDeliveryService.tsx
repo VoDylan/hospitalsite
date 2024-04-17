@@ -15,7 +15,6 @@ import { DeviceDeliveryFormSubmission } from "../common/formSubmission/DeviceDel
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/buttons/DeviceSubmitButton.tsx";
 import axios from "axios";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
@@ -159,7 +158,6 @@ function DeviceDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
       <Grid
         container
         direction={"row"}

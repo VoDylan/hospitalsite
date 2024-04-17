@@ -8,7 +8,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import giftbackground from "../images/giftbackground.jpg";
 import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubmitButton.tsx";
 import React from "react";
@@ -134,7 +133,6 @@ function GiftDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
       <Grid
         container
         direction={"row"}

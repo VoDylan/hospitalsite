@@ -11,7 +11,6 @@ import { RoomSchedulingFormSubmission } from "../common/formSubmission/RoomSched
 import RoomBackground from "../images/servicePageImages/RoomScheduling.jpg";
 import { RoomSubmitButton } from "../components/buttons/RoomSubmitButton.tsx";
 import axios from "axios";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
@@ -115,7 +114,6 @@ function RoomScheduling() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
       <Grid
         container
         direction={"row"}

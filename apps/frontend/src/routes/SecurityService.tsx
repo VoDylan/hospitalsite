@@ -9,7 +9,6 @@ import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { SecurityRequestFormSubmission } from "../common/formSubmission/SecurityRequestFormSubmission.ts";
 import securitybackground from "../images/security_background.jpg";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import { SecuritySubmitButton } from "../components/buttons/SecuritySubmitButton.tsx";
 import axios from "axios";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
@@ -121,7 +120,6 @@ function SecurityService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
       <Grid
         container
         direction={"row"}
