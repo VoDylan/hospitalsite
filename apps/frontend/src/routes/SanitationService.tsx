@@ -11,8 +11,9 @@ import { SanitationRequestFormSubmission } from "../common/formSubmission/Sanita
 import sanitationBackground from "../images/sanitationBackground.webp";
 import { SanitationSubmitButton } from "../components/buttons/SanitationSubmitButton.tsx";
 import axios from "axios";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function SanitationService() {
   const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
@@ -113,20 +114,29 @@ function SanitationService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner2 />
+      <TopBanner />
       <Grid
         container
         direction={"row"}
         justifyContent={"center"}
-        boxShadow={4}
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "transparent",
           width: "40vw", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
         }}
       >
+        <Grid
+          item
+          xs={12}
+          paddingBottom={2}
+          sx={{
+            backgroundColor: "transparent",
+          }}
+        >
+          <ServiceNavTabs/>
+        </Grid>
         <Grid
           item
           xs={12}
@@ -138,80 +148,82 @@ function SanitationService() {
             Sanitation Service Form
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black" } align={"center"}>Name:</Typography>
-          <CenterAlignedTextbox
-            label={"Name"}
-            value={form.name}
-            onChange={handleNameInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Location:</Typography>
-          <DropDown
-            label={"Location"}
-            returnData={form.location}
-            handleChange={handleLocationInput}
-            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Service Needed:</Typography>
-          <DropDown
-            items={[
-              "Routine Cleaning",
-              "Deep Cleaning",
-              "Waste Management",
-              "Disinfection",
-              "Dry Sanitation",
-              "Biohazard Cleanup",
-            ]}
-            handleChange={handleServiceInput}
-            label={"Service"}
-            returnData={form.service}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Frequency Needed:</Typography>
-          <DropDown
-            items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
-            handleChange={handleFrequencyInput}
-            label={"Frequency"}
-            returnData={form.frequency}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Priority of Sanitation:</Typography>
-          <RadioButtonsGroup
-            label={"Priority"}
-            options={["Low", "Medium", "High", "Emergency"]}
-            returnData={form.priority}
-            handleChange={handlePriorityInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Status of the Request:</Typography>
-          <RadioButtonsGroup
-            label={"Status"}
-            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-            returnData={form.status}
-            handleChange={handleStatusInput}
-          />
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            my: 2,
-            justifyContent: "center",
-          }}
-        >
-          <SanitationSubmitButton
-            input={form}
-            text={"SUBMIT"}
-            clear={clear}
-          />
+        <Grid container xs={12} boxShadow={4} sx={{backgroundColor: "white"}}>
+          <Grid item xs={6} mt={2}>
+            <Typography color={"black" } align={"center"}>Name:</Typography>
+            <CenterAlignedTextbox
+              label={"Name"}
+              value={form.name}
+              onChange={handleNameInput}
+            />
+          </Grid>
+          <Grid item xs={6} mt={2}>
+            <Typography color={"black"} align={"center"}>Location:</Typography>
+            <DropDown
+              label={"Location"}
+              returnData={form.location}
+              handleChange={handleLocationInput}
+              items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>Service Needed:</Typography>
+            <DropDown
+              items={[
+                "Routine Cleaning",
+                "Deep Cleaning",
+                "Waste Management",
+                "Disinfection",
+                "Dry Sanitation",
+                "Biohazard Cleanup",
+              ]}
+              handleChange={handleServiceInput}
+              label={"Service"}
+              returnData={form.service}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>Frequency Needed:</Typography>
+            <DropDown
+              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
+              handleChange={handleFrequencyInput}
+              label={"Frequency"}
+              returnData={form.frequency}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>Priority of Sanitation:</Typography>
+            <RadioButtonsGroup
+              label={"Priority"}
+              options={["Low", "Medium", "High", "Emergency"]}
+              returnData={form.priority}
+              handleChange={handlePriorityInput}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>Status of the Request:</Typography>
+            <RadioButtonsGroup
+              label={"Status"}
+              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+              returnData={form.status}
+              handleChange={handleStatusInput}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              my: 2,
+              justifyContent: "center",
+            }}
+          >
+            <SanitationSubmitButton
+              input={form}
+              text={"SUBMIT"}
+              clear={clear}
+            />
+          </Grid>
         </Grid>
       </Grid>
       <Typography>Jacob Murphy, Spencer Trautz</Typography>

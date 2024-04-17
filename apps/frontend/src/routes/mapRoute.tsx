@@ -3,7 +3,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
+import TopBanner from "../components/banner/TopBanner.tsx";
 import "./map.css";
 import {LocationInfo} from "common/src/LocationInfo.ts";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
@@ -625,6 +625,20 @@ function MapRoute() {
           setNodeClicked(node);
           openModal();
           console.log("clicked the node", nodeClicked);
+
+          // Switch to floor when clicking next/prev floor icons
+          for (const key of nodesToNextFloor.current.keys()) {
+            if (key.nodeID === filteredNodes[i].nodeID) {
+              setFloor(nodesToNextFloor.current.get(key)!);
+            }
+          }
+
+          for (const key of nodesToPrevFloor.current.keys()) {
+            if (key.nodeID === filteredNodes[i].nodeID) {
+              setFloor(nodesToPrevFloor.current.get(key)!);
+            }
+          }
+
           break;
         }
       }
@@ -749,7 +763,7 @@ function MapRoute() {
       }}>
         <Box sx={{height: "120px", minHeight: "120px"}}>
           <CssBaseline/>
-          <TopBanner2/>
+          <TopBanner/>
         </Box>
         <Box sx={{
           display: "flex",
