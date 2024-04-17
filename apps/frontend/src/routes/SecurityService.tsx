@@ -1,9 +1,4 @@
-import {
-  Grid,
-  Typography,
-  SelectChangeEvent,
-  Stack,
-} from "@mui/material";
+import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
@@ -11,7 +6,7 @@ import { SecurityRequestFormSubmission } from "../common/formSubmission/Security
 import securitybackground from "../images/security_background.jpg";
 import { SecuritySubmitButton } from "../components/buttons/SecuritySubmitButton.tsx";
 import axios from "axios";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function SecurityService() {
@@ -92,7 +87,7 @@ function SecurityService() {
         for (let i = 0; i < nodeIDs.length; i++) {
           updatedNodes.push({
             nodeID: nodeIDs[i],
-            longName: longNames[i]
+            longName: longNames[i],
           });
         }
 
@@ -140,7 +135,7 @@ function SecurityService() {
             backgroundColor: "transparent",
           }}
         >
-          <ServiceNavTabs/>
+          <ServiceNavTabs />
         </Grid>
         <Grid
           item
@@ -153,9 +148,11 @@ function SecurityService() {
             Security Service Form
           </Typography>
         </Grid>
-        <Grid container xs={12} boxShadow={4} sx={{backgroundColor: "white"}}>
+        <Grid container xs={12} boxShadow={4} sx={{ backgroundColor: "white" }}>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Name:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Name:
+            </Typography>
             <CenterAlignedTextbox
               label={"Name"}
               value={form.name}
@@ -163,25 +160,39 @@ function SecurityService() {
             />
           </Grid>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Location:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Location:
+            </Typography>
             <DropDown
               label={"Location"}
               returnData={form.location}
               handleChange={handleLocationInput}
-              items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Security Personnel:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Security Personnel:
+            </Typography>
             <DropDown
-              items={["Local Security", "Local Police", "State Police", "Other"]}
+              items={[
+                "Local Security",
+                "Local Police",
+                "State Police",
+                "Other",
+              ]}
               handleChange={handleSecurityPersonnelInput}
               label={"Personnel"}
               returnData={form.securityPersonnel}
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Why is Security Needed:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Why is Security Needed:
+            </Typography>
             <DropDown
               items={[
                 "I feel generally unsafe",
@@ -197,7 +208,9 @@ function SecurityService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Priority of Security:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Priority of Security:
+            </Typography>
             <RadioButtonsGroup
               label={"Priority"}
               options={["Low", "Medium", "High", "Emergency"]}
@@ -206,7 +219,9 @@ function SecurityService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Status of the Request:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Status of the Request:
+            </Typography>
             <RadioButtonsGroup
               label={"Status"}
               options={["Unassigned", "Assigned", "InProgress", "Closed"]}
@@ -234,11 +249,7 @@ function SecurityService() {
               justifyContent: "center",
             }}
           >
-            <SecuritySubmitButton
-              input={form}
-              text={"SUBMIT"}
-              clear={clear}
-            />
+            <SecuritySubmitButton input={form} text={"SUBMIT"} clear={clear} />
           </Grid>
         </Grid>
       </Grid>

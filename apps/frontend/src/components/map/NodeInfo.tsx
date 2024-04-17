@@ -1,5 +1,5 @@
-import {Box, Button, Divider, Paper, Typography} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import { Box, Button, Divider, Paper, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import MapNode from "common/src/map/MapNode.ts";
 
@@ -22,11 +22,7 @@ export default function NodeInfo(props: NodeInfoProps) {
   }, [props.node]);
 
   return (
-    <Paper
-      square={false}
-      elevation={3}
-      style={props.style}
-    >
+    <Paper square={false} elevation={3} style={props.style}>
       <Box
         marginTop={"10px"}
         marginBottom={"10px"}
@@ -36,7 +32,7 @@ export default function NodeInfo(props: NodeInfoProps) {
         flexDirection={"column"}
         alignItems={"left"}
       >
-        {!editingMode ?
+        {!editingMode ? (
           <>
             <Typography
               variant={"h5"}
@@ -45,7 +41,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               marginRight={"auto"}
               marginBottom={"10px"}
               color={props.textColor}
-            ><b>{props.title}</b></Typography>
+            >
+              <b>{props.title}</b>
+            </Typography>
             <Typography
               marginTop={"5px"}
               marginBottom={"5px"}
@@ -61,7 +59,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               aria-hidden={"true"}
               sx={{
                 borderBottom: "2px solid",
-                opacity: "0.5"
+                opacity: "0.5",
               }}
             />
 
@@ -80,7 +78,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               aria-hidden={"true"}
               sx={{
                 borderBottom: "2px solid",
-                opacity: "0.5"
+                opacity: "0.5",
               }}
             />
 
@@ -99,7 +97,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               aria-hidden={"true"}
               sx={{
                 borderBottom: "2px solid",
-                opacity: "0.5"
+                opacity: "0.5",
               }}
             />
 
@@ -118,7 +116,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               aria-hidden={"true"}
               sx={{
                 borderBottom: "2px solid",
-                opacity: "0.5"
+                opacity: "0.5",
               }}
             />
 
@@ -137,7 +135,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               aria-hidden={"true"}
               sx={{
                 borderBottom: "2px solid",
-                opacity: "0.5"
+                opacity: "0.5",
               }}
             />
 
@@ -156,7 +154,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               aria-hidden={"true"}
               sx={{
                 borderBottom: "2px solid",
-                opacity: "0.5"
+                opacity: "0.5",
               }}
             />
 
@@ -175,7 +173,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               aria-hidden={"true"}
               sx={{
                 borderBottom: "2px solid",
-                opacity: "0.5"
+                opacity: "0.5",
               }}
             />
 
@@ -194,7 +192,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               aria-hidden={"true"}
               sx={{
                 borderBottom: "2px solid",
-                opacity: "0.5"
+                opacity: "0.5",
               }}
             />
 
@@ -224,7 +222,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               </Button>
             </Box>
           </>
-        :
+        ) : (
           <>
             <TextField
               id={"nodeIDEntry"}
@@ -232,7 +230,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               variant={"outlined"}
               defaultValue={node.nodeID}
               size={"small"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => node.nodeID = event.target.value}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                (node.nodeID = event.target.value)
+              }
               sx={{
                 marginTop: "10px",
                 marginBottom: "10px",
@@ -244,7 +244,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               variant={"outlined"}
               defaultValue={node.xcoord}
               size={"small"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => node.xcoord = parseInt(event.target.value)}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                (node.xcoord = parseInt(event.target.value))
+              }
               sx={{
                 marginTop: "10px",
                 marginBottom: "10px",
@@ -256,7 +258,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               variant={"outlined"}
               defaultValue={node.ycoord}
               size={"small"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => node.ycoord = parseInt(event.target.value)}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                (node.ycoord = parseInt(event.target.value))
+              }
               sx={{
                 marginTop: "10px",
                 marginBottom: "10px",
@@ -268,7 +272,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               variant={"outlined"}
               defaultValue={node.floor}
               size={"small"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => node.floor = event.target.value}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                (node.floor = event.target.value)
+              }
               sx={{
                 marginTop: "10px",
                 marginBottom: "10px",
@@ -280,7 +286,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               variant={"outlined"}
               defaultValue={node.building}
               size={"small"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => node.building = event.target.value}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                (node.building = event.target.value)
+              }
               sx={{
                 marginTop: "10px",
                 marginBottom: "10px",
@@ -292,7 +300,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               variant={"outlined"}
               defaultValue={node.nodeType}
               size={"small"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => node.nodeType = event.target.value}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                (node.nodeType = event.target.value)
+              }
               sx={{
                 marginTop: "10px",
                 marginBottom: "10px",
@@ -304,7 +314,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               variant={"outlined"}
               defaultValue={node.longName}
               size={"small"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => node.longName = event.target.value}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                (node.longName = event.target.value)
+              }
               sx={{
                 marginTop: "10px",
                 marginBottom: "10px",
@@ -316,7 +328,9 @@ export default function NodeInfo(props: NodeInfoProps) {
               variant={"outlined"}
               defaultValue={node.shortName}
               size={"small"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => node.shortName = event.target.value}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                (node.shortName = event.target.value)
+              }
               sx={{
                 marginTop: "10px",
                 marginBottom: "10px",
@@ -355,7 +369,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               </Button>
             </Box>
           </>
-        }
+        )}
       </Box>
     </Paper>
   );

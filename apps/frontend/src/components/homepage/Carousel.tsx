@@ -232,7 +232,7 @@ function MainCarousel() {
             //textDecoration: "underline",
             marginLeft: "2%",
             fontStyle: "inherit",
-            fontFamily: "sans-serif"
+            fontFamily: "sans-serif",
           }}
         >
           Services

@@ -1,34 +1,43 @@
-import React, {useEffect} from 'react';
-import {Button } from '@mui/material'; //IconButton, Stack
-import { useAuth0 } from '@auth0/auth0-react';
+import React, { useEffect } from "react";
+import { Button } from "@mui/material"; //IconButton, Stack
+import { useAuth0 } from "@auth0/auth0-react";
 //import {AccountCircle} from "@mui/icons-material";
 
 const LoginButton: React.FC = () => {
-  const { loginWithRedirect, user, logout, isAuthenticated, getAccessTokenSilently, isLoading   } = useAuth0();
+  const {
+    loginWithRedirect,
+    user,
+    logout,
+    isAuthenticated,
+    getAccessTokenSilently,
+    isLoading,
+  } = useAuth0();
 
   const handleLogin = async () => {
     try {
       await loginWithRedirect({
         authorizationParams: {
-          redirect_uri: 'http://localhost:3000/'
-        }
+          redirect_uri: "http://localhost:3000/",
+        },
       });
     } catch (error) {
-      console.error('Error logging in:', error);
+      console.error("Error logging in:", error);
     }
   };
 
-  const handleLogout =  () => {
-      logout({
-        logoutParams: {
-          returnTo: window.location.origin,
-        },
-      }).then().catch(error => {
-      console.error('Error logging out:', error);
+  const handleLogout = () => {
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    })
+      .then()
+      .catch((error) => {
+        console.error("Error logging out:", error);
       });
   };
 
-  useEffect( () => {
+  useEffect(() => {
     const getToken = async () => {
       try {
         await getAccessTokenSilently();
@@ -39,26 +48,21 @@ const LoginButton: React.FC = () => {
           },
         });
       }
-  };
-//get token if authenticated
-  if (!isLoading && isAuthenticated) {
-    getToken().then();
-  }
-}, [
-  getAccessTokenSilently,
-  isAuthenticated,
-  isLoading,
-  loginWithRedirect,
-  ]);
+    };
+    //get token if authenticated
+    if (!isLoading && isAuthenticated) {
+      getToken().then();
+    }
+  }, [getAccessTokenSilently, isAuthenticated, isLoading, loginWithRedirect]);
 
   return (
-      <Button
-        variant="contained"
-        sx={{width: 220}}
-        onClick={user ? handleLogout : handleLogin}
-      >
-        {user ? 'Logout' : 'Login'}
-      </Button>
+    <Button
+      variant="contained"
+      sx={{ width: 220 }}
+      onClick={user ? handleLogout : handleLogin}
+    >
+      {user ? "Logout" : "Login"}
+    </Button>
   );
 };
 
@@ -93,4 +97,3 @@ export default LoginButton;
     )}
   </IconButton>
 </Stack>*/
-

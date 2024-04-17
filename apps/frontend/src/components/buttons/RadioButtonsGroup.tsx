@@ -17,7 +17,9 @@ export default function RadioButtonsGroup(props: ButtonProps) {
   };
 
   return (
-    <FormControl sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+    <FormControl
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
         name="radio-buttons-group"

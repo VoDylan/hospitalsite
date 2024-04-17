@@ -1,7 +1,7 @@
-import React, {useEffect, useRef} from "react";
-import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
+import React, { useEffect, useRef } from "react";
+import { Floor, floorStrToObj } from "common/src/map/Floor.ts";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
-import {IDCoordinates} from "common/src/IDCoordinates.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import GraphManager from "../../common/GraphManager.ts";
 
@@ -13,7 +13,10 @@ interface PathCanvasProps {
   height: number;
   floor: Floor;
   pathNodesData: IDCoordinates[];
-  floorConnectionCallback: (nodesToNextFloor: Map<IDCoordinates, Floor>, nodesToPrevFloor: Map<IDCoordinates, Floor>) => void;
+  floorConnectionCallback: (
+    nodesToNextFloor: Map<IDCoordinates, Floor>,
+    nodesToPrevFloor: Map<IDCoordinates, Floor>,
+  ) => void;
   pathRenderStatusCallback: (status: boolean) => void;
   startNode: string;
   endNode: string;
@@ -28,22 +31,34 @@ export default function PathCanvas(props: PathCanvasProps) {
   // const pathRenderStatusCallback = props.pathRenderStatusCallback;
 
   useEffect(() => {
-    if(props.backgroundRendered) initializeLayeredCanvas(canvasRef.current, props.width, props.height);
+    if (props.backgroundRendered)
+      initializeLayeredCanvas(canvasRef.current, props.width, props.height);
   }, [props.backgroundRendered, props.height, props.width]);
 
   useEffect(() => {
-    if(props.updateNodesBetweenFloors) {
+    if (props.updateNodesBetweenFloors) {
       if (!props.pathNodesData || props.pathNodesData.length == 0) return;
       console.log("Determining interfloor nodes");
 
-      const nodesToPrevFloor: Map<IDCoordinates, Floor> = new Map<IDCoordinates, Floor>();
-      const nodesToNextFloor: Map<IDCoordinates, Floor> = new Map<IDCoordinates, Floor>();
+      const nodesToPrevFloor: Map<IDCoordinates, Floor> = new Map<
+        IDCoordinates,
+        Floor
+      >();
+      const nodesToNextFloor: Map<IDCoordinates, Floor> = new Map<
+        IDCoordinates,
+        Floor
+      >();
 
-      let lastVisitedFloor: Floor = floorStrToObj(GraphManager.getInstance().getNodeByID(props.pathNodesData[0].nodeID)!.floor)!;
+      let lastVisitedFloor: Floor = floorStrToObj(
+        GraphManager.getInstance().getNodeByID(props.pathNodesData[0].nodeID)!
+          .floor,
+      )!;
       let lastVisitedNode: IDCoordinates = props.pathNodesData[0];
 
       for (let i = 0; i < props.pathNodesData.length; i++) {
-        const node: MapNode | null = GraphManager.getInstance().getNodeByID(props.pathNodesData[i].nodeID);
+        const node: MapNode | null = GraphManager.getInstance().getNodeByID(
+          props.pathNodesData[i].nodeID,
+        );
         if (!node) continue;
 
         if (node.floor != lastVisitedFloor) {
@@ -57,10 +72,15 @@ export default function PathCanvas(props: PathCanvasProps) {
 
       floorConnectionCallback(nodesToNextFloor, nodesToPrevFloor);
     }
-  }, [floorConnectionCallback, props.pathNodesData, props.updateNodesBetweenFloors]);
+  }, [
+    floorConnectionCallback,
+    props.pathNodesData,
+    props.updateNodesBetweenFloors,
+  ]);
 
   useEffect(() => {
-    if(animationFrameRequestID.current) cancelAnimationFrame(animationFrameRequestID.current);
+    if (animationFrameRequestID.current)
+      cancelAnimationFrame(animationFrameRequestID.current);
 
     if (!props.pathNodesData) return;
     const includedPathsOnFloor: IDCoordinates[][] = [];
@@ -70,14 +90,16 @@ export default function PathCanvas(props: PathCanvasProps) {
     let lastVisitedFloor: Floor | null = null;
 
     for (let i = 0; i < props.pathNodesData.length; i++) {
-      const node: MapNode | null = GraphManager.getInstance().getNodeByID(props.pathNodesData[i].nodeID);
+      const node: MapNode | null = GraphManager.getInstance().getNodeByID(
+        props.pathNodesData[i].nodeID,
+      );
       if (!node) continue;
 
       if (node.floor == props.floor) {
         lastVisitedFloor = floorStrToObj(node.floor);
         currPath.push(props.pathNodesData[i]);
       } else {
-        if (lastVisitedFloor && (lastVisitedFloor !== node.floor)) {
+        if (lastVisitedFloor && lastVisitedFloor !== node.floor) {
           lastVisitedFloor = floorStrToObj(node.floor);
         }
 
@@ -104,11 +126,11 @@ export default function PathCanvas(props: PathCanvasProps) {
         let currentTargetIndex = 0;
         let currentPathIndex = 0;
         let currentX =
-          includedPathsOnFloor[currentPathIndex][currentTargetIndex]
-            .coordinates.x;
+          includedPathsOnFloor[currentPathIndex][currentTargetIndex].coordinates
+            .x;
         let currentY =
-          includedPathsOnFloor[currentPathIndex][currentTargetIndex]
-            .coordinates.y;
+          includedPathsOnFloor[currentPathIndex][currentTargetIndex].coordinates
+            .y;
         const speed = 1;
 
         const moveDot = (origFloor: Floor) => {
@@ -125,20 +147,38 @@ export default function PathCanvas(props: PathCanvasProps) {
             for (let j = 0; j < includedPathsOnFloor[i].length; j++) {
               ctx.beginPath();
 
-              if (includedPathsOnFloor[i][j].nodeID === props.startNode) { // Check if it's the first element
-                const image: HTMLImageElement | null = document.querySelector(`.start`);
+              if (includedPathsOnFloor[i][j].nodeID === props.startNode) {
+                // Check if it's the first element
+                const image: HTMLImageElement | null =
+                  document.querySelector(`.start`);
                 if (!image) return;
 
-                props.iconCanvasRef.getContext("2d")!.drawImage(image, includedPathsOnFloor[i][j].coordinates.x - 58, includedPathsOnFloor[i][j].coordinates.y - 42, 110, 80);
-
+                props.iconCanvasRef
+                  .getContext("2d")!
+                  .drawImage(
+                    image,
+                    includedPathsOnFloor[i][j].coordinates.x - 58,
+                    includedPathsOnFloor[i][j].coordinates.y - 42,
+                    110,
+                    80,
+                  );
               }
 
-              if (includedPathsOnFloor[i][j].nodeID === props.endNode) { // Check if it's the last element
-                const image2: HTMLImageElement | null = document.querySelector(`.end`);
+              if (includedPathsOnFloor[i][j].nodeID === props.endNode) {
+                // Check if it's the last element
+                const image2: HTMLImageElement | null =
+                  document.querySelector(`.end`);
                 if (!image2) return;
 
-                props.iconCanvasRef.getContext("2d")!.drawImage(image2, includedPathsOnFloor[i][j].coordinates.x - 63, includedPathsOnFloor[i][j].coordinates.y - 65, 180, 150); // Adjust iconWidth and iconHeight as needed
-
+                props.iconCanvasRef
+                  .getContext("2d")!
+                  .drawImage(
+                    image2,
+                    includedPathsOnFloor[i][j].coordinates.x - 63,
+                    includedPathsOnFloor[i][j].coordinates.y - 65,
+                    180,
+                    150,
+                  ); // Adjust iconWidth and iconHeight as needed
               }
 
               ctx.arc(
@@ -156,9 +196,6 @@ export default function PathCanvas(props: PathCanvasProps) {
           ctx.strokeStyle = "#0F53FF";
           ctx.lineWidth = 8;
           ctx.beginPath();
-
-
-
 
           for (let i = 0; i < includedPathsOnFloor.length; i++) {
             ctx.moveTo(
@@ -194,8 +231,6 @@ export default function PathCanvas(props: PathCanvasProps) {
           ctx.arc(currentX, currentY, 20, 0, 2 * Math.PI);
           ctx.stroke();
 
-
-
           const dx =
             includedPathsOnFloor[currentPathIndex][currentTargetIndex]
               .coordinates.x - currentX;
@@ -223,21 +258,27 @@ export default function PathCanvas(props: PathCanvasProps) {
                 .coordinates.y;
             currentTargetIndex = 1;
           }
-          animationFrameRequestID.current = requestAnimationFrame(() => moveDot(origFloor));
+          animationFrameRequestID.current = requestAnimationFrame(() =>
+            moveDot(origFloor),
+          );
         };
         requestAnimationFrame(() => moveDot(props.floor));
       } else {
         console.log("Clearing path canvas");
-        if(animationFrameRequestID.current) cancelAnimationFrame(animationFrameRequestID.current);
+        if (animationFrameRequestID.current)
+          cancelAnimationFrame(animationFrameRequestID.current);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
-  }, [props.endNode, props.floor, props.height, props.iconCanvasRef, props.pathNodesData, props.startNode, props.width]);
+  }, [
+    props.endNode,
+    props.floor,
+    props.height,
+    props.iconCanvasRef,
+    props.pathNodesData,
+    props.startNode,
+    props.width,
+  ]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={props.style}
-    />
-  );
+  return <canvas ref={canvasRef} style={props.style} />;
 }

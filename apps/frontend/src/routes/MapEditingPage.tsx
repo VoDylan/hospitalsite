@@ -1,24 +1,30 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import TopBanner2 from "../components/banner/TopBanner.tsx";
 import "./map.css";
-import {MapNodeType} from "common/src/map/MapNodeType.ts";
+import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
-import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
-import {FilterName} from "common/src/filter/FilterName.ts";
+import FilterManager, {
+  generateFilterValue,
+} from "common/src/filter/FilterManager.ts";
+import { FilterName } from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
-import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
+import {
+  ReactZoomPanPinchRef,
+  TransformComponent,
+  TransformWrapper,
+} from "react-zoom-pan-pinch";
 
 import Icon from "../components/map/SlideIcon.tsx";
 import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
-import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
+import { Floor, floorStrToObj } from "common/src/map/Floor.ts";
 import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
 import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
@@ -27,11 +33,10 @@ import MapEditorSideBar from "../components/map/MapEditorSideBar.tsx";
 import EdgeCanvas from "../components/map/EdgeCanvas.tsx";
 import ClickableCanvas from "../components/map/ClickableCanvas.tsx";
 
-
 interface TransformState {
   scale: number;
   positionX: number;
-  positionY: number
+  positionY: number;
 }
 
 function MapEditingPage() {
@@ -56,7 +61,8 @@ function MapEditingPage() {
     { label: string; node: string }[]
   >([]);
 
-  const [backgroundRenderStatus, setBackgroundRenderStatus] = useState<boolean>(false);
+  const [backgroundRenderStatus, setBackgroundRenderStatus] =
+    useState<boolean>(false);
   const [canvasWidth, setCanvasWidth] = useState<number>(0);
   const [canvasHeight, setCanvasHeight] = useState<number>(0);
 
@@ -340,7 +346,6 @@ function MapEditingPage() {
     setFiltersApplied(false);
   };
 
-
   /**
    * Change list of nodes based on applied filters
    */
@@ -421,7 +426,9 @@ function MapEditingPage() {
         (node) => node.label === value,
       );
       if (selectedNode) {
-        setSelectedNode1(GraphManager.getInstance().getNodeByID(selectedNode.node)!);
+        setSelectedNode1(
+          GraphManager.getInstance().getNodeByID(selectedNode.node)!,
+        );
       }
     } else {
       setSelectedNode1(null); // Handle null value if necessary
@@ -435,7 +442,9 @@ function MapEditingPage() {
         (node) => node.label === value,
       );
       if (selectedNode) {
-        setSelectedNode2(GraphManager.getInstance().getNodeByID(selectedNode.node)!);
+        setSelectedNode2(
+          GraphManager.getInstance().getNodeByID(selectedNode.node)!,
+        );
       }
     } else {
       setSelectedNode2(null); // Handle null value if necessary
@@ -445,7 +454,7 @@ function MapEditingPage() {
   const handleFloorChange = (newFloor: string) => {
     const newFloorObj = floorStrToObj(newFloor);
 
-    if(!newFloorObj) {
+    if (!newFloorObj) {
       console.error("New map floor is not a valid floor!");
       return;
     }
@@ -470,7 +479,11 @@ function MapEditingPage() {
     }
   }, [determineFilters, filtersApplied, nodeDataLoaded]);
 
-  const handleBackgroundRenderStatus = (status: boolean, width: number, height: number) => {
+  const handleBackgroundRenderStatus = (
+    status: boolean,
+    width: number,
+    height: number,
+  ) => {
     setBackgroundRenderStatus(status);
     setCanvasWidth(width);
     setCanvasHeight(height);
@@ -480,8 +493,11 @@ function MapEditingPage() {
     iconCanvasRef.current = ref;
   };
 
-  const handleTransform = (ref: ReactZoomPanPinchRef, state: { scale: number; positionX: number; positionY: number }) => {
-    if(!transformRef.current) transformRef.current = ref;
+  const handleTransform = (
+    ref: ReactZoomPanPinchRef,
+    state: { scale: number; positionX: number; positionY: number },
+  ) => {
+    if (!transformRef.current) transformRef.current = ref;
     transformState.current = state;
   };
 
@@ -489,27 +505,40 @@ function MapEditingPage() {
     if (!iconCanvasRef.current) return;
     const rect = iconCanvasRef.current.getBoundingClientRect();
 
-    const leftOverHeight = (window.innerHeight - 120)/ (rect.height / transformState.current.scale);
+    const leftOverHeight =
+      (window.innerHeight - 120) / (rect.height / transformState.current.scale);
     console.log(leftOverHeight);
 
-    const widthRatio = canvasWidth / (window.innerWidth - (window.innerWidth * 0.18));
+    const widthRatio =
+      canvasWidth / (window.innerWidth - window.innerWidth * 0.18);
     const heightRatio = canvasHeight / (window.innerHeight - 120);
 
-    const actualX = ((event.clientX - transformState.current.positionX - (window.innerWidth * 0.18)) / transformState.current.scale) * widthRatio;
-    const actualY = ((event.clientY - transformState.current.positionY - 120) / transformState.current.scale) * heightRatio * leftOverHeight;
+    const actualX =
+      ((event.clientX -
+        transformState.current.positionX -
+        window.innerWidth * 0.18) /
+        transformState.current.scale) *
+      widthRatio;
+    const actualY =
+      ((event.clientY - transformState.current.positionY - 120) /
+        transformState.current.scale) *
+      heightRatio *
+      leftOverHeight;
     console.log(`Adjusted ${actualX} ${actualY}`);
 
-    for (let i = 0; i < filteredNodes.length; i++){
-      if (filteredNodes[i].floor === floor){
+    for (let i = 0; i < filteredNodes.length; i++) {
+      if (filteredNodes[i].floor === floor) {
         const node = filteredNodes[i];
-        const distance = Math.sqrt((actualX - node.xcoord)**2 + (actualY - node.ycoord)**2);
+        const distance = Math.sqrt(
+          (actualX - node.xcoord) ** 2 + (actualY - node.ycoord) ** 2,
+        );
 
-        if (distance < 25){
-          if(selectedNode1 && selectedNode2) {
+        if (distance < 25) {
+          if (selectedNode1 && selectedNode2) {
             setSelectedNode1(filteredNodes[i]);
             setSelectedNode2(null);
             return;
-          } else if(selectedNode1) {
+          } else if (selectedNode1) {
             setSelectedNode2(filteredNodes[i]);
             console.log("Set node 2");
             return;
@@ -533,12 +562,14 @@ function MapEditingPage() {
 
   const handleEditNode = (node: MapNode) => {
     try {
-      axios.put("/api/database/nodes/updatenode", node.nodeInfo, {
-        headers: {"Content-Type": "application/json"},
-      }).then((res) => {
-        console.log("Updated node!");
-        console.log(res.data);
-      });
+      axios
+        .put("/api/database/nodes/updatenode", node.nodeInfo, {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then((res) => {
+          console.log("Updated node!");
+          console.log(res.data);
+        });
     } catch (e) {
       console.log("Failed to update node");
     }
@@ -547,12 +578,18 @@ function MapEditingPage() {
 
   const handleDeleteNode = (node: MapNode) => {
     try {
-      axios.put(`/api/database/nodes/deletenode/${node.nodeID}`, {}, {
-        headers: {"Content-Type": "application/json"},
-      }).then((res) => {
-        console.log("Deleted node!");
-        console.log(res.data);
-      });
+      axios
+        .put(
+          `/api/database/nodes/deletenode/${node.nodeID}`,
+          {},
+          {
+            headers: { "Content-Type": "application/json" },
+          },
+        )
+        .then((res) => {
+          console.log("Deleted node!");
+          console.log(res.data);
+        });
     } catch (e) {
       console.log("Failed to delete node");
     }
@@ -562,48 +599,52 @@ function MapEditingPage() {
   return (
     <>
       <img
-          src={startIcon}
-          className={"start"}
-          alt="icon"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            opacity: 0,
-            zIndex: -1,
-          }}
-        />
-        <img
-          src={endIcon}
-          className={"end"}
-          alt="icon"
-          style={{
-        position: "absolute",
+        src={startIcon}
+        className={"start"}
+        alt="icon"
+        style={{
+          position: "absolute",
           top: 0,
           left: 0,
           opacity: 0,
           zIndex: -1,
         }}
       />
-      <Box sx={{
-        display: "flex",
-        flexDirection: "column",
-        maxHeight: window.innerHeight,
-      }}>
-        <Box sx={{height: "120px", minHeight: "120px"}}>
-          <CssBaseline/>
-          <TopBanner2/>
-        </Box>
-        <Box sx={{
+      <img
+        src={endIcon}
+        className={"end"}
+        alt="icon"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          opacity: 0,
+          zIndex: -1,
+        }}
+      />
+      <Box
+        sx={{
           display: "flex",
-          flexDirection: "row",
-          height: "100%",
+          flexDirection: "column",
           maxHeight: window.innerHeight,
-          minHeight: 0,
-          overflow: "clip",
-          flexGrow: 1,
-          flexShrink: 1,
-        }}>
+        }}
+      >
+        <Box sx={{ height: "120px", minHeight: "120px" }}>
+          <CssBaseline />
+          <TopBanner2 />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            height: "100%",
+            maxHeight: window.innerHeight,
+            minHeight: 0,
+            overflow: "clip",
+            flexGrow: 1,
+            flexShrink: 1,
+          }}
+        >
           <Box
             sx={{
               width: "18%",
@@ -621,52 +662,62 @@ function MapEditingPage() {
               groupBy={(option) => option.charAt(0).toUpperCase()}
               optionLabel={(option) => option}
               renderInput={(params) => (
-                <TextField {...params} label="First Node Location" value={selectedNode1 ? selectedNode1.nodeID : ""}/>
+                <TextField
+                  {...params}
+                  label="First Node Location"
+                  value={selectedNode1 ? selectedNode1.nodeID : ""}
+                />
               )}
               onChange1={(event, value) => handleEndNodeChange(value)}
               renderInput1={(params) => (
-                <TextField {...params} label="Second Node Location" value={selectedNode2 ? selectedNode2.nodeID : ""}/>
+                <TextField
+                  {...params}
+                  label="Second Node Location"
+                  value={selectedNode2 ? selectedNode2.nodeID : ""}
+                />
               )}
               open={open}
               onClick1={handleButtonClick}
               checked={checked}
               onClick2={handleSelectAll}
-              icon={<Icon
-                handleButtonClick={handleButtonClick}
-                checked={false}
-                confIconState={confIconState}
-                deptIconState={deptIconState}
-                labsIconState={labsIconState}
-                servIconState={servIconState}
-                infoIconState={infoIconState}
-                restroomsIconState={restroomsIconState}
-                elevatorIconState={elevatorIconState}
-                stairsIconState={stairsIconState}
-                exitsIconState={exitsIconState}
-                retlIconState={retlIconState}
-                ll1IconState={ll1IconState}
-                ll2IconState={ll2IconState}
-                firstFloorIconState={firstFloorIconState}
-                secondFloorIconState={secondFloorIconState}
-                thirdFloorIconState={thirdFloorIconState}
-                handleConfIconState={handleConfIconState}
-                handleDeptIconState={handleDeptIconState}
-                handleLabsIconState={handleLabsIconState}
-                handleServIconState={handleServIconState}
-                handleInfoIconState={handleInfoIconState}
-                handleRestroomsIconState={handleRestroomsIconState}
-                handleElevatorIconState={handleElevatorIconState}
-                handleStairsIconState={handleStairsIconState}
-                handleExitsIconState={handleExitsIconState}
-                handleRetlIconState={handleRetlIconState}
-                handleLL1IconState={handleLL1IconState}
-                handleLL2IconState={handleLL2IconState}
-                handleFirstFloorIconState={handleFirstFloorIconState}
-                handleSecondFloorIconState={handleSecondFloorIconState}
-                handleThirdFloorIconState={handleThirdFloorIconState}
-                handleSelectAll={handleSelectAll}
-                handleClearAll={handleClearAll}
-              />}
+              icon={
+                <Icon
+                  handleButtonClick={handleButtonClick}
+                  checked={false}
+                  confIconState={confIconState}
+                  deptIconState={deptIconState}
+                  labsIconState={labsIconState}
+                  servIconState={servIconState}
+                  infoIconState={infoIconState}
+                  restroomsIconState={restroomsIconState}
+                  elevatorIconState={elevatorIconState}
+                  stairsIconState={stairsIconState}
+                  exitsIconState={exitsIconState}
+                  retlIconState={retlIconState}
+                  ll1IconState={ll1IconState}
+                  ll2IconState={ll2IconState}
+                  firstFloorIconState={firstFloorIconState}
+                  secondFloorIconState={secondFloorIconState}
+                  thirdFloorIconState={thirdFloorIconState}
+                  handleConfIconState={handleConfIconState}
+                  handleDeptIconState={handleDeptIconState}
+                  handleLabsIconState={handleLabsIconState}
+                  handleServIconState={handleServIconState}
+                  handleInfoIconState={handleInfoIconState}
+                  handleRestroomsIconState={handleRestroomsIconState}
+                  handleElevatorIconState={handleElevatorIconState}
+                  handleStairsIconState={handleStairsIconState}
+                  handleExitsIconState={handleExitsIconState}
+                  handleRetlIconState={handleRetlIconState}
+                  handleLL1IconState={handleLL1IconState}
+                  handleLL2IconState={handleLL2IconState}
+                  handleFirstFloorIconState={handleFirstFloorIconState}
+                  handleSecondFloorIconState={handleSecondFloorIconState}
+                  handleThirdFloorIconState={handleThirdFloorIconState}
+                  handleSelectAll={handleSelectAll}
+                  handleClearAll={handleClearAll}
+                />
+              }
               callback={handleFloorChange}
               selectedNode1={selectedNode1}
               selectedNode2={selectedNode2}
@@ -677,10 +728,7 @@ function MapEditingPage() {
             />
           </Box>
 
-          <Box
-            height={"100%"}
-            overflow={"clip"}
-          >
+          <Box height={"100%"} overflow={"clip"}>
             <TransformWrapper
               onTransformed={handleTransform}
               minScale={0.8}
@@ -689,9 +737,7 @@ function MapEditingPage() {
               initialPositionY={0}
             >
               <TransformComponent>
-                <Draggable
-                  defaultPosition={{x: 0, y: 0}}
-                >
+                <Draggable defaultPosition={{ x: 0, y: 0 }}>
                   <>
                     <BackgroundCanvas
                       style={{

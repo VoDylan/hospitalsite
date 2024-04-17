@@ -1,4 +1,13 @@
-import { Card, CardMedia, Box, Typography, Stack, Button, CardActions, Link as MuiLink } from "@mui/material";
+import {
+  Card,
+  CardMedia,
+  Box,
+  Typography,
+  Stack,
+  Button,
+  CardActions,
+  Link as MuiLink,
+} from "@mui/material";
 
 interface ServiceProps {
   servicePath: string;
@@ -26,10 +35,17 @@ export function ServiceCard(props: ServiceProps) {
           <CardMedia
             component={"img"}
             image={props.imagePath}
-            sx={{ width: "350px", height: "310px", display: "flex", marginBottom: "15px"}} // Ensure the image fills the entire card
+            sx={{
+              width: "350px",
+              height: "310px",
+              display: "flex",
+              marginBottom: "15px",
+            }} // Ensure the image fills the entire card
           />
           <Typography
-            gutterBottom variant="h5" component="div"
+            gutterBottom
+            variant="h5"
+            component="div"
             sx={{
               textAlign: "center",
             }}
@@ -37,10 +53,11 @@ export function ServiceCard(props: ServiceProps) {
             {props.title}
           </Typography>
           <Typography
-            variant="body2" color="text.secondary"
+            variant="body2"
+            color="text.secondary"
             sx={{
               textAlign: "center",
-              marginBottom: "15px"
+              marginBottom: "15px",
             }}
           >
             {props.description}

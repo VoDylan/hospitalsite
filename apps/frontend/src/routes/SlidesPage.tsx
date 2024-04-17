@@ -1,4 +1,3 @@
-
 import MainCarousel from "../components/homepage/Carousel.tsx";
 
 function MapPage() {
