@@ -16,6 +16,8 @@ interface NestedListProps {
   handleSelectBFS: () => void;
   checkedAS: boolean;
   handleSelectAS: () => void;
+  checkedDFS: boolean;
+  handleSelectDFS: () => void;
 }
 
 const NestedList: React.FC<NestedListProps> = ({
@@ -25,6 +27,8 @@ const NestedList: React.FC<NestedListProps> = ({
   handleSelectBFS,
   checkedAS,
   handleSelectAS,
+                                                 checkedDFS,
+                                                 handleSelectDFS,
 }) => {
   return (
     <List
@@ -54,6 +58,14 @@ const NestedList: React.FC<NestedListProps> = ({
               <CheckBoxIcon sx={{ color: checkedAS ? "green" : "lightgray" }} />
             </ListItemIcon>
             <ListItemText primary="A*" />
+          </ListItemButton>
+          <ListItemButton onClick={handleSelectDFS} sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <CheckBoxIcon
+                sx={{ color: checkedDFS ? "green" : "lightgray" }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="DFS" />
           </ListItemButton>
         </List>
       </Collapse>

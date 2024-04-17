@@ -109,19 +109,33 @@ function DeviceDeliveryService() {
 
   // Define an interface for the node data
   interface NodeData {
+    nodeID: string;
     longName: string;
   }
 
   // Storing the node numbers in a use state so that we only make a get request once
-  const [nodeNumbers, setNodeNumbers] = useState<string[]>([]);
+  const [nodes, updateNodes] = useState<NodeData[]>([]);
 
   // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
+    window.scrollTo(0, 0);
     axios
       .get<NodeData[]>("/api/database/nodes")
-      .then((response) =>
-        setNodeNumbers(response.data.map((node) => node.longName)),
-      )
+      .then((response) => {
+        const nodeIDs = response.data.map((node) => node.nodeID);
+        const longNames = response.data.map((node) => node.longName);
+
+        const updatedNodes: NodeData[] = [];
+
+        for (let i = 0; i < nodeIDs.length; i++) {
+          updatedNodes.push({
+            nodeID: nodeIDs[i],
+            longName: longNames[i]
+          });
+        }
+
+        updateNodes(updatedNodes);
+      })
       .catch((error) => console.error(error));
   }, []);
 
@@ -183,7 +197,7 @@ function DeviceDeliveryService() {
             label={"Location"}
             returnData={form.roomNum}
             handleChange={handleLocationInput}
-            items={nodeNumbers}
+            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
           />
         </Grid>
         <Grid item xs={6}>
