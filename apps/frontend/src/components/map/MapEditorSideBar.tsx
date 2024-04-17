@@ -2,7 +2,7 @@ import Floor from "./FloorTabs.tsx";
 import React from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
-// import Box from "@mui/material/Box";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
@@ -10,7 +10,7 @@ import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {Box, Divider, Typography} from "@mui/material";
+import {Divider, Typography} from "@mui/material";
 import NodeInfo from "./NodeInfo.tsx";
 import MapNode from "common/src/map/MapNode.ts";
 
@@ -50,6 +50,7 @@ export default function MapEditorSideBar(props: {
   handleEditNode: (node: MapNode) => void;
   handleDeleteNode: (node: MapNode) => void;
 }) {
+  console.log("Rerendering map editor side bar");
   return (
     <Drawer
       variant="permanent"

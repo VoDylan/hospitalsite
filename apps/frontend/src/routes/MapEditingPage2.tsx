@@ -516,20 +516,24 @@ function MapEditingPage2() {
         const node = filteredNodes[i];
         const distance = Math.sqrt((actualX - node.xcoord)**2 + (actualY - node.ycoord)**2);
 
-        console.log("node: ", node.xcoord, node.ycoord);
-        console.log("distance: ", distance);
-        console.log("\n");
+        // console.log("node: ", node.xcoord, node.ycoord);
+        // console.log("distance: ", distance);
+        // console.log("\n");
 
 
         if (distance < 25){
-          if(node1LastUpdated) {
+          if(selectedNode1 && selectedNode2) {
+            setSelectedNode1(filteredNodes[i]);
+            setSelectedNode2(null);
+            return;
+          } else if(selectedNode1) {
             setSelectedNode2(filteredNodes[i]);
-            setNode1LastUpdated(false);
-            break;
+            console.log("Set node 2");
+            return;
           } else {
             setSelectedNode1(filteredNodes[i]);
-            setNode1LastUpdated(true);
-            break;
+            console.log("Set node 1");
+            return;
           }
         }
       }
@@ -538,12 +542,10 @@ function MapEditingPage2() {
 
   const handleClearNode1 = () => {
     setSelectedNode1(null);
-    setNode1LastUpdated(false);
   };
 
   const handleClearNode2 = () => {
     setSelectedNode2(null);
-    setNode1LastUpdated(true);
   };
 
   const handleEditNode = (node: MapNode) => {
