@@ -51,6 +51,20 @@ export async function deleteNodePrisma(nodeID: string) {
   }
 }
 
+export async function deleteEdgePrisma(edgeID: string) {
+  try {
+    await client.edge.delete({
+      where: {
+        edgeID: edgeID,
+      },
+    });
+    return 200;
+  } catch (e) {
+    console.error(e);
+    return 400;
+  }
+}
+
 export async function createEdgePrisma(edge: MapEdgeType) {
   console.log(
     `Adding edge (ID: ${edge.edgeID}) between ${edge.startNodeID} and ${edge.endNodeID} to DB`,
@@ -258,15 +272,6 @@ export async function getServiceRequestFromDBByType(serviceType: string) {
       `${loggingPrefix}Request(s) found with serviceType ${serviceType}`,
     );
   }
-
-  client.serviceRequest.update({
-    where: {
-      id: 47,
-    },
-    data: {
-      serviceType: "done",
-    },
-  });
 
   return request;
 }

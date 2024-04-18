@@ -32,6 +32,8 @@ import IconCanvas from "../components/map/IconCanvas.tsx";
 import MapEditorSideBar from "../components/map/MapEditorSideBar.tsx";
 import EdgeCanvas from "../components/map/EdgeCanvas.tsx";
 import ClickableCanvas from "../components/map/ClickableCanvas.tsx";
+import MapEdge from "common/src/map/MapEdge.ts";
+import {MapEdgeType} from "common/src/map/MapEdgeType.ts";
 
 interface TransformState {
   scale: number;
@@ -51,6 +53,7 @@ function MapEditingPage() {
 
   const [selectedNode1, setSelectedNode1] = useState<MapNode | null>(null);
   const [selectedNode2, setSelectedNode2] = useState<MapNode | null>(null);
+  const [edgeBetweenSelectedNodes, setEdgeBetweenSelectedNodes] = useState<MapEdge | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -82,17 +85,27 @@ function MapEditingPage() {
    */
 
   const loadNodeData = async (): Promise<MapNodeType[]> => {
-    const data: MapNodeType[] = (await axios.get("/api/database/nodes"))
+    const nodeData: MapNodeType[] = (await axios.get("/api/database/nodes"))
       .data as MapNodeType[];
+
+    const edgeData: MapEdgeType[] = (await axios.get("/api/database/edges")).data as MapEdgeType[];
 
     GraphManager.getInstance().resetData();
 
-    data.forEach((node) => {
+    nodeData.forEach((node) => {
       if (!GraphManager.getInstance().getNodeByID(node.nodeID))
         GraphManager.getInstance().nodes.push(new MapNode(node));
     });
 
-    return data;
+    edgeData.forEach((edge: MapEdgeType) => {
+      if(!GraphManager.getInstance().getEdgeByID(edge.edgeID))
+        GraphManager.getInstance().edges.push(new MapEdge(
+          edge,
+          GraphManager.getInstance().getNodeByID(edge.startNodeID)!,
+          GraphManager.getInstance().getNodeByID(edge.endNodeID)!));
+    });
+
+    return nodeData;
   };
 
   const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
@@ -352,11 +365,6 @@ function MapEditingPage() {
 
   const determineFilters = useCallback(() => {
     const filters: NodeFilter[] = []; // Define the filters array here
-    filters.push(
-      FilterManager.getInstance().getConfiguredFilter(FilterName.TYPE, [
-        generateFilterValue(true, "HALL"),
-      ])!,
-    );
 
     const applyIconFilter = (
       iconState: string,
@@ -596,6 +604,80 @@ function MapEditingPage() {
     setNodeDataLoaded(false);
   };
 
+  const handleCreateEdge = (startingNode1: MapNode, startingNode2: MapNode) => {
+    try {
+      axios.put(`/api/database/edges/createedge`, {
+        edgeID: `${startingNode1.nodeID}_${startingNode2.nodeID}`,
+        startNodeID: `${startingNode1.nodeID}`,
+        endNodeID: `${startingNode2.nodeID}`,
+      }, {
+        headers: { "Content-Type": "application/json" },
+      }).then((res) => {
+        console.log("Added edge!");
+        console.log(res.data);
+      });
+    } catch (e) {
+      console.error("Failed to create edge!");
+    }
+    setNodeDataLoaded(false);
+  };
+
+  const handleDeleteEdge = (edge: MapEdge) => {
+    try {
+      axios.put(`/api/database/edges/deleteedge/${edge.edgeID}`, {}, {
+        headers: { "Content-Type": "application/json" },
+      }).then((res) => {
+        console.log("Deleted edge!");
+        console.log(res.data);
+      });
+    } catch (e) {
+      console.error("Failed to delete edge!");
+    }
+    setNodeDataLoaded(false);
+  };
+
+  useEffect(() => {
+    const getEdge = async (edgeID: string) => {
+      let edgeBetween: MapEdge | null = null;
+      try {
+        const response = await axios.get(`/api/database/edges/${edgeID}`, {
+          headers: { "Content-Type": "application/json" },
+          validateStatus: (stat: number) => {
+            return stat == 200 || stat == 404 || stat == 304;
+          },
+        });
+        if(response.status == 200 || response.status == 304) {
+          const edgeData: MapEdgeType = response.data;
+          edgeBetween = GraphManager.getInstance().getEdgeByID(edgeData.edgeID);
+          if(!edgeBetween) {
+            console.log(`Corresponding edge object for the returned edge data (id ${edgeData.edgeID}) could not be found!`);
+          } else {
+            console.log(`Edge with edgeID ${edgeBetween.edgeID} found!`);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      return edgeBetween;
+    };
+
+    const checkAllEdges = async () => {
+      let edgeBetween: MapEdge | null = await getEdge(`${selectedNode1!.nodeID}_${selectedNode2!.nodeID}`);
+      if(!edgeBetween) {
+        edgeBetween = await getEdge(`${selectedNode2!.nodeID}_${selectedNode1!.nodeID}`);
+      }
+
+      setEdgeBetweenSelectedNodes(edgeBetween);
+    };
+
+    console.log("Checking for edge");
+
+    if(selectedNode1 && selectedNode2) {
+      checkAllEdges().then(() => console.log("Finished checking for edge"));
+    }
+  }, [selectedNode1, selectedNode2, nodeDataLoaded]);
+
   return (
     <>
       <img
@@ -721,6 +803,9 @@ function MapEditingPage() {
               callback={handleFloorChange}
               selectedNode1={selectedNode1}
               selectedNode2={selectedNode2}
+              edgeBetweenNodes={edgeBetweenSelectedNodes}
+              handleCreateEdge={handleCreateEdge}
+              handleDeleteEdge={handleDeleteEdge}
               handleClearNode1={handleClearNode1}
               handleClearNode2={handleClearNode2}
               handleEditNode={handleEditNode}

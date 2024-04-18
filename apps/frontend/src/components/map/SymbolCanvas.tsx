@@ -161,6 +161,16 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
               4,
             );
             break;
+          case "HALL":
+            draw.drawCircle(
+              nodesOnFloor[i].xcoord,
+              nodesOnFloor[i].ycoord,
+              8,
+              "#7e36c2",
+              "black",
+              4,
+            );
+            break;
           default:
             console.error("Unsupported nodeType");
             break;

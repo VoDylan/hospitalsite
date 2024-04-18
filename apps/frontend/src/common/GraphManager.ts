@@ -34,6 +34,14 @@ class GraphManager {
     return null;
   }
 
+  public getEdgeByID(edgeID: string): MapEdge | null {
+    for(let i = 0; i < this.edges.length; i++) {
+      if(this.edges[i].edgeID == edgeID) return this.edges[i];
+    }
+
+    return null;
+  }
+
   public resetData() {
     this.nodes = [];
     this.edges = [];
