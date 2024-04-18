@@ -474,7 +474,7 @@ function MapEditingPage() {
    * useEffect to just load the node data. Only called when the flags determining loading data are changed
    */
   useEffect(() => {
-    console.log("Loading Data");
+    console.log(`Loading Data: ${nodeDataLoaded}`);
     if (!nodeDataLoaded) {
       loadNodeData().then(() => {
         setNodeDataLoaded(true);
@@ -605,6 +605,7 @@ function MapEditingPage() {
   };
 
   const handleCreateEdge = (startingNode1: MapNode, startingNode2: MapNode) => {
+    console.log("Creating edge");
     try {
       axios.put(`/api/database/edges/createedge`, {
         edgeID: `${startingNode1.nodeID}_${startingNode2.nodeID}`,
@@ -612,14 +613,16 @@ function MapEditingPage() {
         endNodeID: `${startingNode2.nodeID}`,
       }, {
         headers: { "Content-Type": "application/json" },
+        timeout: 10000,
+        timeoutErrorMessage: "Timed out trying to create edge"
       }).then((res) => {
         console.log("Added edge!");
         console.log(res.data);
+        setNodeDataLoaded(false);
       });
     } catch (e) {
       console.error("Failed to create edge!");
     }
-    setNodeDataLoaded(false);
   };
 
   const handleDeleteEdge = (edge: MapEdge) => {
@@ -629,11 +632,11 @@ function MapEditingPage() {
       }).then((res) => {
         console.log("Deleted edge!");
         console.log(res.data);
+        setNodeDataLoaded(false);
       });
     } catch (e) {
       console.error("Failed to delete edge!");
     }
-    setNodeDataLoaded(false);
   };
 
   useEffect(() => {

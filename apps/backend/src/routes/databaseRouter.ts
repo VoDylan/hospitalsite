@@ -138,6 +138,10 @@ router.put("/edges/createedge", async (req, res) => {
   const edgeData: MapEdgeType = req.body;
 
   await createEdgePrisma(edgeData);
+
+  res.status(200).json({
+    message: "Successfully added edge",
+  });
 });
 
 router.get("/servicerequest", async (req, res) => {

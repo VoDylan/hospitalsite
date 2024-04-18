@@ -80,6 +80,7 @@ export async function createEdgePrisma(edge: MapEdgeType) {
       console.error(e);
     }
   }
+  console.log(`Finished adding edge`);
 }
 
 export async function clearDBNodes() {
