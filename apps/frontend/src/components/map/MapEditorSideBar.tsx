@@ -215,6 +215,7 @@ export default function MapEditorSideBar(props: {
                     style={{
                       opacity: "1",
                       marginTop: "20px",
+                      width: "100%",
                     }}
                     edge={props.edgeBetweenNodes}
                     selectedNode1={props.selectedNode1}
