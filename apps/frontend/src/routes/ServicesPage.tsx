@@ -10,7 +10,7 @@ import security from "../images/servicePageImages/securityService.jpg";
 import medicalDevice from "../images/servicePageImages/medicalDevices.jpg";
 //import Room from "../images/servicePageImages/RoomScheduling.svg";
 import Template from "../images/servicePageImages/ServicesTemplate.svg";
-import flower from "../images/servicePageImages/Flower.jpg";
+import flower from "../images/servicePageImages/Flower_new.png";
 import gift from "../images/servicePageImages/giftBasket.jpg";
 import medicine from "../images/servicePageImages/medicineCard.jpg";
 import signL from "../images/servicePageImages/RoomScheduling.jpg";
@@ -68,7 +68,7 @@ export default function ServicesPage() {
       <TopBanner2 />
       <Box
         sx={{
-          mt: 20,
+          mt: 16,
           backgroundColor: "#ffffff",
         }}
       >
