@@ -162,7 +162,7 @@ function GiftDeliveryService() {
           </Typography>
         </Grid>
         <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -172,7 +172,7 @@ function GiftDeliveryService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -186,7 +186,7 @@ function GiftDeliveryService() {
               }))}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Recipient Name:
             </Typography>
@@ -196,7 +196,7 @@ function GiftDeliveryService() {
               onChange={handlerecipientNameInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Optional Message:
             </Typography>
@@ -207,7 +207,7 @@ function GiftDeliveryService() {
             />
           </Grid>
 
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Delivery:
             </Typography>
@@ -224,7 +224,7 @@ function GiftDeliveryService() {
             />
           </Grid>
 
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Status of the Request:
             </Typography>
@@ -235,7 +235,7 @@ function GiftDeliveryService() {
               handleChange={handleStatusInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} paddingTop={2} align={"center"}>
               Gift Size:
             </Typography>
@@ -246,7 +246,7 @@ function GiftDeliveryService() {
               handleChange={handleGiftSizeInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} paddingTop={2} align={"center"}>
               Gift Add-on:
             </Typography>

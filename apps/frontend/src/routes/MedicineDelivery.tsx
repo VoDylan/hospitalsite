@@ -142,7 +142,7 @@ function MedicineDelivery() {
           </Typography>
         </Grid>
         <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -152,7 +152,7 @@ function MedicineDelivery() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -166,7 +166,7 @@ function MedicineDelivery() {
               }))}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Medicine Needed:
             </Typography>
@@ -183,7 +183,7 @@ function MedicineDelivery() {
               returnData={form.service}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Frequency Needed:
             </Typography>
@@ -194,7 +194,7 @@ function MedicineDelivery() {
               returnData={form.frequency}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Priority of Medicine:
             </Typography>
@@ -205,7 +205,7 @@ function MedicineDelivery() {
               handleChange={handlePriorityInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Status of the Request:
             </Typography>

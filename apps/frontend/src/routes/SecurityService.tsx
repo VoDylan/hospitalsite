@@ -149,7 +149,7 @@ function SecurityService() {
           </Typography>
         </Grid>
         <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -159,7 +159,7 @@ function SecurityService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -173,7 +173,7 @@ function SecurityService() {
               }))}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Security Personnel:
             </Typography>
@@ -189,7 +189,7 @@ function SecurityService() {
               returnData={form.securityPersonnel}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Why is Security Needed:
             </Typography>
@@ -207,7 +207,7 @@ function SecurityService() {
               returnData={form.securityCategory}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Priority of Security:
             </Typography>
@@ -218,7 +218,7 @@ function SecurityService() {
               handleChange={handlePriorityInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Status of the Request:
             </Typography>
@@ -230,7 +230,7 @@ function SecurityService() {
             />
           </Grid>
 
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={6} sx={{ align: "center" }}>
             <Typography color={"black"} align={"center"}>
               Additional Details (optional):
             </Typography>
