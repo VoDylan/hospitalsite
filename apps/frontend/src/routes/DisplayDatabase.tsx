@@ -629,7 +629,6 @@ function DisplayDatabase() {
     </>
   );
 }
-
 //            onRowModesModelChange={handleRowModesModelChange}
 //             onRowEditStop={handleRowEditStop}
 
