@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Floor} from "common/src/map/Floor.ts";
-import {IDCoordinates} from "common/src/IDCoordinates.ts";
+import React, { useEffect, useRef, useState } from "react";
+import { Floor } from "common/src/map/Floor.ts";
+import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
-import {Draw} from "../../common/Draw.ts";
+import { Draw } from "../../common/Draw.ts";
 import L1FloorIconNextSrc from "../../images/mapIcons/L1FloorMarkerNextIcon.png";
 import L1FloorIconPrevSrc from "../../images/mapIcons/L1FloorMarkerPrevIcon.png";
 import L2FloorIconNextSrc from "../../images/mapIcons/L2FloorMarkerNextIcon.png";
@@ -92,12 +92,13 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
   });
 
   useEffect(() => {
-    if(props.backgroundRendered) initializeLayeredCanvas(canvasRef.current, props.width, props.height);
+    if (props.backgroundRendered)
+      initializeLayeredCanvas(canvasRef.current, props.width, props.height);
   }, [props.backgroundRendered, props.height, props.width]);
 
   useEffect(() => {
     const floorToNextIcon = (floor: Floor) => {
-      switch(floor) {
+      switch (floor) {
         case Floor.L1:
           return L1FloorIconNext;
         case Floor.L2:
@@ -112,7 +113,7 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
     };
 
     const floorToPrevIcon = (floor: Floor) => {
-      switch(floor) {
+      switch (floor) {
         case Floor.L1:
           return L1FloorIconPrev;
         case Floor.L2:
@@ -126,12 +127,16 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
       }
     };
 
-    if(canvasRef.current && props.backgroundRendered && props.updateFloorIcons) {
+    if (
+      canvasRef.current &&
+      props.backgroundRendered &&
+      props.updateFloorIcons
+    ) {
       console.log("Rendering floor icons");
       const canvas: HTMLCanvasElement = canvasRef.current;
       const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
-      if(!ctx) return;
+      if (!ctx) return;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -144,23 +149,49 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
 
       props.nodesToNextFloor.forEach((value: Floor, key: IDCoordinates) => {
         console.log(key, value);
-        if(GraphManager.getInstance().getNodeByID(key.nodeID)!.floor == props.floor)
-          draw.drawFloorIcon(key.coordinates.x, key.coordinates.y, 1/3, floorToNextIcon(value));
+        if (
+          GraphManager.getInstance().getNodeByID(key.nodeID)!.floor ==
+          props.floor
+        )
+          draw.drawFloorIcon(
+            key.coordinates.x,
+            key.coordinates.y,
+            1 / 3,
+            floorToNextIcon(value),
+          );
       });
 
       props.nodesToPrevFloor.forEach((value: Floor, key: IDCoordinates) => {
         console.log(key, value);
-        if(GraphManager.getInstance().getNodeByID(key.nodeID)!.floor == props.floor)
-          draw.drawFloorIcon(key.coordinates.x, key.coordinates.y, 1/3, floorToPrevIcon(value));
+        if (
+          GraphManager.getInstance().getNodeByID(key.nodeID)!.floor ==
+          props.floor
+        )
+          draw.drawFloorIcon(
+            key.coordinates.x,
+            key.coordinates.y,
+            1 / 3,
+            floorToPrevIcon(value),
+          );
       });
     }
-  }, [F1FloorIconNext, F1FloorIconPrev, F2FloorIconNext, F2FloorIconPrev, F3FloorIconNext, F3FloorIconPrev, L1FloorIconNext, L1FloorIconPrev, L2FloorIconNext, L2FloorIconPrev, props.backgroundRendered, props.floor, props.nodesToNextFloor, props.nodesToPrevFloor, props.updateFloorIcons]);
+  }, [
+    F1FloorIconNext,
+    F1FloorIconPrev,
+    F2FloorIconNext,
+    F2FloorIconPrev,
+    F3FloorIconNext,
+    F3FloorIconPrev,
+    L1FloorIconNext,
+    L1FloorIconPrev,
+    L2FloorIconNext,
+    L2FloorIconPrev,
+    props.backgroundRendered,
+    props.floor,
+    props.nodesToNextFloor,
+    props.nodesToPrevFloor,
+    props.updateFloorIcons,
+  ]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={props.style}
-      onClick={props.onClick}
-    />
-  );
-};
+  return <canvas ref={canvasRef} style={props.style} onClick={props.onClick} />;
+}

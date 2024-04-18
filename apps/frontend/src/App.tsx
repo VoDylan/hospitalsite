@@ -1,17 +1,16 @@
-import React, {useCallback} from "react";
+import React, { useCallback } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
   Outlet,
   useNavigate,
 } from "react-router-dom";
-import SlidesPageLI from "../src/routes/SlidesPageLI.tsx";
 import MapTestingPage from "./routes/MapTestingPage.tsx";
 import MapRoute from "./routes/mapRoute.tsx";
 import ServicesPage from "./routes/ServicesPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import DisplayDatabase from "./routes/DisplayDatabase.tsx";
-import LoginForm from "./routes/LoginForm.tsx";
+//import LoginForm from "./routes/LoginForm.tsx";
 import SlidesPage from "./routes/SlidesPage.tsx";
 import SanitationService from "./routes/SanitationService.tsx";
 import DeviceDeliveryService from "./routes/DeviceDeliveryService.tsx";
@@ -19,13 +18,15 @@ import GiftDeliveryService from "./routes/GiftDeliveryService.tsx";
 import SecurityService from "./routes/SecurityService.tsx";
 import MedicineDelivery from "./routes/MedicineDelivery.tsx";
 import RoomScheduling from "./routes/RoomScheduling.tsx";
-import MapEditingPage from "./routes/MapEditingPage.tsx";
 import FilterManager from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
 import TypeFilter from "common/src/filter/filters/TypeFilter.ts";
 import FloorFilter from "common/src/filter/filters/FloorFilter.ts";
 import BuildingFilter from "common/src/filter/filters/BuildingFilter.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
+import TopBanner from "./components/banner/TopBanner.tsx";
+import { Auth0Protection } from "./components/auth0/Auth0Protection.tsx";
+import MapEditingPage from "./routes/MapEditingPage.tsx";
 import CalenderPage from "./routes/CalenderPage.tsx";
 
 function App() {
@@ -41,38 +42,39 @@ function App() {
         },
         {
           path: "/Services",
-          element: <ServicesPage />,
+          element: <Auth0Protection component={ServicesPage} />,
         },
         {
           path: "/Services/FlowerDelivery",
-          element: <FlowerDeliveryService />,
+          element: <Auth0Protection component={FlowerDeliveryService} />,
         },
         {
           path: "/Services/GiftDelivery",
-          element: <GiftDeliveryService />,
+          element: <Auth0Protection component={GiftDeliveryService} />,
         },
         {
           path: "/Services/MedicineDelivery",
-          element: <MedicineDelivery />,
+          element: <Auth0Protection component={MedicineDelivery} />,
         },
         {
           path: "/Services/RoomScheduling",
-          element: <RoomScheduling />,
+          element: <Auth0Protection component={RoomScheduling} />,
         },
         {
           path: "/Services/SanitationService",
-          element: <SanitationService />,
+          element: <Auth0Protection component={SanitationService} />,
         },
         {
           path: "/Services/SecurityService",
-          element: <SecurityService />,
+          element: <Auth0Protection component={SecurityService} />,
         },
         {
           path: "/Services/DeviceDeliveryService",
-          element: <DeviceDeliveryService />,
+          element: <Auth0Protection component={DeviceDeliveryService} />,
         },
         {
           path: "/DisplayDatabase",
+          element: <Auth0Protection component={DisplayDatabase} />,
           element: <DisplayDatabase />,
         },
 
@@ -80,27 +82,18 @@ function App() {
           path: "/Calender",
           element: <CalenderPage />,
         },
-
-        {
-          path: "/Login",
-          element: <LoginForm />,
-        },
-
         {
           path: "/Map",
           element: <MapRoute />,
         },
-        {
-          path: "/LoggedIn",
-          element: <SlidesPageLI />,
-        },
+
         {
           path: "/MapTestingPage",
-          element: <MapTestingPage />,
+          element: <Auth0Protection component={MapTestingPage} />,
         },
         {
           path: "/MapEditingPage",
-          element: <MapEditingPage />,
+          element: <Auth0Protection component={MapEditingPage} />,
         },
       ],
     },
@@ -141,6 +134,7 @@ function App() {
         }}
       >
         <div className="w-full flex flex-col px-0 gap-5">
+          <TopBanner />
           <Outlet />
         </div>
       </Auth0Provider>

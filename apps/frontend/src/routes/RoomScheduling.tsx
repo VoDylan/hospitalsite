@@ -1,9 +1,4 @@
-import {
-  Grid,
-  Typography,
-  SelectChangeEvent,
-  Stack,
-} from "@mui/material";
+import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
@@ -11,8 +6,8 @@ import { RoomSchedulingFormSubmission } from "../common/formSubmission/RoomSched
 import RoomBackground from "../images/servicePageImages/RoomScheduling.jpg";
 import { RoomSubmitButton } from "../components/buttons/RoomSubmitButton.tsx";
 import axios from "axios";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
+import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function RoomScheduling() {
   const [form, setFormResponses] = useState<RoomSchedulingFormSubmission>({
@@ -66,7 +61,6 @@ function RoomScheduling() {
   interface NodeData {
     nodeID: string;
     longName: string;
-
   }
 
   // Storing the node numbers in a use state so that we only make a get request once
@@ -86,7 +80,7 @@ function RoomScheduling() {
         for (let i = 0; i < nodeIDs.length; i++) {
           updatedNodes.push({
             nodeID: nodeIDs[i],
-            longName: longNames[i]
+            longName: longNames[i],
           });
         }
 
@@ -114,20 +108,28 @@ function RoomScheduling() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner2 />
       <Grid
         container
         direction={"row"}
         justifyContent={"center"}
-        boxShadow={4}
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "transparent",
           width: "40vw", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
         }}
       >
+        <Grid
+          item
+          xs={12}
+          paddingBottom={2}
+          sx={{
+            backgroundColor: "transparent",
+          }}
+        >
+          <ServiceNavTabs />
+        </Grid>
         <Grid
           item
           xs={12}
@@ -139,78 +141,92 @@ function RoomScheduling() {
             Room Scheduling Form
           </Typography>
         </Grid>
-        <Grid item xs={6} >
-          <Typography color={"black"} align={"center"}>Name:</Typography>
-          <CenterAlignedTextbox
-            label={"Name"}
-            value={form.name}
-            onChange={handleNameInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Location:</Typography>
-          <DropDown
-            label={"Location"}
-            returnData={form.location}
-            handleChange={handleLocationInput}
-            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Room Needed:</Typography>
-          <DropDown
-            items={["MRI", "Surgery", "Conference", "Checkup", "Waiting Room"]}
-            handleChange={handleServiceInput}
-            label={"Room"}
-            returnData={form.service}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Frequency Needed:</Typography>
-          <DropDown
-            items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
-            handleChange={handleFrequencyInput}
-            label={"Frequency"}
-            returnData={form.frequency}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Priority of Scheduling:</Typography>
-          <RadioButtonsGroup
-            label={"Priority"}
-            options={["Low", "Medium", "High", "Emergency"]}
-            returnData={form.priority}
-            handleChange={handlePriorityInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Status of the Request:</Typography>
-          <RadioButtonsGroup
-            label={"Status"}
-            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-            returnData={form.status}
-            handleChange={handleStatusInput}
-          />
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            my: 2,
-            justifyContent: "center",
-          }}
-        >
-          <RoomSubmitButton
-            input={form}
-            text={"SUBMIT"}
-            clear={clear}
-          />
+        <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
+          <Grid item xs={6} mt={2}>
+            <Typography color={"black"} align={"center"}>
+              Name:
+            </Typography>
+            <CenterAlignedTextbox
+              label={"Name"}
+              value={form.name}
+              onChange={handleNameInput}
+            />
+          </Grid>
+          <Grid item xs={6} mt={2}>
+            <Typography color={"black"} align={"center"}>
+              Location:
+            </Typography>
+            <DropDown
+              label={"Location"}
+              returnData={form.location}
+              handleChange={handleLocationInput}
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>
+              Room Needed:
+            </Typography>
+            <DropDown
+              items={[
+                "MRI",
+                "Surgery",
+                "Conference",
+                "Checkup",
+                "Waiting Room",
+              ]}
+              handleChange={handleServiceInput}
+              label={"Room"}
+              returnData={form.service}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>
+              Frequency Needed:
+            </Typography>
+            <DropDown
+              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
+              handleChange={handleFrequencyInput}
+              label={"Frequency"}
+              returnData={form.frequency}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>
+              Priority of Scheduling:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Priority"}
+              options={["Low", "Medium", "High", "Emergency"]}
+              returnData={form.priority}
+              handleChange={handlePriorityInput}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color={"black"} align={"center"}>
+              Status of the Request:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Status"}
+              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+              returnData={form.status}
+              handleChange={handleStatusInput}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              my: 2,
+              justifyContent: "center",
+            }}
+          >
+            <RoomSubmitButton input={form} text={"SUBMIT"} clear={clear} />
+          </Grid>
         </Grid>
       </Grid>
       <Typography>Jacob Murphy, Spencer Trautz</Typography>

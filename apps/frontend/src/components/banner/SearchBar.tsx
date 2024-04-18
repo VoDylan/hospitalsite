@@ -2,8 +2,8 @@ import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function SearchBar() {
   const Search = styled("div")(({ theme }) => ({
@@ -28,15 +28,18 @@ function SearchBar() {
   }));
 
   const results = [
-    {label: "Flower Delivery", link: "/services/FlowerDelivery"},
-    {label: "Sanitation Service", link: "/services/SanitationService"},
-    {label: "Medicine Delivery Service", link: "/services/MedicineDelivery"},
-    {label: "Security Service", link: "/services/SecurityService"},
-    {label: "Gift Delivery Service", link: "/services/GiftDelivery"},
-    {label: "Medical Device Service", link: "/services/DeviceDeliveryService"},
-    {label: "Room Scheduling Service", link: "/services/RoomScheduling"},
-    {label: "Map Page", link: "/Map"},
-    {label: "All Services", link: "/services"},
+    { label: "Flower Delivery", link: "/services/FlowerDelivery" },
+    { label: "Sanitation Service", link: "/services/SanitationService" },
+    { label: "Medicine Delivery Service", link: "/services/MedicineDelivery" },
+    { label: "Security Service", link: "/services/SecurityService" },
+    { label: "Gift Delivery Service", link: "/services/GiftDelivery" },
+    {
+      label: "Medical Device Service",
+      link: "/services/DeviceDeliveryService",
+    },
+    { label: "Room Scheduling Service", link: "/services/RoomScheduling" },
+    { label: "Map Page", link: "/Map" },
+    { label: "All Services", link: "/services" },
   ];
 
   const [value, setValue] = useState<string | null>("");
@@ -53,7 +56,7 @@ function SearchBar() {
     }
   };
 
-  function clearValue(){
+  function clearValue() {
     setValue("");
   }
 
@@ -62,13 +65,15 @@ function SearchBar() {
       <Autocomplete
         id="free-solo-demo"
         value={value}
-        onChange={(event, newValue: string | null) => {
-          setValue(newValue);
-          handleSelectedValue(newValue); // handle the selected value here
+        onChange={(event, newValue) => {
+          setValue(newValue as string);
+          handleSelectedValue(newValue as string); // handle the selected value here
         }}
         freeSolo
         options={results}
-        getOptionLabel={(option) => (typeof option === 'string' ? option : option.label)}
+        getOptionLabel={(option) =>
+          typeof option === "string" ? option : option.label
+        }
         renderInput={(params) => (
           <TextField
             {...params}

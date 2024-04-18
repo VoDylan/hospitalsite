@@ -19,8 +19,15 @@ interface DropDownProps {
   returnData: string;
 }
 
-const isOptionArray = (items: LabelValuePair[] | string[]): items is LabelValuePair[] => {
-  return items.length > 0 && typeof items[0] === "object" && "value" in items[0] && "label" in items[0];
+const isOptionArray = (
+  items: LabelValuePair[] | string[],
+): items is LabelValuePair[] => {
+  return (
+    items.length > 0 &&
+    typeof items[0] === "object" &&
+    "value" in items[0] &&
+    "label" in items[0]
+  );
 };
 
 const useStyles = makeStyles({
@@ -60,7 +67,7 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div className={classes.root}>
-      <FormControl sx={{ width: 223, height: 75}}>
+      <FormControl sx={{ width: 223, height: 75 }}>
         <InputLabel
           id="demo-simple-select-label"
           className={classes.centeredLabel}

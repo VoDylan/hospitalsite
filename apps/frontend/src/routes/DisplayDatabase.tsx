@@ -1,14 +1,9 @@
 import * as React from "react";
-import {
-  Button,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
 import axios, { AxiosResponse } from "axios";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import {
   DataGrid,
   GridColDef,
@@ -58,49 +53,82 @@ function parseCSVFromString(data: string) {
   });
 }
 
-  function ServiceDetailsTable({ service, isVisible }: { service: ServiceParams; isVisible: boolean }) {
-    return (
-      <Box mt={2} className={`slide-in ${isVisible ? 'slide-in--visible' : 'slide-in--hidden'}`} sx={{zIndex: -9999}}>
-        <Typography variant="h6" fontWeight="bold" sx={{ textDecoration: "underline" }}>Service Details</Typography>
-        <Box>
-          {service.services && (
-            <div>
-              {Object.entries(JSON.parse(service.services)).map(([key, value]) => (
+function ServiceDetailsTable({
+  service,
+  isVisible,
+}: {
+  service: ServiceParams;
+  isVisible: boolean;
+}) {
+  return (
+    <Box
+      mt={2}
+      className={`slide-in ${isVisible ? "slide-in--visible" : "slide-in--hidden"}`}
+      sx={{ zIndex: -9999 }}
+    >
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        sx={{ textDecoration: "underline" }}
+      >
+        Service Details
+      </Typography>
+      <Box>
+        {service.services && (
+          <div>
+            {Object.entries(JSON.parse(service.services)).map(
+              ([key, value]) => (
                 <Typography key={key}>
                   {key}: {String(value)}
                 </Typography>
-              ))}
-            </div>
-          )}
-        </Box>
+              ),
+            )}
+          </div>
+        )}
       </Box>
-    );
-  }
+    </Box>
+  );
+}
 
 function DisplayDatabase() {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {},
   );
-
   const [isServiceDetailsVisible, setServiceDetailsVisible] = useState(false);
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isDetailsTableInitialized, setDetailsTableInitialized] =
+    useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(
+    null,
+  );
   const [selectedServiceDetails, setSelectedServiceDetails] =
-    useState<ServiceParams | null>(null); // State to keep track of selected service details
+    useState<ServiceParams | null>(null);
+  const [hasSlideAnimationTriggered, setHasSlideAnimationTriggered] =
+    useState(false);
 
   // Function to handle the click event of the details button
   const handleDetailsClick = (service: ServiceParams) => {
-    if (selectedServiceDetails?.id === service.id) {
+    if (selectedServiceId === service.id) {
       setServiceDetailsVisible(!isServiceDetailsVisible); // Toggle visibility
     } else {
+      setSelectedServiceId(service.id);
       setSelectedServiceDetails(service);
-      setServiceDetailsVisible(true); // Show details for the selected service
+      setHasSlideAnimationTriggered(true); // Trigger slide animation on the first click
+      setTimeout(
+        () => {
+          setServiceDetailsVisible(true); // Show details for the selected service after the animation
+        },
+        hasSlideAnimationTriggered ? 0 : 50,
+      ); // Delay the visibility change if animation has triggered
     }
   };
 
-  // Function to close the details modal
-  const handleCloseDetails = () => {
-    setSelectedServiceDetails(null);
-  };
+  // Update visibility when initialization state changes
+  useEffect(() => {
+    if (isDetailsTableInitialized) {
+      setServiceDetailsVisible(true);
+    }
+  }, [isDetailsTableInitialized]);
 
   const handleEditClick = (id: GridRowId) => () => {
     console.log(rowModesModel);
@@ -131,6 +159,7 @@ function DisplayDatabase() {
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
 
   const serviceColumns: GridColDef[] = [
@@ -405,7 +434,6 @@ function DisplayDatabase() {
 
   return (
     <>
-      <TopBanner2 />
       <div
         style={{
           position: "relative",
@@ -461,7 +489,7 @@ function DisplayDatabase() {
               borderRadius: "8px", // Change border radius
               marginRight: "-1px", // Adjust spacing
               marginTop: "15px",
-              marginBottom: "15px",
+              marginBottom: "30px",
             }}
           >
             Import Nodes (CSV File)
@@ -499,15 +527,15 @@ function DisplayDatabase() {
               borderRadius: "8px", // Change border radius
               marginRight: "-1px", // Adjust spacing
               marginTop: "15px",
-              marginBottom: "15px",
+              marginBottom: "30px",
             }}
           >
             Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
-          <Box display="flex" sx={{zIndex: 9999}}>
+          <Box display="flex" sx={{ zIndex: 9999 }}>
             {/* Container for the service request table and service details table */}
-            <Box flex="1" mr={2} sx={{zIndex: 9999}}>
+            <Box flex="1" ml={"27em"} sx={{ zIndex: 9999 }}>
               <DataGrid
                 slots={{ toolbar: GridToolbar }}
                 sx={{
@@ -529,12 +557,15 @@ function DisplayDatabase() {
                 onProcessRowUpdateError={handleProcessRowUpdateError}
               />
             </Box>
-            <Box width="400px">
+            <Box width="400px" ml={2}>
               {selectedServiceDetails && (
-                <ServiceDetailsTable service={selectedServiceDetails} isVisible={isServiceDetailsVisible} />
+                <ServiceDetailsTable
+                  service={selectedServiceDetails}
+                  isVisible={isServiceDetailsVisible}
+                />
               )}
-              </Box>
             </Box>
+          </Box>
         </Box>
       </div>
     </>
