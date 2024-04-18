@@ -163,8 +163,6 @@ function GiftDeliveryService() {
         </Grid>
         <Grid
           container
-          item
-          xs={12}
           boxShadow={4}
           sx={{ backgroundColor: "white" }}
         >
