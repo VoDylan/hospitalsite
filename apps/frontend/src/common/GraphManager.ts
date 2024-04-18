@@ -35,8 +35,8 @@ class GraphManager {
   }
 
   public getEdgeByID(edgeID: string): MapEdge | null {
-    for(let i = 0; i < this.edges.length; i++) {
-      if(this.edges[i].edgeID == edgeID) return this.edges[i];
+    for (let i = 0; i < this.edges.length; i++) {
+      if (this.edges[i].edgeID == edgeID) return this.edges[i];
     }
 
     return null;

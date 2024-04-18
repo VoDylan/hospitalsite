@@ -33,7 +33,7 @@ import MapEditorSideBar from "../components/map/MapEditorSideBar.tsx";
 import EdgeCanvas from "../components/map/EdgeCanvas.tsx";
 import ClickableCanvas from "../components/map/ClickableCanvas.tsx";
 import MapEdge from "common/src/map/MapEdge.ts";
-import {MapEdgeType} from "common/src/map/MapEdgeType.ts";
+import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 
 interface TransformState {
   scale: number;
@@ -53,7 +53,8 @@ function MapEditingPage() {
 
   const [selectedNode1, setSelectedNode1] = useState<MapNode | null>(null);
   const [selectedNode2, setSelectedNode2] = useState<MapNode | null>(null);
-  const [edgeBetweenSelectedNodes, setEdgeBetweenSelectedNodes] = useState<MapEdge | null>(null);
+  const [edgeBetweenSelectedNodes, setEdgeBetweenSelectedNodes] =
+    useState<MapEdge | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -88,7 +89,8 @@ function MapEditingPage() {
     const nodeData: MapNodeType[] = (await axios.get("/api/database/nodes"))
       .data as MapNodeType[];
 
-    const edgeData: MapEdgeType[] = (await axios.get("/api/database/edges")).data as MapEdgeType[];
+    const edgeData: MapEdgeType[] = (await axios.get("/api/database/edges"))
+      .data as MapEdgeType[];
 
     GraphManager.getInstance().resetData();
 
@@ -98,11 +100,14 @@ function MapEditingPage() {
     });
 
     edgeData.forEach((edge: MapEdgeType) => {
-      if(!GraphManager.getInstance().getEdgeByID(edge.edgeID))
-        GraphManager.getInstance().edges.push(new MapEdge(
-          edge,
-          GraphManager.getInstance().getNodeByID(edge.startNodeID)!,
-          GraphManager.getInstance().getNodeByID(edge.endNodeID)!));
+      if (!GraphManager.getInstance().getEdgeByID(edge.edgeID))
+        GraphManager.getInstance().edges.push(
+          new MapEdge(
+            edge,
+            GraphManager.getInstance().getNodeByID(edge.startNodeID)!,
+            GraphManager.getInstance().getNodeByID(edge.endNodeID)!,
+          ),
+        );
     });
 
     return nodeData;
@@ -607,19 +612,25 @@ function MapEditingPage() {
   const handleCreateEdge = (startingNode1: MapNode, startingNode2: MapNode) => {
     console.log("Creating edge");
     try {
-      axios.put(`/api/database/edges/createedge`, {
-        edgeID: `${startingNode1.nodeID}_${startingNode2.nodeID}`,
-        startNodeID: `${startingNode1.nodeID}`,
-        endNodeID: `${startingNode2.nodeID}`,
-      }, {
-        headers: { "Content-Type": "application/json" },
-        timeout: 10000,
-        timeoutErrorMessage: "Timed out trying to create edge"
-      }).then((res) => {
-        console.log("Added edge!");
-        console.log(res.data);
-        setNodeDataLoaded(false);
-      });
+      axios
+        .put(
+          `/api/database/edges/createedge`,
+          {
+            edgeID: `${startingNode1.nodeID}_${startingNode2.nodeID}`,
+            startNodeID: `${startingNode1.nodeID}`,
+            endNodeID: `${startingNode2.nodeID}`,
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+            timeout: 10000,
+            timeoutErrorMessage: "Timed out trying to create edge",
+          },
+        )
+        .then((res) => {
+          console.log("Added edge!");
+          console.log(res.data);
+          setNodeDataLoaded(false);
+        });
     } catch (e) {
       console.error("Failed to create edge!");
     }
@@ -627,13 +638,19 @@ function MapEditingPage() {
 
   const handleDeleteEdge = (edge: MapEdge) => {
     try {
-      axios.put(`/api/database/edges/deleteedge/${edge.edgeID}`, {}, {
-        headers: { "Content-Type": "application/json" },
-      }).then((res) => {
-        console.log("Deleted edge!");
-        console.log(res.data);
-        setNodeDataLoaded(false);
-      });
+      axios
+        .put(
+          `/api/database/edges/deleteedge/${edge.edgeID}`,
+          {},
+          {
+            headers: { "Content-Type": "application/json" },
+          },
+        )
+        .then((res) => {
+          console.log("Deleted edge!");
+          console.log(res.data);
+          setNodeDataLoaded(false);
+        });
     } catch (e) {
       console.error("Failed to delete edge!");
     }
@@ -649,11 +666,13 @@ function MapEditingPage() {
             return stat == 200 || stat == 404 || stat == 304;
           },
         });
-        if(response.status == 200 || response.status == 304) {
+        if (response.status == 200 || response.status == 304) {
           const edgeData: MapEdgeType = response.data;
           edgeBetween = GraphManager.getInstance().getEdgeByID(edgeData.edgeID);
-          if(!edgeBetween) {
-            console.log(`Corresponding edge object for the returned edge data (id ${edgeData.edgeID}) could not be found!`);
+          if (!edgeBetween) {
+            console.log(
+              `Corresponding edge object for the returned edge data (id ${edgeData.edgeID}) could not be found!`,
+            );
           } else {
             console.log(`Edge with edgeID ${edgeBetween.edgeID} found!`);
           }
@@ -666,9 +685,13 @@ function MapEditingPage() {
     };
 
     const checkAllEdges = async () => {
-      let edgeBetween: MapEdge | null = await getEdge(`${selectedNode1!.nodeID}_${selectedNode2!.nodeID}`);
-      if(!edgeBetween) {
-        edgeBetween = await getEdge(`${selectedNode2!.nodeID}_${selectedNode1!.nodeID}`);
+      let edgeBetween: MapEdge | null = await getEdge(
+        `${selectedNode1!.nodeID}_${selectedNode2!.nodeID}`,
+      );
+      if (!edgeBetween) {
+        edgeBetween = await getEdge(
+          `${selectedNode2!.nodeID}_${selectedNode1!.nodeID}`,
+        );
       }
 
       setEdgeBetweenSelectedNodes(edgeBetween);
@@ -676,7 +699,7 @@ function MapEditingPage() {
 
     console.log("Checking for edge");
 
-    if(selectedNode1 && selectedNode2) {
+    if (selectedNode1 && selectedNode2) {
       checkAllEdges().then(() => console.log("Finished checking for edge"));
     }
   }, [selectedNode1, selectedNode2, nodeDataLoaded]);

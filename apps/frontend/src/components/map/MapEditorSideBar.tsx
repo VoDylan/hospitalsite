@@ -204,32 +204,30 @@ export default function MapEditorSideBar(props: {
             ) : (
               <></>
             )}
-            {props.selectedNode1 && props.selectedNode2 ?
-              (
-                <Box
-                  display={"flex"}
-                  flexDirection={"row"}
-                  justifyContent={"space-between"}
-                >
-                  <EdgeInfo
-                    style={{
-                      opacity: "1",
-                      marginTop: "20px",
-                      width: "100%",
-                      overflow: "clip",
-                    }}
-                    edge={props.edgeBetweenNodes}
-                    selectedNode1={props.selectedNode1}
-                    selectedNode2={props.selectedNode2}
-                    textColor={"#535353"}
-                    createEdgeCallback={props.handleCreateEdge}
-                    deleteEdgeCallback={props.handleDeleteEdge}
-                  />
-                </Box>
-              ) : (
-                <></>
-              )
-            }
+            {props.selectedNode1 && props.selectedNode2 ? (
+              <Box
+                display={"flex"}
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+              >
+                <EdgeInfo
+                  style={{
+                    opacity: "1",
+                    marginTop: "20px",
+                    width: "100%",
+                    overflow: "clip",
+                  }}
+                  edge={props.edgeBetweenNodes}
+                  selectedNode1={props.selectedNode1}
+                  selectedNode2={props.selectedNode2}
+                  textColor={"#535353"}
+                  createEdgeCallback={props.handleCreateEdge}
+                  deleteEdgeCallback={props.handleDeleteEdge}
+                />
+              </Box>
+            ) : (
+              <></>
+            )}
           </Box>
         )}
 

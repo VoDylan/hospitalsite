@@ -34,7 +34,6 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
     console.log("Updated distancesData:", distancePath);
   }
 
-
   useEffect(() => {
     if (props.backgroundRendered)
       initializeLayeredCanvas(canvasRef.current, props.width, props.height);

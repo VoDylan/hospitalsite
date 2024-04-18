@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import MapEdge from "common/src/map/MapEdge.ts";
-import {Box, Button, Divider, Paper, Typography} from "@mui/material";
+import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import MapNode from "common/src/map/MapNode.ts";
 
 interface EdgeInfoProps {
@@ -21,11 +21,7 @@ export default function EdgeInfo(props: EdgeInfoProps) {
   }, [props.edge]);
 
   return (
-    <Paper
-      square={false}
-      elevation={3}
-      style={props.style}
-    >
+    <Paper square={false} elevation={3} style={props.style}>
       <Box
         marginTop={"10px"}
         marginBottom={"10px"}
@@ -111,7 +107,12 @@ export default function EdgeInfo(props: EdgeInfoProps) {
           <>
             <Button
               variant={"contained"}
-              onClick={() => props.createEdgeCallback(props.selectedNode1, props.selectedNode2)}
+              onClick={() =>
+                props.createEdgeCallback(
+                  props.selectedNode1,
+                  props.selectedNode2,
+                )
+              }
               sx={{
                 marginLeft: "5px",
               }}
