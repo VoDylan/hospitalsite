@@ -23,7 +23,7 @@ export default function ServicesPage() {
     { path: "/Services/FlowerDelivery",
       image: flower,
       title: 'Flower Delivery',
-      description: 'Deliver flowers to a friend or loved one',
+      description: 'Deliver a bouquet of flowers to a friend or loved one',
       buttonContent: 'Get Flowers'},
     { path: "/Services/MedicineDelivery",
       image: medicine,
@@ -47,7 +47,7 @@ export default function ServicesPage() {
       buttonContent: 'Get Gift'},
     { path: "/Services/DeviceDeliveryService",
       image: medicalDevice,
-      title: 'Medical Device Delivery',
+      title: 'Device Delivery',
       description: 'Get medical devices for yourself or a dependent',
       buttonContent: 'Get Device'},
     { path: "/Services/RoomScheduling",
@@ -76,7 +76,7 @@ export default function ServicesPage() {
           variant={"h1"}
           align={"center"}
           color={"#003A96"}
-          gutterBottom={true}
+          //gutterBottom={true}
           fontSize={36}
           //fontWeight={'bold'}
           fontStyle={"inherit"}
@@ -87,16 +87,17 @@ export default function ServicesPage() {
       </Box>
       <div
         style={{
-          padding: 10,
+          padding: 20,
           display: "flex",
           justifyContent: "center",
-          marginLeft: "2.4%",
-          marginRight: "2.4%",
+          marginLeft: "10%",
+          marginRight: "10%",
+
         }}
       >
         <Box
         >
-        <Grid container spacing={5} direction={"row"}>
+        <Grid container spacing={0} direction={"row"}>
           {serviceData.map((service:{path: string, image: string, title: string, description: string, buttonContent: string}, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3} key={index}>
               <Zoom
