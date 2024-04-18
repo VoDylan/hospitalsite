@@ -16,8 +16,8 @@ const LoginButton: React.FC = () => {
   const handleLogin = async () => {
     try {
       await loginWithRedirect({
-        authorizationParams: {
-          redirect_uri: "http://localhost:3000/",
+        appState: {
+          returnTo: location.pathname,
         },
       });
     } catch (error) {
