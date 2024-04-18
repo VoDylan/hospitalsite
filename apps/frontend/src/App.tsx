@@ -73,7 +73,8 @@ function App() {
         },
         {
           path: "/DisplayDatabase",
-          element: <Auth0Protection component={DisplayDatabase} />,
+          //element: <Auth0Protection component={DisplayDatabase} />,
+          element: <DisplayDatabase />,
         },
 
         {

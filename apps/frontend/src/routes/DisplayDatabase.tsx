@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Box, Typography } from "@mui/material";
+import { Button, Box, Typography, Tabs, Tab } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 //import background from "frontend/public/Background.jpg";
@@ -432,6 +432,32 @@ function DisplayDatabase() {
     alert("status didn't save");
   }, []);
 
+  //tabs
+  /*function CenteredTabs() {
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+      setValue(newValue);
+    };
+
+    return (
+      <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        <Tabs value={value} onChange={handleChange} centered>
+          <Tab label="Node Data" />
+          <Tab label="Edge Data" />
+          <Tab label="Service Data" />
+        </Tabs>
+      </Box>
+    );
+  }*/
+
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+
+  const handleTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    console.log(tabIndex);
+    setCurrentTabIndex(tabIndex);
+  };
+
   return (
     <>
       <div
@@ -446,6 +472,19 @@ function DisplayDatabase() {
           marginBottom: "150px",
         }}
       >
+        <React.Fragment>
+          <Tabs
+            value={currentTabIndex}
+            onChange={handleTabChange}
+            orientation={"vertical"}
+            sx={{
+              //marginTop: "150px"
+            }}
+          >
+            <Tab label='Node Data' />
+            <Tab label='Edge Data' />
+            <Tab label='Service Data' />
+          </Tabs>
         <Box
           display="flex"
           mt={2}
@@ -456,6 +495,9 @@ function DisplayDatabase() {
             opacity: "90%",
           }}
         >
+          {currentTabIndex === 0 && (
+            <Box >
+              <Typography variant='h5'>Node Data Table</Typography>
           <DataGrid
             slots={{ toolbar: GridToolbar }}
             sx={{
@@ -495,6 +537,12 @@ function DisplayDatabase() {
             Import Nodes (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
           </Button>
+            </Box>
+          )}
+
+          {currentTabIndex === 1 && (
+            <Box>
+              <Typography variant='h5'>Edge Data Table</Typography>
           <DataGrid
             slots={{ toolbar: GridToolbar }}
             sx={{
@@ -533,9 +581,16 @@ function DisplayDatabase() {
             Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
+            </Box>
+          )}
+
+          {currentTabIndex === 2 && (
+            /*<Box>*/
+
           <Box display="flex" sx={{ zIndex: 9999 }}>
             {/* Container for the service request table and service details table */}
-            <Box flex="1" ml={"27em"} sx={{ zIndex: 9999 }}>
+            <Box flex="1" sx={{ zIndex: 9999 }}>
+              <Typography variant='h5'>Service Data Table</Typography>
               <DataGrid
                 slots={{ toolbar: GridToolbar }}
                 sx={{
@@ -556,7 +611,6 @@ function DisplayDatabase() {
                 }
                 onProcessRowUpdateError={handleProcessRowUpdateError}
               />
-            </Box>
             <Box width="400px" ml={2}>
               {selectedServiceDetails && (
                 <ServiceDetailsTable
@@ -565,8 +619,12 @@ function DisplayDatabase() {
                 />
               )}
             </Box>
+           </Box>
           </Box>
+          /*</Box>*/
+          )}
         </Box>
+       </React.Fragment>
       </div>
     </>
   );
