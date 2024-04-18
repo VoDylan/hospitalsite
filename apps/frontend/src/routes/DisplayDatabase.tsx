@@ -2,7 +2,7 @@ import * as React from "react";
 import {Button, Box, Typography, Accordion, AccordionSummary, AccordionDetails, Stack} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-//import background from "frontend/public/Background.jpg";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios, { AxiosResponse } from "axios";
 import {
   DataGrid,
@@ -444,10 +444,10 @@ function DisplayDatabase() {
           marginBottom: "10vh",
           width: "100%",
         }}>
-          <Accordion defaultExpanded sx={{ width: "90%"}}>
-            <AccordionSummary>
-              <Typography>
-                Services
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "#003A96"}}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}>
+              <Typography color={"white"}>
+                SERVICES
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -487,75 +487,74 @@ function DisplayDatabase() {
               </Box>
             </AccordionDetails>
           </Accordion>
-        <Accordion sx={{width: "90%"}}>
-        <AccordionSummary
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          <Typography color={"black"}>
-            Nodes
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-        <Box
-          display="flex"
-          mt={2}
-          alignItems="center"
-          flexDirection="column"
-          sx={{
-            backgroundColor: "white",
-            opacity: "90%",
-          }}
-        >
-          <DataGrid
-            slots={{ toolbar: GridToolbar }}
-            sx={{
-              padding: "40px",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              width: "80vw",
-              //alignItems: "center",
-            }}
-            columns={nodeColumns}
-            rows={nodeRowData}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-          />
-          <Button
-            component="label"
-            role={undefined}
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            className="importButton"
-            variant="contained"
-            // onClick={handleNodeImport}
-            sx={{
-              backgroundColor: "primary.main", // Change background color
-              color: "white", // Change text color
-              borderRadius: "8px", // Change border radius
-              marginRight: "-1px", // Adjust spacing
-              marginTop: "15px",
-              marginBottom: "30px",
-            }}
-          >
-            Import Nodes (CSV File)
-            <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
-          </Button>
-        </Box>
-        </AccordionDetails>
-        </Accordion>
-        <Accordion sx={{width: "90%"}}>
-          <AccordionSummary>
-            <Typography>
-              Edges
+        <Accordion sx={{width: "90%", backgroundColor: "#003A96"}}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}>
+            <Typography color={"white"}>
+              NODES
             </Typography>
           </AccordionSummary>
-        <AccordionDetails>
+            <AccordionDetails>
+              <Box
+                display="flex"
+                mt={2}
+                alignItems="center"
+                flexDirection="column"
+              >
+                <DataGrid
+                  slots={{ toolbar: GridToolbar }}
+                  sx={{
+                    padding: "40px",
+                    position: "relative",
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%",
+                    backgroundColor: "white"
+                  }}
+                  columns={nodeColumns}
+                  rows={nodeRowData}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 },
+                    },
+                  }}
+                  pageSizeOptions={[5, 10]}
+                />
+                <Button
+                  component="label"
+                  role={undefined}
+                  tabIndex={-1}
+                  startIcon={<CloudUploadIcon />}
+                  className="importButton"
+                  variant="contained"
+                  // onClick={handleNodeImport}
+                  sx={{
+                    backgroundColor: "primary.main", // Change background color
+                    color: "white", // Change text color
+                    borderRadius: "8px", // Change border radius
+                    marginRight: "-1px", // Adjust spacing
+                    marginTop: "15px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  Import Nodes (CSV File)
+                  <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
+                </Button>
+              </Box>
+            </AccordionDetails>
+        </Accordion>
+        <Accordion sx={{width: "90%", backgroundColor: "#003A96"}}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}>
+            <Typography color={"white"}>
+              EDGES
+            </Typography>
+          </AccordionSummary>
+        <AccordionDetails sx={{
+          display: "flex",
+          flexDirection: "column",  // To stack the button and DataGrid vertically
+          alignItems: "center",      // To center align items horizontally
+          justifyContent: "center", // To center align items vertically
+        }}>
           <DataGrid
             slots={{ toolbar: GridToolbar }}
             sx={{
@@ -563,7 +562,8 @@ function DisplayDatabase() {
               position: "relative",
               display: "flex",
               justifyContent: "center",
-              //alignItems: "center",
+              backgroundColor: "white",
+              width: "50%"
             }}
             columns={edgeColumns}
             rows={edgeRowData}
