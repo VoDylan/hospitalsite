@@ -28,7 +28,7 @@ export function ServiceCard(props: ServiceProps) {
           <CardMedia
             component={"img"}
             image={props.imagePath}
-            sx={{ width: "350px", height: "310px", display: "flex", marginBottom: "15px"}} // Ensure the image fills the entire card
+            sx={{ width: "310px", height: "250px", display: "flex", marginBottom: "15px"}} // Ensure the image fills the entire card
           />
           <Typography
             gutterBottom variant="h5" component="div"
