@@ -17,7 +17,7 @@ export function ServiceCard(props: ServiceProps) {
         boxShadow: 3,
         display: "flex",
         width: "250px", // Set the width of each card
-        height: "310px", // Set the height of each card
+        height: "250px", // Set the height of each card
         "&:hover": {
           color: "black",
         },
@@ -28,7 +28,7 @@ export function ServiceCard(props: ServiceProps) {
           <CardMedia
             component={"img"}
             image={props.imagePath}
-            sx={{ width: "250px", height: "190px", display: "flex", marginBottom: "15px"}} // Ensure the image fills the entire card
+            sx={{ width: "250px", height: "140px", display: "flex", marginBottom: "15px"}} // Ensure the image fills the entire card
           />
           <Typography
             gutterBottom variant="h5" component="div"
@@ -42,7 +42,6 @@ export function ServiceCard(props: ServiceProps) {
             variant="body2" color="text.secondary"
             sx={{
               textAlign: "center",
-              marginBottom: "15px",
               marginLeft: "5%",
               marginRight: "5%",
             }}
