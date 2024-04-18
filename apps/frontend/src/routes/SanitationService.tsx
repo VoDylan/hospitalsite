@@ -142,7 +142,7 @@ function SanitationService() {
           </Typography>
         </Grid>
         <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -152,7 +152,7 @@ function SanitationService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -166,7 +166,7 @@ function SanitationService() {
               }))}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Service Needed:
             </Typography>
@@ -184,7 +184,7 @@ function SanitationService() {
               returnData={form.service}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Frequency Needed:
             </Typography>
@@ -195,7 +195,7 @@ function SanitationService() {
               returnData={form.frequency}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Priority of Sanitation:
             </Typography>
@@ -206,7 +206,7 @@ function SanitationService() {
               handleChange={handlePriorityInput}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Status of the Request:
             </Typography>

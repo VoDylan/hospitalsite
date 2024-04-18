@@ -139,7 +139,7 @@ function FlowerDeliveryService() {
           </Typography>
         </Grid>
         <Grid container sx={{ backgroundColor: "white" }} boxShadow={4}>
-          <Grid item xs={6} mt={2}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
               label={"Name"}
@@ -148,7 +148,7 @@ function FlowerDeliveryService() {
               type={"text"}
             />
           </Grid>
-          <Grid item xs={6} mt={2}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Flower Type:</Typography>
             <DropDown
               items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
@@ -157,7 +157,7 @@ function FlowerDeliveryService() {
               returnData={form.flowerType}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography align={"center"}>Recipient Name:</Typography>
             <CenterAlignedTextbox
               label={"Recipient Name"}
@@ -165,7 +165,7 @@ function FlowerDeliveryService() {
               onChange={handleRecipientNameInput}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography align={"center"}>Room:</Typography>
             <DropDown
               items={nodes.map((node) => ({
@@ -177,7 +177,7 @@ function FlowerDeliveryService() {
               handleChange={handleRoomNumberInput}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography align={"center"}>Add a message (optional):</Typography>
             <CenterAlignedTextbox
               label={"Message"}

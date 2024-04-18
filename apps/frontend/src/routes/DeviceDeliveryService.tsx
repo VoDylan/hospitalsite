@@ -192,7 +192,7 @@ function DeviceDeliveryService() {
           </Typography>
         </Grid>
         <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -202,7 +202,7 @@ function DeviceDeliveryService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -216,7 +216,7 @@ function DeviceDeliveryService() {
               }))}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Medical Device Needed:
             </Typography>
@@ -226,7 +226,7 @@ function DeviceDeliveryService() {
               onChange={handleDeviceInput}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Amount Needed:
             </Typography>
@@ -236,7 +236,7 @@ function DeviceDeliveryService() {
               value={form.amount}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Priority of Medical Device Delivery:
             </Typography>
@@ -247,7 +247,7 @@ function DeviceDeliveryService() {
               handleChange={handlePriorityInput}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Status of the Request:
             </Typography>
