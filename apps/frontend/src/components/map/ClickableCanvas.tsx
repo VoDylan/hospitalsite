@@ -1,25 +1,21 @@
 import React, { useEffect, useRef } from "react";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
 
-interface IconProps {
+interface ClickableCanvasProps {
   style: React.CSSProperties;
   backgroundRendered: boolean;
   width: number;
   height: number;
-  refCallback: (ref: HTMLCanvasElement) => void;
+  onClick: (event: React.MouseEvent) => void;
 }
 
-export default function IconCanvas(props: IconProps) {
+export default function ClickableCanvas(props: ClickableCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const refCallback = props.refCallback;
 
   useEffect(() => {
     if (props.backgroundRendered)
       initializeLayeredCanvas(canvasRef.current, props.width, props.height);
-    if (canvasRef.current) {
-      refCallback(canvasRef.current);
-    }
-  }, [props.backgroundRendered, props.height, props.width, refCallback]);
+  }, [props.backgroundRendered, props.height, props.width]);
 
-  return <canvas ref={canvasRef} style={props.style} />;
+  return <canvas ref={canvasRef} style={props.style} onClick={props.onClick} />;
 }

@@ -1,9 +1,4 @@
-import {
-  Grid,
-  Typography,
-  SelectChangeEvent,
-  Stack,
-} from "@mui/material";
+import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
@@ -11,8 +6,7 @@ import { MedicineDeliveryFormSubmission } from "../common/formSubmission/Medicin
 import MedicineBackground from "../images/MedicineDelivery.jpeg";
 import { MedicineSubmitButton } from "../components/buttons/MedicineSubmitButton.tsx";
 import axios from "axios";
-import TopBanner from "../components/banner/TopBanner.tsx";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function MedicineDelivery() {
@@ -86,7 +80,7 @@ function MedicineDelivery() {
         for (let i = 0; i < nodeIDs.length; i++) {
           updatedNodes.push({
             nodeID: nodeIDs[i],
-            longName: longNames[i]
+            longName: longNames[i],
           });
         }
 
@@ -114,7 +108,6 @@ function MedicineDelivery() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
       <Grid
         container
         direction={"row"}
@@ -135,7 +128,7 @@ function MedicineDelivery() {
             backgroundColor: "transparent",
           }}
         >
-          <ServiceNavTabs/>
+          <ServiceNavTabs />
         </Grid>
         <Grid
           item
@@ -148,9 +141,11 @@ function MedicineDelivery() {
             Medicine Delivery Form
           </Typography>
         </Grid>
-        <Grid container boxShadow={4} sx={{backgroundColor: "white"}}>
+        <Grid container xs={12} boxShadow={4} sx={{ backgroundColor: "white" }}>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Name:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Name:
+            </Typography>
             <CenterAlignedTextbox
               label={"Name"}
               value={form.name}
@@ -158,16 +153,23 @@ function MedicineDelivery() {
             />
           </Grid>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Location:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Location:
+            </Typography>
             <DropDown
               label={"Location"}
               returnData={form.location}
               handleChange={handleLocationInput}
-              items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Medicine Needed:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Medicine Needed:
+            </Typography>
             <DropDown
               items={[
                 "Acetaminophen (Tylenol)",
@@ -182,7 +184,9 @@ function MedicineDelivery() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Frequency Needed:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Frequency Needed:
+            </Typography>
             <DropDown
               items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
               handleChange={handleFrequencyInput}
@@ -221,11 +225,7 @@ function MedicineDelivery() {
               justifyContent: "center",
             }}
           >
-            <MedicineSubmitButton
-              input={form}
-              text={"SUBMIT"}
-              clear={clear}
-            />
+            <MedicineSubmitButton input={form} text={"SUBMIT"} clear={clear} />
           </Grid>
         </Grid>
       </Grid>

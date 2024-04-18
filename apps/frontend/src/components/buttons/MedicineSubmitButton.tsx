@@ -157,4 +157,3 @@ export function MedicineSubmitButton(props: ButtonProps) {
     </Button>
   );
 }
-

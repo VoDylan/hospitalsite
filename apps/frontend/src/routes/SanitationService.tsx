@@ -1,9 +1,4 @@
-import {
-  Grid,
-  Typography,
-  SelectChangeEvent,
-  Stack,
-} from "@mui/material";
+import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
@@ -11,8 +6,7 @@ import { SanitationRequestFormSubmission } from "../common/formSubmission/Sanita
 import sanitationBackground from "../images/sanitationBackground.webp";
 import { SanitationSubmitButton } from "../components/buttons/SanitationSubmitButton.tsx";
 import axios from "axios";
-import TopBanner from "../components/banner/TopBanner.tsx";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function SanitationService() {
@@ -86,7 +80,7 @@ function SanitationService() {
         for (let i = 0; i < nodeIDs.length; i++) {
           updatedNodes.push({
             nodeID: nodeIDs[i],
-            longName: longNames[i]
+            longName: longNames[i],
           });
         }
 
@@ -114,7 +108,6 @@ function SanitationService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
       <Grid
         container
         direction={"row"}
@@ -135,7 +128,7 @@ function SanitationService() {
             backgroundColor: "transparent",
           }}
         >
-          <ServiceNavTabs/>
+          <ServiceNavTabs />
         </Grid>
         <Grid
           item
@@ -148,9 +141,11 @@ function SanitationService() {
             Sanitation Service Form
           </Typography>
         </Grid>
-        <Grid container boxShadow={4} sx={{backgroundColor: "white"}}>
+        <Grid container xs={12} boxShadow={4} sx={{ backgroundColor: "white" }}>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black" } align={"center"}>Name:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Name:
+            </Typography>
             <CenterAlignedTextbox
               label={"Name"}
               value={form.name}
@@ -158,16 +153,23 @@ function SanitationService() {
             />
           </Grid>
           <Grid item xs={6} mt={2}>
-            <Typography color={"black"} align={"center"}>Location:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Location:
+            </Typography>
             <DropDown
               label={"Location"}
               returnData={form.location}
               handleChange={handleLocationInput}
-              items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Service Needed:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Service Needed:
+            </Typography>
             <DropDown
               items={[
                 "Routine Cleaning",
@@ -183,7 +185,9 @@ function SanitationService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Frequency Needed:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Frequency Needed:
+            </Typography>
             <DropDown
               items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
               handleChange={handleFrequencyInput}
@@ -192,7 +196,9 @@ function SanitationService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Priority of Sanitation:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Priority of Sanitation:
+            </Typography>
             <RadioButtonsGroup
               label={"Priority"}
               options={["Low", "Medium", "High", "Emergency"]}
@@ -201,7 +207,9 @@ function SanitationService() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography color={"black"} align={"center"}>Status of the Request:</Typography>
+            <Typography color={"black"} align={"center"}>
+              Status of the Request:
+            </Typography>
             <RadioButtonsGroup
               label={"Status"}
               options={["Unassigned", "Assigned", "InProgress", "Closed"]}

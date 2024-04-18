@@ -1,23 +1,33 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import { Link, useHistory, useLocation } from "react-router-dom";
 
 // Functional link component which delays page navigation
-export const DelayLink = props => {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+export const DelayLink = (props) => {
   const { delay, onDelayStart, onDelayEnd, replace, to, ...rest } = props;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   let timeout = null;
   const history = useHistory();
   const location = useLocation();
 
   useEffect(() => {
     return () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       if (timeout) {
         clearTimeout(timeout);
       }
     };
   }, [timeout]);
 
-  const handleClick = e => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const handleClick = (e) => {
     // if trying to navigate to current page stop everything
     if (location?.pathname === to) return;
 
@@ -51,14 +61,16 @@ DelayLink.propTypes = {
   // Replace history or not
   replace: PropTypes.bool,
   // Link to go to
-  to: PropTypes.string
+  to: PropTypes.string,
 };
 
 DelayLink.defaultProps = {
   replace: false,
   delay: 0,
+  // eslint-disable-next-line no-empty-function
   onDelayStart: () => {},
-  onDelayEnd: () => {}
+  // eslint-disable-next-line no-empty-function
+  onDelayEnd: () => {},
 };
 
 export default DelayLink;

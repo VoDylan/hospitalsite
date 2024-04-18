@@ -28,8 +28,8 @@ model Edge {
   edgeID      String @id
   startNodeID String
   endNodeID   String
-  startNode   Node   @relation(fields: [startNodeID], references: [nodeID], name: "StartNode")
-  endNode     Node   @relation(fields: [endNodeID], references: [nodeID], name: "EndNode")
+  startNode   Node   @relation(fields: [startNodeID], references: [nodeID], name: "StartNode", onDelete: Cascade, onUpdate: Cascade)
+  endNode     Node   @relation(fields: [endNodeID], references: [nodeID], name: "EndNode", onDelete: Cascade, onUpdate: Cascade)
 }
 
 model User {

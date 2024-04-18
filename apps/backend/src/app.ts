@@ -7,7 +7,7 @@ import sendPath from "./routes/sendPath";
 import sendTestPath from "./routes/sendTestPath.ts";
 import sendNodesEdgesPath from "./routes/sendNodesEdgesPath.ts";
 import sendFloorNodes from "./routes/sendFloorNodes.ts";
-import {auth} from "express-oauth2-jwt-bearer";
+import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Set up the backend
 
@@ -38,11 +38,11 @@ app.use("/healthcheck", (req, res) => {
 
   if (!process.env["VITETEST"]) {
     app.use(
-      auth( {
+      auth({
         audience: "/api",
         issuerBaseURL: "/https://dev-1bg6tdr43pzdkebi.us.auth0.com/api/v2/",
         tokenSigningAlg: "RS256",
-      })
+      }),
     );
   }
 });
