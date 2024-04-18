@@ -1,12 +1,12 @@
-import {Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
+import { Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useEffect, useState } from "react";
 import { DropDown } from "../components/DropDown.tsx";
 import { FlowerDeliverySubmitButton } from "../components/buttons/FlowerDeliverySubmitButton.tsx";
-import TopBanner2 from "../components/banner/TopBanner2.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
+import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
@@ -40,12 +40,12 @@ function FlowerDeliveryService() {
         for (let i = 0; i < nodeIDs.length; i++) {
           updatedNodes.push({
             nodeID: nodeIDs[i],
-            longName: longNames[i]
+            longName: longNames[i],
           });
-    }
+        }
 
-    updateNodes(updatedNodes);
-  })
+        updateNodes(updatedNodes);
+      })
       .catch((error) => console.error(error));
   }, []);
 
@@ -99,20 +99,29 @@ function FlowerDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner2 />
       <Grid
         container
         direction={"row"}
         justifyContent={"center"}
-        boxShadow={4}
+        // boxShadow={4}
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "transparent",
           width: "40vw", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
         }}
       >
+        <Grid
+          item
+          xs={12}
+          paddingBottom={2}
+          sx={{
+            backgroundColor: "transparent",
+          }}
+        >
+          <ServiceNavTabs />
+        </Grid>
         <Grid
           item
           xs={12}
@@ -129,7 +138,8 @@ function FlowerDeliveryService() {
             Flower Delivery Service Form
           </Typography>
         </Grid>
-          <Grid item xs={6}>
+        <Grid container sx={{ backgroundColor: "white" }} boxShadow={4}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
               label={"Name"}
@@ -138,7 +148,7 @@ function FlowerDeliveryService() {
               type={"text"}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Flower Type:</Typography>
             <DropDown
               items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
@@ -147,30 +157,33 @@ function FlowerDeliveryService() {
               returnData={form.flowerType}
             />
           </Grid>
-          <Grid item xs={6}>
-              <Typography align={"center"}>Recipient Name:</Typography>
-              <CenterAlignedTextbox
-                label={"Recipient Name"}
-                value={form.recipientName}
-                onChange={handleRecipientNameInput}
-              />
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography align={"center"}>Recipient Name:</Typography>
+            <CenterAlignedTextbox
+              label={"Recipient Name"}
+              value={form.recipientName}
+              onChange={handleRecipientNameInput}
+            />
           </Grid>
-          <Grid item xs={6}>
-              <Typography align={"center"}>Room:</Typography>
-              <DropDown
-                items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
-                label={"Room Number"}
-                returnData={form.roomNumber}
-                handleChange={handleRoomNumberInput}
-              />
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography align={"center"}>Room:</Typography>
+            <DropDown
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
+              label={"Room Number"}
+              returnData={form.roomNumber}
+              handleChange={handleRoomNumberInput}
+            />
           </Grid>
-          <Grid item xs={6}>
-              <Typography align={"center"}>Add a message (optional):</Typography>
-              <CenterAlignedTextbox
-                label={"Message"}
-                value={form.message}
-                onChange={handleMessageInput}
-              />
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography align={"center"}>Add a message (optional):</Typography>
+            <CenterAlignedTextbox
+              label={"Message"}
+              value={form.message}
+              onChange={handleMessageInput}
+            />
           </Grid>
           <Grid
             item
@@ -181,13 +194,14 @@ function FlowerDeliveryService() {
               justifyContent: "center",
             }}
           >
-              <FlowerDeliverySubmitButton
-                text={"SUBMIT"}
-                input={form}
-                clear={clear}
-              />
+            <FlowerDeliverySubmitButton
+              text={"SUBMIT"}
+              input={form}
+              clear={clear}
+            />
           </Grid>
         </Grid>
+      </Grid>
     </Stack>
   );
 }

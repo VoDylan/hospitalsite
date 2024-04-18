@@ -1,20 +1,15 @@
-import {
-  Grid,
-  Typography,
-  SelectChangeEvent,
-  Stack,
-} from "@mui/material";
+import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
 import { DropDown } from "../components/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
-import TopBanner from "../components/banner/TopBanner.tsx";
 import giftbackground from "../images/giftbackground.jpg";
 import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubmitButton.tsx";
 import React from "react";
 import Confetti from "react-confetti";
 import axios from "axios";
-import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
+import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -95,7 +90,7 @@ function GiftDeliveryService() {
         for (let i = 0; i < nodeIDs.length; i++) {
           updatedNodes.push({
             nodeID: nodeIDs[i],
-            longName: longNames[i]
+            longName: longNames[i],
           });
         }
 
@@ -133,20 +128,28 @@ function GiftDeliveryService() {
         overflowX: "hidden",
       }}
     >
-      <TopBanner />
       <Grid
         container
         direction={"row"}
         justifyContent={"center"}
-        boxShadow={4}
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "transparent",
           width: "40vw", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
         }}
       >
+        <Grid
+          item
+          xs={12}
+          paddingBottom={2}
+          sx={{
+            backgroundColor: "transparent",
+          }}
+        >
+          <ServiceNavTabs />
+        </Grid>
         <Grid
           item
           xs={12}
@@ -158,115 +161,127 @@ function GiftDeliveryService() {
             Gift Delivery Service Form
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Name:</Typography>
-          <CenterAlignedTextbox
-            label={"Name"}
-            value={form.name}
-            onChange={handleNameInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Location:</Typography>
-          <DropDown
-            label={"Location"}
-            returnData={form.location}
-            handleChange={handleLocationInput}
-            items={nodes.map((node) => ({ value: node.nodeID, label: node.longName }))}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Recipient Name:</Typography>
-          <CenterAlignedTextbox
-            label={"Recipient Name"}
-            value={form.recipientName}
-            onChange={handlerecipientNameInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>Optional Message:</Typography>
-          <CenterAlignedTextbox
-            label={"Optional Message"}
-            value={form.message}
-            onChange={handleMessageInput}
-          />
-        </Grid>
-
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Delivery:
-          </Typography>
-          <RadioButtonsGroup
-            label={"Delivery"}
-            options={[
-              "Standard Delivery",
-              "Express Delivery",
-              "Same Day Delivery",
-              "Emergency Delivery",
-            ]}
-            returnData={form.delivery}
-            handleChange={handleDeliveryInput}
-          />
-        </Grid>
-
-        <Grid item xs={6}>
-          <Typography color={"black"} align={"center"}>
-            Status of the Request:
-          </Typography>
-          <RadioButtonsGroup
-            label={"Status"}
-            options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-            returnData={form.status}
-            handleChange={handleStatusInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={2} align={"center"}>
-            Gift Size:
-          </Typography>
-          <RadioButtonsGroup
-            label={"Gift Size"}
-            options={["Small", "Medium", "Large", "Extra Large"]}
-            returnData={form.giftSize}
-            handleChange={handleGiftSizeInput}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography color={"black"} paddingTop={2} align={"center"}>
-            Gift Add-on:
-          </Typography>
-          <RadioButtonsGroup
-            label={"Gift Add-on"}
-            options={["Greeting Card", "Balloons", "Stuffed Animal", "None"]}
-            returnData={form.giftAddOn}
-            handleChange={handleGiftAddOnInput}
-          />
-        </Grid>
-
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            my: 2,
-            justifyContent: "center",
-          }}
-        >
-          {showConfetti && (
-            <Confetti
-              numberOfPieces={100}
-              width={innerWidth}
-              height={innerHeight}
-              //recycle={false}
+        <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Name:
+            </Typography>
+            <CenterAlignedTextbox
+              label={"Name"}
+              value={form.name}
+              onChange={handleNameInput}
             />
-          )}
-          <GiftDeliverySubmitButton
-            text={"SUBMIT"}
-            input={form}
-            clear={clear}
-            displayConfetti={displayConfetti}
-            hideConfetti={hideConfetti}
-          />
+          </Grid>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Location:
+            </Typography>
+            <DropDown
+              label={"Location"}
+              returnData={form.location}
+              handleChange={handleLocationInput}
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
+            />
+          </Grid>
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Recipient Name:
+            </Typography>
+            <CenterAlignedTextbox
+              label={"Recipient Name"}
+              value={form.recipientName}
+              onChange={handlerecipientNameInput}
+            />
+          </Grid>
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Optional Message:
+            </Typography>
+            <CenterAlignedTextbox
+              label={"Optional Message"}
+              value={form.message}
+              onChange={handleMessageInput}
+            />
+          </Grid>
+
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Delivery:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Delivery"}
+              options={[
+                "Standard Delivery",
+                "Express Delivery",
+                "Same Day Delivery",
+                "Emergency Delivery",
+              ]}
+              returnData={form.delivery}
+              handleChange={handleDeliveryInput}
+            />
+          </Grid>
+
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Status of the Request:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Status"}
+              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
+              returnData={form.status}
+              handleChange={handleStatusInput}
+            />
+          </Grid>
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography color={"black"} paddingTop={2} align={"center"}>
+              Gift Size:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Gift Size"}
+              options={["Small", "Medium", "Large", "Extra Large"]}
+              returnData={form.giftSize}
+              handleChange={handleGiftSizeInput}
+            />
+          </Grid>
+          <Grid item xs={6} sx={{align: "center"}}>
+            <Typography color={"black"} paddingTop={2} align={"center"}>
+              Gift Add-on:
+            </Typography>
+            <RadioButtonsGroup
+              label={"Gift Add-on"}
+              options={["Greeting Card", "Balloons", "Stuffed Animal", "None"]}
+              returnData={form.giftAddOn}
+              handleChange={handleGiftAddOnInput}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              my: 2,
+              justifyContent: "center",
+            }}
+          >
+            {showConfetti && (
+              <Confetti
+                numberOfPieces={100}
+                width={innerWidth}
+                height={innerHeight}
+                //recycle={false}
+              />
+            )}
+            <GiftDeliverySubmitButton
+              text={"SUBMIT"}
+              input={form}
+              clear={clear}
+              displayConfetti={displayConfetti}
+              hideConfetti={hideConfetti}
+            />
+          </Grid>
         </Grid>
       </Grid>
       <Typography>Yitao Hong, Arayah Remillard</Typography>

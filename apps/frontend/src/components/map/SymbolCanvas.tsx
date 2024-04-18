@@ -1,10 +1,12 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import MapNode from "common/src/map/MapNode.ts";
-import {Draw} from "../../common/Draw.ts";
-import FilterManager, {generateFilterValue} from "common/src/filter/FilterManager.ts";
-import {FilterName} from "common/src/filter/FilterName.ts";
+import { Draw } from "../../common/Draw.ts";
+import FilterManager, {
+  generateFilterValue,
+} from "common/src/filter/FilterManager.ts";
+import { FilterName } from "common/src/filter/FilterName.ts";
 import Filter from "common/src/filter/filters/Filter.ts";
-import {Floor} from "common/src/map/Floor.ts";
+import { Floor } from "common/src/map/Floor.ts";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
 
 interface SymbolCanvasProps {
@@ -21,7 +23,8 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    if(props.backgroundRendered) initializeLayeredCanvas(canvasRef.current, props.width, props.height);
+    if (props.backgroundRendered)
+      initializeLayeredCanvas(canvasRef.current, props.width, props.height);
   }, [props.backgroundRendered, props.height, props.width]);
 
   /**
@@ -40,10 +43,10 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
       ctx.clearRect(0, 0, props.width, props.height);
 
       //Filter for all nodes on the floor
-      const filters: Filter =
-        FilterManager.getInstance().getConfiguredFilter(FilterName.FLOOR, [
-          generateFilterValue(false, props.floor),
-        ])!;
+      const filters: Filter = FilterManager.getInstance().getConfiguredFilter(
+        FilterName.FLOOR,
+        [generateFilterValue(false, props.floor)],
+      )!;
 
       //Apply the filters to the list of nodes that have the selected filters applied, so only the nodes that the user wants
       //are displayed
@@ -158,18 +161,29 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
               4,
             );
             break;
+          case "HALL":
+            draw.drawCircle(
+              nodesOnFloor[i].xcoord,
+              nodesOnFloor[i].ycoord,
+              8,
+              "#7e36c2",
+              "black",
+              4,
+            );
+            break;
           default:
             console.error("Unsupported nodeType");
             break;
         }
       }
     }
-  }, [props.filtersApplied, props.filteredNodes, props.floor, props.height, props.width]);
+  }, [
+    props.filtersApplied,
+    props.filteredNodes,
+    props.floor,
+    props.height,
+    props.width,
+  ]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={props.style}
-    />
-  );
+  return <canvas ref={canvasRef} style={props.style} />;
 }

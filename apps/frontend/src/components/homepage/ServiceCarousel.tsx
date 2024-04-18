@@ -39,7 +39,7 @@ function ServiceCarousel() {
     {
       image: signL,
       title: "Room Scheduling",
-      description: "Schedule a room for yourself or a dependant",
+      description: "Schedule a room booking for yourself or a dependant!",
       buttonText: "Schedule Room",
       path: "/Services/RoomScheduling",
     },

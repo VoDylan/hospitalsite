@@ -28,8 +28,8 @@ model Edge {
   edgeID      String @id
   startNodeID String
   endNodeID   String
-  startNode   Node   @relation(fields: [startNodeID], references: [nodeID], name: "StartNode")
-  endNode     Node   @relation(fields: [endNodeID], references: [nodeID], name: "EndNode")
+  startNode   Node   @relation(fields: [startNodeID], references: [nodeID], name: "StartNode", onDelete: Cascade, onUpdate: Cascade)
+  endNode     Node   @relation(fields: [endNodeID], references: [nodeID], name: "EndNode", onDelete: Cascade, onUpdate: Cascade)
 }
 
 model User {
@@ -94,3 +94,15 @@ model FlowerServiceRequest {
   roomNumber    String
   message       String
 }
+
+// model GiftDeliveryService {
+// id            Int    @id @default(autoincrement())
+// name          string
+// recipientName string
+// status        string
+// location      string
+// message       string
+// delivery      string
+// giftSize      string
+// giftAddOn     string
+// }
