@@ -140,7 +140,7 @@ function FlowerDeliveryService() {
             Flower Delivery Service Form
           </Typography>
         </Grid>
-        <Grid container xs={12} sx={{backgroundColor: "white"}} boxShadow={4}>
+        <Grid container sx={{backgroundColor: "white"}} boxShadow={4}>
           <Grid item xs={6} mt={2}>
             <Typography align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
