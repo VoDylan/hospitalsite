@@ -88,7 +88,7 @@ export class DFSalgorithm extends Algorithms {
           parents[neighborIndex] = currentNodeID!;
 
           visited.push(neighborID);
-          stack.push(neighborID);
+          stack.unshift(neighborID);
         }
       }
     }

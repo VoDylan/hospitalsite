@@ -148,7 +148,7 @@ function SecurityService() {
             Security Service Form
           </Typography>
         </Grid>
-        <Grid container xs={12} boxShadow={4} sx={{ backgroundColor: "white" }}>
+        <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
           <Grid item xs={6} mt={2}>
             <Typography color={"black"} align={"center"}>
               Name:
