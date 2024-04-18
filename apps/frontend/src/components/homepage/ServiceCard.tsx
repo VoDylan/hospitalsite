@@ -21,7 +21,11 @@ export function ServiceCard(props: ServiceProps) {
         height: "250px", // Set the height of each card
         transition: "0.3s",
         "&:hover": {
-          backgroundColor: "rgba(0, 0, 0, 0.1)", // Darken the card slightly on hover
+          filter: "brightness(95%)", // Darken the card slightly on hover
+          "& .MuiCardMedia-img": {
+            transition: "0.3s",
+            filter: "brightness(95%)", // Darken the image on hover
+          },
         },
       }}
     >
