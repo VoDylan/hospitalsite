@@ -100,6 +100,14 @@ class MapEdge {
     this._endNode = newEndNode;
   }
 
+  public get edgeID(): string {
+    return this._edgeInfo.edgeID;
+  }
+
+  public set edgeID(newEdgeID: string) {
+    this._edgeInfo.edgeID = newEdgeID;
+  }
+
   public get edgeInfo(): MapEdgeType {
     return this._edgeInfo;
   }

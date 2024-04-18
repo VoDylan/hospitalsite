@@ -27,11 +27,11 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
     if (distancesResponse.status !== 200) {
       throw new Error("Failed to fetch data");
     }
-    const distancePath = await distancesResponse.data;
+    const distancePath = distancesResponse.data;
     const distanceData = distancePath.message;
 
     setDistancesData(distanceData);
-    // console.log("Updated distancesData:", distancePath);
+    console.log("Updated distancesData:", distancePath);
   }
 
   useEffect(() => {

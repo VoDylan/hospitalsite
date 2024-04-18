@@ -4,7 +4,9 @@ import client from "../bin/database-connection.ts";
 import {
   clearDBEdges,
   clearDBNodes,
+  createEdgePrisma,
   createServiceRequest,
+  deleteEdgePrisma,
   deleteNodePrisma,
   getDBEdgeByEdgeID,
   getDBNodeByID,
@@ -106,6 +108,40 @@ router.get("/edges/:edgeID", async (req, res) => {
   } else {
     res.status(200).json(edgeData!);
   }
+});
+
+router.put("/edges/deleteedge/:edgeID", async (req, res) => {
+  const result: number = await deleteEdgePrisma(req.params.edgeID);
+
+  let message: string = "";
+
+  if (result == 200) {
+    message = `Successfully deleted edge: ${req.params.edgeID}!`;
+  } else if (result == 400) {
+    message = `Unable to delete edge ${req.params.edgeID}`;
+  }
+
+  res.status(result).json({
+    message: message,
+  });
+});
+
+router.put("/edges/createedge", async (req, res) => {
+  if (validateEdgeData(req.body as never).error != undefined) {
+    console.log("Edge data badly formatted. Skipping...");
+    res.status(400).json({
+      message: "Sent data is badly formatted",
+    });
+    return;
+  }
+
+  const edgeData: MapEdgeType = req.body;
+
+  await createEdgePrisma(edgeData);
+
+  res.status(200).json({
+    message: "Successfully added edge",
+  });
 });
 
 router.get("/servicerequest", async (req, res) => {

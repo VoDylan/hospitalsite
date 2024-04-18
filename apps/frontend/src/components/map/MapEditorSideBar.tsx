@@ -13,6 +13,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Divider, Typography } from "@mui/material";
 import NodeInfo from "./NodeInfo.tsx";
 import MapNode from "common/src/map/MapNode.ts";
+import MapEdge from "common/src/map/MapEdge.ts";
+import EdgeInfo from "./EdgeInfo.tsx";
 
 export default function MapEditorSideBar(props: {
   title: string;
@@ -45,12 +47,14 @@ export default function MapEditorSideBar(props: {
   callback?: (newFloor: string) => void;
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
+  edgeBetweenNodes: MapEdge | null;
+  handleCreateEdge: (startNode1: MapNode, startNode2: MapNode) => void;
+  handleDeleteEdge: (edge: MapEdge) => void;
   handleClearNode1: () => void;
   handleClearNode2: () => void;
   handleEditNode: (node: MapNode) => void;
   handleDeleteNode: (node: MapNode) => void;
 }) {
-  console.log("Rerendering map editor side bar");
   return (
     <Drawer
       variant="permanent"
@@ -197,6 +201,30 @@ export default function MapEditorSideBar(props: {
                 editNodeCallback={props.handleEditNode}
                 deleteNodeCallback={props.handleDeleteNode}
               />
+            ) : (
+              <></>
+            )}
+            {props.selectedNode1 && props.selectedNode2 ? (
+              <Box
+                display={"flex"}
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+              >
+                <EdgeInfo
+                  style={{
+                    opacity: "1",
+                    marginTop: "20px",
+                    width: "100%",
+                    overflow: "clip",
+                  }}
+                  edge={props.edgeBetweenNodes}
+                  selectedNode1={props.selectedNode1}
+                  selectedNode2={props.selectedNode2}
+                  textColor={"#535353"}
+                  createEdgeCallback={props.handleCreateEdge}
+                  deleteEdgeCallback={props.handleDeleteEdge}
+                />
+              </Box>
             ) : (
               <></>
             )}

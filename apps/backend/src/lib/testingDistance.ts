@@ -40,11 +40,11 @@ export class testingDistance {
 
         if (!startCoordinates || !endCoordinates) return undefined;
 
-        this.nodesDistances[i] = {
+        this.nodesDistances.push({
           startCoords: startCoordinates,
           endCoords: endCoordinates,
           distance: this.getDistance(startCoordinates, endCoordinates),
-        };
+        });
       }
     }
 
