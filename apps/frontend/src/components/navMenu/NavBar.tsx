@@ -38,8 +38,8 @@ export const NavBar = () => {
         <Box
           sx={{
             bgcolor: "#003A96",
-            height: "stretch",
-            width: "fit-content",
+            height: "100%",
+            width: "100%",
           }}
         >
           <List
