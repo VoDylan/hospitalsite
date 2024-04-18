@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import HomeIcon from "@mui/icons-material/Home";
 import MapIcon from "@mui/icons-material/Map";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
@@ -98,6 +99,13 @@ export const NavBar = () => {
                 <Typography color="white">Database</Typography>
               </Button>
             </ListItem>
+            <ListItem>
+            <Button variant="text" href={"/Calender"}  startIcon={<CalendarMonthIcon sx={{ color: blue[200] }} />}>
+              <Typography color='white'>
+                Calender
+              </Typography>
+            </Button>
+           </ListItem>
           </List>
         </Box>
       </Drawer>

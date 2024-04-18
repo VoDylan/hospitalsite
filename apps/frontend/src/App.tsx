@@ -75,11 +75,11 @@ function App() {
         {
           path: "/DisplayDatabase",
           element: <Auth0Protection component={DisplayDatabase} />,
-          element: <DisplayDatabase />,
         },
 
         {
           path: "/Calender",
+          //element: <Auth0Protection component={CalenderPage} />,
           element: <CalenderPage />,
         },
         {
