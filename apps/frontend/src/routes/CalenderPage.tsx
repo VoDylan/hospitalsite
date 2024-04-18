@@ -9,7 +9,6 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import calenderbackground from "../images/calenderbackground.jpg";
 import dayjs, {Dayjs} from "dayjs";
 import {DayCalendarSkeleton} from "@mui/x-date-pickers";
-//import {useState} from "react";
 
 export default function CalenderPage() {
 
