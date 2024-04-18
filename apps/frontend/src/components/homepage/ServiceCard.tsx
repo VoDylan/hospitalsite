@@ -12,14 +12,16 @@ export function ServiceCard(props: ServiceProps) {
   return (
 <CardActions style={{ marginTop: "auto", justifyContent: "center" }}>
   <MuiLink href={props.servicePath} underline="none">
-    <Card
+    <Box
+      component={Card}
       sx={{
         boxShadow: 3,
         display: "flex",
         width: "250px", // Set the width of each card
         height: "250px", // Set the height of each card
+        transition: "0.3s",
         "&:hover": {
-          color: "black",
+          backgroundColor: "rgba(0, 0, 0, 0.1)", // Darken the card slightly on hover
         },
       }}
     >
@@ -50,7 +52,7 @@ export function ServiceCard(props: ServiceProps) {
                 </Typography>
               </Stack>
             </Box>
-          </Card>
+          </Box>
         </MuiLink>
       </CardActions>
   );
