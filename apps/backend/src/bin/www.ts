@@ -4,6 +4,7 @@ import { AddressInfo } from "net";
 import { createHttpTerminator } from "http-terminator";
 import { importDefaultNodeAndEdgeData } from "./database-initialization.ts";
 import { registerFilters } from "./filter-registration.ts";
+import {importEmployeeData} from "./employee-initialization.ts";
 
 // Attempt a database connection
 console.info("Connecting to database...");
@@ -127,6 +128,11 @@ function onListening(): void {
   console.log("Initializing database");
   importDefaultNodeAndEdgeData().then(() => {
     console.log("Finished importing data into database");
+  });
+
+  console.log("Initializing employees");
+  importEmployeeData().then(() => {
+    console.log("Finished importing employee data");
     console.log("Finished initializing database");
   });
 }

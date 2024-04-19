@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
-import { DropDown } from "../components/DropDown.tsx";
+import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { DeviceDeliveryFormSubmission } from "../common/formSubmission/DeviceDeliveryFormSubmission.ts";
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/buttons/DeviceSubmitButton.tsx";

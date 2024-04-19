@@ -1,7 +1,7 @@
 import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
-import { DropDown } from "../components/DropDown.tsx";
+import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { SecurityRequestFormSubmission } from "../common/formSubmission/SecurityRequestFormSubmission.ts";
 import securitybackground from "../images/security_background.jpg";
 import { SecuritySubmitButton } from "../components/buttons/SecuritySubmitButton.tsx";
