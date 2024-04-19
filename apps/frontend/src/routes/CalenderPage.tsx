@@ -9,6 +9,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import calenderbackground from "../images/calenderbackground.jpg";
 import dayjs, {Dayjs} from "dayjs";
 import {DayCalendarSkeleton} from "@mui/x-date-pickers";
+import {useState} from "react";
 
 export default function CalenderPage() {
 
@@ -94,6 +95,24 @@ export default function CalenderPage() {
     fetchHighlightedDays(date);
   };
 
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
+
+  const updateDate = (date: Dayjs | null) => {
+    setSelectedDate(date);
+    //console.log(date);
+  };
+
+  const handleOk = (selectedDate) => {
+    if (highlightedDays.some((day) => day === selectedDate.date())) {
+      //console.log('This day has open availability!');
+      return 'This day has open availability!';
+    } else {
+      //console.log('This day has no availability.');
+      return 'This day does not have open availability!';
+    }
+    //console.log(selectedDate);
+  };
+
     return (
       <Stack
         direction="column"
@@ -148,6 +167,9 @@ export default function CalenderPage() {
               <StaticDatePicker
                 orientation="landscape"
                 minDate={currentDate}
+                //value={currentDate}
+                onAccept={handleOk}
+                onChange={updateDate}
                 sx={{
                   '.MuiPickersToolbar-root': {
                     color: '#186BD9',
@@ -162,11 +184,9 @@ export default function CalenderPage() {
                     //color: '#186BD9',
                   }
                 }}
-
                 loading={isLoading}
                 onMonthChange={handleMonthChange}
-                renderLoading={() => <DayCalendarSkeleton />}
-                //onChange={dateInfo}
+                renderLoading={() => <DayCalendarSkeleton/>}
                 slots={{
                   day: ServerDay,
                 }}
@@ -177,6 +197,7 @@ export default function CalenderPage() {
                 }}
               />
             </LocalizationProvider>
+            <p>{handleOk(selectedDate)}</p>
           </Grid>
         </Grid>
       </Stack>
