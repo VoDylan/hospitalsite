@@ -19,6 +19,7 @@ import {
 } from "../PrismaScripts.ts";
 import {
   validateEdgeData,
+  validateEmployeeData,
   validateNodeData,
 } from "common/src/validations/validations.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
@@ -303,7 +304,7 @@ router.put("/updatesr/:id", async (req, res) => {
 router.post("/employees", async (req, res) => {
   const data = req.body;
 
-  if (validateEdgeData(data as never).error != undefined) {
+  if (validateEmployeeData(data as never).error != undefined) {
     res.status(400).json({
       message: "Sent data is badly formatted",
     });
