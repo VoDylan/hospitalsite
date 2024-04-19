@@ -50,14 +50,17 @@ export default function MapSideBar(props: {
       variant="permanent"
       sx={{
         [`& .MuiDrawer-paper`]: {
-          width: "18%",
-          height: "100%",
-          minWidth: "18%",
+          marginTop: "8%",
+          marginLeft: "0.5%",
+          width: "17%",
+          height: "83%",
+          minWidth: "10%",
           boxSizing: "border-box",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
           elevation: 100,
           zIndex: 1,
           border: "3px solid rgba(0, 0, 0, 0.05)",
+          borderRadius: "2%"
         },
       }}
     >
@@ -69,7 +72,7 @@ export default function MapSideBar(props: {
           align={"center"}
           fontStyle={"Open Sans"}
           fontSize={30}
-          sx={{ marginBottom: "10%", marginRight: "4%", marginTop: "30%" }}
+          sx={{ marginBottom: "10%", marginRight: "4%" }}
         >
           {props.title}
         </Typography>
@@ -219,13 +222,14 @@ export default function MapSideBar(props: {
               direction="up"
               style={{
                 zIndex: 1,
-                backgroundColor: "#F5F7FA",
+                backgroundColor: "white",
                 position: "absolute",
-                top: "12%",
-                left: "0.2%",
-                width: "100%",
-                minWidth: "100%",
-                height: "100%",
+                top: "-1%",
+                left: "1%",
+                width: "98%",
+                minWidth: "98%",
+                height: "95%",
+
               }}
             >
               <div>{props.icon || <div />}</div>

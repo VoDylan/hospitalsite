@@ -64,7 +64,7 @@ export default function Icon(props: {
               justifyContent: "start",
               alignItems: "start",
               position: "relative",
-              marginTop: "16%",
+              marginTop: "2%",
               paddingTop: "6%",
               marginLeft: "1%",
               paddingLeft: "8%",
