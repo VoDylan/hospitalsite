@@ -444,9 +444,9 @@ function DisplayDatabase() {
           marginBottom: "10vh",
           width: "100%",
         }}>
-          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "#003A96"}}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}>
-              <Typography color={"white"}>
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+              <Typography color={"black"}>
                 SERVICES
               </Typography>
             </AccordionSummary>
@@ -487,10 +487,10 @@ function DisplayDatabase() {
               </Box>
             </AccordionDetails>
           </Accordion>
-        <Accordion sx={{width: "90%", backgroundColor: "#003A96"}}>
+        <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}>
-            <Typography color={"white"}>
+            expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+            <Typography color={"black"}>
               NODES
             </Typography>
           </AccordionSummary>
@@ -543,9 +543,9 @@ function DisplayDatabase() {
               </Box>
             </AccordionDetails>
         </Accordion>
-        <Accordion sx={{width: "90%", backgroundColor: "#003A96"}}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}>
-            <Typography color={"white"}>
+        <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+            <Typography color={"black"}>
               EDGES
             </Typography>
           </AccordionSummary>
