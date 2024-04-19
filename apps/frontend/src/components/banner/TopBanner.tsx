@@ -7,7 +7,7 @@ import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
 import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
-import StatusBar from "../ScrollProgressBar/ScrollProgressBar.tsx";
+import StatusBar from "../scrollprogressbar/ScrollProgressBar.tsx";
 
 const useStyles = makeStyles({
   logoImage: {
