@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
 import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
+import StatusBar from "../ScrollProgressBar/ScrollProgressBar.tsx";
 
 const useStyles = makeStyles({
   logoImage: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles({
     maxWidth: "450px",
     minHeight: "120px",
     flexShrink: 0,
+
   },
 });
 
@@ -35,15 +37,21 @@ function TopBanner() {
   const classes = useStyles();
 
   return (
+    <>
+
     <AppBar
       position="fixed"
+
       sx={{
         backgroundColor: "white",
         height: "120px",
         boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
         elevation: 1,
+
       }}
+
     >
+
       <Toolbar sx={{ flexGrow: 2, marginLeft: 2 }}>
         <Stack sx={{ marginRight: 2, color: "#012D5A" }}>
           <NavBar />
@@ -82,9 +90,14 @@ function TopBanner() {
               <AccountCircle />
             </IconButton>
           </Link>
+
         </Stack>
+
       </Toolbar>
+      <StatusBar/>
     </AppBar>
+
+    </>
   );
 }
 

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
 import noLady from "../../images/noLady.jpg";
 
+
 interface CardData {
   image: string;
   title: string;
