@@ -10,7 +10,7 @@ import {
   deleteEdgePrisma,
   deleteNodePrisma,
   getDBEdgeByEdgeID,
-  getDBNodeByID,
+  getDBNodeByID, getEmployeesFromDB,
   getServiceRequestFromDBByNodeID,
   getServiceRequestFromDBByType,
   getServiceRequestFromDBByUserID,
@@ -318,6 +318,16 @@ router.post("/employees", async (req, res) => {
   res.status(200).json({
     message: "Successfully added employee data",
   });
+});
+
+router.get("/employees", async (req, res) => {
+  const employees = await getEmployeesFromDB();
+
+  if (employees == null) {
+    res.status(404).json({});
+  } else {
+    res.status(200).json(employees!);
+  }
 });
 
 export default router;

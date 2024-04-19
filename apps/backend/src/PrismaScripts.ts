@@ -453,3 +453,20 @@ export async function createEmployeePrisma(
     return false;
   }
 }
+
+export async function getEmployeesFromDB(){
+  let employees = null;
+  try {
+    employees = await client.employee.findMany();
+  } catch (e) {
+    console.error(e);
+  }
+
+  if (employees == null) {
+    console.log(`${loggingPrefix}No employees found in DB`);
+  } else {
+    console.log(`${loggingPrefix}Employees found in DB`);
+  }
+
+  return employees;
+}
