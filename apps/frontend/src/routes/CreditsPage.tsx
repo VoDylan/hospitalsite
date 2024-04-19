@@ -51,10 +51,9 @@ return (
       <Box hidden={tabValue !== 0}>
         <Accordion>
           <AccordionSummary>
-            <Typography>Library 1</Typography>
+            <Typography>React</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>Details about Library 1</Typography>
           </AccordionDetails>
         </Accordion>
         <Accordion>
