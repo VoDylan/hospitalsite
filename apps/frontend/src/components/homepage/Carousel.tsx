@@ -172,20 +172,14 @@ function MainCarousel() {
           <NavigateNextIcon />
         </IconButton>
       </Stack>
-      <Box
-        display={"flex"}
-        justifyContent={"center"}>
-      <Typography variant = "subtitle1">
-        This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
-      </Typography>
-      </Box>
+
 
       {/*{Icons}*/}
       <Stack
         direction={"row"}
         display={"flex"}
         justifyContent={"center"}
-        sx={{ marginBottom: "6%" }}
+        marginTop={'-2%'}
       >
 
         <a
@@ -219,7 +213,20 @@ function MainCarousel() {
           </IconButton>
           <Button variant={"text"}>About Us! (Real Link)</Button>
         </a>
+
       </Stack>
+      <Box
+        sx={{
+          marginBottom: "6%",
+          color: "#186BD9" }}
+        display={"flex"}
+        justifyContent={"center"}>
+        <Typography variant = "subtitle1">
+          This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
+        </Typography>
+      </Box>
+
+
 
       {/*{Divider Bar}*/}
       <Box
