@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Button, Box, Typography } from "@mui/material";
+import {Button, Box, Typography, Accordion, AccordionSummary, AccordionDetails, Stack} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-//import background from "frontend/public/Background.jpg";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios, { AxiosResponse } from "axios";
 import {
   DataGrid,
@@ -61,7 +61,7 @@ function ServiceDetailsTable({
   isVisible: boolean;
 }) {
   return (
-    <Box
+      <Box
       mt={2}
       className={`slide-in ${isVisible ? "slide-in--visible" : "slide-in--hidden"}`}
       sx={{ zIndex: -9999 }}
@@ -433,29 +433,128 @@ function DisplayDatabase() {
   }, []);
 
   return (
-    <>
-      <div
-        style={{
+        <Stack direction={"column"}
+          sx={{
           position: "relative",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "100vh",
           minWidth: "100wh",
           marginTop: "150px",
-          marginBottom: "150px",
-        }}
-      >
-        <Box
-          display="flex"
-          mt={2}
-          alignItems="center"
-          flexDirection="column"
-          sx={{
-            backgroundColor: "white",
-            opacity: "90%",
-          }}
-        >
+          marginBottom: "10vh",
+          width: "100%",
+        }}>
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+              <Typography color={"black"}>
+                SERVICES
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box display="flex">
+                {/* Container for the service request table and service details table */}
+                <Box flex="1" ml={3}>
+                  <DataGrid
+                    slots={{ toolbar: GridToolbar }}
+                    sx={{
+                      padding: "40px",
+                      position: "relative",
+                      display: "flex",
+                      justifyContent: "center",
+                      zIndex: 1,
+                      background: "white",
+                      width: "100%"
+                    }}
+                    columns={serviceColumns}
+                    rows={serviceRowData}
+                    editMode={"row"}
+                    rowModesModel={rowModesModel}
+                    pageSizeOptions={[5, 10]}
+                    processRowUpdate={(newRow: GridRowModel) =>
+                      processRowUpdate(newRow, parseInt(newRow["id"]))
+                    }
+                    onProcessRowUpdateError={handleProcessRowUpdateError}
+                  />
+                </Box>
+                <Box width="400px" ml={2}>
+                  {selectedServiceDetails && (
+                    <ServiceDetailsTable
+                      service={selectedServiceDetails}
+                      isVisible={isServiceDetailsVisible}
+                    />
+                  )}
+                </Box>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+        <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+            <Typography color={"black"}>
+              NODES
+            </Typography>
+          </AccordionSummary>
+            <AccordionDetails>
+              <Box
+                display="flex"
+                mt={2}
+                alignItems="center"
+                flexDirection="column"
+              >
+                <DataGrid
+                  slots={{ toolbar: GridToolbar }}
+                  sx={{
+                    padding: "40px",
+                    position: "relative",
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%",
+                    backgroundColor: "white"
+                  }}
+                  columns={nodeColumns}
+                  rows={nodeRowData}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 },
+                    },
+                  }}
+                  pageSizeOptions={[5, 10]}
+                />
+                <Button
+                  component="label"
+                  role={undefined}
+                  tabIndex={-1}
+                  startIcon={<CloudUploadIcon />}
+                  className="importButton"
+                  variant="contained"
+                  // onClick={handleNodeImport}
+                  sx={{
+                    backgroundColor: "primary.main", // Change background color
+                    color: "white", // Change text color
+                    borderRadius: "8px", // Change border radius
+                    marginRight: "-1px", // Adjust spacing
+                    marginTop: "15px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  Import Nodes (CSV File)
+                  <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
+                </Button>
+              </Box>
+            </AccordionDetails>
+        </Accordion>
+        <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+            <Typography color={"black"}>
+              EDGES
+            </Typography>
+          </AccordionSummary>
+        <AccordionDetails sx={{
+          display: "flex",
+          flexDirection: "column",  // To stack the button and DataGrid vertically
+          alignItems: "center",      // To center align items horizontally
+          justifyContent: "center", // To center align items vertically
+        }}>
           <DataGrid
             slots={{ toolbar: GridToolbar }}
             sx={{
@@ -463,46 +562,8 @@ function DisplayDatabase() {
               position: "relative",
               display: "flex",
               justifyContent: "center",
-              width: "80vw",
-              //alignItems: "center",
-            }}
-            columns={nodeColumns}
-            rows={nodeRowData}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-          />
-          <Button
-            component="label"
-            role={undefined}
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            className="importButton"
-            variant="contained"
-            // onClick={handleNodeImport}
-            sx={{
-              backgroundColor: "primary.main", // Change background color
-              color: "white", // Change text color
-              borderRadius: "8px", // Change border radius
-              marginRight: "-1px", // Adjust spacing
-              marginTop: "15px",
-              marginBottom: "30px",
-            }}
-          >
-            Import Nodes (CSV File)
-            <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
-          </Button>
-          <DataGrid
-            slots={{ toolbar: GridToolbar }}
-            sx={{
-              padding: "40px",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              //alignItems: "center",
+              backgroundColor: "white",
+              width: "50%"
             }}
             columns={edgeColumns}
             rows={edgeRowData}
@@ -533,42 +594,9 @@ function DisplayDatabase() {
             Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
-          <Box display="flex" sx={{ zIndex: 9999 }}>
-            {/* Container for the service request table and service details table */}
-            <Box flex="1" ml={"27em"} sx={{ zIndex: 9999 }}>
-              <DataGrid
-                slots={{ toolbar: GridToolbar }}
-                sx={{
-                  padding: "40px",
-                  position: "relative",
-                  display: "flex",
-                  justifyContent: "center",
-                  zIndex: 9999,
-                  background: "white",
-                }}
-                columns={serviceColumns}
-                rows={serviceRowData}
-                editMode={"row"}
-                rowModesModel={rowModesModel}
-                pageSizeOptions={[5, 10]}
-                processRowUpdate={(newRow: GridRowModel) =>
-                  processRowUpdate(newRow, parseInt(newRow["id"]))
-                }
-                onProcessRowUpdateError={handleProcessRowUpdateError}
-              />
-            </Box>
-            <Box width="400px" ml={2}>
-              {selectedServiceDetails && (
-                <ServiceDetailsTable
-                  service={selectedServiceDetails}
-                  isVisible={isServiceDetailsVisible}
-                />
-              )}
-            </Box>
-          </Box>
-        </Box>
-      </div>
-    </>
+        </AccordionDetails>
+        </Accordion>
+        </Stack>
   );
 }
 

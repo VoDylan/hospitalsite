@@ -8,6 +8,18 @@ interface TextboxProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type?: "text" | "password"; // Define type prop to indicate input type
 }
+
+const useStyles = makeStyles({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    "& .MuiTextField-root": {
+      minWidth: "150px", // Adjust width as needed
+      minHeight: "75px",
+    },
+  },
+});
+
 export const CenterAlignedTextbox = (props: TextboxProps) => {
   const classes = useStyles();
 
@@ -24,14 +36,3 @@ export const CenterAlignedTextbox = (props: TextboxProps) => {
     </div>
   );
 };
-
-const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    justifyContent: "center",
-    "& .MuiTextField-root": {
-      minWidth: "150px", // Adjust width as needed
-      minHeight: "75px",
-    },
-  },
-});
