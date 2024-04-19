@@ -13,8 +13,6 @@ import {useState} from "react";
 
 export default function CalenderPage() {
 
-  //const dateInfo = "Doctor is available!";
-
   const currentDate: Dayjs = dayjs();
 
   //this function can be replaced with database connection, just random days for now
@@ -99,7 +97,7 @@ export default function CalenderPage() {
 
   const updateDate = (date: Dayjs | null) => {
     setSelectedDate(date);
-    //console.log(date);
+    console.log(date);
   };
 
   const handleOk = (selectedDate) => {
@@ -107,10 +105,9 @@ export default function CalenderPage() {
       //console.log('This day has open availability!');
       return 'This day has open availability!';
     } else {
-      //console.log('This day has no availability.');
-      return 'This day does not have open availability!';
+      //console.log('This day has no open availability.');
+      return 'This day does has no open availability!';
     }
-    //console.log(selectedDate);
   };
 
     return (
@@ -169,6 +166,7 @@ export default function CalenderPage() {
                 minDate={currentDate}
                 //value={currentDate}
                 onAccept={handleOk}
+                //handleCancel={handleCancel}
                 onChange={updateDate}
                 sx={{
                   '.MuiPickersToolbar-root': {
