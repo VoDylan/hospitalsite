@@ -649,9 +649,7 @@ function DisplayDatabase() {
               <Tab label='ANALYTICS' />
             </Tabs>
             {currentEdgeIndex === 0 && (
-            <Box
-              mt={2}
-            >
+            <Box mt={2}>
               {/*<Typography variant='h5'>Edge Data Table</Typography>*/}
           <DataGrid
             slots={{ toolbar: GridToolbar }}
