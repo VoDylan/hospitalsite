@@ -1,6 +1,7 @@
-import {AppBar, Box, Tabs, Typography} from "@mui/material";
+import {AccordionDetails, AccordionSummary, AppBar, Box, Tabs, Typography} from "@mui/material";
 import {useState} from "react";
 import Tab from "@mui/material/Tab";
+import Accordion from "@mui/material/Accordion";
 
 export default function CreditsPage() {
 const [tabValue, setTabValue] = useState(0);
@@ -48,13 +49,32 @@ return (
       </AppBar>
 
       <Box hidden={tabValue !== 0}>
-        <Typography variant="body1">Content for Libraries tab</Typography>
+        <Accordion>
+          <AccordionSummary>
+            <Typography>Library 1</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Details about Library 1</Typography>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary>
+            <Typography>Library 2</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Details about Library 2</Typography>
+          </AccordionDetails>
+        </Accordion>
       </Box>
       <Box hidden={tabValue !== 1}>
-        <Typography variant="body1">Content for Tools tab</Typography>
+        <Typography variant="body1">
+          Content for Tools tab
+        </Typography>
       </Box>
       <Box hidden={tabValue !== 2}>
-        <Typography variant="body1">Content for Frameworks tab</Typography>
+        <Typography variant="body1">
+          Content for Frameworks tab
+        </Typography>
       </Box>
     </Box>
   </>
