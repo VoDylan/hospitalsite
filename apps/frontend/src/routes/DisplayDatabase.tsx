@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, Box, Typography, Accordion, AccordionSummary, AccordionDetails, Stack} from "@mui/material";
+import {Button, Box, Typography, Accordion, AccordionSummary, AccordionDetails, Stack, Tabs} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -22,6 +22,7 @@ import MapEdge from "common/src/map/MapEdge.ts";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import "./TableSlide.css";
+import Tab from "@mui/material/Tab";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -432,11 +433,25 @@ function DisplayDatabase() {
     alert("status didn't save");
   }, []);
 
-  const [currentTabIndex, setCurrentTabIndex] = useState(0);
-
-  const handleTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+  //service tabs
+  const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
+  const handleServiceTabChange = (e, tabIndex: React.SetStateAction<number>) => {
     console.log(tabIndex);
-    setCurrentTabIndex(tabIndex);
+    setCurrentServiceIndex(tabIndex);
+  };
+
+  //node tabs
+  const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
+  const handleNodeTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    console.log(tabIndex);
+    setCurrentNodeIndex(tabIndex);
+  };
+
+  //edge tabs
+  const [currentEdgeIndex, setCurrentEdgeIndex] = useState(0);
+  const handleEdgeTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    console.log(tabIndex);
+    setCurrentEdgeIndex(tabIndex);
   };
 
   return (
@@ -457,10 +472,38 @@ function DisplayDatabase() {
                 SERVICES
               </Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails
+              /*sx={{
+                display: "flex",
+                flexDirection: "column",  // To stack the button and DataGrid vertically
+                alignItems: "center",      // To center align items horizontally
+                justifyContent: "center", // To center align items vertically
+              }}*/
+            >
+              <React.Fragment>
+                <Tabs
+                  value={currentServiceIndex}
+                  onChange={handleServiceTabChange}
+                  orientation={"horizontal"}
+                  sx={{
+                    //marginTop: "150px"
+                  }}
+                >
+                  <Tab label='TABLE' />
+                  <Tab label='GRAPH' />
+                  <Tab label='ANALYTICS' />
+                </Tabs>
               <Box display="flex">
                 {/* Container for the service request table and service details table */}
-                <Box flex="1" ml={3}>
+                <Box
+                     flex="1"
+                     ml={3}
+                     mt={2}
+                     alignItems="center"
+                     flexDirection="column">
+                  {currentServiceIndex === 0 && (
+                    <Box >
+                      {/*<Typography variant='h5'>Service Data Table</Typography>*/}
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
                     sx={{
@@ -482,6 +525,8 @@ function DisplayDatabase() {
                     }
                     onProcessRowUpdateError={handleProcessRowUpdateError}
                   />
+                 </Box>
+                 )}
                 </Box>
                 <Box width="400px" ml={2}>
                   {selectedServiceDetails && (
@@ -492,6 +537,7 @@ function DisplayDatabase() {
                   )}
                 </Box>
               </Box>
+              </React.Fragment>
             </AccordionDetails>
           </Accordion>
         <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
@@ -501,13 +547,36 @@ function DisplayDatabase() {
               NODES
             </Typography>
           </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails
+            /*sx={{
+              display: "flex",
+              flexDirection: "column",  // To stack the button and DataGrid vertically
+              alignItems: "center",      // To center align items horizontally
+              justifyContent: "center", // To center align items vertically
+            }}*/
+            >
+              <React.Fragment>
+                <Tabs
+                  value={currentNodeIndex}
+                  onChange={handleNodeTabChange}
+                  orientation={"horizontal"}
+                  sx={{
+                    //marginTop: "150px"
+                  }}
+                >
+                  <Tab label='TABLE' />
+                  <Tab label='GRAPH' />
+                  <Tab label='ANALYTICS' />
+                </Tabs>
               <Box
                 display="flex"
                 mt={2}
                 alignItems="center"
                 flexDirection="column"
               >
+                  {currentNodeIndex === 0 && (
+                    <Box >
+                      {/*<Typography variant='h5'>Node Data Table</Typography>*/}
                 <DataGrid
                   slots={{ toolbar: GridToolbar }}
                   sx={{
@@ -547,7 +616,10 @@ function DisplayDatabase() {
                   Import Nodes (CSV File)
                   <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
                 </Button>
+                </Box>
+                )}
               </Box>
+              </React.Fragment>
             </AccordionDetails>
         </Accordion>
         <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
@@ -556,12 +628,31 @@ function DisplayDatabase() {
               EDGES
             </Typography>
           </AccordionSummary>
-        <AccordionDetails sx={{
+        <AccordionDetails /*sx={{
           display: "flex",
           flexDirection: "column",  // To stack the button and DataGrid vertically
           alignItems: "center",      // To center align items horizontally
           justifyContent: "center", // To center align items vertically
-        }}>
+        }}*/
+        >
+          <React.Fragment>
+            <Tabs
+              value={currentEdgeIndex}
+              onChange={handleEdgeTabChange}
+              orientation={"horizontal"}
+              sx={{
+                //marginTop: "150px"
+              }}
+            >
+              <Tab label='TABLE' />
+              <Tab label='GRAPH' />
+              <Tab label='ANALYTICS' />
+            </Tabs>
+            {currentEdgeIndex === 0 && (
+            <Box
+              mt={2}
+            >
+              {/*<Typography variant='h5'>Edge Data Table</Typography>*/}
           <DataGrid
             slots={{ toolbar: GridToolbar }}
             sx={{
@@ -601,6 +692,9 @@ function DisplayDatabase() {
             Import Edges (CSV File)
             <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
           </Button>
+            </Box>
+            )}
+         </React.Fragment>
         </AccordionDetails>
         </Accordion>
         </Stack>
