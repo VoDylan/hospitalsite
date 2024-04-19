@@ -432,6 +432,13 @@ function DisplayDatabase() {
     alert("status didn't save");
   }, []);
 
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+
+  const handleTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    console.log(tabIndex);
+    setCurrentTabIndex(tabIndex);
+  };
+
   return (
         <Stack direction={"column"}
           sx={{
