@@ -183,7 +183,7 @@ function MainCarousel() {
       >
 
         <a
-          href="/CreditsPage"
+          href="/Credits"
         >
           <IconButton
             sx={{ color: "#186BD9" }}
