@@ -1,8 +1,8 @@
 import client from "./bin/database-connection.ts";
-import { Prisma} from "database";
+import { Prisma } from "database";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
-import {EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
+import { EmployeeFieldsType } from "common/src/employee/EmployeeFieldsType.ts";
 
 const loggingPrefix: string = "PrismaScripts: ";
 
@@ -440,14 +440,16 @@ export async function checkUserAdmin(userID: number): Promise<boolean> {
   }
 }
 
-export async function createEmployeePrisma(employeeInfo: EmployeeFieldsType): Promise<boolean> {
-    try {
-      await client.employee.create({
-        data: employeeInfo
-      });
-      return true;
-    } catch(e){
-      console.error(e);
-      return false;
-    }
+export async function createEmployeePrisma(
+  employeeInfo: EmployeeFieldsType,
+): Promise<boolean> {
+  try {
+    await client.employee.create({
+      data: employeeInfo,
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }

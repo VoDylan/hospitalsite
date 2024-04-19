@@ -1,5 +1,5 @@
 export type EmployeeFieldsType = {
-  employeeId: number;
+  employeeID: number;
   firstName: string;
   lastName: string;
 };

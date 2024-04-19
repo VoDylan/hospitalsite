@@ -4,7 +4,8 @@ import client from "../bin/database-connection.ts";
 import {
   clearDBEdges,
   clearDBNodes,
-  createEdgePrisma, createEmployeePrisma,
+  createEdgePrisma,
+  createEmployeePrisma,
   createServiceRequest,
   deleteEdgePrisma,
   deleteNodePrisma,
@@ -22,7 +23,7 @@ import {
 } from "common/src/validations/validations.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
-import {EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
+import { EmployeeFieldsType } from "common/src/employee/EmployeeFieldsType.ts";
 
 //Create router instance to handle any database requests
 const router: Router = express.Router();
@@ -300,22 +301,22 @@ router.put("/updatesr/:id", async (req, res) => {
 });
 
 router.post("/employees", async (req, res) => {
-    const data = req.body;
+  const data = req.body;
 
-    if(validateEdgeData(data as never).error != undefined) {
-      res.status(400).json({
-        message: "Sent data is badly formatted",
-      });
-      return;
-    }
-
-    const employeeData: EmployeeFieldsType = data as EmployeeFieldsType;
-
-    await createEmployeePrisma(employeeData);
-
-    res.status(200).json({
-      message: "Successfully added employee data"
+  if (validateEdgeData(data as never).error != undefined) {
+    res.status(400).json({
+      message: "Sent data is badly formatted",
     });
+    return;
+  }
+
+  const employeeData: EmployeeFieldsType = data as EmployeeFieldsType;
+
+  await createEmployeePrisma(employeeData);
+
+  res.status(200).json({
+    message: "Successfully added employee data",
+  });
 });
 
 export default router;

@@ -4,7 +4,7 @@ import { AddressInfo } from "net";
 import { createHttpTerminator } from "http-terminator";
 import { importDefaultNodeAndEdgeData } from "./database-initialization.ts";
 import { registerFilters } from "./filter-registration.ts";
-import {importEmployeeData} from "./employee-initialization.ts";
+import { importEmployeeData } from "./employee-initialization.ts";
 
 // Attempt a database connection
 console.info("Connecting to database...");

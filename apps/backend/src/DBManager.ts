@@ -6,12 +6,13 @@ import {
   getDBEdges,
   clearDBRequests,
   createNodePrisma,
-  createEdgePrisma, createEmployeePrisma,
+  createEdgePrisma,
+  createEmployeePrisma,
 } from "./PrismaScripts";
 //import client from "./bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
-import {EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
+import { EmployeeFieldsType } from "common/src/employee/EmployeeFieldsType.ts";
 
 export default class DBManager {
   private static instance: DBManager;
@@ -115,7 +116,7 @@ export default class DBManager {
     for (let i: number = 1; i < employees.length; i++) {
       if (employees[i][0] == "") continue;
       const employeeInfo: EmployeeFieldsType = {
-        employeeId: parseInt(employees[i][0]),
+        employeeID: parseInt(employees[i][0]),
         firstName: employees[i][1],
         lastName: employees[i][2],
       };
