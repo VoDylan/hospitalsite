@@ -1,7 +1,7 @@
 import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
-import { DropDown } from "../components/DropDown.tsx";
+import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { RoomSchedulingFormSubmission } from "../common/formSubmission/RoomSchedulingFormSubmission.ts";
 import RoomBackground from "../images/servicePageImages/RoomScheduling.jpg";
 import { RoomSubmitButton } from "../components/buttons/RoomSubmitButton.tsx";

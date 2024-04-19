@@ -48,6 +48,8 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   async function handleSubmit() {
     if (props.input.flowerType === "") {
       openWithError("Please select a flower type");
+    } else if (props.input.employeeID === -1){
+      openWithError("Please enter your employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.recipientName === "") {

@@ -24,3 +24,13 @@ export const validateEdgeData = (edgeData: never) => {
 
   return edgeSchema.validate(edgeData);
 };
+
+export const validateEmployeeData = (employeeData: never) => {
+  const employeeSchema: Joi.ObjectSchema = Joi.object({
+    employeeID: Joi.number().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+  });
+
+  return employeeSchema.validate(employeeData);
+};
