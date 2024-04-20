@@ -1,5 +1,6 @@
 import Algorithms from "./Algorithms.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
+import {Coordinates} from "common/src/Coordinates.ts";
 
 export class DijkstrasAlgorithm extends Algorithms {
   public constructor() {
@@ -50,6 +51,21 @@ export class DijkstrasAlgorithm extends Algorithms {
     }
 
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
+  }
+
+  private getDirections(prev: Coordinates, next: Coordinates) {
+    if ((prev.x < next.x) && (prev.y === next.y)) {
+      console.log("right");
+    }
+    else if ((prev.x > next.x) && (prev.y === next.y)) {
+      console.log("left");
+    }
+    else if ((prev.x === prev.x) && (prev.y < next.y)) {
+      console.log("up");
+    }
+    else if ((prev.x === next.x) && (prev.y > next.y)) {
+      console.log("down");
+    }
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
@@ -104,20 +120,31 @@ export class DijkstrasAlgorithm extends Algorithms {
         const coordinatesPath: IDCoordinates[] = [];
         const path: string[] = [];
         let current: string | null = currentNodeID;
+
+        let prev: Coordinates;
+        let next: Coordinates;
+
+        // go through the parent list
         while (current !== start) {
           let currentIdx: number = -1;
+          let currentCoordinates: Coordinates;
+
           if (current) {
             path.unshift(current);
+            currentCoordinates = this.getCoordinates(current);
             coordinatesPath.unshift({
               nodeID: current,
-              coordinates: this.getCoordinates(current),
+              coordinates: currentCoordinates,
             });
             currentIdx = this.nodes.findIndex(
               (node) => node.startNodeID === current,
             );
           }
+          next = currentCoordinates!;
+          if (parents[currentIdx]) prev = this.getCoordinates(parents[currentIdx]!);
           current = parents[currentIdx];
         }
+
         coordinatesPath.unshift({
           nodeID: start,
           coordinates: this.getCoordinates(start),
