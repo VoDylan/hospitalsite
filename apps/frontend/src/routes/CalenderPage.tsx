@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import {Badge, Grid, SelectChangeEvent, Stack, Typography} from "@mui/material";
+import {Badge, Grid, SelectChangeEvent, Stack, TextField, Typography} from "@mui/material";
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay/PickersDay';
 import TopBanner from "../components/banner/TopBanner.tsx";
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -13,6 +13,7 @@ import {ChangeEvent, useState} from "react";
 import {CalendarAvailabilityFormSubmission} from "../common/formSubmission/CalendarAvailabilityFormSubmission.ts";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+//import {CenterAlignedTextboxDate} from "../components/textbox/CenterAlignedTextboxDate.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 import {CalendarAvailabiltiySubmitButton} from "../components/buttons/AppointmentSubmitButton.tsx";
 
@@ -48,6 +49,7 @@ export default function CalenderPage() {
     if (date) {
       const dateString = date.format('YYYY-MM-DD'); // Convert Dayjs to string in 'YYYY-MM-DD' format
       setResponses({ ...form, date: dateString });
+      //return dateString;
       return dateString;
     }
   }
@@ -148,7 +150,10 @@ export default function CalenderPage() {
   };
 
   const handleOk = (selectedDate: Dayjs | null) => {
+    //handleDateInput(selectedDate);
+
     if (selectedDate) {
+      //handleDateInput(selectedDate);
       if (highlightedDays.some((day) => day === selectedDate.date())) {
         //console.log('This day has open availability!');
         return 'This day has open availability!';
@@ -186,13 +191,22 @@ export default function CalenderPage() {
           boxShadow={4}
           sx={{
             backgroundColor: "white",
-            width: "80vw", //Adjust this to change the width
+            width: "70vw", //Adjust this to change the width
             height: "auto",
             mt: "18vh",
             mb: "5vh",
           }}
         >
-          <ServiceNavTabs />
+          <Grid
+            item
+            xs={12}
+            paddingBottom={2}
+            sx={{
+              backgroundColor: "transparent",
+            }}
+          >
+            <ServiceNavTabs />
+          </Grid>
           <Grid
             item
             xs={12}
@@ -247,7 +261,6 @@ export default function CalenderPage() {
            <p>{handleOk(selectedDate)}</p>
           </Grid>
         </Grid>
-
         <Grid
           container
           direction={"row"}
@@ -257,7 +270,7 @@ export default function CalenderPage() {
             backgroundColor: "transparent",
             width: "40vw", //Adjust this to change the width of the form
             height: "auto",
-            mt: "25vh",
+            //mt: "25vh",
             mb: "5vh",
           }}
         >
@@ -300,21 +313,27 @@ export default function CalenderPage() {
               <Typography align={"center"}>Employee:</Typography>
               <EmployeeDropDown returnedEmployeeID={form.employee} handleChange={handleEmployeeInput} />
             </Grid>
-            {/*<Grid item xs={6} mt={2} sx={{align: "center"}}>
-              <Typography align={"center"}>Appointment Date:</Typography>
-              <CenterAlignedTextbox
-                label={"Date"}
-                value={form.date}
-                onChange={handleDateInput}
-                type={"text"}
-              />
-            </Grid>*/}
             <Grid item xs={6} sx={{align: "center"}}>
               <Typography align={"center"}>Reason for visiting:</Typography>
               <CenterAlignedTextbox
                 label={"Message"}
                 value={form.reasonForVisit}
                 onChange={handleReasonInput}
+              />
+            </Grid>
+            <Grid item xs={6} sx={{align: "center"}}>
+              <Typography align={"center"}>Select Appointment Date:</Typography>
+              {/*<CenterAlignedTextboxDate
+                label={"Date"}
+                value={form.date}
+                //onChange={handleDateInput}
+                type={"text"}
+              />*/}
+              <TextField
+                id="date"
+                label="Selected Date"
+                value={selectedDate ? selectedDate.format('YYYY-MM-DD') : ''}
+                onChange={(e) => updateDate(dayjs(e.target.value))}
               />
             </Grid>
             <Grid
@@ -334,7 +353,6 @@ export default function CalenderPage() {
             </Grid>
           </Grid>
         </Grid>
-
       </Stack>
     );
   }
