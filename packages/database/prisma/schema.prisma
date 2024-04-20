@@ -1,3 +1,4 @@
+
 generator client {
   provider   = "prisma-client-js"
   output     = "../.prisma/client"
@@ -43,6 +44,12 @@ model User {
   // ServiceRequest ServiceRequest[]
 }
 
+model Employee {
+  employeeID Int  @id @default(autoincrement())
+  firstName  String
+  lastName   String
+}
+
 model Admin {
   adminID Int  @id @default(autoincrement())
   User    User @relation(fields: [userID], references: [userID])
@@ -78,7 +85,7 @@ model MedicalAssignments {
 
 model ServiceRequest {
   id          Int    @id @default(autoincrement())
-  userID      String
+  employeeID  String
   node        Node   @relation(fields: [nodeID], references: [nodeID])
   nodeID      String
   serviceType String
