@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { linearProgressClasses, styled } from '@mui/material';
 
 const useStyles = makeStyles({
   root: {
@@ -37,9 +38,18 @@ const StatusBar: React.FC = () => {
     return () => window.removeEventListener('scroll', computeProgress);
   }, []);
 
+  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 10,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    },
+
+  }));
+
   return (
     <div className={classes.root}>
-      <LinearProgress variant="determinate" value={progress} />
+      <BorderLinearProgress variant="determinate" value={progress} />
     </div>
   );
 };
