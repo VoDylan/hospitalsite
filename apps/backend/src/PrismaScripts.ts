@@ -454,7 +454,7 @@ export async function createEmployeePrisma(
   }
 }
 
-export async function getEmployeesFromDB(){
+export async function getEmployeesFromDB() {
   let employees = null;
   try {
     employees = await client.employee.findMany();
