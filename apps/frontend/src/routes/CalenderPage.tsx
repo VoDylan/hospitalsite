@@ -154,10 +154,10 @@ export default function CalenderPage() {
     if (selectedDate) {
       if (highlightedDays.some((day) => day === selectedDate.date())) {
         //console.log('This day has open availability!');
-        return 'This day has open availability!';
+        return 'Selected Date has open availability!';
       } else {
         //console.log('This day does not have open availability!');
-        return 'This day has no open availability!';
+        return 'Selected Date does not have open availability!';
       }
     }
   };
@@ -256,7 +256,7 @@ export default function CalenderPage() {
                 }}
               />
             </LocalizationProvider>
-           <p>{handleOk(selectedDate)}</p>
+           <h3>{handleOk(selectedDate)}</h3>
           </Grid>
         </Grid>
         <Grid
@@ -319,19 +319,8 @@ export default function CalenderPage() {
                 onChange={handleReasonInput}
               />
             </Grid>
-            <Grid item xs={6} sx={{
-              align: "center",
-              /*root: {
-                display: "flex",
-                justifyContent: "center",
-                "& .MuiTextField-root": {
-                  minWidth: "150px", // Adjust width as needed
-                  minHeight: "75px",
-                },
-              },*/
-            }}
-            >
-              <Typography align={"center"}>Select Appointment Date:</Typography>
+            <Grid item xs={6} sx={{align: "center"}}>
+              <Typography align={"center"}>Select Open Date From Calendar:</Typography>
               {/*<CenterAlignedTextboxDate
                 label={"Date"}
                 value={form.date}
@@ -339,6 +328,9 @@ export default function CalenderPage() {
                 type={"text"}
               />*/}
               <TextField
+                sx={{
+                  mx: "34px" //is there a better way to line this up tp CenterAllginedTextbox elements???
+                }}
                 id="date"
                 label="Selected Date"
                 value={selectedDate ? selectedDate.format('YYYY-MM-DD') : ''}
