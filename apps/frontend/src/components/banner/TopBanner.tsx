@@ -7,6 +7,8 @@ import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
 import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
+import CurrentTime from "../banner/Time.tsx";
+import WeatherApp from "../banner/Weather.tsx";
 
 const useStyles = makeStyles({
   logoImage: {
@@ -54,7 +56,7 @@ function TopBanner() {
           justifyContent="space-between"
           alignItems="center"
           display={"flex"}
-          sx={{ flexGrow: 8 }}
+          sx={{ flexGrow: 2, marginRight: "2%" }}
         >
           <Link to="/">
             <LogoIconButton as="span" color="inherit" aria-label="logo">
@@ -62,6 +64,19 @@ function TopBanner() {
             </LogoIconButton>
           </Link>
         </Stack>
+
+
+          <Stack
+            direction="row"
+            spacing={3}
+                 alignItems="center"
+                 justifyContent="center"
+                 display={"flex"}
+                 sx={{ flexGrow: 1, marginRight: "6%"}}>
+            <CurrentTime/>
+            <WeatherApp/>
+
+          </Stack>
 
         <Stack
           direction="row"

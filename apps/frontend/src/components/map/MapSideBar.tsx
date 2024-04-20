@@ -50,10 +50,10 @@ export default function MapSideBar(props: {
       variant="permanent"
       sx={{
         [`& .MuiDrawer-paper`]: {
-          marginTop: "8%",
+          top: "16%",
           marginLeft: "0.5%",
           width: "17%",
-          height: "83%",
+          height: "82%",
           minWidth: "10%",
           boxSizing: "border-box",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
