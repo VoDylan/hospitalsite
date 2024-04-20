@@ -2,16 +2,64 @@ import * as React from 'react';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import {Badge, Grid, Stack, Typography} from "@mui/material";
+import {Badge, Grid, SelectChangeEvent, Stack, Typography} from "@mui/material";
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay/PickersDay';
 import TopBanner from "../components/banner/TopBanner.tsx";
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import calenderbackground from "../images/calenderbackground.jpg";
 import dayjs, {Dayjs} from "dayjs";
 import {DayCalendarSkeleton} from "@mui/x-date-pickers";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
+import {CalendarAvailabilityFormSubmission} from "../common/formSubmission/CalendarAvailabilityFormSubmission.ts";
+import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
+import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
+import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
+import {CalendarAvailabiltiySubmitButton} from "../components/buttons/AppointmentSubmitButton.tsx";
 
 export default function CalenderPage() {
+
+  const [form, setResponses] = useState<CalendarAvailabilityFormSubmission>({
+    name: "",
+    employee: -1,
+    date: "",
+    reasonForVisit: ""
+  });
+
+  function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
+    setResponses({ ...form, name: e.target.value });
+  }
+
+  function handleReasonInput(e: ChangeEvent<HTMLInputElement>) {
+    setResponses({ ...form, reasonForVisit: e.target.value });
+  }
+
+  function handleEmployeeInput(event: SelectChangeEvent) {
+    setResponses({ ...form, employee: event.target.value as unknown as number});
+    return event.target.value;
+  }
+
+  /*function handleDateInput(date: Date) {
+    const dateString = date.toISOString().split('T')[0]; // convert Date to string in 'YYYY-MM-DD' format
+    setResponses({ ...form, date: dateString });
+    return dateString;
+  }*/
+
+  function handleDateInput(date: Dayjs | null) {
+    if (date) {
+      const dateString = date.format('YYYY-MM-DD'); // Convert Dayjs to string in 'YYYY-MM-DD' format
+      setResponses({ ...form, date: dateString });
+      return dateString;
+    }
+  }
+
+  function clear() {
+    setResponses({
+      name: "",
+      employee: -1,
+      date: "",
+      reasonForVisit: "",
+    });
+  }
 
   const currentDate: Dayjs = dayjs();
 
@@ -97,16 +145,17 @@ export default function CalenderPage() {
 
   const updateDate = (date: Dayjs | null) => {
     setSelectedDate(date);
-    console.log(date);
   };
 
-  const handleOk = (selectedDate) => {
-    if (highlightedDays.some((day) => day === selectedDate.date())) {
-      //console.log('This day has open availability!');
-      return 'This day has open availability!';
-    } else {
-      //console.log('This day has no open availability.');
-      return 'This day does has no open availability!';
+  const handleOk = (selectedDate: Dayjs | null) => {
+    if (selectedDate) {
+      if (highlightedDays.some((day) => day === selectedDate.date())) {
+        //console.log('This day has open availability!');
+        return 'This day has open availability!';
+      } else {
+        //console.log('This day does not have open availability!');
+        return 'This day has no open availability!';
+      }
     }
   };
 
@@ -143,6 +192,7 @@ export default function CalenderPage() {
             mb: "5vh",
           }}
         >
+          <ServiceNavTabs />
           <Grid
             item
             xs={12}
@@ -151,7 +201,7 @@ export default function CalenderPage() {
             }}
           >
             <Typography color={"white"} align={"center"} fontSize={40}>
-              Calender Availability
+              Appointment Availability
             </Typography>
           </Grid>
           <Grid
@@ -166,7 +216,6 @@ export default function CalenderPage() {
                 minDate={currentDate}
                 //value={currentDate}
                 onAccept={handleOk}
-                //handleCancel={handleCancel}
                 onChange={updateDate}
                 sx={{
                   '.MuiPickersToolbar-root': {
@@ -195,9 +244,97 @@ export default function CalenderPage() {
                 }}
               />
             </LocalizationProvider>
-            <p>{handleOk(selectedDate)}</p>
+           <p>{handleOk(selectedDate)}</p>
           </Grid>
         </Grid>
+
+        <Grid
+          container
+          direction={"row"}
+          justifyContent={"center"}
+          // boxShadow={4}
+          sx={{
+            backgroundColor: "transparent",
+            width: "40vw", //Adjust this to change the width of the form
+            height: "auto",
+            mt: "25vh",
+            mb: "5vh",
+          }}
+        >
+          <Grid
+            item
+            xs={12}
+            paddingBottom={2}
+            sx={{
+              backgroundColor: "transparent",
+            }}
+          >
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              backgroundColor: "#186BD9",
+            }}
+          >
+            <Typography
+              color={"white"}
+              align={"center"}
+              fontStyle={"Open Sans"}
+              fontSize={40}
+            >
+              Appointment Service Form
+            </Typography>
+          </Grid>
+          <Grid container sx={{ backgroundColor: "white" }} boxShadow={4}>
+            <Grid item xs={6} mt={2} sx={{align: "center"}}>
+              <Typography align={"center"}>Name:</Typography>
+              <CenterAlignedTextbox
+                label={"Name"}
+                value={form.name}
+                onChange={handleNameInput}
+                type={"text"}
+              />
+            </Grid>
+            <Grid item xs={6} mt={2} sx={{align: "center"}}>
+              <Typography align={"center"}>Employee:</Typography>
+              <EmployeeDropDown returnedEmployeeID={form.employee} handleChange={handleEmployeeInput} />
+            </Grid>
+            {/*<Grid item xs={6} mt={2} sx={{align: "center"}}>
+              <Typography align={"center"}>Appointment Date:</Typography>
+              <CenterAlignedTextbox
+                label={"Date"}
+                value={form.date}
+                onChange={handleDateInput}
+                type={"text"}
+              />
+            </Grid>*/}
+            <Grid item xs={6} sx={{align: "center"}}>
+              <Typography align={"center"}>Reason for visiting:</Typography>
+              <CenterAlignedTextbox
+                label={"Message"}
+                value={form.reasonForVisit}
+                onChange={handleReasonInput}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                my: 2,
+                justifyContent: "center",
+              }}
+            >
+              <CalendarAvailabiltiySubmitButton
+                text={"SUBMIT"}
+                input={form}
+                clear={clear}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+
       </Stack>
     );
   }
