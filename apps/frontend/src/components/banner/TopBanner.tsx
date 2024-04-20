@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
 import CurrentTime from "../banner/Time.tsx";
-import WeatherApp from "../banner/Weather.tsx";
+import WeatherApp from "./WeatherApp.tsx";
 
 const useStyles = makeStyles({
   logoImage: {
@@ -56,7 +56,7 @@ function TopBanner() {
           justifyContent="space-between"
           alignItems="center"
           display={"flex"}
-          sx={{ flexGrow: 2, marginRight: "2%" }}
+          sx={{ flexGrow: 1.5, marginRight: "2%" }}
         >
           <Link to="/">
             <LogoIconButton as="span" color="inherit" aria-label="logo">
@@ -72,7 +72,7 @@ function TopBanner() {
                  alignItems="center"
                  justifyContent="center"
                  display={"flex"}
-                 sx={{ flexGrow: 1, marginRight: "6%"}}>
+                 sx={{ flexGrow: 2, marginRight: "6%"}}>
             <CurrentTime/>
             <WeatherApp/>
 
