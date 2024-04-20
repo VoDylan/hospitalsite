@@ -12,7 +12,7 @@ export class DijkstrasAlgorithm extends Algorithms {
 
   private getKeyWithLowestDistance(map: Map<string, number>): string {
     let lowestKey = "";
-    let lowestDistance = -1;
+    let lowestDistance = Infinity;
 
     for (const [key, value] of map.entries()) {
       if (lowestDistance > value) {
@@ -77,6 +77,8 @@ export class DijkstrasAlgorithm extends Algorithms {
     const dist: number[] = [];
     const prev: string[] | undefined[] = [];
 
+    const parents: (string | null)[] = [];
+
     const queue = new Map<string, number>();
 
     for (let i = 0; i < this.nodes.length; i++) {
@@ -86,17 +88,47 @@ export class DijkstrasAlgorithm extends Algorithms {
       queue.set(this.nodes[i].startNodeID, Infinity);
     }
 
-    console.log(queue);
-
     const startIDIndex = this.nodes.findIndex(
       (node) => node.startNodeID === start,
     );
     dist[startIDIndex] = 0;
     queue.set(start, 0);
+    parents[startIDIndex] = null;
+
+    console.log(queue.get(start));
 
     while (queue.size > 0) {
       const currentNodeID = this.getKeyWithLowestDistance(queue);
-      queue.delete(currentNodeID);
+
+      if (currentNodeID === end) {
+        const coordinatesPath: IDCoordinates[] = [];
+        const path: string[] = [];
+        let current: string | null = currentNodeID;
+        while (current !== start) {
+          let currentIdx: number = -1;
+          if (current) {
+            path.unshift(current);
+            coordinatesPath.unshift({
+              nodeID: current,
+              coordinates: this.getCoordinates(current),
+            });
+            currentIdx = this.nodes.findIndex(
+              (node) => node.startNodeID === current,
+            );
+          }
+          current = parents[currentIdx];
+        }
+        coordinatesPath.unshift({
+          nodeID: start,
+          coordinates: this.getCoordinates(start),
+        });
+        path.unshift(start);
+
+        console.log("Path found:", path);
+        console.log("Coordinates found:", coordinatesPath);
+
+        return coordinatesPath;
+      }
 
       const currentNode = this.nodes.find(
         (node) => node.startNodeID === currentNodeID,
@@ -116,12 +148,13 @@ export class DijkstrasAlgorithm extends Algorithms {
           if (alt < queue.get(neighborNodeID)!) {
             queue.set(neighborNodeID, alt);
             prev[neighborNodeIndex] = currentNodeID;
+            parents[neighborNodeIndex] = currentNodeID;
           }
         }
       }
-    }
 
-    console.log(prev);
+      queue.delete(currentNodeID);
+    }
 
     return [];
   }
