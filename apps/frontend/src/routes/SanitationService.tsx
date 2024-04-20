@@ -8,10 +8,12 @@ import { SanitationSubmitButton } from "../components/buttons/SanitationSubmitBu
 import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
+import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 
 function SanitationService() {
   const [form, setFormResponses] = useState<SanitationRequestFormSubmission>({
     name: "",
+    employeeID: -1,
     location: "",
     priority: "",
     service: "",
@@ -46,9 +48,15 @@ function SanitationService() {
     return e.target.value;
   }
 
+  function handleEmployeeIDInput(event: SelectChangeEvent) {
+    setFormResponses({ ...form, employeeID: event.target.value as unknown as number});
+    return event.target.value;
+  }
+
   function clear() {
     setFormResponses({
       name: "",
+      employeeID: -1,
       location: "",
       priority: "",
       service: "",
@@ -151,6 +159,10 @@ function SanitationService() {
               value={form.name}
               onChange={handleNameInput}
             />
+          </Grid>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
           <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>

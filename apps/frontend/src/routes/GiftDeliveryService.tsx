@@ -10,10 +10,12 @@ import Confetti from "react-confetti";
 import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
+import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
     name: "",
+    employeeID: -1,
     recipientName: "",
     status: "",
     location: "",
@@ -54,9 +56,15 @@ function GiftDeliveryService() {
     return e.target.value;
   }
 
+  function handleEmployeeIDInput(event: SelectChangeEvent) {
+    setFormResponses({ ...form, employeeID: event.target.value as unknown as number});
+    return event.target.value;
+  }
+
   function clear() {
     setFormResponses({
       name: "",
+      employeeID: -1,
       recipientName: "",
       status: "",
       location: "",
@@ -171,6 +179,10 @@ function GiftDeliveryService() {
               value={form.name}
               onChange={handleNameInput}
             />
+          </Grid>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
           <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>

@@ -1,5 +1,6 @@
 export type GiftDeliveryFormSubmission = {
   name: string;
+  employeeID: number;
   recipientName: string;
   status: string;
   location: string;
