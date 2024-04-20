@@ -4,14 +4,17 @@ import { BFSalgorithm } from "./BFSalgorithm.ts";
 import { DFSalgorithm } from "./DFSalgorithm.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { DijkstrasAlgorithm } from "./DijkstrasAlgorithm.ts";
+import { AStarAlgorithm } from "./AStarAlgorithm.ts";
 
 export class DetermineAlgorithm {
   algorithm: Algorithms | undefined;
 
   chooseAlgorithm(algorithmName: string) {
-    if (algorithmName === "A*") this.algorithm = new DijkstrasAlgorithm();
+    if (algorithmName === "A*") this.algorithm = new AStarAlgorithm();
     else if (algorithmName === "BFS") this.algorithm = new BFSalgorithm();
     else if (algorithmName === "DFS") this.algorithm = new DFSalgorithm();
+    else if (algorithmName === "Dijkstra")
+      this.algorithm = new DijkstrasAlgorithm();
     else {
       this.algorithm = undefined;
       console.error("No algorithm found");
