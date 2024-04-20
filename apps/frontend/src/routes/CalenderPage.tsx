@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import {Badge, Grid, SelectChangeEvent, Stack, TextField, Typography} from "@mui/material";
+import {Badge, Grid, SelectChangeEvent, Stack, Typography, TextField} from "@mui/material";
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay/PickersDay';
 import TopBanner from "../components/banner/TopBanner.tsx";
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -150,10 +150,8 @@ export default function CalenderPage() {
   };
 
   const handleOk = (selectedDate: Dayjs | null) => {
-    //handleDateInput(selectedDate);
 
     if (selectedDate) {
-      //handleDateInput(selectedDate);
       if (highlightedDays.some((day) => day === selectedDate.date())) {
         //console.log('This day has open availability!');
         return 'This day has open availability!';
@@ -313,7 +311,7 @@ export default function CalenderPage() {
               <Typography align={"center"}>Employee:</Typography>
               <EmployeeDropDown returnedEmployeeID={form.employee} handleChange={handleEmployeeInput} />
             </Grid>
-            <Grid item xs={6} sx={{align: "center"}}>
+            <Grid item xs={6}>
               <Typography align={"center"}>Reason for visiting:</Typography>
               <CenterAlignedTextbox
                 label={"Message"}
@@ -321,7 +319,18 @@ export default function CalenderPage() {
                 onChange={handleReasonInput}
               />
             </Grid>
-            <Grid item xs={6} sx={{align: "center"}}>
+            <Grid item xs={6} sx={{
+              align: "center",
+              /*root: {
+                display: "flex",
+                justifyContent: "center",
+                "& .MuiTextField-root": {
+                  minWidth: "150px", // Adjust width as needed
+                  minHeight: "75px",
+                },
+              },*/
+            }}
+            >
               <Typography align={"center"}>Select Appointment Date:</Typography>
               {/*<CenterAlignedTextboxDate
                 label={"Date"}
