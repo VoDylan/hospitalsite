@@ -22,7 +22,7 @@ export const CurrentTime = () => {
       <Typography
         color={"#003A96"}
         fontWeight={"bold"}
-        fontSize={"18px"}
+        fontSize={"19px"}
         sx={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }} // Add shadow using sx prop
       >
         {formattedTime}

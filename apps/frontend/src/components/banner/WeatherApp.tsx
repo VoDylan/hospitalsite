@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack } from "@mui/material";
-import Weather from "../Weather.tsx";
+import Weather from "./Weather.tsx";
 
 
 const WeatherApp = () => {

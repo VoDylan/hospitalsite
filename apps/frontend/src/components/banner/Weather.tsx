@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
 import {Stack, Typography } from '@mui/material';
-import sunny from "../images/weather/sun.png";
-import cloudy from "../images/weather/clear-sky.png";
-import rain from "../images/weather/rain.png";
-import snow from "../images/weather/snowy.png";
-import storm from "../images/weather/storm.png";
+import sunny from "../../images/weather/sun.png";
+import cloudy from "../../images/weather/clear-sky.png";
+import rain from "../../images/weather/rain.png";
+import snow from "../../images/weather/snowy.png";
+import storm from "../../images/weather/storm.png";
 
 interface WeatherData {
   name: string;
@@ -51,8 +51,8 @@ const Weather = () => {
               src={cloudy}
               alt="cloudy"
               style={{
-                width: "29px",
-                height: "29px"
+                width: "31px",
+                height: "31px"
               }}
             />
           )}
@@ -61,8 +61,8 @@ const Weather = () => {
               src={rain}
               alt="rain"
               style={{
-                width: "29px",
-                height: "29px"
+                width: "31px",
+                height: "31px"
               }}
             />
           )}
@@ -71,8 +71,8 @@ const Weather = () => {
               src={snow}
               alt="snow"
               style={{
-                width: "29px",
-                height: "29px"
+                width: "31px",
+                height: "31px"
               }}
             />
           )}
@@ -81,8 +81,8 @@ const Weather = () => {
               src={storm}
               alt="storm"
               style={{
-                width: "29px",
-                height: "29px"
+                width: "31px",
+                height: "31px"
               }}
             />
           )}
@@ -91,8 +91,8 @@ const Weather = () => {
               src={sunny}
               alt="sunny"
               style={{
-                width: "29px",
-                height: "29px"
+                width: "31px",
+                height: "31px"
               }}
             />
           )}
@@ -103,7 +103,7 @@ const Weather = () => {
         {data && (
           <Typography
             fontWeight="bold"
-            fontSize="18px"
+            fontSize="19px"
             color="#003A96"
             display="flex"
             alignItems="center"

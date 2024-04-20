@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
+import styled from '@emotion/styled';
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import "./map.css";
@@ -39,6 +40,20 @@ interface TransformState {
   positionX: number;
   positionY: number;
 }
+
+const NodeButtons = styled("button")({
+  cursor: "pointer",
+  border: "1px solid white",
+  outline: "none",
+  backgroundColor: "white",
+
+  "&:active": {
+    outline: "none"
+  },
+  "&:hover": {
+    borderColor: "#186BD9",
+  },
+});
 
 function MapRoute() {
   const iconCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -709,10 +724,10 @@ function MapRoute() {
           style={{
             zIndex: 10,
             left: xcoord + 10 + "px",
-            top: ycoord + 10 + "px",
+            top: ycoord + 35 + "px",
             position: "absolute",
-            width: "12%",
-            height: "12%",
+            width: "7%",
+            height: "4%",
             backgroundColor: "white",
             border: 2 + "px",
             borderStyle: "solid",
@@ -723,44 +738,42 @@ function MapRoute() {
             justifyContent: "space-evenly",
           }}
         >
-          <button
+          <NodeButtons
             style={{
               width: "96%",
               height: "40%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "90%",
+              fontSize: "40%",
               color: "#186BD9",
               fontWeight: "bold",
               margin: "2%",
-              border: "none",
-              backgroundColor: "white",
-              boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+              // backgroundColor: "white",
+              boxShadow: "1px 1px 4px rgba(0, 0, 0, 0.3)",
             }}
             onClick={handleStartingLocationClick}
           >
             Starting Location
-          </button>
-          <button
+          </NodeButtons>
+          <NodeButtons
             style={{
               width: "96%",
               height: "40%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "90%",
+              fontSize: "40%",
               color: "#186BD9",
               fontWeight: "bold",
               margin: "2%",
-              border: "none",
-              backgroundColor: "white",
+              // backgroundColor: "white",
               boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
             }}
             onClick={handleEndingLocationClick}
           >
             Ending Location
-          </button>
+          </NodeButtons>
         </div>
       );
     }
