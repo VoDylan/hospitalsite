@@ -329,7 +329,7 @@ export default function CalenderPage() {
               />*/}
               <TextField
                 sx={{
-                  mx: "34px" //is there a better way to line this up tp CenterAllginedTextbox elements???
+                  mx: "33px" //is there a better way to line this up tp CenterAllginedTextbox elements???
                 }}
                 id="date"
                 label="Selected Date"
