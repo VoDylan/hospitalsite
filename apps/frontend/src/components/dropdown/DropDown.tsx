@@ -48,7 +48,7 @@ export function DropDown(props: DropDownProps) {
   const renderItems = () => {
     if (isOptionArray(props.items)) {
       return props.items.map((item) => (
-        <MenuItem key={item.value} value={item.value}>
+        <MenuItem key={item.label} value={item.value}>
           {item.label}
         </MenuItem>
       ));
