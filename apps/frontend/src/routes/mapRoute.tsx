@@ -107,6 +107,7 @@ function MapRoute() {
   const [checkedBFS, setCheckedBFS] = React.useState(false);
   const [checkedAS, setCheckedAS] = React.useState(true);
   const [checkedDFS, setCheckedDFS] = React.useState(false);
+  const [checkedDijkstra, setCheckedDijkstra] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("A*");
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
@@ -148,6 +149,8 @@ function MapRoute() {
       setCheckedAS(false);
     } else if (checkedDFS) {
       setCheckedDFS(false);
+    } else if (checkedDijkstra) {
+      setCheckedDijkstra(false);
     }
     setCheckedBFS(true);
     setAlgorithm("BFS");
@@ -158,7 +161,10 @@ function MapRoute() {
       setCheckedBFS(false);
     } else if (checkedDFS) {
       setCheckedDFS(false);
+    } else if (checkedDijkstra) {
+      setCheckedDijkstra(false);
     }
+
     setCheckedAS(true);
     setAlgorithm("A*");
   };
@@ -168,9 +174,24 @@ function MapRoute() {
       setCheckedBFS(false);
     } else if (checkedAS) {
       setCheckedAS(false);
+    } else if (checkedDijkstra) {
+      setCheckedDijkstra(false);
     }
+
     setCheckedDFS(true);
     setAlgorithm("DFS");
+  };
+
+  const handleSelectDijkstra = () => {
+    if (checkedBFS) {
+      setCheckedBFS(false);
+    } else if (checkedAS) {
+      setCheckedAS(false);
+    } else if (checkedDFS) {
+      setCheckedDFS(false);
+    }
+    setCheckedDijkstra(true);
+    setAlgorithm("Dijkstra");
   };
 
   /**
@@ -869,6 +890,8 @@ function MapRoute() {
               handleSelectAS={handleSelectAS}
               checkedDFS={checkedDFS}
               handleSelectDFS={handleSelectDFS}
+              checkedDijkstra={checkedDijkstra}
+              handleSelectDijkstra={handleSelectDijkstra}
               errorMessage={errorMessage}
               onClick={() => {
                 handleSubmit().then(() => {

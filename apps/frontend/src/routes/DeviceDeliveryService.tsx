@@ -17,11 +17,13 @@ import { DeviceSubmitButton } from "../components/buttons/DeviceSubmitButton.tsx
 import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
+import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
 
 function DeviceDeliveryService() {
   const [form, setFormResponses] = useState<DeviceDeliveryFormSubmission>({
     name: "",
+    employeeID: -1,
     roomNum: "",
     device: "",
     amount: "",
@@ -73,6 +75,11 @@ function DeviceDeliveryService() {
     setFormResponses({ ...form, name: e.target.value });
   }
 
+  function handleEmployeeIDInput(event: SelectChangeEvent) {
+    setFormResponses({ ...form, employeeID: event.target.value as unknown as number});
+    return event.target.value;
+  }
+
   function handleLocationInput(e: SelectChangeEvent) {
     setFormResponses({ ...form, roomNum: e.target.value });
     return e.target.value;
@@ -99,6 +106,7 @@ function DeviceDeliveryService() {
   function clear() {
     setFormResponses({
       name: "",
+      employeeID: -1,
       roomNum: "",
       priority: "",
       device: "",
@@ -201,6 +209,10 @@ function DeviceDeliveryService() {
               value={form.name}
               onChange={handleNameInput}
             />
+          </Grid>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
           <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
