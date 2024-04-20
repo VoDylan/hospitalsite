@@ -43,7 +43,7 @@ export default function ServiceNavTabs() {
         sx={{
           width: "100%",
           opacity: "80%",
-          backgroundColor: "lightgray",
+          backgroundColor: "#186BD9",
           borderRadius: 5,
         }}
       >
@@ -53,6 +53,7 @@ export default function ServiceNavTabs() {
           variant="scrollable"
           scrollButtons
           allowScrollButtonsMobile
+          TabIndicatorProps={{style: {background:'gold'}}}
         >
           <Tab
             component={Link}
