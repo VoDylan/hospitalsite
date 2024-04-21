@@ -22,7 +22,7 @@ import MapEdge from "common/src/map/MapEdge.ts";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import "./TableSlide.css";
-import { BarChart } from '@mui/x-charts/BarChart';
+import { PieChart, BarChart} from "@mui/x-charts";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -465,6 +465,7 @@ function DisplayDatabase() {
   }, []);
 
   //Const for countServiceType
+  const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
   const [serviceTypeLabels, setServiceTypeLabels] = useState<string[]>([]);
   const [serviceTypeCountsData, setServiceTypeCountsData] = useState<number[]>([]);
 
@@ -509,6 +510,11 @@ function DisplayDatabase() {
     console.log("Service Type Labels:", serviceTypeLabels);
     console.log("Service Type Counts Data:", serviceTypeCountsData);
   }, [serviceTypeLabels, serviceTypeCountsData]);
+
+  // Toggle between bar chart and pie chart
+  const toggleChartType = () => {
+    setChartType((prevChartType) => (prevChartType === 'bar' ? 'pie' : 'bar'));
+  };
 
   return (
         <Stack direction={"column"}
@@ -573,24 +579,45 @@ function DisplayDatabase() {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Box display="flex">
-                {/* Container for the service request table and service details table */}
-                <Box flex="1" ml={3}>
-                  <BarChart
-                    xAxis={[
-                      {
-                        scaleType: 'band',
-                        data: serviceTypeLabels,
-                      },
-                    ]}
-                    series={[
-                      {
-                        data: serviceTypeCountsData,
-                      },
-                    ]}
-                    width={900} //Change width of graph
-                    height={300} //Change height of graph
-                  />
+              <Box display="flex" flexDirection="column" alignItems="center" width="100%">
+                <Box mb={2} display="flex" justifyContent="center" width="100%">
+                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+                </Box>
+                <Box flex="1" display="flex" justifyContent="center">
+                  {chartType === 'bar' && (
+                    <BarChart
+                      xAxis={[
+                        {
+                          scaleType: 'band',
+                          data: serviceTypeLabels,
+                        },
+                      ]}
+                      series={[
+                        {
+                          data: serviceTypeCountsData,
+                        },
+                      ]}
+                      width={900}
+                      height={300}
+                    />
+                  )}
+
+                  {chartType === 'pie' && (
+                    <PieChart
+                      series={[
+                        {
+                          data: serviceTypeLabels.map((label, index) => ({
+                            id: index,
+                            value: serviceTypeCountsData[index],
+                            label,
+                          })),
+                        },
+                      ]}
+                      width={700}
+                      height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                    />
+                  )}
                 </Box>
               </Box>
             </AccordionDetails>
