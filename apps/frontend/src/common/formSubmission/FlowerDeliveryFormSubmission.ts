@@ -1,7 +1,10 @@
 export type FlowerDeliveryFormSubmission = {
   name: string;
   employeeID: number;
-  flowerType: string;
+  RRose: string;
+  WRose: string;
+  RCarn: string;
+  Tulip: string;
   recipientName: string;
   roomNumber: string;
   message: string;
