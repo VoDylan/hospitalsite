@@ -58,12 +58,15 @@ return (
           }}
         >
           <AccordionSummary
-          sx={{
-            background:'#60D4DC',
-          }}
+            sx={{
+              background:'#60D4DC',
+            }}
           >
             <Typography
+              align="center"
+              fontSize={24}
               sx={{
+                width:"100%",
                 color:"#ffffff",
                 variant:"h2",
               }}
@@ -89,7 +92,10 @@ return (
             }}
           >
             <Typography
+              fontSize={24}
+              align="center"
               sx={{
+                width:"100%",
                 color:"#ffffff",
                 variant:"h2",
               }}
@@ -103,27 +109,119 @@ return (
         </Accordion>
       </Box>
       <Box hidden={tabValue !== 1}>
-        <Accordion sx={{ marginLeft: "25%", marginRight: "25%" }}>
-          <AccordionSummary sx={{ background: '#60D4DC' }}>
-            <Typography sx={{ color: "#ffffff", variant: "h2" }}>
-              Tool 1
+        <Accordion
+          sx={{
+            marginLeft:"25%",
+            marginRight:"25%",
+          }}
+        >
+          <AccordionSummary
+            sx={{
+              background:'#60D4DC',
+            }}
+          >
+            <Typography
+              align="center"
+              fontSize={24}
+              sx={{
+                width:"100%",
+                color:"#ffffff",
+                variant:"h2",
+              }}
+            >
+              React
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>Details about Tool 1</Typography>
+            <Typography>
+              Hello
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          sx={{
+            marginLeft:"25%",
+            marginRight:"25%",
+          }}
+        >
+          <AccordionSummary
+            sx={{
+              background:'#60D4DC',
+            }}
+          >
+            <Typography
+              fontSize={24}
+              align="center"
+              sx={{
+                width:"100%",
+                color:"#ffffff",
+                variant:"h2",
+              }}
+            >
+              Material UI
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Details about Library 2</Typography>
           </AccordionDetails>
         </Accordion>
       </Box>
 
       <Box hidden={tabValue !== 2}>
-        <Accordion sx={{ marginLeft: "25%", marginRight: "25%" }}>
-          <AccordionSummary sx={{ background: '#60D4DC' }}>
-            <Typography sx={{ color: "#ffffff", variant: "h2" }}>
-              Framework 1
+        <Accordion
+          sx={{
+            marginLeft:"25%",
+            marginRight:"25%",
+          }}
+        >
+          <AccordionSummary
+            sx={{
+              background:'#60D4DC',
+            }}
+          >
+            <Typography
+              align="center"
+              fontSize={24}
+              sx={{
+                width:"100%",
+                color:"#ffffff",
+                variant:"h2",
+              }}
+            >
+              React
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>Details about Framework 1</Typography>
+            <Typography>
+              Hello
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          sx={{
+            marginLeft:"25%",
+            marginRight:"25%",
+          }}
+        >
+          <AccordionSummary
+            sx={{
+              background:'#60D4DC',
+            }}
+          >
+            <Typography
+              fontSize={24}
+              align="center"
+              sx={{
+                width:"100%",
+                color:"#ffffff",
+                variant:"h2",
+              }}
+            >
+              Material UI
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Details about Library 2</Typography>
           </AccordionDetails>
         </Accordion>
       </Box>
