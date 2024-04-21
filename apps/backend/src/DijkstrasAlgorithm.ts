@@ -54,42 +54,11 @@ export class DijkstrasAlgorithm extends Algorithms {
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
 
-  private turns(
-    firstCoordinate: Coordinates,
-    secondCoordinate: Coordinates,
-    thirdCoordinate: Coordinates,
-  ): string {
-    const firstVector: Coordinates = {
-      x: secondCoordinate.x - firstCoordinate.x,
-      y: secondCoordinate.y - firstCoordinate.y,
-    };
-    const secondVector: Coordinates = {
-      x: thirdCoordinate.x - secondCoordinate.x,
-      y: thirdCoordinate.y - secondCoordinate.y,
-    };
-
-    const z = firstVector.x * secondVector.y - firstVector.y * secondVector.x;
-
-    const vectorsMultiplication =
-      firstVector.x * secondVector.x + firstVector.y * secondVector.y;
-    const firstVectorMagnitude = Math.sqrt(
-      firstVector.x ** 2 + firstVector.y ** 2,
-    );
-    const secondVectorMagnitude = Math.sqrt(
-      secondVector.x ** 2 + secondVector.y ** 2,
-    );
-    const angle =
-      (Math.acos(
-        vectorsMultiplication / (firstVectorMagnitude * secondVectorMagnitude),
-      ) *
-        180) /
-      Math.PI;
-
-    if (z > 0 && angle > 10) return "right";
-    else if (z < 0 && angle > 10) return "left";
-    else return "forward";
-  }
-
+  /**
+   * The function is used to return the directions of the current floor
+   * @param typeCoordinates includes the coordinates of the current floor
+   * @private
+   */
   private getTurnings(typeCoordinates: TypeCoordinates[]) {
     const turnsList: string[] = [];
 
@@ -99,11 +68,38 @@ export class DijkstrasAlgorithm extends Algorithms {
         const secondCoordinate: Coordinates =
           typeCoordinates[i + 1].coordinates;
         const thirdCoordinate: Coordinates = typeCoordinates[i + 2].coordinates;
-        console.log(firstCoordinate, secondCoordinate, thirdCoordinate);
 
-        turnsList.push(
-          this.turns(firstCoordinate, secondCoordinate, thirdCoordinate),
+        const firstVector: Coordinates = {
+          x: secondCoordinate.x - firstCoordinate.x,
+          y: secondCoordinate.y - firstCoordinate.y,
+        };
+        const secondVector: Coordinates = {
+          x: thirdCoordinate.x - secondCoordinate.x,
+          y: thirdCoordinate.y - secondCoordinate.y,
+        };
+
+        const z =
+          firstVector.x * secondVector.y - firstVector.y * secondVector.x;
+
+        const vectorsMultiplication =
+          firstVector.x * secondVector.x + firstVector.y * secondVector.y;
+        const firstVectorMagnitude = Math.sqrt(
+          firstVector.x ** 2 + firstVector.y ** 2,
         );
+        const secondVectorMagnitude = Math.sqrt(
+          secondVector.x ** 2 + secondVector.y ** 2,
+        );
+        const angle =
+          (Math.acos(
+            vectorsMultiplication /
+              (firstVectorMagnitude * secondVectorMagnitude),
+          ) *
+            180) /
+          Math.PI;
+
+        if (z > 0 && angle > 10) turnsList.push("right");
+        else if (z < 0 && angle > 10) turnsList.push("left");
+        else turnsList.push("forward");
       }
     }
 
@@ -111,12 +107,55 @@ export class DijkstrasAlgorithm extends Algorithms {
   }
 
   private splitToFloors(typeCoordinates: TypeCoordinates[]) {
-    const allFloors: Map<string, TypeCoordinates[]> = new Map();
+    let currentFloorNodes: TypeCoordinates[] = [];
+    let turnsList: string[] = [];
+    let secondElevator: boolean = false;
+    let secondStairs: boolean = false;
+
+    // console.log(typeCoordinates);
 
     for (let i = 0; i < typeCoordinates.length; i++) {
-      if (typeCoordinates[i].nodeType !== "ELEV") {
+      currentFloorNodes.push(typeCoordinates[i]);
+
+      if (typeCoordinates[i].nodeType === "ELEV" && !secondElevator) {
+        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+        turnsList = [...turnsList, ...newTurnsList];
+
+        currentFloorNodes.push(typeCoordinates[i]);
+        currentFloorNodes = [];
+        turnsList.push(`elevator to ${typeCoordinates[i + 1].floor}`);
+        secondElevator = true;
+        console.log("first elevator", newTurnsList);
+      } else if (typeCoordinates[i].nodeType === "ELEV" && secondElevator) {
+        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+
+        turnsList.push(`elevator from ${typeCoordinates[i - 1].floor}`);
+        secondElevator = false;
+        console.log("second elevator", newTurnsList);
+      } else if (typeCoordinates[i].nodeType === "STAI" && !secondStairs) {
+        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+        turnsList = [...turnsList, ...newTurnsList];
+
+        currentFloorNodes.push(typeCoordinates[i]);
+        currentFloorNodes = [];
+        turnsList.push(`stairs to ${typeCoordinates[i + 1].floor}`);
+        secondStairs = true;
+        console.log("first stairs", newTurnsList);
+      } else if (typeCoordinates[i].nodeType === "STAI" && secondStairs) {
+        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+
+        turnsList.push(`stairs from ${typeCoordinates[i - 1].floor}`);
+        secondStairs = false;
+        console.log("second stairs", newTurnsList);
+      } else if (i === typeCoordinates.length - 1) {
+        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+        turnsList = [...turnsList, ...newTurnsList];
+
+        console.log("last", newTurnsList);
       }
     }
+
+    return turnsList;
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
@@ -214,7 +253,7 @@ export class DijkstrasAlgorithm extends Algorithms {
         });
         path.unshift(start);
 
-        const turnsPath = this.getTurnings(TypeCoordinatesPath);
+        const turnsPath = this.splitToFloors(TypeCoordinatesPath);
 
         console.log("Path found:", path);
         console.log("Coordinates found:", IDCoordinatesPath);
