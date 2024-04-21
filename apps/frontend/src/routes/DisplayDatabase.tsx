@@ -22,6 +22,7 @@ import MapEdge from "common/src/map/MapEdge.ts";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import "./TableSlide.css";
+import { BarChart } from '@mui/x-charts/BarChart';
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -487,6 +488,28 @@ function DisplayDatabase() {
               </Box>
             </AccordionDetails>
           </Accordion>
+
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+              <Typography color={"black"}>
+                STATISTICS
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box display="flex">
+                {/* Container for the service request table and service details table */}
+                <Box flex="1" ml={3}>
+                  <BarChart
+                    xAxis={[{ scaleType: 'band', data: serviceRowData.map(service => service.serviceType) }]}
+                    series={[{ data: serviceRowData.map(service => service.userID) }]}
+                    width={500}
+                    height={300}
+                  />
+                </Box>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+
         <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
