@@ -18,7 +18,10 @@ function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
     employeeID: -1,
-    flowerType: "",
+    RRose: "",
+    WRose: "",
+    RCarn: "",
+    Tulip: "",
     recipientName: "",
     roomNumber: "",
     message: "",
@@ -68,11 +71,30 @@ function FlowerDeliveryService() {
     setResponses({ ...form, message: e.target.value });
   }
 
+  function handleRRoseInput(event: SelectChangeEvent) {
+    setResponses({ ...form, RRose: event.target.value });
+  }
+
+  function handleWRoseInput(event: SelectChangeEvent) {
+    setResponses({ ...form, WRose: event.target.value });
+  }
+
+  function handleRCarnInput(event: SelectChangeEvent) {
+    setResponses({ ...form, RCarn: event.target.value });
+  }
+
+  function handleTulipInput(event: SelectChangeEvent) {
+    setResponses({ ...form, Tulip: event.target.value });
+  }
+
   function clear() {
     setResponses({
       name: "",
       employeeID: -1,
-      flowerType: "",
+      RRose: "",
+      WRose: "",
+      RCarn: "",
+      Tulip: "",
       recipientName: "",
       roomNumber: "",
       message: "",
@@ -80,10 +102,6 @@ function FlowerDeliveryService() {
   }
 
   // For dropdown
-  function handleFlowerTypeInput(event: SelectChangeEvent) {
-    setResponses({ ...form, flowerType: event.target.value });
-    return event.target.value;
-  }
 
   function handleRoomNumberInput(event: SelectChangeEvent) {
     setResponses({ ...form, roomNumber: event.target.value });
@@ -135,7 +153,7 @@ function FlowerDeliveryService() {
         >
           <ServiceNavTabs />
         </Grid>
-        <Grid container sx={{ background: "linear-gradient(#186BD9, #FFFFFF)", opacity: 0.95}} boxShadow={3}>
+        <Grid container sx={{ background: "white", opacity: 0.95}} boxShadow={5} borderRadius={5}>
           <Grid
             item
             xs={12}
@@ -143,7 +161,7 @@ function FlowerDeliveryService() {
             }}
           >
             <Typography
-              color={"white"}
+              color={"black"}
               align={"center"}
               fontStyle={"Open Sans"}
               fontSize={40}
@@ -159,7 +177,7 @@ function FlowerDeliveryService() {
             <Typography
               align={"center"}
               fontStyle={"Open Sans"}
-
+              fontSize={24}
             >
               Enter Amount of Each Type:
             </Typography>
@@ -180,34 +198,34 @@ function FlowerDeliveryService() {
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"Red Rose Amount"}
-              value={form.name}
-              onChange={handleFlowerTypeInput}
+              value={form.RRose}
+              onChange={handleRRoseInput}
               type={"text"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"White Rose Amount"}
-              value={form.name}
-              onChange={handleFlowerTypeInput}
+              value={form.WRose}
+              onChange={handleWRoseInput}
               type={"text"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"Red Carnation Amount"}
-              value={form.name}
-              onChange={handleFlowerTypeInput}
+              value={form.RCarn}
+              onChange={handleRCarnInput}
               type={"text"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"Tulip Amount"}
-              value={form.name}
-              onChange={handleFlowerTypeInput}
+              value={form.Tulip}
+              onChange={handleTulipInput}
               type={"text"} />
           </Grid>
 
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
-            <Typography align={"center"}>Name:</Typography>
+          <Grid item xs={4} sx={{align: "center"}}>
+            <Typography align={"center"}> Your Name:</Typography>
             <CenterAlignedTextbox
               label={"Name"}
               value={form.name}
@@ -215,20 +233,7 @@ function FlowerDeliveryService() {
               type={"text"}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
-            <Typography align={"center"}>Employee:</Typography>
-            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
-          </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
-            <Typography align={"center"}>Flower Type:</Typography>
-            <DropDown
-              items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
-              handleChange={handleFlowerTypeInput}
-              label={"Flower Type"}
-              returnData={form.flowerType}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={4} sx={{align: "center"}}>
             <Typography align={"center"}>Recipient Name:</Typography>
             <CenterAlignedTextbox
               label={"Recipient Name"}
@@ -236,7 +241,15 @@ function FlowerDeliveryService() {
               onChange={handleRecipientNameInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={4} sx={{align: "center"}}>
+            <Typography align={"center"}>Add a message (optional):</Typography>
+            <CenterAlignedTextbox
+              label={"Message"}
+              value={form.message}
+              onChange={handleMessageInput}
+            />
+          </Grid>
+          <Grid item xs={4} sx={{align: "center"}}>
             <Typography align={"center"}>Room:</Typography>
             <DropDown
               items={nodes.map((node) => ({
@@ -248,13 +261,9 @@ function FlowerDeliveryService() {
               handleChange={handleRoomNumberInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
-            <Typography align={"center"}>Add a message (optional):</Typography>
-            <CenterAlignedTextbox
-              label={"Message"}
-              value={form.message}
-              onChange={handleMessageInput}
-            />
+          <Grid item xs={4} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
           <Grid
             item

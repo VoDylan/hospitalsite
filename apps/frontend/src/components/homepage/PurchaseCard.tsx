@@ -18,7 +18,7 @@ export function PurchaseCard(props: PurchaseProps) {
             height: "250px" // Set the height of each card
             }}
         >
-          <Box sx={{ position: "relative", display: "flex" }} >
+          <Box sx={{ position: "relative", display: "flex", backgroundColor: "#186BD9" }} >
             <Stack>
               <CardMedia
                 component={"img"}
@@ -29,6 +29,7 @@ export function PurchaseCard(props: PurchaseProps) {
                 gutterBottom variant="h5" component="div"
                 sx={{
                   textAlign: "center",
+                  color: "white"
                 }}
               >
                 {props.title}
@@ -39,6 +40,7 @@ export function PurchaseCard(props: PurchaseProps) {
                   textAlign: "center",
                   marginLeft: "5%",
                   marginRight: "5%",
+                  color: "white"
                 }}
               >
                 {props.description}
