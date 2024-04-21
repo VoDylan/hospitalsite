@@ -1,18 +1,11 @@
 import Algorithms from "./Algorithms.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
-
-enum Turn {
-  right,
-  left,
-}
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class DijkstrasAlgorithm extends Algorithms {
-  turn: string;
-
   public constructor() {
     super();
-    this.turn = "";
   }
 
   async loadData() {
@@ -61,28 +54,6 @@ export class DijkstrasAlgorithm extends Algorithms {
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
 
-  // private getDirections(prev: Coordinates, next: Coordinates) {
-  //   const prevDirection: Direction = this.direction;
-  //
-  //   if (prev.x < next.x && Math.abs(prev.y - next.y) < 5) {
-  //     this.direction = Direction.East;
-  //   } else if (prev.x > next.x && Math.abs(prev.y - next.y) < 5) {
-  //     this.direction = Direction.West;
-  //   } else if (Math.abs(prev.x - next.x) < 5 && prev.y < next.y) {
-  //     this.direction = Direction.South;
-  //   } else if (Math.abs(prev.x - next.x) < 5 && prev.y > next.y) {
-  //     this.direction = Direction.North;
-  //   } else if (prev.x < next.x && prev.y < next.y) {
-  //     this.direction = Direction.SouthEast;
-  //   } else if (prev.x < next.x && prev.y > next.y) {
-  //     this.direction = Direction.NorthEast;
-  //   } else if (prev.x > next.x && prev.y > next.y) {
-  //     this.direction = Direction.NorthWest;
-  //   } else if (prev.x > next.x && prev.y < next.y) {
-  //     this.direction = Direction.SouthWest;
-  //   }
-  // }
-
   private turns(
     firstCoordinate: Coordinates,
     secondCoordinate: Coordinates,
@@ -113,21 +84,22 @@ export class DijkstrasAlgorithm extends Algorithms {
       ) *
         180) /
       Math.PI;
-    console.log(angle);
 
     if (z > 0 && angle > 10) return "right";
     else if (z < 0 && angle > 10) return "left";
     else return "forward";
   }
 
-  private getTurnings(coordinates: Coordinates[]) {
+  private getTurnings(typeCoordinates: TypeCoordinates[]) {
     const turnsList: string[] = [];
 
-    for (let i = 0; i < coordinates.length; i++) {
-      if (coordinates[i + 2]) {
-        const firstCoordinate: Coordinates = coordinates[i];
-        const secondCoordinate: Coordinates = coordinates[i + 1];
-        const thirdCoordinate: Coordinates = coordinates[i + 2];
+    for (let i = 0; i < typeCoordinates.length; i++) {
+      if (typeCoordinates[i + 2]) {
+        const firstCoordinate: Coordinates = typeCoordinates[i].coordinates;
+        const secondCoordinate: Coordinates =
+          typeCoordinates[i + 1].coordinates;
+        const thirdCoordinate: Coordinates = typeCoordinates[i + 2].coordinates;
+        console.log(firstCoordinate, secondCoordinate, thirdCoordinate);
 
         turnsList.push(
           this.turns(firstCoordinate, secondCoordinate, thirdCoordinate),
@@ -136,6 +108,15 @@ export class DijkstrasAlgorithm extends Algorithms {
     }
 
     return turnsList;
+  }
+
+  private splitToFloors(typeCoordinates: TypeCoordinates[]) {
+    const allFloors: Map<string, TypeCoordinates[]> = new Map();
+
+    for (let i = 0; i < typeCoordinates.length; i++) {
+      if (typeCoordinates[i].nodeType !== "ELEV") {
+      }
+    }
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
@@ -188,9 +169,8 @@ export class DijkstrasAlgorithm extends Algorithms {
 
       if (currentNodeID === end) {
         const IDCoordinatesPath: IDCoordinates[] = [];
-        const coordinatesPath: Coordinates[] = [];
+        const TypeCoordinatesPath: TypeCoordinates[] = [];
         const path: string[] = [];
-        // const directions: string[] = [];
         let current: string | null = currentNodeID;
 
         // go through the parent list
@@ -201,7 +181,15 @@ export class DijkstrasAlgorithm extends Algorithms {
           if (current) {
             path.unshift(current);
             currentCoordinates = this.getCoordinates(current);
-            coordinatesPath.unshift(currentCoordinates);
+            const currentNode = this.mapNodes.find(
+              (node) => node.nodeID === current,
+            )!;
+
+            TypeCoordinatesPath.unshift({
+              nodeType: currentNode.nodeType,
+              floor: currentNode.floor,
+              coordinates: currentCoordinates,
+            });
             IDCoordinatesPath.unshift({
               nodeID: current,
               coordinates: currentCoordinates,
@@ -217,15 +205,20 @@ export class DijkstrasAlgorithm extends Algorithms {
           nodeID: start,
           coordinates: this.getCoordinates(start),
         });
-        coordinatesPath.unshift(this.getCoordinates(start));
+
+        const startNode = this.mapNodes.find((node) => node.nodeID === start)!;
+        TypeCoordinatesPath.unshift({
+          nodeType: startNode.nodeType,
+          floor: startNode.floor,
+          coordinates: this.getCoordinates(start),
+        });
         path.unshift(start);
 
-        const turnsPath = this.getTurnings(coordinatesPath);
+        const turnsPath = this.getTurnings(TypeCoordinatesPath);
 
         console.log("Path found:", path);
         console.log("Coordinates found:", IDCoordinatesPath);
         console.log("Turns found", turnsPath);
-        // console.log("Directions found:", directions);
 
         return IDCoordinatesPath;
       }
