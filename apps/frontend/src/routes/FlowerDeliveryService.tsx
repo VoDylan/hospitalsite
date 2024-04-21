@@ -130,23 +130,22 @@ function FlowerDeliveryService() {
         >
           <ServiceNavTabs />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            backgroundColor: "#186BD9",
-          }}
-        >
-          <Typography
-            color={"white"}
-            align={"center"}
-            fontStyle={"Open Sans"}
-            fontSize={40}
+        <Grid container sx={{ background: "linear-gradient(#186BD9, #FFFFFF)", opacity: 0.95}} boxShadow={3}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+            }}
           >
-            Flower Delivery Service Form
-          </Typography>
-        </Grid>
-        <Grid container sx={{ backgroundColor: "white" }} boxShadow={4}>
+            <Typography
+              color={"white"}
+              align={"center"}
+              fontStyle={"Open Sans"}
+              fontSize={40}
+            >
+              Flower Delivery Service Form
+            </Typography>
+          </Grid>
           <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
