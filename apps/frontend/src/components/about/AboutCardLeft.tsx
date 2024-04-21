@@ -1,6 +1,5 @@
 import {Box, Grid, Stack, Typography} from "@mui/material";
 
-
 interface AboutCardProps {
   role: string;
   name: string;
@@ -11,8 +10,14 @@ interface AboutCardProps {
 
 export function AboutCardLeft(props: AboutCardProps) {
   return (
-    <Box sx={{backgroundColor: "lightgray"}}>
-      <Stack>
+    <Box
+      sx={{
+        backgroundColor: "lightgray",
+      }}
+    >
+      <Stack
+        padding={2}
+      >
         <Typography
           variant="h5" component="div"
           sx={{
@@ -29,7 +34,14 @@ export function AboutCardLeft(props: AboutCardProps) {
         >
           {props.name}
         </Typography>
-        <Grid container spacing={2} xs={12}>
+        <Grid
+          container
+          spacing={2}
+          xs={12}
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+        >
           <Grid item xs={8}>
             <Stack>
               <Typography
