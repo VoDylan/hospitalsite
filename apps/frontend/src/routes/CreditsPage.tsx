@@ -33,7 +33,9 @@ return (
         </Typography>
       </Box>
 
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="default"
+      sx={{marginBottom:"2%"}}
+      >
         <Tabs
           value={tabValue}
           onChange={handleChange}
@@ -49,16 +51,51 @@ return (
       </AppBar>
 
       <Box hidden={tabValue !== 0}>
-        <Accordion>
-          <AccordionSummary>
-            <Typography>React</Typography>
+        <Accordion
+          sx={{
+            marginLeft:"25%",
+            marginRight:"25%",
+          }}
+        >
+          <AccordionSummary
+          sx={{
+            background:'#60D4DC',
+          }}
+          >
+            <Typography
+              sx={{
+                color:"#ffffff",
+                variant:"h2",
+              }}
+            >
+              React
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
+            <Typography>
+              Hello
+            </Typography>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
-          <AccordionSummary>
-            <Typography>Library 2</Typography>
+        <Accordion
+          sx={{
+            marginLeft:"25%",
+            marginRight:"25%",
+          }}
+        >
+          <AccordionSummary
+            sx={{
+              background:'#60D4DC',
+            }}
+          >
+            <Typography
+              sx={{
+                color:"#ffffff",
+                variant:"h2",
+              }}
+            >
+              Material UI
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>Details about Library 2</Typography>
@@ -66,15 +103,31 @@ return (
         </Accordion>
       </Box>
       <Box hidden={tabValue !== 1}>
-        <Typography variant="body1">
-          Content for Tools tab
-        </Typography>
+        <Accordion sx={{ marginLeft: "25%", marginRight: "25%" }}>
+          <AccordionSummary sx={{ background: '#60D4DC' }}>
+            <Typography sx={{ color: "#ffffff", variant: "h2" }}>
+              Tool 1
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Details about Tool 1</Typography>
+          </AccordionDetails>
+        </Accordion>
       </Box>
+
       <Box hidden={tabValue !== 2}>
-        <Typography variant="body1">
-          Content for Frameworks tab
-        </Typography>
+        <Accordion sx={{ marginLeft: "25%", marginRight: "25%" }}>
+          <AccordionSummary sx={{ background: '#60D4DC' }}>
+            <Typography sx={{ color: "#ffffff", variant: "h2" }}>
+              Framework 1
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Details about Framework 1</Typography>
+          </AccordionDetails>
+        </Accordion>
       </Box>
+
     </Box>
   </>
 );
