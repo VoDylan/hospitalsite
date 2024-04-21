@@ -4,7 +4,7 @@ import { Coordinates } from "common/src/Coordinates.ts";
 
 enum Turn {
   right,
-  left
+  left,
 }
 
 export class DijkstrasAlgorithm extends Algorithms {
@@ -83,11 +83,59 @@ export class DijkstrasAlgorithm extends Algorithms {
   //   }
   // }
 
-  private getTurnings(coordinates: Coordinates[]) {
-    const secondCoordinateIdx: number = 1;
-    const thirdCoordinateIdx: number = 2;
+  private turns(
+    firstCoordinate: Coordinates,
+    secondCoordinate: Coordinates,
+    thirdCoordinate: Coordinates,
+  ): string {
+    const firstVector: Coordinates = {
+      x: secondCoordinate.x - firstCoordinate.x,
+      y: secondCoordinate.y - firstCoordinate.y,
+    };
+    const secondVector: Coordinates = {
+      x: thirdCoordinate.x - secondCoordinate.x,
+      y: thirdCoordinate.y - secondCoordinate.y,
+    };
 
-    for (let i = 0; i < coordinates.length; i++) {}
+    const z = firstVector.x * secondVector.y - firstVector.y * secondVector.x;
+
+    const vectorsMultiplication =
+      firstVector.x * secondVector.x + firstVector.y * secondVector.y;
+    const firstVectorMagnitude = Math.sqrt(
+      firstVector.x ** 2 + firstVector.y ** 2,
+    );
+    const secondVectorMagnitude = Math.sqrt(
+      secondVector.x ** 2 + secondVector.y ** 2,
+    );
+    const angle =
+      (Math.acos(
+        vectorsMultiplication / (firstVectorMagnitude * secondVectorMagnitude),
+      ) *
+        180) /
+      Math.PI;
+    console.log(angle);
+
+    if (z > 0 && angle > 10) return "right";
+    else if (z < 0 && angle > 10) return "left";
+    else return "forward";
+  }
+
+  private getTurnings(coordinates: Coordinates[]) {
+    const turnsList: string[] = [];
+
+    for (let i = 0; i < coordinates.length; i++) {
+      if (coordinates[i + 2]) {
+        const firstCoordinate: Coordinates = coordinates[i];
+        const secondCoordinate: Coordinates = coordinates[i + 1];
+        const thirdCoordinate: Coordinates = coordinates[i + 2];
+
+        turnsList.push(
+          this.turns(firstCoordinate, secondCoordinate, thirdCoordinate),
+        );
+      }
+    }
+
+    return turnsList;
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
@@ -139,9 +187,10 @@ export class DijkstrasAlgorithm extends Algorithms {
       const currentNodeID = this.getKeyWithLowestDistance(queue);
 
       if (currentNodeID === end) {
-        const coordinatesPath: IDCoordinates[] = [];
+        const IDCoordinatesPath: IDCoordinates[] = [];
+        const coordinatesPath: Coordinates[] = [];
         const path: string[] = [];
-        const directions: string[] = [];
+        // const directions: string[] = [];
         let current: string | null = currentNodeID;
 
         // go through the parent list
@@ -152,7 +201,8 @@ export class DijkstrasAlgorithm extends Algorithms {
           if (current) {
             path.unshift(current);
             currentCoordinates = this.getCoordinates(current);
-            coordinatesPath.unshift({
+            coordinatesPath.unshift(currentCoordinates);
+            IDCoordinatesPath.unshift({
               nodeID: current,
               coordinates: currentCoordinates,
             });
@@ -163,17 +213,21 @@ export class DijkstrasAlgorithm extends Algorithms {
           current = parents[currentIdx];
         }
 
-        coordinatesPath.unshift({
+        IDCoordinatesPath.unshift({
           nodeID: start,
           coordinates: this.getCoordinates(start),
         });
+        coordinatesPath.unshift(this.getCoordinates(start));
         path.unshift(start);
 
-        console.log("Path found:", path);
-        console.log("Coordinates found:", coordinatesPath);
-        console.log("Directions found:", directions);
+        const turnsPath = this.getTurnings(coordinatesPath);
 
-        return coordinatesPath;
+        console.log("Path found:", path);
+        console.log("Coordinates found:", IDCoordinatesPath);
+        console.log("Turns found", turnsPath);
+        // console.log("Directions found:", directions);
+
+        return IDCoordinatesPath;
       }
 
       const currentNode = this.nodes.find(
