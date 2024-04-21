@@ -5,6 +5,7 @@ import Accordion from "@mui/material/Accordion";
 
 export default function CreditsPage() {
 const [tabValue, setTabValue] = useState(0);
+const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
 const handleChange = (event: React.ChangeEvent<object>, newValue: number) => {
   setTabValue(newValue);
 };
@@ -29,7 +30,7 @@ return (
         }}
       >
         <Typography variant={"h1"} color={"white"} fontSize={46}>
-          Credits
+          Software Credits
         </Typography>
       </Box>
 
@@ -50,45 +51,16 @@ return (
         </Tabs>
       </AppBar>
 
-      <Box hidden={tabValue !== 0}>
-        <Accordion
-          sx={{
-            marginLeft:"25%",
-            marginRight:"25%",
-          }}
-        >
+      <Box hidden={tabValue !== 0}
+           sx={{
+             marginLeft:"15%",
+             marginRight:"15%",
+           }}
+      >
+        <Accordion>
           <AccordionSummary
             sx={{
-              background:'#60D4DC',
-            }}
-          >
-            <Typography
-              align="center"
-              fontSize={24}
-              sx={{
-                width:"100%",
-                color:"#ffffff",
-                variant:"h2",
-              }}
-            >
-              React
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Hello
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          sx={{
-            marginLeft:"25%",
-            marginRight:"25%",
-          }}
-        >
-          <AccordionSummary
-            sx={{
-              background:'#60D4DC',
+              background:'#3884d4',
             }}
           >
             <Typography
@@ -108,16 +80,16 @@ return (
           </AccordionDetails>
         </Accordion>
       </Box>
-      <Box hidden={tabValue !== 1}>
-        <Accordion
-          sx={{
-            marginLeft:"25%",
-            marginRight:"25%",
-          }}
-        >
+      <Box hidden={tabValue !== 1}
+           sx={{
+             marginLeft:"15%",
+             marginRight:"15%",
+           }}
+      >
+        <Accordion>
           <AccordionSummary
             sx={{
-              background:'#60D4DC',
+              background:'#3884d4',
             }}
           >
             <Typography
@@ -129,7 +101,7 @@ return (
                 variant:"h2",
               }}
             >
-              React
+              Github
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -138,15 +110,10 @@ return (
             </Typography>
           </AccordionDetails>
         </Accordion>
-        <Accordion
-          sx={{
-            marginLeft:"25%",
-            marginRight:"25%",
-          }}
-        >
+        <Accordion>
           <AccordionSummary
             sx={{
-              background:'#60D4DC',
+              background:'#3884d4',
             }}
           >
             <Typography
@@ -158,7 +125,51 @@ return (
                 variant:"h2",
               }}
             >
-              Material UI
+              Taiga
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Details about Library 2</Typography>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            sx={{
+              background:'#3884d4',
+            }}
+          >
+            <Typography
+              fontSize={24}
+              align="center"
+              sx={{
+                width:"100%",
+                color:"#ffffff",
+                variant:"h2",
+              }}
+            >
+              Figma
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Details about Library 2</Typography>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            sx={{
+              background:'#3884d4',
+            }}
+          >
+            <Typography
+              fontSize={24}
+              align="center"
+              sx={{
+                width:"100%",
+                color:"#ffffff",
+                variant:"h2",
+              }}
+            >
+              Auth0
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -167,16 +178,16 @@ return (
         </Accordion>
       </Box>
 
-      <Box hidden={tabValue !== 2}>
-        <Accordion
-          sx={{
-            marginLeft:"25%",
-            marginRight:"25%",
-          }}
-        >
+      <Box hidden={tabValue !== 2}
+           sx={{
+             marginLeft:"15%",
+             marginRight:"15%",
+           }}
+      >
+        <Accordion>
           <AccordionSummary
             sx={{
-              background:'#60D4DC',
+              background:'#3884d4',
             }}
           >
             <Typography
@@ -195,33 +206,6 @@ return (
             <Typography>
               Hello
             </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          sx={{
-            marginLeft:"25%",
-            marginRight:"25%",
-          }}
-        >
-          <AccordionSummary
-            sx={{
-              background:'#60D4DC',
-            }}
-          >
-            <Typography
-              fontSize={24}
-              align="center"
-              sx={{
-                width:"100%",
-                color:"#ffffff",
-                variant:"h2",
-              }}
-            >
-              Material UI
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>Details about Library 2</Typography>
           </AccordionDetails>
         </Accordion>
       </Box>
