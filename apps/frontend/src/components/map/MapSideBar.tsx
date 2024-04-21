@@ -44,31 +44,34 @@ export default function MapSideBar(props: {
   onClick1?: () => void;
   checked?: boolean;
   onClick2?: () => void;
+  checked2: boolean;
+  onClick3: () => void;
   icon?: React.JSX.Element;
   callback?: (newFloor: string) => void;
+  text: boolean;
+  icon2: React.JSX.Element;
 }) {
   return (
     <Drawer
       variant="permanent"
       sx={{
         [`& .MuiDrawer-paper`]: {
-          top: "16%",
-          marginLeft: "0.5%",
-          width: "17%",
-          height: "82%",
-          minWidth: "10%",
+          position: "relative",
+          marginTop: "0.4%",
+          marginLeft: "0.2%",
+          width: "18vw",
+          height: "90%",
           boxSizing: "border-box",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
           elevation: 100,
           zIndex: 1,
           border: "3px solid rgba(0, 0, 0, 0.05)",
-          borderRadius: "2%"
         },
       }}
     >
       <Toolbar />
 
-      <Stack display={"flex"} direction={"column"} sx={{ marginLeft: "4%" }}>
+      <Stack display={"flex"} direction={"column"} sx={{ marginLeft: "4%", marginTop: "-8%" }}>
         <Typography
           color={"#003A96"}
           align={"center"}
@@ -184,6 +187,15 @@ export default function MapSideBar(props: {
               Find Path
             </Button>
           )}
+          {props.text && (
+          <Button
+            variant={"text"}
+            sx={{ width: "80%", display: "flex", justifyContent: "center", height: "25%" }}
+            onClick={props.onClick3}
+          >
+            Text Directions
+          </Button>
+            )}
         </Stack>
 
         <Box
@@ -194,7 +206,7 @@ export default function MapSideBar(props: {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginTop: "20%",
+            marginTop: props.text ? "10%" : "20%", // Conditionally set marginTop
             marginLeft: "2%",
           }}
         ></Box>
@@ -239,6 +251,25 @@ export default function MapSideBar(props: {
               }}
             >
               <div>{props.icon || <div />}</div>
+            </Slide>
+          )}
+          {props.checked2 && (
+            <Slide
+              in={props.checked2}
+              direction="up"
+              style={{
+                zIndex: 1,
+                backgroundColor: "white",
+                position: "absolute",
+                top: "-1%",
+                left: "1%",
+                width: "98%",
+                minWidth: "98%",
+                height: "95%",
+
+              }}
+            >
+              <div>{props.icon2 || <div />}</div>
             </Slide>
           )}
           {props.callback && <Floor callback={props.callback} />}

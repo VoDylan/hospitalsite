@@ -758,6 +758,8 @@ function MapEditingPage() {
               width: "18%",
               minWidth: "18%",
               minHeight: 0,
+              backgroundColor: "#D9DAD7"
+
             }}
           >
             {/*Side Bar*/}

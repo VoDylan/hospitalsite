@@ -60,17 +60,16 @@ export default function MapEditorSideBar(props: {
       variant="permanent"
       sx={{
         [`& .MuiDrawer-paper`]: {
-          marginTop: "8%",
-          marginLeft: "0.5%",
-          width: "17%",
-          height: "83%",
+          top: "15.5%",
+          marginLeft: "0.2%",
+          width: "17.4%",
+          height: "84%",
           minWidth: "10%",
           boxSizing: "border-box",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
           elevation: 100,
           zIndex: 1,
           border: "3px solid rgba(0, 0, 0, 0.05)",
-          borderRadius: "2%"
         },
       }}
     >
