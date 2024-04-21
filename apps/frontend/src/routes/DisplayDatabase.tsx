@@ -464,9 +464,11 @@ function DisplayDatabase() {
     alert("status didn't save");
   }, []);
 
+  //Const for countServiceType
   const [serviceTypeLabels, setServiceTypeLabels] = useState<string[]>([]);
   const [serviceTypeCountsData, setServiceTypeCountsData] = useState<number[]>([]);
 
+  //Function to count service types for graph display
   const countSpecificServiceTypes = (serviceRowData: ServiceParams[]) => {
     const serviceTypeCounts: { [key: string]: number } = {
       "gift-delivery": 0,
@@ -502,11 +504,11 @@ function DisplayDatabase() {
     console.log("Service Row Data:", serviceRowData);
   }, [serviceRowData]);
 
+  //Console log to see what data is loading
   useEffect(() => {
     console.log("Service Type Labels:", serviceTypeLabels);
     console.log("Service Type Counts Data:", serviceTypeCountsData);
   }, [serviceTypeLabels, serviceTypeCountsData]);
-
 
   return (
         <Stack direction={"column"}
@@ -586,13 +588,14 @@ function DisplayDatabase() {
                         data: serviceTypeCountsData,
                       },
                     ]}
-                    width={900} // Adjust the width according to your needs
-                    height={300}
+                    width={900} //Change width of graph
+                    height={300} //Change height of graph
                   />
                 </Box>
               </Box>
             </AccordionDetails>
           </Accordion>
+
           <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
