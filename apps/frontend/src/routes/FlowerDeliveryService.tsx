@@ -8,6 +8,11 @@ import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
+import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import RedRose from "../images/servicePageImages/FormIcons/RedRose.jpg";
+import WhiteRose from "../images/servicePageImages/FormIcons/WhiteRose.jpg";
+import Tulip from "../images/servicePageImages/FormIcons/Tulip.jpg";
+import RedCarns from "../images/servicePageImages/FormIcons/RedCarns.jpg";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
@@ -114,7 +119,7 @@ function FlowerDeliveryService() {
         // boxShadow={4}
         sx={{
           backgroundColor: "transparent",
-          width: "40vw", //Adjust this to change the width of the form
+          width: "75%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -146,6 +151,61 @@ function FlowerDeliveryService() {
               Flower Delivery Service Form
             </Typography>
           </Grid>
+          <Grid
+            item
+            xs={12}
+            mt={3}
+          >
+            <Typography
+              align={"center"}
+              fontStyle={"Open Sans"}
+
+            >
+              Enter Amount of Each Type:
+            </Typography>
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={RedRose} title={"Red Rose Bouquet"} description={"$5.99"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={WhiteRose} title={"White Rose Bouquet"} description={"$4.99"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={RedCarns} title={"Red Carnation Bouquet"} description={"$3.99"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Tulip} title={"Tulip Bouquet"} description={"$2.99"} />
+          </Grid>
+
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Red Rose Amount"}
+              value={form.name}
+              onChange={handleFlowerTypeInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"White Rose Amount"}
+              value={form.name}
+              onChange={handleFlowerTypeInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Red Carnation Amount"}
+              value={form.name}
+              onChange={handleFlowerTypeInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Tulip Amount"}
+              value={form.name}
+              onChange={handleFlowerTypeInput}
+              type={"text"} />
+          </Grid>
+
           <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Name:</Typography>
             <CenterAlignedTextbox
