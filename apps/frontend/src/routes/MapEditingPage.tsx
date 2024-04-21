@@ -15,7 +15,6 @@ import FilterManager, {
 } from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
-import Draggable from "react-draggable";
 import {
   ReactZoomPanPinchRef,
   TransformComponent,
@@ -848,63 +847,61 @@ function MapEditingPage() {
               initialPositionY={0}
             >
               <TransformComponent>
-                <Draggable defaultPosition={{ x: 0, y: 0 }}>
-                  <>
-                    <BackgroundCanvas
-                      style={{
-                        position: "relative",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      floor={floor}
-                      renderStatusCallback={handleBackgroundRenderStatus}
-                    />
-                    <EdgeCanvas
-                      style={{
-                        position: "absolute",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      nodeDataLoaded={nodeDataLoaded}
-                    />
-                    <SymbolCanvas
-                      style={{
-                        position: "absolute",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      filtersApplied={filtersApplied}
-                      filteredNodes={filteredNodes}
-                      floor={floor}
-                    />
-                    <IconCanvas
-                      style={{
-                        position: "absolute",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      refCallback={handleIconCallback}
-                    />
-                    <ClickableCanvas
-                      style={{
-                        position: "absolute",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      onClick={handleCanvasClick}
-                    />
-                  </>
-                </Draggable>
+                <>
+                  <BackgroundCanvas
+                    style={{
+                      position: "relative",
+                      // minHeight: "100vh",
+                      // maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                    floor={floor}
+                    renderStatusCallback={handleBackgroundRenderStatus}
+                  />
+                  <EdgeCanvas
+                    style={{
+                      position: "absolute",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    floor={floor}
+                    nodeDataLoaded={nodeDataLoaded}
+                  />
+                  <SymbolCanvas
+                    style={{
+                      position: "absolute",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    filtersApplied={filtersApplied}
+                    filteredNodes={filteredNodes}
+                    floor={floor}
+                  />
+                  <IconCanvas
+                    style={{
+                      position: "absolute",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    refCallback={handleIconCallback}
+                  />
+                  <ClickableCanvas
+                    style={{
+                      position: "absolute",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    onClick={handleCanvasClick}
+                  />
+                </>
               </TransformComponent>
             </TransformWrapper>
           </Box>

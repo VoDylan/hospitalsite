@@ -15,7 +15,6 @@ import FilterManager, {
 } from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
-import Draggable from "react-draggable";
 import {
   ReactZoomPanPinchRef,
   TransformComponent,
@@ -942,83 +941,81 @@ function MapRoute() {
               initialPositionY={0}
             >
               <TransformComponent>
-                <Draggable defaultPosition={{ x: 0, y: 0 }}>
-                  <>
-                    <Modal />
-                    <BackgroundCanvas
-                      style={{
-                        position: "relative",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      floor={floor}
-                      renderStatusCallback={handleBackgroundRenderStatus}
-                    />
-                    <SymbolCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      filtersApplied={filtersApplied}
-                      filteredNodes={filteredNodes}
-                      floor={floor}
-                    />
-                    <PathCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      updateNodesBetweenFloors={updateNodesBetweenFloors}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      pathNodesData={pathNodesData.current}
-                      floorConnectionCallback={handleNodeToFloorCallback}
-                      pathRenderStatusCallback={handlePathRenderStatus}
-                      startNode={startNode}
-                      endNode={endNode}
-                      iconCanvasRef={iconCanvasRef.current!}
-                    />
-                    <IconCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      refCallback={handleIconCallback}
-                    />
-                    <FloorIconsCanvas
-                      style={{
-                        position: "absolute",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      pathRendered={pathRenderStatus}
-                      updateFloorIcons={updateFloorIcons}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      nodesToNextFloor={nodesToNextFloor.current}
-                      nodesToPrevFloor={nodesToPrevFloor.current}
-                      onClick={handleCanvasClick}
-                    />
-                  </>
-                </Draggable>
+                <>
+                  <Modal />
+                  <BackgroundCanvas
+                    style={{
+                      position: "relative",
+                      // minHeight: "100vh",
+                      // maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                    floor={floor}
+                    renderStatusCallback={handleBackgroundRenderStatus}
+                  />
+                  <SymbolCanvas
+                    style={{
+                      position: "absolute",
+                      // minHeight: "100vh",
+                      // maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    filtersApplied={filtersApplied}
+                    filteredNodes={filteredNodes}
+                    floor={floor}
+                  />
+                  <PathCanvas
+                    style={{
+                      position: "absolute",
+                      // minHeight: "100vh",
+                      // maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    updateNodesBetweenFloors={updateNodesBetweenFloors}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    floor={floor}
+                    pathNodesData={pathNodesData.current}
+                    floorConnectionCallback={handleNodeToFloorCallback}
+                    pathRenderStatusCallback={handlePathRenderStatus}
+                    startNode={startNode}
+                    endNode={endNode}
+                    iconCanvasRef={iconCanvasRef.current!}
+                  />
+                  <IconCanvas
+                    style={{
+                      position: "absolute",
+                      // minHeight: "100vh",
+                      // maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    refCallback={handleIconCallback}
+                  />
+                  <FloorIconsCanvas
+                    style={{
+                      position: "absolute",
+                      // minHeight: "100vh",
+                      // maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    pathRendered={pathRenderStatus}
+                    updateFloorIcons={updateFloorIcons}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    floor={floor}
+                    nodesToNextFloor={nodesToNextFloor.current}
+                    nodesToPrevFloor={nodesToPrevFloor.current}
+                    onClick={handleCanvasClick}
+                  />
+                </>
               </TransformComponent>
             </TransformWrapper>
           </Box>

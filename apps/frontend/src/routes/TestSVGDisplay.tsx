@@ -6,9 +6,7 @@ export default function TestSVGDisplay() {
 
   console.log("Rendering SVG Image");
   return (
-    <TransformWrapper
-      maxScale={100}
-    >
+    <TransformWrapper maxScale={100}>
       <TransformComponent>
         <L1SVG width={window.innerWidth} height={window.innerHeight} />
       </TransformComponent>
