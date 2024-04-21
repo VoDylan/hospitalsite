@@ -1,10 +1,13 @@
 import Algorithms from "./Algorithms.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
-import {Coordinates} from "common/src/Coordinates.ts";
+import { Coordinates } from "common/src/Coordinates.ts";
 
 export class DijkstrasAlgorithm extends Algorithms {
+  direction: string;
+
   public constructor() {
     super();
+    this.direction = "";
   }
 
   async loadData() {
@@ -53,19 +56,48 @@ export class DijkstrasAlgorithm extends Algorithms {
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
 
-  private getDirections(prev: Coordinates, next: Coordinates) {
-    if ((prev.x < next.x) && (prev.y === next.y)) {
-      console.log("right");
+  private getDirections(prev: Coordinates, next: Coordinates): string {
+    if (prev.x < next.x && Math.abs(prev.y - next.y) < 5) {
+      return "right";
+    } else if (prev.x > next.x && Math.abs(prev.y - next.y) < 5) {
+      return "left";
+    } else if (Math.abs(prev.x - next.x) < 5 && prev.y < next.y) {
+      return "down";
+    } else if (Math.abs(prev.x - next.x) < 5 && prev.y > next.y) {
+      return "up";
+    } else if (prev.x < next.x && prev.y < next.y) {
+      return "right, down";
+    } else if (prev.x < next.x && prev.y > next.y) {
+      return "right, up";
+    } else if (prev.x > next.x && prev.y > next.y) {
+      return "left, up";
+    } else if (prev.x > next.x && prev.y < next.y) {
+      return "left, down";
     }
-    else if ((prev.x > next.x) && (prev.y === next.y)) {
-      console.log("left");
+
+    return "";
+  }
+
+  private getTurnings(prev: Coordinates, next: Coordinates): string {
+    if (prev.x < next.x && Math.abs(prev.y - next.y) < 5) {
+      return "forward";
+    } else if (prev.x > next.x && Math.abs(prev.y - next.y) < 5) {
+      return "forward";
+    } else if (Math.abs(prev.x - next.x) < 5 && prev.y < next.y) {
+      return "right";
+    } else if (Math.abs(prev.x - next.x) < 5 && prev.y > next.y) {
+      return "up";
+    } else if (prev.x < next.x && prev.y < next.y) {
+      return "right, down";
+    } else if (prev.x < next.x && prev.y > next.y) {
+      return "right, up";
+    } else if (prev.x > next.x && prev.y > next.y) {
+      return "left, up";
+    } else if (prev.x > next.x && prev.y < next.y) {
+      return "left, down";
     }
-    else if ((prev.x === prev.x) && (prev.y < next.y)) {
-      console.log("up");
-    }
-    else if ((prev.x === next.x) && (prev.y > next.y)) {
-      console.log("down");
-    }
+
+    return "";
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
@@ -119,6 +151,7 @@ export class DijkstrasAlgorithm extends Algorithms {
       if (currentNodeID === end) {
         const coordinatesPath: IDCoordinates[] = [];
         const path: string[] = [];
+        const directions: string[] = [];
         let current: string | null = currentNodeID;
 
         let prev: Coordinates;
@@ -140,8 +173,11 @@ export class DijkstrasAlgorithm extends Algorithms {
               (node) => node.startNodeID === current,
             );
           }
-          next = currentCoordinates!;
-          if (parents[currentIdx]) prev = this.getCoordinates(parents[currentIdx]!);
+          if (parents[currentIdx] && current) {
+            next = this.getCoordinates(parents[currentIdx]!);
+            prev = currentCoordinates!;
+            directions.unshift(this.getDirections(next, prev));
+          }
           current = parents[currentIdx];
         }
 
@@ -153,6 +189,7 @@ export class DijkstrasAlgorithm extends Algorithms {
 
         console.log("Path found:", path);
         console.log("Coordinates found:", coordinatesPath);
+        console.log("Directions found:", directions);
 
         return coordinatesPath;
       }
