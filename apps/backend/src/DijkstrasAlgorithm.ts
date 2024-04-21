@@ -2,12 +2,17 @@ import Algorithms from "./Algorithms.ts";
 import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
 
+enum Turn {
+  right,
+  left
+}
+
 export class DijkstrasAlgorithm extends Algorithms {
-  direction: string;
+  turn: string;
 
   public constructor() {
     super();
-    this.direction = "";
+    this.turn = "";
   }
 
   async loadData() {
@@ -56,48 +61,33 @@ export class DijkstrasAlgorithm extends Algorithms {
     return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
   }
 
-  private getDirections(prev: Coordinates, next: Coordinates): string {
-    if (prev.x < next.x && Math.abs(prev.y - next.y) < 5) {
-      return "right";
-    } else if (prev.x > next.x && Math.abs(prev.y - next.y) < 5) {
-      return "left";
-    } else if (Math.abs(prev.x - next.x) < 5 && prev.y < next.y) {
-      return "down";
-    } else if (Math.abs(prev.x - next.x) < 5 && prev.y > next.y) {
-      return "up";
-    } else if (prev.x < next.x && prev.y < next.y) {
-      return "right, down";
-    } else if (prev.x < next.x && prev.y > next.y) {
-      return "right, up";
-    } else if (prev.x > next.x && prev.y > next.y) {
-      return "left, up";
-    } else if (prev.x > next.x && prev.y < next.y) {
-      return "left, down";
-    }
+  // private getDirections(prev: Coordinates, next: Coordinates) {
+  //   const prevDirection: Direction = this.direction;
+  //
+  //   if (prev.x < next.x && Math.abs(prev.y - next.y) < 5) {
+  //     this.direction = Direction.East;
+  //   } else if (prev.x > next.x && Math.abs(prev.y - next.y) < 5) {
+  //     this.direction = Direction.West;
+  //   } else if (Math.abs(prev.x - next.x) < 5 && prev.y < next.y) {
+  //     this.direction = Direction.South;
+  //   } else if (Math.abs(prev.x - next.x) < 5 && prev.y > next.y) {
+  //     this.direction = Direction.North;
+  //   } else if (prev.x < next.x && prev.y < next.y) {
+  //     this.direction = Direction.SouthEast;
+  //   } else if (prev.x < next.x && prev.y > next.y) {
+  //     this.direction = Direction.NorthEast;
+  //   } else if (prev.x > next.x && prev.y > next.y) {
+  //     this.direction = Direction.NorthWest;
+  //   } else if (prev.x > next.x && prev.y < next.y) {
+  //     this.direction = Direction.SouthWest;
+  //   }
+  // }
 
-    return "";
-  }
+  private getTurnings(coordinates: Coordinates[]) {
+    const secondCoordinateIdx: number = 1;
+    const thirdCoordinateIdx: number = 2;
 
-  private getTurnings(prev: Coordinates, next: Coordinates): string {
-    if (prev.x < next.x && Math.abs(prev.y - next.y) < 5) {
-      return "forward";
-    } else if (prev.x > next.x && Math.abs(prev.y - next.y) < 5) {
-      return "forward";
-    } else if (Math.abs(prev.x - next.x) < 5 && prev.y < next.y) {
-      return "right";
-    } else if (Math.abs(prev.x - next.x) < 5 && prev.y > next.y) {
-      return "up";
-    } else if (prev.x < next.x && prev.y < next.y) {
-      return "right, down";
-    } else if (prev.x < next.x && prev.y > next.y) {
-      return "right, up";
-    } else if (prev.x > next.x && prev.y > next.y) {
-      return "left, up";
-    } else if (prev.x > next.x && prev.y < next.y) {
-      return "left, down";
-    }
-
-    return "";
+    for (let i = 0; i < coordinates.length; i++) {}
   }
 
   runAlgorithm(start: string, end: string): IDCoordinates[] {
@@ -154,9 +144,6 @@ export class DijkstrasAlgorithm extends Algorithms {
         const directions: string[] = [];
         let current: string | null = currentNodeID;
 
-        let prev: Coordinates;
-        let next: Coordinates;
-
         // go through the parent list
         while (current !== start) {
           let currentIdx: number = -1;
@@ -172,11 +159,6 @@ export class DijkstrasAlgorithm extends Algorithms {
             currentIdx = this.nodes.findIndex(
               (node) => node.startNodeID === current,
             );
-          }
-          if (parents[currentIdx] && current) {
-            next = this.getCoordinates(parents[currentIdx]!);
-            prev = currentCoordinates!;
-            directions.unshift(this.getDirections(next, prev));
           }
           current = parents[currentIdx];
         }
