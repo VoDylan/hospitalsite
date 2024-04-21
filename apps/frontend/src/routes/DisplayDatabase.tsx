@@ -28,7 +28,7 @@ type NodeParams = { id: number } & MapNodeType;
 
 type ServiceParams = {
   id: number;
-  userID: number;
+  employeeID: number;
   nodeID: string;
   serviceType: string;
   services: string;
@@ -164,7 +164,7 @@ function DisplayDatabase() {
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
 
   const serviceColumns: GridColDef[] = [
-    { field: "userID", headerName: "User ID", width: 100 },
+    { field: "employeeID", headerName: "Employee ID", width: 100 },
     { field: "nodeID", headerName: "Node ID", width: 125 },
     { field: "serviceType", headerName: "Service Type", width: 125 },
     {
@@ -272,7 +272,7 @@ function DisplayDatabase() {
     for (let i = 0; i < data.length; i++) {
       const tableFormattedServReq: ServiceParams = {
         id: data[i].id,
-        userID: data[i].userID,
+        employeeID: data[i].employeeID,
         nodeID: data[i].nodeID,
         serviceType: data[i].serviceType,
         services: data[i].services,
@@ -414,7 +414,7 @@ function DisplayDatabase() {
       console.log(`ID: ${id}`);
       const data = {
         id: newRow["id"],
-        userID: newRow["userID"],
+        employeeID: newRow["employeeID"],
         nodeID: newRow["nodeID"],
         serviceType: newRow["serviceType"],
         services: newRow["services"],
@@ -432,6 +432,50 @@ function DisplayDatabase() {
     console.log(error);
     alert("status didn't save");
   }, []);
+
+  const [serviceTypeLabels, setServiceTypeLabels] = useState<string[]>([]);
+  const [serviceTypeCountsData, setServiceTypeCountsData] = useState<number[]>([]);
+
+  const countSpecificServiceTypes = (serviceRowData: ServiceParams[]) => {
+    const serviceTypeCounts: { [key: string]: number } = {
+      "gift-delivery": 0,
+      "flower-delivery": 0,
+      "device-delivery": 0,
+      "medicine-delivery": 0,
+      "room-scheduling": 0,
+      "sanitation-request": 0,
+      "security-request": 0,
+    };
+
+    serviceRowData.forEach((service) => {
+      const { serviceType } = service;
+      serviceTypeCounts[serviceType]++;
+    });
+
+    return serviceTypeCounts;
+  };
+
+  useEffect(() => {
+    const countServiceTypes = () => {
+      const serviceTypeCounts = countSpecificServiceTypes(serviceRowData);
+      const labels = Object.keys(serviceTypeCounts);
+      const counts = Object.values(serviceTypeCounts);
+      setServiceTypeLabels(labels);
+      setServiceTypeCountsData(counts);
+    };
+
+    countServiceTypes();
+  }, [serviceRowData]);
+
+  useEffect(() => {
+    console.log("Service Row Data:", serviceRowData);
+  }, [serviceRowData]);
+
+  useEffect(() => {
+    console.log("Service Type Labels:", serviceTypeLabels);
+    console.log("Service Type Counts Data:", serviceTypeCountsData);
+  }, [serviceTypeLabels, serviceTypeCountsData]);
+
 
   return (
         <Stack direction={"column"}
@@ -500,9 +544,18 @@ function DisplayDatabase() {
                 {/* Container for the service request table and service details table */}
                 <Box flex="1" ml={3}>
                   <BarChart
-                    xAxis={[{ scaleType: 'band', data: serviceRowData.map(service => service.serviceType) }]}
-                    series={[{ data: serviceRowData.map(service => service.userID) }]}
-                    width={500}
+                    xAxis={[
+                      {
+                        scaleType: 'band',
+                        data: serviceTypeLabels,
+                      },
+                    ]}
+                    series={[
+                      {
+                        data: serviceTypeCountsData,
+                      },
+                    ]}
+                    width={900} // Adjust the width according to your needs
                     height={300}
                   />
                 </Box>
