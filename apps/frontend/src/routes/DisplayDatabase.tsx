@@ -37,6 +37,12 @@ type ServiceParams = {
 
 type EdgeParams = { id: number } & MapEdgeType;
 
+type EmployeeParams = {
+  id: number;
+  firstName: string;
+  lastName: string;
+};
+
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
   height: 1,
@@ -160,6 +166,12 @@ function DisplayDatabase() {
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
 
+  const [employeeColumns] = useState<GridColDef[]>([
+    { field: "employeeID", headerName: "EmployeeID", width: 200 },
+    { field: "firstName", headerName: "First Name", width: 150 },
+    { field: "lastName", headerName: "Last Name", width: 150 },
+  ]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
 
@@ -218,6 +230,7 @@ function DisplayDatabase() {
   const [nodeRowData, setNodeRowData] = useState<NodeParams[]>([]);
   const [edgeRowData, setEdgeRowData] = useState<EdgeParams[]>([]);
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
+  const [employeeRowData, setEmployeeRowData] = useState<EmployeeParams[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentFile, setCurrentFile] = useState<File>();
@@ -283,10 +296,28 @@ function DisplayDatabase() {
     setServiceRowData(rowData);
   };
 
+  const getEmployeeData = async () => {
+    const { data } = await axios.get("/api/database/employees");
+    console.log("Gathered Employees");
+    console.log(data);
+
+    const rowData = [];
+    for (let i = 0; i < data.length; i++) {
+      const tableFormattedEmployee: EmployeeParams = {
+        id: data[i].employeeID,
+        firstName: data[i].firstName,
+        lastName: data[i].lastName
+      };
+      rowData.push(tableFormattedEmployee);
+    }
+    setEmployeeRowData(rowData);
+  };
+
   useEffect(() => {
     getNodeData();
     getEdgeData();
     getServiceData();
+    getEmployeeData();
   }, []);
 
   function handleNodeImport(file: File) {
@@ -562,7 +593,42 @@ function DisplayDatabase() {
               </Box>
             </AccordionDetails>
           </Accordion>
-
+          <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+              <Typography color={"black"}>
+                EMPLOYEES
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box
+                display="flex"
+                mt={2}
+                alignItems="center"
+                flexDirection="column"
+              >
+                <DataGrid
+                  slots={{ toolbar: GridToolbar }}
+                  sx={{
+                    padding: "40px",
+                    position: "relative",
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%",
+                    backgroundColor: "white"
+                  }}
+                  columns={employeeColumns}
+                  rows={employeeRowData}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 },
+                    },
+                  }}
+                  pageSizeOptions={[5, 10]}
+                />
+              </Box>
+            </AccordionDetails>
+          </Accordion>
         <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
