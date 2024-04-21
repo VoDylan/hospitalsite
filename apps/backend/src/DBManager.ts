@@ -7,10 +7,12 @@ import {
   clearDBRequests,
   createNodePrisma,
   createEdgePrisma,
+  createEmployeePrisma,
 } from "./PrismaScripts";
 //import client from "./bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
+import { EmployeeFieldsType } from "common/src/employee/EmployeeFieldsType.ts";
 
 export default class DBManager {
   private static instance: DBManager;
@@ -103,6 +105,23 @@ export default class DBManager {
       };
 
       await createEdgePrisma(edgeInfo);
+    }
+  }
+
+  public async importEmployeesFromPath(employeePath: string) {
+    //Convert file data to individual elements in a 2d array. Rows represent an individual edge and the columns represent the data elements
+    const employees: string[][] = CSVTools.parseCSVFromFile(employeePath);
+
+    //loop through all edges, skipping the header line
+    for (let i: number = 1; i < employees.length; i++) {
+      if (employees[i][0] == "") continue;
+      const employeeInfo: EmployeeFieldsType = {
+        employeeID: parseInt(employees[i][0]),
+        firstName: employees[i][1],
+        lastName: employees[i][2],
+      };
+
+      await createEmployeePrisma(employeeInfo);
     }
   }
 

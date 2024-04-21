@@ -61,6 +61,8 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   async function handleSubmit() {
     if (props.input.location === "") {
       openWithError("Please select a room");
+    } else if (props.input.employeeID === -1){
+      openWithError("Please enter your employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.delivery === "") {

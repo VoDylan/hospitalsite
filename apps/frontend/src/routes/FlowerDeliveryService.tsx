@@ -1,16 +1,18 @@
 import { Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useEffect, useState } from "react";
-import { DropDown } from "../components/DropDown.tsx";
+import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { FlowerDeliverySubmitButton } from "../components/buttons/FlowerDeliverySubmitButton.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
 import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
+import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
+    employeeID: -1,
     flowerType: "",
     recipientName: "",
     roomNumber: "",
@@ -64,6 +66,7 @@ function FlowerDeliveryService() {
   function clear() {
     setResponses({
       name: "",
+      employeeID: -1,
       flowerType: "",
       recipientName: "",
       roomNumber: "",
@@ -79,6 +82,11 @@ function FlowerDeliveryService() {
 
   function handleRoomNumberInput(event: SelectChangeEvent) {
     setResponses({ ...form, roomNumber: event.target.value });
+    return event.target.value;
+  }
+
+  function handleEmployeeIDInput(event: SelectChangeEvent) {
+    setResponses({ ...form, employeeID: event.target.value as unknown as number});
     return event.target.value;
   }
 
@@ -147,6 +155,10 @@ function FlowerDeliveryService() {
               onChange={handleNameInput}
               type={"text"}
             />
+          </Grid>
+          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
           <Grid item xs={6} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Flower Type:</Typography>

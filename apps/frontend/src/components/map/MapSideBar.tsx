@@ -37,6 +37,8 @@ export default function MapSideBar(props: {
   handleSelectAS?: () => void;
   checkedDFS?: boolean;
   handleSelectDFS?: () => void;
+  checkedDijkstra?: boolean;
+  handleSelectDijkstra?: () => void;
   errorMessage?: string;
   onClick?: () => void;
   onClick1?: () => void;
@@ -143,7 +145,9 @@ export default function MapSideBar(props: {
             props.checkedAS !== undefined &&
             props.handleSelectAS !== undefined &&
             props.checkedDFS !== undefined &&
-            props.handleSelectDFS !== undefined && (
+            props.handleSelectDFS !== undefined &&
+            props.checkedDijkstra !== undefined &&
+            props.handleSelectDijkstra !== undefined && (
               <NestedList
                 open={props.open}
                 handleClick={props.handleClick}
@@ -153,6 +157,8 @@ export default function MapSideBar(props: {
                 handleSelectAS={props.handleSelectAS}
                 checkedDFS={props.checkedDFS}
                 handleSelectDFS={props.handleSelectDFS}
+                checkedDijkstra={props.checkedDijkstra}
+                handleSelectDijkstra={props.handleSelectDijkstra}
               />
             )}
         </Stack>
