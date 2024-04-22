@@ -501,6 +501,39 @@ function DisplayDatabase() {
     countServiceTypes();
   }, [serviceRowData]);
 
+  //const for count status types
+  const [statusLabels, setStatusLabels] = useState<string[]>([]);
+  const [statusCountsData, setStatusCountsData] = useState<number[]>([]);
+
+  //Function that counts each instance of status type
+  const countSpecificStatusTypes = (serviceRowData: ServiceParams[]) => {
+    const statusCounts: { [key: string]: number } = {
+      "Unassigned": 0,
+      "Assigned": 0,
+      "InProgress": 0,
+      "Closed": 0,
+    };
+
+    serviceRowData.forEach((service) => {
+      const { status } = service;
+      statusCounts[status]++;
+    });
+
+    return statusCounts;
+  };
+
+  useEffect(() => {
+    const countStatusTypes = () => {
+      const statusCounts = countSpecificStatusTypes(serviceRowData);
+      const labels = Object.keys(statusCounts);
+      const counts = Object.values(statusCounts);
+      setStatusLabels(labels);
+      setStatusCountsData(counts);
+    };
+
+    countStatusTypes();
+  }, [serviceRowData]);
+
   useEffect(() => {
     console.log("Service Row Data:", serviceRowData);
   }, [serviceRowData]);
@@ -575,7 +608,7 @@ function DisplayDatabase() {
           <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
             <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
               <Typography color={"black"}>
-                STATISTICS
+                SERVICE TYPE STATISTICS
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -609,6 +642,61 @@ function DisplayDatabase() {
                           data: serviceTypeLabels.map((label, index) => ({
                             id: index,
                             value: serviceTypeCountsData[index],
+                            label,
+                          })),
+                        },
+                      ]}
+                      width={700}
+                      height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                    />
+                  )}
+                </Box>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+              <Typography color={"black"}>
+                STATUS STATISTICS
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box width="100%">
+                <Box mb={2} display="flex" justifyContent="center">
+                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+                </Box>
+              </Box>
+            </AccordionDetails>
+            <AccordionDetails>
+              <Box width="100%">
+                <Box display="flex" justifyContent="center">
+                  {chartType === 'bar' && (
+                    <BarChart
+                      xAxis={[
+                        {
+                          scaleType: 'band',
+                          data: statusLabels,
+                        },
+                      ]}
+                      series={[
+                        {
+                          data: statusCountsData,
+                        },
+                      ]}
+                      width={700}
+                      height={300}
+                    />
+                  )}
+
+                  {chartType === 'pie' && (
+                    <PieChart
+                      series={[
+                        {
+                          data: statusLabels.map((label, index) => ({
+                            id: index,
+                            value: statusCountsData[index],
                             label,
                           })),
                         },
