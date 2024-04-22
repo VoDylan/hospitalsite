@@ -758,6 +758,8 @@ function MapEditingPage() {
               width: "18%",
               minWidth: "18%",
               minHeight: 0,
+              backgroundColor: "#D9DAD7"
+
             }}
           >
             {/*Side Bar*/}
@@ -772,7 +774,7 @@ function MapEditingPage() {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="First Node Location"
+                  label="Node 1"
                   value={selectedNode1 ? selectedNode1.nodeID : ""}
                 />
               )}
@@ -780,7 +782,7 @@ function MapEditingPage() {
               renderInput1={(params) => (
                 <TextField
                   {...params}
-                  label="Second Node Location"
+                  label="Node 2"
                   value={selectedNode2 ? selectedNode2.nodeID : ""}
                 />
               )}

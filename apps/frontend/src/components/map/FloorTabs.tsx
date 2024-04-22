@@ -23,6 +23,7 @@ function Floors({ callback }: FloorProps) {
         position: "fixed",
         right: "1%",
         top: "60%",
+        marginBottom: "2%"
       }}
     >
       <Button
