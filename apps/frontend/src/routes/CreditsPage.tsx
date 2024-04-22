@@ -9,6 +9,9 @@ import MaterialUI from "../images/creditImages/material-ui-logo-removebg-preview
 import ReactImg from "../images/creditImages/react-logo-removebg-preview.png";
 import Taiga from "../images/creditImages/taiga-logo.png";
 import Webstorm from "../images/creditImages/webstorm-logo1.png";
+import Prisma from "../images/creditImages/prisma-logo.png";
+import AWS from "../images/creditImages/aws-logo.png";
+import Postgres from "../images/creditImages/PostgreSQL-Logo.png";
 
 export default function CreditsPage() {
 const [tabValue, setTabValue] = useState(0);
@@ -23,6 +26,7 @@ return (
       sx={{
         mt: 15,
         backgroundColor: "#ffffff",
+        marginBottom: "30px",
       }}
     >
       <Box
@@ -307,6 +311,124 @@ return (
                   Webstorm is a Jetbrains IDE that specializes in javascript and typescript development. Webstorm was incredibly
                   helpful towards our team building this website, as it provided intuitive Git integration on top of a plethora
                   of beneficial quality of life features.
+                </Typography>
+              </div>
+            </a>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            sx={{
+              background: '#3884d4',
+              border: '1px solid #003A96',
+            }}
+          >
+            <Typography
+              fontSize={24}
+              align="center"
+              sx={{
+                width: "100%",
+                color: "#ffffff",
+                variant: "h2",
+              }}
+            >
+              PostgreSQL
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://www.postgresql.org/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={Postgres} alt="PostgreSQL logo" style={{ width: 350, height: 150}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  PostgreSQL is a database management system that allowed us to efficiently manage a large amount of data
+                  while maintaining a high performance throughout the website.
+                </Typography>
+              </div>
+            </a>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            sx={{
+              background: '#3884d4',
+              border: '1px solid #003A96',
+            }}
+          >
+            <Typography
+              fontSize={24}
+              align="center"
+              sx={{
+                width: "100%",
+                color: "#ffffff",
+                variant: "h2",
+              }}
+            >
+              Prisma
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://www.prisma.io/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={Prisma} alt="Prisma logo" style={{ width: 350, height: 150}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  Prisma is a database toolkit that was essential for our team to be able to access the database
+                  in an efficient and intuitive manner. Through its Object-Relational-Mapping (ORM) layer, complexities are
+                  abstracted away and we are able to simply focus on writing application logic.
+                </Typography>
+              </div>
+            </a>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            sx={{
+              background: '#3884d4',
+              border: '1px solid #003A96',
+            }}
+          >
+            <Typography
+              fontSize={24}
+              align="center"
+              sx={{
+                width: "100%",
+                color: "#ffffff",
+                variant: "h2",
+              }}
+            >
+              Amazon Web Services
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://aws.amazon.com/free/?gclid=Cj0KCQjwlZixBhCoARIsAIC745Ck2OTksov4JZKGPGTjPfA4lPvBzz-7JxmmXT8NMcyeJREaX2AOt5kaAn3yEALw_wcB&trk=6a4c3e9d-cdc9-4e25-8dd9-2bd8d15afbca&sc_channel=ps&ef_id=Cj0KCQjwlZixBhCoARIsAIC745Ck2OTksov4JZKGPGTjPfA4lPvBzz-7JxmmXT8NMcyeJREaX2AOt5kaAn3yEALw_wcB:G:s&s_kwcid=AL!4422!3!651751059777!e!!g!!amazon%20web%20services!19852662197!145019195737&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={AWS} alt="AWS logo" style={{ width: 350, height: 150}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  Amazon Web Services (AWS) acted as our server provider for the duration of the creation of this website.
+                  This allows us to extend beyond utilizing local, and actually have a tangible web service.
                 </Typography>
               </div>
             </a>
