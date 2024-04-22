@@ -2,11 +2,11 @@ import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
-import {CalendarAvailabilityFormSubmission} from "../../common/formSubmission/CalendarAvailabilityFormSubmission.ts";
+import {CalendarPageFormSubmission} from "../../common/formSubmission/CalendarPageFormSubmission.ts";
 
 interface ButtonProps {
   text: string;
-  input: CalendarAvailabilityFormSubmission;
+  input: CalendarPageFormSubmission;
   clear: () => void;
 }
 
@@ -77,7 +77,7 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
   }
 
   // Function for posting the form submission to the database
-  async function pushToDB(form: CalendarAvailabilityFormSubmission) {
+  async function pushToDB(form: CalendarPageFormSubmission) {
     const returnData = {
       userID: "admin",
       //nodeID: form.roomNumber,

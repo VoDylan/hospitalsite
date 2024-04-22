@@ -9,22 +9,56 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import calenderbackground from "../images/calenderbackground.jpg";
 import dayjs, {Dayjs} from "dayjs";
 import {DayCalendarSkeleton} from "@mui/x-date-pickers";
-import {ChangeEvent, useState} from "react";
-import {CalendarAvailabilityFormSubmission} from "../common/formSubmission/CalendarAvailabilityFormSubmission.ts";
+import {ChangeEvent, useEffect, useState} from "react";
+import {CalendarPageFormSubmission} from "../common/formSubmission/CalendarPageFormSubmission.ts";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
-//import {CenterAlignedTextboxDate} from "../components/textbox/CenterAlignedTextboxDate.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 import {CalendarAvailabiltiySubmitButton} from "../components/buttons/AppointmentSubmitButton.tsx";
+import axios from "axios";
+import {DropDown} from "../components/dropdown/DropDown.tsx";
 
 export default function CalenderPage() {
 
-  const [form, setResponses] = useState<CalendarAvailabilityFormSubmission>({
+  const [form, setResponses] = useState<CalendarPageFormSubmission>({
     name: "",
     employee: -1,
     date: "",
-    reasonForVisit: ""
+    reasonForVisit: "",
+    roomNumber: ""
   });
+
+  // Define an interface for the node data
+  interface NodeData {
+    nodeID: string;
+    longName: string;
+  }
+
+  // Storing the node numbers in a use state so that we only make a get request once
+  const [nodes, updateNodes] = useState<NodeData[]>([]);
+
+  // GET request to retrieve node numbers wrapped in a useEffect function
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    axios
+      .get<NodeData[]>("/api/database/nodes")
+      .then((response) => {
+        const nodeIDs = response.data.map((node) => node.nodeID);
+        const longNames = response.data.map((node) => node.longName);
+
+        const updatedNodes: NodeData[] = [];
+
+        for (let i = 0; i < nodeIDs.length; i++) {
+          updatedNodes.push({
+            nodeID: nodeIDs[i],
+            longName: longNames[i],
+          });
+        }
+
+        updateNodes(updatedNodes);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
     setResponses({ ...form, name: e.target.value });
@@ -39,11 +73,10 @@ export default function CalenderPage() {
     return event.target.value;
   }
 
-  /*function handleDateInput(date: Date) {
-    const dateString = date.toISOString().split('T')[0]; // convert Date to string in 'YYYY-MM-DD' format
-    setResponses({ ...form, date: dateString });
-    return dateString;
-  }*/
+  function handleRoomNumberInput(event: SelectChangeEvent) {
+    setResponses({ ...form, roomNumber: event.target.value });
+    return event.target.value;
+  }
 
   function handleDateInput(date: Dayjs | null) {
     if (date) {
@@ -60,6 +93,7 @@ export default function CalenderPage() {
       employee: -1,
       date: "",
       reasonForVisit: "",
+      roomNumber: "",
     });
   }
 
@@ -229,6 +263,9 @@ export default function CalenderPage() {
                 //value={currentDate}
                 onAccept={handleOk}
                 onChange={updateDate}
+                loading={isLoading}
+                onMonthChange={handleMonthChange}
+                renderLoading={() => <DayCalendarSkeleton/>}
                 sx={{
                   '.MuiPickersToolbar-root': {
                     color: '#186BD9',
@@ -243,9 +280,6 @@ export default function CalenderPage() {
                     //color: '#186BD9',
                   }
                 }}
-                loading={isLoading}
-                onMonthChange={handleMonthChange}
-                renderLoading={() => <DayCalendarSkeleton/>}
                 slots={{
                   day: ServerDay,
                 }}
@@ -312,11 +346,23 @@ export default function CalenderPage() {
               <EmployeeDropDown returnedEmployeeID={form.employee} handleChange={handleEmployeeInput} />
             </Grid>
             <Grid item xs={6}>
-              <Typography align={"center"}>Reason for visiting:</Typography>
+              <Typography align={"center"}>Reason For Visiting:</Typography>
               <CenterAlignedTextbox
                 label={"Message"}
                 value={form.reasonForVisit}
                 onChange={handleReasonInput}
+              />
+            </Grid>
+            <Grid item xs={6} sx={{align: "center"}}>
+              <Typography align={"center"}>Room:</Typography>
+              <DropDown
+                items={nodes.map((node) => ({
+                  value: node.nodeID,
+                  label: node.longName,
+                }))}
+                label={"Room Number"}
+                returnData={form.roomNumber}
+                handleChange={handleRoomNumberInput}
               />
             </Grid>
             <Grid item xs={6} sx={{align: "center"}}>
@@ -329,11 +375,12 @@ export default function CalenderPage() {
               />*/}
               <TextField
                 sx={{
-                  mx: "33px" //is there a better way to line this up tp CenterAllginedTextbox elements???
+                  mx: "45px" //is there a better way to line this up tp CenterAllginedTextbox elements???
                 }}
                 id="date"
                 label="Selected Date"
-                value={selectedDate ? selectedDate.format('YYYY-MM-DD') : ''}
+                value={selectedDate ? selectedDate.format('MM-DD-YYYY') : ''}
+                //value={highlightedDays.length > 0 ? highlightedDays.map(day => day.toString()).join(', ') : ''}
                 onChange={(e) => updateDate(dayjs(e.target.value))}
               />
             </Grid>
@@ -354,6 +401,7 @@ export default function CalenderPage() {
             </Grid>
           </Grid>
         </Grid>
+        <Typography>Arayah Remillard</Typography>
       </Stack>
     );
   }
