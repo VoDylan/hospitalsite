@@ -757,9 +757,9 @@ function MapEditingPage() {
             sx={{
               width: "18%",
               minWidth: "18%",
-              minHeight: 0,
-              backgroundColor: "#D9DAD7"
-
+              backgroundColor: "#D9DAD7",
+              height: "100vh",
+              display: "flex"
             }}
           >
             {/*Side Bar*/}

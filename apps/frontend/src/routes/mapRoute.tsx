@@ -1,40 +1,38 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import styled from '@emotion/styled';
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import "./map.css";
-import { LocationInfo } from "common/src/LocationInfo.ts";
-import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import {LocationInfo} from "common/src/LocationInfo.ts";
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
-import FilterManager, {
-  generateFilterValue,
-} from "common/src/filter/FilterManager.ts";
-import { FilterName } from "common/src/filter/FilterName.ts";
+import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
+import {FilterName} from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
-import {
-  ReactZoomPanPinchRef,
-  TransformComponent,
-  TransformWrapper,
-} from "react-zoom-pan-pinch";
+import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper,} from "react-zoom-pan-pinch";
 
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
+import {IDCoordinates} from "common/src/IDCoordinates.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
 import TextIcon from "../components/map/TextDirectionsSlide.tsx";
 import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
-import { Floor, floorStrToObj } from "common/src/map/Floor.ts";
+import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
 import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
 import PathCanvas from "../components/map/PathCanvas.tsx";
 import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
 import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
+import NearMeIcon from '@mui/icons-material/NearMe';
 import IconCanvas from "../components/map/IconCanvas.tsx";
+import ToggleButton from "../components/map/MapToggleBar.tsx";
+import {IconButton} from "@mui/material";
+
 
 interface TransformState {
   scale: number;
@@ -69,6 +67,11 @@ function MapRoute() {
   // adding setting the node click
   const [nodeClicked, setNodeClicked] = useState<MapNode | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // State to control visibility of legend
+
+  const toggleLegend = () => {
+    setIsOpen(!isOpen); // Toggle the visibility of the legend
+  };
 
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
@@ -571,6 +574,7 @@ function MapRoute() {
       const path = data.message;
 
       updateNodesData(path);
+      setFloor(findStartingFloor() as Floor);
       !path
         ? setErrorMessage("There is no path between nodes")
         : setErrorMessage("");
@@ -585,6 +589,9 @@ function MapRoute() {
   const handleFloorChange = (newFloor: string) => {
     const newFloorObj = floorStrToObj(newFloor);
 
+
+
+    // CHANGE FLOORTABS
     if (!newFloorObj) {
       console.error("New map floor is not a valid floor!");
       return;
@@ -592,12 +599,20 @@ function MapRoute() {
 
     setFloor(newFloorObj);
   };
+  function findStartingFloor() {
+    for (let i = 0; i < filteredNodes.length; i++) {
+      if (filteredNodes[i].nodeID === startNode) {
+        return filteredNodes[i].floor.toString(); // Return floor as a string
+      }
+    }
+  }
 
   /**
    * useEffect to just load the node data. Only called when the flags determining loading data are changed
    */
   useEffect(() => {
     console.log("Loading Data");
+
     if (!nodeDataLoaded) {
       loadNodeData().then(() => {
         setNodeDataLoaded(true);
@@ -705,7 +720,6 @@ function MapRoute() {
               setFloor(nodesToNextFloor.current.get(key)!);
             }
           }
-
           for (const key of nodesToPrevFloor.current.keys()) {
             if (key.nodeID === filteredNodes[i].nodeID) {
               closeModal();
@@ -966,8 +980,8 @@ function MapRoute() {
               minScale={0.8}
               initialScale={1.0}
               // initialScale={2.0}
-              // initialPositionX={-600}
-              // initialPositionY={-200}
+              // initialPositionX={-300}
+              // initialPositionY={-100}
               initialPositionX={0}
               initialPositionY={0}
             >
@@ -1051,10 +1065,36 @@ function MapRoute() {
                 </Draggable>
               </TransformComponent>
             </TransformWrapper>
+
+              <Box
+                position={"absolute"}
+                top={"15.1%"}
+                right={"0.5%"}
+              >
+                {/* Toggle button */}
+                <ToggleButton onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
+              </Box>
+              {isOpen && (
+                <Legend filterItems={filterIcons} />
+              )}
+
+              <Box
+                position={"absolute"}
+                top={"93%"}
+                left={"19%"}
+              >
+                <IconButton onClick={() => findStartingFloor() && setFloor(findStartingFloor() as Floor)} aria-label="start" sx={{color: "#186BD9", backgroundColor: "white", "&:hover": {
+                    backgroundColor: "white"
+                  }, }}>
+                  <NearMeIcon />
+                </IconButton>
+              </Box>
+
           </Box>
+
         </Box>
 
-        <Legend filterItems={filterIcons} />
+
       </Box>
     </>
   );
