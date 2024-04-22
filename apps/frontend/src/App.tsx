@@ -79,8 +79,7 @@ function App() {
         },
         {
           path: "/Services/Calendar",
-          //element: <Auth0Protection component={CalenderPage} />,
-          element: <CalenderPage />,
+          element: <Auth0Protection component={CalenderPage} />,
         },
         {
           path: "/Map",
