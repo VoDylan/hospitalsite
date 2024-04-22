@@ -5,8 +5,8 @@ import Accordion from "@mui/material/Accordion";
 import Auth0 from "../images/creditImages/Auth0-logo.png";
 import Figma from "../images/creditImages/figma-logo.png";
 import Github from "../images/creditImages/GitHub-logo.png";
-import MaterialUI from "../images/creditImages/material-ui-logo.png";
-import ReactImg from "../images/creditImages/react-logo.png";
+import MaterialUI from "../images/creditImages/material-ui-logo-removebg-preview.png";
+import ReactImg from "../images/creditImages/react-logo-removebg-preview.png";
 import Taiga from "../images/creditImages/taiga-logo.png";
 import Webstorm from "../images/creditImages/webstorm-logo1.png";
 
@@ -83,18 +83,25 @@ return (
               Material UI
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer">
-                <img src={MaterialUI} alt="Material UI logo" style={{width: 450, height: 220}}/>
-              </a>
-              <p style={{marginLeft: '20px'}}>
-                Material UI is an incredibly useful library that builds upon existing React components.
-                It allowed for us to generate a unique design for the website, incorporating features such as
-                the carousel on our home page, a variety of menus and buttons, and even the accordion these
-                credits are in.
-              </p>
-            </div>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={MaterialUI} alt="Material UI logo" style={{ width: 400, height: 200}} />
+              <div>
+                <Typography variant="body1"
+                  sx={{marginLeft: '20px'}}
+                >
+                  Material UI is an incredibly useful library that builds upon existing React components.
+                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
+                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                </Typography>
+              </div>
+            </a>
           </AccordionDetails>
         </Accordion>
       </Box>
@@ -123,18 +130,25 @@ return (
               Github
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer">
-                <img src={Github} alt="Github logo" style={{width: 450, height: 200}}/>
-              </a>
-              <p style={{marginLeft: '20px'}}>
-                Material UI is an incredibly useful library that builds upon existing React components.
-                It allowed for us to generate a unique design for the website, incorporating features such as
-                the carousel on our home page, a variety of menus and buttons, and even the accordion these
-                credits are in.
-              </p>
-            </div>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={Github} alt="Github logo" style={{ width: 400, height: 200}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  Material UI is an incredibly useful library that builds upon existing React components.
+                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
+                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                </Typography>
+              </div>
+            </a>
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -156,18 +170,25 @@ return (
               Taiga
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer">
-                <img src={Taiga} alt="Taiga logo" style={{width: 450, height: 200}}/>
-              </a>
-              <p style={{marginLeft: '20px'}}>
-                Material UI is an incredibly useful library that builds upon existing React components.
-                It allowed for us to generate a unique design for the website, incorporating features such as
-                the carousel on our home page, a variety of menus and buttons, and even the accordion these
-                credits are in.
-              </p>
-            </div>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://taiga.io/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={Taiga} alt="Taiga logo" style={{ width: 370, height: 150}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  Material UI is an incredibly useful library that builds upon existing React components.
+                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
+                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                </Typography>
+              </div>
+            </a>
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -189,18 +210,25 @@ return (
               Figma
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer">
-                <img src={Figma} alt="Figma logo" style={{width: 450, height: 200}}/>
-              </a>
-              <p style={{marginLeft: '20px'}}>
-                Material UI is an incredibly useful library that builds upon existing React components.
-                It allowed for us to generate a unique design for the website, incorporating features such as
-                the carousel on our home page, a variety of menus and buttons, and even the accordion these
-                credits are in.
-              </p>
-            </div>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://www.figma.com/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={Figma} alt="Figma logo" style={{ width: 400, height: 175}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  Material UI is an incredibly useful library that builds upon existing React components.
+                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
+                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                </Typography>
+              </div>
+            </a>
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -222,18 +250,25 @@ return (
               Auth0
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer">
-                <img src={Auth0} alt="Auth0 logo" style={{width: 450, height: 150}}/>
-              </a>
-              <p style={{marginLeft: '20px'}}>
-                Material UI is an incredibly useful library that builds upon existing React components.
-                It allowed for us to generate a unique design for the website, incorporating features such as
-                the carousel on our home page, a variety of menus and buttons, and even the accordion these
-                credits are in.
-              </p>
-            </div>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://auth0.com/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={Auth0} alt="Auth0 logo" style={{ width: 350, height: 120}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  Material UI is an incredibly useful library that builds upon existing React components.
+                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
+                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                </Typography>
+              </div>
+            </a>
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -255,18 +290,25 @@ return (
               Webstorm
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer">
-                <img src={Webstorm} alt="Webstorm logo" style={{width: 450, height: 200}}/>
-              </a>
-              <p style={{marginLeft: '20px'}}>
-                Material UI is an incredibly useful library that builds upon existing React components.
-                It allowed for us to generate a unique design for the website, incorporating features such as
-                the carousel on our home page, a variety of menus and buttons, and even the accordion these
-                credits are in.
-              </p>
-            </div>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://www.jetbrains.com/webstorm/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={Webstorm} alt="Webstorm logo" style={{ width: 350, height: 150}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  Material UI is an incredibly useful library that builds upon existing React components.
+                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
+                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                </Typography>
+              </div>
+            </a>
           </AccordionDetails>
         </Accordion>
       </Box>
@@ -295,18 +337,25 @@ return (
               React
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer">
-                <img src={ReactImg} alt="React logo" style={{width: 450, height: 150}}/>
-              </a>
-              <p style={{marginLeft: '20px'}}>
-                Material UI is an incredibly useful library that builds upon existing React components.
-                It allowed for us to generate a unique design for the website, incorporating features such as
-                the carousel on our home page, a variety of menus and buttons, and even the accordion these
-                credits are in.
-              </p>
-            </div>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://react.dev/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={ReactImg} alt="React logo" style={{ width: 360, height: 125}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{marginLeft: '20px'}}
+                >
+                  Material UI is an incredibly useful library that builds upon existing React components.
+                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
+                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                </Typography>
+              </div>
+            </a>
           </AccordionDetails>
         </Accordion>
       </Box>
