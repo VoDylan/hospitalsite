@@ -97,9 +97,11 @@ export class DijkstrasAlgorithm extends Algorithms {
             180) /
           Math.PI;
 
-        if (z > 0 && angle > 10) turnsList.push("right");
-        else if (z < 0 && angle > 10) turnsList.push("left");
-        else turnsList.push("forward");
+        if (z > 0 && angle > 10)
+          turnsList.push(`Turn right on ${typeCoordinates[i + 1].longName}.`);
+        else if (z < 0 && angle > 10)
+          turnsList.push(`Turn left on ${typeCoordinates[i + 1].longName}.`);
+        else turnsList.push(`Continue on ${typeCoordinates[i + 1].longName}.`);
       }
     }
 
@@ -123,35 +125,43 @@ export class DijkstrasAlgorithm extends Algorithms {
 
         currentFloorNodes.push(typeCoordinates[i]);
         currentFloorNodes = [];
-        turnsList.push(`elevator to ${typeCoordinates[i + 1].floor}`);
+        turnsList.push(
+          `Take ${typeCoordinates[i].longName} to Floor ${typeCoordinates[i + 1].floor}.`,
+        );
         secondElevator = true;
-        console.log("first elevator", newTurnsList);
+        // console.log("first elevator", newTurnsList);
       } else if (typeCoordinates[i].nodeType === "ELEV" && secondElevator) {
-        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+        // const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
 
-        turnsList.push(`elevator from ${typeCoordinates[i - 1].floor}`);
+        turnsList.push(
+          `Come off ${typeCoordinates[i].longName} from Floor ${typeCoordinates[i - 1].floor}.`,
+        );
         secondElevator = false;
-        console.log("second elevator", newTurnsList);
+        // console.log("second elevator", newTurnsList);
       } else if (typeCoordinates[i].nodeType === "STAI" && !secondStairs) {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
         turnsList = [...turnsList, ...newTurnsList];
 
         currentFloorNodes.push(typeCoordinates[i]);
         currentFloorNodes = [];
-        turnsList.push(`stairs to ${typeCoordinates[i + 1].floor}`);
+        turnsList.push(
+          `Take ${typeCoordinates[i].longName} to Floor ${typeCoordinates[i + 1].floor}.`,
+        );
         secondStairs = true;
-        console.log("first stairs", newTurnsList);
+        // console.log("first stairs", newTurnsList);
       } else if (typeCoordinates[i].nodeType === "STAI" && secondStairs) {
-        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+        // const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
 
-        turnsList.push(`stairs from ${typeCoordinates[i - 1].floor}`);
+        turnsList.push(
+          `Come off ${typeCoordinates[i].longName} from Floor ${typeCoordinates[i - 1].floor}.`,
+        );
         secondStairs = false;
-        console.log("second stairs", newTurnsList);
+        // console.log("second stairs", newTurnsList);
       } else if (i === typeCoordinates.length - 1) {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
         turnsList = [...turnsList, ...newTurnsList];
 
-        console.log("last", newTurnsList);
+        // console.log("last", newTurnsList);
       }
     }
 
@@ -227,6 +237,7 @@ export class DijkstrasAlgorithm extends Algorithms {
             TypeCoordinatesPath.unshift({
               nodeType: currentNode.nodeType,
               floor: currentNode.floor,
+              longName: currentNode.longName,
               coordinates: currentCoordinates,
             });
             IDCoordinatesPath.unshift({
@@ -249,6 +260,7 @@ export class DijkstrasAlgorithm extends Algorithms {
         TypeCoordinatesPath.unshift({
           nodeType: startNode.nodeType,
           floor: startNode.floor,
+          longName: startNode.longName,
           coordinates: this.getCoordinates(start),
         });
         path.unshift(start);
