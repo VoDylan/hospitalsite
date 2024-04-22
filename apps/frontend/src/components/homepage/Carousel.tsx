@@ -10,9 +10,10 @@ import Stack from "@mui/material/Stack";
 import CustomCard from "./Card.tsx"; // Update path to Card component
 import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
-import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
-import noLady from "../../images/noLady.jpg";
-import mapVideo from "../../videos/mapVideo.mp4";
+//import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
+//import noLady from "../../images/noLady.jpg";
+import mapVideo from "../../videos/mapVideo2.mp4";
+import noLadymp4 from "../../videos/noLady.mp4";
 
 interface CardData {
   image: string;
@@ -67,25 +68,6 @@ function MainCarousel() {
   useEffect(() => {
     const mainCards: CardData[] = [
       {
-        image: LowerLevel,
-        title: "Directions",
-        description:
-          "Graphical display for directions to anywhere in the hospital!",
-        buttonText: "Go To Map!",
-        path: "/Map",
-        cardTitle: "Simplify Your Hospital Experience",
-        cardDescription: "Graphical navigation to anywhere in the hospital",
-      },
-      {
-        image: noLady,
-        title: "Services",
-        description: "Request a service!",
-        buttonText: "Request a Service!",
-        path: "/Services",
-        cardTitle: "Streamline Your Service Requests",
-        cardDescription: "Access all of our available services in one place",
-      },
-      {
         image: mapVideo,
         title: "Directions",
         description:
@@ -94,6 +76,15 @@ function MainCarousel() {
         path: "/Map",
         cardTitle: "Simplify Your Hospital Experience",
         cardDescription: "Graphical navigation to anywhere in the hospital",
+      },
+      {
+        image: noLadymp4,
+        title: "Services",
+        description: "Request a service!",
+        buttonText: "Request a Service!",
+        path: "/Services",
+        cardTitle: "Streamline Your Service Requests",
+        cardDescription: "Access all of our available services in one place",
       },
     ];
 
