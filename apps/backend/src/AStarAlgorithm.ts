@@ -1,6 +1,7 @@
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
+// import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import Algorithms from "./Algorithms.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
 export class AStarAlgorithm extends Algorithms {
   public constructor() {
@@ -57,7 +58,7 @@ export class AStarAlgorithm extends Algorithms {
     return super.getCoordinates(currentNode);
   }
 
-  runAlgorithm(start: string, end: string): IDCoordinates[] {
+  runAlgorithm(start: string, end: string): TypeCoordinates[] {
     if (!start || !end) {
       console.error("Node ID not found for start or end node");
       return [];
@@ -89,33 +90,33 @@ export class AStarAlgorithm extends Algorithms {
       );
 
       if (currentNodeID === end) {
-        const coordinatesPath: IDCoordinates[] = [];
+        // const coordinatesPath: IDCoordinates[] = [];
         const path: string[] = [];
         let current: string | null = currentNodeID;
         while (current !== start) {
           let currentIdx: number = -1;
           if (current) {
             path.unshift(current);
-            coordinatesPath.unshift({
-              nodeID: current,
-              coordinates: this.getCoordinates(current),
-            });
+            // coordinatesPath.unshift({
+            //   nodeID: current,
+            //   coordinates: this.getCoordinates(current),
+            // });
             currentIdx = this.nodes.findIndex(
               (node) => node.startNodeID === current,
             );
           }
           current = parents[currentIdx];
         }
-        coordinatesPath.unshift({
-          nodeID: start,
-          coordinates: this.getCoordinates(start),
-        });
+        // coordinatesPath.unshift({
+        //   nodeID: start,
+        //   coordinates: this.getCoordinates(start),
+        // });
         path.unshift(start);
 
         // console.log("Path found:", path);
         // console.log("Coordinates found:", coordinatesPath);
 
-        return coordinatesPath;
+        return [];
       }
 
       const currentNode = this.nodes[currentNodeIndex];

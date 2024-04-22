@@ -168,7 +168,7 @@ export class DijkstrasAlgorithm extends Algorithms {
     return turnsList;
   }
 
-  runAlgorithm(start: string, end: string): IDCoordinates[] {
+  runAlgorithm(start: string, end: string): TypeCoordinates[] {
     /**
      * PSEUDOCODE
      *
@@ -235,6 +235,7 @@ export class DijkstrasAlgorithm extends Algorithms {
             )!;
 
             TypeCoordinatesPath.unshift({
+              nodeID: currentNode.nodeID,
               nodeType: currentNode.nodeType,
               floor: currentNode.floor,
               longName: currentNode.longName,
@@ -258,6 +259,7 @@ export class DijkstrasAlgorithm extends Algorithms {
 
         const startNode = this.mapNodes.find((node) => node.nodeID === start)!;
         TypeCoordinatesPath.unshift({
+          nodeID: startNode.nodeID,
           nodeType: startNode.nodeType,
           floor: startNode.floor,
           longName: startNode.longName,
@@ -271,7 +273,7 @@ export class DijkstrasAlgorithm extends Algorithms {
         console.log("Coordinates found:", IDCoordinatesPath);
         console.log("Turns found", turnsPath);
 
-        return IDCoordinatesPath;
+        return TypeCoordinatesPath;
       }
 
       const currentNode = this.nodes.find(

@@ -2,9 +2,9 @@ import Algorithms from "./Algorithms.ts";
 // import { AStarAlgorithm } from "./AStarAlgorithm.ts";
 import { BFSalgorithm } from "./BFSalgorithm.ts";
 import { DFSalgorithm } from "./DFSalgorithm.ts";
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { DijkstrasAlgorithm } from "./DijkstrasAlgorithm.ts";
 import { AStarAlgorithm } from "./AStarAlgorithm.ts";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
 export class DetermineAlgorithm {
   algorithm: Algorithms | undefined;
@@ -24,7 +24,7 @@ export class DetermineAlgorithm {
   async runAll(
     startID: string,
     endID: string,
-  ): Promise<IDCoordinates[] | undefined> {
+  ): Promise<TypeCoordinates[] | undefined> {
     await this.algorithm?.loadData();
     return this.algorithm?.runAlgorithm(startID, endID);
   }

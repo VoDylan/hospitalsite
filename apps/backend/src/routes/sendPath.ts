@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import { LocationInfo } from "common/src/LocationInfo.ts";
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { DetermineAlgorithm } from "../DetermineAlgorithm.ts";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
 const router: Router = express.Router();
 
@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
     const determineAlgorithm = new DetermineAlgorithm();
     determineAlgorithm.chooseAlgorithm(algorithmName);
 
-    const path: IDCoordinates[] | undefined = await determineAlgorithm.runAll(
+    const path: TypeCoordinates[] | undefined = await determineAlgorithm.runAll(
       startID,
       endID,
     );

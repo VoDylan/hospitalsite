@@ -1,10 +1,11 @@
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
+// import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { NodeBFS } from "common/src/NodeBFS.ts";
 import client from "./bin/database-connection.ts";
 import Algorithms from "./Algorithms.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
 export class BFSalgorithm extends Algorithms {
   all_nodes: NodeBFS[];
@@ -82,7 +83,7 @@ export class BFSalgorithm extends Algorithms {
     return super.getCoordinates(currentNode);
   }
 
-  runAlgorithm(start: string, end: string): IDCoordinates[] {
+  runAlgorithm(start: string, end: string): TypeCoordinates[] {
     const start_node = this.all_nodes.find(
       (node) => node.current_node === start,
     );
@@ -108,18 +109,18 @@ export class BFSalgorithm extends Algorithms {
         if (current_node === end_node) {
           // backtrack from end node to start node
           const path: string[] = []; // array to store the shortest path
-          const coordinate_path: IDCoordinates[] = [];
+          // const coordinate_path: IDCoordinates[] = [];
           let current = end_node; // initialize to be the starting node
           while (current !== start_node) {
             // loop to check if the current node is the starting node
             path.unshift(current.current_node); // adds the current node to the beginning of the path
-            coordinate_path.unshift({
-              nodeID: current.current_node,
-              coordinates: {
-                x: current.x_coordinate,
-                y: current.y_coordinate,
-              },
-            });
+            // coordinate_path.unshift({
+            //   nodeID: current.current_node,
+            //   coordinates: {
+            //     x: current.x_coordinate,
+            //     y: current.y_coordinate,
+            //   },
+            // });
 
             const parents = parentsMap.get(current.current_node);
             if (parents && parents.length > 0)
@@ -133,15 +134,15 @@ export class BFSalgorithm extends Algorithms {
             }
           }
           path.unshift(start_node.current_node); // adds the first node to index 0
-          coordinate_path.unshift({
-            nodeID: start_node.current_node,
-            coordinates: {
-              x: start_node.x_coordinate,
-              y: start_node.y_coordinate,
-            },
-          });
+          // coordinate_path.unshift({
+          //   nodeID: start_node.current_node,
+          //   coordinates: {
+          //     x: start_node.x_coordinate,
+          //     y: start_node.y_coordinate,
+          //   },
+          // });
           // console.log(path.join(" -> "));
-          return coordinate_path;
+          return [];
         }
 
         for (let i = 0; i < current_node.neighbors.length; i++) {

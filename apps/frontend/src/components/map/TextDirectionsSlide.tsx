@@ -1,10 +1,12 @@
 import { Button, Paper, Stack } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React from "react";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
 export default function TextIcon(props: {
   handleButtonClick2: () => void;
   checked2: boolean;
+  nodesData: TypeCoordinates[];
 }) {
   return (
     <>
@@ -12,7 +14,7 @@ export default function TextIcon(props: {
         <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
           <Stack>
             <Button
-              startIcon={<ArrowBackIcon />}
+              startIcon={<ArrowBackIcon/>}
               onClick={props.handleButtonClick2}
               variant="text"
               sx={{
@@ -22,7 +24,9 @@ export default function TextIcon(props: {
               }}
             >
               {props.checked2 ? "back" : "back"}
+
             </Button>
+            <p>hello from here?</p>
           </Stack>
         </Paper>
       </Stack>
