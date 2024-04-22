@@ -565,8 +565,6 @@ function MapEditingPage() {
   };
 
   const handleCanvasDoubleClick = (event: React.MouseEvent) => {
-    console.log("Double click registered");
-
     if (!iconCanvasRef.current) return;
     const rect = iconCanvasRef.current.getBoundingClientRect();
 
@@ -580,6 +578,8 @@ function MapEditingPage() {
       canvasHeight,
       rect
       );
+
+    console.log(`Double click registered: ${actualX}, ${actualY}`);
 
     setNodeCreationInfo({
       creatingNode: true,
@@ -738,6 +738,10 @@ function MapEditingPage() {
       checkAllEdges().then(() => console.log("Finished checking for edge"));
     }
   }, [selectedNode1, selectedNode2, nodeDataLoaded]);
+
+  useEffect(() => {
+
+  }, []);
 
   return (
     <>
@@ -944,16 +948,15 @@ function MapEditingPage() {
                 </>
               </TransformComponent>
             </TransformWrapper>
-            {nodeCreationInfo.creatingNode ?
-              <NodeCreator
-                mouseXCoord={nodeCreationInfo.mouseXCoord}
-                mouseYCoord={nodeCreationInfo.mouseYCoord}
-                canvasXCoord={nodeCreationInfo.canvasXCoord}
-                canvasYCoord={nodeCreationInfo.canvasYCoord}
-                floor={floor}
-                handleCloseDialogue={handleCloseNodeCreator}/> :
-              <></>
-            }
+              {nodeCreationInfo.creatingNode ?
+                <NodeCreator
+                  nodeCreationInfo={nodeCreationInfo}
+                  floor={floor}
+                  handleCloseDialogue={handleCloseNodeCreator}
+                />
+                :
+                <></>
+              }
           </Box>
         </Box>
         <Legend filterItems={filterIcons} />

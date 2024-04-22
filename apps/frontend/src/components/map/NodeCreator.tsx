@@ -1,21 +1,47 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, IconButton, Paper, Stack, TextField, Typography} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import MapNode from "common/src/map/MapNode.ts";
 import {Floor} from "common/src/map/Floor.ts";
+import {INodeCreationInfo} from "../../common/INodeCreationInfo.ts";
 
 interface INodeCreatorProps {
   style?: React.CSSProperties;
-  mouseXCoord: number;
-  mouseYCoord: number;
-  canvasXCoord: number;
-  canvasYCoord: number;
+  nodeCreationInfo: INodeCreationInfo;
   floor: Floor;
   handleCloseDialogue: () => void;
 }
 
+const width: number = 400;
+
 export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element {
   const [node] = useState<MapNode>(new MapNode());
+  const [mouseXCoord, setMouseXCoord] = useState<number>(props.nodeCreationInfo.mouseXCoord);
+  const [mouseYCoord, setMouseYCoord] = useState<number>(props.nodeCreationInfo.mouseYCoord);
+  const [canvasXCoord, setCanvasXCoord] = useState<number>(props.nodeCreationInfo.canvasXCoord);
+  const [canvasYCoord, setCanvasYCoord] = useState<number>(props.nodeCreationInfo.canvasYCoord);
+  const [floor, setFloor] = useState<Floor>(props.floor);
+
+  useEffect(() => {
+    if((props.nodeCreationInfo.mouseXCoord + width) > window.innerWidth) {
+      setMouseXCoord(props.nodeCreationInfo.mouseXCoord + (window.innerWidth - (props.nodeCreationInfo.mouseXCoord + width)));
+    } else {
+      setMouseXCoord(props.nodeCreationInfo.mouseXCoord);
+    }
+
+    setMouseYCoord(props.nodeCreationInfo.mouseYCoord);
+    setCanvasXCoord(props.nodeCreationInfo.canvasXCoord);
+    setCanvasYCoord(props.nodeCreationInfo.canvasYCoord);
+    setFloor(props.floor);
+  }, [
+    props.floor,
+    props.nodeCreationInfo.canvasXCoord,
+    props.nodeCreationInfo.canvasYCoord,
+    props.nodeCreationInfo.mouseXCoord,
+    props.nodeCreationInfo.mouseYCoord
+  ]);
+
+  console.log("Reloading node creator");
 
   return (
     <Paper
@@ -23,9 +49,9 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
       elevation={5}
       style={{
         position: "absolute",
-        left: props.mouseXCoord,
-        top: props.mouseYCoord,
-        width: "400px"
+        left: mouseXCoord,
+        top: mouseYCoord,
+        width: `${width}px`
       }}
     >
       <Stack
@@ -33,6 +59,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
         flexDirection={"column"}
         alignItems={"left"}
         justifyContent={"center"}
+        margin={"15px"}
       >
         <Box
           display={"flex"}
@@ -46,7 +73,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             width={"100%"}
             marginLeft={"15px"}
           >
-            Node Creator
+            Create New Node
           </Typography>
           <IconButton
             onClick={props.handleCloseDialogue}
@@ -58,9 +85,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
         <Stack
           display={"flex"}
           flexDirection={"column"}
-          marginRight={"15px"}
-          marginLeft={"15px"}
-          marginBottom={"15px"}
+          margin={"15px"}
         >
           <TextField
             id={"nodeIDEntry"}
@@ -79,7 +104,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             id={"xcoordEntry"}
             label={"X Coord"}
             variant={"outlined"}
-            defaultValue={props.canvasXCoord}
+            value={canvasXCoord}
             size={"small"}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               (node.xcoord = parseInt(event.target.value))
@@ -93,7 +118,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             id={"ycoordEntry"}
             label={"Y Coord"}
             variant={"outlined"}
-            defaultValue={props.canvasYCoord}
+            value={canvasYCoord}
             size={"small"}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               (node.ycoord = parseInt(event.target.value))
@@ -107,7 +132,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             id={"floorEntry"}
             label={"Floor"}
             variant={"outlined"}
-            defaultValue={props.floor}
+            value={floor}
             size={"small"}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               (node.floor = event.target.value)
