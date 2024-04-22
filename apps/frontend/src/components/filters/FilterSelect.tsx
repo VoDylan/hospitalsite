@@ -23,7 +23,7 @@ const FilterWithIcon: React.FC<FilterWithIconProps> = ({
 }) => (
   <Stack
     direction="row"
-    spacing={8}
+    spacing={10.5}
     alignItems={"center"}
     justifyContent={"space-between"}
   >

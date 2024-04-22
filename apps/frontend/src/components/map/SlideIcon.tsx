@@ -42,21 +42,10 @@ export default function Icon(props: {
   return (
     <>
       <Stack width={"100%"} height={"100%"}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={props.handleButtonClick}
-          variant="text"
-          sx={{
-            width: "25%",
-            justifySelf: "left",
-            marginLeft: "10px",
-          }}
-        >
-          {props.checked ? "back" : "back"}
-        </Button>
+
         <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
           <Stack
-            spacing={"10%"}
+            spacing={"5%"}
             direction="column"
             sx={{
               backgroundColor: "white",
@@ -64,12 +53,23 @@ export default function Icon(props: {
               justifyContent: "start",
               alignItems: "start",
               position: "relative",
-              marginTop: "16%",
-              paddingTop: "6%",
+              paddingTop: "4%",
               marginLeft: "1%",
               paddingLeft: "8%",
             }}
           >
+            <Button
+              startIcon={<ArrowBackIcon />}
+              onClick={props.handleButtonClick}
+              variant="text"
+              sx={{
+                width: "25%",
+                justifySelf: "left",
+                marginLeft: "10px",
+              }}
+            >
+              {props.checked ? "back" : "back"}
+            </Button>
             <Stack direction="column" spacing={1}>
               <FilterWithIcon
                 iconColor="#1CA7EC"
@@ -216,6 +216,7 @@ export default function Icon(props: {
                 justifyContent: "center",
                 width: "90%",
                 paddingBottom: "10%",
+                paddingTop: "4%"
               }}
               spacing={0.5}
             >

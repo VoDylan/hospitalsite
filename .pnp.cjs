@@ -3534,16 +3534,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@types/react-modal", [\
-      ["npm:3.16.3", {\
-        "packageLocation": "./.yarn/cache/@types-react-modal-npm-3.16.3-358681c745-9622d1983a.zip/node_modules/@types/react-modal/",\
-        "packageDependencies": [\
-          ["@types/react-modal", "npm:3.16.3"],\
-          ["@types/react", "npm:18.2.48"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["@types/react-router", [\
       ["npm:5.1.20", {\
         "packageLocation": "./.yarn/cache/@types-react-router-npm-5.1.20-620ccce99a-72d78d2f4a.zip/node_modules/@types/react-router/",\

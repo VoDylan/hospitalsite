@@ -5,7 +5,7 @@ import axios from "axios";
 import { LabelValuePair } from "../../common/LabelValuePair.ts";
 
 interface EmployeeDropDownProps {
-    returnedEmployeeID: number;
+    returnedEmployeeID: number | string;
     handleChange: (event: SelectChangeEvent) => string;
 }
 
