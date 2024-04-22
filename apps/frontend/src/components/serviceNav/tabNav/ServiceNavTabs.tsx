@@ -52,14 +52,14 @@ export default function ServiceNavTabs() {
           aria-label={"Service Navigation Tabs"}
 
           sx={{
-            "& .MuiTabs-indicator": {
-              background: 'Gold',
-            },
             "& .MuiTab-labelIcon": {
               color: 'White',
             },
             "& .Mui-selected": {
               color: 'Gold',
+            },
+            "& .MuiTabs-indicator": {
+              background: 'Gold',
             },
             "& .MuiTab-root:hover": {
               backgroundColor: darken("#186BD9", 0.25),

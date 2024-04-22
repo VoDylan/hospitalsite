@@ -59,14 +59,12 @@ export default function MapEditorSideBar(props: {
     <Drawer
       variant="permanent"
       sx={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        "& .MuiDrawer-paper": {
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          minWidth: "18%",
+        [`& .MuiDrawer-paper`]: {
+          top: "15.5%",
+          marginLeft: "0.2%",
+          width: "17.4%",
+          height: "84%",
+          minWidth: "10%",
           boxSizing: "border-box",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
           elevation: 100,
@@ -75,18 +73,9 @@ export default function MapEditorSideBar(props: {
         },
       }}
     >
-      <Stack
-        display={"flex"}
-        direction={"column"}
-        sx={{
-          marginLeft: "4%",
-          marginRight: "4%",
-          marginTop: "4%",
-          marginBottom: "4%",
-          paddingBottom: "5vh",
-        }}
-      >
-        <Typography
+      <Stack display={"flex"} direction={"column"} sx={{ marginLeft: "4%" }}>
+
+      <Typography
           color={"#003A96"}
           align={"center"}
           fontStyle={"Open Sans"}
@@ -178,7 +167,7 @@ export default function MapEditorSideBar(props: {
                   opacity: "1",
                   marginTop: "20px",
                 }}
-                title={"Selected Node 1"}
+                title={"Node 1"}
                 node={props.selectedNode1}
                 textColor={"#535353"}
                 clearNodeCallback={props.handleClearNode1}
@@ -194,7 +183,7 @@ export default function MapEditorSideBar(props: {
                   opacity: "1",
                   marginTop: "20px",
                 }}
-                title={"Selected Node 2"}
+                title={"Node 2"}
                 node={props.selectedNode2}
                 textColor={"#535353"}
                 clearNodeCallback={props.handleClearNode2}
