@@ -186,19 +186,17 @@ function MainCarousel() {
       >
 
         <a
-          href="https://www.brighamandwomens.org/forms/request-an-appointment"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/Credits"
         >
           <IconButton
             sx={{ color: "#186BD9" }}
             size="large"
-            aria-label="Make an appointment"
+            aria-label="Credits"
           >
             <RateReviewSharpIcon />
           </IconButton>
           <Button variant={"text"}>
-            Make an appointment (Real Link Don't Fill Out)
+            Credits
           </Button>
         </a>
 
