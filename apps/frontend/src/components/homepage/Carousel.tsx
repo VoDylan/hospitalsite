@@ -12,6 +12,7 @@ import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
 import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
 import noLady from "../../images/noLady.jpg";
+import mapVideo from "../../videos/mapVideo.mp4";
 
 interface CardData {
   image: string;
@@ -22,6 +23,8 @@ interface CardData {
   cardTitle: string;
   cardDescription: string;
 }
+
+
 
 const Dot = styled("span")(({ theme }) => ({
   height: "10px",
@@ -82,7 +85,19 @@ function MainCarousel() {
         cardTitle: "Streamline Your Service Requests",
         cardDescription: "Access all of our available services in one place",
       },
+      {
+        image: mapVideo,
+        title: "Directions",
+        description:
+          "Graphical display for directions to anywhere in the hospital!",
+        buttonText: "Go To Map!",
+        path: "/Map",
+        cardTitle: "Simplify Your Hospital Experience",
+        cardDescription: "Graphical navigation to anywhere in the hospital",
+      },
     ];
+
+
 
     setCards(mainCards);
     if (autoScroll) {
