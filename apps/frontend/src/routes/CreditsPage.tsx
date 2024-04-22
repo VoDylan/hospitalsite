@@ -143,9 +143,11 @@ return (
                 <Typography variant="body1"
                             sx={{marginLeft: '20px'}}
                 >
-                  Material UI is an incredibly useful library that builds upon existing React components.
-                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
-                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                  Github is an integral software tool that is used for code repository management.
+                  Our team utilized Github for essentially everything involving the code. This included
+                  storing our main branch, creating new
+                  branches, pushing code, pulling code, and reviewing one another's work.
+
                 </Typography>
               </div>
             </a>
@@ -183,9 +185,9 @@ return (
                 <Typography variant="body1"
                             sx={{marginLeft: '20px'}}
                 >
-                  Material UI is an incredibly useful library that builds upon existing React components.
-                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
-                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                  Taiga is a project management platform that allowed for us to streamline the production
+                  of the website. It is very helpful with creating and assigning tasks/user stories,
+                  tracking tasks of each team member, and tracking the progress of the team as a whole.
                 </Typography>
               </div>
             </a>
@@ -223,9 +225,8 @@ return (
                 <Typography variant="body1"
                             sx={{marginLeft: '20px'}}
                 >
-                  Material UI is an incredibly useful library that builds upon existing React components.
-                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
-                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                  Figma is a very useful software tool that allows for the user to generate potential website designs.
+                  Our team utilized Figma in order to brainstorm front end design choices and organize our themes/styles.
                 </Typography>
               </div>
             </a>
@@ -263,9 +264,9 @@ return (
                 <Typography variant="body1"
                             sx={{marginLeft: '20px'}}
                 >
-                  Material UI is an incredibly useful library that builds upon existing React components.
-                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
-                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                  Auth0 is a third party tool that can be implemented in order to track sign-ins to a website.
+                  We utilized Auth0 within our website in order to lock out certain features such as the database
+                  until a proper log-in is given.
                 </Typography>
               </div>
             </a>
@@ -303,9 +304,9 @@ return (
                 <Typography variant="body1"
                             sx={{marginLeft: '20px'}}
                 >
-                  Material UI is an incredibly useful library that builds upon existing React components.
-                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
-                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                  Webstorm is a Jetbrains IDE that specializes in javascript and typescript development. Webstorm was incredibly
+                  helpful towards our team building this website, as it provided intuitive Git integration on top of a plethora
+                  of beneficial quality of life features.
                 </Typography>
               </div>
             </a>
@@ -350,9 +351,8 @@ return (
                 <Typography variant="body1"
                             sx={{marginLeft: '20px'}}
                 >
-                  Material UI is an incredibly useful library that builds upon existing React components.
-                  It allowed for us to generate a unique design for the website, incorporating features such as the carousel
-                  on our home page, a variety of menus and buttons, and even the accordion these credits are in.
+                  The React framework is the foundation that this website utilizes in order to run. This framework allowed for
+                  us to use the Material UI library, and the convenient styling features it brought.
                 </Typography>
               </div>
             </a>
