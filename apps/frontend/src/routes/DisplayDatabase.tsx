@@ -38,7 +38,7 @@ type ServiceParams = {
 type EdgeParams = { id: number } & MapEdgeType;
 
 type EmployeeParams = {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
 };
@@ -167,7 +167,7 @@ function DisplayDatabase() {
   ]);
 
   const [employeeColumns] = useState<GridColDef[]>([
-    { field: "employeeID", headerName: "EmployeeID", width: 200 },
+    { field: "id", headerName: "EmployeeID", width: 100 },
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
   ]);
@@ -718,12 +718,18 @@ function DisplayDatabase() {
                 EMPLOYEES
               </Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails sx={{
+              display: "flex",
+              flexDirection: "column",  // To stack the button and DataGrid vertically
+              alignItems: "center",      // To center align items horizontally
+              justifyContent: "center", // To center align items vertically
+            }}>
               <Box
                 display="flex"
                 mt={2}
                 alignItems="center"
                 flexDirection="column"
+                sx={{width: '50%'}}
               >
                 <DataGrid
                   slots={{ toolbar: GridToolbar }}
