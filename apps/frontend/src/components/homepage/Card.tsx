@@ -50,7 +50,7 @@ export default function CustomCard({
           sx={{
             position: "absolute",
             top: 0,
-            left: '2%',
+            left: '3%',
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -89,7 +89,7 @@ export default function CustomCard({
               width: "auto",
               minWidth: "10vw",
               whiteSpace: "nowrap",
-              zIndex: 100000
+
             }}
             component={Link}
             to={path}

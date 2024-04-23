@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 // import noLady from "../../images/noLady.jpg";
 //import mapVideo from "../../videos/mapVideo2.mp4";
 import noLady from "../../videos/noLady.mp4";
-
 import mapVideo from "../../videos/chrome_o2REuBANbg.mp4";
 
 
