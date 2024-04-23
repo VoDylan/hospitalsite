@@ -24,7 +24,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import "./TableSlide.css";
 import Tab from "@mui/material/Tab";
 import { PieChart, BarChart } from "@mui/x-charts";
-import { PieChart, BarChart} from "@mui/x-charts";
 import {employeeCsvHeader, EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
 
 type NodeParams = { id: number } & MapNodeType;
@@ -663,76 +662,96 @@ function DisplayDatabase() {
   //service tabs
   const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
   const handleServiceTabChange = (e, tabIndex: React.SetStateAction<number>) => {
-    console.log(tabIndex);
+    //console.log(tabIndex);
     setCurrentServiceIndex(tabIndex);
   };
 
+  //employee tabs
+  const [currentEmployeeIndex, setCurrentEmployeeIndex] = useState(0);
+  const handleEmployeeTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    //console.log(tabIndex);
+    setCurrentEmployeeIndex(tabIndex);
+  };
+
+  //map tabs
+  const [currentMapIndex, setCurrentMapIndex] = useState(0);
+  const handleMapTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    //console.log(tabIndex);
+    setCurrentMapIndex(tabIndex);
+  };
+
   //node tabs
-  const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
+  /*const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
   const handleNodeTabChange = (e, tabIndex: React.SetStateAction<number>) => {
     console.log(tabIndex);
     setCurrentNodeIndex(tabIndex);
-  };
+  };*/
 
   //edge tabs
-  const [currentEdgeIndex, setCurrentEdgeIndex] = useState(0);
+  /*const [currentEdgeIndex, setCurrentEdgeIndex] = useState(0);
   const handleEdgeTabChange = (e, tabIndex: React.SetStateAction<number>) => {
     console.log(tabIndex);
     setCurrentEdgeIndex(tabIndex);
-  };
+  };*/
 
   return (
-        <Stack direction={"column"}
-          sx={{
-          position: "relative",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minWidth: "100wh",
-          marginTop: "150px",
-          marginBottom: "10vh",
-          width: "100%",
-        }}>
-          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-              <Typography color={"black"}>
-                SERVICES
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails
-              /*sx={{
-                display: "flex",
-                flexDirection: "column",  // To stack the button and DataGrid vertically
-                alignItems: "center",      // To center align items horizontally
-                justifyContent: "center", // To center align items vertically
-              }}*/
+    <Stack
+      direction={"column"}
+      sx={{
+        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minWidth: "100wh",
+        marginTop: "150px",
+        marginBottom: "10vh",
+        width: "100%",
+      }}
+    >
+      <Accordion
+        defaultExpanded
+        elevation={3}
+        sx={{
+          width: "90%",
+          backgroundColor: "white"
+      }}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+          <Typography color={"black"}>
+            SERVICES DATA
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <React.Fragment>
+            <Tabs
+              value={currentServiceIndex}
+              onChange={handleServiceTabChange}
+              orientation={"horizontal"}
             >
-              <React.Fragment>
-                <Tabs
-                  value={currentServiceIndex}
-                  onChange={handleServiceTabChange}
-                  orientation={"horizontal"}
-                  sx={{
-                    //marginTop: "150px"
-                  }}
-                >
-                  <Tab label='TABLE' />
-                  <Tab label='STATUS' />
-                  <Tab label='ANALYTICS' />
-                </Tabs>
-              <Box display="flex">
-                {/* Container for the service request table and service details table */}
+              <Tab label='TABLE' />
+              <Tab label='STATUS' />
+              <Tab label='ANALYTICS' />
+            </Tabs>
+            <Box> {/*this box is for the service details sliding box*/}
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              {/* Container for the service request table and service details table */}
+              {currentServiceIndex === 0 && (
                 <Box
-                     flex="1"
-                     ml={3}
-                     mt={2}
-                     alignItems="center"
-                     justifyContent="center"
-                     flexDirection="column"
+                  display="flex"
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column"
+                  sx={{width: '50%'}}
                 >
-                  {currentServiceIndex === 0 && (
-                    <Box>
-                      {/*<Typography variant='h5'>Service Data Table</Typography>*/}
+                  {/*<Typography variant='h5'>Service Data Table</Typography>*/}
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
                     sx={{
@@ -754,209 +773,35 @@ function DisplayDatabase() {
                     }
                     onProcessRowUpdateError={handleProcessRowUpdateError}
                   />
-                 </Box>
-                 )}
                 </Box>
-                <Box width="400px" ml={2}>
-                  {selectedServiceDetails && (
-                    <ServiceDetailsTable
-                      service={selectedServiceDetails}
-                      isVisible={isServiceDetailsVisible}
-                    />
-                  )}
-                </Box>
-              </Box>
-
-                <Box display="flex">
+              )}
+            </Box>
+             <Box width="400px" ml={2}>
+                {selectedServiceDetails && (
+                  <ServiceDetailsTable
+                    service={selectedServiceDetails}
+                    isVisible={isServiceDetailsVisible}
+                  />
+                )}
+             </Box>
+            </Box>
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              flexDirection="column"
+            >
+              {/* Container for the service request status graph */}
+              {currentServiceIndex === 1 && (
+                <>
+                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
                 <Box
                   flex="1"
-                  ml={3}
-                  mt={2}
-                  alignItems="center"
-                  flexDirection="column">
-                  {currentServiceIndex === 1 && (
-                    <Box flex="1" display="flex" justifyContent="center">
-                      <Box mb={2} display="flex">
-                        <Button onClick={toggleChartType}>Toggle Chart Type</Button>
-                      </Box>
-                      {chartType === 'bar' && (
-                        <BarChart
-                          xAxis={[
-                            {
-                              scaleType: 'band',
-                              data: statusLabels,
-                            },
-                          ]}
-                          series={[
-                            {
-                              data: statusCountsData,
-                            },
-                          ]}
-                          width={700}
-                          height={300}
-                        />
-                      )}
-
-                      {chartType === 'pie' && (
-                        <PieChart
-                          series={[
-                            {
-                              data: statusLabels.map((label, index) => ({
-                                id: index,
-                                value: statusCountsData[index],
-                                label,
-                              })),
-                            },
-                          ]}
-                          width={700}
-                          height={300}
-                          colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
-                        />
-                      )}
-                    </Box>
-                  )}
-                </Box>
-                <Box width="400px" ml={2}>
-                  {selectedServiceDetails && (
-                    <ServiceDetailsTable
-                      service={selectedServiceDetails}
-                      isVisible={isServiceDetailsVisible}
-                    />
-                  )}
-                </Box>
-               </Box>
-
-                <Box display="flex">
-                  <Box
-                    flex="1"
-                    ml={3}
-                    mt={2}
-                    alignItems="center"
-                    flexDirection="column"
-                  >
-                    {currentServiceIndex === 2 && (
-                      <Box flex="1" display="flex" justifyContent="center">
-                        <Box mb={2} display="flex">
-                          <Button onClick={toggleChartType}>Toggle Chart Type</Button>
-                        </Box>
-                        {chartType === 'bar' && (
-                          <BarChart
-                            xAxis={[
-                              {
-                                scaleType: 'band',
-                                data: serviceTypeLabels,
-                              },
-                            ]}
-                            series={[
-                              {
-                                data: serviceTypeCountsData,
-                              },
-                            ]}
-                            width={900}
-                            height={300}
-                          />
-                        )}
-
-                        {chartType === 'pie' && (
-                          <PieChart
-                            series={[
-                              {
-                                data: serviceTypeLabels.map((label, index) => ({
-                                  id: index,
-                                  value: serviceTypeCountsData[index],
-                                  label,
-                                })),
-                              },
-                            ]}
-                            width={700}
-                            height={300}
-                            colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
-                          />
-                        )}
-                      </Box>
-                    )}
-                  </Box>
-                  <Box width="400px" ml={2}>
-                    {selectedServiceDetails && (
-                      <ServiceDetailsTable
-                        service={selectedServiceDetails}
-                        isVisible={isServiceDetailsVisible}
-                      />
-                    )}
-                  </Box>
-                </Box>
-              </React.Fragment>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-              <Typography color={"black"}>
-                SERVICE TYPE STATISTICS
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Box display="flex" flexDirection="column" alignItems="center" width="100%">
-                <Box mb={2} display="flex" justifyContent="center" width="100%">
-                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
-                </Box>
-                <Box flex="1" display="flex" justifyContent="center">
-                  {chartType === 'bar' && (
-                    <BarChart
-                      xAxis={[
-                        {
-                          scaleType: 'band',
-                          data: serviceTypeLabels,
-                        },
-                      ]}
-                      series={[
-                        {
-                          data: serviceTypeCountsData,
-                        },
-                      ]}
-                      width={900}
-                      height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
-                    />
-                  )}
-
-                  {chartType === 'pie' && (
-                    <PieChart
-                      series={[
-                        {
-                          data: serviceTypeLabels.map((label, index) => ({
-                            id: index,
-                            value: serviceTypeCountsData[index],
-                            label,
-                          })),
-                        },
-                      ]}
-                      width={700}
-                      height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
-                    />
-                  )}
-                </Box>
-              </Box>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-              <Typography color={"black"}>
-                STATUS STATISTICS
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Box width="100%">
-                <Box mb={2} display="flex" justifyContent="center">
-                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
-                </Box>
-              </Box>
-            </AccordionDetails>
-            <AccordionDetails>
-              <Box width="100%">
-                <Box display="flex" justifyContent="center">
+                  display={"flex"}
+                  justifyContent="center"
+                >
                   {chartType === 'bar' && (
                     <BarChart
                       xAxis={[
@@ -971,10 +816,8 @@ function DisplayDatabase() {
                         },
                       ]}
                       width={700}
-                      height={300}
-                    />
+                      height={300}/>
                   )}
-
                   {chartType === 'pie' && (
                     <PieChart
                       series={[
@@ -988,282 +831,364 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
                     />
                   )}
                 </Box>
-              </Box>
-            </AccordionDetails>
-          </Accordion>
+                </>
+              )}
+            </Box>
 
-          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-              <Typography color={"black"}>
-                EMPLOYEE ID STATISTICS
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Box display="flex" flexDirection="column" alignItems="center" width="100%">
-                <Box mb={2} display="flex" justifyContent="center" width="100%">
-                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
-                </Box>
-                <Box flex="1" display="flex" justifyContent="center">
-                  {chartType === 'bar' && (
-                    <BarChart
-                      xAxis={[
-                        {
-                          scaleType: 'band',
-                          data: employeeIDLabels,
-                        },
-                      ]}
-                      series={[
-                        {
-                          data: employeeIDCountsData,
-                        },
-                      ]}
-                      width={900}
-                      height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
-                    />
-                  )}
-
-                  {chartType === 'pie' && (
-                    <PieChart
-                      series={[
-                        {
-                          data: employeeIDLabels.map((label, index) => ({
-                            id: index,
-                            value: employeeIDCountsData[index],
-                            label,
-                          })),
-                        },
-                      ]}
-                      width={700}
-                      height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
-                    />
-                  )}
-                </Box>
-              </Box>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-              <Typography color={"black"}>
-                EMPLOYEES
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{
-              display: "flex",
-              flexDirection: "column",  // To stack the button and DataGrid vertically
-              alignItems: "center",      // To center align items horizontally
-              justifyContent: "center", // To center align items vertically
-            }}>
-              <Box
-                display="flex"
-                mt={2}
-                alignItems="center"
-                flexDirection="column"
-                sx={{width: '50%'}}
-              >
-                <DataGrid
-                  slots={{ toolbar: GridToolbar }}
-                  sx={{
-                    padding: "40px",
-                    position: "relative",
-                    display: "flex",
-                    justifyContent: "center",
-                    width: "100%",
-                    backgroundColor: "white"
-                  }}
-                  columns={employeeColumns}
-                  rows={employeeRowData}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  pageSizeOptions={[5, 10]}
-                />
-                <Button
-                  component="label"
-                  role={undefined}
-                  tabIndex={-1}
-                  startIcon={<CloudUploadIcon />}
-                  className="importButton"
-                  variant="contained"
-                  // onClick={handleNodeImport}
-                  sx={{
-                    backgroundColor: "primary.main", // Change background color
-                    color: "white", // Change text color
-                    borderRadius: "8px", // Change border radius
-                    marginRight: "-1px", // Adjust spacing
-                    marginTop: "15px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  Import Employees (CSV File)
-                  <VisuallyHiddenInput type="file" onChange={handleEmployeeFileUpload} />
-                </Button>
-              </Box>
-            </AccordionDetails>
-          </Accordion>
-
-        <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-            <Typography color={"black"}>
-              NODES
-            </Typography>
-          </AccordionSummary>
-            <AccordionDetails
-            /*sx={{
-              display: "flex",
-              flexDirection: "column",  // To stack the button and DataGrid vertically
-              alignItems: "center",      // To center align items horizontally
-              justifyContent: "center", // To center align items vertically
-            }}*/
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              flexDirection="column"
             >
-              <React.Fragment>
-                <Tabs
-                  value={currentNodeIndex}
-                  onChange={handleNodeTabChange}
-                  orientation={"horizontal"}
-                >
-                  <Tab label='TABLE' />
-                  <Tab label='GRAPH' />
-                  <Tab label='ANALYTICS' />
-                </Tabs>
+              {/* Container for the service request analytics graph */}
+            {currentServiceIndex === 2 && (
+              <>
+              <Button onClick={toggleChartType}>Toggle Chart Type</Button>
               <Box
+                flex="1"
                 display="flex"
-                mt={2}
-                alignItems="center"
-                flexDirection="column"
+                justifyContent="center"
               >
-                  {currentNodeIndex === 0 && (
-                    <Box >
-                      {/*<Typography variant='h5'>Node Data Table</Typography>*/}
-                <DataGrid
-                  slots={{ toolbar: GridToolbar }}
-                  sx={{
-                    padding: "40px",
-                    position: "relative",
-                    display: "flex",
-                    justifyContent: "center",
-                    width: "100%",
-                    backgroundColor: "white"
-                  }}
-                  columns={nodeColumns}
-                  rows={nodeRowData}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  pageSizeOptions={[5, 10]}
-                />
-                <Button
-                  component="label"
-                  role={undefined}
-                  tabIndex={-1}
-                  startIcon={<CloudUploadIcon />}
-                  className="importButton"
-                  variant="contained"
-                  // onClick={handleNodeImport}
-                  sx={{
-                    backgroundColor: "primary.main", // Change background color
-                    color: "white", // Change text color
-                    borderRadius: "8px", // Change border radius
-                    marginRight: "-1px", // Adjust spacing
-                    marginTop: "15px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  Import Nodes (CSV File)
-                  <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
-                </Button>
-                </Box>
+                {chartType === 'bar' && (
+                  <BarChart
+                    xAxis={[
+                      {
+                        scaleType: 'band',
+                        data: serviceTypeLabels,
+                      },
+                    ]}
+                    series={[
+                      {
+                        data: serviceTypeCountsData,
+                      },
+                    ]}
+                    width={900}
+                    height={300}
+                    colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}/>
+                )}
+
+                {chartType === 'pie' && (
+                  <PieChart
+                    series={[
+                      {
+                        data: serviceTypeLabels.map((label, index) => ({
+                          id: index,
+                          value: serviceTypeCountsData[index],
+                          label,
+                        })),
+                      },
+                    ]}
+                    width={700}
+                    height={300}
+                    colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}/>
                 )}
               </Box>
-              </React.Fragment>
-            </AccordionDetails>
-        </Accordion>
-        <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-            <Typography color={"black"}>
-              EDGES
-            </Typography>
-          </AccordionSummary>
-        <AccordionDetails /*sx={{
-          display: "flex",
-          flexDirection: "column",  // To stack the button and DataGrid vertically
-          alignItems: "center",      // To center align items horizontally
-          justifyContent: "center", // To center align items vertically
-        }}*/
-        >
+              </>
+            )}
+            </Box>
+          </React.Fragment>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion
+        defaultExpanded
+        elevation={3}
+        sx={{
+          width: "90%",
+          backgroundColor: "white"
+        }}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+          <Typography color={"black"}>
+            EMPLOYEE DATA
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
           <React.Fragment>
             <Tabs
-              value={currentEdgeIndex}
-              onChange={handleEdgeTabChange}
+              value={currentEmployeeIndex}
+              onChange={handleEmployeeTabChange}
               orientation={"horizontal"}
-              sx={{
-                //marginTop: "150px"
-              }}
             >
-              <Tab label='TABLE' />
-              <Tab label='GRAPH' />
-              <Tab label='ANALYTICS' />
+              <Tab label='EMPLOYEE' />
+              <Tab label='EMPLOYEE ID' />
+              {/*<Tab label='ANALYTICS' />*/}
             </Tabs>
-            {currentEdgeIndex === 0 && (
-            <Box mt={2}>
-              {/*<Typography variant='h5'>Edge Data Table</Typography>*/}
-          <DataGrid
-            slots={{ toolbar: GridToolbar }}
-            sx={{
-              padding: "40px",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "white",
-              width: "50%"
-            }}
-            columns={edgeColumns}
-            rows={edgeRowData}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-          />
-          <Button
-            component="label"
-            role={undefined}
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            className="importButton"
-            variant="contained"
-            // onClick={handleImport}
-            sx={{
-              backgroundColor: "primary.main", // Change background color
-              color: "white", // Change text color
-              borderRadius: "8px", // Change border radius
-              marginRight: "-1px", // Adjust spacing
-              marginTop: "15px",
-              marginBottom: "30px",
-            }}
+          <Box
+            display={"flex"}
+            flex="1"
+            ml={3}
+            mt={2}
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
           >
-            Import Edges (CSV File)
-            <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
-          </Button>
-            </Box>
+            {/* Container for the employee graph */}
+            {currentEmployeeIndex === 1 && (
+              <>
+                <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+              <Box
+                flex="1"
+                display={"flex"}
+                justifyContent="center"
+              >
+            {chartType === 'bar' && (
+              <BarChart
+                xAxis={[
+                  {
+                    scaleType: 'band',
+                    data: employeeIDLabels,
+                  },
+                ]}
+                series={[
+                  {
+                    data: employeeIDCountsData,
+                  },
+                ]}
+                width={900}
+                height={300}
+                colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
+              />
             )}
-         </React.Fragment>
+
+            {chartType === 'pie' && (
+              <PieChart
+                series={[
+                  {
+                    data: employeeIDLabels.map((label, index) => ({
+                      id: index,
+                      value: employeeIDCountsData[index],
+                      label,
+                    })),
+                  },
+                ]}
+                width={700}
+                height={300}
+                colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
+              />
+            )}
+              </Box>
+              </>
+            )}
+          </Box>
+
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              flexDirection="column"
+            >
+              {/* Container for the employee table */}
+              {currentEmployeeIndex === 0 && (
+                <Box
+                  display="flex"
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column"
+                  sx={{width: '50%'}}
+                >
+                  <DataGrid
+                    slots={{ toolbar: GridToolbar }}
+                    sx={{
+                      padding: "40px",
+                      position: "relative",
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "100%",
+                      backgroundColor: "white"
+                    }}
+                    columns={employeeColumns}
+                    rows={employeeRowData}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                      },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                  />
+                  <Button
+                    component="label"
+                    role={undefined}
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                    className="importButton"
+                    variant="contained"
+                    // onClick={handleNodeImport}
+                    sx={{
+                      backgroundColor: "primary.main", // Change background color
+                      color: "white", // Change text color
+                      borderRadius: "8px", // Change border radius
+                      marginRight: "-1px", // Adjust spacing
+                      marginTop: "15px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    Import Employees (CSV File)
+                    <VisuallyHiddenInput type="file" onChange={handleEmployeeFileUpload} />
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </React.Fragment>
         </AccordionDetails>
-        </Accordion>
-        </Stack>
+      </Accordion>
+
+      <Accordion
+        defaultExpanded
+        elevation={3}
+        sx={{
+          width: "90%",
+          backgroundColor: "white"
+        }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+          <Typography color={"black"}>
+            MAP DATA
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <React.Fragment>
+            <Tabs
+              value={currentMapIndex}
+              onChange={handleMapTabChange}
+              orientation={"horizontal"}
+            >
+              <Tab label='NODES' />
+              <Tab label='EDGES' />
+              {/*<Tab label='GRAPH' />*/}
+            </Tabs>
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              {/* Container for the Node data */}
+              {currentMapIndex === 0 && (
+                <Box
+                  display="flex"
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column"
+                  sx={{width: '100%'}}
+                >
+                  <DataGrid
+                    slots={{ toolbar: GridToolbar }}
+                    sx={{
+                      padding: "40px",
+                      position: "relative",
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "100%",
+                      backgroundColor: "white"
+                    }}
+                    columns={nodeColumns}
+                    rows={nodeRowData}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                      },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                  />
+                  <Button
+                    component="label"
+                    role={undefined}
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                    className="importButton"
+                    variant="contained"
+                    // onClick={handleNodeImport}
+                    sx={{
+                      backgroundColor: "primary.main", // Change background color
+                      color: "white", // Change text color
+                      borderRadius: "8px", // Change border radius
+                      marginRight: "-1px", // Adjust spacing
+                      marginTop: "15px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    Import Nodes (CSV File)
+                    <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
+                  </Button>
+                </Box>
+              )}
+            </Box>
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              {/* Container for the Edge data */}
+              {currentMapIndex === 1 && (
+                <Box
+                  display="flex"
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column"
+                  sx={{width: '100%'}}
+                >
+                  <DataGrid
+                    slots={{ toolbar: GridToolbar }}
+                    sx={{
+                      padding: "40px",
+                      position: "relative",
+                      display: "flex",
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      width: "50%"
+                    }}
+                    columns={edgeColumns}
+                    rows={edgeRowData}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                      },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                  />
+                  <Button
+                    component="label"
+                    role={undefined}
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                    className="importButton"
+                    variant="contained"
+                    // onClick={handleImport}
+                    sx={{
+                      backgroundColor: "primary.main", // Change background color
+                      color: "white", // Change text color
+                      borderRadius: "8px", // Change border radius
+                      marginRight: "-1px", // Adjust spacing
+                      marginTop: "15px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    Import Edges (CSV File)
+                    <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </React.Fragment>
+        </AccordionDetails>
+      </Accordion>
+    </Stack>
   );
 }
 
