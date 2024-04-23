@@ -232,9 +232,8 @@ function DisplayDatabase() {
   const [edgeRowData, setEdgeRowData] = useState<EdgeParams[]>([]);
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
   const [employeeRowData, setEmployeeRowData] = useState<EmployeeParams[]>([]);
+  const [employeeNameMapping, setEmployeeNameMapping] = useState<{ [key: string]: string }>({});
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentFile, setCurrentFile] = useState<File>();
 
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
@@ -302,16 +301,20 @@ function DisplayDatabase() {
     console.log("Gathered Employees");
     console.log(data);
 
+    const nameMapping: { [key: string]: string } = {}; // Create the name mapping object
     const rowData = [];
     for (let i = 0; i < data.length; i++) {
+      const { employeeID: id, firstName, lastName } = data[i]; // Destructure correctly
       const tableFormattedEmployee: EmployeeParams = {
         id: data[i].employeeID,
         firstName: data[i].firstName,
         lastName: data[i].lastName
       };
       rowData.push(tableFormattedEmployee);
+      nameMapping[id] = `${firstName} ${lastName}`;
     }
     setEmployeeRowData(rowData);
+    setEmployeeNameMapping(nameMapping);
   };
 
   useEffect(() => {
@@ -605,15 +608,45 @@ function DisplayDatabase() {
     countStatusTypes();
   }, [serviceRowData]);
 
-  useEffect(() => {
-    console.log("Service Row Data:", serviceRowData);
-  }, [serviceRowData]);
+  //Const for countEmployeeID
+  const [employeeIDLabels, setEmployeeIDLabels] = useState<string[]>([]);
+  const [employeeIDCountsData, setEmployeeIDCountsData] = useState<number[]>([]);
 
-  //Console log to see what data is loading
+  //Function to count employee IDs for graph display
+  // Use the effect to count employee IDs and update state
   useEffect(() => {
-    console.log("Service Type Labels:", serviceTypeLabels);
-    console.log("Service Type Counts Data:", serviceTypeCountsData);
-  }, [serviceTypeLabels, serviceTypeCountsData]);
+
+    const countEmployeeIDs = (serviceRowData: ServiceParams[]) => {
+      const employeeIDCounts: { [key: string]: number } = {};
+      const employeeIDLabels: string[] = [];
+
+      serviceRowData.forEach((service) => {
+        const { employeeID } = service;
+        if (employeeIDCounts[employeeID]) {
+          employeeIDCounts[employeeID]++;
+        } else {
+          employeeIDCounts[employeeID] = 1;
+          // Get the employee name from the mapping
+          const employeeName = employeeNameMapping[employeeID]; // Assuming employeeNameMapping is available
+          // Add employee name as label
+          employeeIDLabels.push(employeeName);
+        }
+      });
+
+      // Set the state for labels here
+      setEmployeeIDLabels(employeeIDLabels);
+
+      return employeeIDCounts;
+    };
+
+    const countEmployeeIDsFunction = () => {
+      const employeeIDCounts = countEmployeeIDs(serviceRowData);
+      const counts = Object.values(employeeIDCounts);
+      setEmployeeIDCountsData(counts);
+    };
+
+    countEmployeeIDsFunction();
+  }, [employeeNameMapping, serviceRowData]);
 
   // Toggle between bar chart and pie chart
   const toggleChartType = () => {
@@ -703,6 +736,7 @@ function DisplayDatabase() {
                       ]}
                       width={900}
                       height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
                     />
                   )}
 
@@ -719,7 +753,7 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
                     />
                   )}
                 </Box>
@@ -758,6 +792,7 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
                     />
                   )}
 
@@ -774,7 +809,59 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
+                    />
+                  )}
+                </Box>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+              <Typography color={"black"}>
+                EMPLOYEE ID STATISTICS
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box display="flex" flexDirection="column" alignItems="center" width="100%">
+                <Box mb={2} display="flex" justifyContent="center" width="100%">
+                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+                </Box>
+                <Box flex="1" display="flex" justifyContent="center">
+                  {chartType === 'bar' && (
+                    <BarChart
+                      xAxis={[
+                        {
+                          scaleType: 'band',
+                          data: employeeIDLabels,
+                        },
+                      ]}
+                      series={[
+                        {
+                          data: employeeIDCountsData,
+                        },
+                      ]}
+                      width={900}
+                      height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
+                    />
+                  )}
+
+                  {chartType === 'pie' && (
+                    <PieChart
+                      series={[
+                        {
+                          data: employeeIDLabels.map((label, index) => ({
+                            id: index,
+                            value: employeeIDCountsData[index],
+                            label,
+                          })),
+                        },
+                      ]}
+                      width={700}
+                      height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
                     />
                   )}
                 </Box>
