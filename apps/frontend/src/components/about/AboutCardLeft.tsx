@@ -10,22 +10,24 @@ interface AboutCardProps {
 
 export function AboutCardLeft(props: AboutCardProps) {
   return (
-    // <Box
-    //   sx={{
-    //     backgroundColor: "lightgray",
-    //   }}
-    // >
+    <Box
+      sx={{
+        mx: 'auto',
+        backgroundColor: "lightgray",
+        maxWidth: "70%",
+      }}
+    >
       <Stack
         padding={2}
       >
         <Box
             sx={{
               backgroundColor: "lightgray",
-              maxWidth: "50%"
             }}
         >
           <Typography
-              variant="h5" component="div"
+              variant="h5"
+              component="div"
               sx={{
                 textAlign: "left",
               }}
@@ -33,7 +35,8 @@ export function AboutCardLeft(props: AboutCardProps) {
             {props.role}
           </Typography>
           <Typography
-              variant="h5" component="div"
+              variant="h5"
+              component="div"
               sx={{
                 textAlign: "left",
               }}
@@ -41,7 +44,11 @@ export function AboutCardLeft(props: AboutCardProps) {
             {props.name}
           </Typography>
         </Box>
-        <Box>
+        <Box
+            sx={{
+              paddingTop: 3,
+            }}
+        >
           <Grid
               container
               spacing={2}
@@ -53,7 +60,8 @@ export function AboutCardLeft(props: AboutCardProps) {
             <Grid item xs={8}>
               <Stack>
                 <Typography
-                    variant="h5" component="div"
+                    variant="h5"
+                    component="div"
                     sx={{
                       textAlign: "left",
                     }}
@@ -61,8 +69,10 @@ export function AboutCardLeft(props: AboutCardProps) {
                   {props.bio}
                 </Typography>
                 <Typography
-                    variant="h5" component="div"
+                    variant="h5"
+                    component="div"
                     sx={{
+                      paddingTop: 3,
                       textAlign: "left",
                     }}
                 >
@@ -74,12 +84,15 @@ export function AboutCardLeft(props: AboutCardProps) {
               <img
                   src={props.imagePath}
                   alt={"Picture of " + props.name}
-                  style={{maxWidth: "100%"}}
+                  style={{
+                    maxWidth: "100%",
+                    borderRadius: "20%",
+                  }}
               />
             </Grid>
           </Grid>
         </Box>
       </Stack>
-    // </Box>
+    </Box>
   );
 }
