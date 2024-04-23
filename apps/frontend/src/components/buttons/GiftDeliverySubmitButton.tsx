@@ -3,6 +3,7 @@ import { forwardRef, useState } from "react";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import axios, { isAxiosError } from "axios";
+import {updateCart} from  "../cart/UpdateCart.tsx";
 
 interface ButtonProps {
   text: string;
@@ -25,7 +26,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     },
   );
 
-  function handleShowConfetti() {
+  /*function handleShowConfetti() {
     props.displayConfetti();
 
     const duration = 7000; // 7 seconds
@@ -33,7 +34,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     setTimeout(() => {
       props.hideConfetti();
     }, duration);
-  }
+  }*/
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -89,7 +90,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         );
       } else {
         handleClear();
-        handleShowConfetti();
+        updateCart(undefined,props.input);
         openWithSuccess();
       }
     }
