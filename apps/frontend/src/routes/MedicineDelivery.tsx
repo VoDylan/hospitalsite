@@ -249,6 +249,17 @@ function MedicineDelivery() {
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
+              Frequency Needed:
+            </Typography>
+            <DropDown
+              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
+              handleChange={handleFrequencyInput}
+              label={"Frequency"}
+              returnData={form.frequency}
+            />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
             <DropDown
@@ -264,17 +275,6 @@ function MedicineDelivery() {
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>
             <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
-          </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <Typography color={"black"} align={"center"}>
-              Frequency Needed:
-            </Typography>
-            <DropDown
-              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
-              handleChange={handleFrequencyInput}
-              label={"Frequency"}
-              returnData={form.frequency}
-            />
           </Grid>
           <Grid item xs={12} mt={3} mb={3} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>

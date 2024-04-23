@@ -181,20 +181,6 @@ function SecurityService() {
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
-              Location:
-            </Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.location}
-              handleChange={handleLocationInput}
-              items={nodes.map((node) => ({
-                value: node.nodeID,
-                label: node.longName,
-              }))}
-            />
-          </Grid>
-          <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <Typography color={"black"} align={"center"}>
               Security Personnel:
             </Typography>
             <DropDown
@@ -228,10 +214,6 @@ function SecurityService() {
             />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <Typography align={"center"}>Employee:</Typography>
-            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
-          </Grid>
-          <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Additional Details (optional):
             </Typography>
@@ -240,6 +222,24 @@ function SecurityService() {
               value={form.securityDetail}
               onChange={handleSecurityDetailInput}
             />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Location:
+            </Typography>
+            <DropDown
+              label={"Location"}
+              returnData={form.location}
+              handleChange={handleLocationInput}
+              items={nodes.map((node) => ({
+                value: node.nodeID,
+                label: node.longName,
+              }))}
+            />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
           <Grid item xs={12} mt={3} mb={3} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>

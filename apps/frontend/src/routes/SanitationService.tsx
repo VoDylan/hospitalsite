@@ -202,6 +202,17 @@ function SanitationService() {
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
+              Frequency Needed:
+            </Typography>
+            <DropDown
+              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
+              handleChange={handleFrequencyInput}
+              label={"Frequency"}
+              returnData={form.frequency}
+            />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
             <DropDown
@@ -217,17 +228,6 @@ function SanitationService() {
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>
             <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
-          </Grid>
-          <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <Typography color={"black"} align={"center"}>
-              Frequency Needed:
-            </Typography>
-            <DropDown
-              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
-              handleChange={handleFrequencyInput}
-              label={"Frequency"}
-              returnData={form.frequency}
-            />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
