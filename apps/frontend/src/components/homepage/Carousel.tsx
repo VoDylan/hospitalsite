@@ -52,7 +52,7 @@ function MainCarousel() {
     clearTimeout(autoScrollTimeout as NodeJS.Timeout);
     const newTimeout = setTimeout(() => {
       setAutoScroll(true);
-    }, 100000000); // After 8 seconds, re-enable autoScroll
+    }, 8); // After 8 seconds, re-enable autoScroll
     //1500 = 8 sec
     setAutoScrollTimeout(newTimeout);
   }, [cards.length, autoScrollTimeout]);
