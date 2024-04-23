@@ -1,5 +1,4 @@
 import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
-import { useState } from "react";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 
 type form = {
@@ -7,21 +6,19 @@ type form = {
   gifts?: GiftDeliveryFormSubmission;
 };
 
-let forms: form[];
+export let cart: form[];
 let newForm: form;
 
-export function useCart(flowers?: FlowerDeliveryFormSubmission, gifts?: GiftDeliveryFormSubmission) {
-  const [cart, setCart] = useState<form[]>();
+export function updateCart(flowers?: FlowerDeliveryFormSubmission, gifts?: GiftDeliveryFormSubmission) {
   if (flowers !== undefined) {
     newForm.flowers = flowers;
     newForm.gifts = undefined;
-    forms.push(newForm);
-    setCart(forms);
+    cart.push(newForm);
   }
   if (gifts !== undefined) {
     newForm.flowers = undefined;
     newForm.gifts = gifts;
-    forms.push(newForm);
-    setCart(forms);
+    cart.push(newForm);
   }
+
 }
