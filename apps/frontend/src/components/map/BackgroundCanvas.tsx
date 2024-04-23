@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { jsx } from "@emotion/react";
 import JSX = jsx.JSX;
 
-import L1MapImage from "../../images/mapImages/00_thelowerlevel1.png";
-import L2MapImage from "../../images/mapImages/00_thelowerlevel2.png";
-import F1MapImage from "../../images/mapImages/01_thefirstfloor.png";
-import F2MapImage from "../../images/mapImages/02_thesecondfloor.png";
-import F3MapImage from "../../images/mapImages/03_thethirdfloor.png";
+import L1MapImage from "../../images/mapImages/00_thelowerlevel1_noIcons.png";
+import L2MapImage from "../../images/mapImages/00_thelowerlevel2_noIcons.png";
+import F1MapImage from "../../images/mapImages/01_thefirstfloorsvg_withbackground.png";
+import F2MapImage from "../../images/mapImages/02_thesecondfloor_noIcons.png";
+import F3MapImage from "../../images/mapImages/03_thethirdfloor_noIcons.png";
 
 import { Floor } from "common/src/map/Floor.ts";
 
