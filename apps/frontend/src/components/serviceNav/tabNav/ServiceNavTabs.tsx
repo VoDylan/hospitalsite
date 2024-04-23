@@ -50,9 +50,11 @@ export default function ServiceNavTabs() {
         <Tabs
           value={currentTab}
           aria-label={"Service Navigation Tabs"}
+          textColor={"inherit"}
 
           sx={{
             "& .MuiTab-labelIcon": {
+              opacity: "100%",
               color: 'White',
             },
             "& .Mui-selected": {
