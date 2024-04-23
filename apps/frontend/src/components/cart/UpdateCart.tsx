@@ -1,24 +1,16 @@
 import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 
-type form = {
-  flowers?: FlowerDeliveryFormSubmission;
-  gifts?: GiftDeliveryFormSubmission;
-};
 
-export const cart: form[] = [];
-let newForm: form;
+export const flowerCart: FlowerDeliveryFormSubmission[] = [];
+export const giftCart: GiftDeliveryFormSubmission[] = [];
 
 export function updateCart(flowers?: FlowerDeliveryFormSubmission, gifts?: GiftDeliveryFormSubmission) {
   if (flowers !== undefined) {
-    newForm.flowers = flowers;
-    newForm.gifts = undefined;
-    cart.push(newForm);
+    flowerCart.push(flowers);
   }
   if (gifts !== undefined) {
-    newForm.flowers = undefined;
-    newForm.gifts = gifts;
-    cart.push(newForm);
+    giftCart.push(gifts);
   }
 
 }
