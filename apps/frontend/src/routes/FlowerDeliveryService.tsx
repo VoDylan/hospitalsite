@@ -8,12 +8,20 @@ import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
+import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import RedRose from "../images/servicePageImages/FormIcons/RedRose.jpg";
+import WhiteRose from "../images/servicePageImages/FormIcons/WhiteRose.jpg";
+import Tulip from "../images/servicePageImages/FormIcons/Tulip.jpg";
+import RedCarns from "../images/servicePageImages/FormIcons/RedCarns.jpg";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
     name: "",
     employeeID: -1,
-    flowerType: "",
+    RRose: "",
+    WRose: "",
+    RCarn: "",
+    Tulip: "",
     recipientName: "",
     roomNumber: "",
     message: "",
@@ -63,11 +71,30 @@ function FlowerDeliveryService() {
     setResponses({ ...form, message: e.target.value });
   }
 
+  function handleRRoseInput(event: SelectChangeEvent) {
+    setResponses({ ...form, RRose: event.target.value });
+  }
+
+  function handleWRoseInput(event: SelectChangeEvent) {
+    setResponses({ ...form, WRose: event.target.value });
+  }
+
+  function handleRCarnInput(event: SelectChangeEvent) {
+    setResponses({ ...form, RCarn: event.target.value });
+  }
+
+  function handleTulipInput(event: SelectChangeEvent) {
+    setResponses({ ...form, Tulip: event.target.value });
+  }
+
   function clear() {
     setResponses({
       name: "",
       employeeID: -1,
-      flowerType: "",
+      RRose: "",
+      WRose: "",
+      RCarn: "",
+      Tulip: "",
       recipientName: "",
       roomNumber: "",
       message: "",
@@ -75,10 +102,6 @@ function FlowerDeliveryService() {
   }
 
   // For dropdown
-  function handleFlowerTypeInput(event: SelectChangeEvent) {
-    setResponses({ ...form, flowerType: event.target.value });
-    return event.target.value;
-  }
 
   function handleRoomNumberInput(event: SelectChangeEvent) {
     setResponses({ ...form, roomNumber: event.target.value });
@@ -114,7 +137,7 @@ function FlowerDeliveryService() {
         // boxShadow={4}
         sx={{
           backgroundColor: "transparent",
-          width: "40vw", //Adjust this to change the width of the form
+          width: "75%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -130,25 +153,79 @@ function FlowerDeliveryService() {
         >
           <ServiceNavTabs />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            backgroundColor: "#186BD9",
-          }}
-        >
-          <Typography
-            color={"white"}
-            align={"center"}
-            fontStyle={"Open Sans"}
-            fontSize={40}
+        <Grid container sx={{ background: "white", opacity: 0.95}} boxShadow={5} borderRadius={5}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+            }}
           >
-            Flower Delivery Service Form
-          </Typography>
-        </Grid>
-        <Grid container sx={{ backgroundColor: "white" }} boxShadow={4}>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
-            <Typography align={"center"}>Name:</Typography>
+            <Typography
+              color={"black"}
+              align={"center"}
+              fontStyle={"Open Sans"}
+              fontSize={40}
+            >
+              Flower Delivery Service Form
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            mt={3}
+          >
+            <Typography
+              align={"center"}
+              fontStyle={"Open Sans"}
+              fontSize={24}
+            >
+              Enter Amount of Each Type:
+            </Typography>
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={RedRose} title={"Red Rose Bouquet"} description={"$5.99"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={WhiteRose} title={"White Rose Bouquet"} description={"$4.99"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={RedCarns} title={"Red Carnation Bouquet"} description={"$3.99"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Tulip} title={"Tulip Bouquet"} description={"$2.99"} />
+          </Grid>
+
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Red Rose Amount"}
+              value={form.RRose}
+              onChange={handleRRoseInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"White Rose Amount"}
+              value={form.WRose}
+              onChange={handleWRoseInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Red Carnation Amount"}
+              value={form.RCarn}
+              onChange={handleRCarnInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Tulip Amount"}
+              value={form.Tulip}
+              onChange={handleTulipInput}
+              type={"text"} />
+          </Grid>
+
+          <Grid item xs={4} sx={{align: "center"}}>
+            <Typography align={"center"}> Your Name:</Typography>
             <CenterAlignedTextbox
               label={"Name"}
               value={form.name}
@@ -156,20 +233,7 @@ function FlowerDeliveryService() {
               type={"text"}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
-            <Typography align={"center"}>Employee:</Typography>
-            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
-          </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
-            <Typography align={"center"}>Flower Type:</Typography>
-            <DropDown
-              items={["Red Carnations", "Red Roses", "White Roses", "Tulips"]}
-              handleChange={handleFlowerTypeInput}
-              label={"Flower Type"}
-              returnData={form.flowerType}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={4} sx={{align: "center"}}>
             <Typography align={"center"}>Recipient Name:</Typography>
             <CenterAlignedTextbox
               label={"Recipient Name"}
@@ -177,7 +241,15 @@ function FlowerDeliveryService() {
               onChange={handleRecipientNameInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={4} sx={{align: "center"}}>
+            <Typography align={"center"}>Add a message (optional):</Typography>
+            <CenterAlignedTextbox
+              label={"Message"}
+              value={form.message}
+              onChange={handleMessageInput}
+            />
+          </Grid>
+          <Grid item xs={4} sx={{align: "center"}}>
             <Typography align={"center"}>Room:</Typography>
             <DropDown
               items={nodes.map((node) => ({
@@ -189,13 +261,9 @@ function FlowerDeliveryService() {
               handleChange={handleRoomNumberInput}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
-            <Typography align={"center"}>Add a message (optional):</Typography>
-            <CenterAlignedTextbox
-              label={"Message"}
-              value={form.message}
-              onChange={handleMessageInput}
-            />
+          <Grid item xs={4} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
           <Grid
             item

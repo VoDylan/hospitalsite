@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
-import {IconButton, Button, styled, Typography} from "@mui/material";
+import {IconButton, Button, styled, Typography } from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
@@ -179,23 +179,22 @@ function MainCarousel() {
         direction={"row"}
         display={"flex"}
         justifyContent={"center"}
-        marginTop={'-2%'}
+        marginTop={'-4%'}
+        marginBottom={'0.5%'}
       >
 
         <a
-          href="https://www.brighamandwomens.org/forms/request-an-appointment"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/Credits"
         >
           <IconButton
             sx={{ color: "#186BD9" }}
             size="large"
-            aria-label="Make an appointment"
+            aria-label="Credits"
           >
             <RateReviewSharpIcon />
           </IconButton>
           <Button variant={"text"}>
-            Make an appointment (Real Link Don't Fill Out)
+            Credits
           </Button>
         </a>
 
@@ -213,20 +212,20 @@ function MainCarousel() {
           </IconButton>
           <Button variant={"text"}>About Us! (Real Link)</Button>
         </a>
-
       </Stack>
+
       <Box
         sx={{
-          marginBottom: "6%",
-          color: "#186BD9" }}
+          color: "#186BD9",
+        opacity: "0.7",
+        marginBottom: "2%"}}
         display={"flex"}
         justifyContent={"center"}>
-        <Typography variant = "subtitle1">
+        <Typography variant = "subtitle1"
+        fontSize={"12px"}>
           This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
         </Typography>
       </Box>
-
-
 
       {/*{Divider Bar}*/}
       <Box
