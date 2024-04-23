@@ -600,16 +600,6 @@ function DisplayDatabase() {
     countStatusTypes();
   }, [serviceRowData]);
 
-  useEffect(() => {
-    console.log("Service Row Data:", serviceRowData);
-  }, [serviceRowData]);
-
-  //Console log to see what data is loading
-  useEffect(() => {
-    console.log("Service Type Labels:", serviceTypeLabels);
-    console.log("Service Type Counts Data:", serviceTypeCountsData);
-  }, [serviceTypeLabels, serviceTypeCountsData]);
-
   //Const for countEmployeeID
   const [employeeIDLabels, setEmployeeIDLabels] = useState<string[]>([]);
   const [employeeIDCountsData, setEmployeeIDCountsData] = useState<number[]>([]);
@@ -617,7 +607,7 @@ function DisplayDatabase() {
   //Function to count employee IDs for graph display
   // Use the effect to count employee IDs and update state
   useEffect(() => {
-    // Define the function to count employee IDs inside the effect
+
     const countEmployeeIDs = (serviceRowData: ServiceParams[]) => {
       const employeeIDCounts: { [key: string]: number } = {};
       const employeeIDLabels: string[] = [];
@@ -654,9 +644,6 @@ function DisplayDatabase() {
   const toggleChartType = () => {
     setChartType((prevChartType) => (prevChartType === 'bar' ? 'pie' : 'bar'));
   };
-
-  //Create statistics for employee ID. Maybe link # to the name somehow?
-  //Use on statistics accordian that has tabs to swap between the stats you want to see.
 
   return (
         <Stack direction={"column"}
@@ -741,7 +728,7 @@ function DisplayDatabase() {
                       ]}
                       width={900}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
                     />
                   )}
 
@@ -758,7 +745,7 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
                     />
                   )}
                 </Box>
@@ -797,7 +784,7 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']} // Custom color palette
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
                     />
                   )}
 
@@ -814,7 +801,7 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
                     />
                   )}
                 </Box>
@@ -849,6 +836,7 @@ function DisplayDatabase() {
                       ]}
                       width={900}
                       height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
                     />
                   )}
 
@@ -865,6 +853,7 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
                     />
                   )}
                 </Box>
