@@ -36,6 +36,7 @@ import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import {INodeCreationInfo} from "../common/INodeCreationInfo.ts";
 import NodeCreator from "../components/map/NodeCreator.tsx";
 import transformCanvasCoords from "../common/TransformCanvasCoords.ts";
+import Draggable from "react-draggable";
 
 interface TransformState {
   scale: number;
@@ -586,7 +587,7 @@ function MapEditingPage() {
       mouseXCoord: event.clientX,
       mouseYCoord: event.clientY,
       canvasXCoord: actualX,
-      canvasYCoord: actualY
+      canvasYCoord: actualY,
     });
   };
 
@@ -738,10 +739,6 @@ function MapEditingPage() {
       checkAllEdges().then(() => console.log("Finished checking for edge"));
     }
   }, [selectedNode1, selectedNode2, nodeDataLoaded]);
-
-  useEffect(() => {
-
-  }, []);
 
   return (
     <>
@@ -948,15 +945,17 @@ function MapEditingPage() {
                 </>
               </TransformComponent>
             </TransformWrapper>
-              {nodeCreationInfo.creatingNode ?
+            {nodeCreationInfo.creatingNode ?
+              <Draggable>
                 <NodeCreator
                   nodeCreationInfo={nodeCreationInfo}
                   floor={floor}
                   handleCloseDialogue={handleCloseNodeCreator}
                 />
-                :
-                <></>
-              }
+              </Draggable>
+              :
+              <></>
+            }
           </Box>
         </Box>
         <Legend filterItems={filterIcons} />

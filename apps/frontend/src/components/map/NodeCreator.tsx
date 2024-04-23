@@ -1,26 +1,37 @@
-import React, {useEffect, useState} from "react";
-import {Box, IconButton, Paper, Stack, TextField, Typography} from "@mui/material";
+import React, {MouseEventHandler, TouchEventHandler, useEffect, useRef, useState} from "react";
+import {Box, Button, IconButton, Paper, Stack, TextField, Typography} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import MapNode from "common/src/map/MapNode.ts";
-import {Floor} from "common/src/map/Floor.ts";
 import {INodeCreationInfo} from "../../common/INodeCreationInfo.ts";
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
 
 interface INodeCreatorProps {
   style?: React.CSSProperties;
   nodeCreationInfo: INodeCreationInfo;
-  floor: Floor;
+  floor: string;
   handleCloseDialogue: () => void;
+  className?: string;
+  onMouseDown?: MouseEventHandler<HTMLDivElement>
+  onMouseUp?: MouseEventHandler<HTMLDivElement>
+  onTouchStart?: TouchEventHandler<HTMLDivElement>
+  onTouchEnd?: TouchEventHandler<HTMLDivElement>
 }
 
 const width: number = 400;
 
 export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element {
-  const [node] = useState<MapNode>(new MapNode());
+  const elementRef = useRef<HTMLDivElement>(null);
+
   const [mouseXCoord, setMouseXCoord] = useState<number>(props.nodeCreationInfo.mouseXCoord);
   const [mouseYCoord, setMouseYCoord] = useState<number>(props.nodeCreationInfo.mouseYCoord);
-  const [canvasXCoord, setCanvasXCoord] = useState<number>(props.nodeCreationInfo.canvasXCoord);
-  const [canvasYCoord, setCanvasYCoord] = useState<number>(props.nodeCreationInfo.canvasYCoord);
-  const [floor, setFloor] = useState<Floor>(props.floor);
+
+  const [nodeID, setNodeID] = useState<string>("");
+  const [xcoord, setXcoord] = useState<number>(props.nodeCreationInfo.canvasXCoord);
+  const [ycoord, setYcoord] = useState<number>(props.nodeCreationInfo.canvasYCoord);
+  const [floor, setFloor] = useState<string>(props.floor);
+  const [building, setBuilding] = useState<string>("");
+  const [nodeType, setNodeType] = useState<string>("");
+  const [longName, setLongName] = useState<string>("");
+  const [shortName, setShortName] = useState<string>("");
 
   useEffect(() => {
     if((props.nodeCreationInfo.mouseXCoord + width) > window.innerWidth) {
@@ -29,30 +40,40 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
       setMouseXCoord(props.nodeCreationInfo.mouseXCoord);
     }
 
-    setMouseYCoord(props.nodeCreationInfo.mouseYCoord);
-    setCanvasXCoord(props.nodeCreationInfo.canvasXCoord);
-    setCanvasYCoord(props.nodeCreationInfo.canvasYCoord);
-    setFloor(props.floor);
-  }, [
-    props.floor,
-    props.nodeCreationInfo.canvasXCoord,
-    props.nodeCreationInfo.canvasYCoord,
-    props.nodeCreationInfo.mouseXCoord,
-    props.nodeCreationInfo.mouseYCoord
-  ]);
+    if(elementRef.current) {
+      const rect = elementRef.current.getBoundingClientRect();
 
-  console.log("Reloading node creator");
+      if((props.nodeCreationInfo.mouseYCoord + rect.height) > window.innerHeight) {
+        setMouseYCoord(props.nodeCreationInfo.mouseYCoord + (window.innerHeight - (props.nodeCreationInfo.mouseYCoord + rect.height)));
+      } else {
+        setMouseYCoord(props.nodeCreationInfo.mouseYCoord);
+      }
+    } else {
+      setMouseYCoord(props.nodeCreationInfo.mouseYCoord);
+    }
+
+    setXcoord(props.nodeCreationInfo.canvasXCoord);
+    setYcoord(props.nodeCreationInfo.canvasYCoord);
+    setFloor(props.floor);
+  }, [props.floor, props.nodeCreationInfo.canvasXCoord, props.nodeCreationInfo.canvasYCoord, props.nodeCreationInfo.mouseXCoord, props.nodeCreationInfo.mouseYCoord]);
 
   return (
     <Paper
       square={false}
       elevation={5}
       style={{
+        ...props.style,
         position: "absolute",
         left: mouseXCoord,
         top: mouseYCoord,
         width: `${width}px`
       }}
+      ref={elementRef}
+      className={props.className}
+      onMouseDown={props.onMouseDown}
+      onMouseUp={props.onMouseUp}
+      onTouchStart={props.onTouchStart}
+      onTouchEnd={props.onTouchEnd}
     >
       <Stack
         display={"flex"}
@@ -73,7 +94,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             width={"100%"}
             marginLeft={"15px"}
           >
-            Create New Node
+            Create Node
           </Typography>
           <IconButton
             onClick={props.handleCloseDialogue}
@@ -92,9 +113,10 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             label={"NodeID"}
             variant={"outlined"}
             size={"small"}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              (node.nodeID = event.target.value)
-            }
+            required={true}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setNodeID(event.target.value);
+            }}
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
@@ -104,11 +126,12 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             id={"xcoordEntry"}
             label={"X Coord"}
             variant={"outlined"}
-            value={canvasXCoord}
+            value={xcoord}
             size={"small"}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              (node.xcoord = parseInt(event.target.value))
-            }
+            required={true}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setXcoord(parseInt(event.target.value));
+            }}
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
@@ -118,11 +141,12 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             id={"ycoordEntry"}
             label={"Y Coord"}
             variant={"outlined"}
-            value={canvasYCoord}
+            value={ycoord}
             size={"small"}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              (node.ycoord = parseInt(event.target.value))
-            }
+            required={true}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setYcoord(parseInt(event.target.value));
+            }}
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
@@ -134,9 +158,10 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             variant={"outlined"}
             value={floor}
             size={"small"}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              (node.floor = event.target.value)
-            }
+            required={true}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setFloor(event.target.value);
+            }}
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
@@ -147,9 +172,10 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             label={"Building"}
             variant={"outlined"}
             size={"small"}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              (node.building = event.target.value)
-            }
+            required={true}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setBuilding(event.target.value);
+            }}
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
@@ -160,9 +186,10 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             label={"Node Type"}
             variant={"outlined"}
             size={"small"}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              (node.nodeType = event.target.value)
-            }
+            required={true}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setNodeType(event.target.value);
+            }}
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
@@ -173,9 +200,10 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             label={"Long Name"}
             variant={"outlined"}
             size={"small"}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              (node.longName = event.target.value)
-            }
+            required={true}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setLongName(event.target.value);
+            }}
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
@@ -186,14 +214,46 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
             label={"Short Name"}
             variant={"outlined"}
             size={"small"}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              (node.shortName = event.target.value)
-            }
+            required={true}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setShortName(event.target.value);
+            }}
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
             }}
           />
+          <Button
+            variant={"contained"}
+            style={{
+              marginTop: "15px",
+            }}
+            disabled={
+                (nodeID == "") ||
+                (Number.isNaN(xcoord)) ||
+                (Number.isNaN(ycoord)) ||
+                (floor == "") ||
+                (building == "") ||
+                (nodeType == "") ||
+                (longName == "") ||
+                (shortName == "")
+            }
+            onClick={() => {
+              const newNode: MapNodeType = {
+                nodeID: nodeID,
+                xcoord: xcoord,
+                ycoord: ycoord,
+                floor: floor,
+                building: building,
+                nodeType: nodeType,
+                longName: longName,
+                shortName: shortName,
+              };
+              console.log(newNode);
+            }}
+          >
+            Create Node
+          </Button>
         </Stack>
       </Stack>
     </Paper>
