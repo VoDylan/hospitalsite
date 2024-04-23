@@ -13,7 +13,6 @@ function SlideInBox() {
   return (
     <React.StrictMode>
       <App />
-        <div id="threado-embed"></div>
     </React.StrictMode>
   );
 }
