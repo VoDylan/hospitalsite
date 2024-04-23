@@ -245,7 +245,7 @@ export default function CalenderPage() {
             borderRadius={5}
           >
             <Typography color={"black"} align={"center"} fontSize={40}>
-              Appointment Availability
+              Appointment Scheduling
             </Typography>
           </Grid>
           <Grid
