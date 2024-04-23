@@ -11,9 +11,10 @@ import CustomCard from "./Card.tsx"; // Update path to Card component
 import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
 //import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
-//import noLady from "../../images/noLady.jpg";
-import mapVideo from "../../videos/mapVideo2.mp4";
-import noLadymp4 from "../../videos/noLady.mp4";
+import noLady from "../../images/noLady.jpg";
+//import mapVideo from "../../videos/mapVideo2.mp4";
+//import noLadymp4 from "../../videos/noLady.mp4";
+import mapVideogif from "../../videos/mapVideo2gif.gif";
 
 interface CardData {
   image: string;
@@ -68,7 +69,7 @@ function MainCarousel() {
   useEffect(() => {
     const mainCards: CardData[] = [
       {
-        image: mapVideo,
+        image: mapVideogif,
         title: "Directions",
         description:
           "Graphical display for directions to anywhere in the hospital!",
@@ -78,7 +79,7 @@ function MainCarousel() {
         cardDescription: "Graphical navigation to anywhere in the hospital",
       },
       {
-        image: noLadymp4,
+        image: noLady,
         title: "Services",
         description: "Request a service!",
         buttonText: "Request a Service!",

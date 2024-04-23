@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import Stack from "@mui/material/Stack";
-import {Box, CardActionArea} from "@mui/material";
+import {Box,} from "@mui/material";
 
 
 interface CardProps {
@@ -31,17 +31,16 @@ export default function CustomCard({
 }: CardProps) {
   return (
     <Card sx={{ position: "relative", width: "100vw", height: "65vh" }}>
-      <CardActionArea component={Link} to={path}>
       <CardMedia
         sx={{
           height: "70vh",
           position: "relative",
           backgroundPosition: "center 8%",
         }}
-        component={'video'}
+        // component={'video'}
         image={image}
         title={title}
-        autoPlay
+        // autoPlay
       >
         <Stack
           direction={"row"}
@@ -109,7 +108,6 @@ export default function CustomCard({
           </Button>
         </Link>
       </CardActions>
-      </CardActionArea>
     </Card>
   );
 }
