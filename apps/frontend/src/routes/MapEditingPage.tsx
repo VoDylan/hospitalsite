@@ -551,8 +551,16 @@ function MapEditingPage() {
             setSelectedNode2(null);
             return;
           } else if (selectedNode1) {
-            setSelectedNode2(filteredNodes[i]);
-            console.log("Set node 2");
+            if(selectedNode1.nodeID !== filteredNodes[i].nodeID) {
+              setSelectedNode2(filteredNodes[i]);
+              console.log("Set node 2");
+            }
+            return;
+          } else if (selectedNode2){
+            if(selectedNode2.nodeID !== filteredNodes[i].nodeID) {
+              setSelectedNode1(filteredNodes[i]);
+              console.log("Set node 1");
+            }
             return;
           } else {
             setSelectedNode1(filteredNodes[i]);
