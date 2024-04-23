@@ -16,6 +16,7 @@ import Service from "../../images/realMapIcons/service.svg";
 import Retail from "../../images/realMapIcons/retail.png";
 import Labs from "../../images/realMapIcons/labs.svg";
 import Department from "../../images/realMapIcons/dept.svg";
+import Conference from "../../images/realMapIcons/conf.png";
 import Exit from "../../images/realMapIcons/exit.png";
 
 interface SymbolCanvasProps {
@@ -79,6 +80,12 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
     return img;
   });
 
+  const [conference] = useState<HTMLImageElement>(() => {
+    const img: HTMLImageElement = new Image();
+    img.src = Conference;
+    return img;
+  });
+
   const [exit] = useState<HTMLImageElement>(() => {
     const img: HTMLImageElement = new Image();
     img.src = Exit;
@@ -118,7 +125,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
             draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
               nodesOnFloor[i].ycoord,
-              1,
+              1.2,
               elevators
             );
             break;
@@ -134,7 +141,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
             draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
               nodesOnFloor[i].ycoord,
-              0.1,
+              0.11,
               exit
             );
             break;
@@ -142,7 +149,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
             draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
               nodesOnFloor[i].ycoord,
-              1,
+              1.2,
               retail
             );
             break;
@@ -150,7 +157,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
             draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
               nodesOnFloor[i].ycoord,
-              0.9,
+              1,
               service
             );
             break;
@@ -166,25 +173,23 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
             draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
               nodesOnFloor[i].ycoord,
-              1,
+              1.1,
               bathroom
             );
             break;
           case "CONF":
-            draw.drawPentagon(
+            draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
               nodesOnFloor[i].ycoord,
-              15,
-              "#1CA7EC",
-              "white",
-              4,
+              1.2,
+              conference
             );
             break;
           case "DEPT":
             draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
               nodesOnFloor[i].ycoord,
-              1,
+              1.2,
               department
             );
             break;
@@ -212,7 +217,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         }
       }
     }
-  }, [props.filtersApplied, props.filteredNodes, props.floor, props.height, props.width, elevators, stairs, retail, service, info, bathroom, department, lab, exit]);
+  }, [props.filtersApplied, props.filteredNodes, props.floor, props.height, props.width, elevators, stairs, retail, service, info, bathroom, department, lab, exit, conference]);
 
   return <canvas ref={canvasRef} style={props.style} />;
 }

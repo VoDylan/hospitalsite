@@ -23,7 +23,7 @@ interface FilterProps {
 
 function Filter(props: FilterProps) {
   // Define icon size
-  const iconSize = 25;
+  const iconSize = 27;
 
   // Define default icon component
   let iconSrc = elevatorImage;
@@ -72,7 +72,7 @@ function Filter(props: FilterProps) {
   return (
     <Stack
       direction={"row"}
-      spacing={props.shape === "exit" ? 0.7 : props.shape === "floor" ? 1.8 : 1.5}
+      spacing={props.shape === "exit" ? 0.7 : props.shape === "floor" ? 2.2 : 1.5}
     alignItems="center" // Align items to the center
       sx={{ display: "flex", justifyContent: "flex-start" }} // Align stack items to the left
     >
@@ -91,7 +91,7 @@ function Filter(props: FilterProps) {
             : iconSize,
           color: props.iconColor,
           marginLeft: props.shape === "exit" ? -5 : props.shape === "floor"
-            ? 4 // Adjust width for floor icon
+            ? 5 // Adjust width for floor icon
             : 1,
         }}
       />

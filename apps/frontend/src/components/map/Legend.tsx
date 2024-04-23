@@ -21,8 +21,8 @@ function Legend(props: LegendProps) {
       {/* Legend */}
         <Box
           sx={{
-            width: "180px",
-            height: "300px",
+            width: "200px",
+            height: "320px",
             backgroundColor: "#F5F7FA",
             display: "flex",
             alignItems: "top",
