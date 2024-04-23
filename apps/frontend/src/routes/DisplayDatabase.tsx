@@ -23,6 +23,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import "./TableSlide.css";
 import { PieChart, BarChart} from "@mui/x-charts";
+import {employeeCsvHeader, EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -366,6 +367,9 @@ function DisplayDatabase() {
           .post("/api/database/uploadnodes", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
+          })
+          .catch((e) => {
+            console.error("Error posting employee data:",e);
           });
       }
     };
@@ -418,6 +422,54 @@ function DisplayDatabase() {
     fileReader.readAsText(file);
   }
 
+  function handleEmployeeImport(file: File) {
+    const fileReader: FileReader = new FileReader();
+
+    let fileText: string | ArrayBuffer = "";
+
+    const jsonData: EmployeeFieldsType[] = [];
+
+    fileReader.onload = (evt: ProgressEvent<FileReader>) => {
+      if (evt.target!.result == null) {
+        console.log("No data found in file");
+      } else {
+        fileText = evt.target!.result;
+        console.log(fileText);
+
+        const parsedData: string[][] = parseCSVFromString(fileText as string);
+
+        console.log(parsedData);
+
+        for (let i: number = 0; i < parsedData[0].length; i++) {
+          if (parsedData[0][i] != employeeCsvHeader.split(", ")[i]) {
+            console.error(
+              "Imported employee data does not include the correct header fields",
+            );
+            return;
+          }
+        }
+
+        console.log("Imported employee data is in the correct format");
+
+        for (let i: number = 1; i < parsedData.length; i++) {
+          jsonData.push({
+            employeeID: parseInt(parsedData[i][0]),
+            firstName: parsedData[i][1],
+            lastName: parsedData[i][2],
+          });
+        }
+
+        axios
+          .post("/api/database/employees", jsonData)
+          .then((response: AxiosResponse) => {
+            console.log(response);
+          });
+      }
+    };
+
+    fileReader.readAsText(file);
+  }
+
   function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
     const file: FileList | null = event.target.files;
     console.log(`Uploaded file: ${file![0]}`);
@@ -436,6 +488,17 @@ function DisplayDatabase() {
       console.log("No file uploaded");
     } else {
       handleEdgeImport(file![0]);
+    }
+    console.log("Handling node import data");
+  }
+
+  function handleEmployeeFileUpload(event: { target: { files: FileList | null } }) {
+    const file: FileList | null = event.target.files;
+    console.log(`Uploaded file: ${file![0]}`);
+    if (file == null) {
+      console.log("No file uploaded");
+    } else {
+      handleEmployeeImport(file![0]);
     }
     console.log("Handling node import data");
   }
@@ -750,6 +813,26 @@ function DisplayDatabase() {
                   }}
                   pageSizeOptions={[5, 10]}
                 />
+                <Button
+                  component="label"
+                  role={undefined}
+                  tabIndex={-1}
+                  startIcon={<CloudUploadIcon />}
+                  className="importButton"
+                  variant="contained"
+                  // onClick={handleNodeImport}
+                  sx={{
+                    backgroundColor: "primary.main", // Change background color
+                    color: "white", // Change text color
+                    borderRadius: "8px", // Change border radius
+                    marginRight: "-1px", // Adjust spacing
+                    marginTop: "15px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  Import Employees (CSV File)
+                  <VisuallyHiddenInput type="file" onChange={handleEmployeeFileUpload} />
+                </Button>
               </Box>
             </AccordionDetails>
           </Accordion>
