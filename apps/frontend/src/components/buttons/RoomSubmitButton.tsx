@@ -85,7 +85,7 @@ export function RoomSubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: RoomSchedulingFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "room-scheduling",
       services: form,

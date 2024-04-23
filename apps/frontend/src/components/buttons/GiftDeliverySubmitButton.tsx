@@ -101,7 +101,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: GiftDeliveryFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "gift-delivery",
       services: form,
