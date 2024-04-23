@@ -307,12 +307,9 @@ export default function CalenderPage() {
             <Grid
               item
               xs={12}
-              sx={{
-                backgroundColor: "#186BD9",
-              }}
             >
               <Typography
-                color={"white"}
+                color={"black"}
                 align={"center"}
                 fontStyle={"Open Sans"}
                 fontSize={24}
@@ -321,7 +318,7 @@ export default function CalenderPage() {
                 Appointment Service Form
               </Typography>
             </Grid>
-            <Grid container sx={{ backgroundColor: "white" }} boxShadow={4}>
+            <Grid container sx={{ backgroundColor: "white" }}>
               <Grid item xs={6} mt={2} sx={{align: "center"}}>
                 <Typography align={"center"}>Name:</Typography>
                 <CenterAlignedTextbox
