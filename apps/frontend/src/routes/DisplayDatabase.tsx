@@ -484,6 +484,7 @@ function DisplayDatabase() {
       "room-scheduling": 0,
       "sanitation-request": 0,
       "security-request": 0,
+      "appointment-scheduling": 0,
     };
 
     serviceRowData.forEach((service) => {
@@ -611,7 +612,7 @@ function DisplayDatabase() {
                   }}
                 >
                   <Tab label='TABLE' />
-                  <Tab label='GRAPH' />
+                  <Tab label='STATUS' />
                   <Tab label='ANALYTICS' />
                 </Tabs>
               <Box display="flex">
@@ -621,9 +622,11 @@ function DisplayDatabase() {
                      ml={3}
                      mt={2}
                      alignItems="center"
-                     flexDirection="column">
+                     justifyContent="center"
+                     flexDirection="column"
+                >
                   {currentServiceIndex === 0 && (
-                    <Box >
+                    <Box>
                       {/*<Typography variant='h5'>Service Data Table</Typography>*/}
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
@@ -658,11 +661,127 @@ function DisplayDatabase() {
                   )}
                 </Box>
               </Box>
+
+                <Box display="flex">
+                <Box
+                  flex="1"
+                  ml={3}
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column">
+                  {currentServiceIndex === 1 && (
+                    <Box flex="1" display="flex" justifyContent="center">
+                      {chartType === 'bar' && (
+                        <BarChart
+                          xAxis={[
+                            {
+                              scaleType: 'band',
+                              data: statusLabels,
+                            },
+                          ]}
+                          series={[
+                            {
+                              data: statusCountsData,
+                            },
+                          ]}
+                          width={700}
+                          height={300}
+                        />
+                      )}
+
+                      {chartType === 'pie' && (
+                        <PieChart
+                          series={[
+                            {
+                              data: statusLabels.map((label, index) => ({
+                                id: index,
+                                value: statusCountsData[index],
+                                label,
+                              })),
+                            },
+                          ]}
+                          width={700}
+                          height={300}
+                          colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                        />
+                      )}
+                    </Box>
+                  )}
+                </Box>
+                <Box width="400px" ml={2}>
+                  {selectedServiceDetails && (
+                    <ServiceDetailsTable
+                      service={selectedServiceDetails}
+                      isVisible={isServiceDetailsVisible}
+                    />
+                  )}
+                </Box>
+               </Box>
+
+                <Box display="flex">
+                  <Box
+                    flex="1"
+                    ml={3}
+                    mt={2}
+                    alignItems="center"
+                    flexDirection="column"
+                  >
+                    {currentServiceIndex === 2 && (
+                      <Box flex="1" display="flex" justifyContent="center">
+                        {/*<Box mb={2} display="flex" justifyContent="center" width="100%">
+                          <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+                        </Box>*/}
+                        {chartType === 'bar' && (
+                          <BarChart
+                            xAxis={[
+                              {
+                                scaleType: 'band',
+                                data: serviceTypeLabels,
+                              },
+                            ]}
+                            series={[
+                              {
+                                data: serviceTypeCountsData,
+                              },
+                            ]}
+                            width={900}
+                            height={300}
+                          />
+                        )}
+
+                        {chartType === 'pie' && (
+                          <PieChart
+                            series={[
+                              {
+                                data: serviceTypeLabels.map((label, index) => ({
+                                  id: index,
+                                  value: serviceTypeCountsData[index],
+                                  label,
+                                })),
+                              },
+                            ]}
+                            width={700}
+                            height={300}
+                            colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                          />
+                        )}
+                      </Box>
+                    )}
+                  </Box>
+                  <Box width="400px" ml={2}>
+                    {selectedServiceDetails && (
+                      <ServiceDetailsTable
+                        service={selectedServiceDetails}
+                        isVisible={isServiceDetailsVisible}
+                      />
+                    )}
+                  </Box>
+                </Box>
               </React.Fragment>
             </AccordionDetails>
           </Accordion>
 
-          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+          {/*<Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
             <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
               <Typography color={"black"}>
                 SERVICE TYPE STATISTICS
@@ -711,9 +830,9 @@ function DisplayDatabase() {
                 </Box>
               </Box>
             </AccordionDetails>
-          </Accordion>
+          </Accordion>*/}
 
-          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+          {/*<Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
             <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
               <Typography color={"black"}>
                 STATUS STATISTICS
@@ -766,7 +885,7 @@ function DisplayDatabase() {
                 </Box>
               </Box>
             </AccordionDetails>
-          </Accordion>
+          </Accordion>*/}
 
           <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
             <AccordionSummary
