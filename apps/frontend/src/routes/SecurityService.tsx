@@ -9,6 +9,11 @@ import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
+import CONSTABLE from "../images/servicePageImages/FormIcons/CONSTABLE.jpg";
+import SECURITY from "../images/servicePageImages/FormIcons/SECURITY.jpg";
+import StatePig from "../images/servicePageImages/FormIcons/StatePig.jpg";
+import Wong from "../images/servicePageImages/FormIcons/profwonglasereyes.png";
+import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
 
 function SecurityService() {
   const [form, setFormResponses] = useState<SecurityRequestFormSubmission>({
@@ -19,7 +24,6 @@ function SecurityService() {
     securityPersonnel: "",
     securityCategory: "",
     securityDetail: "",
-    status: "",
   });
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
@@ -38,10 +42,6 @@ function SecurityService() {
   function handleSecurityPersonnelInput(e: SelectChangeEvent) {
     setFormResponses({ ...form, securityPersonnel: e.target.value });
     return e.target.value;
-  }
-
-  function handleStatusInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, status: e.target.value });
   }
 
   function handleSecurityCategoryInput(e: SelectChangeEvent) {
@@ -68,7 +68,6 @@ function SecurityService() {
       securityDetail: "",
       securityCategory: "",
       securityPersonnel: "",
-      status: "",
     });
   }
 
@@ -129,7 +128,7 @@ function SecurityService() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "40vw", //Adjust this to change the width of the form
+          width: "75%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -145,19 +144,32 @@ function SecurityService() {
         >
           <ServiceNavTabs />
         </Grid>
+        <Grid container sx={{ background: "white", opacity: 0.95}} boxShadow={5} borderRadius={5}>
         <Grid
           item
           xs={12}
           sx={{
-            backgroundColor: "#186BD9",
           }}
         >
-          <Typography color={"white"} align={"center"} fontSize={40}>
+          <Typography color={"black"} align={"center"} fontSize={40}>
             Security Service Form
           </Typography>
         </Grid>
-        <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={SECURITY} title={"Local Security"} description={"Minor Nuisance"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={CONSTABLE} title={"Local Police"} description={"Incident"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={StatePig} title={"State Police"} description={"Threat to Hospital & Area"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Wong} title={"Other"} description={"Professor Wilson Wong, PHD."} />
+          </Grid>
+
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -167,11 +179,7 @@ function SecurityService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
-            <Typography align={"center"}>Employee:</Typography>
-            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
-          </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -185,7 +193,7 @@ function SecurityService() {
               }))}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Security Personnel:
             </Typography>
@@ -201,7 +209,7 @@ function SecurityService() {
               returnData={form.securityPersonnel}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Why is Security Needed:
             </Typography>
@@ -219,7 +227,21 @@ function SecurityService() {
               returnData={form.securityCategory}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Additional Details (optional):
+            </Typography>
+            <CenterAlignedTextbox
+              label={"Details"}
+              value={form.securityDetail}
+              onChange={handleSecurityDetailInput}
+            />
+          </Grid>
+          <Grid item xs={12} mt={3} mb={3} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Priority of Security:
             </Typography>
@@ -228,28 +250,6 @@ function SecurityService() {
               options={["Low", "Medium", "High", "Emergency"]}
               returnData={form.priority}
               handleChange={handlePriorityInput}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
-            <Typography color={"black"} align={"center"}>
-              Status of the Request:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Status"}
-              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-              returnData={form.status}
-              handleChange={handleStatusInput}
-            />
-          </Grid>
-
-          <Grid item xs={6} sx={{align: "center"}}>
-            <Typography color={"black"} align={"center"}>
-              Additional Details (optional):
-            </Typography>
-            <CenterAlignedTextbox
-              label={"Details"}
-              value={form.securityDetail}
-              onChange={handleSecurityDetailInput}
             />
           </Grid>
           <Grid

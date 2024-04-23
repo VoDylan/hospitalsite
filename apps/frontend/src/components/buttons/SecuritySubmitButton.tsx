@@ -58,8 +58,6 @@ export function SecuritySubmitButton(props: ButtonProps) {
       openWithError("Please select a priority");
     } else if (props.input.securityCategory === "") {
       openWithError("Please select a category");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
     } else if (props.input.securityPersonnel === "") {
       openWithError("Please select a personnel");
     } else {
