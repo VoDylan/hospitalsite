@@ -121,7 +121,10 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
           return status == 200 || status == 304;
         }
       }).then((res) => {
-        if (res.status == 200) props.handleCreateNodeCallback;
+        if (res.status == 200) {
+          console.log("Closing dialogue box");
+          props.handleCreateNodeCallback();
+        };
         if (res.status == 304) console.log("Node with submitted node ID already exists! Database not modified");
       });
     } catch (e) {
