@@ -88,7 +88,7 @@ export function SecuritySubmitButton(props: ButtonProps) {
 
   async function pushToDB(form: SecurityRequestFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "security-request",
       services: form,
