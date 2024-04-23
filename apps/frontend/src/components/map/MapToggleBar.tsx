@@ -19,7 +19,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ onClick, buttonText }) => {
           border: "0.5px solid rgba(0, 0, 0, 0.05)",
           opacity: "0.8",
           height: "25px",
-          width: "200px"
+          width: "180px"
         }}
         onClick={onClick}
       >

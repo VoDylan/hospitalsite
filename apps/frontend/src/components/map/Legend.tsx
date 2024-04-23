@@ -21,7 +21,7 @@ function Legend(props: LegendProps) {
       {/* Legend */}
         <Box
           sx={{
-            width: "200px",
+            width: "180px",
             height: "300px",
             backgroundColor: "#F5F7FA",
             display: "flex",
@@ -30,7 +30,7 @@ function Legend(props: LegendProps) {
             position: "fixed",
             right: "0.5%",
             top: "130px",
-            marginTop: "1%",
+            marginTop: "15px",
             borderRadius: "1%",
             border: "3px solid rgba(0, 0, 0, 0.05)",
             opacity: "0.9",

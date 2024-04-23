@@ -31,7 +31,7 @@ import endIcon from "../images/mapImages/endIcon.png";
 import NearMeIcon from '@mui/icons-material/NearMe';
 import IconCanvas from "../components/map/IconCanvas.tsx";
 import ToggleButton from "../components/map/MapToggleBar.tsx";
-import {IconButton} from "@mui/material";
+import {IconButton, Stack} from "@mui/material";
 
 
 interface TransformState {
@@ -67,7 +67,7 @@ function MapRoute() {
   // adding setting the node click
   const [nodeClicked, setNodeClicked] = useState<MapNode | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // State to control visibility of legend
+  const [isOpen, setIsOpen] = useState(true); // State to control visibility of legend
 
   const toggleLegend = () => {
     setIsOpen(!isOpen); // Toggle the visibility of the legend
@@ -274,7 +274,7 @@ function MapRoute() {
             iconColor: "#1CA7EC",
             filterName: "Conference",
             filterType: 1,
-            shape: "pentagon",
+            shape: "conf",
           },
         ]
       : []),
@@ -284,7 +284,7 @@ function MapRoute() {
             iconColor: "#72c41c",
             filterName: "Department",
             filterType: 1,
-            shape: "pentagon",
+            shape: "dept",
           },
         ]
       : []),
@@ -294,7 +294,7 @@ function MapRoute() {
             iconColor: "#e88911",
             filterName: "Labs",
             filterType: 1,
-            shape: "pentagon",
+            shape: "labs",
           },
         ]
       : []),
@@ -304,7 +304,7 @@ function MapRoute() {
             iconColor: "#e88911",
             filterName: "Service",
             filterType: 1,
-            shape: "circle",
+            shape: "service",
           },
         ]
       : []),
@@ -314,7 +314,7 @@ function MapRoute() {
             iconColor: "#1CA7EC",
             filterName: "Info",
             filterType: 1,
-            shape: "circle",
+            shape: "info",
           },
         ]
       : []),
@@ -324,9 +324,29 @@ function MapRoute() {
             iconColor: "#72c41c",
             filterName: "Restrooms",
             filterType: 1,
-            shape: "circle",
+            shape: "bathroom",
           },
         ]
+      : []),
+    ...(retlIconState === "check"
+      ? [
+        {
+          iconColor: "#e88911",
+          filterName: "Retail",
+          filterType: 1,
+          shape: "retail",
+        },
+      ]
+      : []),
+    ...(stairsIconState === "check"
+      ? [
+        {
+          iconColor: "#72c41c",
+          filterName: "Stairs",
+          filterType: 1,
+          shape: "stairs",
+        },
+      ]
       : []),
     ...(elevatorIconState === "check"
       ? [
@@ -334,40 +354,22 @@ function MapRoute() {
             iconColor: "#1CA7EC",
             filterName: "Elevators",
             filterType: 1,
-            shape: "square",
+            shape: "elevators",
           },
         ]
       : []),
-    ...(stairsIconState === "check"
-      ? [
-          {
-            iconColor: "#72c41c",
-            filterName: "Stairs",
-            filterType: 1,
-            shape: "square",
-          },
-        ]
-      : []),
+
     ...(exitsIconState === "check"
       ? [
           {
             iconColor: "red",
             filterName: "Exits",
             filterType: 1,
-            shape: "square",
+            shape: "exit",
           },
         ]
       : []),
-    ...(retlIconState === "check"
-      ? [
-          {
-            iconColor: "#e88911",
-            filterName: "Retail",
-            filterType: 1,
-            shape: "square",
-          },
-        ]
-      : []),
+
   ];
 
   /**
@@ -519,12 +521,14 @@ function MapRoute() {
 
   const handleStartNodeChange = (value: string | null) => {
     if (value) {
+      console.log(`Value: ${value}`);
       // Find the corresponding node for the selected label
       const selectedNode = autocompleteNodeData.find(
         (node) => node.label === value,
       );
       if (selectedNode) {
         setStartNode(selectedNode.node);
+        console.log(`Starting node: ${startNode}`);
       }
     } else {
       setStartNode(""); // Handle null value if necessary
@@ -575,6 +579,7 @@ function MapRoute() {
 
       updateNodesData(path);
       setFloor(findStartingFloor() as Floor);
+
       !path
         ? setErrorMessage("There is no path between nodes")
         : setErrorMessage("");
@@ -598,7 +603,9 @@ function MapRoute() {
     }
 
     setFloor(newFloorObj);
+    console.log("NEW FLOOR");
   };
+
   function findStartingFloor() {
     for (let i = 0; i < filteredNodes.length; i++) {
       if (filteredNodes[i].nodeID === startNode) {
@@ -736,19 +743,22 @@ function MapRoute() {
   const handleStartingLocationClick = () => {
     closeModal();
     setStartNode(nodeClicked!.nodeID);
-    // console.log(nodeClicked!.longName);
-    // console.log(startNode);
+    handleStartNodeChange(nodeClicked!.longName);
+    console.log(nodeClicked!.longName);
+    console.log(startNode);
   };
 
   const handleEndingLocationClick = () => {
     closeModal();
     setEndNode(nodeClicked!.nodeID);
+    handleStartNodeChange(nodeClicked!.nodeID);
+
     // const handleFocus = (event) => event.target.select();
     // if (!el_down) return;
     // el_down.innerHTML = startNode;
 
     // console.log(nodeClicked!.longName);
-    // console.log(startNode);
+    console.log(startNode);
   };
 
   const Modal = () => {
@@ -1066,10 +1076,13 @@ function MapRoute() {
               </TransformComponent>
             </TransformWrapper>
 
+            <Stack direction={"row"}>
               <Box
-                position={"absolute"}
-                top={"15.1%"}
+                position={"fixed"}
                 right={"0.5%"}
+                sx={{
+                  top: "120px"
+                }}
               >
                 {/* Toggle button */}
                 <ToggleButton onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
@@ -1077,15 +1090,20 @@ function MapRoute() {
               {isOpen && (
                 <Legend filterItems={filterIcons} />
               )}
+            </Stack>
 
               <Box
                 position={"absolute"}
                 top={"93%"}
                 left={"19%"}
               >
-                <IconButton onClick={() => findStartingFloor() && setFloor(findStartingFloor() as Floor)} aria-label="start" sx={{color: "#186BD9", backgroundColor: "white", "&:hover": {
-                    backgroundColor: "white"
-                  }, }}>
+                <IconButton onClick={() => findStartingFloor() && setFloor(findStartingFloor() as Floor)} aria-label="start"
+                            sx={{color: "#186BD9",
+                              backgroundColor: "white",
+                              border: "1px solid #186BD9",
+                              "&:hover": {
+                               backgroundColor: "white"},
+                            }}>
                   <NearMeIcon />
                 </IconButton>
               </Box>
