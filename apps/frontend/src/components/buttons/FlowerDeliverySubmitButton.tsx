@@ -84,7 +84,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: FlowerDeliveryFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.roomNumber,
       serviceType: "flower-delivery",
       services: form,

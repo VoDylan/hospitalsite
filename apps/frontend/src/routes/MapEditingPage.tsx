@@ -15,7 +15,6 @@ import FilterManager, {
 } from "common/src/filter/FilterManager.ts";
 import { FilterName } from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
-import Draggable from "react-draggable";
 import {
   ReactZoomPanPinchRef,
   TransformComponent,
@@ -34,6 +33,9 @@ import EdgeCanvas from "../components/map/EdgeCanvas.tsx";
 import ClickableCanvas from "../components/map/ClickableCanvas.tsx";
 import MapEdge from "common/src/map/MapEdge.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
+import {INodeCreationInfo} from "../common/INodeCreationInfo.ts";
+import NodeCreator from "../components/map/NodeCreator.tsx";
+import transformCanvasCoords from "../common/TransformCanvasCoords.ts";
 
 interface TransformState {
   scale: number;
@@ -55,6 +57,14 @@ function MapEditingPage() {
   const [selectedNode2, setSelectedNode2] = useState<MapNode | null>(null);
   const [edgeBetweenSelectedNodes, setEdgeBetweenSelectedNodes] =
     useState<MapEdge | null>(null);
+
+  const [nodeCreationInfo, setNodeCreationInfo] = useState<INodeCreationInfo>({
+    creatingNode: false,
+    mouseXCoord: 0,
+    mouseYCoord: 0,
+    canvasXCoord: 0,
+    canvasYCoord: 0,
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -518,26 +528,15 @@ function MapEditingPage() {
     if (!iconCanvasRef.current) return;
     const rect = iconCanvasRef.current.getBoundingClientRect();
 
-    const leftOverHeight =
-      (window.innerHeight - 120) / (rect.height / transformState.current.scale);
-    console.log(leftOverHeight);
-
-    const widthRatio =
-      canvasWidth / (window.innerWidth - window.innerWidth * 0.18);
-    const heightRatio = canvasHeight / (window.innerHeight - 120);
-
-    const actualX =
-      ((event.clientX -
-        transformState.current.positionX -
-        window.innerWidth * 0.18) /
-        transformState.current.scale) *
-      widthRatio;
-    const actualY =
-      ((event.clientY - transformState.current.positionY - 120) /
-        transformState.current.scale) *
-      heightRatio *
-      leftOverHeight;
-    console.log(`Adjusted ${actualX} ${actualY}`);
+    const {actualX, actualY} = transformCanvasCoords(
+      event.clientX,
+      event.clientY,
+      transformState.current.scale,
+      transformState.current.positionX,
+      transformState.current.positionY,
+      canvasWidth,
+      canvasHeight,
+      rect);
 
     for (let i = 0; i < filteredNodes.length; i++) {
       if (filteredNodes[i].floor === floor) {
@@ -552,8 +551,16 @@ function MapEditingPage() {
             setSelectedNode2(null);
             return;
           } else if (selectedNode1) {
-            setSelectedNode2(filteredNodes[i]);
-            console.log("Set node 2");
+            if(selectedNode1.nodeID !== filteredNodes[i].nodeID) {
+              setSelectedNode2(filteredNodes[i]);
+              console.log("Set node 2");
+            }
+            return;
+          } else if (selectedNode2){
+            if(selectedNode2.nodeID !== filteredNodes[i].nodeID) {
+              setSelectedNode1(filteredNodes[i]);
+              console.log("Set node 1");
+            }
             return;
           } else {
             setSelectedNode1(filteredNodes[i]);
@@ -563,6 +570,42 @@ function MapEditingPage() {
         }
       }
     }
+  };
+
+  const handleCanvasDoubleClick = (event: React.MouseEvent) => {
+    if (!iconCanvasRef.current) return;
+    const rect = iconCanvasRef.current.getBoundingClientRect();
+
+    const {actualX, actualY} = transformCanvasCoords(
+      event.clientX,
+      event.clientY,
+      transformState.current.scale,
+      transformState.current.positionX,
+      transformState.current.positionY,
+      canvasWidth,
+      canvasHeight,
+      rect
+      );
+
+    console.log(`Double click registered: ${actualX}, ${actualY}`);
+
+    setNodeCreationInfo({
+      creatingNode: true,
+      mouseXCoord: event.clientX,
+      mouseYCoord: event.clientY,
+      canvasXCoord: actualX,
+      canvasYCoord: actualY,
+    });
+  };
+
+  const handleCloseNodeCreator = () => {
+    setNodeCreationInfo({
+      creatingNode: false,
+      mouseXCoord: 0,
+      mouseYCoord: 0,
+      canvasXCoord: 0,
+      canvasYCoord: 0,
+    });
   };
 
   const handleClearNode1 = () => {
@@ -586,6 +629,11 @@ function MapEditingPage() {
     } catch (e) {
       console.log("Failed to update node");
     }
+    setNodeDataLoaded(false);
+  };
+
+  const handleCreateNode = () => {
+    handleCloseNodeCreator();
     setNodeDataLoaded(false);
   };
 
@@ -848,67 +896,77 @@ function MapEditingPage() {
               initialScale={1.0}
               initialPositionX={0}
               initialPositionY={0}
+              doubleClick={{disabled: true}}
             >
               <TransformComponent>
-                <Draggable defaultPosition={{ x: 0, y: 0 }}>
-                  <>
-                    <BackgroundCanvas
-                      style={{
-                        position: "relative",
-                        // minHeight: "100vh",
-                        // maxHeight: "100%",
-                        maxWidth: "100%",
-                      }}
-                      floor={floor}
-                      renderStatusCallback={handleBackgroundRenderStatus}
-                    />
-                    <EdgeCanvas
-                      style={{
-                        position: "absolute",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      floor={floor}
-                      nodeDataLoaded={nodeDataLoaded}
-                    />
-                    <SymbolCanvas
-                      style={{
-                        position: "absolute",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      filtersApplied={filtersApplied}
-                      filteredNodes={filteredNodes}
-                      floor={floor}
-                    />
-                    <IconCanvas
-                      style={{
-                        position: "absolute",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      refCallback={handleIconCallback}
-                    />
-                    <ClickableCanvas
-                      style={{
-                        position: "absolute",
-                        maxWidth: "100%",
-                      }}
-                      backgroundRendered={backgroundRenderStatus}
-                      width={canvasWidth}
-                      height={canvasHeight}
-                      onClick={handleCanvasClick}
-                    />
-                  </>
-                </Draggable>
+                <>
+                  <BackgroundCanvas
+                    style={{
+                      position: "relative",
+                      // minHeight: "100vh",
+                      // maxHeight: "100%",
+                      maxWidth: "100%",
+                    }}
+                    floor={floor}
+                    renderStatusCallback={handleBackgroundRenderStatus}
+                  />
+                  <EdgeCanvas
+                    style={{
+                      position: "absolute",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    floor={floor}
+                    nodeDataLoaded={nodeDataLoaded}
+                  />
+                  <SymbolCanvas
+                    style={{
+                      position: "absolute",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    filtersApplied={filtersApplied}
+                    filteredNodes={filteredNodes}
+                    floor={floor}
+                  />
+                  <IconCanvas
+                    style={{
+                      position: "absolute",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    refCallback={handleIconCallback}
+                  />
+                  <ClickableCanvas
+                    style={{
+                      position: "absolute",
+                      maxWidth: "100%",
+                    }}
+                    backgroundRendered={backgroundRenderStatus}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    onClick={handleCanvasClick}
+                    onDoubleClick={handleCanvasDoubleClick}
+                  />
+                </>
               </TransformComponent>
             </TransformWrapper>
+            {nodeCreationInfo.creatingNode ?
+              <NodeCreator
+                nodeCreationInfo={nodeCreationInfo}
+                floor={floor}
+                handleCloseDialogue={handleCloseNodeCreator}
+                handleCreateNodeCallback={handleCreateNode}
+              />
+              :
+              <></>
+            }
           </Box>
         </Box>
         <Legend filterItems={filterIcons} />
