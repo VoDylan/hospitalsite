@@ -671,6 +671,9 @@ function DisplayDatabase() {
                   flexDirection="column">
                   {currentServiceIndex === 1 && (
                     <Box flex="1" display="flex" justifyContent="center">
+                      <Box mb={2} display="flex">
+                        <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+                      </Box>
                       {chartType === 'bar' && (
                         <BarChart
                           xAxis={[
@@ -728,9 +731,9 @@ function DisplayDatabase() {
                   >
                     {currentServiceIndex === 2 && (
                       <Box flex="1" display="flex" justifyContent="center">
-                        {/*<Box mb={2} display="flex" justifyContent="center" width="100%">
+                        <Box mb={2} display="flex">
                           <Button onClick={toggleChartType}>Toggle Chart Type</Button>
-                        </Box>*/}
+                        </Box>
                         {chartType === 'bar' && (
                           <BarChart
                             xAxis={[
@@ -929,6 +932,7 @@ function DisplayDatabase() {
               </Box>
             </AccordionDetails>
           </Accordion>
+
         <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
@@ -949,9 +953,6 @@ function DisplayDatabase() {
                   value={currentNodeIndex}
                   onChange={handleNodeTabChange}
                   orientation={"horizontal"}
-                  sx={{
-                    //marginTop: "150px"
-                  }}
                 >
                   <Tab label='TABLE' />
                   <Tab label='GRAPH' />
