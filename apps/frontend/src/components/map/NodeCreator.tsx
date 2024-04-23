@@ -95,7 +95,6 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
     };
 
     if(draggableRef.current) {
-      console.log("Resetting draggable state");
       draggableRef.current.setState({x: 0, y: 0});
     }
 
@@ -118,7 +117,13 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
         headers: {
           "Content-Type": "application/json",
         },
-      }).then(props.handleCreateNodeCallback);
+        validateStatus: status => {
+          return status == 200 || status == 304;
+        }
+      }).then((res) => {
+        if (res.status == 200) props.handleCreateNodeCallback;
+        if (res.status == 304) console.log("Node with submitted node ID already exists! Database not modified");
+      });
     } catch (e) {
       if(isAxiosError(e)) {
         if(e.status == 304) console.log("Database not modified");
