@@ -39,6 +39,16 @@ export default function CustomCard({
         image={image}
         title={title}
       >
+          <Typography variant = "subtitle1"
+                      color={"black"}
+            sx={{
+              position: "absolute",
+              top: "22%",
+              opacity: "0.5",
+              marginLeft: "8%",
+            }}>
+          </Typography>
+
         <Stack
           direction={"row"}
           sx={{
@@ -50,9 +60,10 @@ export default function CustomCard({
             minHeight: "65vh",
           }}
         >
+
           <Box
             sx={{
-              color: "#000000",
+              color: "#003A96",
               fontSize: 40,
               position: "relative",
               marginTop: "6%",
@@ -64,7 +75,7 @@ export default function CustomCard({
           </Box>
           <Box
             sx={{
-              color: "#000000",
+              color: "#003A96",
               fontSize: 20,
               fontWeight: "lighter",
               width: "26vw",
