@@ -119,14 +119,18 @@ export class DijkstrasAlgorithm extends Algorithms {
     for (let i = 0; i < typeCoordinates.length; i++) {
       currentFloorNodes.push(typeCoordinates[i]);
 
-      if (typeCoordinates[i].nodeType === "ELEV" && !secondElevator) {
+      if (
+        typeCoordinates[i].nodeType === "ELEV" &&
+        !secondElevator &&
+        typeCoordinates[i].floor !== typeCoordinates[i + 1].floor
+      ) {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
         turnsList = [...turnsList, ...newTurnsList];
 
         currentFloorNodes.push(typeCoordinates[i]);
         currentFloorNodes = [];
         turnsList.push(
-          `Take ${typeCoordinates[i].longName} to Floor ${typeCoordinates[i + 1].floor}.`,
+          `Go to ${typeCoordinates[i].longName} to Floor ${typeCoordinates[i + 1].floor}.`,
         );
         secondElevator = true;
         // console.log("first elevator", newTurnsList);
@@ -138,7 +142,11 @@ export class DijkstrasAlgorithm extends Algorithms {
         );
         secondElevator = false;
         // console.log("second elevator", newTurnsList);
-      } else if (typeCoordinates[i].nodeType === "STAI" && !secondStairs) {
+      } else if (
+        typeCoordinates[i].nodeType === "STAI" &&
+        !secondStairs &&
+        typeCoordinates[i].floor !== typeCoordinates[i + 1].floor
+      ) {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
         turnsList = [...turnsList, ...newTurnsList];
 
@@ -166,6 +174,16 @@ export class DijkstrasAlgorithm extends Algorithms {
     }
 
     return turnsList;
+  }
+
+  private addToTypeCoordinates(
+    typeCoordinates: TypeCoordinates[],
+    turnsList: string[],
+  ) {
+    for (let i = 1; i < typeCoordinates.length - 1; i++) {
+      typeCoordinates[i].direction = turnsList[i - 1];
+    }
+    return typeCoordinates;
   }
 
   runAlgorithm(start: string, end: string): TypeCoordinates[] {
@@ -218,7 +236,7 @@ export class DijkstrasAlgorithm extends Algorithms {
 
       if (currentNodeID === end) {
         const IDCoordinatesPath: IDCoordinates[] = [];
-        const TypeCoordinatesPath: TypeCoordinates[] = [];
+        let TypeCoordinatesPath: TypeCoordinates[] = [];
         const path: string[] = [];
         let current: string | null = currentNodeID;
 
@@ -240,6 +258,7 @@ export class DijkstrasAlgorithm extends Algorithms {
               floor: currentNode.floor,
               longName: currentNode.longName,
               coordinates: currentCoordinates,
+              direction: "",
             });
             IDCoordinatesPath.unshift({
               nodeID: current,
@@ -264,14 +283,27 @@ export class DijkstrasAlgorithm extends Algorithms {
           floor: startNode.floor,
           longName: startNode.longName,
           coordinates: this.getCoordinates(start),
+          direction: "",
         });
         path.unshift(start);
 
         const turnsPath = this.splitToFloors(TypeCoordinatesPath);
+        console.log(
+          "turns path",
+          turnsPath.length,
+          "actual path",
+          TypeCoordinatesPath.length,
+        );
+        TypeCoordinatesPath = this.addToTypeCoordinates(
+          TypeCoordinatesPath,
+          turnsPath,
+        );
 
-        console.log("Path found:", path);
-        console.log("Coordinates found:", IDCoordinatesPath);
-        console.log("Turns found", turnsPath);
+        // console.log("Path found:", path);
+        // console.log("Coordinates found:", IDCoordinatesPath);
+        // console.log("Turns found", turnsPath);
+
+        console.log("Everything: ", TypeCoordinatesPath);
 
         return TypeCoordinatesPath;
       }

@@ -1,7 +1,7 @@
 import Algorithms from "./Algorithms.ts";
 // import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
-import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class DFSalgorithm extends Algorithms {
   constructor() {

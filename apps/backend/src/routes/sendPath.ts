@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import { LocationInfo } from "common/src/LocationInfo.ts";
 import { DetermineAlgorithm } from "../DetermineAlgorithm.ts";
-import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 const router: Router = express.Router();
 

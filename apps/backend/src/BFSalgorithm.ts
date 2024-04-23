@@ -5,7 +5,7 @@ import { NodeBFS } from "common/src/NodeBFS.ts";
 import client from "./bin/database-connection.ts";
 import Algorithms from "./Algorithms.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
-import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class BFSalgorithm extends Algorithms {
   all_nodes: NodeBFS[];

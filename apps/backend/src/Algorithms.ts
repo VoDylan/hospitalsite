@@ -2,7 +2,7 @@ import client from "./bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import { nodeAlgorithms } from "common/src/nodeAlgorithms.ts";
-import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 abstract class Algorithms {
   mapNodes: MapNodeType[];

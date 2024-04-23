@@ -1,7 +1,7 @@
 // import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import Algorithms from "./Algorithms.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
-import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class AStarAlgorithm extends Algorithms {
   public constructor() {

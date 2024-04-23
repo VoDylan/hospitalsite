@@ -12,7 +12,7 @@ export default function TextIcon(props: {
     <>
       <Stack width={"100%"} height={"100%"}>
         <Paper sx={{ width: "100%", height: "100%" }} elevation={4}>
-          <Stack>
+          <Stack width={"100%"} height={"100%"}>
             <Button
               startIcon={<ArrowBackIcon/>}
               onClick={props.handleButtonClick2}
@@ -26,7 +26,9 @@ export default function TextIcon(props: {
               {props.checked2 ? "back" : "back"}
 
             </Button>
-            <p>hello from here?</p>
+            {props.nodesData.map((item, index) => (
+              <p key={index}>{item.direction}</p>
+            ))}
           </Stack>
         </Paper>
       </Stack>

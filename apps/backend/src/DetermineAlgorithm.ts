@@ -4,7 +4,7 @@ import { BFSalgorithm } from "./BFSalgorithm.ts";
 import { DFSalgorithm } from "./DFSalgorithm.ts";
 import { DijkstrasAlgorithm } from "./DijkstrasAlgorithm.ts";
 import { AStarAlgorithm } from "./AStarAlgorithm.ts";
-import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class DetermineAlgorithm {
   algorithm: Algorithms | undefined;
