@@ -25,10 +25,11 @@ function DeviceDeliveryService() {
     name: "",
     employeeID: -1,
     roomNum: "",
-    device: "",
-    amount: "",
+    beds: "",
+    docTools: "",
+    IV: "",
+    surgery: "",
     priority: "",
-    status: "",
   });
 
   // Arrays for Medical Devices Categories and Devices
@@ -85,13 +86,23 @@ function DeviceDeliveryService() {
     return e.target.value;
   }
 
-  function handleDeviceInput(e: SelectChangeEvent) {
-    setFormResponses({ ...form, device: e.target.value });
+  function handleBedsInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, beds: e.target.value });
     // return e.target.value;
   }
 
-  function handleAmountInput(e: SelectChangeEvent) {
-    setFormResponses({ ...form, amount: e.target.value });
+  function handleToolsInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, docTools: e.target.value });
+    return e.target.value;
+  }
+
+  function handleIVInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, IV: e.target.value });
+    return e.target.value;
+  }
+
+  function handleSurgeryInput(e: SelectChangeEvent) {
+    setFormResponses({ ...form, surgery: e.target.value });
     return e.target.value;
   }
 
@@ -99,9 +110,6 @@ function DeviceDeliveryService() {
     setFormResponses({ ...form, priority: e.target.value });
   }
 
-  function handleStatusInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, status: e.target.value });
-  }
 
   function clear() {
     setFormResponses({
