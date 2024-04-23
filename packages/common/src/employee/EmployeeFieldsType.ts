@@ -3,3 +3,5 @@ export type EmployeeFieldsType = {
   firstName: string;
   lastName: string;
 };
+
+export const employeeCsvHeader = "employeeID, firstName, lastName";
