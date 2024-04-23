@@ -36,7 +36,6 @@ import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import {INodeCreationInfo} from "../common/INodeCreationInfo.ts";
 import NodeCreator from "../components/map/NodeCreator.tsx";
 import transformCanvasCoords from "../common/TransformCanvasCoords.ts";
-import Draggable from "react-draggable";
 
 interface TransformState {
   scale: number;
@@ -625,6 +624,11 @@ function MapEditingPage() {
     setNodeDataLoaded(false);
   };
 
+  const handleCreateNode = () => {
+    handleCloseNodeCreator();
+    setNodeDataLoaded(false);
+  };
+
   const handleDeleteNode = (node: MapNode) => {
     try {
       axios
@@ -946,13 +950,12 @@ function MapEditingPage() {
               </TransformComponent>
             </TransformWrapper>
             {nodeCreationInfo.creatingNode ?
-              <Draggable>
-                <NodeCreator
-                  nodeCreationInfo={nodeCreationInfo}
-                  floor={floor}
-                  handleCloseDialogue={handleCloseNodeCreator}
-                />
-              </Draggable>
+              <NodeCreator
+                nodeCreationInfo={nodeCreationInfo}
+                floor={floor}
+                handleCloseDialogue={handleCloseNodeCreator}
+                handleCreateNodeCallback={handleCreateNode}
+              />
               :
               <></>
             }

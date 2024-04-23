@@ -3,12 +3,16 @@ import {Box, Button, IconButton, Paper, Stack, TextField, Typography} from "@mui
 import CloseIcon from "@mui/icons-material/Close";
 import {INodeCreationInfo} from "../../common/INodeCreationInfo.ts";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
+import Draggable, {DraggableBounds} from "react-draggable";
+import useWindowSize from "../../hooks/useWindowSize.tsx";
+import axios, {isAxiosError} from "axios";
 
 interface INodeCreatorProps {
   style?: React.CSSProperties;
   nodeCreationInfo: INodeCreationInfo;
   floor: string;
   handleCloseDialogue: () => void;
+  handleCreateNodeCallback: () => void;
   className?: string;
   onMouseDown?: MouseEventHandler<HTMLDivElement>
   onMouseUp?: MouseEventHandler<HTMLDivElement>
@@ -20,6 +24,17 @@ const width: number = 400;
 
 export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element {
   const elementRef = useRef<HTMLDivElement>(null);
+  const draggableRef = useRef<Draggable>(null);
+  const [windowWidth, windowHeight] = useWindowSize();
+
+  const [bounds, setBounds] = useState<DraggableBounds>({
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+  });
+
+  const [height, setHeight] = useState<number>(0);
 
   const [mouseXCoord, setMouseXCoord] = useState<number>(props.nodeCreationInfo.mouseXCoord);
   const [mouseYCoord, setMouseYCoord] = useState<number>(props.nodeCreationInfo.mouseYCoord);
@@ -34,8 +49,8 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
   const [shortName, setShortName] = useState<string>("");
 
   useEffect(() => {
-    if((props.nodeCreationInfo.mouseXCoord + width) > window.innerWidth) {
-      setMouseXCoord(props.nodeCreationInfo.mouseXCoord + (window.innerWidth - (props.nodeCreationInfo.mouseXCoord + width)));
+    if((props.nodeCreationInfo.mouseXCoord + width) > windowWidth) {
+      setMouseXCoord(props.nodeCreationInfo.mouseXCoord + (windowWidth - (props.nodeCreationInfo.mouseXCoord + width)));
     } else {
       setMouseXCoord(props.nodeCreationInfo.mouseXCoord);
     }
@@ -43,11 +58,13 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
     if(elementRef.current) {
       const rect = elementRef.current.getBoundingClientRect();
 
-      if((props.nodeCreationInfo.mouseYCoord + rect.height) > window.innerHeight) {
-        setMouseYCoord(props.nodeCreationInfo.mouseYCoord + (window.innerHeight - (props.nodeCreationInfo.mouseYCoord + rect.height)));
+      if((props.nodeCreationInfo.mouseYCoord + rect.height) > windowHeight) {
+        setMouseYCoord(props.nodeCreationInfo.mouseYCoord + (windowHeight - (props.nodeCreationInfo.mouseYCoord + rect.height)));
       } else {
         setMouseYCoord(props.nodeCreationInfo.mouseYCoord);
       }
+
+      setHeight(rect.height);
     } else {
       setMouseYCoord(props.nodeCreationInfo.mouseYCoord);
     }
@@ -55,10 +72,70 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
     setXcoord(props.nodeCreationInfo.canvasXCoord);
     setYcoord(props.nodeCreationInfo.canvasYCoord);
     setFloor(props.floor);
-  }, [props.floor, props.nodeCreationInfo.canvasXCoord, props.nodeCreationInfo.canvasYCoord, props.nodeCreationInfo.mouseXCoord, props.nodeCreationInfo.mouseYCoord]);
+  }, [props.floor, props.nodeCreationInfo.canvasXCoord, props.nodeCreationInfo.canvasYCoord, props.nodeCreationInfo.mouseXCoord, props.nodeCreationInfo.mouseYCoord, windowHeight, windowWidth]);
+
+  /**
+   * Reset draggable state when a new location is passed in from a double click
+   */
+  useEffect(() => {
+    const getBounds = (): DraggableBounds => {
+      const newBounds: DraggableBounds = {
+        left: -1000,
+        top: 1000,
+        right: 1000,
+        bottom: 1000
+      };
+
+      newBounds.top = -mouseYCoord + 120;
+      newBounds.bottom = windowHeight - mouseYCoord - height;
+      newBounds.left = -mouseXCoord + windowWidth * 0.18;
+      newBounds.right = windowWidth - mouseXCoord - width;
+
+      return newBounds;
+    };
+
+    if(draggableRef.current) {
+      console.log("Resetting draggable state");
+      draggableRef.current.setState({x: 0, y: 0});
+    }
+
+    setBounds(getBounds());
+  }, [height, mouseXCoord, mouseYCoord, windowHeight, windowWidth]);
+
+  const handleSubmitNode = () => {
+    const newNode: MapNodeType = {
+      nodeID: nodeID,
+      xcoord: xcoord,
+      ycoord: ycoord,
+      floor: floor,
+      building: building,
+      nodeType: nodeType,
+      longName: longName,
+      shortName: shortName,
+    };
+    try {
+      axios.post("/api/database/nodes", [newNode], {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(props.handleCreateNodeCallback);
+    } catch (e) {
+      if(isAxiosError(e)) {
+        if(e.status == 304) console.log("Database not modified");
+        if(e.status == 400) console.log("Bad node data sent to database");
+      } else {
+        console.log("An unknown error occurred.");
+      }
+      props.handleCreateNodeCallback();
+    }
+  };
 
   return (
-    <Paper
+    <Draggable
+      ref={draggableRef}
+      bounds={bounds}
+    >
+      <Paper
       square={false}
       elevation={5}
       style={{
@@ -69,11 +146,6 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
         width: `${width}px`
       }}
       ref={elementRef}
-      className={props.className}
-      onMouseDown={props.onMouseDown}
-      onMouseUp={props.onMouseUp}
-      onTouchStart={props.onTouchStart}
-      onTouchEnd={props.onTouchEnd}
     >
       <Stack
         display={"flex"}
@@ -238,24 +310,13 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
                 (longName == "") ||
                 (shortName == "")
             }
-            onClick={() => {
-              const newNode: MapNodeType = {
-                nodeID: nodeID,
-                xcoord: xcoord,
-                ycoord: ycoord,
-                floor: floor,
-                building: building,
-                nodeType: nodeType,
-                longName: longName,
-                shortName: shortName,
-              };
-              console.log(newNode);
-            }}
+            onClick={handleSubmitNode}
           >
             Create Node
           </Button>
         </Stack>
       </Stack>
     </Paper>
+    </Draggable>
   );
 }

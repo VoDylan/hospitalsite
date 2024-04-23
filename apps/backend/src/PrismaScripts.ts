@@ -12,13 +12,17 @@ export async function createNodePrisma(node: MapNodeType) {
     await client.node.create({
       data: node,
     });
+    return 200;
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code == "P2002") {
-        console.log(`${loggingPrefix}Node already exists. Skipping...`);
-      }
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code == "P2002"
+    ) {
+      console.log(`${loggingPrefix}Node already exists. Skipping...`);
+      return 304;
     } else {
       console.error(e);
+      return 400;
     }
   }
 }
