@@ -1,5 +1,16 @@
-import React, {MouseEventHandler, TouchEventHandler, useEffect, useRef, useState} from "react";
-import {Box, Button, IconButton, Paper, Stack, TextField, Typography} from "@mui/material";
+import React, {useEffect, useRef, useState} from "react";
+import {
+  Box,
+  Button,
+  FormControl,
+  IconButton, InputLabel, MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  TextField,
+  Typography
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {INodeCreationInfo} from "../../common/INodeCreationInfo.ts";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
@@ -13,11 +24,6 @@ interface INodeCreatorProps {
   floor: string;
   handleCloseDialogue: () => void;
   handleCreateNodeCallback: () => void;
-  className?: string;
-  onMouseDown?: MouseEventHandler<HTMLDivElement>
-  onMouseUp?: MouseEventHandler<HTMLDivElement>
-  onTouchStart?: TouchEventHandler<HTMLDivElement>
-  onTouchEnd?: TouchEventHandler<HTMLDivElement>
 }
 
 const width: number = 400;
@@ -124,7 +130,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
         if (res.status == 200) {
           console.log("Closing dialogue box");
           props.handleCreateNodeCallback();
-        };
+        }
         if (res.status == 304) console.log("Node with submitted node ID already exists! Database not modified");
       });
     } catch (e) {
@@ -232,21 +238,46 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
               marginBottom: "10px",
             }}
           />
-          <TextField
-            id={"floorEntry"}
-            label={"Floor"}
-            variant={"outlined"}
-            value={floor}
-            size={"small"}
-            required={true}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setFloor(event.target.value);
-            }}
+          <Box
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
             }}
-          />
+          >
+            <FormControl fullWidth required size={"small"}>
+              <InputLabel id={"floorEntryLabel"}>Floor</InputLabel>
+              <Select
+                id={"floorEntry"}
+                labelId={"floorEntryLabel"}
+                label={"Floor*"}
+                value={floor}
+                onChange={(event: SelectChangeEvent<string>) => {
+                  setFloor(event.target.value as string);
+                }}
+              >
+                <MenuItem value={"L2"}>Floor L2</MenuItem>
+                <MenuItem value={"L1"}>Floor L1</MenuItem>
+                <MenuItem value={"1"}>Floor 1</MenuItem>
+                <MenuItem value={"2"}>Floor 2</MenuItem>
+                <MenuItem value={"3"}>Floor 3</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          {/*<TextField*/}
+          {/*  id={"floorEntry"}*/}
+          {/*  label={"Floor"}*/}
+          {/*  variant={"outlined"}*/}
+          {/*  value={floor}*/}
+          {/*  size={"small"}*/}
+          {/*  required={true}*/}
+          {/*  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {*/}
+          {/*    setFloor(event.target.value);*/}
+          {/*  }}*/}
+          {/*  sx={{*/}
+          {/*    marginTop: "10px",*/}
+          {/*    marginBottom: "10px",*/}
+          {/*  }}*/}
+          {/*/>*/}
           <TextField
             id={"buildingEntry"}
             label={"Building"}
@@ -261,20 +292,37 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
               marginBottom: "10px",
             }}
           />
-          <TextField
-            id={"nodeTypeEntry"}
-            label={"Node Type"}
-            variant={"outlined"}
-            size={"small"}
-            required={true}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setNodeType(event.target.value);
-            }}
+          <Box
             sx={{
               marginTop: "10px",
               marginBottom: "10px",
             }}
-          />
+          >
+            <FormControl fullWidth required size={"small"}>
+              <InputLabel id={"nodeTypeEntryLabel"}>Node Type</InputLabel>
+              <Select
+                id={"nodeTypeEntry"}
+                labelId={"nodeTypeEntryLabel"}
+                label={"Node Type*"}
+                value={nodeType}
+                onChange={(event: SelectChangeEvent<string>) => {
+                  setNodeType(event.target.value as string);
+                }}
+              >
+                <MenuItem value={"ELEV"}>Elevator</MenuItem>
+                <MenuItem value={"STAI"}>Stairs</MenuItem>
+                <MenuItem value={"SERV"}>Service</MenuItem>
+                <MenuItem value={"INFO"}>Information</MenuItem>
+                <MenuItem value={"REST"}>Restroom</MenuItem>
+                <MenuItem value={"EXIT"}>Exit</MenuItem>
+                <MenuItem value={"CONF"}>Conference</MenuItem>
+                <MenuItem value={"DEPT"}>Department</MenuItem>
+                <MenuItem value={"LABS"}>Laboratory</MenuItem>
+                <MenuItem value={"RETL"}>Retail</MenuItem>
+                <MenuItem value={"HALL"}>Hallway</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
           <TextField
             id={"longNameEntry"}
             label={"Long Name"}

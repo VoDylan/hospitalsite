@@ -17,7 +17,7 @@ export function ServiceCard(props: ServiceProps) {
           sx={{
             boxShadow: 3,
             display: "flex",
-            width: "350px", // Set the width of each card
+            width: "300px", // Set the width of each card
             height: "325px", // Set the height of each card
             transition: "0.3s",
             "&:hover": {
@@ -35,7 +35,7 @@ export function ServiceCard(props: ServiceProps) {
                 component={"img"}
                 image={props.imagePath}
                 sx={{
-                  width: "350px", // Set the width of each card
+                  width: "300px", // Set the width of each card
                   height: "300px",// Adjust the height of the image to 60% of the card's height
                   marginBottom: "1px",
                 }}
