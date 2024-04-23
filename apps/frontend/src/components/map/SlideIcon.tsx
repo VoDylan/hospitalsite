@@ -1,5 +1,5 @@
 import { Button, Paper, Stack } from "@mui/material";
-import FilterWithIcon from "../filters/FilterSelect.tsx";
+import FilterWithIcon from "../filters/FilterWithIcon.tsx";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React from "react";
 
