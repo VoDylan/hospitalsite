@@ -19,6 +19,11 @@ import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 // import MoreMenuItem from "../components/MoreMenuItem.tsx";
+import DocsTools from "../images/servicePageImages/FormIcons/DocsTools.jpg";
+import IV from "../images/servicePageImages/FormIcons/IV.jpg";
+import SurgicalInstruments from "../images/servicePageImages/FormIcons/SurgicalInstruments.jpg";
+import HospBed from "../images/servicePageImages/FormIcons/HospBed.png";
+import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
 
 function DeviceDeliveryService() {
   const [form, setFormResponses] = useState<DeviceDeliveryFormSubmission>({
@@ -117,9 +122,10 @@ function DeviceDeliveryService() {
       employeeID: -1,
       roomNum: "",
       priority: "",
-      device: "",
-      amount: "",
-      status: "",
+      beds: "",
+      docTools: "",
+      IV: "",
+      surgery: "",
     });
   }
 
@@ -180,7 +186,7 @@ function DeviceDeliveryService() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "40vw", //Adjust this to change the width of the form
+          width: "75%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -196,19 +202,74 @@ function DeviceDeliveryService() {
         >
           <ServiceNavTabs />
         </Grid>
+        <Grid container sx={{ background: "white", opacity: 0.95}} boxShadow={5} borderRadius={5}>
         <Grid
           item
           xs={12}
           sx={{
-            backgroundColor: "#186BD9",
           }}
         >
-          <Typography color={"white"} align={"center"} fontSize={40}>
+          <Typography color={"black"} align={"center"} fontSize={40}>
             Medical Device Request Form
           </Typography>
         </Grid>
-        <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid
+            item
+            xs={12}
+            mt={3}
+          >
+            <Typography
+              align={"center"}
+              fontStyle={"Open Sans"}
+              fontSize={24}
+            >
+              Enter Amount of Each Type:
+            </Typography>
+          </Grid>
+
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={HospBed} title={"Hospital Bed"} description={""} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={DocsTools} title={"Doctor Tool Set"} description={""} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={IV} title={"IV Apparatus"} description={""} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={SurgicalInstruments} title={"Surigcal Tool Set"} description={""} />
+          </Grid>
+
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Bed Amount"}
+              value={form.beds}
+              onChange={handleBedsInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Doctor Tool Set Amount"}
+              value={form.docTools}
+              onChange={handleToolsInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"IV Apparatus Amount"}
+              value={form.IV}
+              onChange={handleIVInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Surgical Tool Amount"}
+              value={form.surgery}
+              onChange={handleSurgeryInput}
+              type={"text"} />
+          </Grid>
+
+          <Grid item xs={3} mt={5} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -218,11 +279,11 @@ function DeviceDeliveryService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={3} mt={5} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>
             <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{align: "center"}}>
+          <Grid item xs={3} mt={5} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -236,27 +297,7 @@ function DeviceDeliveryService() {
               }))}
             />
           </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
-            <Typography color={"black"} align={"center"}>
-              Medical Device Needed:
-            </Typography>
-            <CenterAlignedTextbox
-              label={"Medical Device"}
-              value={form.device}
-              onChange={handleDeviceInput}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
-            <Typography color={"black"} align={"center"}>
-              Amount Needed:
-            </Typography>
-            <CenterAlignedTextbox
-              onChange={handleAmountInput}
-              label={"Amount"}
-              value={form.amount}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
+          <Grid item xs={3} mt={5} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Priority of Medical Device Delivery:
             </Typography>
@@ -265,17 +306,6 @@ function DeviceDeliveryService() {
               options={["Low", "Medium", "High", "Emergency"]}
               returnData={form.priority}
               handleChange={handlePriorityInput}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{align: "center"}}>
-            <Typography color={"black"} align={"center"}>
-              Status of the Request:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Status"}
-              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-              returnData={form.status}
-              handleChange={handleStatusInput}
             />
           </Grid>
           <Grid
