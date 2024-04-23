@@ -4,8 +4,10 @@ import client from "../bin/database-connection.ts";
 import {
   clearDBEdges,
   clearDBNodes,
+  clearEmployeesFromDB,
   createEdgePrisma,
   createEmployeePrisma,
+  createNodePrisma,
   createServiceRequest,
   deleteEdgePrisma,
   deleteNodePrisma,
@@ -36,6 +38,70 @@ router.get("/nodes", async (req: Request, res: Response) => {
   const nodeData: MapNodeType[] =
     await DBManager.getInstance().getNodesFromDB();
   res.status(200).json(nodeData);
+});
+
+router.post("/nodes", async (req: Request, res: Response) => {
+  const data = req.body;
+  console.log(data);
+  if (!Array.isArray(data)) {
+    res.status(400).json({
+      message: "Node data must be an array!",
+    });
+    return;
+  }
+
+  if (data.length == 0) {
+    res.status(304).json({
+      message: "No data sent. Not modified.",
+    });
+    return;
+  }
+
+  const badData: [] = [];
+  const addedData: [] = [];
+  const ignoredData: [] = [];
+  const erroredData: [] = [];
+
+  for (const node of data) {
+    if (validateNodeData(node as never).error != undefined) {
+      badData.push(node as never);
+    } else {
+      const result: 200 | 304 | 400 = await createNodePrisma(
+        node as MapNodeType,
+      );
+
+      switch (result) {
+        case 200:
+          addedData.push(node as never);
+          break;
+        case 304:
+          ignoredData.push(node as never);
+          break;
+        default:
+          erroredData.push(node as never);
+          break;
+      }
+    }
+  }
+
+  let status: number = 304;
+
+  if (badData.length > 0 || erroredData.length > 0) {
+    status = 400;
+  } else if (ignoredData.length > 0) {
+    status = 304;
+  } else if (addedData.length > 0) {
+    status = 200;
+  }
+
+  res.status(status).json({
+    numAddedNodes: addedData.length,
+    numIgnoredNodes: ignoredData.length,
+    numBadNodes: badData.length,
+
+    ignoredData: ignoredData,
+    badData: badData,
+  });
 });
 
 //Accepts a GET request to the /api/backend/nodes/<NODE_ID> endpoint where <NODE_ID> is replaced by the ID of the node you
@@ -159,7 +225,7 @@ router.get("/servicerequest", async (req, res) => {
 });
 
 router.get("/servicerequest/userid/:userid", async (req, res) => {
-  const userID: string = req.params.userid;
+  const userID: number = req.params.userid as unknown as number;
 
   const requests = await getServiceRequestFromDBByUserID(userID);
 
@@ -329,6 +395,32 @@ router.get("/employees", async (req, res) => {
   } else {
     res.status(200).json(employees!);
   }
+});
+
+router.post("/uploademployees", async (req, res) => {
+  const data: [] = req.body;
+
+  console.log(data);
+
+  await clearEmployeesFromDB();
+
+  for (let i = 0; i < data.length; i++) {
+    if (validateEmployeeData(data[i]).error != undefined) {
+      console.log(`Employee data at line ${i} badly formatted. Skipping...`);
+      continue;
+    } else {
+      console.log(`Employee data at line ${i} valid, adding to database`);
+    }
+    try {
+      await client.employee.create({
+        data: data[i],
+      });
+    } catch (e) {
+      console.log("Failed to create employee", e);
+    }
+  }
+
+  res.status(200);
 });
 
 export default router;

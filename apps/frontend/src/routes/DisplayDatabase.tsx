@@ -24,6 +24,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import "./TableSlide.css";
 import Tab from "@mui/material/Tab";
 import { PieChart, BarChart } from "@mui/x-charts";
+import { PieChart, BarChart} from "@mui/x-charts";
+import {employeeCsvHeader, EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -40,7 +42,7 @@ type ServiceParams = {
 type EdgeParams = { id: number } & MapEdgeType;
 
 type EmployeeParams = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
 };
@@ -234,9 +236,8 @@ function DisplayDatabase() {
   const [edgeRowData, setEdgeRowData] = useState<EdgeParams[]>([]);
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
   const [employeeRowData, setEmployeeRowData] = useState<EmployeeParams[]>([]);
+  const [employeeNameMapping, setEmployeeNameMapping] = useState<{ [key: string]: string }>({});
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentFile, setCurrentFile] = useState<File>();
 
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
@@ -305,16 +306,20 @@ function DisplayDatabase() {
     console.log("Gathered Employees");
     console.log(data);
 
+    const nameMapping: { [key: string]: string } = {}; // Create the name mapping object
     const rowData = [];
     for (let i = 0; i < data.length; i++) {
+      const { employeeID: id, firstName, lastName } = data[i]; // Destructure correctly
       const tableFormattedEmployee: EmployeeParams = {
         id: data[i].employeeID,
         firstName: data[i].firstName,
         lastName: data[i].lastName
       };
       rowData.push(tableFormattedEmployee);
+      nameMapping[id] = `${firstName} ${lastName}`;
     }
     setEmployeeRowData(rowData);
+    setEmployeeNameMapping(nameMapping);
   };
 
   useEffect(() => {
@@ -370,6 +375,9 @@ function DisplayDatabase() {
           .post("/api/database/uploadnodes", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
+          })
+          .catch((e) => {
+            console.error("Error posting employee data:",e);
           });
       }
     };
@@ -422,6 +430,62 @@ function DisplayDatabase() {
     fileReader.readAsText(file);
   }
 
+  function handleEmployeeImport(file: File) {
+    const fileReader: FileReader = new FileReader();
+
+    let fileText: string | ArrayBuffer = "";
+
+    const jsonData: EmployeeFieldsType[] = [];
+
+    fileReader.onload = (evt: ProgressEvent<FileReader>) => {
+      if (evt.target!.result == null) {
+        console.log("No data found in file");
+      } else {
+        fileText = evt.target!.result;
+        console.log(fileText);
+
+        const parsedData: string[][] = parseCSVFromString(fileText as string);
+
+        console.log("Parsed data:");
+        console.log(parsedData);
+
+        for (let i: number = 0; i < parsedData[0].length; i++) {
+          if (parsedData[0][i] != employeeCsvHeader.split(", ")[i]) {
+            console.error(
+              "Imported employee data does not include the correct header fields",
+            );
+            return;
+          }
+        }
+
+        console.log("Imported employee data is in the correct format");
+
+        for (let i: number = 1; i < parsedData.length; i++) {
+          if( parsedData[i].length != 3 ) {
+            continue;
+          }
+          jsonData.push({
+            employeeID: parseInt(parsedData[i][0]),
+            firstName: parsedData[i][1],
+            lastName: parsedData[i][2],
+          });
+          console.log("Placed " + parsedData[i][2]);
+        }
+
+        console.log("JSON data:");
+        console.log(jsonData);
+
+        axios
+          .post("/api/database/uploademployees", jsonData)
+          .then((response: AxiosResponse) => {
+            console.log(response);
+          });
+      }
+    };
+
+    fileReader.readAsText(file);
+  }
+
   function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
     const file: FileList | null = event.target.files;
     console.log(`Uploaded file: ${file![0]}`);
@@ -440,6 +504,17 @@ function DisplayDatabase() {
       console.log("No file uploaded");
     } else {
       handleEdgeImport(file![0]);
+    }
+    console.log("Handling node import data");
+  }
+
+  function handleEmployeeFileUpload(event: { target: { files: FileList | null } }) {
+    const file: FileList | null = event.target.files;
+    console.log(`Uploaded file: ${file![0]}`);
+    if (file == null) {
+      console.log("No file uploaded");
+    } else {
+      handleEmployeeImport(file![0]);
     }
     console.log("Handling node import data");
   }
@@ -540,15 +615,45 @@ function DisplayDatabase() {
     countStatusTypes();
   }, [serviceRowData]);
 
-  useEffect(() => {
-    console.log("Service Row Data:", serviceRowData);
-  }, [serviceRowData]);
+  //Const for countEmployeeID
+  const [employeeIDLabels, setEmployeeIDLabels] = useState<string[]>([]);
+  const [employeeIDCountsData, setEmployeeIDCountsData] = useState<number[]>([]);
 
-  //Console log to see what data is loading
+  //Function to count employee IDs for graph display
+  // Use the effect to count employee IDs and update state
   useEffect(() => {
-    console.log("Service Type Labels:", serviceTypeLabels);
-    console.log("Service Type Counts Data:", serviceTypeCountsData);
-  }, [serviceTypeLabels, serviceTypeCountsData]);
+
+    const countEmployeeIDs = (serviceRowData: ServiceParams[]) => {
+      const employeeIDCounts: { [key: string]: number } = {};
+      const employeeIDLabels: string[] = [];
+
+      serviceRowData.forEach((service) => {
+        const { employeeID } = service;
+        if (employeeIDCounts[employeeID]) {
+          employeeIDCounts[employeeID]++;
+        } else {
+          employeeIDCounts[employeeID] = 1;
+          // Get the employee name from the mapping
+          const employeeName = employeeNameMapping[employeeID]; // Assuming employeeNameMapping is available
+          // Add employee name as label
+          employeeIDLabels.push(employeeName);
+        }
+      });
+
+      // Set the state for labels here
+      setEmployeeIDLabels(employeeIDLabels);
+
+      return employeeIDCounts;
+    };
+
+    const countEmployeeIDsFunction = () => {
+      const employeeIDCounts = countEmployeeIDs(serviceRowData);
+      const counts = Object.values(employeeIDCounts);
+      setEmployeeIDCountsData(counts);
+    };
+
+    countEmployeeIDsFunction();
+  }, [employeeNameMapping, serviceRowData]);
 
   // Toggle between bar chart and pie chart
   const toggleChartType = () => {
@@ -784,7 +889,7 @@ function DisplayDatabase() {
             </AccordionDetails>
           </Accordion>
 
-          {/*<Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
             <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
               <Typography color={"black"}>
                 SERVICE TYPE STATISTICS
@@ -811,6 +916,7 @@ function DisplayDatabase() {
                       ]}
                       width={900}
                       height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
                     />
                   )}
 
@@ -827,15 +933,15 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
                     />
                   )}
                 </Box>
               </Box>
             </AccordionDetails>
-          </Accordion>*/}
+          </Accordion>
 
-          {/*<Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
             <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
               <Typography color={"black"}>
                 STATUS STATISTICS
@@ -882,13 +988,65 @@ function DisplayDatabase() {
                       ]}
                       width={700}
                       height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
                     />
                   )}
                 </Box>
               </Box>
             </AccordionDetails>
-          </Accordion>*/}
+          </Accordion>
+
+          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+              <Typography color={"black"}>
+                EMPLOYEE ID STATISTICS
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box display="flex" flexDirection="column" alignItems="center" width="100%">
+                <Box mb={2} display="flex" justifyContent="center" width="100%">
+                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+                </Box>
+                <Box flex="1" display="flex" justifyContent="center">
+                  {chartType === 'bar' && (
+                    <BarChart
+                      xAxis={[
+                        {
+                          scaleType: 'band',
+                          data: employeeIDLabels,
+                        },
+                      ]}
+                      series={[
+                        {
+                          data: employeeIDCountsData,
+                        },
+                      ]}
+                      width={900}
+                      height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
+                    />
+                  )}
+
+                  {chartType === 'pie' && (
+                    <PieChart
+                      series={[
+                        {
+                          data: employeeIDLabels.map((label, index) => ({
+                            id: index,
+                            value: employeeIDCountsData[index],
+                            label,
+                          })),
+                        },
+                      ]}
+                      width={700}
+                      height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
+                    />
+                  )}
+                </Box>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
 
           <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
             <AccordionSummary
@@ -929,6 +1087,26 @@ function DisplayDatabase() {
                   }}
                   pageSizeOptions={[5, 10]}
                 />
+                <Button
+                  component="label"
+                  role={undefined}
+                  tabIndex={-1}
+                  startIcon={<CloudUploadIcon />}
+                  className="importButton"
+                  variant="contained"
+                  // onClick={handleNodeImport}
+                  sx={{
+                    backgroundColor: "primary.main", // Change background color
+                    color: "white", // Change text color
+                    borderRadius: "8px", // Change border radius
+                    marginRight: "-1px", // Adjust spacing
+                    marginTop: "15px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  Import Employees (CSV File)
+                  <VisuallyHiddenInput type="file" onChange={handleEmployeeFileUpload} />
+                </Button>
               </Box>
             </AccordionDetails>
           </Accordion>

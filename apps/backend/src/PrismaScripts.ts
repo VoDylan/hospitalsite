@@ -12,13 +12,17 @@ export async function createNodePrisma(node: MapNodeType) {
     await client.node.create({
       data: node,
     });
+    return 200;
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code == "P2002") {
-        console.log(`${loggingPrefix}Node already exists. Skipping...`);
-      }
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code == "P2002"
+    ) {
+      console.log(`${loggingPrefix}Node already exists. Skipping...`);
+      return 304;
     } else {
       console.error(e);
+      return 400;
     }
   }
 }
@@ -303,7 +307,7 @@ export async function getServiceRequestFromDBByNodeID(nodeID: string) {
   return request;
 }
 
-export async function getServiceRequestFromDBByUserID(employeeID: string) {
+export async function getServiceRequestFromDBByUserID(employeeID: number) {
   let request = null;
   try {
     request = await client.serviceRequest.findMany({
@@ -469,4 +473,14 @@ export async function getEmployeesFromDB() {
   }
 
   return employees;
+}
+
+export async function clearEmployeesFromDB() {
+  console.log(`${loggingPrefix}Clearing employees from DB`);
+  try {
+    await client.employee.deleteMany({});
+  } catch (e) {
+    console.error(e);
+  }
+  console.log(`${loggingPrefix}Employees cleared from DB`);
 }
