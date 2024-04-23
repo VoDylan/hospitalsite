@@ -34,6 +34,8 @@ import EdgeCanvas from "../components/map/EdgeCanvas.tsx";
 import ClickableCanvas from "../components/map/ClickableCanvas.tsx";
 import MapEdge from "common/src/map/MapEdge.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
+import ToggleButton from "../components/map/MapToggleBar.tsx";
+import {Stack} from "@mui/material";
 
 interface TransformState {
   scale: number;
@@ -50,6 +52,12 @@ function MapEditingPage() {
     positionX: 0,
     positionY: 0,
   });
+
+  const [isOpen, setIsOpen] = useState(true); // State to control visibility of legend
+
+  const toggleLegend = () => {
+    setIsOpen(!isOpen); // Toggle the visibility of the legend
+  };
 
   const [selectedNode1, setSelectedNode1] = useState<MapNode | null>(null);
   const [selectedNode2, setSelectedNode2] = useState<MapNode | null>(null);
@@ -190,104 +198,106 @@ function MapEditingPage() {
   const filterIcons = [
     ...(confIconState === "check"
       ? [
-          {
-            iconColor: "#1CA7EC",
-            filterName: "Conference",
-            filterType: 1,
-            shape: "pentagon",
-          },
-        ]
+        {
+          iconColor: "#1CA7EC",
+          filterName: "Conference",
+          filterType: 1,
+          shape: "conf",
+        },
+      ]
       : []),
     ...(deptIconState === "check"
       ? [
-          {
-            iconColor: "#72c41c",
-            filterName: "Department",
-            filterType: 1,
-            shape: "pentagon",
-          },
-        ]
+        {
+          iconColor: "#72c41c",
+          filterName: "Department",
+          filterType: 1,
+          shape: "dept",
+        },
+      ]
       : []),
     ...(labsIconState === "check"
       ? [
-          {
-            iconColor: "#e88911",
-            filterName: "Labs",
-            filterType: 1,
-            shape: "pentagon",
-          },
-        ]
+        {
+          iconColor: "#e88911",
+          filterName: "Labs",
+          filterType: 1,
+          shape: "labs",
+        },
+      ]
       : []),
     ...(servIconState === "check"
       ? [
-          {
-            iconColor: "#e88911",
-            filterName: "Service",
-            filterType: 1,
-            shape: "circle",
-          },
-        ]
+        {
+          iconColor: "#e88911",
+          filterName: "Service",
+          filterType: 1,
+          shape: "service",
+        },
+      ]
       : []),
     ...(infoIconState === "check"
       ? [
-          {
-            iconColor: "#1CA7EC",
-            filterName: "Info",
-            filterType: 1,
-            shape: "circle",
-          },
-        ]
+        {
+          iconColor: "#1CA7EC",
+          filterName: "Info",
+          filterType: 1,
+          shape: "info",
+        },
+      ]
       : []),
     ...(restroomsIconState === "check"
       ? [
-          {
-            iconColor: "#72c41c",
-            filterName: "Restrooms",
-            filterType: 1,
-            shape: "circle",
-          },
-        ]
-      : []),
-    ...(elevatorIconState === "check"
-      ? [
-          {
-            iconColor: "#1CA7EC",
-            filterName: "Elevators",
-            filterType: 1,
-            shape: "square",
-          },
-        ]
-      : []),
-    ...(stairsIconState === "check"
-      ? [
-          {
-            iconColor: "#72c41c",
-            filterName: "Stairs",
-            filterType: 1,
-            shape: "square",
-          },
-        ]
-      : []),
-    ...(exitsIconState === "check"
-      ? [
-          {
-            iconColor: "red",
-            filterName: "Exits",
-            filterType: 1,
-            shape: "square",
-          },
-        ]
+        {
+          iconColor: "#72c41c",
+          filterName: "Restrooms",
+          filterType: 1,
+          shape: "bathroom",
+        },
+      ]
       : []),
     ...(retlIconState === "check"
       ? [
-          {
-            iconColor: "#e88911",
-            filterName: "Retail",
-            filterType: 1,
-            shape: "square",
-          },
-        ]
+        {
+          iconColor: "#e88911",
+          filterName: "Retail",
+          filterType: 1,
+          shape: "retail",
+        },
+      ]
       : []),
+    ...(stairsIconState === "check"
+      ? [
+        {
+          iconColor: "#72c41c",
+          filterName: "Stairs",
+          filterType: 1,
+          shape: "stairs",
+        },
+      ]
+      : []),
+    ...(elevatorIconState === "check"
+      ? [
+        {
+          iconColor: "#1CA7EC",
+          filterName: "Elevators",
+          filterType: 1,
+          shape: "elevators",
+        },
+      ]
+      : []),
+
+    ...(exitsIconState === "check"
+      ? [
+        {
+          iconColor: "red",
+          filterName: "Exits",
+          filterType: 1,
+          shape: "exit",
+        },
+      ]
+      : []),
+
   ];
 
   /**
@@ -911,7 +921,21 @@ function MapEditingPage() {
             </TransformWrapper>
           </Box>
         </Box>
-        <Legend filterItems={filterIcons} />
+        <Stack direction={"row"}>
+          <Box
+            position={"fixed"}
+            right={"0.5%"}
+            sx={{
+              top: "120px"
+            }}
+          >
+            {/* Toggle button */}
+            <ToggleButton onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
+          </Box>
+          {isOpen && (
+            <Legend filterItems={filterIcons} />
+          )}
+        </Stack>
       </Box>
     </>
   );
