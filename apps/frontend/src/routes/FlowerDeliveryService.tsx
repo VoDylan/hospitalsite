@@ -261,7 +261,7 @@ function FlowerDeliveryService() {
               handleChange={handleRoomNumberInput}
             />
           </Grid>
-          <Grid item xs={3} sx={{align: "center"}}>
+          <Grid item xs={12} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>
             <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
