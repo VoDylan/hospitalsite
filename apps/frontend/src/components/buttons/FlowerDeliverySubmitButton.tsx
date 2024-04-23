@@ -23,7 +23,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   );
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -46,8 +46,10 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
   async function handleSubmit() {
-    if (props.input.flowerType === "") {
+    if (props.input.RRose === "" && props.input.WRose === "" && props.input.RCarn === "" && props.input.Tulip === "") {
       openWithError("Please select a flower type");
+    } else if (props.input.employeeID === -1){
+      openWithError("Please enter your employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.recipientName === "") {

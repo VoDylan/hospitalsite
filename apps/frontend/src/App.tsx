@@ -27,7 +27,6 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import TopBanner from "./components/banner/TopBanner.tsx";
 import { Auth0Protection } from "./components/auth0/Auth0Protection.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
-import CheckOutPage from "./routes/CheckOutPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -47,10 +46,6 @@ function App() {
         {
           path: "/Services/FlowerDelivery",
           element: <Auth0Protection component={FlowerDeliveryService} />,
-        },
-        {
-          path: "/Services/FlowerDelivery/CheckOutPage",
-          element: <Auth0Protection component={CheckOutPage} />,
         },
         {
           path: "/Services/GiftDelivery",

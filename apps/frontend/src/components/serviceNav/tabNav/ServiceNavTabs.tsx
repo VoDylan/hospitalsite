@@ -1,6 +1,6 @@
 import * as React from "react";
 import Tab from "@mui/material/Tab";
-import { Box, Tabs } from "@mui/material";
+import {Box, darken, Tabs} from "@mui/material";
 import { Link, matchPath, useLocation } from "react-router-dom";
 
 import {
@@ -43,13 +43,29 @@ export default function ServiceNavTabs() {
         sx={{
           width: "100%",
           opacity: "80%",
-          backgroundColor: "lightgray",
+          backgroundColor: "#186BD9",
           borderRadius: 5,
         }}
       >
         <Tabs
           value={currentTab}
           aria-label={"Service Navigation Tabs"}
+
+          sx={{
+            "& .MuiTab-labelIcon": {
+              color: 'White',
+            },
+            "& .Mui-selected": {
+              color: 'Gold',
+            },
+            "& .MuiTabs-indicator": {
+              background: 'Gold',
+            },
+            "& .MuiTab-root:hover": {
+              backgroundColor: darken("#186BD9", 0.25),
+            },
+          }}
+
           variant="scrollable"
           scrollButtons
           allowScrollButtonsMobile
