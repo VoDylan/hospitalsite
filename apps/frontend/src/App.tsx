@@ -75,6 +75,10 @@ function App() {
           path: "/DisplayDatabase",
           element: <Auth0Protection component={DisplayDatabase} />,
         },
+        /*{
+          path: "/Cart",
+          element: <Auth0Protection component={Cart} />,
+        },*/
 
         {
           path: "/Map",

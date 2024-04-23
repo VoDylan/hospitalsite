@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     justifyContent: "center",
     "& .MuiTextField-root": {
       minWidth: "150px", // Adjust width as needed
+      maxWidth: "220px",
       minHeight: "75px",
     },
   },
