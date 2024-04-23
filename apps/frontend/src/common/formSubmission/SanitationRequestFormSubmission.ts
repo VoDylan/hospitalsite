@@ -1,5 +1,6 @@
 export interface SanitationRequestFormSubmission {
   name: string;
+  employeeID: number
   location: string;
   priority: string;
   service: string;

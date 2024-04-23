@@ -6,17 +6,13 @@ import {
   InputLabel,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-
-interface LabelValuePair {
-  value: string;
-  label: string;
-}
+import {LabelValuePair} from "../../common/LabelValuePair.ts";
 
 interface DropDownProps {
   items: LabelValuePair[] | string[];
   handleChange: (event: SelectChangeEvent) => string;
   label: string;
-  returnData: string;
+  returnData: string | number;
 }
 
 const isOptionArray = (
@@ -52,7 +48,7 @@ export function DropDown(props: DropDownProps) {
   const renderItems = () => {
     if (isOptionArray(props.items)) {
       return props.items.map((item) => (
-        <MenuItem key={item.value} value={item.value}>
+        <MenuItem key={item.label} value={item.value}>
           {item.label}
         </MenuItem>
       ));
