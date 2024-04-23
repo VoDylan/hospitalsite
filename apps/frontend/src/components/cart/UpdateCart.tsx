@@ -6,7 +6,7 @@ type form = {
   gifts?: GiftDeliveryFormSubmission;
 };
 
-export let cart: form[];
+export const cart: form[] = [];
 let newForm: form;
 
 export function updateCart(flowers?: FlowerDeliveryFormSubmission, gifts?: GiftDeliveryFormSubmission) {
