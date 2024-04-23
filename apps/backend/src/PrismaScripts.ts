@@ -158,7 +158,7 @@ export async function getDBNodeByID(
 }
 
 export async function createServiceRequest(
-  employeeID: string,
+  employeeID: number,
   nodeID: string,
   serviceType: string,
   services: string,
