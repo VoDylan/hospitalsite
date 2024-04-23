@@ -303,7 +303,7 @@ export async function getServiceRequestFromDBByNodeID(nodeID: string) {
   return request;
 }
 
-export async function getServiceRequestFromDBByUserID(employeeID: string) {
+export async function getServiceRequestFromDBByUserID(employeeID: number) {
   let request = null;
   try {
     request = await client.serviceRequest.findMany({
@@ -469,4 +469,14 @@ export async function getEmployeesFromDB() {
   }
 
   return employees;
+}
+
+export async function clearEmployeesFromDB() {
+  console.log(`${loggingPrefix}Clearing employees from DB`);
+  try {
+    await client.employee.deleteMany({});
+  } catch (e) {
+    console.error(e);
+  }
+  console.log(`${loggingPrefix}Employees cleared from DB`);
 }

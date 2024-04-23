@@ -39,7 +39,7 @@ type ServiceParams = {
 type EdgeParams = { id: number } & MapEdgeType;
 
 type EmployeeParams = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
 };
@@ -438,6 +438,7 @@ function DisplayDatabase() {
 
         const parsedData: string[][] = parseCSVFromString(fileText as string);
 
+        console.log("Parsed data:");
         console.log(parsedData);
 
         for (let i: number = 0; i < parsedData[0].length; i++) {
@@ -452,15 +453,22 @@ function DisplayDatabase() {
         console.log("Imported employee data is in the correct format");
 
         for (let i: number = 1; i < parsedData.length; i++) {
+          if( parsedData[i].length != 3 ) {
+            continue;
+          }
           jsonData.push({
             employeeID: parseInt(parsedData[i][0]),
             firstName: parsedData[i][1],
             lastName: parsedData[i][2],
           });
+          console.log("Placed " + parsedData[i][2]);
         }
 
+        console.log("JSON data:");
+        console.log(jsonData);
+
         axios
-          .post("/api/database/employees", jsonData)
+          .post("/api/database/uploademployees", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
           });

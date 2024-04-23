@@ -4,6 +4,7 @@ import client from "../bin/database-connection.ts";
 import {
   clearDBEdges,
   clearDBNodes,
+  clearEmployeesFromDB,
   createEdgePrisma,
   createEmployeePrisma,
   createServiceRequest,
@@ -159,7 +160,7 @@ router.get("/servicerequest", async (req, res) => {
 });
 
 router.get("/servicerequest/userid/:userid", async (req, res) => {
-  const userID: string = req.params.userid;
+  const userID: number = req.params.userid as unknown as number;
 
   const requests = await getServiceRequestFromDBByUserID(userID);
 
@@ -329,6 +330,32 @@ router.get("/employees", async (req, res) => {
   } else {
     res.status(200).json(employees!);
   }
+});
+
+router.post("/uploademployees", async (req, res) => {
+  const data: [] = req.body;
+
+  console.log(data);
+
+  await clearEmployeesFromDB();
+
+  for (let i = 0; i < data.length; i++) {
+    if (validateEmployeeData(data[i]).error != undefined) {
+      console.log(`Employee data at line ${i} badly formatted. Skipping...`);
+      continue;
+    } else {
+      console.log(`Employee data at line ${i} valid, adding to database`);
+    }
+    try {
+      await client.employee.create({
+        data: data[i],
+      });
+    } catch (e) {
+      console.log("Failed to create employee", e);
+    }
+  }
+
+  res.status(200);
 });
 
 export default router;
