@@ -2,10 +2,10 @@ import { Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
 export const CurrentTime = () => {
-  let [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
-    let timer = setInterval(() => {
+    const timer = setInterval(() => {
       setDate(new Date());
     }, 1000);
 
