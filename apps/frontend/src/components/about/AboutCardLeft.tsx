@@ -10,89 +10,92 @@ interface AboutCardProps {
 
 export function AboutCardLeft(props: AboutCardProps) {
   return (
-    <Box
-      sx={{
-        mx: 'auto',
-        backgroundColor: "lightgray",
-        maxWidth: "70%",
-      }}
-    >
-      <Stack
-        padding={2}
+    <>
+      <br/>
+      <Box
+          sx={{
+            mx: 'auto',
+            backgroundColor: "lightgray",
+            maxWidth: "70%",
+          }}
       >
-        <Box
-            sx={{
-              backgroundColor: "lightgray",
-            }}
+        <Stack
+            padding={2}
         >
-          <Typography
-              variant="h5"
-              component="div"
+          <Box
               sx={{
-                textAlign: "left",
+                backgroundColor: "lightgray",
               }}
           >
-            {props.role}
-          </Typography>
-          <Typography
-              variant="h5"
-              component="div"
+            <Typography
+                variant="h5"
+                component="div"
+                sx={{
+                  textAlign: "left",
+                }}
+            >
+              {props.role}
+            </Typography>
+            <Typography
+                variant="h5"
+                component="div"
+                sx={{
+                  textAlign: "left",
+                }}
+            >
+              {props.name}
+            </Typography>
+          </Box>
+          <Box
               sx={{
-                textAlign: "left",
+                paddingTop: 3,
               }}
           >
-            {props.name}
-          </Typography>
-        </Box>
-        <Box
-            sx={{
-              paddingTop: 3,
-            }}
-        >
-          <Grid
-              container
-              spacing={2}
-              xs={12}
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-          >
-            <Grid item xs={8}>
-              <Stack>
-                <Typography
-                    variant="h5"
-                    component="div"
-                    sx={{
-                      textAlign: "left",
+            <Grid
+                container
+                spacing={2}
+                xs={12}
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+            >
+              <Grid item xs={8}>
+                <Stack>
+                  <Typography
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        textAlign: "left",
+                      }}
+                  >
+                    {props.bio}
+                  </Typography>
+                  <Typography
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        paddingTop: 3,
+                        textAlign: "left",
+                      }}
+                  >
+                    {props.email}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={4}>
+                <img
+                    src={props.imagePath}
+                    alt={"Picture of " + props.name}
+                    style={{
+                      maxWidth: "100%",
+                      borderRadius: "20%",
                     }}
-                >
-                  {props.bio}
-                </Typography>
-                <Typography
-                    variant="h5"
-                    component="div"
-                    sx={{
-                      paddingTop: 3,
-                      textAlign: "left",
-                    }}
-                >
-                  {props.email}
-                </Typography>
-              </Stack>
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <img
-                  src={props.imagePath}
-                  alt={"Picture of " + props.name}
-                  style={{
-                    maxWidth: "100%",
-                    borderRadius: "20%",
-                  }}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-      </Stack>
-    </Box>
+          </Box>
+        </Stack>
+      </Box>
+    </>
   );
 }

@@ -3,8 +3,19 @@ import {AboutCardRight} from "../components/about/AboutCardRight.tsx";
 import {Box, Stack, Typography} from "@mui/material";
 
 // Images
-import ProfWong from '../images/aboutImages/WilsonWong.jpg';
-import Connor from "../images/aboutImages/Connor.jpeg";
+import ProfWong from '../images/aboutImages/Wong.jpg';
+import Connor from "../images/aboutImages/Connor.jpg";
+import Arayah from "../images/aboutImages/Arayah.png";
+import Dylan from "../images/aboutImages/Dylan.png";
+import Elene from "../images/aboutImages/Elene.png";
+import Jacob from "../images/aboutImages/Jacob.jpg";
+import Kyle from "../images/aboutImages/Kyle.jpg";
+import Matt from "../images/aboutImages/Matt.png";
+import Rick from "../images/aboutImages/Rick.png";
+import Robert from "../images/aboutImages/Robert.png";
+import Sebastian from "../images/aboutImages/Sebastian.jpg";
+import Spencer from "../images/aboutImages/Spencer.jpg";
+import Yitao from "../images/aboutImages/Yitao.jpg";
 
 export default function AboutPage() {
   return (
@@ -35,7 +46,6 @@ export default function AboutPage() {
           email={"wwong2@wpi.edu"}
           imagePath={ProfWong}
         />
-        <br/>
         <AboutCardRight
           role={"Team Coach"}
           name={"Connor Olsen"}
@@ -50,63 +60,63 @@ export default function AboutPage() {
           name={"Elene Kajaia"}
           bio={""}
           email={"ekajaia@wpi.edu"}
-          imagePath={}
+          imagePath={Elene}
         />
         <AboutCardRight
           role={"Assistant Lead"}
           name={"Kyle Schmottlach"}
           bio={""}
           email={"kjschmottlach@wpi.edu"}
-          imagePath={}
+          imagePath={Kyle}
         />
         <AboutCardLeft
           role={"Assistant Lead"}
           name={"Dylan Vo"}
           bio={""}
           email={"dvo@wpi.edu"}
-          imagePath={}
+          imagePath={Dylan}
         />
         <AboutCardRight
           role={"Project Manager"}
           name={"Matt Walsh"}
           bio={""}
           email={"mjwalsh1@wpi.edu"}
-          imagePath={}
+          imagePath={Matt}
         />
         <AboutCardLeft
           role={"Scrum Master"}
           name={"Robert Mellen"}
           bio={""}
           email={"ramellen@wpi.edu"}
-          imagePath={}
+          imagePath={Robert}
         />
         <AboutCardRight
           role={"Product Owner"}
           name={"Jingxu (Rick) Wang"}
           bio={""}
           email={"jwang23@wpi.edu"}
-          imagePath={}
+          imagePath={Rick}
         />
         <AboutCardLeft
           role={"Documentation Analyst"}
           name={"Arayah Remillard"}
           bio={""}
           email={"ajremillard@wpi.edu"}
-          imagePath={}
+          imagePath={Arayah}
         />
         <AboutCardRight
           role={"Full Time Software Engineer"}
           name={"Sebastian Gurgol"}
           bio={""}
           email={"sagurgol@wpi.edu"}
-          imagePath={}
+          imagePath={Sebastian}
         />
         <AboutCardLeft
           role={"Full Time Software Engineer"}
           name={"Yitao Hong"}
           bio={""}
           email={"yhong4@wpi.edu"}
-          imagePath={}
+          imagePath={Yitao}
         />
         <AboutCardRight
           role={"Full Time Software Engineer"}
@@ -114,14 +124,14 @@ export default function AboutPage() {
           bio={"Jacob is a sophomore majoring in Computer Science at WPI. Outside of class, he enjoys power lifting" +
             "and going to the gym. "}
           email={"jjmurphy1@wpi.edu"}
-          imagePath={}
+          imagePath={Jacob}
         />
         <AboutCardLeft
           role={"Full Time Software Engineer"}
           name={"Spencer Trautz"}
           bio={""}
           email={"sctrautz@wpi.edu"}
-          imagePath={}
+          imagePath={Spencer}
         />
       </Stack>
     </Box>

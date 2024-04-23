@@ -10,6 +10,8 @@ interface AboutCardProps {
 
 export function AboutCardRight(props: AboutCardProps) {
   return (
+    <>
+      <br/>
       <Box
           sx={{
             mx: 'auto',
@@ -94,5 +96,6 @@ export function AboutCardRight(props: AboutCardProps) {
           </Box>
         </Stack>
       </Box>
+    </>
   );
 }
