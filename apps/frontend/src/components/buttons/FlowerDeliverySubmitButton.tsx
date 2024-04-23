@@ -16,7 +16,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
   const [message, setMessage] = useState("");
-  const Fcart: FlowerDeliveryFormSubmission[] = [];
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
@@ -38,7 +37,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
     setType("success");
     setMessage("Form submitted successfully!");
     setOpen(true);
-    Fcart.push(props.input);
   }
 
   function openWithError(message: string) {
@@ -137,7 +135,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
-    <Link to={"/Cart"} state={{Fcart}} onClick={() => handleSubmit()}>
+    <Link to={"/Cart"} state={props.input} onClick={() => handleSubmit()}>
     <Button
       variant="contained"
       id={"submitButton"}

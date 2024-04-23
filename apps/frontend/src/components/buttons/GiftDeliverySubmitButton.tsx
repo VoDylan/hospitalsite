@@ -4,6 +4,7 @@ import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeli
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import axios, { isAxiosError } from "axios";
 import {updateCart} from  "../cart/UpdateCart.tsx";
+import {Link} from "react-router-dom";
 
 interface ButtonProps {
   text: string;
@@ -153,11 +154,10 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
+    <Link to={"/Cart"} state={props.input} onClick={() => handleSubmit()}>
     <Button
       variant="contained"
       id={"submitButton"}
-      onClick={() => handleSubmit()}
-      href={"/Cart"}
     >
       {props.text}
       <Snackbar
@@ -173,5 +173,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
+    </Link>
   );
 }

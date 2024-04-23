@@ -2,6 +2,7 @@ import React from 'react';
 import { TextField, Button, CardContent, Typography, Box } from '@mui/material';
 import { FlowerDeliveryFormSubmission } from '../common/formSubmission/FlowerDeliveryFormSubmission.ts';
 import {useLocation} from "react-router-dom";
+import {GiftDeliveryFormSubmission} from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
 
 const flowerPrices = {
   RRose: 5.99,
@@ -10,7 +11,8 @@ const flowerPrices = {
   Tulip: 2.99
 };
 
-let flowerCart: FlowerDeliveryFormSubmission[] = [];
+const flowerCart: FlowerDeliveryFormSubmission[] = [];
+const giftCart: GiftDeliveryFormSubmission[] = [];
 
 function CheckOutPage(){
 
@@ -19,8 +21,11 @@ function CheckOutPage(){
   };
 
   const location = useLocation();
-  if (location.state !== null) {
-    flowerCart = location.state as FlowerDeliveryFormSubmission[];
+  if (location.state !== null && location.state.RRose !== undefined) {
+    flowerCart.push(location.state);
+  }
+  else if (location.state !== null && location.state.balloons !== undefined) {
+    giftCart.push(location.state);
   }
 
   // Calculate the total price for flowers
@@ -31,10 +36,6 @@ function CheckOutPage(){
       parseAmount(flower.Tulip) * flowerPrices['Tulip'];
     return acc;
   }, 0);
-
-
-
-
 
   return (
     <Box sx={{ pt: '150px' }} display="flex" justifyContent="center" p={4}>
