@@ -196,7 +196,7 @@ router.get("/servicerequest/servicetype/:servicetype", async (req, res) => {
 
 router.post("/servicerequest", async (req, res) => {
   const data: {
-    userID: string;
+    employeeID: number;
     nodeID: string;
     serviceType: string;
     services: string;
@@ -216,7 +216,7 @@ router.post("/servicerequest", async (req, res) => {
     });
   } else {
     await createServiceRequest(
-      data.userID,
+      data.employeeID,
       data.nodeID,
       data.serviceType,
       data.services,
