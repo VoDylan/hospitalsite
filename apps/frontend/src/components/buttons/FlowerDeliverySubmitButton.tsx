@@ -37,6 +37,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
     setType("success");
     setMessage("Form submitted successfully!");
     setOpen(true);
+    updateCart(props.input);
   }
 
   function openWithError(message: string) {
@@ -71,7 +72,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
       } else {
         handleClear();
         openWithSuccess();
-        updateCart(props.input);
       }
     }
   }

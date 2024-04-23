@@ -16,16 +16,15 @@ const flowerPrices = {
 function CheckOutPage(){
 
   const parseAmount = (amountStr: string): number => {
-    const parsed = parseInt(amountStr, 10);
-    return isNaN(parsed) ? 0 : parsed;
+    return parseInt(amountStr, 10) || 0;
   };
 
   // Calculate the total price for flowers
   const totalFlowerPrice = flowerCart.reduce((acc, flower) => {
-    acc += parseAmount(flower.RRose as string) * flowerPrices['RRose'] +
-      parseAmount(flower.WRose as string) * flowerPrices['WRose'] +
-      parseAmount(flower.RCarn as string) * flowerPrices['RCarn'] +
-      parseAmount(flower.Tulip as string) * flowerPrices['Tulip'];
+    acc += parseAmount(flower.RRose) * flowerPrices['RRose'] +
+      parseAmount(flower.WRose) * flowerPrices['WRose'] +
+      parseAmount(flower.RCarn) * flowerPrices['RCarn'] +
+      parseAmount(flower.Tulip) * flowerPrices['Tulip'];
     return acc;
   }, 0);
 
