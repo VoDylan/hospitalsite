@@ -2,8 +2,8 @@ import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/Flower
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 
 
-export const flowerCart: FlowerDeliveryFormSubmission[] = [];
-export const giftCart: GiftDeliveryFormSubmission[] = [];
+const flowerCart: FlowerDeliveryFormSubmission[] = [];
+const giftCart: GiftDeliveryFormSubmission[] = [];
 
 export function updateCart(flowers?: FlowerDeliveryFormSubmission, gifts?: GiftDeliveryFormSubmission) {
   if (flowers !== undefined) {
@@ -13,4 +13,8 @@ export function updateCart(flowers?: FlowerDeliveryFormSubmission, gifts?: GiftD
     giftCart.push(gifts);
   }
 
+}
+
+export function getFlowerCart(): FlowerDeliveryFormSubmission[] {
+  return flowerCart;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField, Button, CardContent, Typography, Box } from '@mui/material';
-import {flowerCart} from "../components/cart/UpdateCart.tsx";
 import { FlowerDeliveryFormSubmission } from '../common/formSubmission/FlowerDeliveryFormSubmission.ts';
+import {useLocation} from "react-router-dom";
 
 const flowerPrices = {
   RRose: 5.99,
@@ -10,14 +10,18 @@ const flowerPrices = {
   Tulip: 2.99
 };
 
-
-
+let flowerCart: FlowerDeliveryFormSubmission[] = [];
 
 function CheckOutPage(){
 
   const parseAmount = (amountStr: string): number => {
     return parseInt(amountStr, 10) || 0;
   };
+
+  const location = useLocation();
+  if (location.state !== null) {
+    flowerCart = location.state as FlowerDeliveryFormSubmission[];
+  }
 
   // Calculate the total price for flowers
   const totalFlowerPrice = flowerCart.reduce((acc, flower) => {

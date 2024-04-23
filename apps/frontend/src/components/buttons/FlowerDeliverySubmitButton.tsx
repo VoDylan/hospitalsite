@@ -3,7 +3,7 @@ import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/Flower
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
-import {updateCart} from  "../cart/UpdateCart.tsx";
+import {Link} from "react-router-dom";
 
 interface ButtonProps {
   text: string;
@@ -16,6 +16,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
   const [message, setMessage] = useState("");
+  const Fcart: FlowerDeliveryFormSubmission[] = [];
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
@@ -37,7 +38,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
     setType("success");
     setMessage("Form submitted successfully!");
     setOpen(true);
-    updateCart(props.input);
+    Fcart.push(props.input);
   }
 
   function openWithError(message: string) {
@@ -70,8 +71,8 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
           `Failed to post form data to database: ${result.data.message}`,
         );
       } else {
-        handleClear();
         openWithSuccess();
+        handleClear();
       }
     }
   }
@@ -136,11 +137,10 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
+    <Link to={"/Cart"} state={{Fcart}} onClick={() => handleSubmit()}>
     <Button
       variant="contained"
       id={"submitButton"}
-      onClick={() => handleSubmit()}
-      href={"/Cart"}
     >
       {props.text}
       <Snackbar
@@ -156,5 +156,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
+    </Link>
   );
 }
