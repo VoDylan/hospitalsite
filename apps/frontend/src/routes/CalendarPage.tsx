@@ -16,8 +16,22 @@ import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 import {CalendarAvailabiltiySubmitButton} from "../components/buttons/AppointmentSubmitButton.tsx";
 import axios from "axios";
 import {DropDown} from "../components/dropdown/DropDown.tsx";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    "& .MuiTextField-root": {
+      minWidth: "150px", // Adjust width as needed
+      maxWidth: "220px",
+      minHeight: "75px",
+    },
+  },
+});
 
 export default function CalendarPage() {
+  const classes = useStyles();
 
   const [form, setResponses] = useState<CalendarPageFormSubmission>({
     name: "",
@@ -354,20 +368,22 @@ export default function CalendarPage() {
               </Grid>
               <Grid item xs={6} sx={{align: "center"}}>
                 <Typography align={"center"}>Select Open Date From Calendar:</Typography>
+                <div className={classes.root}>
                 <TextField
-                  sx={{
-                    mx: "35px" //is there a better way to line this up tp CenterAllginedTextbox elements???
-                  }}
+                  // sx={{
+                  //   mx: "35px" //is there a better way to line this up tp CenterAllginedTextbox elements???
+                  // }}
                   id="date"
                   label="Selected Date"
                   value={selectedDate ? selectedDate.format('MM-DD-YYYY') : ''}
                   //value={highlightedDays.length > 0 ? highlightedDays.map(day => day.toString()).join(', ') : ''}
                   onChange={(e) => updateDate(dayjs(e.target.value))}
                 />
+                </div>
               </Grid>
               <Grid
                 item
-                xs={12}
+                xs={6}
                 sx={{
                   display: "flex",
                   my: 2,
