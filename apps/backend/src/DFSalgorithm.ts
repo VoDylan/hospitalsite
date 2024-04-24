@@ -1,20 +1,7 @@
 import Algorithms from "./Algorithms.ts";
-import { Coordinates } from "common/src/Coordinates.ts";
 import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class DFSalgorithm extends Algorithms {
-  constructor() {
-    super();
-  }
-
-  async loadData() {
-    await super.loadData();
-  }
-
-  getCoordinates(currentNode: string): Coordinates {
-    return super.getCoordinates(currentNode);
-  }
-
   runAlgorithm(start: string, end: string): TypeCoordinates[] {
     /*
 
@@ -50,32 +37,7 @@ export class DFSalgorithm extends Algorithms {
       )!;
 
       if (currentNodeID === end) {
-        // const coordinatesPath: IDCoordinates[] = [];
-        const path: string[] = [];
-        let current: string | null = currentNodeID;
-        while (current !== start) {
-          let currentIdx: number = -1;
-          if (current) {
-            path.unshift(current);
-            // coordinatesPath.unshift({
-            //   nodeID: current,
-            //   coordinates: this.getCoordinates(current),
-            // });
-            currentIdx = this.nodes.findIndex(
-              (node) => node.startNodeID === current,
-            );
-          }
-          current = parents[currentIdx];
-        }
-        // coordinatesPath.unshift({
-        //   nodeID: start,
-        //   coordinates: this.getCoordinates(start),
-        // });
-        path.unshift(start);
-
-        console.log("Path found:", path);
-
-        return [];
+        return this.ending(currentNodeID, start, parents);
       }
 
       for (let i = 0; i < currentNode.neighbors.length; i++) {
