@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, Box, Typography, Accordion, AccordionSummary, AccordionDetails, Stack} from "@mui/material";
+import {Button, Box, Typography, Accordion, AccordionSummary, AccordionDetails, Stack, Tabs} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -22,12 +22,16 @@ import MapEdge from "common/src/map/MapEdge.ts";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import "./TableSlide.css";
+import Tab from "@mui/material/Tab";
+import { PieChart, BarChart } from "@mui/x-charts";
+import {employeeCsvHeader, EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
 
 type NodeParams = { id: number } & MapNodeType;
 
 type ServiceParams = {
   id: number;
-  userID: number;
+  //userID: number;
+  employeeID: number;
   nodeID: string;
   serviceType: string;
   services: string;
@@ -35,6 +39,12 @@ type ServiceParams = {
 };
 
 type EdgeParams = { id: number } & MapEdgeType;
+
+type EmployeeParams = {
+  id: number;
+  firstName: string;
+  lastName: string;
+};
 
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
@@ -159,11 +169,18 @@ function DisplayDatabase() {
     { field: "endNodeID", headerName: "EndNodeID", width: 150 },
   ]);
 
+  const [employeeColumns] = useState<GridColDef[]>([
+    { field: "id", headerName: "EmployeeID", width: 100 },
+    { field: "firstName", headerName: "First Name", width: 150 },
+    { field: "lastName", headerName: "Last Name", width: 150 },
+  ]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
 
   const serviceColumns: GridColDef[] = [
-    { field: "userID", headerName: "User ID", width: 100 },
+    //{ field: "userID", headerName: "User ID", width: 100 },
+    { field: "employeeID", headerName: "Employee ID", width: 100 },
     { field: "nodeID", headerName: "Node ID", width: 125 },
     { field: "serviceType", headerName: "Service Type", width: 125 },
     {
@@ -217,9 +234,9 @@ function DisplayDatabase() {
   const [nodeRowData, setNodeRowData] = useState<NodeParams[]>([]);
   const [edgeRowData, setEdgeRowData] = useState<EdgeParams[]>([]);
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
+  const [employeeRowData, setEmployeeRowData] = useState<EmployeeParams[]>([]);
+  const [employeeNameMapping, setEmployeeNameMapping] = useState<{ [key: string]: string }>({});
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentFile, setCurrentFile] = useState<File>();
 
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
@@ -271,7 +288,8 @@ function DisplayDatabase() {
     for (let i = 0; i < data.length; i++) {
       const tableFormattedServReq: ServiceParams = {
         id: data[i].id,
-        userID: data[i].userID,
+        employeeID: data[i].employeeID,
+        //userID: data[i].userID,
         nodeID: data[i].nodeID,
         serviceType: data[i].serviceType,
         services: data[i].services,
@@ -282,10 +300,32 @@ function DisplayDatabase() {
     setServiceRowData(rowData);
   };
 
+  const getEmployeeData = async () => {
+    const { data } = await axios.get("/api/database/employees");
+    console.log("Gathered Employees");
+    console.log(data);
+
+    const nameMapping: { [key: string]: string } = {}; // Create the name mapping object
+    const rowData = [];
+    for (let i = 0; i < data.length; i++) {
+      const { employeeID: id, firstName, lastName } = data[i]; // Destructure correctly
+      const tableFormattedEmployee: EmployeeParams = {
+        id: data[i].employeeID,
+        firstName: data[i].firstName,
+        lastName: data[i].lastName
+      };
+      rowData.push(tableFormattedEmployee);
+      nameMapping[id] = `${firstName} ${lastName}`;
+    }
+    setEmployeeRowData(rowData);
+    setEmployeeNameMapping(nameMapping);
+  };
+
   useEffect(() => {
     getNodeData();
     getEdgeData();
     getServiceData();
+    getEmployeeData();
   }, []);
 
   function handleNodeImport(file: File) {
@@ -334,6 +374,9 @@ function DisplayDatabase() {
           .post("/api/database/uploadnodes", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
+          })
+          .catch((e) => {
+            console.error("Error posting employee data:",e);
           });
       }
     };
@@ -386,6 +429,62 @@ function DisplayDatabase() {
     fileReader.readAsText(file);
   }
 
+  function handleEmployeeImport(file: File) {
+    const fileReader: FileReader = new FileReader();
+
+    let fileText: string | ArrayBuffer = "";
+
+    const jsonData: EmployeeFieldsType[] = [];
+
+    fileReader.onload = (evt: ProgressEvent<FileReader>) => {
+      if (evt.target!.result == null) {
+        console.log("No data found in file");
+      } else {
+        fileText = evt.target!.result;
+        console.log(fileText);
+
+        const parsedData: string[][] = parseCSVFromString(fileText as string);
+
+        console.log("Parsed data:");
+        console.log(parsedData);
+
+        for (let i: number = 0; i < parsedData[0].length; i++) {
+          if (parsedData[0][i] != employeeCsvHeader.split(", ")[i]) {
+            console.error(
+              "Imported employee data does not include the correct header fields",
+            );
+            return;
+          }
+        }
+
+        console.log("Imported employee data is in the correct format");
+
+        for (let i: number = 1; i < parsedData.length; i++) {
+          if( parsedData[i].length != 3 ) {
+            continue;
+          }
+          jsonData.push({
+            employeeID: parseInt(parsedData[i][0]),
+            firstName: parsedData[i][1],
+            lastName: parsedData[i][2],
+          });
+          console.log("Placed " + parsedData[i][2]);
+        }
+
+        console.log("JSON data:");
+        console.log(jsonData);
+
+        axios
+          .post("/api/database/uploademployees", jsonData)
+          .then((response: AxiosResponse) => {
+            console.log(response);
+          });
+      }
+    };
+
+    fileReader.readAsText(file);
+  }
+
   function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
     const file: FileList | null = event.target.files;
     console.log(`Uploaded file: ${file![0]}`);
@@ -408,12 +507,24 @@ function DisplayDatabase() {
     console.log("Handling node import data");
   }
 
+  function handleEmployeeFileUpload(event: { target: { files: FileList | null } }) {
+    const file: FileList | null = event.target.files;
+    console.log(`Uploaded file: ${file![0]}`);
+    if (file == null) {
+      console.log("No file uploaded");
+    } else {
+      handleEmployeeImport(file![0]);
+    }
+    console.log("Handling node import data");
+  }
+
   const processRowUpdate = React.useCallback(
     async (newRow: GridRowModel, id: number) => {
       console.log(`ID: ${id}`);
       const data = {
         id: newRow["id"],
-        userID: newRow["userID"],
+        employeeID: newRow["employeeID"],
+        //userID: newRow["userID"],
         nodeID: newRow["nodeID"],
         serviceType: newRow["serviceType"],
         services: newRow["services"],
@@ -432,28 +543,219 @@ function DisplayDatabase() {
     alert("status didn't save");
   }, []);
 
+  //Const for countServiceType
+  const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
+  const [serviceTypeLabels, setServiceTypeLabels] = useState<string[]>([]);
+  const [serviceTypeCountsData, setServiceTypeCountsData] = useState<number[]>([]);
+
+  //Function to count service types for graph display
+  const countSpecificServiceTypes = (serviceRowData: ServiceParams[]) => {
+    const serviceTypeCounts: { [key: string]: number } = {
+      "medicine-delivery": 0,
+      "gift-delivery": 0,
+      "sanitation-request": 0,
+      "device-delivery": 0,
+      "security-request": 0,
+      "flower-delivery": 0,
+      "room-scheduling": 0,
+      "appointment-scheduling": 0,
+    };
+
+    serviceRowData.forEach((service) => {
+      const { serviceType } = service;
+      serviceTypeCounts[serviceType]++;
+    });
+
+    return serviceTypeCounts;
+  };
+
+  useEffect(() => {
+    const countServiceTypes = () => {
+      const serviceTypeCounts = countSpecificServiceTypes(serviceRowData);
+      const labels = Object.keys(serviceTypeCounts);
+      const counts = Object.values(serviceTypeCounts);
+      setServiceTypeLabels(labels);
+      setServiceTypeCountsData(counts);
+    };
+
+    countServiceTypes();
+  }, [serviceRowData]);
+
+  //const for count status types
+  const [statusLabels, setStatusLabels] = useState<string[]>([]);
+  const [statusCountsData, setStatusCountsData] = useState<number[]>([]);
+
+  //Function that counts each instance of status type
+  const countSpecificStatusTypes = (serviceRowData: ServiceParams[]) => {
+    const statusCounts: { [key: string]: number } = {
+      "Unassigned": 0,
+      "Assigned": 0,
+      "InProgress": 0,
+      "Closed": 0,
+    };
+
+    serviceRowData.forEach((service) => {
+      const { status } = service;
+      statusCounts[status]++;
+    });
+
+    return statusCounts;
+  };
+
+  useEffect(() => {
+    const countStatusTypes = () => {
+      const statusCounts = countSpecificStatusTypes(serviceRowData);
+      const labels = Object.keys(statusCounts);
+      const counts = Object.values(statusCounts);
+      setStatusLabels(labels);
+      setStatusCountsData(counts);
+    };
+
+    countStatusTypes();
+  }, [serviceRowData]);
+
+  //Const for countEmployeeID
+  const [employeeIDLabels, setEmployeeIDLabels] = useState<string[]>([]);
+  const [employeeIDCountsData, setEmployeeIDCountsData] = useState<number[]>([]);
+
+  //Function to count employee IDs for graph display
+  // Use the effect to count employee IDs and update state
+  useEffect(() => {
+
+    const countEmployeeIDs = (serviceRowData: ServiceParams[]) => {
+      const employeeIDCounts: { [key: string]: number } = {};
+      const employeeIDLabels: string[] = [];
+
+      serviceRowData.forEach((service) => {
+        const { employeeID } = service;
+        if (employeeIDCounts[employeeID]) {
+          employeeIDCounts[employeeID]++;
+        } else {
+          employeeIDCounts[employeeID] = 1;
+          // Get the employee name from the mapping
+          const employeeName = employeeNameMapping[employeeID]; // Assuming employeeNameMapping is available
+          // Add employee name as label
+          employeeIDLabels.push(employeeName);
+        }
+      });
+
+      // Set the state for labels here
+      setEmployeeIDLabels(employeeIDLabels);
+
+      return employeeIDCounts;
+    };
+
+    const countEmployeeIDsFunction = () => {
+      const employeeIDCounts = countEmployeeIDs(serviceRowData);
+      const counts = Object.values(employeeIDCounts);
+      setEmployeeIDCountsData(counts);
+    };
+
+    countEmployeeIDsFunction();
+  }, [employeeNameMapping, serviceRowData]);
+
+  // Toggle between bar chart and pie chart
+  const toggleChartType = () => {
+    setChartType((prevChartType) => (prevChartType === 'bar' ? 'pie' : 'bar'));
+  };
+
+  //service tabs
+  const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
+  const handleServiceTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    //console.log(tabIndex);
+    setCurrentServiceIndex(tabIndex);
+  };
+
+  //employee tabs
+  const [currentEmployeeIndex, setCurrentEmployeeIndex] = useState(0);
+  const handleEmployeeTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    //console.log(tabIndex);
+    setCurrentEmployeeIndex(tabIndex);
+  };
+
+  //map tabs
+  const [currentMapIndex, setCurrentMapIndex] = useState(0);
+  const handleMapTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    //console.log(tabIndex);
+    setCurrentMapIndex(tabIndex);
+  };
+
+  //node tabs
+  /*const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
+  const handleNodeTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    console.log(tabIndex);
+    setCurrentNodeIndex(tabIndex);
+  };*/
+
+  //edge tabs
+  /*const [currentEdgeIndex, setCurrentEdgeIndex] = useState(0);
+  const handleEdgeTabChange = (e, tabIndex: React.SetStateAction<number>) => {
+    console.log(tabIndex);
+    setCurrentEdgeIndex(tabIndex);
+  };*/
+
   return (
-        <Stack direction={"column"}
-          sx={{
-          position: "relative",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minWidth: "100wh",
-          marginTop: "150px",
-          marginBottom: "10vh",
-          width: "100%",
-        }}>
-          <Accordion defaultExpanded sx={{ width: "90%", backgroundColor: "white"}} elevation={3}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-              <Typography color={"black"}>
-                SERVICES
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Box display="flex">
-                {/* Container for the service request table and service details table */}
-                <Box flex="1" ml={3}>
+    <Stack
+      direction={"column"}
+      sx={{
+        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minWidth: "100wh",
+        marginTop: "150px",
+        marginBottom: "10vh",
+        width: "100%",
+      }}
+    >
+      <Accordion
+        defaultExpanded
+        elevation={3}
+        sx={{
+          width: "90%",
+          backgroundColor: "white"
+      }}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+          <Typography color={"black"}>
+            SERVICES DATA
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <React.Fragment>
+            <Tabs
+              value={currentServiceIndex}
+              onChange={handleServiceTabChange}
+              orientation={"horizontal"}
+            >
+              <Tab label='TABLE' />
+              <Tab label='STATUS' />
+              <Tab label='ANALYTICS' />
+            </Tabs>
+            <Box //this box is for the service details sliding box
+              display={"flex"}
+              alignItems="center"
+              //justifyContent="center"
+              //flexDirection="column"
+            >
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              {/* Container for the service request table and service details table */}
+              {currentServiceIndex === 0 && (
+                <Box
+                  display="flex"
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column"
+                  sx={{width: '100%'}}
+                >
+                  {/*<Typography variant='h5'>Service Data Table</Typography>*/}
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
                     sx={{
@@ -476,127 +778,423 @@ function DisplayDatabase() {
                     onProcessRowUpdateError={handleProcessRowUpdateError}
                   />
                 </Box>
-                <Box width="400px" ml={2}>
-                  {selectedServiceDetails && (
-                    <ServiceDetailsTable
-                      service={selectedServiceDetails}
-                      isVisible={isServiceDetailsVisible}
+              )}
+            </Box>
+              {currentServiceIndex === 0 && (
+             <Box width="400px" ml={2}>
+                {selectedServiceDetails && (
+                  <ServiceDetailsTable
+                    service={selectedServiceDetails}
+                    isVisible={isServiceDetailsVisible}
+                  />
+                )}
+             </Box>
+              )}
+            </Box>
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              flexDirection="column"
+            >
+              {/* Container for the service request status graph */}
+              {currentServiceIndex === 1 && (
+                <>
+                  <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+                <Box
+                  flex="1"
+                  display={"flex"}
+                  justifyContent="center"
+                >
+                  {chartType === 'bar' && (
+                    <BarChart
+                      xAxis={[
+                        {
+                          scaleType: 'band',
+                          data: statusLabels,
+                        },
+                      ]}
+                      series={[
+                        {
+                          data: statusCountsData,
+                        },
+                      ]}
+                      width={700}
+                      height={300}/>
+                  )}
+                  {chartType === 'pie' && (
+                    <PieChart
+                      series={[
+                        {
+                          data: statusLabels.map((label, index) => ({
+                            id: index,
+                            value: statusCountsData[index],
+                            label,
+                          })),
+                        },
+                      ]}
+                      width={700}
+                      height={300}
+                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
                     />
                   )}
                 </Box>
-              </Box>
-            </AccordionDetails>
-          </Accordion>
-        <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-            <Typography color={"black"}>
-              NODES
-            </Typography>
-          </AccordionSummary>
-            <AccordionDetails>
+                </>
+              )}
+            </Box>
+
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              flexDirection="column"
+            >
+              {/* Container for the service request analytics graph */}
+            {currentServiceIndex === 2 && (
+              <>
+              <Button onClick={toggleChartType}>Toggle Chart Type</Button>
               <Box
+                flex="1"
                 display="flex"
-                mt={2}
-                alignItems="center"
-                flexDirection="column"
+                justifyContent="center"
               >
-                <DataGrid
-                  slots={{ toolbar: GridToolbar }}
-                  sx={{
-                    padding: "40px",
-                    position: "relative",
-                    display: "flex",
-                    justifyContent: "center",
-                    width: "100%",
-                    backgroundColor: "white"
-                  }}
-                  columns={nodeColumns}
-                  rows={nodeRowData}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  pageSizeOptions={[5, 10]}
-                />
-                <Button
-                  component="label"
-                  role={undefined}
-                  tabIndex={-1}
-                  startIcon={<CloudUploadIcon />}
-                  className="importButton"
-                  variant="contained"
-                  // onClick={handleNodeImport}
-                  sx={{
-                    backgroundColor: "primary.main", // Change background color
-                    color: "white", // Change text color
-                    borderRadius: "8px", // Change border radius
-                    marginRight: "-1px", // Adjust spacing
-                    marginTop: "15px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  Import Nodes (CSV File)
-                  <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
-                </Button>
+                {chartType === 'bar' && (
+                  <BarChart
+                    xAxis={[
+                      {
+                        scaleType: 'band',
+                        data: serviceTypeLabels,
+                      },
+                    ]}
+                    series={[
+                      {
+                        data: serviceTypeCountsData,
+                      },
+                    ]}
+                    width={900}
+                    height={300}
+                    colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}/>
+                )}
+
+                {chartType === 'pie' && (
+                  <PieChart
+                    series={[
+                      {
+                        data: serviceTypeLabels.map((label, index) => ({
+                          id: index,
+                          value: serviceTypeCountsData[index],
+                          label,
+                        })),
+                      },
+                    ]}
+                    width={700}
+                    height={300}
+                    colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}/>
+                )}
               </Box>
-            </AccordionDetails>
-        </Accordion>
-        <Accordion sx={{width: "90%", backgroundColor: "white"}} elevation={3}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
-            <Typography color={"black"}>
-              EDGES
-            </Typography>
-          </AccordionSummary>
-        <AccordionDetails sx={{
-          display: "flex",
-          flexDirection: "column",  // To stack the button and DataGrid vertically
-          alignItems: "center",      // To center align items horizontally
-          justifyContent: "center", // To center align items vertically
-        }}>
-          <DataGrid
-            slots={{ toolbar: GridToolbar }}
-            sx={{
-              padding: "40px",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "white",
-              width: "50%"
-            }}
-            columns={edgeColumns}
-            rows={edgeRowData}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-          />
-          <Button
-            component="label"
-            role={undefined}
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            className="importButton"
-            variant="contained"
-            // onClick={handleImport}
-            sx={{
-              backgroundColor: "primary.main", // Change background color
-              color: "white", // Change text color
-              borderRadius: "8px", // Change border radius
-              marginRight: "-1px", // Adjust spacing
-              marginTop: "15px",
-              marginBottom: "30px",
-            }}
-          >
-            Import Edges (CSV File)
-            <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
-          </Button>
+              </>
+            )}
+            </Box>
+          </React.Fragment>
         </AccordionDetails>
-        </Accordion>
-        </Stack>
+      </Accordion>
+
+      <Accordion
+        defaultExpanded
+        elevation={3}
+        sx={{
+          width: "90%",
+          backgroundColor: "white"
+        }}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+          <Typography color={"black"}>
+            EMPLOYEE DATA
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <React.Fragment>
+            <Tabs
+              value={currentEmployeeIndex}
+              onChange={handleEmployeeTabChange}
+              orientation={"horizontal"}
+            >
+              <Tab label='EMPLOYEE' />
+              <Tab label='EMPLOYEE ID' />
+              {/*<Tab label='ANALYTICS' />*/}
+            </Tabs>
+          <Box
+            display={"flex"}
+            flex="1"
+            ml={3}
+            mt={2}
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+          >
+            {/* Container for the employee graph */}
+            {currentEmployeeIndex === 1 && (
+              <>
+                <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+              <Box
+                flex="1"
+                display={"flex"}
+                justifyContent="center"
+              >
+            {chartType === 'bar' && (
+              <BarChart
+                xAxis={[
+                  {
+                    scaleType: 'band',
+                    data: employeeIDLabels,
+                  },
+                ]}
+                series={[
+                  {
+                    data: employeeIDCountsData,
+                  },
+                ]}
+                width={900}
+                height={300}
+                colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
+              />
+            )}
+
+            {chartType === 'pie' && (
+              <PieChart
+                series={[
+                  {
+                    data: employeeIDLabels.map((label, index) => ({
+                      id: index,
+                      value: employeeIDCountsData[index],
+                      label,
+                    })),
+                  },
+                ]}
+                width={700}
+                height={300}
+                colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
+              />
+            )}
+              </Box>
+              </>
+            )}
+          </Box>
+
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              flexDirection="column"
+            >
+              {/* Container for the employee table */}
+              {currentEmployeeIndex === 0 && (
+                <Box
+                  display="flex"
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column"
+                  sx={{width: '50%'}}
+                >
+                  <DataGrid
+                    slots={{ toolbar: GridToolbar }}
+                    sx={{
+                      padding: "40px",
+                      position: "relative",
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "100%",
+                      backgroundColor: "white"
+                    }}
+                    columns={employeeColumns}
+                    rows={employeeRowData}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                      },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                  />
+                  <Button
+                    component="label"
+                    role={undefined}
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                    className="importButton"
+                    variant="contained"
+                    // onClick={handleNodeImport}
+                    sx={{
+                      backgroundColor: "primary.main", // Change background color
+                      color: "white", // Change text color
+                      borderRadius: "8px", // Change border radius
+                      marginRight: "-1px", // Adjust spacing
+                      marginTop: "15px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    Import Employees (CSV File)
+                    <VisuallyHiddenInput type="file" onChange={handleEmployeeFileUpload} />
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </React.Fragment>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion
+        defaultExpanded
+        elevation={3}
+        sx={{
+          width: "90%",
+          backgroundColor: "white"
+        }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "black"}}/>}>
+          <Typography color={"black"}>
+            MAP DATA
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <React.Fragment>
+            <Tabs
+              value={currentMapIndex}
+              onChange={handleMapTabChange}
+              orientation={"horizontal"}
+            >
+              <Tab label='NODES' />
+              <Tab label='EDGES' />
+              {/*<Tab label='GRAPH' />*/}
+            </Tabs>
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              {/* Container for the Node data */}
+              {currentMapIndex === 0 && (
+                <Box
+                  display="flex"
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column"
+                  sx={{width: '100%'}}
+                >
+                  <DataGrid
+                    slots={{ toolbar: GridToolbar }}
+                    sx={{
+                      padding: "40px",
+                      position: "relative",
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "100%",
+                      backgroundColor: "white"
+                    }}
+                    columns={nodeColumns}
+                    rows={nodeRowData}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                      },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                  />
+                  <Button
+                    component="label"
+                    role={undefined}
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                    className="importButton"
+                    variant="contained"
+                    // onClick={handleNodeImport}
+                    sx={{
+                      backgroundColor: "primary.main", // Change background color
+                      color: "white", // Change text color
+                      borderRadius: "8px", // Change border radius
+                      marginRight: "-1px", // Adjust spacing
+                      marginTop: "15px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    Import Nodes (CSV File)
+                    <VisuallyHiddenInput type="file" onChange={handleNodeFileUpload} />
+                  </Button>
+                </Box>
+              )}
+            </Box>
+            <Box
+              display={"flex"}
+              flex="1"
+              ml={3}
+              mt={2}
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              {/* Container for the Edge data */}
+              {currentMapIndex === 1 && (
+                <Box
+                  display="flex"
+                  mt={2}
+                  alignItems="center"
+                  flexDirection="column"
+                  sx={{width: '100%'}}
+                >
+                  <DataGrid
+                    slots={{ toolbar: GridToolbar }}
+                    sx={{
+                      padding: "40px",
+                      position: "relative",
+                      display: "flex",
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      width: "50%"
+                    }}
+                    columns={edgeColumns}
+                    rows={edgeRowData}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                      },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                  />
+                  <Button
+                    component="label"
+                    role={undefined}
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                    className="importButton"
+                    variant="contained"
+                    // onClick={handleImport}
+                    sx={{
+                      backgroundColor: "primary.main", // Change background color
+                      color: "white", // Change text color
+                      borderRadius: "8px", // Change border radius
+                      marginRight: "-1px", // Adjust spacing
+                      marginTop: "15px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    Import Edges (CSV File)
+                    <VisuallyHiddenInput type="file" onChange={handleEdgeFileUpload} />
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </React.Fragment>
+        </AccordionDetails>
+      </Accordion>
+    </Stack>
   );
 }
 

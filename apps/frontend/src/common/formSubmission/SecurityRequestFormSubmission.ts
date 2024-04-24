@@ -6,5 +6,4 @@ export interface SecurityRequestFormSubmission {
   securityPersonnel: string;
   securityCategory: string;
   securityDetail: string;
-  status: string;
 }

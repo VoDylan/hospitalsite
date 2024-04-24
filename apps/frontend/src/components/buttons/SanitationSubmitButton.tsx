@@ -56,8 +56,6 @@ export function SanitationSubmitButton(props: ButtonProps) {
       openWithError("Please select a priority");
     } else if (props.input.service === "") {
       openWithError("Please select a service");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
     } else if (props.input.frequency === "") {
       openWithError("Please select a frequency");
     } else {
@@ -85,7 +83,7 @@ export function SanitationSubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: SanitationRequestFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "sanitation-request",
       services: form,

@@ -1,8 +1,8 @@
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import client from "./bin/database-connection.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import { nodeAlgorithms } from "common/src/nodeAlgorithms.ts";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 abstract class Algorithms {
   mapNodes: MapNodeType[];
@@ -52,7 +52,7 @@ abstract class Algorithms {
     return { x: Node.xcoord, y: Node.ycoord };
   }
 
-  abstract runAlgorithm(start: string, end: string): IDCoordinates[];
+  abstract runAlgorithm(start: string, end: string): TypeCoordinates[];
 }
 
 export default Algorithms;
