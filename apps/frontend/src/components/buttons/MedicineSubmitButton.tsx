@@ -1,6 +1,6 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import { MedicineDeliveryFormSubmission } from "../../common/formSubmission/MedicineDeliveryFormSubmission.ts";
 
@@ -23,7 +23,7 @@ export function MedicineSubmitButton(props: ButtonProps) {
   );
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -148,7 +148,7 @@ export function MedicineSubmitButton(props: ButtonProps) {
         autoHideDuration={5000}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         }}
       >
