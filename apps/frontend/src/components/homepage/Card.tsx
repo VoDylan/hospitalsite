@@ -69,7 +69,7 @@ export default function CustomCard({
               marginBottom: "0.75%",
               width: "26vw",
               // fit-content option
-              backgroundColor: 'rgba(221, 191, 152, 0.6)',
+              // backgroundColor: 'rgba(221, 191, 152, 0.6)',
 
             }}
           >
@@ -84,7 +84,7 @@ export default function CustomCard({
               width: "26vw",
               // fit-content option
               whiteSpace: "nowrap",
-              backgroundColor: 'rgba(221, 191, 152, 0.6)',
+              // backgroundColor: 'rgba(221, 191, 152, 0.6)',
 
 
             }}
