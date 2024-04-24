@@ -5,5 +5,4 @@ export interface RoomSchedulingFormSubmission {
   priority: string;
   service: string;
   frequency: string;
-  status: string;
 }
