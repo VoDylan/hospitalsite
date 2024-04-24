@@ -31,6 +31,7 @@ export class Cart {
       this.Tulip = this.RRose + parseInt(flowers.Tulip);
     }
     else if (flowers.roomNumber !== this.location){
+      this.location = flowers.roomNumber;
       this.RRose = parseInt(flowers.RRose);
       this.WRose = parseInt(flowers.WRose);
       this.RCarn = parseInt(flowers.RCarn);
@@ -45,6 +46,7 @@ export class Cart {
       this.Bears = this.Bears + parseInt(gifts.bears);
     }
     else if (gifts.location !== this.location){
+      this.location = gifts.location;
       this.Balloons = parseInt(gifts.balloons);
       this.Cards = parseInt(gifts.cards);
       this.Bears = parseInt(gifts.bears);
