@@ -27,7 +27,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import TopBanner from "./components/banner/TopBanner.tsx";
 import { Auth0Protection } from "./components/auth0/Auth0Protection.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
-import CalenderPage from "./routes/CalenderPage.tsx";
+import CalendarPage from "./routes/CalendarPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 
 function App() {
@@ -79,7 +79,7 @@ function App() {
         },
         {
           path: "/Services/Calendar",
-          element: <Auth0Protection component={CalenderPage} />,
+          element: <Auth0Protection component={CalendarPage} />,
         },
         /*{
           path: "/Cart",
