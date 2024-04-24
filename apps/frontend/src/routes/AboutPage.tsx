@@ -86,7 +86,7 @@ export default function AboutPage() {
           role={"Project Manager"}
           name={"Matt Walsh"}
           bio={"Matt is a sophomore majoring in Computer Science at WPI. He has been programming in Java since 8th grade" +
-            "and also is proficient in C, C++, and SQL. He also has experience with managing teams. Outside of school, he " +
+            "and also is proficient in C and C++. He also has experience with managing teams. Outside of school, he " +
             "enjoys playing sports and weightlifting."}
           email={"mjwalsh1@wpi.edu"}
           imagePath={Matt}
@@ -114,8 +114,7 @@ export default function AboutPage() {
           name={"Arayah Remillard"}
           bio={"Arayah is a junior majoring in Computer Science at WPI. She started programming in college and is " +
             "proficient with Java, C, and C++. She also has internship experience with documentation and is a tutor" +
-            "for the Writing Center. Outside of school, she enjoys "}
-          boop
+            "for the Writing Center. Outside of school, she enjoys playing and watching basketball."}
           email={"ajremillard@wpi.edu"}
           imagePath={Arayah}
         />
@@ -131,7 +130,9 @@ export default function AboutPage() {
         <AboutCardLeft
           role={"Full Time Software Engineer"}
           name={"Yitao Hong"}
-          bio={""}
+          bio={"Yitao is a junior majoring in Computer Science and minoring in Data Science at WPI. He started programming" +
+            "in college and is proficient in Java, C, and C++. He has experience with UI/UX design and has experience " +
+            "using SQL to manage databases. Outside of school, he enjoys fitness and snowboarding."}
           email={"yhong4@wpi.edu"}
           imagePath={Yitao}
         />
@@ -139,7 +140,7 @@ export default function AboutPage() {
           role={"Full Time Software Engineer"}
           name={"Jacob Murphy"}
           bio={"Jacob is a sophomore majoring in Computer Science at WPI. He has programmed since high school and is " +
-            "proficient in a few different programming languages. He also has had software engineering experience working" +
+            "proficient in Java, C, and SQL. He also has had software engineering experience working" +
             "with a remote team. Outside of class, he enjoys power lifting and going to the gym."}
           email={"jjmurphy1@wpi.edu"}
           imagePath={Jacob}
@@ -147,7 +148,9 @@ export default function AboutPage() {
         <AboutCardLeft
           role={"Full Time Software Engineer"}
           name={"Spencer Trautz"}
-          bio={""}
+          bio={"Spencer is a sophomore majoring in Computer Science at WPI. He has programmed since high school and is" +
+            "proficient in Java, C, C++, and Python. He also has experience working as an End User Support Technician." +
+            "Outside of class, he enjoys going on drives and is passionate about cars."}
           email={"sctrautz@wpi.edu"}
           imagePath={Spencer}
         />
