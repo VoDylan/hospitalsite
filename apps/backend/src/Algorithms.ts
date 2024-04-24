@@ -157,11 +157,9 @@ abstract class Algorithms {
             180) /
           Math.PI;
 
-        if (z > 0 && angle > 10)
-          turnsList.push(`Turn right on ${typeCoordinates[i + 1].longName}.`);
-        else if (z < 0 && angle > 10)
-          turnsList.push(`Turn left on ${typeCoordinates[i + 1].longName}.`);
-        else turnsList.push(`Continue on ${typeCoordinates[i + 1].longName}.`);
+        if (z > 0 && angle > 10) turnsList.push(`Turn right.`);
+        else if (z < 0 && angle > 10) turnsList.push(`Turn left.`);
+        else turnsList.push(`Continue.`);
       }
     }
 
@@ -186,22 +184,13 @@ abstract class Algorithms {
       ) {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
         turnsList = [...turnsList, ...newTurnsList];
-
         currentFloorNodes.push(typeCoordinates[i]);
         currentFloorNodes = [];
-        turnsList.push(
-          `Go to ${typeCoordinates[i].longName} to Floor ${typeCoordinates[i + 1].floor}.`,
-        );
+        turnsList.push(`Go to Floor ${typeCoordinates[i + 1].floor}.`);
         secondElevator = true;
-        // console.log("first elevator", newTurnsList);
       } else if (typeCoordinates[i].nodeType === "ELEV" && secondElevator) {
-        // const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
-
-        turnsList.push(
-          `Come off ${typeCoordinates[i].longName} from Floor ${typeCoordinates[i - 1].floor}.`,
-        );
+        turnsList.push(`Come off Floor ${typeCoordinates[i - 1].floor}.`);
         secondElevator = false;
-        // console.log("second elevator", newTurnsList);
       } else if (
         typeCoordinates[i].nodeType === "STAI" &&
         !secondStairs &&
@@ -209,27 +198,16 @@ abstract class Algorithms {
       ) {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
         turnsList = [...turnsList, ...newTurnsList];
-
         currentFloorNodes.push(typeCoordinates[i]);
         currentFloorNodes = [];
-        turnsList.push(
-          `Take ${typeCoordinates[i].longName} to Floor ${typeCoordinates[i + 1].floor}.`,
-        );
+        turnsList.push(`Go to Floor ${typeCoordinates[i + 1].floor}.`);
         secondStairs = true;
-        // console.log("first stairs", newTurnsList);
       } else if (typeCoordinates[i].nodeType === "STAI" && secondStairs) {
-        // const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
-
-        turnsList.push(
-          `Come off ${typeCoordinates[i].longName} from Floor ${typeCoordinates[i - 1].floor}.`,
-        );
+        turnsList.push(`Come off Floor ${typeCoordinates[i - 1].floor}.`);
         secondStairs = false;
-        // console.log("second stairs", newTurnsList);
       } else if (i === typeCoordinates.length - 1) {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
         turnsList = [...turnsList, ...newTurnsList];
-
-        // console.log("last", newTurnsList);
       }
     }
 
