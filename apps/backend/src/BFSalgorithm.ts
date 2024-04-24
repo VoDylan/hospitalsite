@@ -1,10 +1,8 @@
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
-// import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { NodeBFS } from "common/src/NodeBFS.ts";
 import client from "./bin/database-connection.ts";
 import Algorithms from "./Algorithms.ts";
-import { Coordinates } from "common/src/Coordinates.ts";
 import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class BFSalgorithm extends Algorithms {
@@ -77,10 +75,6 @@ export class BFSalgorithm extends Algorithms {
           this.all_nodes[j].neighbors.push(start_node_now.current_node);
       }
     }
-  }
-
-  getCoordinates(currentNode: string): Coordinates {
-    return super.getCoordinates(currentNode);
   }
 
   runAlgorithm(start: string, end: string): TypeCoordinates[] {
