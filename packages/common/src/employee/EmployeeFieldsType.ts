@@ -4,4 +4,4 @@ export type EmployeeFieldsType = {
   lastName: string;
 };
 
-export const employeeCsvHeader = "employeeID, firstName, lastName";
+export const employeeCsvHeader = "Employee ID, First Name, Last Name";
