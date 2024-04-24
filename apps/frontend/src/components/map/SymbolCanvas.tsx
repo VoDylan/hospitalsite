@@ -197,7 +197,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
             draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
               nodesOnFloor[i].ycoord,
-              1,
+              1.12,
               lab
             );
             break;
