@@ -9,7 +9,7 @@ import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
 import CurrentTime from "../banner/Time.tsx";
 import WeatherApp from "./WeatherApp.tsx";
-import Carticon from ".../images/carticon.png";
+import Carticon from "/carticon.png";
 
 const useStyles = makeStyles({
   logoImage: {
