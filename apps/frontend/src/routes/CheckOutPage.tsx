@@ -5,6 +5,7 @@ import {useLocation} from "react-router-dom";
 import {GiftDeliveryFormSubmission} from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { CheckOutPageFormSubmission } from '../common/formSubmission/CheckOutPageFormSubmission.ts';
 import { CheckOutPageSubmitButton } from "../components/buttons/CheckOutPageSubmitButton.tsx";
+import InitCart from "./InitCart.ts";
 
 const flowerPrices = {
   RRose: 5.99,
@@ -19,11 +20,75 @@ const giftPrices = {
   bears: 5.99
 };
 
+const presentFlowers: string[] = [];
+function loadFlowers() {
+  if (InitCart.RRose !== 0){
+    presentFlowers.push("RRose");
+  }
+  if (InitCart.WRose !== 0){
+    presentFlowers.push("WRose");
+  }
+  if (InitCart.RCarn !== 0){
+    presentFlowers.push("RCarn");
+  }
+  if (InitCart.Tulip !== 0){
+    presentFlowers.push("Tulip");
+  }
+}
+
+const flowerAmounts: number[] = [];
+function loadFlowerAmounts() {
+  if (InitCart.RRose !== 0){
+    flowerAmounts.push(InitCart.RRose);
+  }
+  if (InitCart.WRose !== 0){
+    flowerAmounts.push(InitCart.WRose);
+  }
+  if (InitCart.RCarn !== 0){
+    flowerAmounts.push(InitCart.RCarn);
+  }
+  if (InitCart.Tulip !== 0){
+    flowerAmounts.push(InitCart.Tulip);
+  }
+}
+
+const presentGifts:string[] = [];
+function loadGifts() {
+  if (InitCart.Balloons !== 0){
+    presentGifts.push("Balloons");
+  }
+  if (InitCart.Cards !== 0){
+    presentGifts.push("Cards");
+  }
+  if (InitCart.Bears !== 0){
+    presentGifts.push("Bears");
+  }
+}
+
+const giftAmounts:number[] =[];
+
+function loadGiftAmounts() {
+  if (InitCart.Balloons !== 0){
+    giftAmounts.push(InitCart.Balloons);
+  }
+  if (InitCart.Cards !== 0){
+    giftAmounts.push(InitCart.Cards);
+  }
+  if (InitCart.Bears !== 0){
+    giftAmounts.push(InitCart.Bears);
+  }
+}
+
 const flowerCart: FlowerDeliveryFormSubmission[] = [];
 const giftCart: GiftDeliveryFormSubmission[] = [];
 
 function CheckOutPage(){
   //const [flowerAmounts, setFlowerAmounts] = React.useState<number[]>([0, 0, 0, 0]);
+
+  loadFlowers();
+  loadGifts();
+  loadFlowerAmounts();
+  loadGiftAmounts();
 
   const [form, setFormResponses] = useState<CheckOutPageFormSubmission>({
     nameOnCard: "",
