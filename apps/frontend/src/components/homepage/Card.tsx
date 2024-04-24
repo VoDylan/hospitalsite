@@ -76,6 +76,7 @@ export default function CustomCard({
               marginTop: "6%",
               marginBottom: "0.75%",
               width: "26vw",
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
 
             }}
           >
