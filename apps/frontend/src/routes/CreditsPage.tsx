@@ -12,6 +12,7 @@ import Webstorm from "../images/creditImages/webstorm-logo1.png";
 import Prisma from "../images/creditImages/prisma-logo.png";
 import AWS from "../images/creditImages/aws-logo.png";
 import Postgres from "../images/creditImages/PostgreSQL-Logo.png";
+import Threado from "../images/creditImages/threado-logo-removebg-preview.png";
 
 export default function CreditsPage() {
 const [tabValue, setTabValue] = useState(0);
@@ -98,7 +99,10 @@ return (
               <img src={MaterialUI} alt="Material UI logo" style={{ width: 400, height: 200}} />
               <div>
                 <Typography variant="body1"
-                  sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Material UI is an incredibly useful library that builds upon existing React components.
                   It allowed for us to generate a unique design for the website, incorporating features such as the carousel
@@ -145,7 +149,10 @@ return (
               <img src={Github} alt="Github logo" style={{ width: 400, height: 200}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Github is an integral software tool that is used for code repository management.
                   Our team utilized Github for essentially everything involving the code. This included
@@ -187,7 +194,10 @@ return (
               <img src={Taiga} alt="Taiga logo" style={{ width: 370, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Taiga is a project management platform that allowed for us to streamline the production
                   of the website. It is very helpful with creating and assigning tasks/user stories,
@@ -227,7 +237,10 @@ return (
               <img src={Figma} alt="Figma logo" style={{ width: 400, height: 175}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Figma is a very useful software tool that allows for the user to generate potential website designs.
                   Our team utilized Figma in order to brainstorm front end design choices and organize our themes/styles.
@@ -266,7 +279,10 @@ return (
               <img src={Auth0} alt="Auth0 logo" style={{ width: 350, height: 120}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Auth0 is a third party tool that can be implemented in order to track sign-ins to a website.
                   We utilized Auth0 within our website in order to lock out certain features such as the database
@@ -306,7 +322,10 @@ return (
               <img src={Webstorm} alt="Webstorm logo" style={{ width: 350, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Webstorm is a Jetbrains IDE that specializes in javascript and typescript development. Webstorm was incredibly
                   helpful towards our team building this website, as it provided intuitive Git integration on top of a plethora
@@ -346,7 +365,10 @@ return (
               <img src={Postgres} alt="PostgreSQL logo" style={{ width: 350, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   PostgreSQL is a database management system that allowed us to efficiently manage a large amount of data
                   while maintaining a high performance throughout the website.
@@ -385,7 +407,10 @@ return (
               <img src={Prisma} alt="Prisma logo" style={{ width: 350, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Prisma is a database toolkit that was essential for our team to be able to access the database
                   in an efficient and intuitive manner. Through its Object-Relational-Mapping (ORM) layer, complexities are
@@ -421,14 +446,66 @@ return (
               },
             }}
           >
-            <a href="https://aws.amazon.com/free/?gclid=Cj0KCQjwlZixBhCoARIsAIC745Ck2OTksov4JZKGPGTjPfA4lPvBzz-7JxmmXT8NMcyeJREaX2AOt5kaAn3yEALw_wcB&trk=6a4c3e9d-cdc9-4e25-8dd9-2bd8d15afbca&sc_channel=ps&ef_id=Cj0KCQjwlZixBhCoARIsAIC745Ck2OTksov4JZKGPGTjPfA4lPvBzz-7JxmmXT8NMcyeJREaX2AOt5kaAn3yEALw_wcB:G:s&s_kwcid=AL!4422!3!651751059777!e!!g!!amazon%20web%20services!19852662197!145019195737&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+            <a href="https://aws.amazon.com/free/?gclid=Cj0KCQjwlZixBhCoARIsAIC745Ck2OTksov4JZKGPGTjPfA4lPvBzz-7
+            JxmmXT8NMcyeJREaX2AOt5kaAn3yEALw_wcB&trk=6a4c3e9d-cdc9-4e25-8dd9-2bd8d15afbca&sc_channel=ps&ef_id=Cj0
+            KCQjwlZixBhCoARIsAIC745Ck2OTksov4JZKGPGTjPfA4lPvBzz-7JxmmXT8NMcyeJREaX2AOt5kaAn3yEALw_wcB:G:s&s_kwcid
+            =AL!4422!3!651751059777!e!!g!!amazon%20web%20services!19852662197!145019195737&all-free-tier.sort-by=
+            item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20
+            Tier%20Categories=*all" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
               <img src={AWS} alt="AWS logo" style={{ width: 350, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Amazon Web Services (AWS) acted as our server provider for the duration of the creation of this website.
                   This allows us to extend beyond utilizing local, and actually have a tangible web service.
+                </Typography>
+              </div>
+            </a>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            sx={{
+              background: '#3884d4',
+              border: '1px solid #003A96',
+            }}
+          >
+            <Typography
+              fontSize={24}
+              align="center"
+              sx={{
+                width: "100%",
+                color: "#ffffff",
+                variant: "h2",
+              }}
+            >
+              Threado
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              "&:hover": {
+                backgroundColor: "#eee", // Darken on hover
+              },
+            }}
+          >
+            <a href="https://www.threado.com/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+              <img src={Threado} alt="Threado logo" style={{ width: 350, height: 100}} />
+              <div>
+                <Typography variant="body1"
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
+                >
+                  Threado is a 3rd party tool/service that allows for straightforward and intuitive implementation of an AI
+                  chatbot to any website. On top of these, these bots can be custom trained in order to generate proper responses
+                  in regards to the context in which it is implemented. Our AI helper, titled Wong Bot, is able to assist in the
+                  navigation and usage of the website.
                 </Typography>
               </div>
             </a>
@@ -471,7 +548,10 @@ return (
               <img src={ReactImg} alt="React logo" style={{ width: 360, height: 125}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   The React framework is the foundation that this website utilizes in order to run. This framework allowed for
                   us to use the Material UI library, and the convenient styling features it brought.

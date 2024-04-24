@@ -202,18 +202,16 @@ function MainCarousel() {
         </a>
 
         <a
-          href="https://www.brighamandwomens.org/about-bwh"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/About"
         >
           <IconButton
             sx={{ color: "#186BD9" }}
             size="large"
-            aria-label="About Brigham and Women's Hospital"
+            aria-label="About Team F"
           >
             <InfoIcon />
           </IconButton>
-          <Button variant={"text"}>About Us! (Real Link)</Button>
+          <Button variant={"text"}>About Us!</Button>
         </a>
       </Stack>
 
