@@ -12,9 +12,8 @@ import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
 
 import noLady from "../../videos/noLady.mp4";
-import mapVideo from "../../videos/test6.mp4";
-//test 1 = good
-//test
+import mapVideo from "../../videos/finalmapedit.mp4";
+
 
 interface CardData {
   image: string;
@@ -25,8 +24,6 @@ interface CardData {
   cardTitle: string;
   cardDescription: string;
 }
-
-
 
 const Dot = styled("span")(({ theme }) => ({
   height: "10px",

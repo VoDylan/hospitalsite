@@ -131,7 +131,7 @@ export default function PathCanvas(props: PathCanvasProps) {
         let currentY =
           includedPathsOnFloor[currentPathIndex][currentTargetIndex].coordinates
             .y;
-        const speed = 2;
+        const speed = 1  ;
 
         const moveDot = (origFloor: Floor) => {
           if (props.floor != origFloor) {

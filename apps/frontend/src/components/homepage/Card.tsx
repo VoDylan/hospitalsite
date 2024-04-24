@@ -28,7 +28,6 @@ export default function CustomCard({
     <Card sx={{ position: "relative", width: "100vw", height: "65vh" }}>
       <CardMedia
         sx={{
-          // height: "70vh",
           width:'100%',
           zIndex: 0,
           position: "relative",
@@ -59,7 +58,7 @@ export default function CustomCard({
           sx={{
             position: "absolute",
             top: 0,
-            left: '3%',
+            left: '1%',
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -77,6 +76,7 @@ export default function CustomCard({
               marginTop: "6%",
               marginBottom: "0.75%",
               width: "26vw",
+
             }}
           >
             {cardTitle}
