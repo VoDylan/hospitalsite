@@ -28,18 +28,6 @@ function SearchBar() {
   }));
 
   const results = [
-    { label: "Flower Delivery", link: "/services/FlowerDelivery" },
-    { label: "Sanitation Service", link: "/services/SanitationService" },
-    { label: "Medicine Delivery Service", link: "/services/MedicineDelivery" },
-    { label: "Security Service", link: "/services/SecurityService" },
-    { label: "Gift Delivery Service", link: "/services/GiftDelivery" },
-    {
-      label: "Medical Device Service",
-      link: "/services/DeviceDeliveryService",
-    },
-    { label: "Room Scheduling Service", link: "/services/RoomScheduling" },
-    { label: "Map Page", link: "/Map" },
-    { label: "All Services", link: "/services" },
     {label: "Flower Delivery", link: "/services/FlowerDelivery"},
     {label: "Sanitation Service", link: "/services/SanitationService"},
     {label: "Medicine Delivery Service", link: "/services/MedicineDelivery"},
@@ -47,7 +35,7 @@ function SearchBar() {
     {label: "Gift Delivery Service", link: "/services/GiftDelivery"},
     {label: "Medical Device Service", link: "/services/DeviceDeliveryService"},
     {label: "Room Scheduling Service", link: "/services/RoomScheduling"},
-    {label: "Calender", link: "/Calender"},
+    {label: "Calendar", link: "/services/calendar"},
     {label: "Map Page", link: "/Map"},
     {label: "All Services", link: "/services"},
   ];

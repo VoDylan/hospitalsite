@@ -10,7 +10,7 @@ import medicalDevice from "../images/servicePageImages/medicalDevices.jpg";
 //import Room from "../images/servicePageImages/RoomScheduling.svg";
 import Template from "../images/servicePageImages/ServicesTemplate.svg";
 import flower from "../images/servicePageImages/Flower_new.png";
-import gift from "../images/servicePageImages/Wrapped-gift-basket-706x369.jpg";
+import gift from "../images/servicePageImages/giftBasket.jpg";
 import medicine from "../images/servicePageImages/medicineCard.jpg";
 import signL from "../images/servicePageImages/RoomScheduling.jpg";
 import calendar from "../images/servicePageImages/calendar.jpg";
@@ -79,8 +79,8 @@ export default function ServicesPage() {
     {
       path: "",
       image: Template,
-      title: "",
-      description: "",
+      title: "More Services Soon",
+      description: "More services to be displayed here, coming soon!",
       buttonContent: "Home Page",
     },
   ];
@@ -127,8 +127,8 @@ export default function ServicesPage() {
           padding: 5,
           display: "flex",
           justifyContent: "center",
-          marginLeft: "5%",
-          marginRight: "5%",
+          marginLeft: "10%",
+          marginRight: "10%",
         }}
       >
         <Box>

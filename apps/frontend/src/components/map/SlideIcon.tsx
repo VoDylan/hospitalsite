@@ -1,5 +1,5 @@
 import { Button, Paper, Stack } from "@mui/material";
-import FilterWithIcon from "../filters/FilterSelect.tsx";
+import FilterWithIcon from "../filters/FilterWithIcon.tsx";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React from "react";
 
@@ -75,7 +75,7 @@ export default function Icon(props: {
                 iconColor="#1CA7EC"
                 filterName="Conference"
                 filterType={1}
-                shape={"pentagon"}
+                shape={"conf"}
                 iconState={props.confIconState}
                 handleIconState={props.handleConfIconState}
               />
@@ -84,7 +84,7 @@ export default function Icon(props: {
                 iconColor="#72c41c"
                 filterName="Department"
                 filterType={1}
-                shape={"pentagon"}
+                shape={"dept"}
                 iconState={props.deptIconState}
                 handleIconState={props.handleDeptIconState}
               />
@@ -93,7 +93,7 @@ export default function Icon(props: {
                 iconColor="#e88911"
                 filterName="Labs"
                 filterType={1}
-                shape={"pentagon"}
+                shape={"labs"}
                 iconState={props.labsIconState}
                 handleIconState={props.handleLabsIconState}
               />
@@ -102,7 +102,7 @@ export default function Icon(props: {
                 iconColor="#e88911"
                 filterName="Service"
                 filterType={1}
-                shape={"circle"}
+                shape={"service"}
                 iconState={props.servIconState}
                 handleIconState={props.handleServIconState}
               />
@@ -111,7 +111,7 @@ export default function Icon(props: {
                 iconColor="#1CA7EC"
                 filterName="Info"
                 filterType={1}
-                shape={"circle"}
+                shape={"info"}
                 iconState={props.infoIconState}
                 handleIconState={props.handleInfoIconState}
               />
@@ -120,52 +120,53 @@ export default function Icon(props: {
                 iconColor="#72c41c"
                 filterName="Restrooms"
                 filterType={1}
-                shape={"circle"}
+                shape={"bathroom"}
                 iconState={props.restroomsIconState}
                 handleIconState={props.handleRestroomsIconState}
-              />
-
-              <FilterWithIcon
-                iconColor="#1CA7EC"
-                filterName="Elevators"
-                filterType={1}
-                shape={"square"}
-                iconState={props.elevatorIconState}
-                handleIconState={props.handleElevatorIconState}
-              />
-
-              <FilterWithIcon
-                iconColor="#72c41c"
-                filterName="Stairs"
-                filterType={1}
-                shape={"square"}
-                iconState={props.stairsIconState}
-                handleIconState={props.handleStairsIconState}
-              />
-
-              <FilterWithIcon
-                iconColor="red"
-                filterName="Exits"
-                filterType={1}
-                shape={"square"}
-                iconState={props.exitsIconState}
-                handleIconState={props.handleExitsIconState}
               />
 
               <FilterWithIcon
                 iconColor="#e88911"
                 filterName="Retail"
                 filterType={1}
-                shape={"square"}
+                shape={"retail"}
                 iconState={props.retlIconState}
                 handleIconState={props.handleRetlIconState}
+              />
+
+              <FilterWithIcon
+                iconColor="#72c41c"
+                filterName="Stairs"
+                filterType={1}
+                shape={"stairs"}
+                iconState={props.stairsIconState}
+                handleIconState={props.handleStairsIconState}
+              />
+
+
+              <FilterWithIcon
+                iconColor="#1CA7EC"
+                filterName="Elevators"
+                filterType={1}
+                shape={"elevators"}
+                iconState={props.elevatorIconState}
+                handleIconState={props.handleElevatorIconState}
+              />
+
+              <FilterWithIcon
+                iconColor="red"
+                filterName="Exits"
+                filterType={1}
+                shape={"exit"}
+                iconState={props.exitsIconState}
+                handleIconState={props.handleExitsIconState}
               />
 
               <FilterWithIcon
                 iconColor="#012D5A"
                 filterName="L1"
                 filterType={0}
-                shape={"stairs"}
+                shape={"floor"}
                 iconState={props.ll1IconState}
                 handleIconState={props.handleLL1IconState}
               />
@@ -174,7 +175,7 @@ export default function Icon(props: {
                 iconColor="#012D5A"
                 filterName="L2"
                 filterType={0}
-                shape={"stairs"}
+                shape={"floor"}
                 iconState={props.ll2IconState}
                 handleIconState={props.handleLL2IconState}
               />
@@ -183,7 +184,7 @@ export default function Icon(props: {
                 iconColor="#012D5A"
                 filterName="1st Floor"
                 filterType={0}
-                shape={"stairs"}
+                shape={"floor"}
                 iconState={props.firstFloorIconState}
                 handleIconState={props.handleFirstFloorIconState}
               />
@@ -192,7 +193,7 @@ export default function Icon(props: {
                 iconColor="#012D5A"
                 filterName="Second Floor"
                 filterType={0}
-                shape={"stairs"}
+                shape={"floor"}
                 iconState={props.secondFloorIconState}
                 handleIconState={props.handleSecondFloorIconState}
               />
@@ -201,7 +202,7 @@ export default function Icon(props: {
                 iconColor="#012D5A"
                 filterName="Third Floor"
                 filterType={0}
-                shape={"stairs"}
+                shape={"floor"}
                 iconState={props.thirdFloorIconState}
                 handleIconState={props.handleThirdFloorIconState}
               />

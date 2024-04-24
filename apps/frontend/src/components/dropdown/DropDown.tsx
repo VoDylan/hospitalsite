@@ -3,7 +3,7 @@ import {
   Select,
   SelectChangeEvent,
   FormControl,
-  InputLabel,
+  InputLabel, SelectVariants,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import {LabelValuePair} from "../../common/LabelValuePair.ts";
@@ -13,6 +13,7 @@ interface DropDownProps {
   handleChange: (event: SelectChangeEvent) => string;
   label: string;
   returnData: string | number;
+  variant?: SelectVariants;
 }
 
 const isOptionArray = (
@@ -80,6 +81,7 @@ export function DropDown(props: DropDownProps) {
           onChange={handleSelectChange}
           value={props.returnData}
           defaultValue={""}
+          variant={props.variant}
           labelId="demo-simple-select-label"
           label={props.label}
           sx={
