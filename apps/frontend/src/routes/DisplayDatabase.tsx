@@ -558,7 +558,7 @@ function DisplayDatabase() {
       "security-request": 0,
       "flower-delivery": 0,
       "room-scheduling": 0,
-      "appointment-scheduling": 0,
+      "calendar-appointment": 0,
     };
 
     serviceRowData.forEach((service) => {
