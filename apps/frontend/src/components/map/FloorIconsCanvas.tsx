@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Floor } from "common/src/map/Floor.ts";
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
 import { Draw } from "../../common/Draw.ts";
 import L1FloorIconNextSrc from "../../images/mapIcons/L1FloorMarkerNextIcon.png";
@@ -14,6 +13,7 @@ import F2FloorIconPrevSrc from "../../images/mapIcons/F2FloorMarkerPrevIcon.png"
 import F3FloorIconNextSrc from "../../images/mapIcons/F3FloorMarkerNextIcon.png";
 import F3FloorIconPrevSrc from "../../images/mapIcons/F3FloorMarkerPrevIcon.png";
 import GraphManager from "../../common/GraphManager.ts";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
 interface FloorIconsCanvasProps {
   style: React.CSSProperties;
@@ -23,8 +23,8 @@ interface FloorIconsCanvasProps {
   width: number;
   height: number;
   floor: Floor;
-  nodesToNextFloor: Map<IDCoordinates, Floor>;
-  nodesToPrevFloor: Map<IDCoordinates, Floor>;
+  nodesToNextFloor: Map<TypeCoordinates, Floor>;
+  nodesToPrevFloor: Map<TypeCoordinates, Floor>;
   onClick: (event: React.MouseEvent) => void;
 }
 
@@ -147,7 +147,7 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
       console.log(`Nodes to previous floor:`);
       console.log(props.nodesToPrevFloor);
 
-      props.nodesToNextFloor.forEach((value: Floor, key: IDCoordinates) => {
+      props.nodesToNextFloor.forEach((value: Floor, key: TypeCoordinates) => {
         console.log(key, value);
         if (
           GraphManager.getInstance().getNodeByID(key.nodeID)!.floor ==
@@ -161,7 +161,7 @@ export default function FloorIconsCanvas(props: FloorIconsCanvasProps) {
           );
       });
 
-      props.nodesToPrevFloor.forEach((value: Floor, key: IDCoordinates) => {
+      props.nodesToPrevFloor.forEach((value: Floor, key: TypeCoordinates) => {
         console.log(key, value);
         if (
           GraphManager.getInstance().getNodeByID(key.nodeID)!.floor ==

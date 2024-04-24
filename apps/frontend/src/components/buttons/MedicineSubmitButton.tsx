@@ -54,10 +54,9 @@ export function MedicineSubmitButton(props: ButtonProps) {
       openWithError("Please enter your name");
     } else if (props.input.priority === "") {
       openWithError("Please select a priority");
-    } else if (props.input.service === "") {
-      openWithError("Please select a service");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
+    } else if (props.input.Acetaminophen === "" && props.input.Ibuprofen === "" && props.input.Omeprazole === ""
+    && props.input.Fexofenadine === "" && props.input.Diphenhydramine === "") {
+      openWithError("Please select a medicine");
     } else if (props.input.frequency === "") {
       openWithError("Please select a frequency");
     } else {
@@ -86,7 +85,7 @@ export function MedicineSubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: MedicineDeliveryFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "medicine-delivery",
       services: form,

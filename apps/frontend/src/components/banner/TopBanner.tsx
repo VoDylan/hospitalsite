@@ -9,6 +9,7 @@ import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
 import CurrentTime from "../banner/Time.tsx";
 import WeatherApp from "./WeatherApp.tsx";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const useStyles = makeStyles({
   logoImage: {
@@ -95,6 +96,15 @@ function TopBanner() {
               aria-label="account of current user"
             >
               <AccountCircle />
+            </IconButton>
+          </Link>
+          <Link to={"/Cart"}>
+            <IconButton
+              sx={{ color: "#012D5A" }}
+              size="large"
+              aria-label="account of current user"
+            >
+              <ShoppingCartIcon />
             </IconButton>
           </Link>
         </Stack>
