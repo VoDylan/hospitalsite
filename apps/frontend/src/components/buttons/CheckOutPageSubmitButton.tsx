@@ -36,7 +36,7 @@ export function CheckOutPageSubmitButton(props: ButtonProps) {
 
   function openWithSuccess() {
     setType("success");
-    setMessage("Form submitted successfully!");
+    setMessage("Thank you for your order!");
     setOpen(true);
   }
 
