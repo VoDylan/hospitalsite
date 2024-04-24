@@ -174,7 +174,11 @@ export async function createServiceRequest(
 
     const createdServiceRequest = await client.serviceRequest.create({
       data: {
-        employeeID: employeeID,
+        employee: {
+          connect: {
+            employeeID: employeeID,
+          },
+        },
         node: {
           connect: {
             nodeID: nodeID,
@@ -243,7 +247,11 @@ export async function getDBEdgeByEdgeID(
 export async function getServiceRequestsFromDB() {
   let requests = null;
   try {
-    requests = await client.serviceRequest.findMany();
+    requests = await client.serviceRequest.findMany({
+      include: {
+        employee: true,
+      },
+    });
   } catch (e) {
     console.error(e);
   }
