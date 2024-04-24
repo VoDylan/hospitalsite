@@ -9,6 +9,7 @@ import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
 import CurrentTime from "../banner/Time.tsx";
 import WeatherApp from "./WeatherApp.tsx";
+import Carticon from ".../images/carticon.png";
 
 const useStyles = makeStyles({
   logoImage: {
@@ -95,6 +96,9 @@ function TopBanner() {
               aria-label="account of current user"
             >
               <AccountCircle />
+              <Link to={"/Cart"}>
+                <img src={Carticon} alt="carticon" />
+              </Link>
             </IconButton>
           </Link>
         </Stack>
