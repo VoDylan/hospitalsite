@@ -40,7 +40,7 @@ return (
           opacity: "90%",
         }}
       >
-        <Typography variant={"h1"} color={"white"} fontSize={46}>
+        <Typography variant={"h1"} color={"white"} fontSize={40}>
           Software Credits
         </Typography>
       </Box>
