@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {ChangeEvent, useState } from 'react';
 import { TextField, Button, CardContent, Typography, Box } from '@mui/material';
 import { FlowerDeliveryFormSubmission } from '../common/formSubmission/FlowerDeliveryFormSubmission.ts';
 import {useLocation} from "react-router-dom";
 import {GiftDeliveryFormSubmission} from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
-
+import { CheckOutPageFormSubmission } from '../common/formSubmission/CheckOutPageFormSubmission.ts';
+import { CheckOutPageSubmitButton } from "../components/buttons/CheckOutPageSubmitButton.tsx";
 
 const flowerPrices = {
   RRose: 5.99,
@@ -24,6 +25,37 @@ const giftCart: GiftDeliveryFormSubmission[] = [];
 function CheckOutPage(){
   //const [flowerAmounts, setFlowerAmounts] = React.useState<number[]>([0, 0, 0, 0]);
 
+  const [form, setFormResponses] = useState<CheckOutPageFormSubmission>({
+    nameOnCard: "",
+    cardNum: "",
+    expiration: "",
+    cvc: "",
+  });
+
+  function handleNameOnCardInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, nameOnCard: e.target.value });
+  }
+
+  function handleCardNumInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, cardNum: e.target.value });
+  }
+
+  function handleExpirationInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, expiration: e.target.value });
+  }
+
+  function handleCVCInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, cvc: e.target.value });
+  }
+
+  function clear() {
+    setFormResponses({
+      nameOnCard: "",
+      cardNum: "",
+      expiration: "",
+      cvc: "",
+    });
+  }
   const parseAmount = (amountStr: string): number => {
     return parseInt(amountStr, 10) || 0;
   };
@@ -61,16 +93,56 @@ function CheckOutPage(){
     <Box sx={{ pt: '150px' }} display="flex" justifyContent="center" p={4}>
       {/* Payment Details */}
       <Box width="50%" paddingRight={2}>
-        <Typography variant="h5" gutterBottom>Payment Details</Typography>
+        <Typography
+          variant="h5" gutterBottom>Payment Details
+        </Typography>
         <form>
-          <TextField fullWidth margin="normal" label="Name on card" variant="outlined" />
-          <TextField fullWidth margin="normal" label="Card number" variant="outlined" />
-          <Box display="flex" justifyContent="space-between">
-            <TextField fullWidth margin="normal" label="Expiration" variant="outlined" style={{ marginRight: '10px', width: '30%' }} />
-            <TextField fullWidth margin="normal" label="CVC" variant="outlined" style={{ width: '30%' }} />
+          <TextField
+            fullWidth margin="normal"
+            label="Name on card"
+            value={form.nameOnCard}
+            onChange={handleNameOnCardInput}
+            variant="outlined" />
+          <TextField
+            fullWidth margin="normal"
+            label="Card number"
+            value={form.cardNum}
+            onChange={handleCardNumInput}
+            variant="outlined" />
+          <Box
+            display="flex"
+            justifyContent="left">
+            <TextField
+              fullWidth margin="normal"
+              label="Expiration"
+              variant="outlined"
+              value={form.expiration}
+              onChange={handleExpirationInput}
+              style={{ marginRight: '10px', width: '30%' }} />
+            <TextField
+              fullWidth margin="normal"
+              label="CVC"
+              variant="outlined"
+              value={form.cvc}
+              onChange={handleCVCInput}
+              style={{ width: '30%' }} />
           </Box>
-          <Button variant="contained" color="primary" fullWidth>Complete order</Button>
-          <Button color="secondary">Cancel order</Button>
+          <Box
+            display="flex"
+            justifyContent="left"
+            mt={2}>
+            <CheckOutPageSubmitButton
+              input={form}
+              clear={clear}
+              text={"COMPLETE ORDER"}>
+            </CheckOutPageSubmitButton>
+          </Box>
+
+
+          <Button
+            color="secondary"
+          >
+          </Button>
         </form>
       </Box>
 
