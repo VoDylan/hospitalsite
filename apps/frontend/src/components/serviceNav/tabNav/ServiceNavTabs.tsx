@@ -11,6 +11,7 @@ import {
   CleanHandsOutlined,
   HealthAndSafetyOutlined,
   CalendarMonthOutlined,
+  EventAvailableOutlined,
 } from "@mui/icons-material";
 
 function useRouteMatch(patterns: string[]) {
@@ -35,6 +36,7 @@ export default function ServiceNavTabs() {
     "Services/SanitationService",
     "Services/SecurityService",
     "Services/DeviceDeliveryService",
+    "Services/Calendar",
   ]);
   const currentTab = routeMatch?.pattern?.path;
   return (
@@ -122,6 +124,13 @@ export default function ServiceNavTabs() {
             icon={<TroubleshootOutlined />}
             value="Services/DeviceDeliveryService"
             to="/Services/DeviceDeliveryService"
+          />
+          <Tab
+            component={Link}
+            label="Appointment"
+            icon={<EventAvailableOutlined />}
+            value="Services/Calendar"
+            to="/Services/Calendar"
           />
         </Tabs>
       </Box>
