@@ -10,6 +10,7 @@ import EdgeInfo from "../EdgeInfo.tsx";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import useWindowSize from "../../../hooks/useWindowSize.tsx";
+import FilterSlider from "./FilterSlider.tsx";
 
 interface MapEditorSideBar2Props {
   title: string;
@@ -55,7 +56,7 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
         sx: {
           position: "relative",
           width: "100%",
-          height: `${windowHeight - 120}px`
+          height: `${windowHeight - 120}px`,
         },
         elevation: 3,
       }}
@@ -181,6 +182,7 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
               )}
             </Box>
           )}
+          <FilterSlider />
         </Stack>
       </Box>
     </Drawer>

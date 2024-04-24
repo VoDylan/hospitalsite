@@ -45,7 +45,7 @@ function TopBanner() {
         height: "120px",
         boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
         elevation: 1,
-        zIndex: 1000,
+        zIndex: 9999,
       }}
     >
       <Toolbar sx={{ flexGrow: 2, marginLeft: 2 }}>
