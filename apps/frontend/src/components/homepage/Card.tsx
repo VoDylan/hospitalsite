@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import { Box } from "@mui/material";
 
+
 interface CardProps {
   image: string;
   title: string;
@@ -42,19 +43,9 @@ export default function CustomCard({
 
       >
       </CardMedia>
-{/*          <Typography variant = "subtitle1"
-                      color={"black"}
-            sx={{
-              position: "absolute",
-              top: "22%",
-              opacity: "0.5",
-              marginLeft: "8%",
-            }}>
-          </Typography>*/}
 
         <Stack
           direction={"row"}
-
           sx={{
             position: "absolute",
             top: 0,
@@ -65,6 +56,7 @@ export default function CustomCard({
             alignItems: "flex-start",
             marginLeft: "8%",
             minHeight: "65vh",
+
           }}
         >
 
@@ -76,19 +68,25 @@ export default function CustomCard({
               marginTop: "6%",
               marginBottom: "0.75%",
               width: "26vw",
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              // fit-content option
+              backgroundColor: 'rgba(221, 191, 152, 0.6)',
 
             }}
           >
             {cardTitle}
           </Box>
+
           <Box
             sx={{
               color: "#003A96",
               fontSize: 20,
               fontWeight: "lighter",
               width: "26vw",
+              // fit-content option
               whiteSpace: "nowrap",
+              backgroundColor: 'rgba(221, 191, 152, 0.6)',
+
+
             }}
           >
             {cardDescription}
