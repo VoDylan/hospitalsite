@@ -551,13 +551,13 @@ function DisplayDatabase() {
   //Function to count service types for graph display
   const countSpecificServiceTypes = (serviceRowData: ServiceParams[]) => {
     const serviceTypeCounts: { [key: string]: number } = {
-      "gift-delivery": 0,
-      "flower-delivery": 0,
-      "device-delivery": 0,
       "medicine-delivery": 0,
-      "room-scheduling": 0,
+      "gift-delivery": 0,
       "sanitation-request": 0,
+      "device-delivery": 0,
       "security-request": 0,
+      "flower-delivery": 0,
+      "room-scheduling": 0,
       "appointment-scheduling": 0,
     };
 
@@ -732,12 +732,16 @@ function DisplayDatabase() {
               <Tab label='STATUS' />
               <Tab label='ANALYTICS' />
             </Tabs>
-            <Box> {/*this box is for the service details sliding box*/}
+            <Box //this box is for the service details sliding box
+              display={"flex"}
+              alignItems="center"
+              //justifyContent="center"
+              //flexDirection="column"
+            >
             <Box
               display={"flex"}
               flex="1"
               ml={3}
-              mt={2}
               alignItems="center"
               justifyContent="center"
               flexDirection="column"
@@ -749,7 +753,7 @@ function DisplayDatabase() {
                   mt={2}
                   alignItems="center"
                   flexDirection="column"
-                  sx={{width: '50%'}}
+                  sx={{width: '100%'}}
                 >
                   {/*<Typography variant='h5'>Service Data Table</Typography>*/}
                   <DataGrid
@@ -776,6 +780,7 @@ function DisplayDatabase() {
                 </Box>
               )}
             </Box>
+              {currentServiceIndex === 0 && (
              <Box width="400px" ml={2}>
                 {selectedServiceDetails && (
                   <ServiceDetailsTable
@@ -784,6 +789,7 @@ function DisplayDatabase() {
                   />
                 )}
              </Box>
+              )}
             </Box>
             <Box
               display={"flex"}
