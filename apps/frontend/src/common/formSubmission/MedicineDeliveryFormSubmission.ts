@@ -3,7 +3,10 @@ export interface MedicineDeliveryFormSubmission {
   employeeID: number;
   location: string;
   priority: string;
-  service: string;
+  Acetaminophen: string;
+  Ibuprofen: string;
+  Omeprazole: string;
+  Fexofenadine: string;
+  Diphenhydramine: string;
   frequency: string;
-  status: string;
 }

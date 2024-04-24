@@ -1,6 +1,6 @@
 import Algorithms from "./Algorithms.ts";
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class DFSalgorithm extends Algorithms {
   constructor() {
@@ -15,7 +15,7 @@ export class DFSalgorithm extends Algorithms {
     return super.getCoordinates(currentNode);
   }
 
-  runAlgorithm(start: string, end: string): IDCoordinates[] {
+  runAlgorithm(start: string, end: string): TypeCoordinates[] {
     /*
 
     PSEUDOCODE
@@ -28,7 +28,7 @@ export class DFSalgorithm extends Algorithms {
       remove the node from the stack
 
       for all neighbors for the new node
-        if the neighbor is not visites
+        if the neighbor is not visited
           push neighbor as visited
           push neighbor in the stack
      */
@@ -50,32 +50,32 @@ export class DFSalgorithm extends Algorithms {
       )!;
 
       if (currentNodeID === end) {
-        const coordinatesPath: IDCoordinates[] = [];
+        // const coordinatesPath: IDCoordinates[] = [];
         const path: string[] = [];
         let current: string | null = currentNodeID;
         while (current !== start) {
           let currentIdx: number = -1;
           if (current) {
             path.unshift(current);
-            coordinatesPath.unshift({
-              nodeID: current,
-              coordinates: this.getCoordinates(current),
-            });
+            // coordinatesPath.unshift({
+            //   nodeID: current,
+            //   coordinates: this.getCoordinates(current),
+            // });
             currentIdx = this.nodes.findIndex(
               (node) => node.startNodeID === current,
             );
           }
           current = parents[currentIdx];
         }
-        coordinatesPath.unshift({
-          nodeID: start,
-          coordinates: this.getCoordinates(start),
-        });
+        // coordinatesPath.unshift({
+        //   nodeID: start,
+        //   coordinates: this.getCoordinates(start),
+        // });
         path.unshift(start);
 
         console.log("Path found:", path);
 
-        return coordinatesPath;
+        return [];
       }
 
       for (let i = 0; i < currentNode.neighbors.length; i++) {
