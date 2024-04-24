@@ -9,7 +9,7 @@ import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
 import CurrentTime from "../banner/Time.tsx";
 import WeatherApp from "./WeatherApp.tsx";
-import Carticon from "/carticon.png";
+import carticon from "./carticon.png";
 
 const useStyles = makeStyles({
   logoImage: {
@@ -97,7 +97,7 @@ function TopBanner() {
             >
               <AccountCircle />
               <Link to={"/Cart"}>
-                <img src={Carticon} alt="carticon" />
+                <img src={carticon} alt="carticon" />
               </Link>
             </IconButton>
           </Link>
