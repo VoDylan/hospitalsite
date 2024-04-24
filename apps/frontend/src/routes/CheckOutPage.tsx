@@ -11,6 +11,12 @@ const flowerPrices = {
   Tulip: 2.99
 };
 
+const giftPrices = {
+  balloons: 3.99,
+  cards: 1.99,
+  bears: 5.99
+};
+
 const flowerCart: FlowerDeliveryFormSubmission[] = [];
 const giftCart: GiftDeliveryFormSubmission[] = [];
 
@@ -36,6 +42,16 @@ function CheckOutPage(){
       parseAmount(flower.Tulip) * flowerPrices['Tulip'];
     return acc;
   }, 0);
+
+// Calculate the total price for gift
+  const totalGiftPrice = giftCart.reduce((acc, gift) => {
+    acc += parseAmount(gift.balloons) * giftPrices['balloons'] +
+      parseAmount(gift.cards) * giftPrices['cards'] +
+      parseAmount(gift.bears) * giftPrices['bears'] ;
+    return acc;
+  }, 0);
+
+  const totalPrice = totalFlowerPrice + totalGiftPrice;
 
   return (
     <Box sx={{ pt: '150px' }} display="flex" justifyContent="center" p={4}>
@@ -74,9 +90,28 @@ function CheckOutPage(){
               })}
             </React.Fragment>
           ))}
+
+          {giftCart.map((gift, index) => (
+            <React.Fragment key={`gift_${index}`}>
+              {Object.keys(giftPrices).map((giftType) => {
+                const giftKey = giftType as keyof GiftDeliveryFormSubmission;
+                const amountStr = gift[giftKey] as string;
+                const amount = parseAmount(amountStr);
+                return amount > 0 && (
+                  <Box display="flex" justifyContent="space-between" alignItems="center" key={giftType}>
+                    <Typography variant="subtitle1">{giftType}</Typography>
+                    <Typography variant="body1">{amount}</Typography>
+                    <Typography variant="body1">${(amount * giftPrices[giftType as keyof typeof giftPrices]).toFixed(2)}</Typography>
+                  </Box>
+                );
+              })}
+            </React.Fragment>
+          ))}
+
           <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6">Total</Typography>
-            <Typography variant="h6">${totalFlowerPrice.toFixed(2)}</Typography>
+            <Typography variant="h6">Total Flower Price: ${totalFlowerPrice.toFixed(2)}</Typography>
+            <Typography variant="h6">Total Gift Price: ${totalGiftPrice.toFixed(2)}</Typography>
+            <Typography variant="h6">Total Price: ${totalPrice.toFixed(2)}</Typography>
           </Box>
         </CardContent>
       </Box>
