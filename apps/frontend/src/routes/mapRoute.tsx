@@ -979,7 +979,7 @@ function MapRoute() {
                 handleButtonClick2={handleButtonClick2}
                 checked2={false}
                 nodesData={pathNodesData.current}
-              />
+                onClickText={setFloor}/>
               }
 
               callback={handleFloorChange}
@@ -1097,7 +1097,7 @@ function MapRoute() {
               <Box
                 position={"absolute"}
                 top={"93%"}
-                left={"19%"}
+                left={"21%"}
               >
                 <IconButton onClick={() => findStartingFloor() && setFloor(findStartingFloor() as Floor)} aria-label="start"
                             sx={{color: "#186BD9",
