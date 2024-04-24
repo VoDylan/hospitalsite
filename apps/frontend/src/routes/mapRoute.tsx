@@ -17,7 +17,6 @@ import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
 import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper,} from "react-zoom-pan-pinch";
 
-import {IDCoordinates} from "common/src/IDCoordinates.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
 import TextIcon from "../components/map/TextDirectionsSlide.tsx";
@@ -30,6 +29,7 @@ import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
 import NearMeIcon from '@mui/icons-material/NearMe';
 import IconCanvas from "../components/map/IconCanvas.tsx";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 import ToggleButton from "../components/map/MapToggleBar.tsx";
 import {IconButton, Stack} from "@mui/material";
 
@@ -77,17 +77,17 @@ function MapRoute() {
   const [endNode, setEndNode] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const pathNodesData = useRef<IDCoordinates[]>([]);
+  const pathNodesData = useRef<TypeCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
   const [updateNodesBetweenFloors, setUpdateNodesBetweenFloors] =
     useState<boolean>(false);
   const [textDirections, setTextDirections] = useState<boolean>(false);
 
-  const nodesToNextFloor = useRef<Map<IDCoordinates, Floor>>(
-    new Map<IDCoordinates, Floor>(),
+  const nodesToNextFloor = useRef<Map<TypeCoordinates, Floor>>(
+    new Map<TypeCoordinates, Floor>(),
   );
-  const nodesToPrevFloor = useRef<Map<IDCoordinates, Floor>>(
-    new Map<IDCoordinates, Floor>(),
+  const nodesToPrevFloor = useRef<Map<TypeCoordinates, Floor>>(
+    new Map<TypeCoordinates, Floor>(),
   );
   const [pathRenderStatus, setPathRenderStatus] = useState<boolean>(false);
   const [updateFloorIcons, setUpdateFloorIcons] = useState<boolean>(false);
@@ -549,8 +549,9 @@ function MapRoute() {
     }
   };
 
-  const updateNodesData = (newData: IDCoordinates[]) => {
+  const updateNodesData = (newData: TypeCoordinates[]) => {
     pathNodesData.current = newData;
+    // console.log("printing use ref now", pathNodesData.current);
   };
 
   async function handleSubmit() {
@@ -642,8 +643,8 @@ function MapRoute() {
   };
 
   const handleNodeToFloorCallback = (
-    newNodesToNextFloor: Map<IDCoordinates, Floor>,
-    newNodesToPrevFloor: Map<IDCoordinates, Floor>,
+    newNodesToNextFloor: Map<TypeCoordinates, Floor>,
+    newNodesToPrevFloor: Map<TypeCoordinates, Floor>,
   ) => {
     nodesToNextFloor.current = newNodesToNextFloor;
     nodesToPrevFloor.current = newNodesToPrevFloor;
@@ -977,6 +978,7 @@ function MapRoute() {
               icon2={<TextIcon
                 handleButtonClick2={handleButtonClick2}
                 checked2={false}
+                nodesData={pathNodesData.current}
               />
               }
 
