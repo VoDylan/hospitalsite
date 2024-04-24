@@ -1,10 +1,8 @@
 import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import { Box } from "@mui/material";
@@ -12,7 +10,6 @@ import { Box } from "@mui/material";
 interface CardProps {
   image: string;
   title: string;
-  description: string;
   buttonText: string;
   path: string;
   cardTitle: string;
@@ -22,7 +19,6 @@ interface CardProps {
 export default function CustomCard({
   image,
   title,
-  description,
   buttonText,
   path,
   cardTitle,
@@ -32,14 +28,21 @@ export default function CustomCard({
     <Card sx={{ position: "relative", width: "100vw", height: "65vh" }}>
       <CardMedia
         sx={{
-          height: "70vh",
+          width:'100%',
+          zIndex: 0,
           position: "relative",
           backgroundPosition: "center 8%",
         }}
+        component={'video'}
         image={image}
         title={title}
+        autoPlay
+        loop
+        muted
+
       >
-          <Typography variant = "subtitle1"
+      </CardMedia>
+{/*          <Typography variant = "subtitle1"
                       color={"black"}
             sx={{
               position: "absolute",
@@ -47,11 +50,15 @@ export default function CustomCard({
               opacity: "0.5",
               marginLeft: "8%",
             }}>
-          </Typography>
+          </Typography>*/}
 
         <Stack
           direction={"row"}
+
           sx={{
+            position: "absolute",
+            top: 0,
+            left: '1%',
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -69,6 +76,7 @@ export default function CustomCard({
               marginTop: "6%",
               marginBottom: "0.75%",
               width: "26vw",
+
             }}
           >
             {cardTitle}
@@ -91,6 +99,7 @@ export default function CustomCard({
               width: "auto",
               minWidth: "10vw",
               whiteSpace: "nowrap",
+
             }}
             component={Link}
             to={path}
@@ -100,15 +109,15 @@ export default function CustomCard({
             {buttonText}
           </Button>
         </Stack>
-      </CardMedia>
-      <CardContent>
+
+{/*      <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
-      </CardContent>
+      </CardContent>*/}
       <CardActions>
         <Link to={path}>
           <Button variant="contained" size="large">

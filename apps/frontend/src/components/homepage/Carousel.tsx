@@ -10,13 +10,15 @@ import Stack from "@mui/material/Stack";
 import CustomCard from "./Card.tsx"; // Update path to Card component
 import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
-import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
-import noLady from "../../images/noLady.jpg";
+
+import noLady from "../../videos/noLady.mp4";
+import mapVideo from "../../videos/finalmapedit.mp4";
+
 
 interface CardData {
   image: string;
   title: string;
-  description: string;
+
   buttonText: string;
   path: string;
   cardTitle: string;
@@ -45,7 +47,8 @@ function MainCarousel() {
     clearTimeout(autoScrollTimeout as NodeJS.Timeout);
     const newTimeout = setTimeout(() => {
       setAutoScroll(true);
-    }, 1500); // After 8 seconds, re-enable autoScroll
+    }, 8); // After 8 seconds, re-enable autoScroll
+    //1500 = 8 sec
     setAutoScrollTimeout(newTimeout);
   }, [cards.length, autoScrollTimeout]);
 
@@ -64,10 +67,8 @@ function MainCarousel() {
   useEffect(() => {
     const mainCards: CardData[] = [
       {
-        image: LowerLevel,
+        image: mapVideo,
         title: "Directions",
-        description:
-          "Graphical display for directions to anywhere in the hospital!",
         buttonText: "Go To Map!",
         path: "/Map",
         cardTitle: "Simplify Your Hospital Experience",
@@ -76,13 +77,14 @@ function MainCarousel() {
       {
         image: noLady,
         title: "Services",
-        description: "Request a service!",
         buttonText: "Request a Service!",
         path: "/Services",
         cardTitle: "Streamline Your Service Requests",
         cardDescription: "Access all of our available services in one place",
       },
     ];
+
+
 
     setCards(mainCards);
     if (autoScroll) {
@@ -128,7 +130,6 @@ function MainCarousel() {
                     key={index}
                     image={card.image}
                     title={card.title}
-                    description={card.description}
                     buttonText={card.buttonText}
                     path={card.path}
                     cardTitle={card.cardTitle}
