@@ -3,7 +3,7 @@ import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/Flower
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
-import {updateCart} from  "../cart/UpdateCart.tsx";
+import {Link} from "react-router-dom";
 
 interface ButtonProps {
   text: string;
@@ -69,9 +69,8 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
           `Failed to post form data to database: ${result.data.message}`,
         );
       } else {
-        handleClear();
         openWithSuccess();
-        updateCart(props.input);
+        handleClear();
       }
     }
   }
@@ -136,11 +135,10 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
+    <Link to={"/Cart"} state={props.input} onClick={() => handleSubmit()}>
     <Button
       variant="contained"
       id={"submitButton"}
-      onClick={() => handleSubmit()}
-      href={"/Cart"}
     >
       {props.text}
       <Snackbar
@@ -156,5 +154,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
+    </Link>
   );
 }

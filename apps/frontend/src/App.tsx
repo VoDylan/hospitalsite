@@ -30,6 +30,7 @@ import MapEditingPage from "./routes/MapEditingPage.tsx";
 import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 import MapEditingPage2 from "./routes/MapEditingPage2.tsx";
+import CheckOutPage from "./routes/CheckOutPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -82,14 +83,19 @@ function App() {
           path: "/DisplayDatabase",
           element: <Auth0Protection component={DisplayDatabase} />,
         },
-        /*{
+        {
           path: "/Cart",
-          element: <Auth0Protection component={Cart} />,
-        },*/
+          element: <Auth0Protection component={CheckOutPage} />,
+        },
 
         {
           path: "/Map",
           element: <MapRoute />,
+        },
+
+        {
+          path: "/Credits",
+          element: <CreditsPage />
         },
 
         {
@@ -103,10 +109,6 @@ function App() {
         {
           path: "/mapeditingpage2",
           element: <MapEditingPage2/>,
-        },
-        {
-          path: "/Credits",
-          element: <CreditsPage />
         }
       ],
     },
