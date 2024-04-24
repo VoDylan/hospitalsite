@@ -170,7 +170,7 @@ function DisplayDatabase() {
   ]);
 
   const [employeeColumns] = useState<GridColDef[]>([
-    { field: "id", headerName: "EmployeeID", width: 100 },
+    { field: "id", headerName: "Employee ID", width: 100 },
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
   ]);
