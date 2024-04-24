@@ -28,6 +28,7 @@ import TopBanner from "./components/banner/TopBanner.tsx";
 import { Auth0Protection } from "./components/auth0/Auth0Protection.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
+import MapEditorPage2 from "./routes/MapEditorPage2.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -93,6 +94,10 @@ function App() {
         {
           path: "/MapEditingPage",
           element: <Auth0Protection component={MapEditingPage} />,
+        },
+        {
+          path: "/mapeditingpage2",
+          element: <MapEditorPage2/>,
         },
         {
           path: "/Credits",

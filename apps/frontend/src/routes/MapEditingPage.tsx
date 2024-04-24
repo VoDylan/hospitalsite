@@ -77,8 +77,7 @@ function MapEditingPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const [reloadNodeData, setReloadNodeData] = useState<boolean>(true);
-  const {nodeData, edgeData} = useNodes(false, reloadNodeData);
+  const {nodeData, edgeData, nodeDataLoaded, setNodeDataLoaded} = useNodes();
 
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
@@ -97,40 +96,6 @@ function MapEditingPage() {
   const [open] = React.useState(false);
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
-
-  //-----------------------------------------------------------------------------------------
-
-  /**
-   * DATA LOADING
-   */
-
-  // const loadNodeData = async (): Promise<MapNodeType[]> => {
-  //   const nodeData: MapNodeType[] = (await axios.get("/api/database/nodes"))
-  //     .data as MapNodeType[];
-  //
-  //   const edgeData: MapEdgeType[] = (await axios.get("/api/database/edges"))
-  //     .data as MapEdgeType[];
-  //
-  //   GraphManager.getInstance().resetData();
-  //
-  //   nodeData.forEach((node) => {
-  //     if (!GraphManager.getInstance().getNodeByID(node.nodeID))
-  //       GraphManager.getInstance().nodes.push(new MapNode(node));
-  //   });
-  //
-  //   edgeData.forEach((edge: MapEdgeType) => {
-  //     if (!GraphManager.getInstance().getEdgeByID(edge.edgeID))
-  //       GraphManager.getInstance().edges.push(
-  //         new MapEdge(
-  //           edge,
-  //           GraphManager.getInstance().getNodeByID(edge.startNodeID)!,
-  //           GraphManager.getInstance().getNodeByID(edge.endNodeID)!,
-  //         ),
-  //       );
-  //   });
-  //
-  //   return nodeData;
-  // };
 
   const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
     const filteredNodeAssociations = nodes.map((node) => ({
@@ -500,12 +465,12 @@ function MapEditingPage() {
    * useEffect to just load the node data. Only called when the flags determining loading data are changed
    */
   useEffect(() => {
-    if (!filtersApplied && !reloadNodeData) {
+    if (nodeDataLoaded && !filtersApplied) {
       console.log("Applying filters");
       determineFilters();
       setFiltersApplied(true);
     }
-  }, [determineFilters, filtersApplied, reloadNodeData]);
+  }, [determineFilters, filtersApplied, nodeData, nodeDataLoaded]);
 
   const handleBackgroundRenderStatus = (
     status: boolean,
@@ -634,12 +599,12 @@ function MapEditingPage() {
     } catch (e) {
       console.log("Failed to update node");
     }
-    setReloadNodeData(true);
+    setNodeDataLoaded(false);
   };
 
   const handleCreateNode = () => {
     handleCloseNodeCreator();
-    setReloadNodeData(true);
+    setNodeDataLoaded(false);
   };
 
   const handleDeleteNode = (node: MapNode) => {
@@ -659,7 +624,7 @@ function MapEditingPage() {
     } catch (e) {
       console.log("Failed to delete node");
     }
-    setReloadNodeData(true);
+    setNodeDataLoaded(false);
   };
 
   const handleCreateEdge = (startingNode1: MapNode, startingNode2: MapNode) => {
@@ -682,7 +647,7 @@ function MapEditingPage() {
         .then((res) => {
           console.log("Added edge!");
           console.log(res.data);
-          setReloadNodeData(true);
+          setNodeDataLoaded(false);
         });
     } catch (e) {
       console.error("Failed to create edge!");
@@ -702,7 +667,7 @@ function MapEditingPage() {
         .then((res) => {
           console.log("Deleted edge!");
           console.log(res.data);
-          setReloadNodeData(true);
+          setNodeDataLoaded(false);
         });
     } catch (e) {
       console.error("Failed to delete edge!");

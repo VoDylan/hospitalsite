@@ -6,10 +6,10 @@ import MapEdge from "common/src/map/MapEdge.ts";
 import axios from "axios";
 import {useEffect, useState} from "react";
 
-export const useNodes = (initialValue: boolean, reload: boolean) => {
+export const useNodes = () => {
   const [nodeData, setNodeData] = useState<MapNode[]>([]);
   const [edgeData, setEdgeData] = useState<MapEdge[]>([]);
-  const [reloadNodeData] = useState<boolean>(reload);
+  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     const loadNodeData = async (): Promise<MapNodeType[]> => {
@@ -38,17 +38,19 @@ export const useNodes = (initialValue: boolean, reload: boolean) => {
     };
 
     console.log(`Loading node Data`);
-    if (reloadNodeData) {
+    if (!nodeDataLoaded) {
       loadNodeData().then(() => {
         setNodeData(GraphManager.getInstance().nodes);
         setEdgeData(GraphManager.getInstance().edges);
-        // reloadCallback(false);
+        setNodeDataLoaded(true);
         console.log("Data loaded");
       });
     }
-  }, [reloadNodeData]);
+  }, [nodeDataLoaded]);
 
-  console.log("Returning from node loading");
+  const setDataLoadedStatus = (status: boolean) => {
+    setNodeDataLoaded(status);
+  };
 
-  return {nodeData: nodeData, edgeData: edgeData};
+  return {nodeData: nodeData, edgeData: edgeData, nodeDataLoaded: nodeDataLoaded, setNodeDataLoaded: setDataLoadedStatus};
 };
