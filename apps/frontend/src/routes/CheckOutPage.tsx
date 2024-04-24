@@ -109,8 +109,6 @@ function CheckOutPage(){
           ))}
 
           <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6">Total Flower Price: ${totalFlowerPrice.toFixed(2)}</Typography>
-            <Typography variant="h6">Total Gift Price: ${totalGiftPrice.toFixed(2)}</Typography>
             <Typography variant="h6">Total Price: ${totalPrice.toFixed(2)}</Typography>
           </Box>
         </CardContent>
