@@ -41,6 +41,8 @@ export default function ServiceNavTabs() {
     <>
       <Box
         sx={{
+          display: "flex",
+          justifyContent: "center",
           width: "100%",
           opacity: "80%",
           backgroundColor: "#186BD9",
