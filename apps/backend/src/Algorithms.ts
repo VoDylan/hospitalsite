@@ -59,6 +59,24 @@ abstract class Algorithms {
   }
 
   distance(startNodeID: string, endNodeID: string) {
+    const startNodeType = this.mapNodes.find(
+      (node) => node.nodeID === startNodeID,
+    )!.nodeType;
+    const endNodeType = this.mapNodes.find(
+      (node) => node.nodeID === endNodeID,
+    )!.nodeType;
+
+    if (!startNodeType || !endNodeType) {
+      console.error("Could not find start node or end node types");
+      return undefined;
+    }
+
+    if (startNodeType === "ELEV" && endNodeType === "ELEV") {
+      return 20;
+    } else if (startNodeType === "STAI" && endNodeType === "STAI") {
+      return 100;
+    }
+
     let startX: number = -1;
     let startY: number = -1;
     let neighborX: number = -1;
