@@ -247,7 +247,11 @@ export async function getDBEdgeByEdgeID(
 export async function getServiceRequestsFromDB() {
   let requests = null;
   try {
-    requests = await client.serviceRequest.findMany();
+    requests = await client.serviceRequest.findMany({
+      include: {
+        employee: true,
+      },
+    });
   } catch (e) {
     console.error(e);
   }

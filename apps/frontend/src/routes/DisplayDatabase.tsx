@@ -287,6 +287,7 @@ function DisplayDatabase() {
 
     const rowData = [];
     for (let i = 0; i < data.length; i++) {
+      console.log(data[i].employee);
       const employeeFirstName = data[i].employee ? data[i].employee.firstName || 'Unknown' : 'Unknown';
       const employeeLastName = data[i].employee ? data[i].employee.lastName || 'Unknown' : 'Unknown';
       const employeeFullName = `${employeeFirstName} ${employeeLastName}`;
