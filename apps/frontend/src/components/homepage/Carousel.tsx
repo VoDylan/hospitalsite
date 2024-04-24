@@ -10,12 +10,11 @@ import Stack from "@mui/material/Stack";
 import CustomCard from "./Card.tsx"; // Update path to Card component
 import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
-// import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
-// import noLady from "../../images/noLady.jpg";
-//import mapVideo from "../../videos/mapVideo2.mp4";
-import noLady from "../../videos/noLady.mp4";
-import mapVideo from "../../videos/chrome_o2REuBANbg.mp4";
 
+import noLady from "../../videos/noLady.mp4";
+import mapVideo from "../../videos/test6.mp4";
+//test 1 = good
+//test
 
 interface CardData {
   image: string;
