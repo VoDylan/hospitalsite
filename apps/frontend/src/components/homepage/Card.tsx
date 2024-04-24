@@ -59,7 +59,17 @@ export default function CustomCard({
 
           }}
         >
+<Box
+  sx={{
+    color: "#003A96",
+    fontSize: 40,
+    position: "relative",
+    marginTop: "6%",
+    marginBottom: "0.75%",
+    width: "26vw",
 
+    backdropFilter: 'blur(10px)',
+  }}>
           <Box
             sx={{
               color: "#003A96",
@@ -68,8 +78,6 @@ export default function CustomCard({
               marginTop: "6%",
               marginBottom: "0.75%",
               width: "26vw",
-              // fit-content option
-              // backgroundColor: 'rgba(221, 191, 152, 0.6)',
 
             }}
           >
@@ -82,15 +90,12 @@ export default function CustomCard({
               fontSize: 20,
               fontWeight: "lighter",
               width: "26vw",
-              // fit-content option
               whiteSpace: "nowrap",
-              // backgroundColor: 'rgba(221, 191, 152, 0.6)',
-
-
             }}
           >
             {cardDescription}
           </Box>
+</Box>
           <Button
             sx={{
               position: "relative",
