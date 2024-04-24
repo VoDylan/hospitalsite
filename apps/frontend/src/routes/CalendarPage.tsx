@@ -92,10 +92,10 @@ export default function CalendarPage() {
   }
 
   function handleDateInput(date: Dayjs | null) {
+    setSelectedDate(date);
     if (date) {
       const dateString = date.format('YYYY-MM-DD'); // Convert Dayjs to string in 'YYYY-MM-DD' format
       setResponses({ ...form, date: dateString });
-      //return dateString;
       return dateString;
     }
   }
@@ -192,9 +192,9 @@ export default function CalendarPage() {
 
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
 
-  const updateDate = (date: Dayjs | null) => {
+  /*const updateDate = (date: Dayjs | null) => {
     setSelectedDate(date);
-  };
+  };*/
 
   const handleOk = (selectedDate: Dayjs | null) => {
 
@@ -275,7 +275,7 @@ export default function CalendarPage() {
                 minDate={currentDate}
                 //value={currentDate}
                 onAccept={handleOk}
-                onChange={updateDate}
+                onChange={handleDateInput}
                 loading={isLoading}
                 onMonthChange={handleMonthChange}
                 renderLoading={() => <DayCalendarSkeleton/>}
@@ -377,7 +377,7 @@ export default function CalendarPage() {
                   label="Selected Date"
                   value={selectedDate ? selectedDate.format('MM-DD-YYYY') : ''}
                   //value={highlightedDays.length > 0 ? highlightedDays.map(day => day.toString()).join(', ') : ''}
-                  onChange={(e) => updateDate(dayjs(e.target.value))}
+                  onChange={(e) => handleDateInput(dayjs(e.target.value))}
                 />
                 </div>
               </Grid>

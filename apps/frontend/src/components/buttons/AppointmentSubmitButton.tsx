@@ -79,8 +79,8 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: CalendarPageFormSubmission) {
     const returnData = {
-      userID: "admin",
-      //nodeID: form.roomNumber,
+      employeeID: form.employee,
+      nodeID: form.roomNumber,
       serviceType: "calendar-appointment",
       services: form,
     };
