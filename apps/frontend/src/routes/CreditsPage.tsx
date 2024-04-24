@@ -99,7 +99,10 @@ return (
               <img src={MaterialUI} alt="Material UI logo" style={{ width: 400, height: 200}} />
               <div>
                 <Typography variant="body1"
-                  sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Material UI is an incredibly useful library that builds upon existing React components.
                   It allowed for us to generate a unique design for the website, incorporating features such as the carousel
@@ -146,7 +149,10 @@ return (
               <img src={Github} alt="Github logo" style={{ width: 400, height: 200}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Github is an integral software tool that is used for code repository management.
                   Our team utilized Github for essentially everything involving the code. This included
@@ -188,7 +194,10 @@ return (
               <img src={Taiga} alt="Taiga logo" style={{ width: 370, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Taiga is a project management platform that allowed for us to streamline the production
                   of the website. It is very helpful with creating and assigning tasks/user stories,
@@ -228,7 +237,10 @@ return (
               <img src={Figma} alt="Figma logo" style={{ width: 400, height: 175}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Figma is a very useful software tool that allows for the user to generate potential website designs.
                   Our team utilized Figma in order to brainstorm front end design choices and organize our themes/styles.
@@ -267,7 +279,10 @@ return (
               <img src={Auth0} alt="Auth0 logo" style={{ width: 350, height: 120}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Auth0 is a third party tool that can be implemented in order to track sign-ins to a website.
                   We utilized Auth0 within our website in order to lock out certain features such as the database
@@ -307,7 +322,10 @@ return (
               <img src={Webstorm} alt="Webstorm logo" style={{ width: 350, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Webstorm is a Jetbrains IDE that specializes in javascript and typescript development. Webstorm was incredibly
                   helpful towards our team building this website, as it provided intuitive Git integration on top of a plethora
@@ -347,7 +365,10 @@ return (
               <img src={Postgres} alt="PostgreSQL logo" style={{ width: 350, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   PostgreSQL is a database management system that allowed us to efficiently manage a large amount of data
                   while maintaining a high performance throughout the website.
@@ -386,7 +407,10 @@ return (
               <img src={Prisma} alt="Prisma logo" style={{ width: 350, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Prisma is a database toolkit that was essential for our team to be able to access the database
                   in an efficient and intuitive manner. Through its Object-Relational-Mapping (ORM) layer, complexities are
@@ -431,7 +455,10 @@ return (
               <img src={AWS} alt="AWS logo" style={{ width: 350, height: 150}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   Amazon Web Services (AWS) acted as our server provider for the duration of the creation of this website.
                   This allows us to extend beyond utilizing local, and actually have a tangible web service.
@@ -521,7 +548,10 @@ return (
               <img src={ReactImg} alt="React logo" style={{ width: 360, height: 125}} />
               <div>
                 <Typography variant="body1"
-                            sx={{marginLeft: '20px'}}
+                            sx={{
+                              marginLeft: '20px',
+                              wordBreak: 'break-word',
+                            }}
                 >
                   The React framework is the foundation that this website utilizes in order to run. This framework allowed for
                   us to use the Material UI library, and the convenient styling features it brought.
