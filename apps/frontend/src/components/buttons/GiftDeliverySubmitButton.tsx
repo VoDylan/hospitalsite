@@ -3,7 +3,6 @@ import { forwardRef, useState } from "react";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import axios, { isAxiosError } from "axios";
-import {updateCart} from  "../cart/UpdateCart.tsx";
 import {Link} from "react-router-dom";
 
 interface ButtonProps {
@@ -88,7 +87,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         );
       } else {
         handleClear();
-        updateCart(undefined,props.input);
         openWithSuccess();
       }
     }

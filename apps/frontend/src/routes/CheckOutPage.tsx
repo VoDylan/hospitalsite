@@ -4,11 +4,12 @@ import { FlowerDeliveryFormSubmission } from '../common/formSubmission/FlowerDel
 import {useLocation} from "react-router-dom";
 import {GiftDeliveryFormSubmission} from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
 
+
 const flowerPrices = {
   RRose: 5.99,
   WRose: 4.99,
   RCarn: 3.99,
-  Tulip: 2.99
+  Tulip: 2.99,
 };
 
 const giftPrices = {
@@ -21,6 +22,7 @@ const flowerCart: FlowerDeliveryFormSubmission[] = [];
 const giftCart: GiftDeliveryFormSubmission[] = [];
 
 function CheckOutPage(){
+  //const [flowerAmounts, setFlowerAmounts] = React.useState<number[]>([0, 0, 0, 0]);
 
   const parseAmount = (amountStr: string): number => {
     return parseInt(amountStr, 10) || 0;
@@ -28,10 +30,12 @@ function CheckOutPage(){
 
   const location = useLocation();
   if (location.state !== null && location.state.RRose !== undefined) {
-    flowerCart.push(location.state);
+    flowerCart[0] = location.state;
+    // const Famounts: number[] = [parseAmount(location.state.RRose), parseAmount(location.state.WRose), parseAmount(location.state.RCarn), parseAmount(location.state.Tulip)];
+    // setFlowerAmounts(Famounts);
   }
   else if (location.state !== null && location.state.balloons !== undefined) {
-    giftCart.push(location.state);
+    giftCart[0] = location.state;
   }
 
   // Calculate the total price for flowers
