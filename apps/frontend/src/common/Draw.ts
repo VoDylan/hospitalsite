@@ -26,6 +26,24 @@ export class Draw {
     this.ctx.fill();
   }
 
+  drawElevator(x: number, y: number, scale: number, img: HTMLImageElement) {
+    if (scale <= 0) scale = 1;
+
+    const scaledWidth = img.width * scale;
+    const scaledHeight = img.height * scale;
+
+    const topLeftCornerX = x - scaledWidth / 2;
+    const topLeftCornerY = y - scaledHeight / 2;
+
+    this.ctx.drawImage(
+      img,
+      topLeftCornerX,
+      topLeftCornerY,
+      scaledWidth,
+      scaledHeight,
+    );
+  }
+
   drawRectangle(
     x: number,
     y: number,
