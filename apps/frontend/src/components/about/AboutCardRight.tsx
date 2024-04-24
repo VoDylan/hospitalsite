@@ -12,11 +12,13 @@ export function AboutCardRight(props: AboutCardProps) {
   return (
     <>
       <br/>
+      <br/>
       <Box
           sx={{
             mx: 'auto',
             backgroundColor: "lightgray",
             maxWidth: "70%",
+            borderRadius: "20px",
           }}
       >
         <Stack
@@ -28,16 +30,16 @@ export function AboutCardRight(props: AboutCardProps) {
               }}
           >
             <Typography
-                variant="h5"
+                variant="h4"
                 component="div"
                 sx={{
                   textAlign: "left",
                 }}
             >
-              {props.role}
+              <b>{props.role}</b>
             </Typography>
             <Typography
-                variant="h5"
+                variant="h4"
                 component="div"
                 sx={{
                   textAlign: "left",
@@ -88,7 +90,7 @@ export function AboutCardRight(props: AboutCardProps) {
                         textAlign: "left",
                       }}
                   >
-                    {props.email}
+                    Email: {props.email}
                   </Typography>
                 </Stack>
               </Grid>
