@@ -2,6 +2,7 @@ import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import MapNode from "common/src/map/MapNode.ts";
+import axios from "axios";
 
 interface NodeInfoProps {
   style: React.CSSProperties;
@@ -9,13 +10,48 @@ interface NodeInfoProps {
   node: MapNode;
   textColor: string;
   clearNodeCallback: () => void;
-  editNodeCallback: (node: MapNode) => void;
-  deleteNodeCallback: (node: MapNode) => void;
+  nodeUpdateCallback: () => void;
 }
 
 export default function NodeInfo(props: NodeInfoProps) {
   const [editingMode, setEditingMode] = useState<boolean>(false);
   const [node, setNode] = useState<MapNode>(props.node);
+
+  const handleEditNode = (node: MapNode) => {
+    try {
+      axios
+        .put("/api/database/nodes/updatenode", node.nodeInfo, {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then((res) => {
+          console.log("Updated node!");
+          console.log(res.data);
+        });
+    } catch (e) {
+      console.log("Failed to update node");
+    }
+    props.nodeUpdateCallback();
+  };
+
+  const handleDeleteNode = (node: MapNode) => {
+    try {
+      axios
+        .put(
+          `/api/database/nodes/deletenode/${node.nodeID}`,
+          {},
+          {
+            headers: { "Content-Type": "application/json" },
+          },
+        )
+        .then((res) => {
+          console.log("Deleted node!");
+          console.log(res.data);
+        });
+    } catch (e) {
+      console.log("Failed to delete node");
+    }
+    props.nodeUpdateCallback();
+  };
 
   useEffect(() => {
     setNode(props.node);
@@ -345,7 +381,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               <Button
                 variant={"contained"}
                 onClick={() => {
-                  props.editNodeCallback(node);
+                  handleEditNode(node);
                   setEditingMode(false);
                 }}
                 sx={{
@@ -357,7 +393,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               <Button
                 variant={"contained"}
                 onClick={() => {
-                  props.deleteNodeCallback(node);
+                  handleDeleteNode(node);
                   props.clearNodeCallback();
                 }}
                 sx={{

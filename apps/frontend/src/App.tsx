@@ -29,7 +29,7 @@ import { Auth0Protection } from "./components/auth0/Auth0Protection.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
 import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
-import MapEditorPage2 from "./routes/MapEditorPage2.tsx";
+import MapEditingPage2 from "./routes/MapEditingPage2.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -102,7 +102,7 @@ function App() {
         },
         {
           path: "/mapeditingpage2",
-          element: <MapEditorPage2/>,
+          element: <MapEditingPage2/>,
         },
         {
           path: "/Credits",
