@@ -82,6 +82,27 @@ function loadGiftAmounts() {
 const flowerCart: FlowerDeliveryFormSubmission[] = [];
 const giftCart: GiftDeliveryFormSubmission[] = [];
 
+function getFlowerTotal():number {
+  let total = 0;
+
+  total += 5.99*InitCart.RRose;
+  total += 4.99*InitCart.WRose;
+  total += 3.99*InitCart.RCarn;
+  total += 2.99*InitCart.Tulip;
+
+  return total;
+}
+
+function getGiftTotal():number {
+  let total=0;
+
+  total += 3.99*InitCart.Balloons;
+  total += 1.99*InitCart.Cards;
+  total += 5.99*InitCart.Bears;
+
+  return total;
+}
+
 function CheckOutPage(){
   //const [flowerAmounts, setFlowerAmounts] = React.useState<number[]>([0, 0, 0, 0]);
 
@@ -89,6 +110,9 @@ function CheckOutPage(){
   loadGifts();
   loadFlowerAmounts();
   loadGiftAmounts();
+
+  const total = getFlowerTotal() + getGiftTotal();
+  total.toFixed(2);
 
   const [form, setFormResponses] = useState<CheckOutPageFormSubmission>({
     nameOnCard: "",
