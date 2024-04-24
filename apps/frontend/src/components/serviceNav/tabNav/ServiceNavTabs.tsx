@@ -50,16 +50,18 @@ export default function ServiceNavTabs() {
         <Tabs
           value={currentTab}
           aria-label={"Service Navigation Tabs"}
+          textColor={"inherit"}
 
           sx={{
-            "& .MuiTabs-indicator": {
-              background: 'Gold',
-            },
             "& .MuiTab-labelIcon": {
+              opacity: "100%",
               color: 'White',
             },
             "& .Mui-selected": {
               color: 'Gold',
+            },
+            "& .MuiTabs-indicator": {
+              background: 'Gold',
             },
             "& .MuiTab-root:hover": {
               backgroundColor: darken("#186BD9", 0.25),

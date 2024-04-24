@@ -10,8 +10,21 @@ class MapNode {
    * Constructor that creates a new MapNode object using the passed in NodeFields
    * @param nodeInfo
    */
-  public constructor(nodeInfo: MapNodeType) {
-    this._nodeInfo = nodeInfo;
+  public constructor(nodeInfo?: MapNodeType) {
+    if(nodeInfo) {
+      this._nodeInfo = nodeInfo;
+    } else {
+      this._nodeInfo = {
+        nodeID: "",
+        xcoord: 0,
+        ycoord: 0,
+        floor: "",
+        building: "",
+        nodeType: "",
+        longName: "",
+        shortName: "",
+      };
+    }
   }
 
   /**

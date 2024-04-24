@@ -3,6 +3,7 @@ import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/Flower
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import {updateCart} from  "../cart/UpdateCart.tsx";
 
 interface ButtonProps {
   text: string;
@@ -23,7 +24,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   );
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -46,7 +47,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
   async function handleSubmit() {
-    if (props.input.flowerType === "") {
+    if (props.input.RRose === "" && props.input.WRose === "" && props.input.RCarn === "" && props.input.Tulip === "") {
       openWithError("Please select a flower type");
     } else if (props.input.employeeID === -1){
       openWithError("Please enter your employee ID");
@@ -70,6 +71,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
       } else {
         handleClear();
         openWithSuccess();
+        updateCart(props.input);
       }
     }
   }
@@ -78,10 +80,11 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
     props.clear();
   }
 
+
   // Function for posting the form submission to the database
   async function pushToDB(form: FlowerDeliveryFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.roomNumber,
       serviceType: "flower-delivery",
       services: form,
@@ -137,6 +140,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
       variant="contained"
       id={"submitButton"}
       onClick={() => handleSubmit()}
+      href={"/Cart"}
     >
       {props.text}
       <Snackbar
