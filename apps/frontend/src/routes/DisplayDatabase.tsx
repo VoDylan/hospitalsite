@@ -730,7 +730,7 @@ function DisplayDatabase() {
             >
               <Tab label='TABLE' />
               <Tab label='STATUS' />
-              <Tab label='ANALYTICS' />
+              <Tab label='SERVICES' />
             </Tabs>
             <Box //this box is for the service details sliding box
               display={"flex"}
@@ -821,8 +821,10 @@ function DisplayDatabase() {
                           data: statusCountsData,
                         },
                       ]}
-                      width={700}
-                      height={300}/>
+                      width={1000}
+                      height={300}
+                      colors={['#186BD9']}
+                    />
                   )}
                   {chartType === 'pie' && (
                     <PieChart
@@ -835,9 +837,21 @@ function DisplayDatabase() {
                           })),
                         },
                       ]}
-                      width={700}
-                      height={300}
-                      colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']} // Custom color palette
+                      width={600}
+                      height={250}
+                      colors={[
+                        '#0088FE', // Blue
+                        '#00C49F', // Green
+                        '#FFBB28', // Yellow
+                        '#FF5733', // Reddish Orange
+                        '#AF19FF', // Purple
+                        '#FF6666', // Red
+                        '#33CCCC', // Light Blue
+                        '#FF9933', // Orange
+                      ]}
+
+
+                      // Custom color palette
                     />
                   )}
                 </Box>
@@ -856,7 +870,9 @@ function DisplayDatabase() {
               {/* Container for the service request analytics graph */}
             {currentServiceIndex === 2 && (
               <>
+                <Box mt={-2.0}>
               <Button onClick={toggleChartType}>Toggle Chart Type</Button>
+                </Box>
               <Box
                 flex="1"
                 display="flex"
@@ -875,9 +891,9 @@ function DisplayDatabase() {
                         data: serviceTypeCountsData,
                       },
                     ]}
-                    width={900}
+                    width={1250}
                     height={300}
-                    colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}/>
+                    colors={['#186BD9']}/>
                 )}
 
                 {chartType === 'pie' && (
@@ -891,9 +907,19 @@ function DisplayDatabase() {
                         })),
                       },
                     ]}
-                    width={700}
-                    height={300}
-                    colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}/>
+                    width={775}
+                    height={250}
+                    colors={[
+                      '#0088FE', // Blue
+                      '#00C49F', // Green
+                      '#FFBB28', // Yellow
+                      '#FF5733', // Reddish Orange
+                      '#AF19FF', // Purple
+                      '#FF6666', // Red
+                      '#33CCCC', // Light Blue
+                      '#FF9933', // Orange
+                    ]}
+                  />
                 )}
               </Box>
               </>
@@ -923,8 +949,8 @@ function DisplayDatabase() {
               onChange={handleEmployeeTabChange}
               orientation={"horizontal"}
             >
+              <Tab label='TABLE' />
               <Tab label='EMPLOYEE' />
-              <Tab label='EMPLOYEE ID' />
               {/*<Tab label='ANALYTICS' />*/}
             </Tabs>
           <Box
@@ -958,9 +984,9 @@ function DisplayDatabase() {
                     data: employeeIDCountsData,
                   },
                 ]}
-                width={900}
+                width={1250}
                 height={300}
-                colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042']}
+                colors={['#186BD9']}
               />
             )}
 
@@ -976,8 +1002,18 @@ function DisplayDatabase() {
                   },
                 ]}
                 width={700}
-                height={300}
-                colors={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF6666', '#3399FF']}
+                height={250}
+                colors={[
+                  '#0088FE', // Blue
+                  '#00C49F', // Green
+                  '#FFBB28', // Yellow
+                  '#FF5733', // Reddish Orange
+                  '#AF19FF', // Purple
+                  '#FF6666', // Red
+                  '#33CCCC', // Light Blue
+                  '#FF9933', // Orange
+                ]}
+
               />
             )}
               </Box>
