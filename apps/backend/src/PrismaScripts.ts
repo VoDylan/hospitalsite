@@ -174,7 +174,11 @@ export async function createServiceRequest(
 
     const createdServiceRequest = await client.serviceRequest.create({
       data: {
-        employeeID: employeeID,
+        employee: {
+          connect: {
+            employeeID: employeeID,
+          },
+        },
         node: {
           connect: {
             nodeID: nodeID,

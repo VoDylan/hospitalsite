@@ -30,8 +30,8 @@ type NodeParams = { id: number } & MapNodeType;
 
 type ServiceParams = {
   id: number;
-  //userID: number;
   employeeID: number;
+  employeeName: string;
   nodeID: string;
   serviceType: string;
   services: string;
@@ -181,6 +181,7 @@ function DisplayDatabase() {
   const serviceColumns: GridColDef[] = [
     //{ field: "userID", headerName: "User ID", width: 100 },
     { field: "employeeID", headerName: "Employee ID", width: 100 },
+    { field: "employeeName", headerName: "Employee Name", width: 125 },
     { field: "nodeID", headerName: "Node ID", width: 125 },
     { field: "serviceType", headerName: "Service Type", width: 125 },
     {
@@ -286,10 +287,13 @@ function DisplayDatabase() {
 
     const rowData = [];
     for (let i = 0; i < data.length; i++) {
+      const employeeFirstName = data[i].employee ? data[i].employee.firstName || 'Unknown' : 'Unknown';
+      const employeeLastName = data[i].employee ? data[i].employee.lastName || 'Unknown' : 'Unknown';
+      const employeeFullName = `${employeeFirstName} ${employeeLastName}`;
       const tableFormattedServReq: ServiceParams = {
         id: data[i].id,
         employeeID: data[i].employeeID,
-        //userID: data[i].userID,
+        employeeName: employeeFullName,
         nodeID: data[i].nodeID,
         serviceType: data[i].serviceType,
         services: data[i].services,
