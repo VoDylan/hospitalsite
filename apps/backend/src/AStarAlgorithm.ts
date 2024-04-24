@@ -1,63 +1,7 @@
-// import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import Algorithms from "./Algorithms.ts";
-import { Coordinates } from "common/src/Coordinates.ts";
 import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 export class AStarAlgorithm extends Algorithms {
-  public constructor() {
-    super();
-  }
-
-  async loadData() {
-    await super.loadData();
-  }
-
-  private distance(startNodeID: string, endNodeID: string) {
-    let startX: number = -1;
-    let startY: number = -1;
-    let neighborX: number = -1;
-    let neighborY: number = -1;
-
-    for (let i = 0; i < this.mapNodes.length; i++) {
-      if (this.mapNodes[i].nodeID === startNodeID) {
-        startX = this.mapNodes[i].xcoord;
-        startY = this.mapNodes[i].ycoord;
-      } else if (this.mapNodes[i].nodeID === endNodeID) {
-        neighborX = this.mapNodes[i].xcoord;
-        neighborY = this.mapNodes[i].ycoord;
-      }
-
-      if (startX !== -1 && neighborX !== -1) {
-        break;
-      }
-    }
-
-    if ([startX, startY, neighborX, neighborY].some((val) => val === -1)) {
-      console.error("Node does not exist");
-      return -1;
-    }
-
-    return Math.sqrt((neighborX - startX) ** 2 + (neighborY - startY) ** 2);
-  }
-
-  private shortestDistance(open: Map<string, number>) {
-    let minValue: number = Infinity;
-    let minKey: string = "";
-
-    for (const [key, value] of open) {
-      if (value < minValue) {
-        minValue = value;
-        minKey = key;
-      }
-    }
-
-    return minKey;
-  }
-
-  getCoordinates(currentNode: string): Coordinates {
-    return super.getCoordinates(currentNode);
-  }
-
   runAlgorithm(start: string, end: string): TypeCoordinates[] {
     if (!start || !end) {
       console.error("Node ID not found for start or end node");
@@ -90,33 +34,7 @@ export class AStarAlgorithm extends Algorithms {
       );
 
       if (currentNodeID === end) {
-        // const coordinatesPath: IDCoordinates[] = [];
-        const path: string[] = [];
-        let current: string | null = currentNodeID;
-        while (current !== start) {
-          let currentIdx: number = -1;
-          if (current) {
-            path.unshift(current);
-            // coordinatesPath.unshift({
-            //   nodeID: current,
-            //   coordinates: this.getCoordinates(current),
-            // });
-            currentIdx = this.nodes.findIndex(
-              (node) => node.startNodeID === current,
-            );
-          }
-          current = parents[currentIdx];
-        }
-        // coordinatesPath.unshift({
-        //   nodeID: start,
-        //   coordinates: this.getCoordinates(start),
-        // });
-        path.unshift(start);
-
-        // console.log("Path found:", path);
-        // console.log("Coordinates found:", coordinatesPath);
-
-        return [];
+        return this.ending(currentNodeID, start, parents);
       }
 
       const currentNode = this.nodes[currentNodeIndex];
