@@ -1,4 +1,4 @@
-import { Button, Paper, Stack, Box, Typography } from "@mui/material";
+import { Button, Paper, Stack, Box } from "@mui/material";
 import RemoveIcon from '@mui/icons-material/Remove';
 import React, {useState} from "react";
 import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
@@ -8,7 +8,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import TurnRightIcon from '@mui/icons-material/TurnRight';
 import TurnLeftIcon from '@mui/icons-material/TurnLeft';
 import NorthIcon from '@mui/icons-material/North';
-import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+// import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import Elevator from "../../images/realMapIcons/elevator.svg";
 import WalkingPerson from "../../images/mapIcons/WalkingPerson.png";
 
@@ -200,26 +200,26 @@ export default function TextIcon(props: {
               }}
             >
               <Stack direction={"row"} sx={{ padding: "10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <Stack direction={"row"} spacing={0.4}>
-                  <Typography
-                    color={"white"}
-                    sx={{
-                      minWidth: "90px"
-                    }}
-                  >
-                    Est. Travel:
-                  </Typography>
-                  <DirectionsWalkIcon sx={{ fontSize: "large", color: "white", marginTop: "20px" }} />
-                  <Typography
-                    color={"#34CB2C"}
-                    sx={{
-                      minWidth: "90px",
-                      fontWidth: "bold",
-                    }}
-                  >
-                    6 min
-                  </Typography>
-                </Stack>
+                {/*<Stack direction={"row"} spacing={0.4}>*/}
+                {/*  <Typography*/}
+                {/*    color={"white"}*/}
+                {/*    sx={{*/}
+                {/*      minWidth: "90px"*/}
+                {/*    }}*/}
+                {/*  >*/}
+                {/*    Est. Travel:*/}
+                {/*  </Typography>*/}
+                {/*  <DirectionsWalkIcon sx={{ fontSize: "large", color: "white", marginTop: "20px" }} />*/}
+                {/*  <Typography*/}
+                {/*    color={"#34CB2C"}*/}
+                {/*    sx={{*/}
+                {/*      minWidth: "90px",*/}
+                {/*      fontWidth: "bold",*/}
+                {/*    }}*/}
+                {/*  >*/}
+                {/*    6 min*/}
+                {/*  </Typography>*/}
+                {/*</Stack>*/}
                 <Button
                   endIcon={<RemoveIcon sx={{ fontSize: "large", color: "white" }} />} // Set the font size to large and color to white
                   onClick={props.handleButtonClick2}
