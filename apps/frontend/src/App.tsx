@@ -27,6 +27,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import TopBanner from "./components/banner/TopBanner.tsx";
 import { Auth0Protection } from "./components/auth0/Auth0Protection.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
+import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 
 function App() {
@@ -39,6 +40,10 @@ function App() {
         {
           path: "",
           element: <SlidesPage />,
+        },
+        {
+          path: "/About",
+          element: <AboutPage />,
         },
         {
           path: "/Services",
