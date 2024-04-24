@@ -69,11 +69,11 @@ function TopBanner() {
 
           <Stack
             direction="row"
-            spacing={3}
+            spacing={2}
                  alignItems="center"
                  justifyContent="center"
                  display={"flex"}
-                 sx={{ flexGrow: 2, marginRight: "6%"}}>
+                 sx={{ flexGrow: 2, marginRight: "3%"}}>
             <CurrentTime/>
             <WeatherApp/>
 
@@ -81,7 +81,7 @@ function TopBanner() {
 
         <Stack
           direction="row"
-          spacing={2}
+          spacing={1}
           alignItems="center"
           display={"flex"}
           sx={{ flexGrow: 1 }}

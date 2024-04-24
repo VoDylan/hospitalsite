@@ -7,7 +7,7 @@ const WeatherApp = () => {
 
   return (
     <>
-      <Stack direction={"column"} sx={{display: "flex", alignItems: "left", justifyContent: "center" }} spacing={0.1}>
+      <Stack direction={"column"} sx={{display: "flex", alignItems: "center", justifyContent: "center" }} spacing={0.1}>
             <Weather/>
         </Stack>
     </>
