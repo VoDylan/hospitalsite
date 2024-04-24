@@ -4,6 +4,7 @@ import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import {Link} from "react-router-dom";
+import InitCart from "../../routes/InitCart.ts";
 
 interface ButtonProps {
   text: string;
@@ -71,6 +72,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
       } else {
         openWithSuccess();
         handleClear();
+        InitCart.setFlowers(props.input);
       }
     }
   }
@@ -135,7 +137,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
-    <Link to={"/Cart"} state={props.input} onClick={() => handleSubmit()}>
+    <Link to={"/Cart"} onClick={() => handleSubmit()}>
     <Button
       variant="contained"
       id={"submitButton"}

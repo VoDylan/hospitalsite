@@ -4,6 +4,7 @@ import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeli
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import axios, { isAxiosError } from "axios";
 import {Link} from "react-router-dom";
+import initCart from "../../routes/InitCart.ts";
 
 interface ButtonProps {
   text: string;
@@ -88,6 +89,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       } else {
         handleClear();
         openWithSuccess();
+        initCart.setGifts(props.input);
       }
     }
   }
