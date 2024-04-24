@@ -54,12 +54,8 @@ export function DeviceSubmitButton(props: ButtonProps) {
       openWithError("Please enter your name");
     } else if (props.input.priority === "") {
       openWithError("Please select a priority");
-    } else if (props.input.device === "") {
+    } else if (props.input.beds === "" && props.input.docTools === "" && props.input.surgery === "" && props.input.IV === "") {
       openWithError("Please select a device");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
-    } else if (props.input.amount === "") {
-      openWithError("Please select an amount");
     } else {
       const submission = props.input;
       console.log(props.input);

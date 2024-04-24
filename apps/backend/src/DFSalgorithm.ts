@@ -1,5 +1,4 @@
 import Algorithms from "./Algorithms.ts";
-// import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import { Coordinates } from "common/src/Coordinates.ts";
 import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
@@ -29,7 +28,7 @@ export class DFSalgorithm extends Algorithms {
       remove the node from the stack
 
       for all neighbors for the new node
-        if the neighbor is not visites
+        if the neighbor is not visited
           push neighbor as visited
           push neighbor in the stack
      */

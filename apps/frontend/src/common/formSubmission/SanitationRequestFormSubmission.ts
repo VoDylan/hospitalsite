@@ -5,5 +5,4 @@ export interface SanitationRequestFormSubmission {
   priority: string;
   service: string;
   frequency: string;
-  status: string;
 }
