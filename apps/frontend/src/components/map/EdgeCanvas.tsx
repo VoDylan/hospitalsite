@@ -3,6 +3,7 @@ import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
 import { Floor } from "common/src/map/Floor.ts";
 import { nodesDistances } from "common/src/nodesDistances.ts";
 import axios from "axios";
+import MapNode from "common/src/map/MapNode.ts";
 
 interface EdgeCanvasProps {
   style: React.CSSProperties;
@@ -10,7 +11,7 @@ interface EdgeCanvasProps {
   width: number;
   height: number;
   floor: Floor;
-  nodeDataLoaded: boolean;
+  nodeData: MapNode[];
 }
 
 export default function EdgeCanvas(props: EdgeCanvasProps) {
@@ -41,7 +42,7 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
 
   useEffect(() => {
     loadEdgesDistance({ req: props.floor }).then(() => setEdgeDataLoaded(true));
-  }, [props.floor, props.nodeDataLoaded]);
+  }, [props.floor, props.nodeData]);
 
   useEffect(() => {
     if (edgeDataLoaded && canvasRef.current) {
@@ -82,7 +83,7 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
     distancesData,
     edgeDataLoaded,
     props.height,
-    props.nodeDataLoaded,
+    props.nodeData,
     props.width,
   ]);
 
