@@ -62,6 +62,13 @@ export default function NodeAutocomplete(props: NodeAutocompleteProps) {
         groupBy={(option) => option.label.charAt(0).toUpperCase()}
         sx={{ width: "75%" }}
         renderInput={(params: AutocompleteRenderInputParams) => <TextField {...params} label={props.label}/>}
+        renderOption={(props, option) => {
+          return (
+            <li {...props} key={option.node}>
+              {option.label}
+            </li>
+          );
+        }}
         isOptionEqualToValue={(option: AutocompleteNodeType, value: AutocompleteNodeType) => {
           return option.label === value.label && option.node === value.node;
         }}

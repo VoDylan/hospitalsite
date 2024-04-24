@@ -43,7 +43,7 @@ export const useNodes = () => {
         setNodeData(GraphManager.getInstance().nodes);
         setEdgeData(GraphManager.getInstance().edges);
         setNodeDataLoaded(true);
-        console.log("Data loaded");
+        console.log("Node Data loaded");
       });
     }
   }, [nodeDataLoaded]);

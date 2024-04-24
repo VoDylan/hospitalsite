@@ -6,6 +6,7 @@ import MapRender from "../components/map/mapEditor2/MapRender.tsx";
 import MapEditorSideBar2 from "../components/map/mapEditor2/MapEditorSideBar2.tsx";
 import {useSelectedNodes} from "../hooks/useSelectedNodes.tsx";
 import GraphManager from "../common/GraphManager.ts";
+import {useFilters} from "../hooks/useFilters.tsx";
 
 export default function MapEditingPage2() {
   const {
@@ -23,6 +24,16 @@ export default function MapEditingPage2() {
     setSelectedNode2
   } = useSelectedNodes();
 
+  const [
+    filteredNodes,
+    filtersApplied,
+    setFiltersApplied,
+    setNodeDataFilters,
+    setNewFilterActiveStatus,
+    selectAllFilters,
+    selectNoFilters
+  ] = useFilters();
+
   const [windowWidth, windowHeight] = useWindowSize();
 
   useEffect(() => {
@@ -33,8 +44,14 @@ export default function MapEditingPage2() {
   }, [nodeDataLoaded, selectedNode1, selectedNode2, setSelectedNode1, setSelectedNode2]);
 
   useEffect(() => {
+    console.log("Filtered Nodes");
+    console.log(filteredNodes);
+  }, [filteredNodes]);
+
+  useEffect(() => {
     console.log(nodeData);
-  }, [nodeData]);
+    setNodeDataFilters(nodeData);
+  }, [nodeData, setNodeDataFilters]);
 
   useEffect(() => {
     console.log(edgeData);
@@ -57,7 +74,7 @@ export default function MapEditingPage2() {
             selectedNode1={selectedNode1}
             selectedNode2={selectedNode2}
             edgeBetweenNodes={edgeBetween}
-            nodeData={nodeData}
+            nodeData={filteredNodes}
             nodeUpdateCallback={() => setNodeDataLoaded(false)}
             handleSelectNode1={(nodeID) => setSelectedNode1(nodeID ? GraphManager.getInstance().getNodeByID(nodeID) : null)}
             handleSelectNode2={(nodeID) => setSelectedNode2(nodeID ? GraphManager.getInstance().getNodeByID(nodeID) : null)}

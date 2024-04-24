@@ -62,7 +62,7 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
 
     >
       <Box
-        margin={"15px"}
+        margin={"25px"}
         marginBottom={"50px"}
       >
         <Stack>
@@ -75,27 +75,35 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
           >
             {props.title}
           </Typography>
-          <NodeAutocomplete
-            style={{
-              marginTop: "15px",
+          <Stack
+            sx={{
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "80%",
             }}
-            label={"Node 1"}
-            Icon={<RadioButtonCheckedIcon color={"primary"} sx={{color: "blue"}}/>}
-            onChange={handleNode1Change}
-            nodeData={props.nodeData}
-            value={props.selectedNode1}
-          />
-          <MoreVertIcon fontSize={"medium"}/>
-          <NodeAutocomplete
-            style={{
-              marginBottom: "15px",
-            }}
-            label={"Node 2"}
-            Icon={<LocationOnIcon fontSize={"medium"} sx={{color: "red"}}/>}
-            onChange={handleNode2Change}
-            nodeData={props.nodeData}
-            value={props.selectedNode2}
-          />
+          >
+            <NodeAutocomplete
+              style={{
+                marginTop: "15px",
+              }}
+              label={"Node 1"}
+              Icon={<RadioButtonCheckedIcon color={"primary"} sx={{color: "blue"}}/>}
+              onChange={handleNode1Change}
+              nodeData={props.nodeData}
+              value={props.selectedNode1}
+            />
+            <MoreVertIcon fontSize={"medium"}/>
+            <NodeAutocomplete
+              style={{
+                marginBottom: "15px",
+              }}
+              label={"Node 2"}
+              Icon={<LocationOnIcon fontSize={"medium"} sx={{color: "red"}}/>}
+              onChange={handleNode2Change}
+              nodeData={props.nodeData}
+              value={props.selectedNode2}
+            />
+          </Stack>
           <Divider
             variant={"middle"}
             orientation={"horizontal"}
@@ -165,8 +173,7 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
                     selectedNode1={props.selectedNode1}
                     selectedNode2={props.selectedNode2}
                     textColor={"#535353"}
-                    createEdgeCallback={props.handleCreateEdge}
-                    deleteEdgeCallback={props.handleDeleteEdge}
+                    nodeUpdateCallback={props.nodeUpdateCallback}
                   />
                 </Box>
               ) : (

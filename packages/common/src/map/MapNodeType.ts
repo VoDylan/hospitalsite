@@ -19,3 +19,17 @@ export const emptyNodeInfo: MapNodeType = {
   longName: "",
   shortName: "",
 };
+
+export const validNodeTypes: string[] = [
+  "ELEV",
+  "STAI",
+  "SERV",
+  "INFO",
+  "REST",
+  "EXIT",
+  "CONF",
+  "DEPT",
+  "LABS",
+  "RETL",
+  "HALL",
+];
