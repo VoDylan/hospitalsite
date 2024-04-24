@@ -17,7 +17,7 @@ import {CalendarAvailabiltiySubmitButton} from "../components/buttons/Appointmen
 import axios from "axios";
 import {DropDown} from "../components/dropdown/DropDown.tsx";
 
-export default function CalenderPage() {
+export default function CalendarPage() {
 
   const [form, setResponses] = useState<CalendarPageFormSubmission>({
     name: "",
