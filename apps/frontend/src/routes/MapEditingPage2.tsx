@@ -27,8 +27,10 @@ export default function MapEditingPage2() {
   const [
     filteredNodes,
     filtersApplied,
+    filterInfo,
     setFiltersApplied,
     setNodeDataFilters,
+    setNodeDataLoadedFilters,
     setNewFilterActiveStatus,
     selectAllFilters,
     selectNoFilters
@@ -44,18 +46,21 @@ export default function MapEditingPage2() {
   }, [nodeDataLoaded, selectedNode1, selectedNode2, setSelectedNode1, setSelectedNode2]);
 
   useEffect(() => {
+    setNodeDataLoadedFilters(nodeDataLoaded);
+  }, [nodeDataLoaded, setNodeDataLoadedFilters]);
+
+  useEffect(() => {
     console.log("Filtered Nodes");
     console.log(filteredNodes);
   }, [filteredNodes]);
 
   useEffect(() => {
-    console.log(nodeData);
-    setNodeDataFilters(nodeData);
-  }, [nodeData, setNodeDataFilters]);
+    console.log(`filtersApplied changed: ${filtersApplied}`);
+  }, [filtersApplied]);
 
   useEffect(() => {
-    console.log(edgeData);
-  }, [edgeData]);
+    setNodeDataFilters(nodeData);
+  }, [nodeData, setNodeDataFilters]);
 
   return (
     <>
@@ -71,6 +76,7 @@ export default function MapEditingPage2() {
         >
           <MapEditorSideBar2
             title={"Map Editor"}
+            filterInfo={filterInfo}
             selectedNode1={selectedNode1}
             selectedNode2={selectedNode2}
             edgeBetweenNodes={edgeBetween}
@@ -84,6 +90,10 @@ export default function MapEditingPage2() {
             handleDeleteEdge={() => {return;}}
             handleDeleteNode={() => {return;}}
             handleEditNode={() => {return;}}
+
+            handleIconStateChange={(filterType, newState) => {
+              setNewFilterActiveStatus({type: filterType, active: newState});
+            }}
           />
           <MapRender/>
         </Stack>

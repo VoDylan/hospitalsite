@@ -11,11 +11,15 @@ import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import useWindowSize from "../../../hooks/useWindowSize.tsx";
 import FilterSlider from "./FilterSlider.tsx";
+import {NodeTypes} from "common/src/map/MapNodeType.ts";
+import {IFilterState} from "../../../hooks/useFilters.tsx";
 
 interface MapEditorSideBar2Props {
   title: string;
 
   nodeData: MapNode[];
+
+  filterInfo: Map<NodeTypes, IFilterState>;
 
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
@@ -31,6 +35,8 @@ interface MapEditorSideBar2Props {
   handleClearNode2: () => void;
   handleEditNode: (node: MapNode) => void;
   handleDeleteNode: (node: MapNode) => void;
+
+  handleIconStateChange: (filterType: NodeTypes, newState: boolean) => void;
 }
 
 export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
@@ -125,6 +131,7 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
+                marginBottom: "25px",
               }}
             >
               {props.selectedNode1 ? (
@@ -182,7 +189,20 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
               )}
             </Box>
           )}
-          <FilterSlider />
+          <Divider
+            variant={"middle"}
+            orientation={"horizontal"}
+            flexItem
+            aria-hidden={"true"}
+            sx={{
+              borderBottom: "2px solid",
+              opacity: "0.5",
+            }}
+          />
+          <FilterSlider
+            filterInfo={props.filterInfo}
+            handleIconStateChange={props.handleIconStateChange}
+          />
         </Stack>
       </Box>
     </Drawer>

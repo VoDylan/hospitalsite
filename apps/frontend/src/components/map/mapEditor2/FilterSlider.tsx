@@ -1,43 +1,55 @@
 import {Box, Button, Stack} from "@mui/material";
 import Slide from "@mui/material/Slide";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import FilterList from "./FilterList.tsx";
+import useWindowSize from "../../../hooks/useWindowSize.tsx";
+import {IFilterState} from "../../../hooks/useFilters.tsx";
+import {NodeTypes} from "common/src/map/MapNodeType.ts";
 
 interface FilterSelectorProps {
-
+  filterInfo: Map<NodeTypes, IFilterState>;
+  handleIconStateChange: (filterType: NodeTypes, newState: boolean) => void;
 }
 
 export default function FilterSlider(props: FilterSelectorProps) {
   const [filterMenuShown, setFilterMenuShown] = useState<boolean>(false);
+  const [sendFilterMenuToBack, setSendFilterMenuToBack] = useState<boolean>(true);
+  const [, windowHeight] = useWindowSize();
+
+  useEffect(() => {
+    console.log(sendFilterMenuToBack);
+  }, [sendFilterMenuToBack]);
+
   return (
     <Stack
       direction={"column"}
       spacing={2}
-      marginLeft={"10%"}
+      marginLeft={"auto"}
+      marginRight={"auto"}
+      marginTop={"25px"}
     >
-      {!filterMenuShown ?
-        <Button
-          variant={"contained"}
-          sx={{
-            width: "80%",
-            zIndex: 2,
-          }}
-          onClick={() => setFilterMenuShown(true)}
-        >
-          Edit Filters
-        </Button>
-        :
-        <></>
-      }
+      <Button
+        variant={"contained"}
+        sx={{
+          width: "100%",
+        }}
+        onClick={() => {
+          setSendFilterMenuToBack(false);
+          setFilterMenuShown(true);
+        }}
+      >
+        Edit Filters
+      </Button>
       <Box
-        position={"absolute"}
-        width={"100%"}
-        height={"100%"}
-        top={0}
+        position={"fixed"}
+        width={"18%"}
+        height={`${windowHeight - 120}px`}
+        top={"120px"}
         left={0}
         overflow={"hidden"}
         sx={{
-          marginTop: "0 !important"
+          marginTop: "0 !important",
+          ...sendFilterMenuToBack ? { zIndex: -5} : {zIndex: 100},
         }}
       >
         <Slide
@@ -56,9 +68,16 @@ export default function FilterSlider(props: FilterSelectorProps) {
           }}
           mountOnEnter
           unmountOnExit
+          addEndListener={() => {
+            if(!filterMenuShown) setSendFilterMenuToBack(true);
+          }}
         >
           <div>
-            <FilterList hideFilterMenu={() => setFilterMenuShown(false)} />
+            <FilterList
+              hideFilterMenu={() => setFilterMenuShown(false)}
+              filterInfo={props.filterInfo}
+              handleIconStateChange={props.handleIconStateChange}
+            />
           </div>
         </Slide>
       </Box>

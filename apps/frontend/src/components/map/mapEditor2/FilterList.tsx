@@ -1,8 +1,13 @@
 import React from "react";
-import {Box, Button, Typography} from "@mui/material";
+import {Box, Button, Stack} from "@mui/material";
+import {NodeTypes} from "common/src/map/MapNodeType.ts";
+import {IFilterState} from "../../../hooks/useFilters.tsx";
+import FilterWithIcon from "./FilterWithIcon.tsx";
 
 interface FilterListProps {
   hideFilterMenu: () => void;
+  filterInfo: Map<NodeTypes, IFilterState>;
+  handleIconStateChange: (filterType: NodeTypes, newState: boolean) => void;
 }
 
 export default function FilterList(props: FilterListProps) {
@@ -19,7 +24,22 @@ export default function FilterList(props: FilterListProps) {
       <Box
         margin={"15px"}
       >
-        <Typography>;ljkjkdsljkahsddf</Typography>
+        <Stack>
+          {[...props.filterInfo.values()].map((filterInfo): React.JSX.Element => {
+            return (
+              (filterInfo.renderInfo) ?
+                <FilterWithIcon
+                  iconColor={filterInfo.renderInfo.iconColor}
+                  filterName={filterInfo.renderInfo.filterName}
+                  filterType={filterInfo.renderInfo.filterType}
+                  initialIconState={filterInfo.active}
+                  handleIconState={props.handleIconStateChange}
+                />
+                :
+                <></>
+            );
+          })}
+        </Stack>
       </Box>
     </Box>
   );

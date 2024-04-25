@@ -1,35 +1,99 @@
 import React, {useCallback, useEffect, useState} from "react";
 import MapNode from "common/src/map/MapNode.ts";
-import {validNodeTypes} from "common/src/map/MapNodeType.ts";
+import {NodeTypes, ValidNodeTypesList} from "common/src/map/MapNodeType.ts";
 import FilterManager, {FilterValueType, generateFilterValue} from "common/src/filter/FilterManager.ts";
 import {FilterName} from "common/src/filter/FilterName.ts";
 import Filter from "common/src/filter/filters/Filter.ts";
 
-interface IFilterState {
+export interface IFilterState {
   filterValue: FilterValueType;
+  renderInfo?: IRenderInfo
   active: boolean;
 }
+
+export interface IRenderInfo {
+  filterType: NodeTypes;
+  iconColor: string;
+  filterName: string;
+}
+
+const filterRenderInfo: Map<NodeTypes, IRenderInfo> = new Map([
+  [NodeTypes.CONF, {
+    iconColor: "#1CA7EC",
+    filterName: "Conference",
+    filterType: NodeTypes.CONF,
+  }],
+  [NodeTypes.DEPT, {
+    iconColor: "#72c41c",
+    filterName: "Department",
+    filterType: NodeTypes.DEPT,
+  }],
+  [NodeTypes.LABS, {
+    iconColor: "#e88911",
+    filterName: "Labs",
+    filterType: NodeTypes.LABS,
+  }],
+  [NodeTypes.SERV, {
+    iconColor: "#e88911",
+    filterName: "Service",
+    filterType: NodeTypes.SERV,
+  }],
+  [NodeTypes.INFO, {
+    iconColor: "#1CA7EC",
+    filterName: "Info",
+    filterType: NodeTypes.INFO,
+  }],
+  [NodeTypes.REST, {
+    iconColor: "#72c41c",
+    filterName: "Restrooms",
+    filterType: NodeTypes.REST,
+  }],
+  [NodeTypes.RETL, {
+    iconColor: "#e88911",
+    filterName: "Retail",
+    filterType: NodeTypes.RETL,
+  }],
+  [NodeTypes.STAI, {
+    iconColor: "#72c41c",
+    filterName: "Stairs",
+    filterType: NodeTypes.STAI
+  }],
+  [NodeTypes.ELEV, {
+    iconColor: "#1CA7EC",
+    filterName: "Elevators",
+    filterType: NodeTypes.ELEV,
+  }],
+  [NodeTypes.EXIT, {
+    iconColor: "red",
+    filterName: "Exits",
+    filterType: NodeTypes.EXIT,
+  }]
+]);
 
 export const useFilters = (): [
   MapNode[],
   boolean,
+  Map<NodeTypes, IFilterState>,
   React.Dispatch<React.SetStateAction<boolean>>,
   React.Dispatch<React.SetStateAction<MapNode[]>>,
+  React.Dispatch<React.SetStateAction<boolean>>,
   React.Dispatch<React.SetStateAction<{
-    type: string,
+    type: NodeTypes,
     active: boolean
   } | null>>,
   React.Dispatch<React.SetStateAction<boolean>>,
   React.Dispatch<React.SetStateAction<boolean>>,
 ] => {
   const [nodeData, setNodeData] = useState<MapNode[]>([]);
+  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
 
-  const [filterAssociations, setFilterAssociations] = useState<Map<string, IFilterState>>(new Map());
+  const [filterAssociations, setFilterAssociations] = useState<Map<NodeTypes, IFilterState>>(new Map());
   const [filtersRegistered, setFiltersRegistered] = useState<boolean>(false);
 
-  const [newFilterActiveStatus, setNewFilterActiveStatus] = useState<{type: string, active: boolean} | null>(null);
+  const [newFilterActiveStatus, setNewFilterActiveStatus] = useState<{type: NodeTypes, active: boolean} | null>(null);
 
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectNone, setSelectNone] = useState<boolean>(false);
@@ -37,11 +101,15 @@ export const useFilters = (): [
   /**
    * Helper callback function that sets a given filter association's active status to the passed in status
    */
-  const setFilterActiveState = useCallback((nodeType: string, newActiveStatus: boolean) => {
+  const setFilterActiveState = useCallback((nodeType: NodeTypes, newActiveStatus: boolean) => {
     const newFilterState: IFilterState | undefined = filterAssociations.get(nodeType);
+    const oldFilterAssociations = filterAssociations;
+
     if(newFilterState) {
       newFilterState.active = newActiveStatus;
-      filterAssociations.set(nodeType, newFilterState);
+      console.log(newFilterState);
+      oldFilterAssociations.set(nodeType, newFilterState);
+      setFilterAssociations(oldFilterAssociations);
     }
   }, [filterAssociations]);
 
@@ -50,10 +118,12 @@ export const useFilters = (): [
    */
   useEffect(() => {
     if(!filtersRegistered) {
-      const newRegisteredFilters: Map<string, IFilterState> = new Map<string, IFilterState>();
-      for(const type of validNodeTypes) {
+      console.log("Registering filters");
+      const newRegisteredFilters: Map<NodeTypes, IFilterState> = new Map<NodeTypes, IFilterState>();
+      for(const type of ValidNodeTypesList) {
         newRegisteredFilters.set(type, {
           filterValue: generateFilterValue(false, type),
+          renderInfo: filterRenderInfo.get(type),
           active: true,
         });
       }
@@ -69,18 +139,19 @@ export const useFilters = (): [
   useEffect(() => {
     if(filtersRegistered && newFilterActiveStatus) {
       if(filterAssociations.has(newFilterActiveStatus.type)) {
+        console.log(`Received new state for filter type ${newFilterActiveStatus.type}`);
         setFilterActiveState(newFilterActiveStatus.type, newFilterActiveStatus.active);
       }
     }
-
-    setFiltersApplied(false);
   }, [filterAssociations, filtersRegistered, newFilterActiveStatus, setFilterActiveState]);
 
   /**
    * If filters are registered, not applied, and the data is loaded, calculate the set of filtered nodes
    */
   useEffect(() => {
-    if(!filtersApplied && filtersRegistered) {
+    console.log(`filtersRegistered: ${filtersRegistered} | nodeDataLoaded: ${nodeDataLoaded}`);
+    if(filtersRegistered && nodeDataLoaded) {
+      console.log("Reapplying filters to node data");
       const activeFilterValues: FilterValueType[] = [];
 
       for(const filterState of filterAssociations.values()) {
@@ -92,19 +163,17 @@ export const useFilters = (): [
       const filteredNodes: MapNode[] = FilterManager.getInstance().applyFilters([typeFilter], nodeData);
 
       setFilteredNodes(filteredNodes);
-      setFiltersApplied(true);
     }
-  }, [nodeData, filterAssociations, filtersApplied, filtersRegistered]);
+  }, [nodeData, filterAssociations, filtersRegistered, nodeDataLoaded]);
 
   /**
    * If the request to select all filters is set from the program, set all active states for all filters to true
    */
   useEffect(() => {
     if(selectAll && filtersRegistered) {
-      for(const type of validNodeTypes) {
+      for(const type of ValidNodeTypesList) {
         setFilterActiveState(type, true);
       }
-      setFiltersApplied(false);
       setSelectAll(false);
     }
   }, [filtersRegistered, selectAll, setFilterActiveState]);
@@ -114,23 +183,20 @@ export const useFilters = (): [
    */
   useEffect(() => {
     if(selectNone && filtersRegistered) {
-      for(const type of validNodeTypes) {
+      for(const type of ValidNodeTypesList) {
         setFilterActiveState(type, true);
       }
-      setFiltersApplied(false);
       setSelectNone(false);
     }
   }, [filtersRegistered, selectNone, setFilterActiveState]);
 
-  useEffect(() => {
-    setFiltersApplied(false);
-  }, [nodeData]);
-
   return [
     filteredNodes,
     filtersApplied,
+    filterAssociations,
     setFiltersApplied,
     setNodeData,
+    setNodeDataLoaded,
     setNewFilterActiveStatus,
     setSelectAll,
     setSelectNone
