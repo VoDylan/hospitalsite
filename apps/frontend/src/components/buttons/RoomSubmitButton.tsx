@@ -56,8 +56,6 @@ export function RoomSubmitButton(props: ButtonProps) {
       openWithError("Please select a priority");
     } else if (props.input.service === "") {
       openWithError("Please select a service");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
     } else if (props.input.frequency === "") {
       openWithError("Please select a frequency");
     } else {
@@ -148,7 +146,7 @@ export function RoomSubmitButton(props: ButtonProps) {
         autoHideDuration={5000}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         }}
       >

@@ -1,21 +1,20 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
-import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import {CalendarPageFormSubmission} from "../../common/formSubmission/CalendarPageFormSubmission.ts";
 
 interface ButtonProps {
   text: string;
-  input: FlowerDeliveryFormSubmission;
+  input: CalendarPageFormSubmission;
   clear: () => void;
 }
 
-export function FlowerDeliverySubmitButton(props: ButtonProps) {
+export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
   // Logic for snackbar alert
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
   const [message, setMessage] = useState("");
-  const link:string = "";
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
@@ -24,7 +23,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   );
 
   const handleClose = (
-    _event?: React.SyntheticEvent | Event,
+    event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -47,16 +46,14 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
 
   // Handles the onClick for the submit button and will continue only if all required fields are filled out
   async function handleSubmit() {
-    if (props.input.RRose === "" && props.input.WRose === "" && props.input.RCarn === "" && props.input.Tulip === "") {
-      openWithError("Please select a flower type");
-    } else if (props.input.employeeID === -1){
+    if (props.input.date === "") {
+      openWithError("Please select a date");
+    } else if (props.input.employee === -1){
       openWithError("Please enter your employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
-    } else if (props.input.recipientName === "") {
-      openWithError("Please enter the recipient's name");
-    } else if (props.input.roomNumber === "") {
-      openWithError("Please enter a valid room number");
+    } else if (props.input.reasonForVisit === "") {
+      openWithError("Please enter your reason for visiting");
     } else {
       const submission = props.input;
       console.log(props.input);
@@ -69,8 +66,8 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
           `Failed to post form data to database: ${result.data.message}`,
         );
       } else {
-        openWithSuccess();
         handleClear();
+        openWithSuccess();
       }
     }
   }
@@ -78,29 +75,13 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   function handleClear() {
     props.clear();
   }
-  
-  function linkToCart(link:string) {
-    if (props.input.RRose === "" && props.input.WRose === "" && props.input.RCarn === "" && props.input.Tulip === "") {
-      return link;
-    } else if (props.input.employeeID === -1){
-      return link;
-    } else if (props.input.name === "") {
-      return link;
-    } else if (props.input.recipientName === "") {
-      return link;
-    } else if (props.input.roomNumber === "") {
-      return link;
-    } else link = "/Cart";
-    return link;
-  }
-
 
   // Function for posting the form submission to the database
-  async function pushToDB(form: FlowerDeliveryFormSubmission) {
+  async function pushToDB(form: CalendarPageFormSubmission) {
     const returnData = {
-      employeeID: form.employeeID,
+      employeeID: form.employee,
       nodeID: form.roomNumber,
-      serviceType: "flower-delivery",
+      serviceType: "calendar-appointment",
       services: form,
     };
 
@@ -154,7 +135,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
       variant="contained"
       id={"submitButton"}
       onClick={() => handleSubmit()}
-      href={linkToCart(link)}
     >
       {props.text}
       <Snackbar

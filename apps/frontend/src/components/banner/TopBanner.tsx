@@ -57,7 +57,7 @@ function TopBanner() {
           justifyContent="space-between"
           alignItems="center"
           display={"flex"}
-          sx={{ flexGrow: 1.5, marginRight: "2%" }}
+          sx={{ flexGrow: 1, marginRight: "2%" }}
         >
           <Link to="/">
             <LogoIconButton as="span" color="inherit" aria-label="logo">
@@ -69,11 +69,11 @@ function TopBanner() {
 
           <Stack
             direction="row"
-            spacing={3}
+            spacing={2}
                  alignItems="center"
                  justifyContent="center"
                  display={"flex"}
-                 sx={{ flexGrow: 2, marginRight: "6%"}}>
+                 sx={{ flexGrow: 2.5, marginRight: "10%", marginLeft: "12%"}}>
             <CurrentTime/>
             <WeatherApp/>
 

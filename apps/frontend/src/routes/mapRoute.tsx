@@ -604,6 +604,7 @@ function MapRoute() {
     }
 
     setFloor(newFloorObj);
+
     console.log("NEW FLOOR");
   };
 
@@ -979,7 +980,7 @@ function MapRoute() {
                 handleButtonClick2={handleButtonClick2}
                 checked2={false}
                 nodesData={pathNodesData.current}
-              />
+                onClickText={setFloor}/>
               }
 
               callback={handleFloorChange}
@@ -991,9 +992,6 @@ function MapRoute() {
               onTransformed={handleTransform}
               minScale={0.8}
               initialScale={1.0}
-              // initialScale={2.0}
-              // initialPositionX={-300}
-              // initialPositionY={-100}
               initialPositionX={0}
               initialPositionY={0}
             >
@@ -1097,7 +1095,7 @@ function MapRoute() {
               <Box
                 position={"absolute"}
                 top={"93%"}
-                left={"19%"}
+                left={"21%"}
               >
                 <IconButton onClick={() => findStartingFloor() && setFloor(findStartingFloor() as Floor)} aria-label="start"
                             sx={{color: "#186BD9",

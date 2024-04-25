@@ -13,6 +13,7 @@ import flower from "../images/servicePageImages/Flower_new.png";
 import gift from "../images/servicePageImages/giftBasket.jpg";
 import medicine from "../images/servicePageImages/medicineCard.jpg";
 import signL from "../images/servicePageImages/RoomScheduling.jpg";
+import calendar from "../images/servicePageImages/calendar.jpg";
 
 export default function ServicesPage() {
   const [showCards] = useState(true); // Initialize to true to show cards initially
@@ -67,6 +68,13 @@ export default function ServicesPage() {
       title: "Device Delivery",
       description: "Get medical devices for yourself or a dependent",
       buttonContent: "Get Device",
+    },
+    {
+      path: "/Services/Calendar",
+      image: calendar,
+      title: "Appointment Calendar",
+      description: "View availability and make an appointment",
+      buttonContent: "Make Appointment",
     },
     {
       path: "",

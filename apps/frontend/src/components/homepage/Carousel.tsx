@@ -12,7 +12,7 @@ import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
 
 import noLady from "../../videos/noLady.mp4";
-import mapVideo from "../../videos/finalmapedit.mp4";
+import mapVideo from "../../videos/finaledit2.mp4";
 
 
 interface CardData {
