@@ -36,7 +36,7 @@ const NestedList: React.FC<NestedListProps> = ({
 }) => {
   return (
     <List
-      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+      sx={{ width: "96%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
     >
       <ListItemButton sx={{ color: "#767674" }} onClick={handleClick}>
