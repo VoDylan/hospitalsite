@@ -186,7 +186,7 @@ abstract class Algorithms {
         turnsList = [...turnsList, ...newTurnsList];
         currentFloorNodes.push(typeCoordinates[i]);
         currentFloorNodes = [];
-        turnsList.push(`Go to Floor ${typeCoordinates[i + 1].floor}.`);
+        turnsList.push(`Go to ${typeCoordinates[i].longName}.`);
         secondElevator = true;
       } else if (typeCoordinates[i].nodeType === "ELEV" && secondElevator) {
         turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
@@ -200,7 +200,7 @@ abstract class Algorithms {
         turnsList = [...turnsList, ...newTurnsList];
         currentFloorNodes.push(typeCoordinates[i]);
         currentFloorNodes = [];
-        turnsList.push(`Go to Floor ${typeCoordinates[i + 1].floor}.`);
+        turnsList.push(`Go to ${typeCoordinates[i].longName}.`);
         secondStairs = true;
       } else if (typeCoordinates[i].nodeType === "STAI" && secondStairs) {
         turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
