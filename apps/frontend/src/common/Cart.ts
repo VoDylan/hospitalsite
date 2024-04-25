@@ -1,5 +1,5 @@
-import {FlowerDeliveryFormSubmission} from "../common/formSubmission/FlowerDeliveryFormSubmission.ts";
-import {GiftDeliveryFormSubmission} from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
+import {FlowerDeliveryFormSubmission} from "./formSubmission/FlowerDeliveryFormSubmission.ts";
+import {GiftDeliveryFormSubmission} from "./formSubmission/GiftDeliveryFormSubmission.ts";
 
 export class Cart {
   RRose: number;

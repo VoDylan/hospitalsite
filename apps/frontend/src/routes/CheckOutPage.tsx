@@ -5,7 +5,7 @@ import {useLocation} from "react-router-dom";
 import {GiftDeliveryFormSubmission} from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { CheckOutPageFormSubmission } from '../common/formSubmission/CheckOutPageFormSubmission.ts';
 import { CheckOutPageSubmitButton } from "../components/buttons/CheckOutPageSubmitButton.tsx";
-import InitCart from "./InitCart.ts";
+import InitCart from "../common/InitCart.ts";
 
 const flowerPrices = {
   RRose: 5.99,
