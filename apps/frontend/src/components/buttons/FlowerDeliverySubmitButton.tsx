@@ -3,6 +3,7 @@ import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/Flower
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import InitCart from "../../common/InitCart.ts";
 
 interface ButtonProps {
   text: string;
@@ -71,6 +72,7 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
       } else {
         openWithSuccess();
         handleClear();
+        InitCart.setFlowers(props.input);
       }
     }
   }
