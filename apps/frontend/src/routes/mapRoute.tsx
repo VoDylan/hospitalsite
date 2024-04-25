@@ -595,16 +595,17 @@ function MapRoute() {
   const handleFloorChange = (newFloor: string) => {
     const newFloorObj = floorStrToObj(newFloor);
 
-
-
-    // CHANGE FLOORTABS
     if (!newFloorObj) {
       console.error("New map floor is not a valid floor!");
       return;
     }
 
-    setFloor(newFloorObj);
+    // Reset transform to initial values
+    if (transformRef.current) {
+      transformRef.current.resetTransform();
+    }
 
+    setFloor(newFloorObj);
     console.log("NEW FLOOR");
   };
 

@@ -3,7 +3,6 @@ import { forwardRef, useState } from "react";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import axios, { isAxiosError } from "axios";
-import {Link} from "react-router-dom";
 
 interface ButtonProps {
   text: string;
@@ -19,6 +18,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
   const [message, setMessage] = useState("");
+  const link = "";
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
@@ -96,6 +96,24 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     props.clear();
   }
 
+  function linkToCart(link:string){
+    if (props.input.location === "") {
+      return link;
+    } else if (props.input.employeeID === -1){
+      return link;
+    } else if (props.input.name === "") {
+      return link;
+    } else if (props.input.delivery === "") {
+      return link;
+    } else if (props.input.balloons == "" && props.input.cards == "" && props.input.bears == ""){
+      return link;
+    }
+    else if (props.input.recipientName === "") {
+      return link;
+    } else link = "/Cart";
+    return link;
+  }
+
   // Commenting this out for iteration 2
   // Function for posting the form submission to the database
   async function pushToDB(form: GiftDeliveryFormSubmission) {
@@ -152,10 +170,11 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
-    <Link to={"/Cart"} state={props.input} onClick={() => handleSubmit()}>
     <Button
       variant="contained"
       id={"submitButton"}
+      onClick={() => handleSubmit()}
+      href={linkToCart(link)}
     >
       {props.text}
       <Snackbar
@@ -171,6 +190,5 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
-    </Link>
   );
 }
