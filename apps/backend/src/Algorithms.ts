@@ -189,7 +189,7 @@ abstract class Algorithms {
         turnsList.push(`Go to Floor ${typeCoordinates[i + 1].floor}.`);
         secondElevator = true;
       } else if (typeCoordinates[i].nodeType === "ELEV" && secondElevator) {
-        turnsList.push(`Come off Floor ${typeCoordinates[i - 1].floor}.`);
+        turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
         secondElevator = false;
       } else if (
         typeCoordinates[i].nodeType === "STAI" &&
@@ -203,7 +203,7 @@ abstract class Algorithms {
         turnsList.push(`Go to Floor ${typeCoordinates[i + 1].floor}.`);
         secondStairs = true;
       } else if (typeCoordinates[i].nodeType === "STAI" && secondStairs) {
-        turnsList.push(`Come off Floor ${typeCoordinates[i - 1].floor}.`);
+        turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
         secondStairs = false;
       } else if (i === typeCoordinates.length - 1) {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
