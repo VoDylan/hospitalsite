@@ -458,6 +458,10 @@ function MapEditingPage() {
       return;
     }
 
+    if(transformRef.current) {
+      transformRef.current.resetTransform();
+    }
+
     setFloor(newFloorObj);
   };
 
