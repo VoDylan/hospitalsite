@@ -2,6 +2,7 @@ import client from "./bin/database-connection.ts";
 import { Prisma } from "database";
 import { MapNodeType } from "common/src/map/MapNodeType.ts";
 import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
+import { EmployeeFieldsType } from "common/src/employee/EmployeeFieldsType.ts";
 
 const loggingPrefix: string = "PrismaScripts: ";
 
@@ -11,13 +12,17 @@ export async function createNodePrisma(node: MapNodeType) {
     await client.node.create({
       data: node,
     });
+    return 200;
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code == "P2002") {
-        console.log(`${loggingPrefix}Node already exists. Skipping...`);
-      }
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code == "P2002"
+    ) {
+      console.log(`${loggingPrefix}Node already exists. Skipping...`);
+      return 304;
     } else {
       console.error(e);
+      return 400;
     }
   }
 }
@@ -157,7 +162,7 @@ export async function getDBNodeByID(
 }
 
 export async function createServiceRequest(
-  userID: string,
+  employeeID: number,
   nodeID: string,
   serviceType: string,
   services: string,
@@ -169,7 +174,11 @@ export async function createServiceRequest(
 
     const createdServiceRequest = await client.serviceRequest.create({
       data: {
-        userID: userID,
+        employee: {
+          connect: {
+            employeeID: employeeID,
+          },
+        },
         node: {
           connect: {
             nodeID: nodeID,
@@ -238,7 +247,11 @@ export async function getDBEdgeByEdgeID(
 export async function getServiceRequestsFromDB() {
   let requests = null;
   try {
-    requests = await client.serviceRequest.findMany();
+    requests = await client.serviceRequest.findMany({
+      include: {
+        employee: true,
+      },
+    });
   } catch (e) {
     console.error(e);
   }
@@ -302,12 +315,12 @@ export async function getServiceRequestFromDBByNodeID(nodeID: string) {
   return request;
 }
 
-export async function getServiceRequestFromDBByUserID(userID: string) {
+export async function getServiceRequestFromDBByUserID(employeeID: number) {
   let request = null;
   try {
     request = await client.serviceRequest.findMany({
       where: {
-        userID: userID,
+        employeeID: employeeID,
       },
     });
   } catch (e) {
@@ -316,11 +329,11 @@ export async function getServiceRequestFromDBByUserID(userID: string) {
 
   if (request == null) {
     console.log(
-      `${loggingPrefix}No request found from users with userID ${userID}`,
+      `${loggingPrefix}No request found from users with userID ${employeeID}`,
     );
   } else {
     console.log(
-      `${loggingPrefix}Request(s) found from users with userID ${userID}`,
+      `${loggingPrefix}Request(s) found from users with userID ${employeeID}`,
     );
   }
   return request;
@@ -437,4 +450,45 @@ export async function checkUserAdmin(userID: number): Promise<boolean> {
     );
     return false;
   }
+}
+
+export async function createEmployeePrisma(
+  employeeInfo: EmployeeFieldsType,
+): Promise<boolean> {
+  try {
+    await client.employee.create({
+      data: employeeInfo,
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}
+
+export async function getEmployeesFromDB() {
+  let employees = null;
+  try {
+    employees = await client.employee.findMany();
+  } catch (e) {
+    console.error(e);
+  }
+
+  if (employees == null) {
+    console.log(`${loggingPrefix}No employees found in DB`);
+  } else {
+    console.log(`${loggingPrefix}Employees found in DB`);
+  }
+
+  return employees;
+}
+
+export async function clearEmployeesFromDB() {
+  console.log(`${loggingPrefix}Clearing employees from DB`);
+  try {
+    await client.employee.deleteMany({});
+  } catch (e) {
+    console.error(e);
+  }
+  console.log(`${loggingPrefix}Employees cleared from DB`);
 }

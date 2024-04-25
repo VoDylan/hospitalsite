@@ -1,44 +1,58 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
+import styled from '@emotion/styled';
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import "./map.css";
-import { LocationInfo } from "common/src/LocationInfo.ts";
-import { MapNodeType } from "common/src/map/MapNodeType.ts";
+import {LocationInfo} from "common/src/LocationInfo.ts";
+import {MapNodeType} from "common/src/map/MapNodeType.ts";
 import GraphManager from "../common/GraphManager.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import Legend from "../components/map/Legend.tsx";
 
-import FilterManager, {
-  generateFilterValue,
-} from "common/src/filter/FilterManager.ts";
-import { FilterName } from "common/src/filter/FilterName.ts";
+import FilterManager, {generateFilterValue,} from "common/src/filter/FilterManager.ts";
+import {FilterName} from "common/src/filter/FilterName.ts";
 import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
-import {
-  ReactZoomPanPinchRef,
-  TransformComponent,
-  TransformWrapper,
-} from "react-zoom-pan-pinch";
+import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper,} from "react-zoom-pan-pinch";
 
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
+import TextIcon from "../components/map/TextDirectionsSlide.tsx";
 import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
-import { Floor, floorStrToObj } from "common/src/map/Floor.ts";
+import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
 import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
 import PathCanvas from "../components/map/PathCanvas.tsx";
 import FloorIconsCanvas from "../components/map/FloorIconsCanvas.tsx";
 import startIcon from "../images/mapImages/starticon3.png";
 import endIcon from "../images/mapImages/endIcon.png";
+import NearMeIcon from '@mui/icons-material/NearMe';
 import IconCanvas from "../components/map/IconCanvas.tsx";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import ToggleButton from "../components/map/MapToggleBar.tsx";
+import {IconButton, Stack} from "@mui/material";
+
 
 interface TransformState {
   scale: number;
   positionX: number;
   positionY: number;
 }
+
+const NodeButtons = styled("button")({
+  cursor: "pointer",
+  border: "1px solid white",
+  outline: "none",
+  backgroundColor: "white",
+
+  "&:active": {
+    outline: "none"
+  },
+  "&:hover": {
+    borderColor: "#186BD9",
+  },
+});
 
 function MapRoute() {
   const iconCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -53,21 +67,27 @@ function MapRoute() {
   // adding setting the node click
   const [nodeClicked, setNodeClicked] = useState<MapNode | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true); // State to control visibility of legend
+
+  const toggleLegend = () => {
+    setIsOpen(!isOpen); // Toggle the visibility of the legend
+  };
 
   const [startNode, setStartNode] = useState<string>("");
   const [endNode, setEndNode] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const pathNodesData = useRef<IDCoordinates[]>([]);
+  const pathNodesData = useRef<TypeCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
   const [updateNodesBetweenFloors, setUpdateNodesBetweenFloors] =
     useState<boolean>(false);
+  const [textDirections, setTextDirections] = useState<boolean>(false);
 
-  const nodesToNextFloor = useRef<Map<IDCoordinates, Floor>>(
-    new Map<IDCoordinates, Floor>(),
+  const nodesToNextFloor = useRef<Map<TypeCoordinates, Floor>>(
+    new Map<TypeCoordinates, Floor>(),
   );
-  const nodesToPrevFloor = useRef<Map<IDCoordinates, Floor>>(
-    new Map<IDCoordinates, Floor>(),
+  const nodesToPrevFloor = useRef<Map<TypeCoordinates, Floor>>(
+    new Map<TypeCoordinates, Floor>(),
   );
   const [pathRenderStatus, setPathRenderStatus] = useState<boolean>(false);
   const [updateFloorIcons, setUpdateFloorIcons] = useState<boolean>(false);
@@ -92,6 +112,7 @@ function MapRoute() {
   const [checkedBFS, setCheckedBFS] = React.useState(false);
   const [checkedAS, setCheckedAS] = React.useState(true);
   const [checkedDFS, setCheckedDFS] = React.useState(false);
+  const [checkedDijkstra, setCheckedDijkstra] = React.useState(false);
   const [algorithm, setAlgorithm] = React.useState("A*");
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
   const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
@@ -133,6 +154,8 @@ function MapRoute() {
       setCheckedAS(false);
     } else if (checkedDFS) {
       setCheckedDFS(false);
+    } else if (checkedDijkstra) {
+      setCheckedDijkstra(false);
     }
     setCheckedBFS(true);
     setAlgorithm("BFS");
@@ -143,7 +166,10 @@ function MapRoute() {
       setCheckedBFS(false);
     } else if (checkedDFS) {
       setCheckedDFS(false);
+    } else if (checkedDijkstra) {
+      setCheckedDijkstra(false);
     }
+
     setCheckedAS(true);
     setAlgorithm("A*");
   };
@@ -153,9 +179,24 @@ function MapRoute() {
       setCheckedBFS(false);
     } else if (checkedAS) {
       setCheckedAS(false);
+    } else if (checkedDijkstra) {
+      setCheckedDijkstra(false);
     }
+
     setCheckedDFS(true);
     setAlgorithm("DFS");
+  };
+
+  const handleSelectDijkstra = () => {
+    if (checkedBFS) {
+      setCheckedBFS(false);
+    } else if (checkedAS) {
+      setCheckedAS(false);
+    } else if (checkedDFS) {
+      setCheckedDFS(false);
+    }
+    setCheckedDijkstra(true);
+    setAlgorithm("Dijkstra");
   };
 
   /**
@@ -163,9 +204,13 @@ function MapRoute() {
    */
 
   const [checked, setChecked] = React.useState(false);
+  const [checked2, setChecked2] = React.useState(false);
 
   const handleButtonClick = () => {
     setChecked((prev) => !prev);
+  };
+  const handleButtonClick2 = () => {
+    setChecked2((prev) => !prev);
   };
 
   /**
@@ -229,7 +274,7 @@ function MapRoute() {
             iconColor: "#1CA7EC",
             filterName: "Conference",
             filterType: 1,
-            shape: "pentagon",
+            shape: "conf",
           },
         ]
       : []),
@@ -239,7 +284,7 @@ function MapRoute() {
             iconColor: "#72c41c",
             filterName: "Department",
             filterType: 1,
-            shape: "pentagon",
+            shape: "dept",
           },
         ]
       : []),
@@ -249,7 +294,7 @@ function MapRoute() {
             iconColor: "#e88911",
             filterName: "Labs",
             filterType: 1,
-            shape: "pentagon",
+            shape: "labs",
           },
         ]
       : []),
@@ -259,7 +304,7 @@ function MapRoute() {
             iconColor: "#e88911",
             filterName: "Service",
             filterType: 1,
-            shape: "circle",
+            shape: "service",
           },
         ]
       : []),
@@ -269,7 +314,7 @@ function MapRoute() {
             iconColor: "#1CA7EC",
             filterName: "Info",
             filterType: 1,
-            shape: "circle",
+            shape: "info",
           },
         ]
       : []),
@@ -279,9 +324,29 @@ function MapRoute() {
             iconColor: "#72c41c",
             filterName: "Restrooms",
             filterType: 1,
-            shape: "circle",
+            shape: "bathroom",
           },
         ]
+      : []),
+    ...(retlIconState === "check"
+      ? [
+        {
+          iconColor: "#e88911",
+          filterName: "Retail",
+          filterType: 1,
+          shape: "retail",
+        },
+      ]
+      : []),
+    ...(stairsIconState === "check"
+      ? [
+        {
+          iconColor: "#72c41c",
+          filterName: "Stairs",
+          filterType: 1,
+          shape: "stairs",
+        },
+      ]
       : []),
     ...(elevatorIconState === "check"
       ? [
@@ -289,40 +354,22 @@ function MapRoute() {
             iconColor: "#1CA7EC",
             filterName: "Elevators",
             filterType: 1,
-            shape: "square",
+            shape: "elevators",
           },
         ]
       : []),
-    ...(stairsIconState === "check"
-      ? [
-          {
-            iconColor: "#72c41c",
-            filterName: "Stairs",
-            filterType: 1,
-            shape: "square",
-          },
-        ]
-      : []),
+
     ...(exitsIconState === "check"
       ? [
           {
             iconColor: "red",
             filterName: "Exits",
             filterType: 1,
-            shape: "square",
+            shape: "exit",
           },
         ]
       : []),
-    ...(retlIconState === "check"
-      ? [
-          {
-            iconColor: "#e88911",
-            filterName: "Retail",
-            filterType: 1,
-            shape: "square",
-          },
-        ]
-      : []),
+
   ];
 
   /**
@@ -474,12 +521,14 @@ function MapRoute() {
 
   const handleStartNodeChange = (value: string | null) => {
     if (value) {
+      console.log(`Value: ${value}`);
       // Find the corresponding node for the selected label
       const selectedNode = autocompleteNodeData.find(
         (node) => node.label === value,
       );
       if (selectedNode) {
         setStartNode(selectedNode.node);
+        console.log(`Starting node: ${startNode}`);
       }
     } else {
       setStartNode(""); // Handle null value if necessary
@@ -500,8 +549,9 @@ function MapRoute() {
     }
   };
 
-  const updateNodesData = (newData: IDCoordinates[]) => {
+  const updateNodesData = (newData: TypeCoordinates[]) => {
     pathNodesData.current = newData;
+    // console.log("printing use ref now", pathNodesData.current);
   };
 
   async function handleSubmit() {
@@ -529,10 +579,12 @@ function MapRoute() {
       const path = data.message;
 
       updateNodesData(path);
+      setFloor(findStartingFloor() as Floor);
+
       !path
         ? setErrorMessage("There is no path between nodes")
         : setErrorMessage("");
-
+      setTextDirections(true);
       setUpdateNodesBetweenFloors(true);
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -543,19 +595,33 @@ function MapRoute() {
   const handleFloorChange = (newFloor: string) => {
     const newFloorObj = floorStrToObj(newFloor);
 
+
+
+    // CHANGE FLOORTABS
     if (!newFloorObj) {
       console.error("New map floor is not a valid floor!");
       return;
     }
 
     setFloor(newFloorObj);
+
+    console.log("NEW FLOOR");
   };
+
+  function findStartingFloor() {
+    for (let i = 0; i < filteredNodes.length; i++) {
+      if (filteredNodes[i].nodeID === startNode) {
+        return filteredNodes[i].floor.toString(); // Return floor as a string
+      }
+    }
+  }
 
   /**
    * useEffect to just load the node data. Only called when the flags determining loading data are changed
    */
   useEffect(() => {
     console.log("Loading Data");
+
     if (!nodeDataLoaded) {
       loadNodeData().then(() => {
         setNodeDataLoaded(true);
@@ -578,8 +644,8 @@ function MapRoute() {
   };
 
   const handleNodeToFloorCallback = (
-    newNodesToNextFloor: Map<IDCoordinates, Floor>,
-    newNodesToPrevFloor: Map<IDCoordinates, Floor>,
+    newNodesToNextFloor: Map<TypeCoordinates, Floor>,
+    newNodesToPrevFloor: Map<TypeCoordinates, Floor>,
   ) => {
     nodesToNextFloor.current = newNodesToNextFloor;
     nodesToPrevFloor.current = newNodesToPrevFloor;
@@ -663,7 +729,6 @@ function MapRoute() {
               setFloor(nodesToNextFloor.current.get(key)!);
             }
           }
-
           for (const key of nodesToPrevFloor.current.keys()) {
             if (key.nodeID === filteredNodes[i].nodeID) {
               closeModal();
@@ -680,19 +745,22 @@ function MapRoute() {
   const handleStartingLocationClick = () => {
     closeModal();
     setStartNode(nodeClicked!.nodeID);
-    // console.log(nodeClicked!.longName);
-    // console.log(startNode);
+    handleStartNodeChange(nodeClicked!.longName);
+    console.log(nodeClicked!.longName);
+    console.log(startNode);
   };
 
   const handleEndingLocationClick = () => {
     closeModal();
     setEndNode(nodeClicked!.nodeID);
+    handleStartNodeChange(nodeClicked!.nodeID);
+
     // const handleFocus = (event) => event.target.select();
     // if (!el_down) return;
     // el_down.innerHTML = startNode;
 
     // console.log(nodeClicked!.longName);
-    // console.log(startNode);
+    console.log(startNode);
   };
 
   const Modal = () => {
@@ -709,10 +777,10 @@ function MapRoute() {
           style={{
             zIndex: 10,
             left: xcoord + 10 + "px",
-            top: ycoord + 10 + "px",
+            top: ycoord + 35 + "px",
             position: "absolute",
-            width: "12%",
-            height: "12%",
+            width: "7%",
+            height: "4%",
             backgroundColor: "white",
             border: 2 + "px",
             borderStyle: "solid",
@@ -723,44 +791,42 @@ function MapRoute() {
             justifyContent: "space-evenly",
           }}
         >
-          <button
+          <NodeButtons
             style={{
               width: "96%",
               height: "40%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "90%",
+              fontSize: "40%",
               color: "#186BD9",
               fontWeight: "bold",
               margin: "2%",
-              border: "none",
-              backgroundColor: "white",
-              boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+              // backgroundColor: "white",
+              boxShadow: "1px 1px 4px rgba(0, 0, 0, 0.3)",
             }}
             onClick={handleStartingLocationClick}
           >
             Starting Location
-          </button>
-          <button
+          </NodeButtons>
+          <NodeButtons
             style={{
               width: "96%",
               height: "40%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "90%",
+              fontSize: "40%",
               color: "#186BD9",
               fontWeight: "bold",
               margin: "2%",
-              border: "none",
-              backgroundColor: "white",
+              // backgroundColor: "white",
               boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
             }}
             onClick={handleEndingLocationClick}
           >
             Ending Location
-          </button>
+          </NodeButtons>
         </div>
       );
     }
@@ -820,7 +886,9 @@ function MapRoute() {
             sx={{
               width: "18%",
               minWidth: "18%",
-              minHeight: 0,
+              backgroundColor: "#D9DAD7",
+              height: "100vh",
+              display: "flex"
             }}
           >
             {/*Side Bar*/}
@@ -856,6 +924,8 @@ function MapRoute() {
               handleSelectAS={handleSelectAS}
               checkedDFS={checkedDFS}
               handleSelectDFS={handleSelectDFS}
+              checkedDijkstra={checkedDijkstra}
+              handleSelectDijkstra={handleSelectDijkstra}
               errorMessage={errorMessage}
               onClick={() => {
                 handleSubmit().then(() => {
@@ -865,6 +935,9 @@ function MapRoute() {
               onClick1={handleButtonClick}
               checked={checked}
               onClick2={handleSelectAll}
+              checked2={checked2}
+              onClick3={handleButtonClick2}
+              text={textDirections}
               icon={
                 <Icon
                   handleButtonClick={handleButtonClick}
@@ -903,6 +976,13 @@ function MapRoute() {
                   handleClearAll={handleClearAll}
                 />
               }
+              icon2={<TextIcon
+                handleButtonClick2={handleButtonClick2}
+                checked2={false}
+                nodesData={pathNodesData.current}
+                onClickText={setFloor}/>
+              }
+
               callback={handleFloorChange}
             />
           </Box>
@@ -911,10 +991,7 @@ function MapRoute() {
             <TransformWrapper
               onTransformed={handleTransform}
               minScale={0.8}
-              // initialScale={1.5}
               initialScale={1.0}
-              // initialPositionX={-400}
-              // initialPositionY={-150}
               initialPositionX={0}
               initialPositionY={0}
             >
@@ -998,10 +1075,44 @@ function MapRoute() {
                 </Draggable>
               </TransformComponent>
             </TransformWrapper>
+
+            <Stack direction={"row"}>
+              <Box
+                position={"fixed"}
+                right={"0.5%"}
+                sx={{
+                  top: "120px"
+                }}
+              >
+                {/* Toggle button */}
+                <ToggleButton onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
+              </Box>
+              {isOpen && (
+                <Legend filterItems={filterIcons} />
+              )}
+            </Stack>
+
+              <Box
+                position={"absolute"}
+                top={"93%"}
+                left={"21%"}
+              >
+                <IconButton onClick={() => findStartingFloor() && setFloor(findStartingFloor() as Floor)} aria-label="start"
+                            sx={{color: "#186BD9",
+                              backgroundColor: "white",
+                              border: "1px solid #186BD9",
+                              "&:hover": {
+                               backgroundColor: "white"},
+                            }}>
+                  <NearMeIcon />
+                </IconButton>
+              </Box>
+
           </Box>
+
         </Box>
 
-        <Legend filterItems={filterIcons} />
+
       </Box>
     </>
   );

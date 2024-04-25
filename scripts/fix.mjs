@@ -5,8 +5,10 @@ import { executeCommands } from './commandRunner.mjs';
 function executeFixes() {
   const commands = [
     'yarn cache clean', 
-    'rm -rf node_modules', 
-    'yarn install', 
+    'rm -rf node_modules',
+    'rm -rf apps/frontend/node_modules',
+    'rm -rf apps/backend/node_modules',
+    'yarn install',
     'yarn build:dev'
   ];
 

@@ -9,10 +9,11 @@ import security from "../images/servicePageImages/securityService.jpg";
 import medicalDevice from "../images/servicePageImages/medicalDevices.jpg";
 //import Room from "../images/servicePageImages/RoomScheduling.svg";
 import Template from "../images/servicePageImages/ServicesTemplate.svg";
-import flower from "../images/servicePageImages/Flower.jpg";
+import flower from "../images/servicePageImages/Flower_new.png";
 import gift from "../images/servicePageImages/giftBasket.jpg";
 import medicine from "../images/servicePageImages/medicineCard.jpg";
 import signL from "../images/servicePageImages/RoomScheduling.jpg";
+import calendar from "../images/servicePageImages/calendar.jpg";
 
 export default function ServicesPage() {
   const [showCards] = useState(true); // Initialize to true to show cards initially
@@ -64,9 +65,16 @@ export default function ServicesPage() {
     {
       path: "/Services/DeviceDeliveryService",
       image: medicalDevice,
-      title: "Medical Device Delivery",
+      title: "Device Delivery",
       description: "Get medical devices for yourself or a dependent",
       buttonContent: "Get Device",
+    },
+    {
+      path: "/Services/Calendar",
+      image: calendar,
+      title: "Appointment Calendar",
+      description: "View availability and make an appointment",
+      buttonContent: "Make Appointment",
     },
     {
       path: "",
@@ -93,8 +101,8 @@ export default function ServicesPage() {
           sx={{
             backgroundColor: "#003A96",
             position: "relative",
-            marginBottom: "2rem",
-            height: "6rem",
+            marginBottom: "0.5rem",
+            height: "3.5rem",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -104,7 +112,7 @@ export default function ServicesPage() {
           <Typography
             variant={"h1"}
             color={"white"}
-            gutterBottom={true}
+            //gutterBottom={true}
             fontSize={46}
             //fontWeight={'bold'}
             fontStyle={"inherit"}
@@ -116,15 +124,15 @@ export default function ServicesPage() {
       </Box>
       <div
         style={{
-          padding: 10,
+          padding: 5,
           display: "flex",
           justifyContent: "center",
-          marginLeft: "2.4%",
-          marginRight: "2.4%",
+          marginLeft: "10%",
+          marginRight: "10%",
         }}
       >
         <Box>
-          <Grid container spacing={5} direction={"row"}>
+          <Grid container spacing={0} direction={"row"}>
             {serviceData.map(
               (
                 service: {

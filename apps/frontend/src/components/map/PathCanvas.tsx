@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { Floor, floorStrToObj } from "common/src/map/Floor.ts";
 import initializeLayeredCanvas from "./InitializeLayeredCanvas.ts";
-import { IDCoordinates } from "common/src/IDCoordinates.ts";
+// import { IDCoordinates } from "common/src/IDCoordinates.ts";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 import MapNode from "common/src/map/MapNode.ts";
 import GraphManager from "../../common/GraphManager.ts";
 
@@ -12,10 +13,10 @@ interface PathCanvasProps {
   width: number;
   height: number;
   floor: Floor;
-  pathNodesData: IDCoordinates[];
+  pathNodesData: TypeCoordinates[];
   floorConnectionCallback: (
-    nodesToNextFloor: Map<IDCoordinates, Floor>,
-    nodesToPrevFloor: Map<IDCoordinates, Floor>,
+    nodesToNextFloor: Map<TypeCoordinates, Floor>,
+    nodesToPrevFloor: Map<TypeCoordinates, Floor>,
   ) => void;
   pathRenderStatusCallback: (status: boolean) => void;
   startNode: string;
@@ -40,12 +41,12 @@ export default function PathCanvas(props: PathCanvasProps) {
       if (!props.pathNodesData || props.pathNodesData.length == 0) return;
       console.log("Determining interfloor nodes");
 
-      const nodesToPrevFloor: Map<IDCoordinates, Floor> = new Map<
-        IDCoordinates,
+      const nodesToPrevFloor: Map<TypeCoordinates, Floor> = new Map<
+        TypeCoordinates,
         Floor
       >();
-      const nodesToNextFloor: Map<IDCoordinates, Floor> = new Map<
-        IDCoordinates,
+      const nodesToNextFloor: Map<TypeCoordinates, Floor> = new Map<
+        TypeCoordinates,
         Floor
       >();
 
@@ -53,7 +54,7 @@ export default function PathCanvas(props: PathCanvasProps) {
         GraphManager.getInstance().getNodeByID(props.pathNodesData[0].nodeID)!
           .floor,
       )!;
-      let lastVisitedNode: IDCoordinates = props.pathNodesData[0];
+      let lastVisitedNode: TypeCoordinates = props.pathNodesData[0];
 
       for (let i = 0; i < props.pathNodesData.length; i++) {
         const node: MapNode | null = GraphManager.getInstance().getNodeByID(
@@ -83,9 +84,9 @@ export default function PathCanvas(props: PathCanvasProps) {
       cancelAnimationFrame(animationFrameRequestID.current);
 
     if (!props.pathNodesData) return;
-    const includedPathsOnFloor: IDCoordinates[][] = [];
+    const includedPathsOnFloor: TypeCoordinates[][] = [];
 
-    let currPath: IDCoordinates[] = [];
+    let currPath: TypeCoordinates[] = [];
 
     let lastVisitedFloor: Floor | null = null;
 
@@ -131,7 +132,7 @@ export default function PathCanvas(props: PathCanvasProps) {
         let currentY =
           includedPathsOnFloor[currentPathIndex][currentTargetIndex].coordinates
             .y;
-        const speed = 1;
+        const speed = 3;
 
         const moveDot = (origFloor: Floor) => {
           if (props.floor != origFloor) {

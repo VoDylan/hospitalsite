@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
-import { IconButton, Button, styled } from "@mui/material";
+import {IconButton, Button, styled, Typography } from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
@@ -10,13 +10,15 @@ import Stack from "@mui/material/Stack";
 import CustomCard from "./Card.tsx"; // Update path to Card component
 import ServiceCarousel from "./ServiceCarousel.tsx";
 import { Link } from "react-router-dom";
-import LowerLevel from "../../images/mapImages/00_thelowerlevel1.png";
-import noLady from "../../images/noLady.jpg";
+
+import noLady from "../../videos/noLady.mp4";
+import mapVideo from "../../videos/finaledit2.mp4";
+
 
 interface CardData {
   image: string;
   title: string;
-  description: string;
+
   buttonText: string;
   path: string;
   cardTitle: string;
@@ -45,7 +47,8 @@ function MainCarousel() {
     clearTimeout(autoScrollTimeout as NodeJS.Timeout);
     const newTimeout = setTimeout(() => {
       setAutoScroll(true);
-    }, 1500); // After 8 seconds, re-enable autoScroll
+    }, 8); // After 8 seconds, re-enable autoScroll
+    //1500 = 8 sec
     setAutoScrollTimeout(newTimeout);
   }, [cards.length, autoScrollTimeout]);
 
@@ -64,10 +67,8 @@ function MainCarousel() {
   useEffect(() => {
     const mainCards: CardData[] = [
       {
-        image: LowerLevel,
+        image: mapVideo,
         title: "Directions",
-        description:
-          "Graphical display for directions to anywhere in the hospital!",
         buttonText: "Go To Map!",
         path: "/Map",
         cardTitle: "Simplify Your Hospital Experience",
@@ -76,13 +77,14 @@ function MainCarousel() {
       {
         image: noLady,
         title: "Services",
-        description: "Request a service!",
         buttonText: "Request a Service!",
         path: "/Services",
         cardTitle: "Streamline Your Service Requests",
         cardDescription: "Access all of our available services in one place",
       },
     ];
+
+
 
     setCards(mainCards);
     if (autoScroll) {
@@ -107,6 +109,8 @@ function MainCarousel() {
       >
         {/*Cards*/}
         <Box sx={{ width: "100vw", height: "50vh", display: "flex" }}>
+
+
           {cards.map((card, index) => (
             <Box
               key={`card-${index}`}
@@ -126,7 +130,6 @@ function MainCarousel() {
                     key={index}
                     image={card.image}
                     title={card.title}
-                    description={card.description}
                     buttonText={card.buttonText}
                     path={card.path}
                     cardTitle={card.cardTitle}
@@ -173,45 +176,57 @@ function MainCarousel() {
         </IconButton>
       </Stack>
 
+
       {/*{Icons}*/}
       <Stack
         direction={"row"}
         display={"flex"}
         justifyContent={"center"}
-        sx={{ marginBottom: "6%" }}
+        marginTop={'-4%'}
+        marginBottom={'0.5%'}
       >
+
         <a
-          href="https://www.brighamandwomens.org/forms/request-an-appointment"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/Credits"
         >
           <IconButton
             sx={{ color: "#186BD9" }}
             size="large"
-            aria-label="Make an appointment"
+            aria-label="Credits"
           >
             <RateReviewSharpIcon />
           </IconButton>
           <Button variant={"text"}>
-            Make an appointment (Real Link Don't Fill Out)
+            Credits
           </Button>
         </a>
 
         <a
-          href="https://www.brighamandwomens.org/about-bwh"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/About"
         >
           <IconButton
             sx={{ color: "#186BD9" }}
             size="large"
-            aria-label="About Brigham and Women's Hospital"
+            aria-label="About Team F"
           >
             <InfoIcon />
           </IconButton>
-          <Button variant={"text"}>About Us! (Real Link)</Button>
+          <Button variant={"text"}>About Us!</Button>
         </a>
       </Stack>
+
+      <Box
+        sx={{
+          color: "#186BD9",
+        opacity: "0.7",
+        marginBottom: "2%"}}
+        display={"flex"}
+        justifyContent={"center"}>
+        <Typography variant = "subtitle1"
+        fontSize={"12px"}>
+          This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
+        </Typography>
+      </Box>
 
       {/*{Divider Bar}*/}
       <Box

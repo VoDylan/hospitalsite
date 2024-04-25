@@ -7,6 +7,7 @@ interface ClickableCanvasProps {
   width: number;
   height: number;
   onClick: (event: React.MouseEvent) => void;
+  onDoubleClick: (event: React.MouseEvent) => void;
 }
 
 export default function ClickableCanvas(props: ClickableCanvasProps) {
@@ -17,5 +18,5 @@ export default function ClickableCanvas(props: ClickableCanvasProps) {
       initializeLayeredCanvas(canvasRef.current, props.width, props.height);
   }, [props.backgroundRendered, props.height, props.width]);
 
-  return <canvas ref={canvasRef} style={props.style} onClick={props.onClick} />;
+  return <canvas ref={canvasRef} style={props.style} onClick={props.onClick} onDoubleClick={props.onDoubleClick}/>;
 }

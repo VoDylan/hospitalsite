@@ -27,6 +27,10 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import TopBanner from "./components/banner/TopBanner.tsx";
 import { Auth0Protection } from "./components/auth0/Auth0Protection.tsx";
 import MapEditingPage from "./routes/MapEditingPage.tsx";
+import CalendarPage from "./routes/CalendarPage.tsx";
+import AboutPage from "./routes/AboutPage.tsx";
+import CreditsPage from "./routes/CreditsPage.tsx";
+import CheckOutPage from "./routes/CheckOutPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +42,10 @@ function App() {
         {
           path: "",
           element: <SlidesPage />,
+        },
+        {
+          path: "/About",
+          element: <AboutPage />,
         },
         {
           path: "/Services",
@@ -75,10 +83,23 @@ function App() {
           path: "/DisplayDatabase",
           element: <Auth0Protection component={DisplayDatabase} />,
         },
+        {
+          path: "/Services/Calendar",
+          element: <Auth0Protection component={CalendarPage} />,
+        },
+        {
+          path: "/Cart",
+          element: <Auth0Protection component={CheckOutPage} />,
+        },
 
         {
           path: "/Map",
           element: <MapRoute />,
+        },
+
+        {
+          path: "/Credits",
+          element: <CreditsPage />
         },
 
         {

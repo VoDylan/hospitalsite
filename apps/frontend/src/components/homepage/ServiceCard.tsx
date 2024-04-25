@@ -1,13 +1,4 @@
-import {
-  Card,
-  CardMedia,
-  Box,
-  Typography,
-  Stack,
-  Button,
-  CardActions,
-  Link as MuiLink,
-} from "@mui/material";
+import { Card, CardMedia, Box, Typography, Stack, CardActions, Link as MuiLink } from "@mui/material";
 
 interface ServiceProps {
   servicePath: string;
@@ -19,60 +10,54 @@ interface ServiceProps {
 
 export function ServiceCard(props: ServiceProps) {
   return (
-    <Card
-      sx={{
-        boxShadow: 3,
-        display: "flex",
-        width: "fit-content", // Set the width of each card
-        height: "fit-content", // Set the height of each card
-        "&:hover": {
-          color: "black",
-        },
-      }}
-    >
-      <Box sx={{ position: "relative", display: "flex" }}>
-        <Stack>
-          <CardMedia
-            component={"img"}
-            image={props.imagePath}
-            sx={{
-              width: "350px",
-              height: "310px",
-              display: "flex",
-              marginBottom: "15px",
-            }} // Ensure the image fills the entire card
-          />
-          <Typography
-            gutterBottom
-            variant="h5"
-            component="div"
-            sx={{
-              textAlign: "center",
-            }}
-          >
-            {props.title}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              textAlign: "center",
-              marginBottom: "15px",
-            }}
-          >
-            {props.description}
-          </Typography>
-          <CardActions style={{ marginTop: "auto", justifyContent: "center" }}>
-            {props.buttonContent && ( // Render button only if buttonContent is provided
-              <MuiLink href={props.servicePath} underline="none">
-                <Button variant="contained" size="large" sx={{ width: "100%" }}>
-                  {props.buttonContent}
-                </Button>
-              </MuiLink>
-            )}
-          </CardActions>
-        </Stack>
-      </Box>
-    </Card>
+    <CardActions style={{ marginTop: "auto", justifyContent: "center" }}>
+      <MuiLink href={props.servicePath} underline="none">
+        <Box
+          component={Card}
+          sx={{
+            boxShadow: 3,
+            display: "flex",
+            width: "250px", // Set the width of each card
+            height: "250px", // Set the height of each card
+            transition: "0.3s",
+            "&:hover": {
+              filter: "brightness(95%)", // Darken the card slightly on hover
+              "& .MuiCardMedia-img": {
+                transition: "0.3s",
+                filter: "brightness(95%)", // Darken the image on hover
+              },
+            },
+          }}
+        >
+          <Box sx={{ position: "relative", display: "flex" }} >
+            <Stack>
+              <CardMedia
+                component={"img"}
+                image={props.imagePath}
+                sx={{ width: "250px", height: "140px", display: "flex", marginBottom: "15px"}} // Ensure the image fills the entire card
+              />
+              <Typography
+                gutterBottom variant="h5" component="div"
+                sx={{
+                  textAlign: "center",
+                }}
+              >
+                {props.title}
+              </Typography>
+              <Typography
+                variant="body2" color="text.secondary"
+                sx={{
+                  textAlign: "center",
+                  marginLeft: "5%",
+                  marginRight: "5%",
+                }}
+              >
+                {props.description}
+              </Typography>
+            </Stack>
+          </Box>
+        </Box>
+      </MuiLink>
+    </CardActions>
   );
 }

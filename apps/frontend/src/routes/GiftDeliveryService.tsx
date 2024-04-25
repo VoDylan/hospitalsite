@@ -1,7 +1,7 @@
 import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
-import { DropDown } from "../components/DropDown.tsx";
+import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import giftbackground from "../images/giftbackground.jpg";
 import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubmitButton.tsx";
@@ -10,17 +10,23 @@ import Confetti from "react-confetti";
 import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
+import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
+import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import BalLoons from "../images/servicePageImages/FormIcons/BalLoons.jpg";
+import GetWellCard from "../images/servicePageImages/FormIcons/GetWellCard.jpg";
+import TedBear from "../images/servicePageImages/FormIcons/TedBear.jpeg";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
     name: "",
+    employeeID: -1,
     recipientName: "",
-    status: "",
+    balloons: "",
+    cards: "",
+    bears: "",
     location: "",
     message: "",
     delivery: "",
-    giftSize: "",
-    giftAddOn: "",
   });
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
@@ -29,9 +35,14 @@ function GiftDeliveryService() {
   function handlerecipientNameInput(e: ChangeEvent<HTMLInputElement>) {
     setFormResponses({ ...form, recipientName: e.target.value });
   }
-
-  function handleStatusInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, status: e.target.value });
+  function handleBalloonsInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, balloons: e.target.value });
+  }
+  function handleCardsInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, cards: e.target.value });
+  }
+  function handleBearsInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, bears: e.target.value });
   }
   function handleLocationInput(e: SelectChangeEvent) {
     setFormResponses({ ...form, location: e.target.value });
@@ -44,26 +55,22 @@ function GiftDeliveryService() {
     setFormResponses({ ...form, delivery: e.target.value });
   }
 
-  function handleGiftSizeInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, giftSize: e.target.value });
-    return e.target.value;
-  }
-
-  function handleGiftAddOnInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, giftAddOn: e.target.value });
-    return e.target.value;
+  function handleEmployeeIDInput(event: SelectChangeEvent) {
+    setFormResponses({ ...form, employeeID: event.target.value as unknown as number});
+    return event.target.value;
   }
 
   function clear() {
     setFormResponses({
       name: "",
+      employeeID: -1,
       recipientName: "",
-      status: "",
+      balloons: "",
+      cards: "",
+      bears: "",
       location: "",
       message: "",
       delivery: "",
-      giftSize: "",
-      giftAddOn: "",
     });
   }
 
@@ -134,7 +141,7 @@ function GiftDeliveryService() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "40vw", //Adjust this to change the width of the form
+          width: "75%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -150,19 +157,62 @@ function GiftDeliveryService() {
         >
           <ServiceNavTabs />
         </Grid>
+        <Grid container sx={{ background: "white", opacity: 0.95}} boxShadow={5} borderRadius={5}>
         <Grid
           item
           xs={12}
           sx={{
-            backgroundColor: "#186BD9",
           }}
         >
-          <Typography color={"white"} align={"center"} fontSize={40}>
+          <Typography color={"black"} align={"center"} fontSize={40}>
             Gift Delivery Service Form
           </Typography>
         </Grid>
-        <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
+          <Grid
+            item
+            xs={12}
+            mt={3}
+          >
+            <Typography
+              align={"center"}
+              fontStyle={"Open Sans"}
+              fontSize={24}
+            >
+              Enter Amount of Each Type:
+            </Typography>
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={BalLoons} title={"Balloons!"} description={"$3.99"} />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={GetWellCard} title={"Card"} description={"$1.99"} />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={TedBear} title={"Teddy Bear"} description={"$5.99"} />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Balloon Amount"}
+              value={form.balloons}
+              onChange={handleBalloonsInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Card Amount"}
+              value={form.cards}
+              onChange={handleCardsInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Bear Amount"}
+              value={form.bears}
+              onChange={handleBearsInput}
+              type={"text"} />
+          </Grid>
+
+          <Grid item xs={4} mt={5} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -172,7 +222,31 @@ function GiftDeliveryService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
+          <Grid item xs={4} mt={5} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Recipient Name:
+            </Typography>
+            <CenterAlignedTextbox
+              label={"Recipient Name"}
+              value={form.recipientName}
+              onChange={handlerecipientNameInput}
+            />
+          </Grid>
+          <Grid item xs={4} mt={5} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Optional Message:
+            </Typography>
+            <CenterAlignedTextbox
+              label={"Optional Message"}
+              value={form.message}
+              onChange={handleMessageInput}
+            />
+          </Grid>
+          <Grid item xs={4} mt={5} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
+          </Grid>
+          <Grid item xs={4} mt={5} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -186,28 +260,8 @@ function GiftDeliveryService() {
               }))}
             />
           </Grid>
-          <Grid item xs={6} sx={{ align: "center" }}>
-            <Typography color={"black"} align={"center"}>
-              Recipient Name:
-            </Typography>
-            <CenterAlignedTextbox
-              label={"Recipient Name"}
-              value={form.recipientName}
-              onChange={handlerecipientNameInput}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{ align: "center" }}>
-            <Typography color={"black"} align={"center"}>
-              Optional Message:
-            </Typography>
-            <CenterAlignedTextbox
-              label={"Optional Message"}
-              value={form.message}
-              onChange={handleMessageInput}
-            />
-          </Grid>
 
-          <Grid item xs={6} sx={{ align: "center" }}>
+          <Grid item xs={4} mt={5} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Delivery:
             </Typography>
@@ -224,39 +278,6 @@ function GiftDeliveryService() {
             />
           </Grid>
 
-          <Grid item xs={6} sx={{ align: "center" }}>
-            <Typography color={"black"} align={"center"}>
-              Status of the Request:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Status"}
-              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-              returnData={form.status}
-              handleChange={handleStatusInput}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{ align: "center" }}>
-            <Typography color={"black"} paddingTop={2} align={"center"}>
-              Gift Size:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Gift Size"}
-              options={["Small", "Medium", "Large", "Extra Large"]}
-              returnData={form.giftSize}
-              handleChange={handleGiftSizeInput}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{ align: "center" }}>
-            <Typography color={"black"} paddingTop={2} align={"center"}>
-              Gift Add-on:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Gift Add-on"}
-              options={["Greeting Card", "Balloons", "Stuffed Animal", "None"]}
-              returnData={form.giftAddOn}
-              handleChange={handleGiftAddOnInput}
-            />
-          </Grid>
           <Grid
             item
             xs={12}

@@ -1,8 +1,10 @@
 export type DeviceDeliveryFormSubmission = {
   name: string;
+  employeeID: number;
   roomNum: string;
-  device: string;
-  amount: string;
+  beds: string;
+  docTools: string;
+  IV: string;
+  surgery: string;
   priority: string;
-  status: string;
 };

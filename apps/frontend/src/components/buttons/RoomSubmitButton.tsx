@@ -48,14 +48,14 @@ export function RoomSubmitButton(props: ButtonProps) {
   async function handleSubmit() {
     if (props.input.location === "") {
       openWithError("Please select a room");
+    } else if (props.input.employeeID === -1){
+      openWithError("Please enter your employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.priority === "") {
       openWithError("Please select a priority");
     } else if (props.input.service === "") {
       openWithError("Please select a service");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
     } else if (props.input.frequency === "") {
       openWithError("Please select a frequency");
     } else {
@@ -83,7 +83,7 @@ export function RoomSubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: RoomSchedulingFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "room-scheduling",
       services: form,
@@ -146,7 +146,7 @@ export function RoomSubmitButton(props: ButtonProps) {
         autoHideDuration={5000}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         }}
       >

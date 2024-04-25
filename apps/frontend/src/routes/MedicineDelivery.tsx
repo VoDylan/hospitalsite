@@ -1,22 +1,33 @@
 import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
-import { DropDown } from "../components/DropDown.tsx";
+import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { MedicineDeliveryFormSubmission } from "../common/formSubmission/MedicineDeliveryFormSubmission.ts";
 import MedicineBackground from "../images/MedicineDelivery.jpeg";
 import { MedicineSubmitButton } from "../components/buttons/MedicineSubmitButton.tsx";
 import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
+import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
+import Acet from "../images/servicePageImages/FormIcons/Acet.jpg";
+import Fexo from "../images/servicePageImages/FormIcons/Fexo.jpeg";
+import Ibup from "../images/servicePageImages/FormIcons/Ibup.jpeg";
+import Omeprazole from "../images/servicePageImages/FormIcons/Omeprazole.jpeg";
+import Diphen from "../images/servicePageImages/FormIcons/Diphen.jpeg";
+import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
 
 function MedicineDelivery() {
   const [form, setFormResponses] = useState<MedicineDeliveryFormSubmission>({
     name: "",
+    employeeID: -1,
     location: "",
     priority: "",
-    service: "",
+    Acetaminophen: "",
+    Ibuprofen: "",
+    Omeprazole: "",
+    Fexofenadine: "",
+    Diphenhydramine: "",
     frequency: "",
-    status: "",
   });
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
@@ -32,13 +43,24 @@ function MedicineDelivery() {
     setFormResponses({ ...form, priority: e.target.value });
   }
 
-  function handleServiceInput(e: SelectChangeEvent) {
-    setFormResponses({ ...form, service: e.target.value });
-    return e.target.value;
+  function handleAceInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, Acetaminophen: e.target.value });
   }
 
-  function handleStatusInput(e: ChangeEvent<HTMLInputElement>) {
-    setFormResponses({ ...form, status: e.target.value });
+  function handleIbuInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, Ibuprofen: e.target.value });
+  }
+
+  function handleOmeInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, Omeprazole: e.target.value });
+  }
+
+  function handleFexInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, Fexofenadine: e.target.value });
+  }
+
+  function handleDipInput(e: ChangeEvent<HTMLInputElement>) {
+    setFormResponses({ ...form, Diphenhydramine: e.target.value });
   }
 
   function handleFrequencyInput(e: SelectChangeEvent) {
@@ -46,14 +68,23 @@ function MedicineDelivery() {
     return e.target.value;
   }
 
+  function handleEmployeeIDInput(event: SelectChangeEvent) {
+    setFormResponses({ ...form, employeeID: event.target.value as unknown as number});
+    return event.target.value;
+  }
+
   function clear() {
     setFormResponses({
       name: "",
+      employeeID: -1,
       location: "",
       priority: "",
-      service: "",
+      Acetaminophen: "",
+      Ibuprofen: "",
+      Omeprazole: "",
+      Fexofenadine: "",
+      Diphenhydramine: "",
       frequency: "",
-      status: "",
     });
   }
 
@@ -114,7 +145,7 @@ function MedicineDelivery() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "40vw", //Adjust this to change the width of the form
+          width: "75%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -130,19 +161,83 @@ function MedicineDelivery() {
         >
           <ServiceNavTabs />
         </Grid>
+        <Grid container sx={{ background: "white", opacity: 0.95}} boxShadow={5} borderRadius={5}>
         <Grid
           item
           xs={12}
           sx={{
-            backgroundColor: "#186BD9",
           }}
         >
-          <Typography color={"white"} align={"center"} fontSize={40}>
+          <Typography color={"black"} align={"center"} fontSize={40}>
             Medicine Delivery Form
           </Typography>
         </Grid>
-        <Grid container boxShadow={4} sx={{ backgroundColor: "white" }}>
-          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
+          <Grid
+            item
+            xs={12}
+            mt={3}
+          >
+            <Typography
+              align={"center"}
+              fontStyle={"Open Sans"}
+              fontSize={24}
+            >
+              Enter Amount of Each Type:
+            </Typography>
+          </Grid>
+
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Acet} title={"Acetaminophen"} description={"(Tylenol)"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Ibup} title={"Ibuprofen"} description={"(Advil)"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Omeprazole} title={"Omeprazole"} description={"(Prilosec)"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Fexo} title={"Fexofenadine"} description={"(Allegra)"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Tylenol Amount"}
+              value={form.Acetaminophen}
+              onChange={handleAceInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Ibuprofen Amount"}
+              value={form.Ibuprofen}
+              onChange={handleIbuInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Prilosec Amount"}
+              value={form.Omeprazole}
+              onChange={handleOmeInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Allegra Amount"}
+              value={form.Fexofenadine}
+              onChange={handleFexInput}
+              type={"text"} />
+          </Grid>
+          <Grid item xs={12} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Diphen} title={"Diphenhydramine"} description={"(Benadryl)"} />
+          </Grid>
+          <Grid item xs={12} mt={2} sx={{align: "center"}}>
+            <CenterAlignedTextbox
+              label={"Benadryl Amount"}
+              value={form.Diphenhydramine}
+              onChange={handleDipInput}
+              type={"text"} />
+          </Grid>
+
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -152,7 +247,18 @@ function MedicineDelivery() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={6} mt={2} sx={{ align: "center" }}>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <Typography color={"black"} align={"center"}>
+              Frequency Needed:
+            </Typography>
+            <DropDown
+              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
+              handleChange={handleFrequencyInput}
+              label={"Frequency"}
+              returnData={form.frequency}
+            />
+          </Grid>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
@@ -166,35 +272,11 @@ function MedicineDelivery() {
               }))}
             />
           </Grid>
-          <Grid item xs={6} sx={{ align: "center" }}>
-            <Typography color={"black"} align={"center"}>
-              Medicine Needed:
-            </Typography>
-            <DropDown
-              items={[
-                "Acetaminophen (Tylenol)",
-                "Ibuprofen (Advil)",
-                "Omeprazole (Prilosec)",
-                "Fexofenadine (Allegra)",
-                "Diphenhydramine (Benadryl)",
-              ]}
-              handleChange={handleServiceInput}
-              label={"Medicine"}
-              returnData={form.service}
-            />
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+            <Typography align={"center"}>Employee:</Typography>
+            <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
-          <Grid item xs={6} sx={{ align: "center" }}>
-            <Typography color={"black"} align={"center"}>
-              Frequency Needed:
-            </Typography>
-            <DropDown
-              items={["Once", "Daily", "Weekly", "Bi-Weekly", "Monthly"]}
-              handleChange={handleFrequencyInput}
-              label={"Frequency"}
-              returnData={form.frequency}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{ align: "center" }}>
+          <Grid item xs={12} mt={3} mb={3} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Priority of Medicine:
             </Typography>
@@ -203,17 +285,6 @@ function MedicineDelivery() {
               options={["Low", "Medium", "High", "Emergency"]}
               returnData={form.priority}
               handleChange={handlePriorityInput}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{ align: "center" }}>
-            <Typography color={"black"} align={"center"}>
-              Status of the Request:
-            </Typography>
-            <RadioButtonsGroup
-              label={"Status"}
-              options={["Unassigned", "Assigned", "InProgress", "Closed"]}
-              returnData={form.status}
-              handleChange={handleStatusInput}
             />
           </Grid>
           <Grid

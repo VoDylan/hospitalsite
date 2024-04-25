@@ -7,6 +7,9 @@ import SearchBar from "./SearchBar.tsx";
 import { Link } from "react-router-dom";
 import NavBar from "../navMenu/NavBar.tsx";
 import LoginButton from "../auth0/LoginButton.tsx";
+import CurrentTime from "../banner/Time.tsx";
+import WeatherApp from "./WeatherApp.tsx";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const useStyles = makeStyles({
   logoImage: {
@@ -54,7 +57,7 @@ function TopBanner() {
           justifyContent="space-between"
           alignItems="center"
           display={"flex"}
-          sx={{ flexGrow: 8 }}
+          sx={{ flexGrow: 1, marginRight: "2%" }}
         >
           <Link to="/">
             <LogoIconButton as="span" color="inherit" aria-label="logo">
@@ -62,6 +65,19 @@ function TopBanner() {
             </LogoIconButton>
           </Link>
         </Stack>
+
+
+          <Stack
+            direction="row"
+            spacing={2}
+                 alignItems="center"
+                 justifyContent="center"
+                 display={"flex"}
+                 sx={{ flexGrow: 2.5, marginRight: "10%", marginLeft: "12%"}}>
+            <CurrentTime/>
+            <WeatherApp/>
+
+          </Stack>
 
         <Stack
           direction="row"
@@ -80,6 +96,15 @@ function TopBanner() {
               aria-label="account of current user"
             >
               <AccountCircle />
+            </IconButton>
+          </Link>
+          <Link to={"/Cart"}>
+            <IconButton
+              sx={{ color: "#012D5A" }}
+              size="large"
+              aria-label="account of current user"
+            >
+              <ShoppingCartIcon />
             </IconButton>
           </Link>
         </Stack>

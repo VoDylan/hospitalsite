@@ -3,20 +3,17 @@ import {
   Select,
   SelectChangeEvent,
   FormControl,
-  InputLabel,
+  InputLabel, SelectVariants,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-
-interface LabelValuePair {
-  value: string;
-  label: string;
-}
+import {LabelValuePair} from "../../common/LabelValuePair.ts";
 
 interface DropDownProps {
   items: LabelValuePair[] | string[];
   handleChange: (event: SelectChangeEvent) => string;
   label: string;
-  returnData: string;
+  returnData: string | number;
+  variant?: SelectVariants;
 }
 
 const isOptionArray = (
@@ -52,7 +49,7 @@ export function DropDown(props: DropDownProps) {
   const renderItems = () => {
     if (isOptionArray(props.items)) {
       return props.items.map((item) => (
-        <MenuItem key={item.value} value={item.value}>
+        <MenuItem key={item.label} value={item.value}>
           {item.label}
         </MenuItem>
       ));
@@ -67,7 +64,7 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div className={classes.root}>
-      <FormControl sx={{ width: 223, height: 75 }}>
+      <FormControl sx={{ width: 220, height: 75 }}>
         <InputLabel
           id="demo-simple-select-label"
           className={classes.centeredLabel}
@@ -84,6 +81,7 @@ export function DropDown(props: DropDownProps) {
           onChange={handleSelectChange}
           value={props.returnData}
           defaultValue={""}
+          variant={props.variant}
           labelId="demo-simple-select-label"
           label={props.label}
           sx={

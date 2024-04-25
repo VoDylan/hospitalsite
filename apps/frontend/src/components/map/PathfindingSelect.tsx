@@ -18,6 +18,8 @@ interface NestedListProps {
   handleSelectAS: () => void;
   checkedDFS: boolean;
   handleSelectDFS: () => void;
+  checkedDijkstra: boolean;
+  handleSelectDijkstra: () => void;
 }
 
 const NestedList: React.FC<NestedListProps> = ({
@@ -29,10 +31,12 @@ const NestedList: React.FC<NestedListProps> = ({
   handleSelectAS,
   checkedDFS,
   handleSelectDFS,
+  checkedDijkstra,
+  handleSelectDijkstra
 }) => {
   return (
     <List
-      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+      sx={{ width: "96%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
     >
       <ListItemButton sx={{ color: "#767674" }} onClick={handleClick}>
@@ -66,6 +70,14 @@ const NestedList: React.FC<NestedListProps> = ({
               />
             </ListItemIcon>
             <ListItemText primary="DFS" />
+          </ListItemButton>
+          <ListItemButton onClick={handleSelectDijkstra} sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <CheckBoxIcon
+                sx={{ color: checkedDijkstra ? "green" : "lightgray" }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Dijkstra" />
           </ListItemButton>
         </List>
       </Collapse>

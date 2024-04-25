@@ -1,6 +1,6 @@
 import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import { MedicineDeliveryFormSubmission } from "../../common/formSubmission/MedicineDeliveryFormSubmission.ts";
 
@@ -23,7 +23,7 @@ export function MedicineSubmitButton(props: ButtonProps) {
   );
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -48,14 +48,15 @@ export function MedicineSubmitButton(props: ButtonProps) {
   async function handleSubmit() {
     if (props.input.location === "") {
       openWithError("Please select a room");
+    } else if (props.input.employeeID === -1){
+      openWithError("Please enter your employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.priority === "") {
       openWithError("Please select a priority");
-    } else if (props.input.service === "") {
-      openWithError("Please select a service");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
+    } else if (props.input.Acetaminophen === "" && props.input.Ibuprofen === "" && props.input.Omeprazole === ""
+    && props.input.Fexofenadine === "" && props.input.Diphenhydramine === "") {
+      openWithError("Please select a medicine");
     } else if (props.input.frequency === "") {
       openWithError("Please select a frequency");
     } else {
@@ -84,7 +85,7 @@ export function MedicineSubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: MedicineDeliveryFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "medicine-delivery",
       services: form,
@@ -147,7 +148,7 @@ export function MedicineSubmitButton(props: ButtonProps) {
         autoHideDuration={5000}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         }}
       >

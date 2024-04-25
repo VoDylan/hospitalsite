@@ -3,6 +3,7 @@ import { forwardRef, useState } from "react";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import axios, { isAxiosError } from "axios";
+import {Link} from "react-router-dom";
 
 interface ButtonProps {
   text: string;
@@ -25,7 +26,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     },
   );
 
-  function handleShowConfetti() {
+  /*function handleShowConfetti() {
     props.displayConfetti();
 
     const duration = 7000; // 7 seconds
@@ -33,10 +34,10 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     setTimeout(() => {
       props.hideConfetti();
     }, duration);
-  }
+  }*/
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === "clickaway") {
@@ -61,17 +62,16 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   async function handleSubmit() {
     if (props.input.location === "") {
       openWithError("Please select a room");
+    } else if (props.input.employeeID === -1){
+      openWithError("Please enter your employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.delivery === "") {
       openWithError("Please select a priority");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
-    } else if (props.input.giftSize === "") {
-      openWithError("Please select a Gift Size");
-    } else if (props.input.giftAddOn === "") {
-      openWithError("Please select the Gift Add-on");
-    } else if (props.input.recipientName === "") {
+    } else if (props.input.balloons == "" && props.input.cards == "" && props.input.bears == ""){
+      openWithError("Please select a gift");
+    }
+      else if (props.input.recipientName === "") {
       openWithError("Please enter a Recipient Name");
     } else {
       console.log(props.input);
@@ -87,7 +87,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         );
       } else {
         handleClear();
-        handleShowConfetti();
         openWithSuccess();
       }
     }
@@ -101,7 +100,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   // Function for posting the form submission to the database
   async function pushToDB(form: GiftDeliveryFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "gift-delivery",
       services: form,
@@ -153,10 +152,10 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
+    <Link to={"/Cart"} state={props.input} onClick={() => handleSubmit()}>
     <Button
       variant="contained"
       id={"submitButton"}
-      onClick={() => handleSubmit()}
     >
       {props.text}
       <Snackbar
@@ -164,7 +163,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         autoHideDuration={5000}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         }}
       >
@@ -172,5 +171,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
+    </Link>
   );
 }

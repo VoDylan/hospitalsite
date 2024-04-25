@@ -50,14 +50,14 @@ export function SecuritySubmitButton(props: ButtonProps) {
   async function handleSubmit() {
     if (props.input.location === "") {
       openWithError("Please select a room");
+    } else if (props.input.employeeID === -1){
+      openWithError("Please enter your employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.priority === "") {
       openWithError("Please select a priority");
     } else if (props.input.securityCategory === "") {
       openWithError("Please select a category");
-    } else if (props.input.status === "") {
-      openWithError("Please select a status");
     } else if (props.input.securityPersonnel === "") {
       openWithError("Please select a personnel");
     } else {
@@ -88,7 +88,7 @@ export function SecuritySubmitButton(props: ButtonProps) {
 
   async function pushToDB(form: SecurityRequestFormSubmission) {
     const returnData = {
-      userID: "admin",
+      employeeID: form.employeeID,
       nodeID: form.location,
       serviceType: "security-request",
       services: form,
@@ -151,7 +151,7 @@ export function SecuritySubmitButton(props: ButtonProps) {
         autoHideDuration={5000}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         }}
       >
