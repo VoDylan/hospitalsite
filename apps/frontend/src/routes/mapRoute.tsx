@@ -604,6 +604,7 @@ function MapRoute() {
     }
 
     setFloor(newFloorObj);
+
     console.log("NEW FLOOR");
   };
 
@@ -991,9 +992,6 @@ function MapRoute() {
               onTransformed={handleTransform}
               minScale={0.8}
               initialScale={1.0}
-              // initialScale={2.0}
-              // initialPositionX={-300}
-              // initialPositionY={-100}
               initialPositionX={0}
               initialPositionY={0}
             >

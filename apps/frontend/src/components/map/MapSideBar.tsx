@@ -68,13 +68,13 @@ export default function MapSideBar(props: {
           marginTop: "0.4%",
           marginLeft: "0.2%",
           width: "19.5vw",
-          height: "90%",
+          height: "100%",
           boxSizing: "border-box",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
           elevation: 100,
           zIndex: 1,
           border: "0px solid rgba(0, 0, 0, 0.05)",
-          overflow: props.checked2 ? "hidden" : "auto", // Hide overflow when slide is up
+          overflow: "auto", // Hide overflow when slide is up
         },
       }}
     >
@@ -82,7 +82,7 @@ export default function MapSideBar(props: {
       <Stack
         display={"flex"}
         direction={"column"}
-        sx={{ marginLeft: "4%", marginTop: "-8%" }}
+        sx={{ marginTop: "-8%" }}
       >
         <Typography
           color={"#003A96"}
@@ -93,7 +93,7 @@ export default function MapSideBar(props: {
         >
           {props.title}
         </Typography>
-        <Stack direction={"row"} spacing={1} sx={{ alignItems: "center" }}>
+        <Stack direction={"row"} spacing={1} sx={{ alignItems: "center",  marginLeft: "4%",  }}>
           <RadioButtonCheckedIcon sx={{ color: "blue" }} />
           <Autocomplete
             onChange={props.onChange}
@@ -104,14 +104,14 @@ export default function MapSideBar(props: {
               .map(props.nodeToLabelIdCallback)}
             groupBy={props.groupBy}
             getOptionLabel={props.optionLabel}
-            sx={{ width: "75%" }}
+            sx={{ width: "80%" }}
             renderInput={props.renderInput}
           />
         </Stack>
         <Stack>
-          <MoreVertIcon fontSize={"medium"}></MoreVertIcon>
+          <MoreVertIcon sx={{ marginLeft: "4%", }} fontSize={"medium"}></MoreVertIcon>
         </Stack>
-        <Stack direction={"row"} spacing={1} sx={{ alignItems: "center" }}>
+        <Stack direction={"row"} spacing={1} sx={{ alignItems: "center",  marginLeft: "4%",  }}>
           <LocationOnIcon fontSize={"medium"} sx={{ color: "red" }} />
           <Autocomplete
             onChange={props.onChange1}
@@ -122,7 +122,7 @@ export default function MapSideBar(props: {
               .map(props.nodeToLabelIdCallback)}
             groupBy={props.groupBy}
             getOptionLabel={props.optionLabel}
-            sx={{ width: "75%" }}
+            sx={{ width: "80%" }}
             renderInput={props.renderInput1}
           />
         </Stack>
@@ -130,7 +130,7 @@ export default function MapSideBar(props: {
         <Stack
           direction={"row"}
           spacing={1}
-          sx={{ alignItems: "center", marginTop: "8%", marginLeft: "2%" }}
+          sx={{ alignItems: "center", marginTop: "4%",  marginLeft: "4%" }}
         >
           {props.open !== undefined &&
             props.handleClick !== undefined &&
@@ -156,13 +156,13 @@ export default function MapSideBar(props: {
               />
             )}
         </Stack>
-        <Stack direction={"column"} spacing={2} sx={{ marginLeft: "10%", marginTop: "4%" }}>
+        <Stack direction={"column"} spacing={2} sx={{ marginLeft: "14%", marginTop: "4%" }}>
           {props.errorMessage && <p style={{ color: "red" }}>{props.errorMessage}</p>}
           {props.onClick && (
             <Button
               startIcon={<AltRouteIcon />}
               variant={"contained"}
-              sx={{ width: "80%", display: "flex", justifyContent: "center" }}
+              sx={{ width: "84%", display: "flex", justifyContent: "center" }}
               onClick={props.onClick}
             >
               Find Path
@@ -172,7 +172,7 @@ export default function MapSideBar(props: {
             <Button
               variant={"text"}
               sx={{
-                width: "80%",
+                width: "84%",
                 display: "flex",
                 justifyContent: "center",
                 height: "25%",
@@ -183,6 +183,19 @@ export default function MapSideBar(props: {
             </Button>
           )}
         </Stack>
+
+        {/*Text direction box*/}
+        {props.checked2 && (
+          <Box
+            sx={{
+              width: "100%",
+              backgroundColor: "white",
+            }}
+          >
+            <div>{props.icon2 || <div/>}</div>
+          </Box>
+        )}
+
         <Box
           sx={{
             width: "90%",
@@ -192,14 +205,14 @@ export default function MapSideBar(props: {
             alignItems: "center",
             justifyContent: "center",
             marginTop: props.text ? "10%" : "20%", // Conditionally set marginTop
-            marginLeft: "2%",
+            marginLeft: "4%",
           }}
         ></Box>
-        <Stack direction={"column"} spacing={2} sx={{ marginLeft: "10%", marginTop: "20%" }}>
+        <Stack direction={"column"} spacing={2} sx={{ marginLeft: "14%", marginTop: "20%" }}>
           {props.onClick1 && (
             <Button
               variant={"contained"}
-              sx={{ width: "80%" }}
+              sx={{ width: "84%" }}
               onClick={props.onClick1}
             >
               {props.checked ? "Add Filters" : "Add Filters"}
@@ -208,7 +221,7 @@ export default function MapSideBar(props: {
           {props.onClick2 && (
             <Button
               variant={"contained"}
-              sx={{ width: "80%", backgroundColor: "#D9D9D9" }}
+              sx={{ width: "84%", backgroundColor: "#D9D9D9" }}
               onClick={props.onClick2}
             >
               Clear Filters
@@ -230,26 +243,6 @@ export default function MapSideBar(props: {
               }}
             >
               <div>{props.icon || <div />}</div>
-            </Slide>
-          )}
-          {props.checked2 && (
-            <Slide
-              in={props.checked2}
-              direction="up"
-              style={{
-                zIndex: 1,
-                backgroundColor: "white",
-                position: "absolute",
-                top: "-2.5%",
-                left: "0%",
-                width: "100%",
-                minWidth: "98%",
-                height: "100%",
-                overflow: "auto", // Allow the content inside the slide to scroll
-              }}
-            >
-
-            <div>{props.icon2 || <div />}</div>
             </Slide>
           )}
           {props.callback && <Floor callback={props.callback} />}
