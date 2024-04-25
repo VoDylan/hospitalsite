@@ -42,6 +42,9 @@ export default function AboutPage() {
         </Typography>
       </Box>
       <Stack>
+        <Typography paddingTop={5} textAlign={"center"} variant={"h1"} color={"black"} fontSize={30}>
+          WPI Computer Science Department, CS3733-D24 Software Engineering
+        </Typography>
         <AboutCardLeft
           role={"Professor"}
           name={"Professor Wilson Wong"}
@@ -160,6 +163,13 @@ export default function AboutPage() {
           imagePath={Spencer}
         />
         <br/>
+        <Typography paddingTop={5} textAlign={"center"} variant={"h1"} color={"black"} fontSize={30}>
+          Additional Thank You to Brigham & Women's Hospital and their representative Andrew Shinn.
+        </Typography>
+        <Typography paddingTop={5} textAlign={"center"} variant={"h1"} color={"black"} fontSize={20}>
+          The Brigham & Women's Hospital maps and data used in this application are copyrighted and provided for the
+          sole use of educational purposes.
+        </Typography>
       </Stack>
     </Box>
 
