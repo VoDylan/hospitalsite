@@ -1,14 +1,14 @@
-import {Box, Stack} from "@mui/material";
 import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 import {useEffect, useRef, useState} from "react";
 import {TransformState} from "../../../common/TransformState.ts";
-import ToggleButton from "../MapToggleBar.tsx";
-import Legend from "./Legend.tsx";
-import {useLegend} from "../../../hooks/useLegend.tsx";
 import {IFilterState} from "../../../hooks/useFilters.tsx";
+import BackgroundCanvas from "../BackgroundCanvas.tsx";
+import {useCanvasInfo} from "../../../hooks/useCanvasInfo.tsx";
+import {Floor} from "common/src/map/Floor.ts";
 
 interface MapRenderProps {
   filterInfo: IFilterState[];
+  floor: Floor;
 }
 
 export default function MapRender(props: MapRenderProps) {
@@ -21,10 +21,16 @@ export default function MapRender(props: MapRenderProps) {
 
   const [filterInfo, setFilterInfo] = useState<IFilterState[]>(props.filterInfo);
 
+  const [floor, setFloor] = useState<Floor>(props.floor);
+
   const [
-    isOpen,
-    setIsOpen
-  ] = useLegend();
+    backgroundRendered,
+    setBackgroundRendered,
+    width,
+    setWidth,
+    height,
+    setHeight
+  ] = useCanvasInfo();
 
   const handleTransform = (
     ref: ReactZoomPanPinchRef,
@@ -34,15 +40,22 @@ export default function MapRender(props: MapRenderProps) {
     transformState.current = state;
   };
 
+  const handleBackgroundRenderStatus = (backgroundRendered: boolean, width: number, height: number) => {
+    setBackgroundRendered(backgroundRendered);
+    setWidth(width);
+    setHeight(height);
+  };
+
   useEffect(() => {
     setFilterInfo(props.filterInfo);
   }, [props.filterInfo]);
 
+  useEffect(() => {
+    setFloor(props.floor);
+  }, [props.floor]);
+
   return (
-    <Box
-      width={"100%"}
-      height={"100%"}
-    >
+    <>
       <TransformWrapper
         onTransformed={handleTransform}
         minScale={0.8}
@@ -51,24 +64,26 @@ export default function MapRender(props: MapRenderProps) {
         initialPositionY={0}
         doubleClick={{disabled: true}}
       >
-        <TransformComponent>
-          <></>
+        <TransformComponent
+          wrapperStyle={{
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <>
+            <BackgroundCanvas
+              style={{
+                position: "relative",
+                // minHeight: "100vh",
+                // maxHeight: "100%",
+                maxWidth: "100%",
+              }}
+              floor={floor}
+              renderStatusCallback={handleBackgroundRenderStatus}
+            />
+          </>
         </TransformComponent>
       </TransformWrapper>
-      <Stack direction={"row"}>
-        <Box
-          position={"absolute"}
-          right={0}
-          width={"200px"}
-          margin={"25px"}
-        >
-          {/* Toggle button */}
-          <ToggleButton onClick={() => setIsOpen(!isOpen)} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
-          {isOpen && (
-            <Legend filterInfo={[...filterInfo.values()]}/>
-          )}
-        </Box>
-      </Stack>
-    </Box>
+    </>
   );
 }

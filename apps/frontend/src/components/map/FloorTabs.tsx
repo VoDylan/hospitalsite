@@ -1,28 +1,43 @@
 import React, { useState } from "react";
 import { Button, Stack } from "@mui/material";
+import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
 
 interface FloorProps {
-  callback: (newFloor: string) => void;
+  setFloor: (newFloor: Floor) => void;
 }
 
-function Floors({ callback }: FloorProps) {
+function Floors(props: FloorProps) {
   // State to track the active button
   const [activeButton, setActiveButton] = useState<string>("L1");
 
   // Function to handle button click
   const handleButtonClick = (button: string) => {
     setActiveButton(button);
-    callback(button);
+    handleFloorChange(button);
+  };
+
+  const handleFloorChange = (newFloor: string) => {
+    const newFloorObj = floorStrToObj(newFloor);
+
+    if (!newFloorObj) {
+      console.error("New map floor is not a valid floor!");
+      return;
+    }
+
+    props.setFloor(newFloorObj);
   };
 
   return (
     <Stack
-      direction="column"
-      spacing={0.1}
+      direction={"column"}
+      spacing={0.3}
+      flex={1}
       sx={{
-        position: "fixed",
-        right: "1%",
-        top: "60%",
+        position: "absolute",
+        right: 0,
+        bottom: 0,
+        margin: "25px",
+        zIndex: 2,
       }}
     >
       <Button

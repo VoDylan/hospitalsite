@@ -1,6 +1,6 @@
 import {useNodes} from "../hooks/useNodes.tsx";
 import {useEffect, useState} from "react";
-import {Box, Stack} from "@mui/material";
+import {Box, Paper, Stack} from "@mui/material";
 import useWindowSize from "../hooks/useWindowSize.tsx";
 import MapRender from "../components/map/mapEditor2/MapRender.tsx";
 import MapEditorSideBar2 from "../components/map/mapEditor2/MapEditorSideBar2.tsx";
@@ -8,6 +8,11 @@ import {useSelectedNodes} from "../hooks/useSelectedNodes.tsx";
 import GraphManager from "../common/GraphManager.ts";
 import {useFilters} from "../hooks/useFilters.tsx";
 import MapNode from "common/src/map/MapNode.ts";
+import ToggleButton from "../components/map/MapToggleBar.tsx";
+import Legend from "../components/map/mapEditor2/Legend.tsx";
+import {useLegend} from "../hooks/useLegend.tsx";
+import Floors from "../components/map/FloorTabs.tsx";
+import {useFloor} from "../hooks/useFloor.tsx";
 
 export default function MapEditingPage2() {
   const {
@@ -36,6 +41,16 @@ export default function MapEditingPage2() {
     selectAllFilters,
     selectNoFilters
   ] = useFilters(true);
+
+  const [
+    isOpen,
+    setIsOpen
+  ] = useLegend();
+
+  const [
+    floor,
+    setFloor
+  ] = useFloor();
 
   const [windowWidth, windowHeight] = useWindowSize();
   const [updateSelection, setUpdateSelection] = useState<boolean>(false);
@@ -115,7 +130,31 @@ export default function MapEditingPage2() {
             handleSelectAllFilters={() => selectAllFilters(true)}
             handleSelectNoFilters={() => selectNoFilters(true)}
           />
-          <MapRender filterInfo={[...filterInfo.values()]}/>
+          <Box
+            width={"100%"}
+            height={"100%"}
+          >
+            <Paper
+              style={{
+                position: "absolute",
+                right: 0,
+                width: "200px",
+                margin: "25px",
+                zIndex: 2,
+              }}
+              elevation={3}
+            >
+              <>
+                {/* Toggle button */}
+                <ToggleButton onClick={() => setIsOpen(!isOpen)} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
+                {isOpen && (
+                  <Legend filterInfo={[...filterInfo.values()]}/>
+                )}
+              </>
+            </Paper>
+            <Floors setFloor={setFloor} />
+            <MapRender filterInfo={[...filterInfo.values()]} floor={floor}/>
+          </Box>
         </Stack>
       </Box>
     </>
