@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     display: "flex",
     width: "100%", // Set the width to 100%
     minHeight: "300px",
-    minWidth: "200px",
+    minWidth: "250px",
     maxWidth: "450px", // Add a max-width for responsiveness
   },
 });

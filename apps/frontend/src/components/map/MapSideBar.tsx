@@ -12,6 +12,7 @@ import Floor from "./FloorTabs.tsx";
 import NestedList from "./PathfindingSelect.tsx";
 
 export default function MapSideBar(props: {
+  activeFloor: string;
   title: string;
   onChange: (event: React.SyntheticEvent, value: string | null) => void;
   autocompleteNodeData: { label: string; node: string }[];
@@ -245,7 +246,7 @@ export default function MapSideBar(props: {
               <div>{props.icon || <div />}</div>
             </Slide>
           )}
-          {props.callback && <Floor callback={props.callback} />}
+          {props.callback && <Floor callback={props.callback} activeFloor={props.activeFloor}/>}
         </Stack>
       </Stack>
     </Drawer>

@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Button, Stack } from "@mui/material";
 
 interface FloorProps {
   callback: (newFloor: string) => void;
+  activeFloor: string; // Add the activeFloor prop
 }
 
-function Floors({ callback }: FloorProps) {
-  // State to track the active button
-  const [activeButton, setActiveButton] = useState<string>("L1");
 
+function Floors({ callback, activeFloor }: FloorProps) {
+  // State to track the active button
+  const [activeButton, setActiveButton] = useState<string>(activeFloor); // Initialize activeButton with activeFloor prop
+  useEffect(() => {
+    setActiveButton(activeFloor);
+  }, [activeFloor]);
   // Function to handle button click
   const handleButtonClick = (button: string) => {
     setActiveButton(button);

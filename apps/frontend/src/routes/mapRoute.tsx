@@ -40,6 +40,7 @@ interface TransformState {
   positionY: number;
 }
 
+
 const NodeButtons = styled("button")({
   cursor: "pointer",
   border: "1px solid white",
@@ -104,6 +105,7 @@ function MapRoute() {
   const [canvasHeight, setCanvasHeight] = useState<number>(0);
 
   const [floor, setFloor] = useState<Floor>(Floor.L1);
+
 
   /**
    * Pathfinder selection
@@ -894,6 +896,7 @@ function MapRoute() {
           >
             {/*Side Bar*/}
             <MapSideBar
+              activeFloor={floor}
               title="Navigation"
               onChange={(event, value) => handleStartNodeChange(value)}
               autocompleteNodeData={autocompleteNodeData}
