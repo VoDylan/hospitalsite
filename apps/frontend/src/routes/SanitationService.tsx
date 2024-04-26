@@ -131,6 +131,10 @@ function SanitationService() {
           mb: "5vh",
         }}
       >
+        <Typography
+        color={'white'}>
+          Jacob Murphy, Spencer Trautz
+        </Typography>
         <Grid
           item
           xs={12}
@@ -257,7 +261,7 @@ function SanitationService() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography>Jacob Murphy, Spencer Trautz</Typography>
+
     </Stack>
   );
 }

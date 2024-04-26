@@ -9327,6 +9327,7 @@ __metadata:
     "@mui/styles": "npm:^5.15.15"
     "@mui/x-charts": "npm:^7.3.0"
     "@mui/x-data-grid": "npm:^7.1.0"
+    "@mui/x-date-pickers": "npm:^7.2.0"
     "@prisma/client": "npm:^5.11.0"
     "@types/express": "npm:^4.17.21"
     "@types/joi": "npm:latest"

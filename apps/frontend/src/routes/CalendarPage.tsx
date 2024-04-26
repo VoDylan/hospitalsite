@@ -226,14 +226,20 @@ export default function CalendarPage() {
           backgroundAttachment: "fixed",
         }}
       >
+
         <Grid
           item
           xs={12}
           sx={{
             backgroundColor: "transparent",
             mt: "25vh",
+
           }}
         >
+          <Typography
+                      align={"center"}
+                      fontStyle={"Open Sans"}
+                      fontSize={18}>Arayah Remillard</Typography>
           <ServiceNavTabs />
         </Grid>
         <Grid
@@ -399,7 +405,7 @@ export default function CalendarPage() {
             </Grid>
           </Grid>
         </Grid>
-        <Typography mt={5}>Arayah Remillard</Typography>
+
       </Stack>
     );
   }
