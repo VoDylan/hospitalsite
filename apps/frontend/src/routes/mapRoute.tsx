@@ -32,6 +32,7 @@ import IconCanvas from "../components/map/IconCanvas.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 import ToggleButton from "../components/map/MapToggleBar.tsx";
 import {IconButton, Stack} from "@mui/material";
+import {useParams} from "react-router-dom";
 
 
 interface TransformState {
@@ -144,7 +145,17 @@ function MapRoute() {
   }, []);
 
   //-----------------------------------------------------------------------------------------
+  /**
+  * CHATBOT NODE LOGIC
+  */
+  const { startnode, endnode } = useParams();
 
+// Function to check if a nodeID is valid
+  const isValidNodeID = (nodeID: string): boolean => {
+    const node = GraphManager.getInstance().getNodeByID(nodeID);
+    return !!node;
+  };
+  //-----------------------------------------------------------------------------------------
   const handleClick = () => {
     setOpen(!open);
   };
@@ -554,43 +565,52 @@ function MapRoute() {
     // console.log("printing use ref now", pathNodesData.current);
   };
 
-  async function handleSubmit() {
-    if (startNode.trim() === "" || endNode.trim() === "") {
-      setErrorMessage("Please enter both start and end nodes");
-      return;
+  const findStartingFloor = useCallback(() => {
+    for (let i = 0; i < filteredNodes.length; i++) {
+      if (filteredNodes[i].nodeID === startNode) {
+        return filteredNodes[i].floor.toString(); // Return floor as a string
+      }
     }
+  }, [filteredNodes, startNode]);
 
-    if (startNode === endNode) {
-      setErrorMessage("Please enter different nodes");
-      return;
-    }
+  const handleSubmit = useCallback(
+    async() =>  {
+      if (startNode.trim() === "" || endNode.trim() === "") {
+        setErrorMessage("Please enter both start and end nodes");
+        return;
+      }
 
-    const request: LocationInfo = {
-      algorithm: algorithm,
-      startNode: startNode,
-      endNode: endNode,
-    };
+      if (startNode === endNode) {
+        setErrorMessage("Please enter different nodes");
+        return;
+      }
 
-    try {
-      const response = await axios.post("/api/path", request, {
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = response.data;
-      const path = data.message;
+      const request: LocationInfo = {
+        algorithm: algorithm,
+        startNode: startNode,
+        endNode: endNode,
+      };
 
-      updateNodesData(path);
-      setFloor(findStartingFloor() as Floor);
+      try {
+        const response = await axios.post("/api/path", request, {
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = response.data;
+        const path = data.message;
 
-      !path
-        ? setErrorMessage("There is no path between nodes")
-        : setErrorMessage("");
-      setTextDirections(true);
-      setUpdateNodesBetweenFloors(true);
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-      setErrorMessage("Failed to fetch data. Please try again.");
-    }
-  }
+        updateNodesData(path);
+        setFloor(findStartingFloor() as Floor);
+
+        !path
+          ? setErrorMessage("There is no path between nodes")
+          : setErrorMessage("");
+        setTextDirections(true);
+        setUpdateNodesBetweenFloors(true);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setErrorMessage("Failed to fetch data. Please try again.");
+      }
+    }, [algorithm, endNode, findStartingFloor, startNode]);
 
   const handleFloorChange = (newFloor: string) => {
     const newFloorObj = floorStrToObj(newFloor);
@@ -609,14 +629,6 @@ function MapRoute() {
     console.log("NEW FLOOR");
   };
 
-  function findStartingFloor() {
-    for (let i = 0; i < filteredNodes.length; i++) {
-      if (filteredNodes[i].nodeID === startNode) {
-        return filteredNodes[i].floor.toString(); // Return floor as a string
-      }
-    }
-  }
-
   /**
    * useEffect to just load the node data. Only called when the flags determining loading data are changed
    */
@@ -632,7 +644,20 @@ function MapRoute() {
       determineFilters();
       setFiltersApplied(true);
     }
-  }, [determineFilters, filtersApplied, nodeDataLoaded]);
+
+    // Check if startnode and endnode are valid nodeIDs before setting them
+    if (startnode && endnode && isValidNodeID(startnode as string) && isValidNodeID(endnode as string)) {
+      setStartNode(startnode as string);
+      console.log("Grabbed start node from URL: " + startnode as string);
+      setEndNode(endnode as string);
+      console.log("Grabbed end node from URL: " + endnode as string);
+      handleSubmit();
+    }
+    else if (startnode && endnode) {
+      // Handle case where startnode or endnode is invalid
+      setErrorMessage("Invalid start or end node ID provided.");
+    }
+  }, [determineFilters, filtersApplied, nodeDataLoaded, startnode, endnode, handleSubmit]);
 
   const handleBackgroundRenderStatus = (
     status: boolean,
