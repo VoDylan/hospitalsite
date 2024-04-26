@@ -110,6 +110,7 @@ export const useFilters = (): [
       console.log(newFilterState);
       oldFilterAssociations.set(nodeType, newFilterState);
       setFilterAssociations(oldFilterAssociations);
+      setFiltersApplied(false);
     }
   }, [filterAssociations]);
 
@@ -150,7 +151,7 @@ export const useFilters = (): [
    */
   useEffect(() => {
     console.log(`filtersRegistered: ${filtersRegistered} | nodeDataLoaded: ${nodeDataLoaded}`);
-    if(filtersRegistered && nodeDataLoaded) {
+    if(!filtersApplied && filtersRegistered && nodeDataLoaded) {
       console.log("Reapplying filters to node data");
       const activeFilterValues: FilterValueType[] = [];
 
@@ -163,8 +164,9 @@ export const useFilters = (): [
       const filteredNodes: MapNode[] = FilterManager.getInstance().applyFilters([typeFilter], nodeData);
 
       setFilteredNodes(filteredNodes);
+      setFiltersApplied(true);
     }
-  }, [nodeData, filterAssociations, filtersRegistered, nodeDataLoaded]);
+  }, [nodeData, filterAssociations, filtersRegistered, nodeDataLoaded, filtersApplied]);
 
   /**
    * If the request to select all filters is set from the program, set all active states for all filters to true
@@ -189,6 +191,10 @@ export const useFilters = (): [
       setSelectNone(false);
     }
   }, [filtersRegistered, selectNone, setFilterActiveState]);
+
+  useEffect(() => {
+    console.log(`FiltersApplied: ${filtersApplied}`);
+  }, [filtersApplied]);
 
   return [
     filteredNodes,
