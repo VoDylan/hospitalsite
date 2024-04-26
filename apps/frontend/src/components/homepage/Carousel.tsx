@@ -223,7 +223,7 @@ function MainCarousel() {
         display={"flex"}
         justifyContent={"center"}>
         <Typography variant = "subtitle1"
-        fontSize={"19px"}
+        fontSize={"100%"}
         color = 'red'
         fontWeight = 'bold'>
           This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
