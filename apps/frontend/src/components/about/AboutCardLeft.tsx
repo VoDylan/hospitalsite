@@ -11,14 +11,14 @@ interface AboutCardProps {
 export function AboutCardLeft(props: AboutCardProps) {
   return (
     <>
-      <br/>
-      <br/>
       <Box
           sx={{
+            my: "2.5em",
             mx: 'auto',
             backgroundColor: "lightgray",
             maxWidth: "70%",
-            borderRadius: "20px",
+            borderRadius: "2em",
+            minWidth: "70%", // forces all cards to be same width
           }}
       >
         <Stack
