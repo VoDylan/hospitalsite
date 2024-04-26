@@ -67,6 +67,7 @@ export default function NodeInfo(props: NodeInfoProps) {
         display={"flex"}
         flexDirection={"column"}
         alignItems={"left"}
+        overflow={"hidden"}
       >
         {!editingMode ? (
           <>
@@ -243,18 +244,20 @@ export default function NodeInfo(props: NodeInfoProps) {
                 onClick={props.clearNodeCallback}
                 sx={{
                   marginRight: "5px",
+                  flex: 1,
                 }}
               >
-                Clear Selection
+                Clear
               </Button>
               <Button
                 variant={"contained"}
                 onClick={() => setEditingMode(true)}
                 sx={{
                   marginLeft: "5px",
+                  flex: 1,
                 }}
               >
-                Edit Node
+                Edit
               </Button>
             </Box>
           </>

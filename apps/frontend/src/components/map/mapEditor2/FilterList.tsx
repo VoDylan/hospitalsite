@@ -1,13 +1,13 @@
 import React from "react";
 import {Box, Button, Stack} from "@mui/material";
-import {NodeTypes} from "common/src/map/MapNodeType.ts";
 import {IFilterState} from "../../../hooks/useFilters.tsx";
 import FilterWithIcon from "./FilterWithIcon.tsx";
+import {FilterType} from "../../../common/types/FilterType.ts";
 
 interface FilterListProps {
   hideFilterMenu: () => void;
-  filterInfo: Map<NodeTypes, IFilterState>;
-  handleIconStateChange: (filterType: NodeTypes, newState: boolean) => void;
+  filterInfo: Map<FilterType, IFilterState>;
+  handleIconStateChange: (filterType: FilterType, newState: boolean) => void;
 }
 
 export default function FilterList(props: FilterListProps) {
@@ -29,11 +29,12 @@ export default function FilterList(props: FilterListProps) {
             return (
               (filterInfo.renderInfo) ?
                 <FilterWithIcon
-                  iconColor={filterInfo.renderInfo.iconColor}
-                  filterName={filterInfo.renderInfo.filterName}
-                  filterType={filterInfo.renderInfo.filterType}
-                  initialIconState={filterInfo.active}
+                  filterInfo={filterInfo}
                   handleIconState={props.handleIconStateChange}
+                  sx={{
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                  }}
                 />
                 :
                 <></>

@@ -30,6 +30,8 @@ export const useSelectedNodes = () => {
           } else {
             console.log(`Edge with edgeID ${edgeBetween.edgeID} found!`);
           }
+        } else {
+          console.log(`Edge with id ${edgeID} not found`);
         }
       } catch (e) {
         console.error(e);

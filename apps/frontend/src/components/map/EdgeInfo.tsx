@@ -78,6 +78,7 @@ export default function EdgeInfo(props: EdgeInfoProps) {
         display={"flex"}
         flexDirection={"column"}
         alignItems={"left"}
+        overflow={"hidden"}
       >
         {edge ? (
           <>

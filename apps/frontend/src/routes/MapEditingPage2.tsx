@@ -1,5 +1,5 @@
 import {useNodes} from "../hooks/useNodes.tsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Box, Stack} from "@mui/material";
 import useWindowSize from "../hooks/useWindowSize.tsx";
 import MapRender from "../components/map/mapEditor2/MapRender.tsx";
@@ -7,6 +7,7 @@ import MapEditorSideBar2 from "../components/map/mapEditor2/MapEditorSideBar2.ts
 import {useSelectedNodes} from "../hooks/useSelectedNodes.tsx";
 import GraphManager from "../common/GraphManager.ts";
 import {useFilters} from "../hooks/useFilters.tsx";
+import MapNode from "common/src/map/MapNode.ts";
 
 export default function MapEditingPage2() {
   const {
@@ -34,9 +35,10 @@ export default function MapEditingPage2() {
     setNewFilterActiveStatus,
     selectAllFilters,
     selectNoFilters
-  ] = useFilters();
+  ] = useFilters(true);
 
   const [windowWidth, windowHeight] = useWindowSize();
+  const [updateSelection, setUpdateSelection] = useState<boolean>(false);
 
   useEffect(() => {
     if(nodeDataLoaded) {
@@ -55,8 +57,23 @@ export default function MapEditingPage2() {
   }, [filteredNodes]);
 
   useEffect(() => {
-    console.log(`filtersApplied changed: ${filtersApplied}`);
+    setUpdateSelection(filtersApplied);
   }, [filtersApplied]);
+
+  useEffect(() => {
+    if(updateSelection) {
+      if(selectedNode1 && !filteredNodes.find((value: MapNode) => {
+        return value == selectedNode1;
+      }))
+        setSelectedNode1(null);
+      if(selectedNode2 && !filteredNodes.find((value: MapNode) => {
+        return value == selectedNode2;
+      }))
+        setSelectedNode2(null);
+
+      setUpdateSelection(false);
+    }
+  }, [filteredNodes, selectedNode1, selectedNode2, setSelectedNode1, setSelectedNode2, updateSelection]);
 
   useEffect(() => {
     setNodeDataFilters(nodeData);

@@ -1,14 +1,15 @@
-import {Box, Button, Stack} from "@mui/material";
+import {Box, Button, Stack, SxProps, Theme} from "@mui/material";
 import Slide from "@mui/material/Slide";
 import {useEffect, useState} from "react";
 import FilterList from "./FilterList.tsx";
 import useWindowSize from "../../../hooks/useWindowSize.tsx";
 import {IFilterState} from "../../../hooks/useFilters.tsx";
-import {NodeTypes} from "common/src/map/MapNodeType.ts";
+import {FilterType} from "../../../common/types/FilterType.ts";
 
 interface FilterSelectorProps {
-  filterInfo: Map<NodeTypes, IFilterState>;
-  handleIconStateChange: (filterType: NodeTypes, newState: boolean) => void;
+  filterInfo: Map<FilterType, IFilterState>;
+  handleIconStateChange: (filterType: FilterType, newState: boolean) => void;
+  sx?: SxProps<Theme>;
 }
 
 export default function FilterSlider(props: FilterSelectorProps) {
@@ -24,9 +25,7 @@ export default function FilterSlider(props: FilterSelectorProps) {
     <Stack
       direction={"column"}
       spacing={2}
-      marginLeft={"auto"}
-      marginRight={"auto"}
-      marginTop={"25px"}
+      sx={props.sx}
     >
       <Button
         variant={"contained"}

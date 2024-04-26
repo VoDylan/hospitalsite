@@ -11,15 +11,15 @@ import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import useWindowSize from "../../../hooks/useWindowSize.tsx";
 import FilterSlider from "./FilterSlider.tsx";
-import {NodeTypes} from "common/src/map/MapNodeType.ts";
 import {IFilterState} from "../../../hooks/useFilters.tsx";
+import {FilterType} from "../../../common/types/FilterType.ts";
 
 interface MapEditorSideBar2Props {
   title: string;
 
   nodeData: MapNode[];
 
-  filterInfo: Map<NodeTypes, IFilterState>;
+  filterInfo: Map<FilterType, IFilterState>;
 
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
@@ -36,7 +36,7 @@ interface MapEditorSideBar2Props {
   handleEditNode: (node: MapNode) => void;
   handleDeleteNode: (node: MapNode) => void;
 
-  handleIconStateChange: (filterType: NodeTypes, newState: boolean) => void;
+  handleIconStateChange: (filterType: FilterType, newState: boolean) => void;
 }
 
 export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
@@ -78,10 +78,21 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
             align={"center"}
             fontStyle={"Open Sans"}
             fontSize={30}
-            sx={{ marginBottom: "10%", marginTop: "10%" }}
           >
             {props.title}
           </Typography>
+          <Divider
+            variant={"middle"}
+            orientation={"horizontal"}
+            flexItem
+            aria-hidden={"true"}
+            sx={{
+              borderBottom: "2px solid",
+              opacity: "0.5",
+              marginTop: "25px",
+              marginBottom: "25px",
+            }}
+          />
           <Stack
             sx={{
               marginLeft: "auto",
@@ -90,9 +101,6 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
             }}
           >
             <NodeAutocomplete
-              style={{
-                marginTop: "15px",
-              }}
               label={"Node 1"}
               Icon={<RadioButtonCheckedIcon color={"primary"} sx={{color: "blue"}}/>}
               onChange={handleNode1Change}
@@ -101,9 +109,6 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
             />
             <MoreVertIcon fontSize={"medium"}/>
             <NodeAutocomplete
-              style={{
-                marginBottom: "15px",
-              }}
               label={"Node 2"}
               Icon={<LocationOnIcon fontSize={"medium"} sx={{color: "red"}}/>}
               onChange={handleNode2Change}
@@ -119,8 +124,8 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
             sx={{
               borderBottom: "2px solid",
               opacity: "0.5",
-              marginTop: "15px",
-              marginBottom: "15px",
+              marginTop: "25px",
+              marginBottom: "25px",
             }}
           />
           {!props.selectedNode1 && !props.selectedNode2 ? (
@@ -131,14 +136,13 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
-                marginBottom: "25px",
+                justifyContent: "space-between",
               }}
             >
               {props.selectedNode1 ? (
                 <NodeInfo
                   style={{
                     opacity: "1",
-                    marginTop: "20px",
                   }}
                   title={"Node 1"}
                   node={props.selectedNode1}
@@ -187,21 +191,27 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
               ) : (
                 <></>
               )}
+              <Divider
+                variant={"middle"}
+                orientation={"horizontal"}
+                flexItem
+                aria-hidden={"true"}
+                sx={{
+                  borderBottom: "2px solid",
+                  opacity: "0.5",
+                  marginTop: "25px",
+                  marginBottom: "25px",
+                }}
+              />
             </Box>
           )}
-          <Divider
-            variant={"middle"}
-            orientation={"horizontal"}
-            flexItem
-            aria-hidden={"true"}
-            sx={{
-              borderBottom: "2px solid",
-              opacity: "0.5",
-            }}
-          />
           <FilterSlider
             filterInfo={props.filterInfo}
             handleIconStateChange={props.handleIconStateChange}
+            sx={{
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
           />
         </Stack>
       </Box>
