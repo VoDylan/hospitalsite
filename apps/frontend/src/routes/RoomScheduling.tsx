@@ -127,6 +127,7 @@ function RoomScheduling() {
           mb: "5vh",
         }}
       >
+        <Typography>Jacob Murphy, Spencer Trautz</Typography>
         <Grid
           item
           xs={12}
@@ -244,7 +245,7 @@ function RoomScheduling() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography>Jacob Murphy, Spencer Trautz</Typography>
+
     </Stack>
   );
 }

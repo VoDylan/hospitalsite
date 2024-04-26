@@ -130,6 +130,7 @@ function FlowerDeliveryService() {
         overflowX: "hidden",
       }}
     >
+
       <Grid
         container
         direction={"row"}
@@ -143,6 +144,12 @@ function FlowerDeliveryService() {
           mb: "5vh",
         }}
       >
+        <Typography
+          align={"center"}
+
+        >
+          Jacob Murphy, Jingxu (Rick) Wang
+        </Typography>
         <Grid
           item
           xs={12}
