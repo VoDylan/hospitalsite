@@ -1,3 +1,9 @@
-<svg width="70" height="70" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="50" cy="50" r="48" fill="#7E36C2" stroke="black" stroke-width="4"/>
+<svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path id="Ellipse 1" d="M98 50C98 76.5097 76.5097 98 50 98C23.4903 98 2 76.5097 2 50C2 23.4903 23.4903 2 50 2C76.5097 2 98 23.4903 98 50Z" fill="#7E36C2" stroke="black" stroke-width="4"/>
+<path id="Vector 2" d="M11 25H9.83454L9.25995 26.014C0.40284 41.6442 0.922804 59.3961 9.26352 73.9923L9.83936 75H11H89.5H90.576L91.1689 74.1021C95.8957 66.944 97.9912 57.7768 97.8886 49.039C97.7862 40.3194 95.49 31.7455 91.1089 25.812L90.5094 25H89.5H11Z" fill="white" stroke="black" stroke-width="4"/>
+<rect id="Rectangle 1" x="10" y="47" width="13" height="7" fill="black"/>
+<rect id="Rectangle 5" x="78" y="47" width="13" height="7" fill="black"/>
+<rect id="Rectangle 4" x="61" y="47" width="13" height="7" fill="black"/>
+<rect id="Rectangle 3" x="44" y="47" width="13" height="7" fill="black"/>
+<rect id="Rectangle 2" x="27" y="47" width="13" height="7" fill="black"/>
 </svg>

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import MapNode from "common/src/map/MapNode.ts";
-import {NodeTypes} from "common/src/map/MapNodeType.ts";
+import {NodeType} from "common/src/map/MapNodeType.ts";
 import FilterManager, {FilterValueType, generateFilterValue} from "common/src/filter/FilterManager.ts";
 import {FilterName} from "common/src/filter/FilterName.ts";
 import Filter from "common/src/filter/filters/Filter.ts";
@@ -33,70 +33,70 @@ export interface IRenderInfo {
 }
 
 const filterRenderInfo: Map<FilterType, IRenderInfo> = new Map([
-  [NodeTypes.CONF, {
+  [NodeType.CONF, {
     iconColor: "#1CA7EC",
     filterName: "Conference",
-    filterType: NodeTypes.CONF,
+    filterType: NodeType.CONF,
     img: confImage,
   }],
-  [NodeTypes.DEPT, {
+  [NodeType.DEPT, {
     iconColor: "#72c41c",
     filterName: "Department",
-    filterType: NodeTypes.DEPT,
+    filterType: NodeType.DEPT,
     img: deptImage,
   }],
-  [NodeTypes.LABS, {
+  [NodeType.LABS, {
     iconColor: "#e88911",
     filterName: "Labs",
-    filterType: NodeTypes.LABS,
+    filterType: NodeType.LABS,
     img: labsImage,
   }],
-  [NodeTypes.SERV, {
+  [NodeType.SERV, {
     iconColor: "#e88911",
     filterName: "Service",
-    filterType: NodeTypes.SERV,
+    filterType: NodeType.SERV,
     img: serviceImage,
   }],
-  [NodeTypes.INFO, {
+  [NodeType.INFO, {
     iconColor: "#1CA7EC",
     filterName: "Info",
-    filterType: NodeTypes.INFO,
+    filterType: NodeType.INFO,
     img: infoImage,
   }],
-  [NodeTypes.REST, {
+  [NodeType.REST, {
     iconColor: "#72c41c",
     filterName: "Restrooms",
-    filterType: NodeTypes.REST,
+    filterType: NodeType.REST,
     img: bathroomImage,
   }],
-  [NodeTypes.RETL, {
+  [NodeType.RETL, {
     iconColor: "#e88911",
     filterName: "Retail",
-    filterType: NodeTypes.RETL,
+    filterType: NodeType.RETL,
     img: retailImage,
   }],
-  [NodeTypes.STAI, {
+  [NodeType.STAI, {
     iconColor: "#72c41c",
     filterName: "Stairs",
-    filterType: NodeTypes.STAI,
+    filterType: NodeType.STAI,
     img: stairsImage,
   }],
-  [NodeTypes.ELEV, {
+  [NodeType.ELEV, {
     iconColor: "#1CA7EC",
     filterName: "Elevators",
-    filterType: NodeTypes.ELEV,
+    filterType: NodeType.ELEV,
     img: elevatorImage,
   }],
-  [NodeTypes.EXIT, {
+  [NodeType.EXIT, {
     iconColor: "red",
     filterName: "Exits",
-    filterType: NodeTypes.EXIT,
+    filterType: NodeType.EXIT,
     img: exitImage,
   }],
-  [NodeTypes.HALL, {
+  [NodeType.HALL, {
     iconColor: "#7e36c2",
     filterName: "Hall",
-    filterType: NodeTypes.HALL,
+    filterType: NodeType.HALL,
     img: hallImage,
   }]
 ]);
@@ -152,7 +152,7 @@ export const useFilters = (includeHalls: boolean): [
       console.log("Registering filters");
       const newRegisteredFilters: Map<FilterType, IFilterState> = new Map<FilterType, IFilterState>();
       for(const type of ValidFilterTypeList) {
-        if(!includeHalls && (type == NodeTypes.HALL)) continue;
+        if(!includeHalls && (type == NodeType.HALL)) continue;
         newRegisteredFilters.set(type, {
           filterValue: generateFilterValue(false, type),
           renderInfo: filterRenderInfo.get(type),

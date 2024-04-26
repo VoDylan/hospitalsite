@@ -153,7 +153,11 @@ export default function MapEditingPage2() {
               </>
             </Paper>
             <Floors setFloor={setFloor} />
-            <MapRender filterInfo={[...filterInfo.values()]} floor={floor}/>
+            <MapRender
+              filterInfo={filterInfo}
+              floor={floor}
+              filteredNodes={filteredNodes}
+            />
           </Box>
         </Stack>
       </Box>

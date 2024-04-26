@@ -20,7 +20,7 @@ export const emptyNodeInfo: MapNodeType = {
   shortName: "",
 };
 
-export enum NodeTypes {
+export enum NodeType {
   ELEV = "ELEV",
   STAI = "STAI",
   SERV = "SERV",
@@ -35,15 +35,23 @@ export enum NodeTypes {
 }
 
 export const ValidNodeTypesList = [
-  NodeTypes.ELEV,
-  NodeTypes.STAI,
-  NodeTypes.SERV,
-  NodeTypes.INFO,
-  NodeTypes.REST,
-  NodeTypes.EXIT,
-  NodeTypes.CONF,
-  NodeTypes.DEPT,
-  NodeTypes.LABS,
-  NodeTypes.RETL,
-  NodeTypes.HALL,
+  NodeType.ELEV,
+  NodeType.STAI,
+  NodeType.SERV,
+  NodeType.INFO,
+  NodeType.REST,
+  NodeType.EXIT,
+  NodeType.CONF,
+  NodeType.DEPT,
+  NodeType.LABS,
+  NodeType.RETL,
+  NodeType.HALL,
 ];
+
+export const getNodeTypeFromStr = (strType: string): NodeType | undefined => {
+  for(const type of ValidNodeTypesList) {
+    if(type === strType) return type;
+  }
+
+  return undefined;
+};

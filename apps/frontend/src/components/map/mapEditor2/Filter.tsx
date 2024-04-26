@@ -2,7 +2,7 @@ import {Stack, Typography} from "@mui/material";
 import React, {useRef} from "react";
 
 // Import your PNG images for filters
-import {NodeTypes} from "common/src/map/MapNodeType.ts";
+import {NodeType} from "common/src/map/MapNodeType.ts";
 import {IFilterState, IRenderInfo} from "../../../hooks/useFilters.tsx";
 
 interface FilterProps {
@@ -18,7 +18,7 @@ function Filter(props: FilterProps) {
   return (
     <Stack
       direction={"row"}
-      spacing={renderInfo.current.filterType === NodeTypes.EXIT ? 0.7 : renderInfo.current.filterType === "floor" ? 2.2 : 1.5}
+      spacing={renderInfo.current.filterType === NodeType.EXIT ? 0.7 : renderInfo.current.filterType === "floor" ? 2.2 : 1.5}
       alignItems="center" // Align items to the center
       sx={{ display: "flex", justifyContent: "flex-start" }} // Align stack items to the left
     >
@@ -27,7 +27,7 @@ function Filter(props: FilterProps) {
         alt={renderInfo.current.filterName}
         style={{
           width:
-            renderInfo.current.filterType === NodeTypes.EXIT
+            renderInfo.current.filterType === NodeType.EXIT
             ? iconSize * 1.5
             : renderInfo.current.filterType === "floor"
               ? 20 // Adjust width for floor icon
@@ -36,7 +36,7 @@ function Filter(props: FilterProps) {
             ? 20 // Adjust width for floor icon
             : iconSize,
           color: renderInfo.current.iconColor,
-          marginLeft: renderInfo.current.filterType === NodeTypes.EXIT ? -5 : renderInfo.current.filterType === "floor"
+          marginLeft: renderInfo.current.filterType === NodeType.EXIT ? -5 : renderInfo.current.filterType === "floor"
             ? 5 // Adjust width for floor icon
             : 1,
         }}

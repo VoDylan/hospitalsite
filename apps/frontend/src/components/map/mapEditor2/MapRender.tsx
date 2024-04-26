@@ -5,10 +5,15 @@ import {IFilterState} from "../../../hooks/useFilters.tsx";
 import BackgroundCanvas from "../BackgroundCanvas.tsx";
 import {useCanvasInfo} from "../../../hooks/useCanvasInfo.tsx";
 import {Floor} from "common/src/map/Floor.ts";
+import EdgeCanvas from "../EdgeCanvas.tsx";
+import MapNode from "common/src/map/MapNode.ts";
+import {FilterType} from "../../../common/types/FilterType.ts";
+import SymbolCanvas from "./SymbolCanvas.tsx";
 
 interface MapRenderProps {
-  filterInfo: IFilterState[];
+  filterInfo: Map<FilterType, IFilterState>;
   floor: Floor;
+  filteredNodes: MapNode[];
 }
 
 export default function MapRender(props: MapRenderProps) {
@@ -19,17 +24,17 @@ export default function MapRender(props: MapRenderProps) {
     positionY: 0,
   });
 
-  const [filterInfo, setFilterInfo] = useState<IFilterState[]>(props.filterInfo);
-
+  const [filterInfo, setFilterInfo] = useState<Map<FilterType, IFilterState>>(props.filterInfo);
   const [floor, setFloor] = useState<Floor>(props.floor);
+  const [filteredNodes, setFilteredNodes] = useState<MapNode[]>(props.filteredNodes);
 
   const [
     backgroundRendered,
     setBackgroundRendered,
-    width,
-    setWidth,
-    height,
-    setHeight
+    canvasWidth,
+    setCanvasWidth,
+    canvasHeight,
+    setCanvasHeight
   ] = useCanvasInfo();
 
   const handleTransform = (
@@ -42,8 +47,8 @@ export default function MapRender(props: MapRenderProps) {
 
   const handleBackgroundRenderStatus = (backgroundRendered: boolean, width: number, height: number) => {
     setBackgroundRendered(backgroundRendered);
-    setWidth(width);
-    setHeight(height);
+    setCanvasWidth(width);
+    setCanvasHeight(height);
   };
 
   useEffect(() => {
@@ -53,6 +58,10 @@ export default function MapRender(props: MapRenderProps) {
   useEffect(() => {
     setFloor(props.floor);
   }, [props.floor]);
+
+  useEffect(() => {
+    setFilteredNodes(props.filteredNodes);
+  }, [props.filteredNodes]);
 
   return (
     <>
@@ -80,6 +89,25 @@ export default function MapRender(props: MapRenderProps) {
               }}
               floor={floor}
               renderStatusCallback={handleBackgroundRenderStatus}
+            />
+            <EdgeCanvas
+              style={{
+                position: "absolute",
+                maxWidth: "100%",
+              }}
+              backgroundRendered={backgroundRendered}
+              width={canvasWidth}
+              height={canvasHeight}
+              floor={floor}
+              nodeData={filteredNodes}
+            />
+            <SymbolCanvas
+              backgroundRendered={backgroundRendered}
+              width={canvasWidth}
+              height={canvasHeight}
+              filterInfo={filterInfo}
+              filteredNodes={filteredNodes}
+              floor={floor}
             />
           </>
         </TransformComponent>
