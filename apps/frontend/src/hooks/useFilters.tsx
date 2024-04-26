@@ -132,7 +132,7 @@ export const useFilters = (includeHalls: boolean): [
   /**
    * Helper callback function that sets a given filter association's active status to the passed in status
    */
-  const setFilterActiveState = useCallback((filterType: FilterType, newActiveStatus: boolean) => {
+  const setFilterActiveState = useCallback((filterType: FilterType, newActiveStatus: boolean, updateFilterApplied: boolean) => {
     const newFilterState: IFilterState | undefined = filterAssociations.get(filterType);
     const oldFilterAssociations = filterAssociations;
 
@@ -141,7 +141,7 @@ export const useFilters = (includeHalls: boolean): [
       console.log(newFilterState);
       oldFilterAssociations.set(filterType, newFilterState);
       setFilterAssociations(oldFilterAssociations);
-      setFiltersApplied(false);
+      if(updateFilterApplied) setFiltersApplied(false);
     }
   }, [filterAssociations]);
 
@@ -173,7 +173,7 @@ export const useFilters = (includeHalls: boolean): [
     if(filtersRegistered && newFilterActiveStatus) {
       if(filterAssociations.has(newFilterActiveStatus.type)) {
         console.log(`Received new state for filter type ${newFilterActiveStatus.type}`);
-        setFilterActiveState(newFilterActiveStatus.type, newFilterActiveStatus.active);
+        setFilterActiveState(newFilterActiveStatus.type, newFilterActiveStatus.active, true);
       }
     }
   }, [filterAssociations, filtersRegistered, newFilterActiveStatus, setFilterActiveState]);
@@ -206,9 +206,10 @@ export const useFilters = (includeHalls: boolean): [
   useEffect(() => {
     if(selectAll && filtersRegistered) {
       for(const type of ValidFilterTypeList) {
-        setFilterActiveState(type, true);
+        setFilterActiveState(type, true, false);
       }
       setSelectAll(false);
+      setFiltersApplied(false);
     }
   }, [filtersRegistered, selectAll, setFilterActiveState]);
 
@@ -218,9 +219,10 @@ export const useFilters = (includeHalls: boolean): [
   useEffect(() => {
     if(selectNone && filtersRegistered) {
       for(const type of ValidFilterTypeList) {
-        setFilterActiveState(type, true);
+        setFilterActiveState(type, false, false);
       }
       setSelectNone(false);
+      setFiltersApplied(false);
     }
   }, [filtersRegistered, selectNone, setFilterActiveState]);
 

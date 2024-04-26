@@ -9,6 +9,10 @@ import {FilterType} from "../../../common/types/FilterType.ts";
 interface FilterSelectorProps {
   filterInfo: Map<FilterType, IFilterState>;
   handleIconStateChange: (filterType: FilterType, newState: boolean) => void;
+
+  handleSelectAllFilters: () => void;
+  handleSelectNofilters: () => void;
+
   sx?: SxProps<Theme>;
 }
 
@@ -76,6 +80,8 @@ export default function FilterSlider(props: FilterSelectorProps) {
               hideFilterMenu={() => setFilterMenuShown(false)}
               filterInfo={props.filterInfo}
               handleIconStateChange={props.handleIconStateChange}
+              handleSelectAllFilters={props.handleSelectAllFilters}
+              handleSelectNoFilters={props.handleSelectNofilters}
             />
           </div>
         </Slide>

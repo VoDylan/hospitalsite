@@ -111,6 +111,9 @@ export default function MapEditingPage2() {
             handleIconStateChange={(filterType, newState) => {
               setNewFilterActiveStatus({type: filterType, active: newState});
             }}
+
+            handleSelectAllFilters={() => selectAllFilters(true)}
+            handleSelectNoFilters={() => selectNoFilters(true)}
           />
           <MapRender/>
         </Stack>

@@ -37,6 +37,9 @@ interface MapEditorSideBar2Props {
   handleDeleteNode: (node: MapNode) => void;
 
   handleIconStateChange: (filterType: FilterType, newState: boolean) => void;
+
+  handleSelectAllFilters: () => void;
+  handleSelectNoFilters: () => void;
 }
 
 export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
@@ -208,6 +211,8 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
           <FilterSlider
             filterInfo={props.filterInfo}
             handleIconStateChange={props.handleIconStateChange}
+            handleSelectAllFilters={props.handleSelectAllFilters}
+            handleSelectNofilters={props.handleSelectNoFilters}
             sx={{
               marginLeft: "auto",
               marginRight: "auto",
