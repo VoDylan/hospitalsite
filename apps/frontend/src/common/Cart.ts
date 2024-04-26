@@ -118,4 +118,18 @@ export class Cart {
     }
   }
 
+  public clearCart() {
+    this.RRose = 0;
+    this.WRose = 0;
+    this.RCarn = 0;
+    this.Tulip = 0;
+    this.Balloons = 0;
+    this.Bears = 0;
+    this.Cards = 0;
+    this.presentFlowers = [];
+    this.presentGifts = [];
+    this.flowerAmounts = [];
+    this.giftAmounts = [];
+  }
+
 }
