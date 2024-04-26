@@ -115,7 +115,7 @@ export default function MapEditingPage2() {
             handleSelectAllFilters={() => selectAllFilters(true)}
             handleSelectNoFilters={() => selectNoFilters(true)}
           />
-          <MapRender/>
+          <MapRender filterInfo={[...filterInfo.values()]}/>
         </Stack>
       </Box>
     </>
