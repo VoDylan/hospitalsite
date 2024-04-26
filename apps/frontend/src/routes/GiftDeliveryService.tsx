@@ -147,6 +147,12 @@ function GiftDeliveryService() {
           mb: "5vh",
         }}
       >
+        <Typography
+          align={"center"}
+          fontStyle={"Open Sans"}
+        >
+          Yitao Hong, Arayah Remillard
+        </Typography>
         <Grid
           item
           xs={12}
@@ -305,7 +311,6 @@ function GiftDeliveryService() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography>Yitao Hong, Arayah Remillard</Typography>
     </Stack>
   );
 }

@@ -192,6 +192,15 @@ function DeviceDeliveryService() {
           mb: "5vh",
         }}
       >
+        <Typography
+          align={"center"}
+          fontStyle={"Open Sans"}
+
+          color={'white'}
+
+        >
+          Sebastian Gurgol, Jingxu (Rick) Wang
+        </Typography>
         <Grid
           item
           xs={12}
@@ -321,9 +330,7 @@ function DeviceDeliveryService() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography color={"white"}>
-        Sebastian Gurgol, Jingxu (Rick) Wang
-      </Typography>
+
     </Stack>
   );
 }

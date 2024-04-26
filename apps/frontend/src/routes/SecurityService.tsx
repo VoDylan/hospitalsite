@@ -134,6 +134,7 @@ function SecurityService() {
           mb: "5vh",
         }}
       >
+        <Typography>Dylan Vo, Robert Mellen</Typography>
         <Grid
           item
           xs={12}
@@ -265,7 +266,7 @@ function SecurityService() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography>Dylan Vo, Robert Mellen</Typography>
+
     </Stack>
   );
 }
