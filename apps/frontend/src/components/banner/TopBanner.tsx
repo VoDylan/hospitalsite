@@ -65,8 +65,6 @@ function TopBanner() {
             </LogoIconButton>
           </Link>
         </Stack>
-
-
           <Stack
             direction="row"
             spacing={2}

@@ -139,6 +139,7 @@ function MedicineDelivery() {
         overflowX: "hidden",
       }}
     >
+
       <Grid
         container
         direction={"row"}
@@ -151,6 +152,7 @@ function MedicineDelivery() {
           mb: "5vh",
         }}
       >
+        <Typography>Jacob Murphy, Spencer Trautz</Typography>
         <Grid
           item
           xs={12}
@@ -300,7 +302,7 @@ function MedicineDelivery() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography>Jacob Murphy, Spencer Trautz</Typography>
+
     </Stack>
   );
 }
