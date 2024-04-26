@@ -26,6 +26,10 @@ export default function FilterWithIcon(props: FilterWithIconProps) {
     if(renderInfo.current) handleIconState.current(renderInfo.current.filterType, iconState);
   }, [iconState]);
 
+  useEffect(() => {
+    setIconState(props.filterInfo.active);
+  }, [props.filterInfo.active]);
+
   return (
     (renderInfo.current ?
       <Stack

@@ -138,7 +138,6 @@ export const useFilters = (includeHalls: boolean): [
 
     if(newFilterState) {
       newFilterState.active = newActiveStatus;
-      console.log(newFilterState);
       oldFilterAssociations.set(filterType, newFilterState);
       setFilterAssociations(oldFilterAssociations);
       if(updateFilterApplied) setFiltersApplied(false);
@@ -182,7 +181,6 @@ export const useFilters = (includeHalls: boolean): [
    * If filters are registered, not applied, and the data is loaded, calculate the set of filtered nodes
    */
   useEffect(() => {
-    console.log(`filtersRegistered: ${filtersRegistered} | nodeDataLoaded: ${nodeDataLoaded}`);
     if(!filtersApplied && filtersRegistered && nodeDataLoaded) {
       console.log("Reapplying filters to node data");
       const activeFilterValues: FilterValueType[] = [];
@@ -225,10 +223,6 @@ export const useFilters = (includeHalls: boolean): [
       setFiltersApplied(false);
     }
   }, [filtersRegistered, selectNone, setFilterActiveState]);
-
-  useEffect(() => {
-    console.log(`FiltersApplied: ${filtersApplied}`);
-  }, [filtersApplied]);
 
   return [
     filteredNodes,
