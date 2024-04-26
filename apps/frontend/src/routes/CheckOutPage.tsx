@@ -1,8 +1,5 @@
 import React, {ChangeEvent, useState } from 'react';
 import { TextField, Button, CardContent, Typography, Box } from '@mui/material';
-import { FlowerDeliveryFormSubmission } from '../common/formSubmission/FlowerDeliveryFormSubmission.ts';
-import {useLocation} from "react-router-dom";
-import {GiftDeliveryFormSubmission} from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { CheckOutPageFormSubmission } from '../common/formSubmission/CheckOutPageFormSubmission.ts';
 import { CheckOutPageSubmitButton } from "../components/buttons/CheckOutPageSubmitButton.tsx";
 import InitCart from "../common/InitCart.ts";
@@ -19,68 +16,6 @@ const giftPrices = {
   cards: 1.99,
   bears: 5.99
 };
-
-const presentFlowers: string[] = [];
-function loadFlowers() {
-  if (InitCart.RRose !== 0){
-    presentFlowers.push("RRose");
-  }
-  if (InitCart.WRose !== 0){
-    presentFlowers.push("WRose");
-  }
-  if (InitCart.RCarn !== 0){
-    presentFlowers.push("RCarn");
-  }
-  if (InitCart.Tulip !== 0){
-    presentFlowers.push("Tulip");
-  }
-}
-
-const flowerAmounts: number[] = [];
-function loadFlowerAmounts() {
-  if (InitCart.RRose !== 0){
-    flowerAmounts.push(InitCart.RRose);
-  }
-  if (InitCart.WRose !== 0){
-    flowerAmounts.push(InitCart.WRose);
-  }
-  if (InitCart.RCarn !== 0){
-    flowerAmounts.push(InitCart.RCarn);
-  }
-  if (InitCart.Tulip !== 0){
-    flowerAmounts.push(InitCart.Tulip);
-  }
-}
-
-const presentGifts:string[] = [];
-function loadGifts() {
-  if (InitCart.Balloons !== 0){
-    presentGifts.push("Balloons");
-  }
-  if (InitCart.Cards !== 0){
-    presentGifts.push("Cards");
-  }
-  if (InitCart.Bears !== 0){
-    presentGifts.push("Bears");
-  }
-}
-
-const giftAmounts:number[] =[];
-
-function loadGiftAmounts() {
-  if (InitCart.Balloons !== 0){
-    giftAmounts.push(InitCart.Balloons);
-  }
-  if (InitCart.Cards !== 0){
-    giftAmounts.push(InitCart.Cards);
-  }
-  if (InitCart.Bears !== 0){
-    giftAmounts.push(InitCart.Bears);
-  }
-}
-
-const flowerCart: FlowerDeliveryFormSubmission[] = [];
-const giftCart: GiftDeliveryFormSubmission[] = [];
 
 function getFlowerTotal():number {
   let total = 0;
@@ -104,12 +39,6 @@ function getGiftTotal():number {
 }
 
 function CheckOutPage(){
-  //const [flowerAmounts, setFlowerAmounts] = React.useState<number[]>([0, 0, 0, 0]);
-
-  loadFlowers();
-  loadGifts();
-  loadFlowerAmounts();
-  loadGiftAmounts();
 
   const total = getFlowerTotal() + getGiftTotal();
   total.toFixed(2);
@@ -145,38 +74,6 @@ function CheckOutPage(){
       cvc: "",
     });
   }
-  const parseAmount = (amountStr: string): number => {
-    return parseInt(amountStr, 10) || 0;
-  };
-
-  const location = useLocation();
-  if (location.state !== null && location.state.RRose !== undefined) {
-    flowerCart[0] = location.state;
-    // const Famounts: number[] = [parseAmount(location.state.RRose), parseAmount(location.state.WRose), parseAmount(location.state.RCarn), parseAmount(location.state.Tulip)];
-    // setFlowerAmounts(Famounts);
-  }
-  else if (location.state !== null && location.state.balloons !== undefined) {
-    giftCart[0] = location.state;
-  }
-
-  // Calculate the total price for flowers
-  const totalFlowerPrice = flowerCart.reduce((acc, flower) => {
-    acc += parseAmount(flower.RRose) * flowerPrices['RRose'] +
-      parseAmount(flower.WRose) * flowerPrices['WRose'] +
-      parseAmount(flower.RCarn) * flowerPrices['RCarn'] +
-      parseAmount(flower.Tulip) * flowerPrices['Tulip'];
-    return acc;
-  }, 0);
-
-// Calculate the total price for gift
-  const totalGiftPrice = giftCart.reduce((acc, gift) => {
-    acc += parseAmount(gift.balloons) * giftPrices['balloons'] +
-      parseAmount(gift.cards) * giftPrices['cards'] +
-      parseAmount(gift.bears) * giftPrices['bears'] ;
-    return acc;
-  }, 0);
-
-  const totalPrice = totalFlowerPrice + totalGiftPrice;
 
   return (
     <Box sx={{ pt: '150px' }} display="flex" justifyContent="center" p={4}>
@@ -241,8 +138,8 @@ function CheckOutPage(){
           <Typography variant="h5" gutterBottom>Order Summary</Typography>
 
           {/* Flowers Summary */}
-          {presentFlowers.map((flowerKey, index) => {
-            const amount = flowerAmounts[index];
+          {InitCart.presentFlowers.map((flowerKey, index) => {
+            const amount = InitCart.flowerAmounts[index];
             const price = flowerPrices[flowerKey as keyof typeof flowerPrices]; // Assert the key type
             return (
               <Box display="flex" justifyContent="space-between" alignItems="center" key={flowerKey}>
@@ -254,8 +151,8 @@ function CheckOutPage(){
           })}
 
           {/* Gifts Summary */}
-          {presentGifts.map((giftKey, index) => {
-            const amount = giftAmounts[index];
+          {InitCart.presentGifts.map((giftKey, index) => {
+            const amount = InitCart.giftAmounts[index];
             const price = giftPrices[giftKey as keyof typeof giftPrices]; // Assert the key type
             return (
               <Box display="flex" justifyContent="space-between" alignItems="center" key={giftKey}>

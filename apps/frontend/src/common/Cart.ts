@@ -46,6 +46,38 @@ export class Cart {
     }
   }
 
+  presentFlowers: string[] = [];
+  public loadFlowers() {
+    if (this.RRose !== 0){
+      this.presentFlowers.push("RRose");
+    }
+    if (this.WRose !== 0){
+      this.presentFlowers.push("WRose");
+    }
+    if (this.RCarn !== 0){
+      this.presentFlowers.push("RCarn");
+    }
+    if (this.Tulip !== 0){
+      this.presentFlowers.push("Tulip");
+    }
+  }
+
+  flowerAmounts: number[] = [];
+  public loadFlowerAmounts() {
+    if (this.RRose !== 0){
+      this.flowerAmounts.push(this.RRose);
+    }
+    if (this.WRose !== 0){
+      this.flowerAmounts.push(this.WRose);
+    }
+    if (this.RCarn !== 0){
+      this.flowerAmounts.push(this.RCarn);
+    }
+    if (this.Tulip !== 0){
+      this.flowerAmounts.push(this.Tulip);
+    }
+  }
+
   public setGifts(gifts: GiftDeliveryFormSubmission) {
     if (gifts.location == this.location){
       this.Balloons = this.Balloons + this.parseAmount(gifts.balloons);
@@ -59,4 +91,31 @@ export class Cart {
       this.Bears = this.parseAmount(gifts.bears);
     }
   }
+
+  presentGifts:string[] = [];
+  public loadGifts() {
+    if (this.Balloons !== 0){
+      this.presentGifts.push("Balloons");
+    }
+    if (this.Cards !== 0){
+      this.presentGifts.push("Cards");
+    }
+    if (this.Bears !== 0){
+      this.presentGifts.push("Bears");
+    }
+  }
+
+  giftAmounts:number[] = [];
+  public loadGiftAmounts() {
+    if (this.Balloons !== 0){
+      this.giftAmounts.push(this.Balloons);
+    }
+    if (this.Cards !== 0){
+      this.giftAmounts.push(this.Cards);
+    }
+    if (this.Bears !== 0){
+      this.giftAmounts.push(this.Bears);
+    }
+  }
+
 }

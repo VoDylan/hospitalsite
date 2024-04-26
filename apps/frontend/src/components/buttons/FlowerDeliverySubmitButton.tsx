@@ -72,6 +72,8 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
         openWithSuccess();
         handleClear();
         InitCart.setFlowers(props.input);
+        InitCart.loadFlowers();
+        InitCart.loadFlowerAmounts();
       }
     }
   }
