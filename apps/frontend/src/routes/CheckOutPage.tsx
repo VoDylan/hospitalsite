@@ -239,41 +239,35 @@ function CheckOutPage(){
       <Box width="50%" paddingLeft={2}>
         <CardContent>
           <Typography variant="h5" gutterBottom>Order Summary</Typography>
-          {flowerCart.map((flower, index) => (
-            <React.Fragment key={index}>
-              {Object.keys(flowerPrices).map((flowerType) => {
-                const flowerKey = flowerType as keyof FlowerDeliveryFormSubmission;
-                const amountStr = flower[flowerKey] as string;
-                const amount = parseAmount(amountStr);
-                return amount > 0 && (
-                  <Box display="flex" justifyContent="space-between" alignItems="center" key={flowerType}>
-                    <Typography variant="subtitle1">{flowerType}</Typography>
-                    <Typography variant="body1">{amount}</Typography>
-                    <Typography variant="body1">${(amount * flowerPrices[flowerType as keyof typeof flowerPrices]).toFixed(2)}</Typography>
-                  </Box>
-                );
-              })}
-            </React.Fragment>
-          ))}
 
-          {giftCart.map((gift, index) => (
-            <React.Fragment key={`gift_${index}`}>
-              {Object.keys(giftPrices).map((giftType) => {
-                const giftKey = giftType as keyof GiftDeliveryFormSubmission;
-                const amountStr = gift[giftKey] as string;
-                const amount = parseAmount(amountStr);
-                return amount > 0 && (
-                  <Box display="flex" justifyContent="space-between" alignItems="center" key={giftType}>
-                    <Typography variant="subtitle1">{giftType}</Typography>
-                    <Typography variant="body1">{amount}</Typography>
-                    <Typography variant="body1">${(amount * giftPrices[giftType as keyof typeof giftPrices]).toFixed(2)}</Typography>
-                  </Box>
-                );
-              })}
-            </React.Fragment>
-          ))}
+          {/* Flowers Summary */}
+          {presentFlowers.map((flowerKey, index) => {
+            const amount = flowerAmounts[index];
+            const price = flowerPrices[flowerKey as keyof typeof flowerPrices]; // Assert the key type
+            return (
+              <Box display="flex" justifyContent="space-between" alignItems="center" key={flowerKey}>
+                <Typography variant="subtitle1">{flowerKey}</Typography>
+                <Typography variant="body1">{amount}</Typography>
+                <Typography variant="body1">${(amount * price).toFixed(2)}</Typography>
+              </Box>
+            );
+          })}
 
-          <Box display="flex" justifyContent="space-between">
+          {/* Gifts Summary */}
+          {presentGifts.map((giftKey, index) => {
+            const amount = giftAmounts[index];
+            const price = giftPrices[giftKey as keyof typeof giftPrices]; // Assert the key type
+            return (
+              <Box display="flex" justifyContent="space-between" alignItems="center" key={giftKey}>
+                <Typography variant="subtitle1">{giftKey}</Typography>
+                <Typography variant="body1">{amount}</Typography>
+                <Typography variant="body1">${(amount * price).toFixed(2)}</Typography>
+              </Box>
+            );
+          })}
+
+          {/* Total Price */}
+          <Box display="flex" justifyContent="space-between" mt={2}>
             <Typography variant="h6">Total Price: ${totalPrice.toFixed(2)}</Typography>
           </Box>
         </CardContent>
