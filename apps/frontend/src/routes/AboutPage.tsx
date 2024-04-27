@@ -53,6 +53,7 @@ export default function AboutPage() {
             "Director of Technical Operations at various corporations in the information systems and software field."}
           email={"wwong2@wpi.edu"}
           imagePath={ProfWong}
+          quote={"I like football"}
         />
         <AboutCardRight
           role={"Team Coach"}
@@ -62,6 +63,7 @@ export default function AboutPage() {
             "class, he enjoys skiing."}
           email={"caolsen@wpi.edu"}
           imagePath={Connor}
+          quote={"I like foot"}
         />
         <AboutCardLeft
           role={"Lead Software Engineer"}
@@ -71,6 +73,7 @@ export default function AboutPage() {
             "a Robotics Process Automation developer. In her free time, she enjoys exploring and cooking."}
           email={"ekajaia@wpi.edu"}
           imagePath={Elene}
+          quote={"I like football"}
         />
         <AboutCardRight
           role={"Assistant Lead"}
@@ -80,6 +83,7 @@ export default function AboutPage() {
             "FIRST robotics team. Outside of school, he enjoys playing the trumpet in a multitude of bands."}
           email={"kjschmottlach@wpi.edu"}
           imagePath={Kyle}
+          quote={"I like football"}
         />
         <AboutCardLeft
           role={"Assistant Lead"}
@@ -89,6 +93,7 @@ export default function AboutPage() {
             "for software. Outside of school, he enjoys snowboarding, reading, and playing the violin."}
           email={"dvo@wpi.edu"}
           imagePath={Dylan}
+          quote={"I like football"}
         />
         <AboutCardRight
           role={"Project Manager"}
@@ -98,6 +103,7 @@ export default function AboutPage() {
             "enjoys playing sports and weightlifting."}
           email={"mjwalsh1@wpi.edu"}
           imagePath={Matt}
+          quote={"I like football"}
         />
         <AboutCardLeft
           role={"Scrum Master"}
@@ -107,6 +113,7 @@ export default function AboutPage() {
             "automation engineer. Outside of school, he enjoys outdoor activities such as running, hiking, and camping."}
           email={"ramellen@wpi.edu"}
           imagePath={Robert}
+          quote={"I like football"}
         />
         <AboutCardRight
           role={"Product Owner"}
@@ -116,6 +123,7 @@ export default function AboutPage() {
             "CAD and DFM. Outside of school, he enjoys playing percussion and traveling."}
           email={"jwang23@wpi.edu"}
           imagePath={Rick}
+          quote={"I like football"}
         />
         <AboutCardLeft
           role={"Documentation Analyst"}
@@ -125,6 +133,7 @@ export default function AboutPage() {
             "for the Writing Center. Outside of school, she enjoys playing and watching basketball."}
           email={"ajremillard@wpi.edu"}
           imagePath={Arayah}
+          quote={"I like football"}
         />
         <AboutCardRight
           role={"Full Time Software Engineer"}
@@ -134,6 +143,7 @@ export default function AboutPage() {
             "with SQL. Outside of school, he enjoys transcribing music by ear to make sheet music."}
           email={"sagurgol@wpi.edu"}
           imagePath={Sebastian}
+          quote={"I like football"}
         />
         <AboutCardLeft
           role={"Full Time Software Engineer"}
@@ -143,6 +153,7 @@ export default function AboutPage() {
             "using SQL to manage databases. Outside of school, he enjoys fitness and snowboarding."}
           email={"yhong4@wpi.edu"}
           imagePath={Yitao}
+          quote={"I like football"}
         />
         <AboutCardRight
           role={"Full Time Software Engineer"}
@@ -152,6 +163,7 @@ export default function AboutPage() {
             "with a remote team. Outside of class, he enjoys power lifting and going to the gym."}
           email={"jjmurphy1@wpi.edu"}
           imagePath={Jacob}
+          quote={"I like football"}
         />
         <AboutCardLeft
           role={"Full Time Software Engineer"}
@@ -161,6 +173,7 @@ export default function AboutPage() {
             "Outside of class, he enjoys going on drives and is passionate about cars."}
           email={"sctrautz@wpi.edu"}
           imagePath={Spencer}
+          quote={"I like football"}
         />
         <br/>
         <Typography paddingTop={5} textAlign={"center"} variant={"h1"} color={"black"} fontSize={30}>
