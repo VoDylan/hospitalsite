@@ -297,7 +297,8 @@ export default function CalendarPage() {
                   },
                   '.MuiPickersDay-dayWithMargin': {
                     //color: '#186BD9',
-                  }
+                  },
+                  marginLeft: "20px"
                 }}
                 slots={{
                   day: ServerDay,
@@ -309,7 +310,7 @@ export default function CalendarPage() {
                 }}
               />
             </LocalizationProvider>
-           <h3>{handleOk(selectedDate)}</h3>
+           <h3 style={{marginLeft: "20px"}}>{handleOk(selectedDate)}</h3>
           </Grid>
           <Grid
             xs={6}
