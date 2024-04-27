@@ -131,5 +131,4 @@ export class Cart {
     this.flowerAmounts = [];
     this.giftAmounts = [];
   }
-
 }
