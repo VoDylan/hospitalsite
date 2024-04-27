@@ -150,6 +150,7 @@ function DisplayDatabase() {
       ...prevRowModesModel,
       [id]: { mode: GridRowModes.View },
     }));
+    window.location.reload();
   };
 
   const [nodeColumns] = useState<GridColDef[]>([
@@ -545,7 +546,6 @@ function DisplayDatabase() {
       const data = {
         id: newRow["id"],
         employeeID: newRow["employeeID"],
-        //userID: newRow["userID"],
         nodeID: newRow["nodeID"],
         serviceType: newRow["serviceType"],
         services: newRow["services"],
