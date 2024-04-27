@@ -113,7 +113,7 @@ function App() {
         },
         {
           path: "/testingTHREED",
-          element: <MapTestingTHREED/>
+          element: <MapTestingTHREED />,
         }
       ],
     },
