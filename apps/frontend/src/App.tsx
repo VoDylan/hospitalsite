@@ -31,6 +31,7 @@ import CalendarPage from "./routes/CalendarPage.tsx";
 import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 import CheckOutPage from "./routes/CheckOutPage.tsx";
+import MapTestingTHREED from "./components/map/MapTestingTHREED.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -110,6 +111,10 @@ function App() {
           path: "/MapEditingPage",
           element: <Auth0Protection component={MapEditingPage} />,
         },
+        {
+          path: "/testingTHREED",
+          element: <MapTestingTHREED/>
+        }
       ],
     },
   ]);
