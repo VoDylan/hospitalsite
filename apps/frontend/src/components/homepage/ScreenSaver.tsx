@@ -22,12 +22,14 @@ function ScreenSaver() {
     resetTimer();
     window.addEventListener("mousemove", handleUserActivity);
     window.addEventListener("keypress", handleUserActivity);
+    window.addEventListener("scroll", handleUserActivity);
 
     // Clean up event listeners
     return () => {
       clearTimeout(timeoutId);
       window.removeEventListener("mousemove", handleUserActivity);
       window.removeEventListener("keypress", handleUserActivity);
+      window.removeEventListener("scroll", handleUserActivity);
     };
   }, []);
 
@@ -36,7 +38,7 @@ function ScreenSaver() {
       top: 0, left: 0, width: '100%', height: '100%',
       zIndex: 99999999,
       visibility: showBox ? 'visible' : 'hidden',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
+      backgroundColor: 'rgba(0, 0, 0, 0.65)' }} />
   );
 }
 
