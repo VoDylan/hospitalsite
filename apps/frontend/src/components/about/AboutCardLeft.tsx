@@ -15,7 +15,7 @@ export function AboutCardLeft(props: AboutCardProps) {
           sx={{
             my: "2.5em",
             mx: 'auto',
-            backgroundColor: "lightgray",
+            backgroundImage: "linear-gradient(to right, lightgray, #2874C0)",
             maxWidth: "70%",
             borderRadius: "2em",
             minWidth: "70%", // forces all cards to be same width
