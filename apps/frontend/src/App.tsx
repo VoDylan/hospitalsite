@@ -110,6 +110,10 @@ function App() {
           path: "/MapEditingPage",
           element: <Auth0Protection component={MapEditingPage} />,
         },
+        {
+          path: "map/:startnode/:endnode",
+          element: <MapRoute />,
+        },
       ],
     },
   ]);
