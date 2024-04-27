@@ -3,6 +3,7 @@ import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import {CalendarPageFormSubmission} from "../../common/formSubmission/CalendarPageFormSubmission.ts";
+import sendSMS from "../sms/SendSMS.tsx";
 
 interface ButtonProps {
   text: string;
@@ -68,6 +69,7 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
       } else {
         handleClear();
         openWithSuccess();
+        sendSMS();
       }
     }
   }
