@@ -1,5 +1,10 @@
-import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
-import {useEffect, useRef, useState} from "react";
+import {
+  ReactZoomPanPinchContentRef,
+  ReactZoomPanPinchRef,
+  TransformComponent,
+  TransformWrapper
+} from "react-zoom-pan-pinch";
+import React, {useEffect, useRef, useState} from "react";
 import {TransformState} from "../../../common/TransformState.ts";
 import {IFilterState} from "../../../hooks/useFilters.tsx";
 import BackgroundCanvas from "../BackgroundCanvas.tsx";
@@ -14,6 +19,9 @@ interface MapRenderProps {
   filterInfo: Map<FilterType, IFilterState>;
   floor: Floor;
   filteredNodes: MapNode[];
+  selectNodeGeneral: (node: MapNode) => void;
+  selectedNode1: MapNode | null;
+  selectedNode2: MapNode | null;
 }
 
 export default function MapRender(props: MapRenderProps) {
@@ -27,6 +35,8 @@ export default function MapRender(props: MapRenderProps) {
   const [filterInfo, setFilterInfo] = useState<Map<FilterType, IFilterState>>(props.filterInfo);
   const [floor, setFloor] = useState<Floor>(props.floor);
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>(props.filteredNodes);
+
+  const transformWrapperRef = useRef<ReactZoomPanPinchContentRef>(null);
 
   const [
     backgroundRendered,
@@ -57,6 +67,9 @@ export default function MapRender(props: MapRenderProps) {
 
   useEffect(() => {
     setFloor(props.floor);
+    if(transformRef.current) {
+      transformRef.current.resetTransform();
+    }
   }, [props.floor]);
 
   useEffect(() => {
@@ -67,16 +80,21 @@ export default function MapRender(props: MapRenderProps) {
     <>
       <TransformWrapper
         onTransformed={handleTransform}
-        minScale={0.8}
-        initialScale={1.0}
-        initialPositionX={0}
-        initialPositionY={0}
+        minScale={0.2}
+        initialScale={0.2}
         doubleClick={{disabled: true}}
+        ref={transformWrapperRef}
+        centerOnInit
       >
         <TransformComponent
           wrapperStyle={{
             width: "100%",
             height: "100%",
+          }}
+          contentStyle={{
+            width: canvasWidth,
+            height: canvasHeight,
+            position: "absolute",
           }}
         >
           <>
@@ -108,6 +126,9 @@ export default function MapRender(props: MapRenderProps) {
               filterInfo={filterInfo}
               filteredNodes={filteredNodes}
               floor={floor}
+              selectNodeGeneral={props.selectNodeGeneral}
+              selectedNode1={props.selectedNode1}
+              selectedNode2={props.selectedNode2}
             />
           </>
         </TransformComponent>

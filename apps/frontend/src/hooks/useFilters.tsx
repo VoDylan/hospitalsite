@@ -30,6 +30,8 @@ export interface IRenderInfo {
   iconColor: string;
   filterName: string;
   img: string;
+  width: number;
+  height: number;
 }
 
 const filterRenderInfo: Map<FilterType, IRenderInfo> = new Map([
@@ -38,66 +40,88 @@ const filterRenderInfo: Map<FilterType, IRenderInfo> = new Map([
     filterName: "Conference",
     filterType: NodeType.CONF,
     img: confImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.DEPT, {
     iconColor: "#72c41c",
     filterName: "Department",
     filterType: NodeType.DEPT,
     img: deptImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.LABS, {
     iconColor: "#e88911",
     filterName: "Labs",
     filterType: NodeType.LABS,
     img: labsImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.SERV, {
     iconColor: "#e88911",
     filterName: "Service",
     filterType: NodeType.SERV,
     img: serviceImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.INFO, {
     iconColor: "#1CA7EC",
     filterName: "Info",
     filterType: NodeType.INFO,
     img: infoImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.REST, {
     iconColor: "#72c41c",
     filterName: "Restrooms",
     filterType: NodeType.REST,
     img: bathroomImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.RETL, {
     iconColor: "#e88911",
     filterName: "Retail",
     filterType: NodeType.RETL,
     img: retailImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.STAI, {
     iconColor: "#72c41c",
     filterName: "Stairs",
     filterType: NodeType.STAI,
     img: stairsImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.ELEV, {
     iconColor: "#1CA7EC",
     filterName: "Elevators",
     filterType: NodeType.ELEV,
     img: elevatorImage,
+    width: 34,
+    height: 34,
   }],
   [NodeType.EXIT, {
     iconColor: "red",
     filterName: "Exits",
     filterType: NodeType.EXIT,
     img: exitImage,
+    width: 55,
+    height: 34,
   }],
   [NodeType.HALL, {
     iconColor: "#7e36c2",
     filterName: "Hall",
     filterType: NodeType.HALL,
     img: hallImage,
+    width: 20,
+    height: 20,
   }]
 ]);
 

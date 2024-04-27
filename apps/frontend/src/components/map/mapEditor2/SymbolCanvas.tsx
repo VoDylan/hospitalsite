@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import MapNode from "common/src/map/MapNode.ts";
 import FilterManager, {
   generateFilterValue,
@@ -10,6 +10,7 @@ import {FilterType} from "../../../common/types/FilterType.ts";
 import {IFilterState, IRenderInfo} from "../../../hooks/useFilters.tsx";
 import {Box} from "@mui/material";
 import {getNodeTypeFromStr, NodeType} from "common/src/map/MapNodeType.ts";
+import MapIcon from "./MapIcon.tsx";
 
 interface SymbolCanvasProps {
   backgroundRendered: boolean;
@@ -18,6 +19,9 @@ interface SymbolCanvasProps {
   filterInfo: Map<FilterType, IFilterState>;
   filteredNodes: MapNode[];
   floor: Floor;
+  selectNodeGeneral: (node: MapNode) => void;
+  selectedNode1: MapNode | null;
+  selectedNode2: MapNode | null;
 }
 
 export default function SymbolCanvas(props: SymbolCanvasProps) {
@@ -68,14 +72,12 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
           const renderInfo: IRenderInfo | undefined = filterInfo.get(nodeTypeObj)!.renderInfo;
           if(renderInfo)
             return (
-              <img
-                alt={node.nodeType}
-                src={renderInfo.img}
-                style={{
-                  position: "absolute",
-                  top: node.ycoord,
-                  left: node.xcoord,
-                }}
+              <MapIcon
+                node={node}
+                renderInfo={renderInfo}
+                selectNodeGeneral={props.selectNodeGeneral}
+                selectedNode1={props.selectedNode1}
+                selectedNode2={props.selectedNode2}
               />
             );
           return <></>;

@@ -60,5 +60,19 @@ export const useSelectedNodes = () => {
     }
   }, [selectedNode1, selectedNode2]);
 
-  return {selectedNode1, selectedNode2, edgeBetween, setSelectedNode1, setSelectedNode2};
+  const selectNodeGeneral = (node: MapNode) => {
+    if(selectedNode1 && node.nodeID == selectedNode1.nodeID) return;
+    if(selectedNode2 && node.nodeID == selectedNode2.nodeID) return;
+
+    if(selectedNode1 && selectedNode2) {
+      setSelectedNode1(node);
+      setSelectedNode2(null);
+    } else if(selectedNode1) {
+      setSelectedNode2(node);
+    } else {
+      setSelectedNode1(node);
+    }
+  };
+
+  return {selectedNode1, selectedNode2, edgeBetween, setSelectedNode1, setSelectedNode2, selectNodeGeneral};
 };

@@ -70,7 +70,6 @@ export default function FilterSlider(props: FilterSelectorProps) {
             maxHeight: "100%",
           }}
           mountOnEnter
-          unmountOnExit
           addEndListener={() => {
             if(!filterMenuShown) setSendFilterMenuToBack(true);
           }}

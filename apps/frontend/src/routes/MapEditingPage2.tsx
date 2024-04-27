@@ -27,7 +27,8 @@ export default function MapEditingPage2() {
     selectedNode2,
     edgeBetween,
     setSelectedNode1,
-    setSelectedNode2
+    setSelectedNode2,
+    selectNodeGeneral,
   } = useSelectedNodes();
 
   const [
@@ -157,6 +158,9 @@ export default function MapEditingPage2() {
               filterInfo={filterInfo}
               floor={floor}
               filteredNodes={filteredNodes}
+              selectNodeGeneral={selectNodeGeneral}
+              selectedNode1={selectedNode1}
+              selectedNode2={selectedNode2}
             />
           </Box>
         </Stack>
