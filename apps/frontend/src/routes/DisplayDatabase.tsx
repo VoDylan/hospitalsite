@@ -177,10 +177,11 @@ function DisplayDatabase() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
+  const [employeeIDs, setEmployeeIDs] = useState<number[]>([]);
 
   const serviceColumns: GridColDef[] = [
     //{ field: "userID", headerName: "User ID", width: 100 },
-    { field: "employeeID", headerName: "Employee ID", width: 100 },
+    { field: "employeeID", headerName: "Employee ID", width: 100, editable: true, type: "singleSelect", valueOptions: employeeIDs},
     { field: "employeeName", headerName: "Employee Name", width: 125 },
     { field: "nodeID", headerName: "Node ID", width: 125 },
     { field: "serviceType", headerName: "Service Type", width: 125 },
@@ -237,7 +238,6 @@ function DisplayDatabase() {
   const [serviceRowData, setServiceRowData] = useState<ServiceParams[]>([]);
   const [employeeRowData, setEmployeeRowData] = useState<EmployeeParams[]>([]);
   const [employeeNameMapping, setEmployeeNameMapping] = useState<{ [key: string]: string }>({});
-
 
   const getNodeData = async () => {
     const { data } = await axios.get("/api/database/nodes");
@@ -305,6 +305,18 @@ function DisplayDatabase() {
     setServiceRowData(rowData);
   };
 
+  const getEmployeeIDs = async () => {
+    const { data } = await axios.get("/api/database/employees");
+    console.log("Gathered Employees");
+    console.log(data);
+
+    const rowData = [];
+    for (let i = 0; i < data.length; i++) {
+      rowData.push(data[i].employeeID);
+    }
+    setEmployeeIDs(rowData);
+  };
+
   const getEmployeeData = async () => {
     const { data } = await axios.get("/api/database/employees");
     console.log("Gathered Employees");
@@ -331,6 +343,7 @@ function DisplayDatabase() {
     getEdgeData();
     getServiceData();
     getEmployeeData();
+    getEmployeeIDs();
   }, []);
 
   function handleNodeImport(file: File) {
@@ -488,6 +501,7 @@ function DisplayDatabase() {
     };
 
     fileReader.readAsText(file);
+    window.location.reload();
   }
 
   function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
@@ -499,6 +513,7 @@ function DisplayDatabase() {
       handleNodeImport(file![0]);
     }
     console.log("Handling node import data");
+    window.location.reload();
   }
 
   function handleEdgeFileUpload(event: { target: { files: FileList | null } }) {
@@ -510,6 +525,7 @@ function DisplayDatabase() {
       handleEdgeImport(file![0]);
     }
     console.log("Handling node import data");
+    window.location.reload();
   }
 
   function handleEmployeeFileUpload(event: { target: { files: FileList | null } }) {
