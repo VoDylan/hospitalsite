@@ -114,7 +114,11 @@ function App() {
         {
           path: "/mapeditingpage2",
           element: <MapEditingPage2/>,
-        }
+        },
+        {
+          path: "map/:startnode/:endnode",
+          element: <MapRoute />,
+        },
       ],
     },
   ]);
