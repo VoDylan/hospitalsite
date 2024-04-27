@@ -570,7 +570,11 @@ function MapRoute() {
   const findStartingFloor = useCallback(() => {
     for (let i = 0; i < filteredNodes.length; i++) {
       if (filteredNodes[i].nodeID === startNode) {
+        if (transformRef.current) {
+          transformRef.current.resetTransform();
+        }
         return filteredNodes[i].floor.toString(); // Return floor as a string
+
       }
     }
   }, [filteredNodes, startNode]);
@@ -602,6 +606,9 @@ function MapRoute() {
 
         updateNodesData(path);
         setFloor(findStartingFloor() as Floor);
+        if (transformRef.current) {
+          transformRef.current.resetTransform();
+        }
 
         !path
           ? setErrorMessage("There is no path between nodes")
@@ -755,12 +762,18 @@ function MapRoute() {
             if (key.nodeID === filteredNodes[i].nodeID) {
               closeModal();
               setFloor(nodesToNextFloor.current.get(key)!);
+              if (transformRef.current) {
+                transformRef.current.resetTransform();
+              }
             }
           }
           for (const key of nodesToPrevFloor.current.keys()) {
             if (key.nodeID === filteredNodes[i].nodeID) {
               closeModal();
               setFloor(nodesToPrevFloor.current.get(key)!);
+              if (transformRef.current) {
+                transformRef.current.resetTransform();
+              }
             }
           }
 
