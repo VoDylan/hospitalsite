@@ -80,7 +80,7 @@ export function AboutCardLeft(props: AboutCardProps) {
                   </Typography>
                 </Stack>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={4} container justifyContent="flex-end">
                 <img
                     src={props.imagePath}
                     alt={"Picture of " + props.name}
