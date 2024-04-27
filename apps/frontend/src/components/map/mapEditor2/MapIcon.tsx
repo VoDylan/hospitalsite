@@ -1,6 +1,7 @@
 import MapNode from "common/src/map/MapNode.ts";
 import {IRenderInfo} from "../../../hooks/useFilters.tsx";
 import {useEffect, useState} from "react";
+import {NodeType} from "common/src/map/MapNodeType.ts";
 
 interface MapIconProps {
   node: MapNode;
@@ -19,13 +20,17 @@ export default function MapIcon(props: MapIconProps) {
   const [zIndex, setZIndex] = useState<number>(0);
 
   const handleHover = () => {
-    setIsHovered(true);
-    setZIndex(1);
+    if(!selected) {
+      setIsHovered(true);
+      setZIndex(1);
+    }
   };
 
   const handleUnhover = () => {
-    setIsHovered(false);
-    setZIndex(0);
+    if(!selected) {
+      setIsHovered(false);
+      setZIndex(0);
+    }
   };
 
   useEffect(() => {
@@ -38,20 +43,15 @@ export default function MapIcon(props: MapIconProps) {
 
   useEffect(() => {
     console.log("Checking selection");
-    if(props.selectedNode1 && props.selectedNode1.nodeID == props.node.nodeID) {
+    if((props.selectedNode1 && props.selectedNode1.nodeID == props.node.nodeID) ||
+      (props.selectedNode2 && props.selectedNode2.nodeID == props.node.nodeID)) {
       setSelected(true);
-      return;
+      setZIndex(1);
+    } else {
+      setSelected(false);
+      setZIndex(0);
     }
-    if(props.selectedNode2 && props.selectedNode2.nodeID == props.node.nodeID) {
-      setSelected(true);
-      return;
-    }
-    setSelected(false);
   }, [props.node.nodeID, props.selectedNode1, props.selectedNode2]);
-
-  useEffect(() => {
-    console.log(`Selected: ${selected}`);
-  }, [selected]);
 
   return (
     <div
@@ -62,7 +62,10 @@ export default function MapIcon(props: MapIconProps) {
         zIndex: zIndex,
         transform: (isHovered || selected) ? `scale(1.25)` : `scale(1)`,
         transition: "all 0.05s ease-in-out",
-        boxShadow: selected ? "2em 2em 2em 2em #F6BD38" : undefined,
+        boxShadow: selected ? "0 0 2em 0.5em #003A96" : undefined,
+        borderRadius: props.node.nodeType == NodeType.EXIT ? undefined : "100%",
+        width: iconWidth,
+        height: iconHeight,
       }}
       onMouseOver={() => handleHover()}
       onMouseOut={() => handleUnhover()}
