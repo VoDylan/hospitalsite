@@ -18,12 +18,14 @@ import {useNodeCreationInfo} from "../../../hooks/useNodeCreationInfo.tsx";
 import NodeCreator from "../NodeCreator.tsx";
 import useWindowSize from "../../../hooks/useWindowSize.tsx";
 import transformCoords2 from "../../../common/TransformCoords2.ts";
+import {Box} from "@mui/material";
 
 interface MapRenderProps {
   filterInfo: Map<FilterType, IFilterState>;
   floor: Floor;
   filteredNodes: MapNode[];
   selectNodeGeneral: (node: MapNode) => void;
+  deselectNodeGeneral: (node: MapNode) => void;
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
   dataLoaded: boolean;
@@ -126,7 +128,10 @@ export default function MapRender(props: MapRenderProps) {
   }, [props.filteredNodes]);
 
   return (
-    <>
+    <Box
+      width={"100%"}
+      height={"100%"}
+    >
       <TransformWrapper
         onTransformed={handleTransform}
         minScale={0.2}
@@ -175,6 +180,7 @@ export default function MapRender(props: MapRenderProps) {
               filteredNodes={filteredNodes}
               floor={floor}
               selectNodeGeneral={props.selectNodeGeneral}
+              deselectNodeGeneral={props.deselectNodeGeneral}
               selectedNode1={props.selectedNode1}
               selectedNode2={props.selectedNode2}
               handleNodeCreationRequest={handleNodeCreationRequest}
@@ -192,6 +198,6 @@ export default function MapRender(props: MapRenderProps) {
         :
         <></>
       }
-    </>
+    </Box>
   );
 }

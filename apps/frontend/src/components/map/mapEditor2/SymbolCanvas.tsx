@@ -18,6 +18,7 @@ interface SymbolCanvasProps {
   filteredNodes: MapNode[];
   floor: Floor;
   selectNodeGeneral: (node: MapNode) => void;
+  deselectNodeGeneral: (node: MapNode) => void;
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
   handleNodeCreationRequest: (event: React.MouseEvent, boundingElementRef: React.MutableRefObject<HTMLDivElement | null>) => void;
@@ -69,6 +70,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
                 node={node}
                 renderInfo={renderInfo}
                 selectNodeGeneral={props.selectNodeGeneral}
+                deselectNodeGeneral={props.deselectNodeGeneral}
                 selectedNode1={props.selectedNode1}
                 selectedNode2={props.selectedNode2}
               />

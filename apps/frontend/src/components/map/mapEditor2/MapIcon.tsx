@@ -8,6 +8,7 @@ interface MapIconProps {
   node: MapNode;
   renderInfo: IRenderInfo;
   selectNodeGeneral: (node: MapNode) => void;
+  deselectNodeGeneral: (node: MapNode) => void;
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
 }
@@ -34,6 +35,15 @@ export default function MapIcon(props: MapIconProps) {
     }
   };
 
+  const handleClick = () => {
+    if((props.selectedNode1 && props.selectedNode1.nodeID == props.node.nodeID) ||
+       (props.selectedNode2 && props.selectedNode2.nodeID == props.node.nodeID)) {
+      props.deselectNodeGeneral(props.node);
+    } else {
+      props.selectNodeGeneral(props.node);
+    }
+  };
+
   useEffect(() => {
     setIconWidth(props.renderInfo.width);
   }, [props.renderInfo.width]);
@@ -43,7 +53,6 @@ export default function MapIcon(props: MapIconProps) {
   }, [props.renderInfo.height]);
 
   useEffect(() => {
-    console.log("Checking selection");
     if((props.selectedNode1 && props.selectedNode1.nodeID == props.node.nodeID) ||
       (props.selectedNode2 && props.selectedNode2.nodeID == props.node.nodeID)) {
       setSelected(true);
@@ -63,7 +72,7 @@ export default function MapIcon(props: MapIconProps) {
           left: props.node.xcoord - (iconWidth / 2),
           zIndex: zIndex,
           transform: (isHovered || selected) ? `scale(1.25)` : `scale(1)`,
-          transition: "all 0.05s ease-in-out",
+          transition: "transform 0.05s ease-in-out",
           boxShadow: selected ? "0 0 2em 0.5em #003A96" : undefined,
           borderRadius: props.node.nodeType == NodeType.EXIT ? undefined : "100%",
           width: iconWidth,
@@ -71,7 +80,7 @@ export default function MapIcon(props: MapIconProps) {
         }}
         onMouseOver={() => handleHover()}
         onMouseOut={() => handleUnhover()}
-        onClick={() => props.selectNodeGeneral(props.node)}
+        onClick={handleClick}
       >
         <img
           alt={props.node.nodeType}

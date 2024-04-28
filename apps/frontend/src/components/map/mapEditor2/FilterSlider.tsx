@@ -1,6 +1,6 @@
 import {Box, Button, Stack, SxProps, Theme} from "@mui/material";
 import Slide from "@mui/material/Slide";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import FilterList from "./FilterList.tsx";
 import useWindowSize from "../../../hooks/useWindowSize.tsx";
 import {IFilterState} from "../../../hooks/useFilters.tsx";
@@ -20,10 +20,6 @@ export default function FilterSlider(props: FilterSelectorProps) {
   const [filterMenuShown, setFilterMenuShown] = useState<boolean>(false);
   const [sendFilterMenuToBack, setSendFilterMenuToBack] = useState<boolean>(true);
   const [, windowHeight] = useWindowSize();
-
-  useEffect(() => {
-    console.log(sendFilterMenuToBack);
-  }, [sendFilterMenuToBack]);
 
   return (
     <Stack

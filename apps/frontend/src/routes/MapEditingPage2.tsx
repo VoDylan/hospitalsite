@@ -29,6 +29,7 @@ export default function MapEditingPage2() {
     setSelectedNode1,
     setSelectedNode2,
     selectNodeGeneral,
+    deselectNodeGeneral,
   } = useSelectedNodes();
 
   const [
@@ -65,7 +66,8 @@ export default function MapEditingPage2() {
 
   useEffect(() => {
     setNodeDataLoadedFilters(dataLoaded);
-  }, [dataLoaded, setNodeDataLoadedFilters]);
+    setFiltersApplied(false);
+  }, [dataLoaded, setFiltersApplied, setNodeDataLoadedFilters]);
 
   useEffect(() => {
     console.log("Filtered Nodes");
@@ -159,6 +161,7 @@ export default function MapEditingPage2() {
               floor={floor}
               filteredNodes={filteredNodes}
               selectNodeGeneral={selectNodeGeneral}
+              deselectNodeGeneral={deselectNodeGeneral}
               selectedNode1={selectedNode1}
               selectedNode2={selectedNode2}
               dataLoaded={dataLoaded}
