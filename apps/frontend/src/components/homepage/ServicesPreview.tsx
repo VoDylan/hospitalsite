@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function ServicesPreview() {
   return (
-    <Box sx={{ marginTop: "-4%" }}>
+    <Box sx={{ marginTop: "4%" }}>
       <ServiceCarousel/>
       <Stack
         direction={"row"}
@@ -13,7 +13,7 @@ function ServicesPreview() {
           alignContent: "center",
           justifyContent: "end",
           marginRight: "45px",
-          marginBottom: "10px",
+          marginBottom: "45px",
         }}
       >
         <Link to={"/Services"}>

@@ -143,7 +143,7 @@ function Carousel() {
           position: "relative",
           display: "flex",
           flexDirection: "row",
-          marginTop: "5%",
+          marginTop: "6%",
           height: "220px",
           alignItems: "center",
           justifyContent: "center",
