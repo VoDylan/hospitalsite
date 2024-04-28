@@ -196,9 +196,7 @@ function DeviceDeliveryService() {
         <Typography
           align={"center"}
           fontStyle={"Open Sans"}
-
           color={'white'}
-
         >
           Sebastian Gurgol, Jingxu (Rick) Wang
         </Typography>
