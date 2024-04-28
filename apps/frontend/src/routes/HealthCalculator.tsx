@@ -75,28 +75,31 @@ export default function HealthCalculator() {
           xs={12}
           sx={{
             backgroundColor: "#186BD9",
-            //backgroundColor: "white",
           }}
           borderRadius={5}
         >
-          <Typography color={"white"} align={"center"} fontSize={40}>
-            Health & Wellness Calculator(s)
+          <Typography color={"white"} align={"center"} fontSize={40} width={"100vh"}>
+            Health & Wellness Calculators
           </Typography>
         </Grid>
-          <Grid container xs={12}>
+          <Grid container xs={9} direction={"column"}>
           <Grid
             item
             xs={6}
-            display={"flex"}
-            flex="1"
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
+            position={"fixed"}
+            mt={"5vh"}
+            mx={"5vh"}
           >
           <Tabs
             value={currentIndex}
             onChange={handleIndexChange}
             orientation={"vertical"}
+            sx={{
+              //backgroundColor: "grey",
+              width: "auto",
+              height: "auto",
+              boxShadow: "5",
+            }}
           >
             <Tab label='BMI Calculator' />
             <Tab label='Calories Burned Calculator' />
@@ -112,7 +115,7 @@ export default function HealthCalculator() {
         >
         <Grid
           item
-          xs={6}
+          xs={9}
           mt={"5vh"}
         >
           <Typography color={"black"} align={"center"} fontSize={18}>
@@ -144,11 +147,10 @@ export default function HealthCalculator() {
         {bmiValue && bmiMessage && (
           <Grid
             item
-            xs={12}
+            xs={9}
             mt={"2vh"}
             sx={{
               backgroundColor: "#186BD9",
-              //backgroundColor: "white",
             }}
             borderRadius={3}
           >
@@ -162,6 +164,26 @@ export default function HealthCalculator() {
         )}
         </Box>
           )}
+            {currentIndex === 0 && (
+            <Grid
+              sx={{
+                mx: "95vh",
+                width: "45vh",
+                backgroundColor: "#186BD9",
+            }}
+              borderRadius={3}
+              position={"fixed"}
+              mt={"5vh"}
+            >
+              <Typography color={"white"} align={"center"} fontSize={18}>
+                Please note: BMI weight calculations are not always accurate because they do not take into account factors such as muscle mass, bone density,
+                and overall body composition. This means that individuals with higher muscle mass or denser bones may be classified as overweight or obese based
+                on their BMI, even though they may have a healthy level of body fat.
+                <br />
+                [Source: https://www.medicalnewstoday.com]
+              </Typography>
+            </Grid>
+            )}
             {currentIndex === 1 && (
               <Box
                 display={"flex"}
@@ -171,7 +193,7 @@ export default function HealthCalculator() {
                 flexDirection="column"
               >
                 <Grid>
-                  <Typography color={"black"} align={"center"} fontSize={18}>
+                  <Typography color={"black"} align={"center"} fontSize={18} mt={"1vh"}>
                     Enter Your Weight (kg):
                   </Typography>
                   <Textbox
@@ -219,7 +241,7 @@ export default function HealthCalculator() {
                 {burned && (
                   <Grid
                     item
-                    xs={12}
+                    xs={6}
                     mt={"2vh"}
                     sx={{
                       backgroundColor: "#186BD9",
@@ -233,6 +255,27 @@ export default function HealthCalculator() {
                   </Grid>
                 )}
               </Box>
+            )}
+            {currentIndex === 1 && (
+              <Grid
+                sx={{
+                  mx: "95vh",
+                  width: "45vh",
+                  backgroundColor: "#186BD9",
+                }}
+                borderRadius={3}
+                position={"fixed"}
+                mt={"5vh"}
+              >
+                <Typography color={"white"} align={"center"} fontSize={18}>
+                  What is MET?: "A more precise measure of intensity involves the measurement of a person's oxygen consumption during exercise. Oxygen
+                  consumption and the intensity of exercise have a linear relationship; as exercise intensity increases, oxygen consumption increases.
+                  Oxygen consumption is measured in MET (metabolic equivalent of a task). There are a few different definitions of MET. The original
+                  definition, and the one used by this calculator, is based on oxygen utilization and body mass."
+                  <br />
+                  [Source: https://www.calculator.net/calories-burned-calculator.html]
+                </Typography>
+              </Grid>
             )}
         </Grid>
       </React.Fragment>
