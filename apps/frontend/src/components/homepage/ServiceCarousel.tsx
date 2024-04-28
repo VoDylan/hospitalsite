@@ -5,6 +5,7 @@ import gift from "../../images/servicePageImages/giftBasket.jpg";
 import medicine from "../../images/servicePageImages/medicineCard.jpg";
 import signL from "../../images/language.webp";
 
+
 interface secondaryCardData {
   image: string;
   title: string;
@@ -50,14 +51,14 @@ function ServiceCarousel() {
       <Stack
         sx={{
           margin: "70px",
-          marginBottom: "1%",
-          marginTop: "2.5%",
+          marginBottom: "2%",
+          marginTop: "-2%",
         }}
         direction={"row"}
         spacing={6}
         display={"flex"}
         alignContent={"center"}
-        justifyContent={"center"}
+        justifyContent={"center"} id="service-carousel"
       >
         {secondaryCards.map((card, index) => (
           <ServiceCards
