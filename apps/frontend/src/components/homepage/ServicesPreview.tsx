@@ -12,13 +12,13 @@ function ServicesPreview() {
           display: "flex",
           alignContent: "center",
           justifyContent: "end",
-          marginRight: "45px",
+          marginRight: "150px",
           marginBottom: "45px",
         }}
       >
         <Link to={"/Services"}>
           <Box sx={{
-            marginTop: "-72px"
+            marginTop: "-20px"
 
           }}>
           <Button variant="contained" size="small">
