@@ -4,12 +4,13 @@ import {Floor, floorStrToObj} from "common/src/map/Floor.ts";
 
 interface FloorProps {
   setFloor: (newFloor: Floor) => void;
-  activeFloor: string; // Add the activeFloor prop
+  activeFloor: Floor; // Add the activeFloor prop
 }
 
 function Floors(props: FloorProps) {
   // State to track the active button
   const [activeButton, setActiveButton] = useState<string>(props.activeFloor); // Initialize activeButton with activeFloor prop
+
   useEffect(() => {
     setActiveButton(props.activeFloor);
   }, [props.activeFloor]);

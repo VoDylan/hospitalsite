@@ -155,7 +155,10 @@ export default function MapEditingPage2() {
                 )}
               </>
             </Paper>
-            <Floors setFloor={setFloor} />
+            <Floors
+              setFloor={setFloor}
+              activeFloor={floor}
+            />
             <MapRender
               filterInfo={filterInfo}
               floor={floor}
