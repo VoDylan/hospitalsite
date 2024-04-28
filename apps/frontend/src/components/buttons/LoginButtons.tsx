@@ -20,8 +20,6 @@ function LoginButtons(props: LoginButtonsProps) {
         variant="contained"
         onClick={props.onClick}
         sx={{
-          borderRadius: "8px",
-          marginRight: "5px",
         }}
       >
         Submit

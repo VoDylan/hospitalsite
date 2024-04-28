@@ -1,4 +1,4 @@
-import { Button, Paper, Stack, Box } from "@mui/material";
+import { Button, Paper, Stack, Box, Typography } from "@mui/material";
 import RemoveIcon from '@mui/icons-material/Remove';
 import React, {useState} from "react";
 import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
@@ -8,7 +8,8 @@ import PlaceIcon from '@mui/icons-material/Place';
 import TurnRightIcon from '@mui/icons-material/TurnRight';
 import TurnLeftIcon from '@mui/icons-material/TurnLeft';
 import NorthIcon from '@mui/icons-material/North';
-// import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import EastIcon from '@mui/icons-material/East';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import Elevator from "../../images/realMapIcons/elevator.svg";
 import WalkingPerson from "../../images/mapIcons/WalkingPerson.png";
 
@@ -184,9 +185,9 @@ export default function TextIcon(props: {
           display: "flex",
           height: "100%",
           flexDirection: "column",
-          marginTop: "1%",
           borderRadius: "0%",
           overflowY: "auto", // Apply overflow only to the Paper component
+          zIndex: 1000
         }}
         elevation={4}
       >
@@ -200,26 +201,26 @@ export default function TextIcon(props: {
               }}
             >
               <Stack direction={"row"} sx={{ padding: "10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                {/*<Stack direction={"row"} spacing={0.4}>*/}
-                {/*  <Typography*/}
-                {/*    color={"white"}*/}
-                {/*    sx={{*/}
-                {/*      minWidth: "90px"*/}
-                {/*    }}*/}
-                {/*  >*/}
-                {/*    Est. Travel:*/}
-                {/*  </Typography>*/}
-                {/*  <DirectionsWalkIcon sx={{ fontSize: "large", color: "white", marginTop: "20px" }} />*/}
-                {/*  <Typography*/}
-                {/*    color={"#34CB2C"}*/}
-                {/*    sx={{*/}
-                {/*      minWidth: "90px",*/}
-                {/*      fontWidth: "bold",*/}
-                {/*    }}*/}
-                {/*  >*/}
-                {/*    6 min*/}
-                {/*  </Typography>*/}
-                {/*</Stack>*/}
+                <Stack direction={"row"} spacing={0.4}>
+                  <Typography
+                    color={"white"}
+                    sx={{
+                      minWidth: "90px"
+                    }}
+                  >
+                    Est. Travel:
+                  </Typography>
+                  <DirectionsWalkIcon sx={{ fontSize: "large", color: "white", marginTop: "20px" }} />
+                  <Typography
+                    color={"#34CB2C"}
+                    sx={{
+                      minWidth: "90px",
+                      fontWidth: "bold",
+                    }}
+                  >
+                    6 min
+                  </Typography>
+                </Stack>
                 <Button
                   endIcon={<RemoveIcon sx={{ fontSize: "large", color: "white" }} />} // Set the font size to large and color to white
                   onClick={props.handleButtonClick2}
@@ -231,6 +232,31 @@ export default function TextIcon(props: {
                 />
               </Stack>
             </Box>
+            <Box
+              sx={{
+                backgroundColor: "#003A96",
+                width: "100%",
+                height: "40px",
+                overflowX: "auto", // Enable horizontal scrolling
+                whiteSpace: "nowrap", // Prevent wrapping of buttons
+              }}
+            >
+              <Stack direction={"row"} sx={{ display: "flex", alignItems: "center" }}>
+                {props.nodesData.map((floorData, index) => (
+                  <>
+                    {/* Render arrow icon before each floor except the first */}
+                    {index !== 0 && props.nodesData[index - 1].floor !== floorData.floor && (
+                      <EastIcon key={`arrow_${index}`} fontSize={"small"} sx={{ color: "white" }} />
+                    )}
+                    {/* Render floor button only if it's different from the previous floor */}
+                    {index === 0 || props.nodesData[index - 1].floor !== floorData.floor ? (
+                      <Button onClick={() => props.onClickText(props.nodesData[index].floor as Floor)} key={`floor_${index}`} sx={{ color: "white" }}>{floorData.floor}</Button>
+                    ) : null}
+                  </>
+                ))}
+              </Stack>
+            </Box>
+
             {props.nodesData.map((item, index) => (
               <Stack direction="row" alignItems="center" key={index}>
 
