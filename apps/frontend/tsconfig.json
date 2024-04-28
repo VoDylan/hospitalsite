@@ -3,13 +3,16 @@
   "compilerOptions": {
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "jsx": "react-jsx",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-/*    "types": [
-      "node"
-    ]*/
+    "allowSyntheticDefaultImports": true,
+
+
+    /*    "types": [
+          "node"
+        ]*/
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }],

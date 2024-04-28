@@ -80,9 +80,6 @@
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.0",
     "express": "^4.19.2",
-    "fs": "^0.0.1-security",
-    "fs-fs": "^1.0.0",
-    "fs-js": "^1.0.6",
     "lodash": "^4.17.21",
     "multer": "^1.4.5-lts.1",
     "prisma": "^5.11.0",
@@ -93,7 +90,8 @@
     "react-material-ui-carousel": "^3.4.2",
     "react-modal": "^3.16.1",
     "react-responsive-modal": "^6.4.2",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "twilio": "^5.0.4"
   },
   "prisma": {
     "schema": "./packages/database/prisma/schema.prisma"
