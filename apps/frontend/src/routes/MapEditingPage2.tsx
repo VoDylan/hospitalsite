@@ -14,6 +14,7 @@ import {useLegend} from "../hooks/useLegend.tsx";
 import Floors from "../components/map/FloorTabs.tsx";
 import {useFloor} from "../hooks/useFloor.tsx";
 
+
 export default function MapEditingPage2() {
   const {
     nodeData,
