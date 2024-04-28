@@ -58,7 +58,7 @@ const LoginButton: React.FC = () => {
   return (
     <Button
       variant="contained"
-      sx={{ width: 220 }}
+      sx={{ width: 200 }}
       onClick={user ? handleLogout : handleLogin}
     >
       {user ? "Logout" : "Login"}
