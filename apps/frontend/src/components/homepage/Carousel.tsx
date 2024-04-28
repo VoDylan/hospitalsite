@@ -9,6 +9,8 @@ import CustomCard from "./Card.tsx"; // Update path to Card component
 
 import noLady from "../../videos/noLady.mp4";
 import mapVideo from "../../videos/finaledit2.mp4";
+import HospitalPOV from "../../videos/HospitalPOV.mp4";
+
 
 
 interface CardData {
@@ -62,6 +64,14 @@ function Carousel() {
 
   useEffect(() => {
     const mainCards: CardData[] = [
+      {
+        image: HospitalPOV,
+        title: "Welcome",
+        buttonText: "Go To About Us!",
+        path: "/About",
+        cardTitle: "Welcome to Brigham and Women's Hospital",
+        cardDescription: " ",
+      },
       {
         image: mapVideo,
         title: "Directions",
