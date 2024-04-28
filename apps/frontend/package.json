@@ -35,6 +35,9 @@
     "common": "workspace:*",
     "dayjs": "^1.11.10",
     "framer-motion": "^11.0.25",
+    "fs": "^0.0.1-security",
+    "fs-fs": "^1.0.0",
+    "fs-js": "^1.0.6",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "postcss": "^8.4.35",
@@ -50,7 +53,7 @@
     "react-zoom-pan-pinch": "^3.4.4",
     "serve": "^14.2.0",
     "sort-by": "^1.2.0",
-    "styled-components": "^6.1.8",
+    "styled-components": "^.1.8",
     "tailwindcss": "^3.4.1",
     "twilio": "^5.0.4",
     "v4": "^0.0.1"

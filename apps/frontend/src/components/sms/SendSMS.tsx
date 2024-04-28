@@ -8,7 +8,6 @@ const myNumber = '+18667816473';
 export default function sendSMS() {
   if (accountSid && authToken && myNumber && twilioNumber) {
     const client = new Twilio(accountSid, authToken);
-
     client.messages
       .create({
         from: twilioNumber,
