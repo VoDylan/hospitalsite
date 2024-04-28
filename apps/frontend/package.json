@@ -35,6 +35,8 @@
     "common": "workspace:*",
     "dayjs": "^1.11.10",
     "framer-motion": "^11.0.25",
+    "fs-fs": "^1.0.0",
+    "fs-js": "^1.0.6",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "postcss": "^8.4.35",
@@ -57,7 +59,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
-    "@types/node": "^20.2.5",
+    "@types/node": "^20.12.7",
     "@types/prop-types": "^15.7.5",
     "@types/react": "^18.0.37",
     "@types/react-bootstrap": "^0.32.32",
