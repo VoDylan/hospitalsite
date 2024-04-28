@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function ServicesPreview() {
   return (
-    <Box>
+    <Box sx={{ marginTop: "-4%" }}>
       <ServiceCarousel/>
       <Stack
         direction={"row"}

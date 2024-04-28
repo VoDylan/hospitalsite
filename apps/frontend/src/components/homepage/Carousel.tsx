@@ -99,7 +99,7 @@ function Carousel() {
           alignItems: "center",
           alignContent: "center",
           justifyContent: "center",
-          height: "50vh",
+          height: "40vh",
           width: "100%",
         }}
       >
@@ -144,7 +144,7 @@ function Carousel() {
           position: "relative",
           display: "flex",
           flexDirection: "row",
-          marginTop: "4%",
+          marginTop: "6%",
           height: "220px",
           alignItems: "center",
           justifyContent: "center",
