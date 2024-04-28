@@ -33,6 +33,12 @@ const NodeDropDown: React.FC<NodeDropDownProps> = (props) => {
         const updatedNodes: NodeData[] = [];
 
         for (let i = 0; i < nodeIDs.length; i++) {
+          if (props.filterHalls && nodeTypes[i] === "HALL") {
+            continue;
+          }
+          if (props.filterElevators && nodeTypes[i] === "ELEV") {
+            continue;
+          }
           updatedNodes.push({
             nodeID: nodeIDs[i],
             longName: longNames[i],
@@ -47,7 +53,7 @@ const NodeDropDown: React.FC<NodeDropDownProps> = (props) => {
     };
 
     fetchNodeData();
-  }, []);
+  }, [props.filterElevators, props.filterHalls]);
 
   const EmployeeDropDownData: LabelValuePair[] = nodesFromDB.map((node: NodeData) => ({
     value: node.nodeID,
