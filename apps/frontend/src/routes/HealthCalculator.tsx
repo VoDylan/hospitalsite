@@ -168,15 +168,16 @@ export default function HealthCalculator() {
             <Grid
               sx={{
                 mx: "95vh",
-                width: "45vh",
+                width: "50vh",
                 backgroundColor: "#186BD9",
             }}
               borderRadius={3}
               position={"fixed"}
               mt={"5vh"}
             >
+              <Typography color={"white"} align={"center"} fontSize={20} fontWeight="bold">Please Note:</Typography>
               <Typography color={"white"} align={"center"} fontSize={18}>
-                Please note: BMI weight calculations are not always accurate because they do not take into account factors such as muscle mass, bone density,
+                BMI weight calculations are not always accurate because they do not take into account factors such as muscle mass, bone density,
                 and overall body composition. This means that individuals with higher muscle mass or denser bones may be classified as overweight or obese based
                 on their BMI, even though they may have a healthy level of body fat.
                 <br />
@@ -260,15 +261,16 @@ export default function HealthCalculator() {
               <Grid
                 sx={{
                   mx: "95vh",
-                  width: "45vh",
+                  width: "50vh",
                   backgroundColor: "#186BD9",
                 }}
                 borderRadius={3}
                 position={"fixed"}
                 mt={"5vh"}
               >
+                <Typography color={"white"} align={"center"} fontSize={20} fontWeight="bold">What is MET?:</Typography>
                 <Typography color={"white"} align={"center"} fontSize={18}>
-                  What is MET?: "A more precise measure of intensity involves the measurement of a person's oxygen consumption during exercise. Oxygen
+                  "A more precise measure of intensity involves the measurement of a person's oxygen consumption during exercise. Oxygen
                   consumption and the intensity of exercise have a linear relationship; as exercise intensity increases, oxygen consumption increases.
                   Oxygen consumption is measured in MET (metabolic equivalent of a task). There are a few different definitions of MET. The original
                   definition, and the one used by this calculator, is based on oxygen utilization and body mass."
