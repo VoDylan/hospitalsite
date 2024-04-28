@@ -12,6 +12,7 @@ interface EdgeCanvasProps {
   height: number;
   floor: Floor;
   nodeData: MapNode[];
+  dataLoaded: boolean;
 }
 
 export default function EdgeCanvas(props: EdgeCanvasProps) {
@@ -41,8 +42,10 @@ export default function EdgeCanvas(props: EdgeCanvasProps) {
   }, [props.backgroundRendered, props.height, props.width]);
 
   useEffect(() => {
-    loadEdgesDistance({ req: props.floor }).then(() => setEdgeDataLoaded(true));
-  }, [props.floor, props.nodeData]);
+    if(props.dataLoaded) {
+      loadEdgesDistance({ req: props.floor }).then(() => setEdgeDataLoaded(true));
+    }
+  }, [props.floor, props.nodeData, props.dataLoaded]);
 
   useEffect(() => {
     if (edgeDataLoaded && canvasRef.current) {

@@ -92,9 +92,9 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
         bottom: 1000
       };
 
-      newBounds.top = -mouseYCoord + 120;
+      newBounds.top = -mouseYCoord;
       newBounds.bottom = windowHeight - mouseYCoord - height;
-      newBounds.left = -mouseXCoord + windowWidth * 0.18;
+      newBounds.left = -mouseXCoord + windowWidth;
       newBounds.right = windowWidth - mouseXCoord - width;
 
       return newBounds;

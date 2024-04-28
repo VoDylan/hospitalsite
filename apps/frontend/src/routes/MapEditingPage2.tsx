@@ -18,8 +18,8 @@ export default function MapEditingPage2() {
   const {
     nodeData,
     edgeData,
-    nodeDataLoaded,
-    setNodeDataLoaded
+    dataLoaded,
+    setDataLoaded
   } = useNodes();
 
   const {
@@ -57,15 +57,15 @@ export default function MapEditingPage2() {
   const [updateSelection, setUpdateSelection] = useState<boolean>(false);
 
   useEffect(() => {
-    if(nodeDataLoaded) {
+    if(dataLoaded) {
       if(selectedNode1) setSelectedNode1(GraphManager.getInstance().getNodeByID(selectedNode1.nodeID));
       if(selectedNode2) setSelectedNode2(GraphManager.getInstance().getNodeByID(selectedNode2.nodeID));
     }
-  }, [nodeDataLoaded, selectedNode1, selectedNode2, setSelectedNode1, setSelectedNode2]);
+  }, [dataLoaded, selectedNode1, selectedNode2, setSelectedNode1, setSelectedNode2]);
 
   useEffect(() => {
-    setNodeDataLoadedFilters(nodeDataLoaded);
-  }, [nodeDataLoaded, setNodeDataLoadedFilters]);
+    setNodeDataLoadedFilters(dataLoaded);
+  }, [dataLoaded, setNodeDataLoadedFilters]);
 
   useEffect(() => {
     console.log("Filtered Nodes");
@@ -114,15 +114,15 @@ export default function MapEditingPage2() {
             selectedNode2={selectedNode2}
             edgeBetweenNodes={edgeBetween}
             nodeData={filteredNodes}
-            nodeUpdateCallback={() => setNodeDataLoaded(false)}
+            nodeUpdateCallback={() => setDataLoaded(false)}
             handleSelectNode1={(nodeID) => setSelectedNode1(nodeID ? GraphManager.getInstance().getNodeByID(nodeID) : null)}
             handleSelectNode2={(nodeID) => setSelectedNode2(nodeID ? GraphManager.getInstance().getNodeByID(nodeID) : null)}
             handleClearNode1={() => setSelectedNode1(null)}
             handleClearNode2={() => setSelectedNode2(null)}
-            handleCreateEdge={() => {return;}}
-            handleDeleteEdge={() => {return;}}
-            handleDeleteNode={() => {return;}}
-            handleEditNode={() => {return;}}
+            handleCreateEdge={() => setDataLoaded(false)}
+            handleDeleteEdge={() => setDataLoaded(false)}
+            handleDeleteNode={() => setDataLoaded(false)}
+            handleEditNode={() => setDataLoaded(false)}
 
             handleIconStateChange={(filterType, newState) => {
               setNewFilterActiveStatus({type: filterType, active: newState});
@@ -161,6 +161,8 @@ export default function MapEditingPage2() {
               selectNodeGeneral={selectNodeGeneral}
               selectedNode1={selectedNode1}
               selectedNode2={selectedNode2}
+              dataLoaded={dataLoaded}
+              setDataLoaded={setDataLoaded}
             />
           </Box>
         </Stack>

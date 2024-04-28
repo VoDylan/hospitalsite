@@ -9,7 +9,7 @@ import {useEffect, useState} from "react";
 export const useNodes = () => {
   const [nodeData, setNodeData] = useState<MapNode[]>([]);
   const [edgeData, setEdgeData] = useState<MapEdge[]>([]);
-  const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
+  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     const loadNodeData = async (): Promise<MapNodeType[]> => {
@@ -38,19 +38,15 @@ export const useNodes = () => {
     };
 
     console.log(`Loading node Data`);
-    if (!nodeDataLoaded) {
+    if (!dataLoaded) {
       loadNodeData().then(() => {
         setNodeData(GraphManager.getInstance().nodes);
         setEdgeData(GraphManager.getInstance().edges);
-        setNodeDataLoaded(true);
+        setDataLoaded(true);
         console.log("Node Data loaded");
       });
     }
-  }, [nodeDataLoaded]);
+  }, [dataLoaded]);
 
-  const setDataLoadedStatus = (status: boolean) => {
-    setNodeDataLoaded(status);
-  };
-
-  return {nodeData: nodeData, edgeData: edgeData, nodeDataLoaded: nodeDataLoaded, setNodeDataLoaded: setDataLoadedStatus};
+  return {nodeData: nodeData, edgeData: edgeData, dataLoaded: dataLoaded, setDataLoaded};
 };

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import MapNode from "common/src/map/MapNode.ts";
 import FilterManager, {
   generateFilterValue,
@@ -8,35 +8,26 @@ import Filter from "common/src/filter/filters/Filter.ts";
 import { Floor } from "common/src/map/Floor.ts";
 import {FilterType} from "../../../common/types/FilterType.ts";
 import {IFilterState, IRenderInfo} from "../../../hooks/useFilters.tsx";
-import {Box} from "@mui/material";
+// import {Box} from "@mui/material";
 import {getNodeTypeFromStr, NodeType} from "common/src/map/MapNodeType.ts";
 import MapIcon from "./MapIcon.tsx";
 
 interface SymbolCanvasProps {
   backgroundRendered: boolean;
-  width: number;
-  height: number;
   filterInfo: Map<FilterType, IFilterState>;
   filteredNodes: MapNode[];
   floor: Floor;
   selectNodeGeneral: (node: MapNode) => void;
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
+  handleNodeCreationRequest: (event: React.MouseEvent, boundingElementRef: React.MutableRefObject<HTMLDivElement | null>) => void;
 }
 
 export default function SymbolCanvas(props: SymbolCanvasProps) {
   const [nodesOnFloor, setNodesOnFloor] = useState<MapNode[]>([]);
-  const [width, setWidth] = useState<number>(props.width);
-  const [height, setHeight] = useState<number>(props.height);
   const [filterInfo, setFilterInfo] = useState<Map<FilterType, IFilterState>>(props.filterInfo);
 
-  useEffect(() => {
-    setWidth(props.width);
-  }, [props.width]);
-
-  useEffect(() => {
-    setHeight(props.height);
-  }, [props.height]);
+  const boundingBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setFilterInfo(props.filterInfo);
@@ -59,12 +50,14 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
   }, [props.backgroundRendered, props.filteredNodes, props.floor]);
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         position: "absolute",
         width: "100%",
         height: "100%",
       }}
+      ref={boundingBoxRef}
+      onDoubleClick={(event: React.MouseEvent) => props.handleNodeCreationRequest(event, boundingBoxRef)}
     >
       {nodesOnFloor.map((node) => {
         const nodeTypeObj: NodeType | undefined = getNodeTypeFromStr(node.nodeType);
@@ -84,6 +77,6 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         }
         return <></>;
       })}
-    </Box>
+    </div>
   );
 }

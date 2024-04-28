@@ -77,7 +77,7 @@ function MapEditingPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const {nodeData, edgeData, nodeDataLoaded, setNodeDataLoaded} = useNodes();
+  const {nodeData, edgeData, dataLoaded, setDataLoaded} = useNodes();
 
   const [autocompleteNodeData, setAutocompleteNodeData] = useState<
     { label: string; node: string }[]
@@ -469,12 +469,12 @@ function MapEditingPage() {
    * useEffect to just load the node data. Only called when the flags determining loading data are changed
    */
   useEffect(() => {
-    if (nodeDataLoaded && !filtersApplied) {
+    if (dataLoaded && !filtersApplied) {
       console.log("Applying filters");
       determineFilters();
       setFiltersApplied(true);
     }
-  }, [determineFilters, filtersApplied, nodeData, nodeDataLoaded]);
+  }, [determineFilters, filtersApplied, nodeData, dataLoaded]);
 
   const handleBackgroundRenderStatus = (
     status: boolean,
@@ -603,12 +603,12 @@ function MapEditingPage() {
     } catch (e) {
       console.log("Failed to update node");
     }
-    setNodeDataLoaded(false);
+    setDataLoaded(false);
   };
 
   const handleCreateNode = () => {
     handleCloseNodeCreator();
-    setNodeDataLoaded(false);
+    setDataLoaded(false);
   };
 
   const handleDeleteNode = (node: MapNode) => {
@@ -628,7 +628,7 @@ function MapEditingPage() {
     } catch (e) {
       console.log("Failed to delete node");
     }
-    setNodeDataLoaded(false);
+    setDataLoaded(false);
   };
 
   const handleCreateEdge = (startingNode1: MapNode, startingNode2: MapNode) => {
@@ -651,7 +651,7 @@ function MapEditingPage() {
         .then((res) => {
           console.log("Added edge!");
           console.log(res.data);
-          setNodeDataLoaded(false);
+          setDataLoaded(false);
         });
     } catch (e) {
       console.error("Failed to create edge!");
@@ -671,7 +671,7 @@ function MapEditingPage() {
         .then((res) => {
           console.log("Deleted edge!");
           console.log(res.data);
-          setNodeDataLoaded(false);
+          setDataLoaded(false);
         });
     } catch (e) {
       console.error("Failed to delete edge!");

@@ -14,6 +14,10 @@ import EdgeCanvas from "../EdgeCanvas.tsx";
 import MapNode from "common/src/map/MapNode.ts";
 import {FilterType} from "../../../common/types/FilterType.ts";
 import SymbolCanvas from "./SymbolCanvas.tsx";
+import {useNodeCreationInfo} from "../../../hooks/useNodeCreationInfo.tsx";
+import NodeCreator from "../NodeCreator.tsx";
+import useWindowSize from "../../../hooks/useWindowSize.tsx";
+import transformCoords2 from "../../../common/TransformCoords2.ts";
 
 interface MapRenderProps {
   filterInfo: Map<FilterType, IFilterState>;
@@ -22,6 +26,8 @@ interface MapRenderProps {
   selectNodeGeneral: (node: MapNode) => void;
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
+  dataLoaded: boolean;
+  setDataLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function MapRender(props: MapRenderProps) {
@@ -31,6 +37,9 @@ export default function MapRender(props: MapRenderProps) {
     positionX: 0,
     positionY: 0,
   });
+
+  const [nodeCreationInfo, setNodeCreationInfo] = useNodeCreationInfo();
+  const [windowWidth, windowHeight] = useWindowSize();
 
   const [filterInfo, setFilterInfo] = useState<Map<FilterType, IFilterState>>(props.filterInfo);
   const [floor, setFloor] = useState<Floor>(props.floor);
@@ -59,6 +68,46 @@ export default function MapRender(props: MapRenderProps) {
     setBackgroundRendered(backgroundRendered);
     setCanvasWidth(width);
     setCanvasHeight(height);
+  };
+
+  const handleNodeCreationRequest = (event: React.MouseEvent, contentRef: React.MutableRefObject<HTMLDivElement | null>) => {
+    if (!contentRef.current) return;
+    const rect = contentRef.current.getBoundingClientRect();
+
+    const {actualX, actualY} = transformCoords2(
+      event.clientX,
+      event.clientY,
+      transformState,
+      contentRef.current.clientWidth,
+      contentRef.current.clientHeight,
+      windowWidth,
+      windowHeight,
+      rect
+    );
+
+    console.log(`Double click registered: ${actualX}, ${actualY}`);
+
+    setNodeCreationInfo({
+      creatingNode: true,
+      mouseXCoord: event.clientX,
+      mouseYCoord: event.clientY,
+      canvasXCoord: actualX,
+      canvasYCoord: actualY,
+    });
+  };
+
+  const handleCloseNodeCreator = () => {
+    setNodeCreationInfo({
+      creatingNode: false,
+      mouseXCoord: 0,
+      mouseYCoord: 0,
+      canvasXCoord: 0,
+      canvasYCoord: 0,
+    });
+  };
+  const handleCreateNode = () => {
+    handleCloseNodeCreator();
+    props.setDataLoaded(false);
   };
 
   useEffect(() => {
@@ -100,7 +149,7 @@ export default function MapRender(props: MapRenderProps) {
           <>
             <BackgroundCanvas
               style={{
-                position: "relative",
+                position: "absolute",
                 // minHeight: "100vh",
                 // maxHeight: "100%",
                 maxWidth: "100%",
@@ -118,21 +167,31 @@ export default function MapRender(props: MapRenderProps) {
               height={canvasHeight}
               floor={floor}
               nodeData={filteredNodes}
+              dataLoaded={props.dataLoaded}
             />
             <SymbolCanvas
               backgroundRendered={backgroundRendered}
-              width={canvasWidth}
-              height={canvasHeight}
               filterInfo={filterInfo}
               filteredNodes={filteredNodes}
               floor={floor}
               selectNodeGeneral={props.selectNodeGeneral}
               selectedNode1={props.selectedNode1}
               selectedNode2={props.selectedNode2}
+              handleNodeCreationRequest={handleNodeCreationRequest}
             />
           </>
         </TransformComponent>
       </TransformWrapper>
+      {nodeCreationInfo.creatingNode ?
+        <NodeCreator
+          nodeCreationInfo={nodeCreationInfo}
+          floor={floor}
+          handleCloseDialogue={handleCloseNodeCreator}
+          handleCreateNodeCallback={handleCreateNode}
+        />
+        :
+        <></>
+      }
     </>
   );
 }

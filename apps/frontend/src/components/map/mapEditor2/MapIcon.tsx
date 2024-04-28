@@ -2,6 +2,7 @@ import MapNode from "common/src/map/MapNode.ts";
 import {IRenderInfo} from "../../../hooks/useFilters.tsx";
 import {useEffect, useState} from "react";
 import {NodeType} from "common/src/map/MapNodeType.ts";
+// import Draggable from "react-draggable";
 
 interface MapIconProps {
   node: MapNode;
@@ -54,30 +55,31 @@ export default function MapIcon(props: MapIconProps) {
   }, [props.node.nodeID, props.selectedNode1, props.selectedNode2]);
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: props.node.ycoord - (iconHeight / 2),
-        left: props.node.xcoord - (iconWidth / 2),
-        zIndex: zIndex,
-        transform: (isHovered || selected) ? `scale(1.25)` : `scale(1)`,
-        transition: "all 0.05s ease-in-out",
-        boxShadow: selected ? "0 0 2em 0.5em #003A96" : undefined,
-        borderRadius: props.node.nodeType == NodeType.EXIT ? undefined : "100%",
-        width: iconWidth,
-        height: iconHeight,
-      }}
-      onMouseOver={() => handleHover()}
-      onMouseOut={() => handleUnhover()}
-      onClick={() => props.selectNodeGeneral(props.node)}
-    >
-      <img
-        alt={props.node.nodeType}
-        src={props.renderInfo.img}
-        width={iconWidth}
-        height={iconHeight}
-      />
-    </div>
-
+    // <Draggable>
+      <div
+        style={{
+          position: "absolute",
+          top: props.node.ycoord - (iconHeight / 2),
+          left: props.node.xcoord - (iconWidth / 2),
+          zIndex: zIndex,
+          transform: (isHovered || selected) ? `scale(1.25)` : `scale(1)`,
+          transition: "all 0.05s ease-in-out",
+          boxShadow: selected ? "0 0 2em 0.5em #003A96" : undefined,
+          borderRadius: props.node.nodeType == NodeType.EXIT ? undefined : "100%",
+          width: iconWidth,
+          height: iconHeight,
+        }}
+        onMouseOver={() => handleHover()}
+        onMouseOut={() => handleUnhover()}
+        onClick={() => props.selectNodeGeneral(props.node)}
+      >
+        <img
+          alt={props.node.nodeType}
+          src={props.renderInfo.img}
+          width={iconWidth}
+          height={iconHeight}
+        />
+      </div>
+    // </Draggable>
   );
 }
