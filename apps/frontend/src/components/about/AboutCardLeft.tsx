@@ -11,14 +11,14 @@ interface AboutCardProps {
 export function AboutCardLeft(props: AboutCardProps) {
   return (
     <>
-      <br/>
-      <br/>
       <Box
           sx={{
+            my: "2.5em",
             mx: 'auto',
-            backgroundColor: "lightgray",
+            backgroundImage: "linear-gradient(to right, lightgray, #2874C0)",
             maxWidth: "70%",
-            borderRadius: "20px",
+            borderRadius: "2em",
+            minWidth: "70%", // forces all cards to be same width
           }}
       >
         <Stack
@@ -80,7 +80,7 @@ export function AboutCardLeft(props: AboutCardProps) {
                   </Typography>
                 </Stack>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={4} container justifyContent="flex-end">
                 <img
                     src={props.imagePath}
                     alt={"Picture of " + props.name}
