@@ -1,4 +1,6 @@
-import MainCarousel from "../components/homepage/Carousel.tsx";
+import Carousel from "../components/homepage/Carousel.tsx";
+import ServicesPreview from "../components/homepage/ServicesPreview.tsx";
+import HeroText from "../components/homepage/HeroText.tsx";
 
 function MapPage() {
   return (
@@ -8,7 +10,9 @@ function MapPage() {
           backgroundColor: "white",
         }}
       >
-        <MainCarousel />
+        <Carousel />
+        <ServicesPreview />
+        <HeroText />
       </div>
     </>
   );
