@@ -65,7 +65,6 @@ export default function Icon(props: {
               sx={{
                 width: "25%",
                 justifySelf: "left",
-                marginLeft: "10px",
               }}
             >
               {props.checked ? "back" : "back"}
