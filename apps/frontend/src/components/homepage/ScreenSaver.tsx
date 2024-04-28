@@ -1,45 +1,56 @@
 import React, { useState, useEffect } from "react";
+import Brigham from "../../videos/Brigham.mp4";
+import "./ScreenSaveFade.css"; // Import CSS file
 
 function ScreenSaver() {
-  const [showBox, setShowBox] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null); // Adjust the type
 
   useEffect(() => {
-    let timeoutId: string | number | NodeJS.Timeout | undefined;
-
+    // Function to reset the timer
     const resetTimer = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setShowBox(true);
-      }, 5000); // 5 seconds for testing purposes, change to 5 * 60 * 1000 for 5 minutes
+      if (timer) clearTimeout(timer); // Clear existing timer
+      setTimer(setTimeout(() => setShowVideo(true), 5000)); // Set a new timer
     };
 
+    // Event listener for user activity
     const handleUserActivity = () => {
-      setShowBox(false);
-      resetTimer();
+      resetTimer(); // Reset the timer on user activity
+      setShowVideo(false); // Hide the video instantly on user activity
     };
 
-    // Initial setup and event listeners
+    // Set up initial timer and event listeners
     resetTimer();
     window.addEventListener("mousemove", handleUserActivity);
     window.addEventListener("keypress", handleUserActivity);
     window.addEventListener("scroll", handleUserActivity);
 
-    // Clean up event listeners
+    // Clean up event listeners and timer
     return () => {
-      clearTimeout(timeoutId);
+      if (timer) clearTimeout(timer); // Clear any remaining timer
       window.removeEventListener("mousemove", handleUserActivity);
       window.removeEventListener("keypress", handleUserActivity);
       window.removeEventListener("scroll", handleUserActivity);
     };
-  }, []);
+  }, [timer]); // Re-run effect when timer changes
 
   return (
-    <div style={{ position: 'fixed',
-      top: 0, left: 0, width: '100%', height: '100%',
-      zIndex: 99999999,
-      visibility: showBox ? 'visible' : 'hidden',
-      backgroundColor: 'rgba(0, 0, 0, 0.65)' }} />
+    <div className={`screensaver ${showVideo ? 'show' : ''}`}>
+      <video
+        autoPlay
+        loop
+        muted
+        className={`video ${showVideo ? 'fade-in' : ''}`}
+        onLoadedData={() => setShowVideo(true)}
+      >
+        <source src={Brigham} type="video/mp4" />
+      </video>
+    </div>
   );
 }
 
 export default ScreenSaver;
+
+
+
+
