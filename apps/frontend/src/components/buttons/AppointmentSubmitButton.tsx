@@ -3,6 +3,7 @@ import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import {CalendarPageFormSubmission} from "../../common/formSubmission/CalendarPageFormSubmission.ts";
+import {sendMail} from "../sendEmail/sendEmail.ts";
 
 interface ButtonProps {
   text: string;
@@ -15,6 +16,12 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
   const [message, setMessage] = useState("");
+
+  const from: string = 'vdylan24@gmail.com';
+  const to: string = 'dvo@wpi.edu';
+  const subject: string = 'testing123';
+  const mailTemplate: string = '<subject>';
+
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
@@ -66,6 +73,7 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
           `Failed to post form data to database: ${result.data.message}`,
         );
       } else {
+        sendMail( from, to, subject, mailTemplate);
         handleClear();
         openWithSuccess();
       }
