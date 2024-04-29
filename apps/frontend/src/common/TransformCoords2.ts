@@ -1,10 +1,9 @@
-import {TransformState} from "./TransformState.ts";
-import React from "react";
+import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
 
 export default function transformCoords2(
   mouseX: number,
   mouseY: number,
-  transformInfo: React.MutableRefObject<TransformState>,
+  transformInfo: ReactZoomPanPinchState,
   realContentWidth: number,
   realContentHeight: number,
   windowWidth: number,
@@ -12,10 +11,10 @@ export default function transformCoords2(
   rect: DOMRect
 ) {
   console.log(`mouseX: ${mouseX} | mouseY: ${mouseY} | realContentWidth: ${realContentWidth} | realContentHeight: ${realContentHeight} | windowWidth: ${windowWidth} | windowHeight: ${windowHeight} | rect.width: ${rect.width} | rect.height: ${rect.height}`);
-  console.log(transformInfo.current);
+  console.log(transformInfo);
 
-  const actualX = Math.round(((mouseX - (windowWidth * 0.18)) - transformInfo.current.positionX) / transformInfo.current.scale);
-  const actualY = Math.round(((mouseY - (120)) - transformInfo.current.positionY) / transformInfo.current.scale);
+  const actualX = Math.round(((mouseX - (windowWidth * 0.18)) - transformInfo.positionX) / transformInfo.scale);
+  const actualY = Math.round(((mouseY - (120)) - transformInfo.positionY) / transformInfo.scale);
 
   return {actualX, actualY};
 }

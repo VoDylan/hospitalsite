@@ -1,11 +1,10 @@
 import {
   ReactZoomPanPinchContentRef,
-  ReactZoomPanPinchRef,
+  ReactZoomPanPinchRef, ReactZoomPanPinchState,
   TransformComponent,
   TransformWrapper
 } from "react-zoom-pan-pinch";
 import React, {useEffect, useRef, useState} from "react";
-import {TransformState} from "../../../common/TransformState.ts";
 import {IFilterState} from "../../../hooks/useFilters.tsx";
 import BackgroundCanvas from "../BackgroundCanvas.tsx";
 import {useCanvasInfo} from "../../../hooks/useCanvasInfo.tsx";
@@ -34,7 +33,14 @@ interface MapRenderProps {
 
 export default function MapRender(props: MapRenderProps) {
   const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
-  const transformState = useRef<TransformState>({
+  // const transformState = useRef<TransformState>({
+  //   scale: 1,
+  //   positionX: 0,
+  //   positionY: 0,
+  // });
+
+  const [transformState, setTransformState] = useState<ReactZoomPanPinchState>({
+    previousScale: 1,
     scale: 1,
     positionX: 0,
     positionY: 0,
@@ -58,12 +64,27 @@ export default function MapRender(props: MapRenderProps) {
     setCanvasHeight
   ] = useCanvasInfo();
 
-  const handleTransform = (
-    ref: ReactZoomPanPinchRef,
-    state: { scale: number; positionX: number; positionY: number },
-  ) => {
-    if (!transformRef.current) transformRef.current = ref;
-    transformState.current = state;
+  // const handleTransform = (
+  //   ref: ReactZoomPanPinchRef,
+  //   state: { scale: number; positionX: number; positionY: number },
+  // ) => {
+  //   if (!transformRef.current) transformRef.current = ref;
+  //   transformState.current = state;
+  // };
+
+  const updateTransformState = (ref: ReactZoomPanPinchRef) => {
+    // console.log("Updating transform state");
+    // console.log(ref.state);
+    console.log("MapRender: Updating transform state");
+
+    const newState: ReactZoomPanPinchState = {
+      previousScale: ref.state.previousScale,
+      scale: ref.state.scale,
+      positionX: ref.state.positionX,
+      positionY: ref.state.positionY,
+    };
+
+    setTransformState(newState);
   };
 
   const handleBackgroundRenderStatus = (backgroundRendered: boolean, width: number, height: number) => {
@@ -133,7 +154,10 @@ export default function MapRender(props: MapRenderProps) {
       height={"100%"}
     >
       <TransformWrapper
-        onTransformed={handleTransform}
+        // onTransformed={handleTransform}
+        onZoomStop={updateTransformState}
+        onPanningStop={updateTransformState}
+        onPinchingStop={updateTransformState}
         minScale={0.2}
         initialScale={0.2}
         doubleClick={{disabled: true}}
@@ -155,8 +179,6 @@ export default function MapRender(props: MapRenderProps) {
             <BackgroundCanvas
               style={{
                 position: "absolute",
-                // minHeight: "100vh",
-                // maxHeight: "100%",
                 maxWidth: "100%",
               }}
               floor={floor}
@@ -184,6 +206,7 @@ export default function MapRender(props: MapRenderProps) {
               selectedNode1={props.selectedNode1}
               selectedNode2={props.selectedNode2}
               handleNodeCreationRequest={handleNodeCreationRequest}
+              transformState={transformState}
             />
           </>
         </TransformComponent>

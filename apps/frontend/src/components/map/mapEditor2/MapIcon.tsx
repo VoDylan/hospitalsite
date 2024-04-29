@@ -1,8 +1,9 @@
 import MapNode from "common/src/map/MapNode.ts";
 import {IRenderInfo} from "../../../hooks/useFilters.tsx";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {NodeType} from "common/src/map/MapNodeType.ts";
-// import Draggable from "react-draggable";
+import Draggable from "react-draggable";
+import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
 
 interface MapIconProps {
   node: MapNode;
@@ -11,6 +12,7 @@ interface MapIconProps {
   deselectNodeGeneral: (node: MapNode) => void;
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
+  transformState: ReactZoomPanPinchState;
 }
 
 export default function MapIcon(props: MapIconProps) {
@@ -20,6 +22,14 @@ export default function MapIcon(props: MapIconProps) {
   const [iconWidth, setIconWidth] = useState<number>(props.renderInfo.width);
   const [iconHeight, setIconHeight] = useState<number>(props.renderInfo.height);
   const [zIndex, setZIndex] = useState<number>(0);
+
+  const [transformState, setTransformState] = useState<ReactZoomPanPinchState>(props.transformState);
+
+  const handleMouseDown = (event: MouseEvent) => {
+    if(selected)
+      event.stopPropagation();
+    console.log(props.transformState.scale);
+  };
 
   const handleHover = () => {
     if(!selected) {
@@ -45,6 +55,11 @@ export default function MapIcon(props: MapIconProps) {
   };
 
   useEffect(() => {
+    console.log("Updating transform state");
+    setTransformState(props.transformState);
+  }, [props.transformState, props.transformState.scale]);
+
+  useEffect(() => {
     setIconWidth(props.renderInfo.width);
   }, [props.renderInfo.width]);
 
@@ -64,7 +79,11 @@ export default function MapIcon(props: MapIconProps) {
   }, [props.node.nodeID, props.selectedNode1, props.selectedNode2]);
 
   return (
-    // <Draggable>
+    <Draggable
+      onMouseDown={handleMouseDown}
+      scale={transformState.scale}
+      disabled={!selected}
+    >
       <div
         style={{
           position: "absolute",
@@ -72,7 +91,7 @@ export default function MapIcon(props: MapIconProps) {
           left: props.node.xcoord - (iconWidth / 2),
           zIndex: zIndex,
           transform: (isHovered || selected) ? `scale(1.25)` : `scale(1)`,
-          transition: "transform 0.05s ease-in-out",
+          transition: !selected ? "transform 0.05s ease-in-out" : undefined,
           boxShadow: selected ? "0 0 2em 0.5em #003A96" : undefined,
           borderRadius: props.node.nodeType == NodeType.EXIT ? undefined : "100%",
           width: iconWidth,
@@ -80,7 +99,7 @@ export default function MapIcon(props: MapIconProps) {
         }}
         onMouseOver={() => handleHover()}
         onMouseOut={() => handleUnhover()}
-        onClick={handleClick}
+        onClickCapture={handleClick}
       >
         <img
           alt={props.node.nodeType}
@@ -89,6 +108,6 @@ export default function MapIcon(props: MapIconProps) {
           height={iconHeight}
         />
       </div>
-    // </Draggable>
+    </Draggable>
   );
 }

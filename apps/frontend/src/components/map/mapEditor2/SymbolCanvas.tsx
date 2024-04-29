@@ -8,9 +8,9 @@ import Filter from "common/src/filter/filters/Filter.ts";
 import { Floor } from "common/src/map/Floor.ts";
 import {FilterType} from "../../../common/types/FilterType.ts";
 import {IFilterState, IRenderInfo} from "../../../hooks/useFilters.tsx";
-// import {Box} from "@mui/material";
 import {getNodeTypeFromStr, NodeType} from "common/src/map/MapNodeType.ts";
 import MapIcon from "./MapIcon.tsx";
+import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
 
 interface SymbolCanvasProps {
   backgroundRendered: boolean;
@@ -22,6 +22,7 @@ interface SymbolCanvasProps {
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
   handleNodeCreationRequest: (event: React.MouseEvent, boundingElementRef: React.MutableRefObject<HTMLDivElement | null>) => void;
+  transformState: ReactZoomPanPinchState;
 }
 
 export default function SymbolCanvas(props: SymbolCanvasProps) {
@@ -73,6 +74,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
                 deselectNodeGeneral={props.deselectNodeGeneral}
                 selectedNode1={props.selectedNode1}
                 selectedNode2={props.selectedNode2}
+                transformState={props.transformState}
               />
             );
           return <></>;
