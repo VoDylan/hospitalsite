@@ -72,15 +72,36 @@
 import { Canvas } from "@react-three/fiber";
 // import { OrbitControls } from "@react-three/drei";
 import {Suspense} from "react";
+import Model from "../../../public/ThreeD/FloorTwo.jsx";
+import {OrbitControls} from "@react-three/drei";
 
 function MapTestingTHREED () {
   return (
-    <div>hello
-      <Canvas >
+    <>
+      <Canvas style={{width: window.innerWidth, height: window.innerHeight}}>
+        <OrbitControls/>
         <Suspense fallback={null}>
+          <ambientLight/>
+          <directionalLight
+          position={[ -5, 5, 5]} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024}
+          />
+          <group position={[2, -4, 0]}>
+          <Model/>
+          </group>
+
         </Suspense>
+        {/*<mesh*/}
+        {/*  rotation={[-0.5 * Math.PI, 0, 0]} position={[0, -1, 0]} receiveShadow*/}
+        {/*>*/}
+        {/*  <planeBufferGeometry args={[10, 10, 1, 1]}/>*/}
+        {/*  <shadowMaterial transparent opacity={0.2}/>*/}
+        {/*</mesh>*/}
+        {/*</OrbitControls>*/}
+
       </Canvas>
-    </div>
+    </>
+
   );
 }
+
 export default MapTestingTHREED;

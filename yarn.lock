@@ -3145,19 +3145,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/three@npm:^0.164.0":
-  version: 0.164.0
-  resolution: "@types/three@npm:0.164.0"
-  dependencies:
-    "@tweenjs/tween.js": "npm:~23.1.1"
-    "@types/stats.js": "npm:*"
-    "@types/webxr": "npm:*"
-    fflate: "npm:~0.8.2"
-    meshoptimizer: "npm:~0.18.1"
-  checksum: 10/e5bdca5db603c594a5a5ae8ab2eaa38f95e091964a109ed4cbc00cfc95e00f3d7e356c6d676db4c2fbb9d98c266b3097eab2c5b4099a72e80bc9e455f5fec8d3
-  languageName: node
-  linkType: hard
-
 "@types/treeify@npm:^1.0.0":
   version: 1.0.3
   resolution: "@types/treeify@npm:1.0.3"
@@ -6380,7 +6367,6 @@ __metadata:
     "@types/react-dom": "npm:^18.0.11"
     "@types/react-router-bootstrap": "npm:^0.26.0"
     "@types/react-router-dom": "npm:^5.3.3"
-    "@types/three": "npm:^0.164.0"
     "@vitejs/plugin-react-swc": "npm:^3.0.0"
     autoprefixer: "npm:^10.4.18"
     axios: "npm:^1.4.0"
@@ -10550,8 +10536,6 @@ __metadata:
     "@mui/x-data-grid": "npm:^7.1.0"
     "@mui/x-date-pickers": "npm:^7.2.0"
     "@prisma/client": "npm:^5.11.0"
-    "@react-three/drei": "npm:^9.105.4"
-    "@react-three/fiber": "npm:^8.16.2"
     "@types/express": "npm:^4.17.21"
     "@types/joi": "npm:latest"
     "@types/lodash": "npm:^4"
@@ -10560,7 +10544,6 @@ __metadata:
     "@types/react": "npm:^18.0.37"
     "@types/react-dom": "npm:^18.0.11"
     "@types/react-modal": "npm:^3.16.3"
-    "@types/three": "npm:^0.164.0"
     "@vitest/ui": "npm:^1.4.0"
     "@yarnpkg/pnpify": "npm:^4.0.0-rc.45"
     axios: "npm:^1.6.8"
@@ -10588,7 +10571,6 @@ __metadata:
     react-modal: "npm:^3.16.1"
     react-responsive-modal: "npm:^6.4.2"
     styled-components: "npm:^6.1.8"
-    three: "npm:^0.164.1"
     tsconfig-custom: "workspace:*"
     turbo: "npm:latest"
     typescript: "npm:^5.0.4"
