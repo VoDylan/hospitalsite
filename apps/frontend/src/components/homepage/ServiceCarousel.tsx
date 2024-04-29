@@ -5,6 +5,7 @@ import gift from "../../images/servicePageImages/giftBasket.jpg";
 import medicine from "../../images/servicePageImages/medicineCard.jpg";
 import signL from "../../images/language.webp";
 
+
 interface secondaryCardData {
   image: string;
   title: string;

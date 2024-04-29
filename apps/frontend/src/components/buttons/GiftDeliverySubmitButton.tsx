@@ -1,4 +1,4 @@
-import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
+import {Alert, AlertProps, Button, Snackbar, Stack} from "@mui/material";
 import { forwardRef, useState } from "react";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
@@ -170,25 +170,36 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
-    <Button
-      variant="contained"
-      id={"submitButton"}
-      onClick={() => handleSubmit()}
-      href={linkToCart(link)}
-    >
-      {props.text}
-      <Snackbar
-        open={open}
-        autoHideDuration={5000}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
+    <Stack
+      direction={"row"}
+      spacing={3}>
+      <Button
+        variant="contained"
+        id ={"submitButton"}
+        onClick={() => handleSubmit()}
+        href={linkToCart(link)}
       >
+        {props.text}
+        <Snackbar
+          open={open}
+          autoHideDuration={5000}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
         {/*@ts-expect-error Severity will only be of type "success" or "error"*/}
-        <SnackbarAlert severity={type}>{message}</SnackbarAlert>
-      </Snackbar>
+          <SnackbarAlert severity={type}>{message}</SnackbarAlert>
+        </Snackbar>
+      </Button>
+    <Button
+      variant={"outlined"}
+      id={"toCart"}
+      href={"/Cart"}
+    >
+      To Cart
     </Button>
+  </Stack>
   );
 }
