@@ -48,8 +48,7 @@ export default function CustomCard({
           direction={"row"}
           sx={{
             position: "absolute",
-            top: 0,
-            left: '1%',
+            top: 22,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",

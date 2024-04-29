@@ -179,7 +179,7 @@ function Carousel() {
         display={"flex"}
         justifyContent={"center"}
         marginTop={'-4%'}
-        marginBottom={'0.5%'}
+        marginBottom={'1.5%'}
       >
 
         <a
@@ -254,14 +254,15 @@ function Carousel() {
         direction={"row"}
         sx={{
           display: "flex",
+          position: "absolute",
+          right: 184,
           alignContent: "center",
           justifyContent: "end",
-          marginRight: "70px",
-          marginBottom: "10px",
+
         }}
       >
         <Link to={"/Services"}>
-          <Button variant="contained" size="large">
+          <Button variant="contained" size="medium">
             See All {">"}
           </Button>
         </Link>
