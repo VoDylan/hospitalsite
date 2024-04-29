@@ -3,27 +3,21 @@ import {
   Typography,
   SelectChangeEvent,
   Stack,
-  // MenuItem,
-  // FormControl,
-  // InputLabel,
-  // Select,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
-import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { DeviceDeliveryFormSubmission } from "../common/formSubmission/DeviceDeliveryFormSubmission.ts";
 import medDeviceBackground from "../images/medDeviceBackground.jpg";
 import { DeviceSubmitButton } from "../components/buttons/DeviceSubmitButton.tsx";
-import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
-// import MoreMenuItem from "../components/MoreMenuItem.tsx";
 import DocsTools from "../images/servicePageImages/FormIcons/DocsTools.jpg";
 import IV from "../images/servicePageImages/FormIcons/IV.jpg";
 import SurgicalInstruments from "../images/servicePageImages/FormIcons/SurgicalInstruments.jpg";
 import HospBed from "../images/servicePageImages/FormIcons/HospBed.png";
 import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
 import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function DeviceDeliveryService() {
@@ -130,36 +124,8 @@ function DeviceDeliveryService() {
     });
   }
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -295,15 +261,7 @@ function DeviceDeliveryService() {
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.roomNum}
-              handleChange={handleLocationInput}
-              items={nodes.map((node) => ({
-                value: node.nodeID,
-                label: node.longName,
-              }))}
-            />
+            <NodeDropDown handleChange={handleLocationInput} label={"Location"} returnedNodeID={form.roomNum} filterRoomsOnly={true}/>
           </Grid>
           <Grid item xs={3} mt={5} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
