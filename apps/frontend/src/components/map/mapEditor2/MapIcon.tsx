@@ -2,7 +2,7 @@ import MapNode from "common/src/map/MapNode.ts";
 import {IRenderInfo} from "../../../hooks/useFilters.tsx";
 import React, {useEffect, useState} from "react";
 import {NodeType} from "common/src/map/MapNodeType.ts";
-import Draggable from "react-draggable";
+import Draggable, {DraggableEvent} from "react-draggable";
 import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
 
 interface MapIconProps {
@@ -15,7 +15,13 @@ interface MapIconProps {
   transformState: ReactZoomPanPinchState;
 }
 
+interface MousePos {
+  positionX: number;
+  positionY: number;
+}
+
 export default function MapIcon(props: MapIconProps) {
+
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [selected, setSelected] = useState<boolean>(false);
 
@@ -23,12 +29,25 @@ export default function MapIcon(props: MapIconProps) {
   const [iconHeight, setIconHeight] = useState<number>(props.renderInfo.height);
   const [zIndex, setZIndex] = useState<number>(0);
 
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
   const [transformState, setTransformState] = useState<ReactZoomPanPinchState>(props.transformState);
 
-  const handleMouseDown = (event: MouseEvent) => {
+  const handleMouseDownDraggable = (event: MouseEvent) => {
     if(selected)
       event.stopPropagation();
-    console.log(props.transformState.scale);
+  };
+
+  const handleDrag = (event: DraggableEvent) => {
+    if(event.type == "mousemove" || event.type == "touchmove") {
+      setIsDragging(true);
+    }
+  };
+
+  const handleStopDrag = (event: DraggableEvent) => {
+    if(event.type == "mouseup" || event.type == "touchend") {
+      setTimeout(() => setIsDragging(false), 100);
+    }
   };
 
   const handleHover = () => {
@@ -46,6 +65,11 @@ export default function MapIcon(props: MapIconProps) {
   };
 
   const handleClick = () => {
+    if(isDragging) {
+      setIsDragging(false);
+      return;
+    }
+
     if((props.selectedNode1 && props.selectedNode1.nodeID == props.node.nodeID) ||
        (props.selectedNode2 && props.selectedNode2.nodeID == props.node.nodeID)) {
       props.deselectNodeGeneral(props.node);
@@ -80,7 +104,9 @@ export default function MapIcon(props: MapIconProps) {
 
   return (
     <Draggable
-      onMouseDown={handleMouseDown}
+      onMouseDown={handleMouseDownDraggable}
+      onDrag={handleDrag}
+      onStop={handleStopDrag}
       scale={transformState.scale}
       disabled={!selected}
     >
@@ -99,7 +125,7 @@ export default function MapIcon(props: MapIconProps) {
         }}
         onMouseOver={() => handleHover()}
         onMouseOut={() => handleUnhover()}
-        onClickCapture={handleClick}
+        onClick={handleClick}
       >
         <img
           alt={props.node.nodeType}
