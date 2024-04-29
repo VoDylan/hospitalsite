@@ -18,15 +18,15 @@ interface CardProps {
 }
 
 export default function CustomCard({
-  image,
-  title,
-  buttonText,
-  path,
-  cardTitle,
-  cardDescription,
-}: CardProps) {
+                                     image,
+                                     title,
+                                     buttonText,
+                                     path,
+                                     cardTitle,
+                                     cardDescription,
+                                   }: CardProps) {
   return (
-    <Card sx={{ position: "relative", width: "100vw", height: "65vh" }}>
+    <Card sx={{ position: "relative", width: "100vw", height: "62vh" }}>
       <CardMedia
         sx={{
           width:'100%',
@@ -44,31 +44,31 @@ export default function CustomCard({
       >
       </CardMedia>
 
-        <Stack
-          direction={"row"}
-          sx={{
-            position: "absolute",
-            top: 22,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "flex-start",
-            marginLeft: "8%",
-            minHeight: "65vh",
+      <Stack
+        direction={"row"}
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: '1%',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          marginLeft: "8%",
+          minHeight: "65vh",
 
-          }}
-        >
-<Box
-  sx={{
-    color: "#003A96",
-    fontSize: 40,
-    position: "relative",
-    marginTop: "6%",
-    marginBottom: "0.75%",
-    width: "26vw",
-    // borderRadius: '1rem',
-    // backdropFilter: 'blur(10px)',
-  }}>
+        }}
+      >
+        <Box
+          sx={{
+            color: "#003A96",
+            fontSize: 40,
+            position: "relative",
+            marginTop: "6%",
+            marginBottom: "0.75%",
+            width: "26vw",
+            borderRadius: '1rem',
+          }}>
           <Box
             sx={{
               color: "#003A96",
@@ -94,26 +94,26 @@ export default function CustomCard({
           >
             {cardDescription}
           </Box>
-</Box>
-          <Button
-            sx={{
-              position: "relative",
-              marginTop: "2%",
-              width: "auto",
-              minWidth: "10vw",
-              whiteSpace: "nowrap",
+        </Box>
+        <Button
+          sx={{
+            position: "relative",
+            marginTop: "2%",
+            width: "auto",
+            minWidth: "10vw",
+            whiteSpace: "nowrap",
 
-            }}
-            component={Link}
-            to={path}
-            variant="contained"
-            color="primary"
-          >
-            {buttonText}
-          </Button>
-        </Stack>
+          }}
+          component={Link}
+          to={path}
+          variant="contained"
+          color="primary"
+        >
+          {buttonText}
+        </Button>
+      </Stack>
 
-{/*      <CardContent>
+      {/*      <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
