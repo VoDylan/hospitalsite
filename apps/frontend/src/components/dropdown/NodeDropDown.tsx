@@ -37,7 +37,8 @@ const NodeDropDown: React.FC<NodeDropDownProps> = (props) => {
             nodeTypes[i] === "STAI" ||
             nodeTypes[i] === "EXIT" ||
             nodeTypes[i] === "ELEV" ||
-            nodeTypes[i] === "REST"
+            nodeTypes[i] === "REST" ||
+            nodeTypes[i] === "BATH"
           )) {
             continue;
           }

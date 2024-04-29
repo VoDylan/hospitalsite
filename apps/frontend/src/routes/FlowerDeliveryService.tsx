@@ -230,7 +230,7 @@ function FlowerDeliveryService() {
           </Grid>
           <Grid item xs={3} mt={5} sx={{align: "center"}}>
             <Typography align={"center"}>Room:</Typography>
-            <NodeDropDown returnedNodeID={form.roomNumber} label={"Room"} handleChange={handleRoomNumberInput} filterElevators={true} filterHalls={true} />
+            <NodeDropDown returnedNodeID={form.roomNumber} label={"Room"} handleChange={handleRoomNumberInput} filterRoomsOnly={true} />
           </Grid>
           <Grid item xs={12} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>
