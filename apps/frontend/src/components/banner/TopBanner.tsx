@@ -15,7 +15,7 @@ const useStyles = makeStyles({
   logoImage: {
     display: "flex",
     width: "100%", // Set the width to 100%
-    minHeight: "300px",
+    minHeight: "120px",
     minWidth: "250px",
     maxWidth: "450px", // Add a max-width for responsiveness
   },
