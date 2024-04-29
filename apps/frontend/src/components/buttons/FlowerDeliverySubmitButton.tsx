@@ -1,4 +1,4 @@
-import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
+import {Alert, AlertProps, Button, Snackbar, Stack} from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
@@ -15,7 +15,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
   const [message, setMessage] = useState("");
-  const link:string = "";
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
@@ -78,22 +77,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   function handleClear() {
     props.clear();
   }
-  
-  function linkToCart(link:string) {
-    if (props.input.RRose === "" && props.input.WRose === "" && props.input.RCarn === "" && props.input.Tulip === "") {
-      return link;
-    } else if (props.input.employeeID === -1){
-      return link;
-    } else if (props.input.name === "") {
-      return link;
-    } else if (props.input.recipientName === "") {
-      return link;
-    } else if (props.input.roomNumber === "") {
-      return link;
-    } else link = "/Cart";
-    return link;
-  }
-
 
   // Function for posting the form submission to the database
   async function pushToDB(form: FlowerDeliveryFormSubmission) {
@@ -150,11 +133,13 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
+    <Stack
+    direction={"row"}
+    spacing={3}>
     <Button
       variant="contained"
       id={"submitButton"}
       onClick={() => handleSubmit()}
-      href={linkToCart(link)}
     >
       {props.text}
       <Snackbar
@@ -170,5 +155,13 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
+      <Button
+        variant={"outlined"}
+        id={"toCart"}
+        href={"/Cart"}
+      >
+        To Cart
+      </Button>
+    </Stack>
   );
 }

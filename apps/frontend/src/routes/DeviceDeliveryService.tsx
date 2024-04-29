@@ -24,6 +24,7 @@ import IV from "../images/servicePageImages/FormIcons/IV.jpg";
 import SurgicalInstruments from "../images/servicePageImages/FormIcons/SurgicalInstruments.jpg";
 import HospBed from "../images/servicePageImages/FormIcons/HospBed.png";
 import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function DeviceDeliveryService() {
   const [form, setFormResponses] = useState<DeviceDeliveryFormSubmission>({
@@ -192,6 +193,13 @@ function DeviceDeliveryService() {
           mb: "5vh",
         }}
       >
+        <Typography
+          align={"center"}
+          fontStyle={"Open Sans"}
+          color={'white'}
+        >
+          Sebastian Gurgol, Jingxu (Rick) Wang
+        </Typography>
         <Grid
           item
           xs={12}
@@ -241,32 +249,32 @@ function DeviceDeliveryService() {
           </Grid>
 
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Bed Amount"}
               value={form.beds}
               onChange={handleBedsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Doctor Tool Set Amount"}
               value={form.docTools}
               onChange={handleToolsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"IV Apparatus Amount"}
               value={form.IV}
               onChange={handleIVInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Surgical Tool Amount"}
               value={form.surgery}
               onChange={handleSurgeryInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
 
           <Grid item xs={3} mt={5} sx={{align: "center"}}>
@@ -321,9 +329,7 @@ function DeviceDeliveryService() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography color={"white"}>
-        Sebastian Gurgol, Jingxu (Rick) Wang
-      </Typography>
+
     </Stack>
   );
 }

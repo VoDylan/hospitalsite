@@ -227,179 +227,205 @@ export default function CalendarPage() {
         }}
       >
         <Grid
-          item
-          xs={12}
+          container
+          direction={"row"}
+          justifyContent={"center"}
           sx={{
             backgroundColor: "transparent",
-            mt: "25vh",
-          }}
-        >
-          <ServiceNavTabs />
-        </Grid>
-        <Grid
-          xs={12}
-          container
-          justifyContent="center"
-          boxShadow={5}
-          borderRadius={5}
-          sx={{
-            backgroundColor: "white",
             width: "75%", //Adjust this to change the width of the form
             height: "auto",
-            mt: "2vh",
+            mt: "25vh",
+            mb: "5vh",
           }}
         >
+          <Typography
+            align={"center"}
+            fontStyle={"Open Sans"}
+            fontSize={18}
+          >
+            Arayah Remillard
+          </Typography>
           <Grid
             item
             xs={12}
-            sx={{
-              //backgroundColor: "#186BD9",
-              backgroundColor: "white",
-            }}
-            borderRadius={5}
-          >
-            <Typography color={"black"} align={"center"} fontSize={40}>
-              Appointment Scheduling
-            </Typography>
-          </Grid>
-          <Grid
-            item xs={12}
-            sm={6}
-            mt={2}
-          >
-            <LocalizationProvider
-              dateAdapter={AdapterDayjs}
-            >
-              <StaticDatePicker
-                orientation="landscape"
-                minDate={currentDate}
-                //value={currentDate}
-                onAccept={handleOk}
-                onChange={handleDateInput}
-                loading={isLoading}
-                onMonthChange={handleMonthChange}
-                renderLoading={() => <DayCalendarSkeleton/>}
-                sx={{
-                  '.MuiPickersToolbar-root': {
-                    color: '#186BD9',
-                    //borderRadius: '2px',
-                    //borderWidth: '1px',
-                    borderColor: '#186BD9',
-                    border: '1px solid',
-                    backgroundColor: 'white',
-                    //width: '200px'
-                  },
-                  '.MuiPickersDay-dayWithMargin': {
-                    //color: '#186BD9',
-                  }
-                }}
-                slots={{
-                  day: ServerDay,
-                }}
-                slotProps={{
-                  day: {
-                    highlightedDays,
-                  } as never, //any...?
-                }}
-              />
-            </LocalizationProvider>
-           <h3>{handleOk(selectedDate)}</h3>
-          </Grid>
-          <Grid
-            xs={6}
-            container
-            direction={"row"}
-            justifyContent={"center"}
+            paddingBottom={2}
             sx={{
               backgroundColor: "transparent",
-              width: "40vw", //Adjust this to change the width of the form
+            }}
+          >
+            <ServiceNavTabs />
+          </Grid>
+          <Grid
+            xs={12}
+            container
+            justifyContent="center"
+            boxShadow={5}
+            borderRadius={5}
+            sx={{
+              backgroundColor: "white",
+              width: "75%", //Adjust this to change the width of the form
               height: "auto",
-              //mt: "25vh",
-              mb: "5vh",
+              // mt: "2vh",
             }}
           >
             <Grid
               item
               xs={12}
+              sx={{
+                //backgroundColor: "#186BD9",
+                backgroundColor: "white",
+              }}
+              borderRadius={5}
             >
-              <Typography
-                color={"black"}
-                align={"center"}
-                fontStyle={"Open Sans"}
-                fontSize={24}
-                mt={1}
-              >
-                Appointment Service Form
+              <Typography color={"black"} align={"center"} fontSize={40}>
+                Appointment Scheduling
               </Typography>
             </Grid>
-            <Grid container sx={{ backgroundColor: "white" }}>
-              <Grid item xs={6} mt={2} sx={{align: "center"}}>
-                <Typography align={"center"}>Name:</Typography>
-                <CenterAlignedTextbox
-                  label={"Name"}
-                  value={form.name}
-                  onChange={handleNameInput}
-                  type={"text"}
+            <Grid
+              item xs={12}
+              sm={6}
+              mt={2}
+            >
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+              >
+                <StaticDatePicker
+                  orientation="landscape"
+                  minDate={currentDate}
+                  //value={currentDate}
+                  onAccept={handleOk}
+                  onChange={handleDateInput}
+                  loading={isLoading}
+                  onMonthChange={handleMonthChange}
+                  renderLoading={() => <DayCalendarSkeleton/>}
+                  sx={{
+                    '.MuiDateCalendar-root': {
+                      borderRadius: '5px',
+                      border: '3px solid',
+                      borderColor: '#186BD9',
+                    },
+                    '.MuiPickersToolbar-root': {
+                      color: '#186BD9',
+                      borderRadius: '5px',
+                      //borderWidth: '1px',
+                      borderColor: '#186BD9',
+                      border: '3px solid',
+                      backgroundColor: 'white',
+                      //width: '200px'
+                    },
+                    '.MuiPickersDay-dayWithMargin': {
+                      //color: '#186BD9',
+                    },
+                    marginLeft: "20px"
+                  }}
+                  slots={{
+                    day: ServerDay,
+                  }}
+                  slotProps={{
+                    day: {
+                      highlightedDays,
+                    } as never, //any...?
+                  }}
                 />
-              </Grid>
-              <Grid item xs={6} mt={2} sx={{align: "center"}}>
-                <Typography align={"center"}>Employee:</Typography>
-                <EmployeeDropDown returnedEmployeeID={form.employee} handleChange={handleEmployeeInput} />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography align={"center"}>Reason For Visiting:</Typography>
-                <CenterAlignedTextbox
-                  label={"Message"}
-                  value={form.reasonForVisit}
-                  onChange={handleReasonInput}
-                />
-              </Grid>
-              <Grid item xs={6} sx={{align: "center"}}>
-                <Typography align={"center"}>Room:</Typography>
-                <DropDown
-                  items={nodes.map((node) => ({
-                    value: node.nodeID,
-                    label: node.longName,
-                  }))}
-                  label={"Room Number"}
-                  returnData={form.roomNumber}
-                  handleChange={handleRoomNumberInput}
-                />
-              </Grid>
-              <Grid item xs={6} sx={{align: "center"}}>
-                <Typography align={"center"}>Select Open Date From Calendar:</Typography>
-                <div className={classes.root}>
-                <TextField
-                  // sx={{
-                  //   mx: "35px" //is there a better way to line this up tp CenterAllginedTextbox elements???
-                  // }}
-                  id="date"
-                  label="Selected Date"
-                  value={selectedDate ? selectedDate.format('MM-DD-YYYY') : ''}
-                  //value={highlightedDays.length > 0 ? highlightedDays.map(day => day.toString()).join(', ') : ''}
-                  onChange={(e) => handleDateInput(dayjs(e.target.value))}
-                />
-                </div>
-              </Grid>
+              </LocalizationProvider>
+             <h3 style={{marginLeft: "20px"}}>{handleOk(selectedDate)}</h3>
+            </Grid>
+            <Grid
+              xs={6}
+              container
+              direction={"row"}
+              justifyContent={"center"}
+              sx={{
+                backgroundColor: "transparent",
+                width: "40vw", //Adjust this to change the width of the form
+                height: "auto",
+                //mt: "25vh",
+                mb: "5vh",
+              }}
+            >
               <Grid
                 item
-                xs={6}
-                sx={{
-                  display: "flex",
-                  my: 2,
-                  justifyContent: "center",
-                }}
+                xs={12}
               >
-                <CalendarAvailabiltiySubmitButton
-                  text={"SUBMIT"}
-                  input={form}
-                  clear={clear}
-                />
+                <Typography
+                  color={"black"}
+                  align={"center"}
+                  fontStyle={"Open Sans"}
+                  fontSize={24}
+                  mt={1}
+                >
+                  Appointment Service Form
+                </Typography>
+              </Grid>
+              <Grid container sx={{ backgroundColor: "white" }}>
+                <Grid item xs={6} mt={2} sx={{align: "center"}}>
+                  <Typography align={"center"}>Name:</Typography>
+                  <CenterAlignedTextbox
+                    label={"Name"}
+                    value={form.name}
+                    onChange={handleNameInput}
+                    type={"text"}
+                  />
+                </Grid>
+                <Grid item xs={6} mt={2} sx={{align: "center"}}>
+                  <Typography align={"center"}>Employee:</Typography>
+                  <EmployeeDropDown returnedEmployeeID={form.employee} handleChange={handleEmployeeInput} />
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography align={"center"}>Reason For Visiting:</Typography>
+                  <CenterAlignedTextbox
+                    label={"Message"}
+                    value={form.reasonForVisit}
+                    onChange={handleReasonInput}
+                  />
+                </Grid>
+                <Grid item xs={6} sx={{align: "center"}}>
+                  <Typography align={"center"}>Room:</Typography>
+                  <DropDown
+                    items={nodes.map((node) => ({
+                      value: node.nodeID,
+                      label: node.longName,
+                    }))}
+                    label={"Room Number"}
+                    returnData={form.roomNumber}
+                    handleChange={handleRoomNumberInput}
+                  />
+                </Grid>
+                <Grid item xs={6} sx={{align: "center"}}>
+                  <Typography align={"center"}>Select Open Date From Calendar:</Typography>
+                  <div className={classes.root}>
+                  <TextField
+                    // sx={{
+                    //   mx: "35px" //is there a better way to line this up tp CenterAllginedTextbox elements???
+                    // }}
+                    id="date"
+                    label="Selected Date"
+                    value={selectedDate ? selectedDate.format('MM-DD-YYYY') : ''}
+                    //value={highlightedDays.length > 0 ? highlightedDays.map(day => day.toString()).join(', ') : ''}
+                    onChange={(e) => handleDateInput(dayjs(e.target.value))}
+                  />
+                  </div>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    my: 2,
+                    justifyContent: "center",
+                  }}
+                >
+                  <CalendarAvailabiltiySubmitButton
+                    text={"SUBMIT"}
+                    input={form}
+                    clear={clear}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Typography mt={5}>Arayah Remillard</Typography>
+
       </Stack>
     );
   }

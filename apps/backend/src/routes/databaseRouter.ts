@@ -345,7 +345,7 @@ router.post("/uploadedges", async (req, res) => {
 router.put("/updatesr/:id", async (req, res) => {
   const data: {
     id: number;
-    userID: string;
+    employeeID: number;
     nodeID: string;
     serviceType: string;
     services: string;
@@ -360,6 +360,7 @@ router.put("/updatesr/:id", async (req, res) => {
     },
     data: {
       status: data.status,
+      employeeID: data.employeeID,
     },
   });
 

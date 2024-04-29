@@ -14,10 +14,10 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 const useStyles = makeStyles({
   logoImage: {
     display: "flex",
-    minWidth: "450px",
-    maxWidth: "450px",
+    width: "100%", // Set the width to 100%
     minHeight: "120px",
-    flexShrink: 0,
+    minWidth: "250px",
+    maxWidth: "450px", // Add a max-width for responsiveness
   },
 });
 
@@ -47,18 +47,10 @@ function TopBanner() {
         elevation: 1,
       }}
     >
-      <Toolbar sx={{ flexGrow: 2, marginLeft: 2 }}>
-        <Stack sx={{ marginRight: 2, color: "#012D5A" }}>
+      <Toolbar>
+        <Stack direction="row" spacing={2.5} sx={{  alignItems: "center",  color: "#012D5A", marginRight: "1%" }}>
           <NavBar />
-        </Stack>
 
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          display={"flex"}
-          sx={{ flexGrow: 1, marginRight: "2%" }}
-        >
           <Link to="/">
             <LogoIconButton as="span" color="inherit" aria-label="logo">
               <img src={bwhLogo} className={classes.logoImage} alt="bwh logo" />
@@ -66,25 +58,24 @@ function TopBanner() {
           </Link>
         </Stack>
 
-
-          <Stack
-            direction="row"
-            spacing={2}
-                 alignItems="center"
-                 justifyContent="center"
-                 display={"flex"}
-                 sx={{ flexGrow: 2.5, marginRight: "10%", marginLeft: "12%"}}>
-            <CurrentTime/>
-            <WeatherApp/>
-
-          </Stack>
+        <Stack
+          direction="row"
+          spacing={2}
+          flexGrow={1}
+          alignItems="center"
+          justifyContent="center"
+          sx={{ textAlign: "center", marginRight: "1%", minWidth: "200px" }}
+        >
+          <CurrentTime />
+          <WeatherApp />
+        </Stack>
 
         <Stack
           direction="row"
           spacing={2}
           alignItems="center"
-          display={"flex"}
-          sx={{ flexGrow: 1 }}
+          justifyContent="center"
+          sx={{ textAlign: "right", marginRight: "1%" }}
         >
           <SearchBar />
           {/* Replace Sign In button and profile button with LoginButton */}

@@ -15,6 +15,7 @@ import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
 import BalLoons from "../images/servicePageImages/FormIcons/BalLoons.jpg";
 import GetWellCard from "../images/servicePageImages/FormIcons/GetWellCard.jpg";
 import TedBear from "../images/servicePageImages/FormIcons/TedBear.jpeg";
+import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -147,6 +148,12 @@ function GiftDeliveryService() {
           mb: "5vh",
         }}
       >
+        <Typography
+          align={"center"}
+          fontStyle={"Open Sans"}
+        >
+          Yitao Hong, Arayah Remillard
+        </Typography>
         <Grid
           item
           xs={12}
@@ -191,25 +198,25 @@ function GiftDeliveryService() {
             <PurchaseCard imagePath={TedBear} title={"Teddy Bear"} description={"$5.99"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Balloon Amount"}
               value={form.balloons}
               onChange={handleBalloonsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Card Amount"}
               value={form.cards}
               onChange={handleCardsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Bear Amount"}
               value={form.bears}
               onChange={handleBearsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
 
           <Grid item xs={4} mt={5} sx={{align: "center"}}>
@@ -305,7 +312,6 @@ function GiftDeliveryService() {
           </Grid>
         </Grid>
       </Grid>
-      <Typography>Yitao Hong, Arayah Remillard</Typography>
     </Stack>
   );
 }
