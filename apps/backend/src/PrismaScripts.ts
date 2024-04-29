@@ -21,7 +21,7 @@ export async function createNodePrisma(node: MapNodeType) {
       // console.log(`${loggingPrefix}Node already exists. Skipping...`);
       return 304;
     } else {
-      console.error(e);
+      // console.error(e);
       return 400;
     }
   }
@@ -37,7 +37,7 @@ export async function updateNodePrisma(node: MapNodeType) {
     });
     return 200;
   } catch (e) {
-    console.error(e);
+    // console.error(e);
     return 400;
   }
 }
@@ -51,7 +51,7 @@ export async function deleteNodePrisma(nodeID: string) {
     });
     return 200;
   } catch (e) {
-    console.error(e);
+    // console.error(e);
     return 400;
   }
 }
@@ -65,7 +65,7 @@ export async function deleteEdgePrisma(edgeID: string) {
     });
     return 200;
   } catch (e) {
-    console.error(e);
+    // console.error(e);
     return 400;
   }
 }
@@ -82,7 +82,7 @@ export async function createEdgePrisma(edge: MapEdgeType) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       // console.log(`${loggingPrefix}Edge already exists. Skipping...`);
     } else {
-      console.error(e);
+      // console.error(e);
     }
   }
   // console.log(`Finished adding edge`);
@@ -93,7 +93,7 @@ export async function clearDBNodes() {
   try {
     await client.node.deleteMany({});
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
   // console.log(`${loggingPrefix}Nodes cleared from DB`);
 }
@@ -103,7 +103,7 @@ export async function clearDBEdges() {
   try {
     await client.edge.deleteMany({});
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
   // console.log(`${loggingPrefix}Edges cleared from DB`);
 }
@@ -113,7 +113,7 @@ export async function clearDBRequests() {
   try {
     await client.serviceRequest.deleteMany({});
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   // console.log(`${loggingPrefix}Service requests cleared from DB`);
@@ -125,7 +125,7 @@ export async function getDBNodes(): Promise<MapNodeType[] | null> {
   try {
     nodes = await client.node.findMany({});
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   if (nodes == null) {
@@ -149,7 +149,7 @@ export async function getDBNodeByID(
       },
     });
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   if (node == null) {
@@ -167,7 +167,7 @@ export async function createServiceRequest(
   serviceType: string,
   services: string,
 ): Promise<void> {
-  console.log("Creating service request");
+  // console.log("Creating service request");
 
   try {
     const serviceJson = JSON.stringify(services);
@@ -197,7 +197,7 @@ export async function createServiceRequest(
       }
     } else {
       // All other errors
-      console.error(e);
+      // console.error(e);
     }
   }
 }
@@ -208,7 +208,7 @@ export async function getDBEdges(): Promise<MapEdgeType[] | null> {
   try {
     edges = await client.edge.findMany({});
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   if (edges == null) {
@@ -253,7 +253,7 @@ export async function getServiceRequestsFromDB() {
       },
     });
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   if (requests == null) {
@@ -274,7 +274,7 @@ export async function getServiceRequestFromDBByType(serviceType: string) {
       },
     });
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   if (request == null) {
@@ -282,9 +282,9 @@ export async function getServiceRequestFromDBByType(serviceType: string) {
     //   `${loggingPrefix}No request found with serviceType ${serviceType}`,
     // );
   } else {
-    console.log(
-      `${loggingPrefix}Request(s) found with serviceType ${serviceType}`,
-    );
+    // console.log(
+    //   `${loggingPrefix}Request(s) found with serviceType ${serviceType}`,
+    // );
   }
 
   return request;
@@ -324,7 +324,7 @@ export async function getServiceRequestFromDBByUserID(employeeID: number) {
       },
     });
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   if (request == null) {
@@ -349,7 +349,7 @@ export async function checkUserID(userID: number) {
       },
     });
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
   if (user == null) {
     // console.log(
@@ -413,7 +413,7 @@ export async function checkUserPatient(userID: number): Promise<boolean> {
         return false;
       }
     } catch (e) {
-      console.error(e);
+      // console.error(e);
       return false;
     }
   } else {
@@ -441,7 +441,7 @@ export async function checkUserAdmin(userID: number): Promise<boolean> {
         return false;
       }
     } catch (e) {
-      console.error(e);
+      // console.error(e);
       return false;
     }
   } else {
@@ -461,7 +461,7 @@ export async function createEmployeePrisma(
     });
     return true;
   } catch (e) {
-    console.error(e);
+    // console.error(e);
     return false;
   }
 }
@@ -471,7 +471,7 @@ export async function getEmployeesFromDB() {
   try {
     employees = await client.employee.findMany();
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   if (employees == null) {
@@ -488,7 +488,7 @@ export async function clearEmployeesFromDB() {
   try {
     await client.employee.deleteMany({});
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
   // console.log(`${loggingPrefix}Employees cleared from DB`);
 }
