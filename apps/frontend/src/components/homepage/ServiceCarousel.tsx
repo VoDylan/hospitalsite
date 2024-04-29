@@ -51,14 +51,14 @@ function ServiceCarousel() {
       <Stack
         sx={{
           margin: "70px",
-          marginBottom: "2%",
-          marginTop: "-2%",
+          marginBottom: "1%",
+          marginTop: "2.5%",
         }}
         direction={"row"}
         spacing={6}
         display={"flex"}
         alignContent={"center"}
-        justifyContent={"center"} id="service-carousel"
+        justifyContent={"center"}
       >
         {secondaryCards.map((card, index) => (
           <ServiceCards

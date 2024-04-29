@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
-import {Button, IconButton, Link, Typography, styled} from "@mui/material";
+import {Button, IconButton, Typography, styled} from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Slide from "@mui/material/Slide";
@@ -11,6 +11,7 @@ import mapVideo from "../../videos/finaledit2.mp4";
 import ServiceCarousel from "./ServiceCarousel.tsx";
 import InfoIcon from "@mui/icons-material/Info";
 import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
+import { Link } from "react-router-dom";
 
 interface CardData {
   image: string;
@@ -212,13 +213,13 @@ function Carousel() {
 
       <Box
         sx={{
-          color: "#186BD9",
+          color: "red",
           opacity: "0.7",
           marginBottom: "2%"}}
         display={"flex"}
         justifyContent={"center"}>
         <Typography variant = "subtitle1"
-                    fontSize={"12px"}>
+                    fontSize={"16px"}>
           This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
         </Typography>
       </Box>
