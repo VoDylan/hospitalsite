@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import MapNode from "common/src/map/MapNode.ts";
 import axios from "axios";
+import updateDBNode from "../../common/UpdateDBNode.ts";
 
 interface NodeInfoProps {
   style: React.CSSProperties;
@@ -18,18 +19,7 @@ export default function NodeInfo(props: NodeInfoProps) {
   const [node, setNode] = useState<MapNode>(props.node);
 
   const handleEditNode = (node: MapNode) => {
-    try {
-      axios
-        .put("/api/database/nodes/updatenode", node.nodeInfo, {
-          headers: { "Content-Type": "application/json" },
-        })
-        .then((res) => {
-          console.log("Updated node!");
-          console.log(res.data);
-        });
-    } catch (e) {
-      console.log("Failed to update node");
-    }
+    updateDBNode(node);
     props.nodeUpdateCallback();
   };
 
