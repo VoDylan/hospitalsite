@@ -1,9 +1,7 @@
 import MapNode from "common/src/map/MapNode.ts";
 import {useEffect, useState} from "react";
 import MapEdge from "common/src/map/MapEdge.ts";
-import {MapEdgeType} from "common/src/map/MapEdgeType.ts";
 import GraphManager from "../common/GraphManager.ts";
-import axios from "axios";
 
 export const useSelectedNodes = () => {
   const [selectedNode1, setSelectedNode1] = useState<MapNode | null>(null);
@@ -11,41 +9,42 @@ export const useSelectedNodes = () => {
   const [edgeBetween, setEdgeBetween] = useState<MapEdge | null>(null);
 
   useEffect(() => {
-    const getEdge = async (edgeID: string) => {
-      let edgeBetween: MapEdge | null = null;
-      try {
-        const response = await axios.get(`/api/database/edges/${edgeID}`, {
-          headers: { "Content-Type": "application/json" },
-          validateStatus: (stat: number) => {
-            return stat == 200 || stat == 404 || stat == 304;
-          },
-        });
-        if (response.status == 200 || response.status == 304) {
-          const edgeData: MapEdgeType = response.data;
-          edgeBetween = GraphManager.getInstance().getEdgeByID(edgeData.edgeID);
-          if (!edgeBetween) {
-            console.log(
-              `Corresponding edge object for the returned edge data (id ${edgeData.edgeID}) could not be found!`,
-            );
-          } else {
-            console.log(`Edge with edgeID ${edgeBetween.edgeID} found!`);
-          }
-        } else {
-          console.log(`Edge with id ${edgeID} not found`);
-        }
-      } catch (e) {
-        console.error(e);
-      }
+    const getEdge = (edgeID: string) => {
+      // try {
+      //   const response = await axios.get(`/api/database/edges/${edgeID}`, {
+      //     headers: { "Content-Type": "application/json" },
+      //     validateStatus: (stat: number) => {
+      //       return stat == 200 || stat == 404 || stat == 304;
+      //     },
+      //   });
+      //   if (response.status == 200 || response.status == 304) {
+      //     const edgeData: MapEdgeType = response.data;
+      //     edgeBetween = GraphManager.getInstance().getEdgeByID(edgeData.edgeID);
+      //     if (!edgeBetween) {
+      //       console.log(
+      //         `Corresponding edge object for the returned edge data (id ${edgeData.edgeID}) could not be found!`,
+      //       );
+      //     } else {
+      //       console.log(`Edge with edgeID ${edgeBetween.edgeID} found!`);
+      //     }
+      //   } else {
+      //     console.log(`Edge with id ${edgeID} not found`);
+      //   }
+      // } catch (e) {
+      //   console.error(e);
+      // }
 
-      return edgeBetween;
+
+      return GraphManager.getInstance().getEdgeByID(edgeID);
     };
 
-    const checkAllEdges = async () => {
-      let edgeBetween: MapEdge | null = await getEdge(
+    const checkAllEdges = () => {
+      let edgeBetween: MapEdge | null = getEdge(
         `${selectedNode1!.nodeID}_${selectedNode2!.nodeID}`,
       );
+
       if (!edgeBetween) {
-        edgeBetween = await getEdge(
+        edgeBetween = getEdge(
           `${selectedNode2!.nodeID}_${selectedNode1!.nodeID}`,
         );
       }
@@ -53,10 +52,10 @@ export const useSelectedNodes = () => {
       setEdgeBetween(edgeBetween);
     };
 
-    console.log("Checking for edge");
-
     if (selectedNode1 && selectedNode2) {
-      checkAllEdges().then(() => console.log("Finished checking for edge"));
+      console.log("Checking for edge");
+      checkAllEdges();
+      console.log("Finished checking for edge");
     }
   }, [selectedNode1, selectedNode2]);
 

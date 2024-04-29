@@ -1,9 +1,10 @@
 import MapNode from "common/src/map/MapNode.ts";
 import {IRenderInfo} from "../../../hooks/useFilters.tsx";
 import React, {useEffect, useRef, useState} from "react";
-import {NodeType} from "common/src/map/MapNodeType.ts";
+import {MapNodeType, NodeType} from "common/src/map/MapNodeType.ts";
 import Draggable, {DraggableData, DraggableEvent} from "react-draggable";
 import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
+import GraphManager from "../../../common/GraphManager.ts";
 
 interface MapIconProps {
   node: MapNode;
@@ -13,7 +14,7 @@ interface MapIconProps {
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
   transformState: ReactZoomPanPinchState;
-  // key: number;
+  setDataLoadedSoft: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface IconPosition {
@@ -66,12 +67,24 @@ export default function MapIcon(props: MapIconProps) {
       y: data.y,
     };
 
+    const newNodeInfo: MapNodeType = props.node.nodeInfo;
+
+    newNodeInfo.xcoord = newPosition.x;
+    newNodeInfo.ycoord = newPosition.y;
+
     console.log("Dragging");
+    setIsDragging(true);
     setPosition(newPosition);
+    GraphManager.getInstance().updateLocalNode(newNodeInfo);
   };
 
-  const handleDragStop = (event: DraggableEvent, data: DraggableData) => {
+  const handleDragStop = (event: DraggableEvent) => {
     if(event.type == "mouseup" || event.type == "touchend") {
+      const nodeInfo: MapNodeType = props.node.nodeInfo;
+      nodeInfo.xcoord = position.x + (props.renderInfo.width / 2);
+      nodeInfo.ycoord = position.y + (props.renderInfo.height / 2);
+      GraphManager.getInstance().updateLocalNode(nodeInfo);
+      props.setDataLoadedSoft(false);
       setTimeout(() => {
         console.log("Dragging stopped");
         setIsDragging(false);
@@ -103,7 +116,7 @@ export default function MapIcon(props: MapIconProps) {
 
   const handleClick = () => {
     if(isDragging) {
-      setIsDragging(false);
+      // setIsDragging(false);
       return;
     }
 
@@ -153,7 +166,6 @@ export default function MapIcon(props: MapIconProps) {
       scale={transformState.scale}
       disabled={!selected}
       position={position}
-      // key={props.key}
     >
       <div
         style={{
@@ -162,7 +174,8 @@ export default function MapIcon(props: MapIconProps) {
           // top: currPositionY,
           zIndex: zIndex,
           // transform: (isHovered || selected) ? `scale(1.25)` : `scale(1)`,
-          transition: (!selected && !isDragging) ? "transform 0.05s ease-in-out" : "none",
+          // transition: (!selected && !isDragging) ? "transform 0.05s ease-in-out" : "none",
+          transition: (!selected && !isDragging) ? "none" : "none",
           boxShadow: selected ? "0 0 2em 0.5em #003A96" : undefined,
           borderRadius: props.node.nodeType == NodeType.EXIT ? undefined : "100%",
           width: iconWidth,

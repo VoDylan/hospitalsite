@@ -23,6 +23,7 @@ interface SymbolCanvasProps {
   selectedNode2: MapNode | null;
   handleNodeCreationRequest: (event: React.MouseEvent, boundingElementRef: React.MutableRefObject<HTMLDivElement | null>) => void;
   transformState: ReactZoomPanPinchState;
+  setDataLoadedSoft: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function SymbolCanvas(props: SymbolCanvasProps) {
@@ -30,6 +31,30 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
   const [filterInfo, setFilterInfo] = useState<Map<FilterType, IFilterState>>(props.filterInfo);
 
   const boundingBoxRef = useRef<HTMLDivElement>(null);
+
+  const usedKeys = useRef<number[]>([]);
+
+  const newKeys = useRef<number[]>([]);
+
+  const getNewKey = (): number => {
+    let newKey: number = Math.random();
+    let foundUnique: boolean = false;
+    while (!foundUnique) {
+      const keyAlreadyUsed = usedKeys.current.find((key) => {
+        return key == newKey;
+      });
+
+      if(!keyAlreadyUsed) {
+        foundUnique = true;
+      } else {
+        newKey = Math.random();
+      }
+    }
+
+    newKeys.current.push(newKey);
+
+    return newKey;
+  };
 
   useEffect(() => {
     setFilterInfo(props.filterInfo);
@@ -47,6 +72,9 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         props.filteredNodes,
       );
 
+      nodesOnFloor.forEach((node: MapNode) => {
+        console.log(node.floor);
+      });
       setNodesOnFloor(nodesOnFloor);
     }
   }, [props.backgroundRendered, props.filteredNodes, props.floor]);
@@ -61,11 +89,18 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
       ref={boundingBoxRef}
       onDoubleClick={(event: React.MouseEvent) => props.handleNodeCreationRequest(event, boundingBoxRef)}
     >
-      {nodesOnFloor.map((node) => {
+      {nodesOnFloor.map((node, index: number, array ) => {
         const nodeTypeObj: NodeType | undefined = getNodeTypeFromStr(node.nodeType);
         if(nodeTypeObj) {
           const renderInfo: IRenderInfo | undefined = filterInfo.get(nodeTypeObj)!.renderInfo;
-          if(renderInfo)
+          if(renderInfo) {
+            const key: number = getNewKey();
+
+            if(index >= array.length - 1) {
+              usedKeys.current = newKeys.current;
+              newKeys.current = [];
+            }
+
             return (
               <MapIcon
                 node={node}
@@ -75,9 +110,11 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
                 selectedNode1={props.selectedNode1}
                 selectedNode2={props.selectedNode2}
                 transformState={props.transformState}
+                setDataLoadedSoft={props.setDataLoadedSoft}
+                key={key}
               />
             );
-          return <></>;
+          }
         }
         return <></>;
       })}

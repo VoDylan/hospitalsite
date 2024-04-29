@@ -2,8 +2,7 @@ import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import MapNode from "common/src/map/MapNode.ts";
-import axios from "axios";
-import updateDBNode from "../../common/UpdateDBNode.ts";
+import GraphManager from "../../common/GraphManager.ts";
 
 interface NodeInfoProps {
   style: React.CSSProperties;
@@ -19,27 +18,12 @@ export default function NodeInfo(props: NodeInfoProps) {
   const [node, setNode] = useState<MapNode>(props.node);
 
   const handleEditNode = (node: MapNode) => {
-    updateDBNode(node);
+    GraphManager.getInstance().updateLocalNode(node.nodeInfo);
     props.nodeUpdateCallback();
   };
 
   const handleDeleteNode = (node: MapNode) => {
-    try {
-      axios
-        .put(
-          `/api/database/nodes/deletenode/${node.nodeID}`,
-          {},
-          {
-            headers: { "Content-Type": "application/json" },
-          },
-        )
-        .then((res) => {
-          console.log("Deleted node!");
-          console.log(res.data);
-        });
-    } catch (e) {
-      console.log("Failed to delete node");
-    }
+    GraphManager.getInstance().deleteLocalNodeByID(node.nodeID);
     props.nodeUpdateCallback();
   };
 

@@ -62,6 +62,10 @@ class MapNode {
     return this._nodeInfo;
   }
 
+  public set nodeInfo(newNodeInfo: MapNodeType) {
+    this._nodeInfo = newNodeInfo;
+  }
+
   /**
    * Getter for the nodeID field
    */

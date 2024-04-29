@@ -9,7 +9,8 @@ import {useEffect, useState} from "react";
 export const useNodes = () => {
   const [nodeData, setNodeData] = useState<MapNode[]>([]);
   const [edgeData, setEdgeData] = useState<MapEdge[]>([]);
-  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
+  const [dataLoadedHard, setDataLoadedHard] = useState<boolean>(false);
+  const [dataLoadedSoft, setDataLoadedSoft] = useState<boolean>(false);
 
   useEffect(() => {
     const loadNodeData = async (): Promise<MapNodeType[]> => {
@@ -37,16 +38,26 @@ export const useNodes = () => {
       return nodeData;
     };
 
-    console.log(`Loading node Data`);
-    if (!dataLoaded) {
+    console.log(`Loading node and edge data from DB`);
+    if (!dataLoadedHard) {
+      setDataLoadedSoft(false);
       loadNodeData().then(() => {
         setNodeData(GraphManager.getInstance().nodes);
         setEdgeData(GraphManager.getInstance().edges);
-        setDataLoaded(true);
-        console.log("Node Data loaded");
+        setDataLoadedHard(true);
+        setDataLoadedSoft(true);
+        console.log("Node and edge data loaded from DB");
       });
     }
-  }, [dataLoaded]);
+  }, [dataLoadedHard]);
 
-  return {nodeData: nodeData, edgeData: edgeData, dataLoaded: dataLoaded, setDataLoaded};
+  useEffect(() => {
+    if(!dataLoadedSoft) {
+      setNodeData(GraphManager.getInstance().nodes);
+      setEdgeData(GraphManager.getInstance().edges);
+      setDataLoadedSoft(false);
+    }
+  }, [dataLoadedSoft]);
+
+  return {nodeData: nodeData, edgeData: edgeData, dataLoadedHard, setDataLoadedHard, dataLoadedSoft, setDataLoadedSoft};
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MapEdge from "common/src/map/MapEdge.ts";
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import MapNode from "common/src/map/MapNode.ts";
-import axios from "axios";
+import GraphManager from "../../common/GraphManager.ts";
 
 interface EdgeInfoProps {
   style: React.CSSProperties;
@@ -20,52 +20,69 @@ export default function EdgeInfo(props: EdgeInfoProps) {
     setEdge(props.edge);
   }, [props.edge]);
 
+  // const handleCreateEdge = () => {
+  //   console.log("Creating edge");
+  //   try {
+  //     axios
+  //       .put(
+  //         `/api/database/edges/createedge`,
+  //         {
+  //           edgeID: `${props.selectedNode1.nodeID}_${props.selectedNode2.nodeID}`,
+  //           startNodeID: `${props.selectedNode1.nodeID}`,
+  //           endNodeID: `${props.selectedNode2.nodeID}`,
+  //         },
+  //         {
+  //           headers: { "Content-Type": "application/json" },
+  //           timeout: 10000,
+  //           timeoutErrorMessage: "Timed out trying to create edge",
+  //         },
+  //       )
+  //       .then((res) => {
+  //         console.log("Added edge!");
+  //         console.log(res.data);
+  //         props.nodeUpdateCallback();
+  //       });
+  //   } catch (e) {
+  //     console.error("Failed to create edge!");
+  //   }
+  // };
+
   const handleCreateEdge = () => {
-    console.log("Creating edge");
-    try {
-      axios
-        .put(
-          `/api/database/edges/createedge`,
-          {
-            edgeID: `${props.selectedNode1.nodeID}_${props.selectedNode2.nodeID}`,
-            startNodeID: `${props.selectedNode1.nodeID}`,
-            endNodeID: `${props.selectedNode2.nodeID}`,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-            timeout: 10000,
-            timeoutErrorMessage: "Timed out trying to create edge",
-          },
-        )
-        .then((res) => {
-          console.log("Added edge!");
-          console.log(res.data);
-          props.nodeUpdateCallback();
-        });
-    } catch (e) {
-      console.error("Failed to create edge!");
-    }
+    const edgeID = `${props.selectedNode1.nodeID}_${props.selectedNode2.nodeID}`;
+    if(!GraphManager.getInstance().getEdgeByID(edgeID)) GraphManager.getInstance().edges.push(
+      new MapEdge({
+        edgeID: edgeID,
+        startNodeID: props.selectedNode1.nodeID,
+        endNodeID: props.selectedNode2.nodeID,
+      }, props.selectedNode1, props.selectedNode2)
+    );
   };
+
+  // const handleDeleteEdge = () => {
+  //   if(!props.edge) return;
+  //   try {
+  //     axios
+  //       .put(
+  //         `/api/database/edges/deleteedge/${props.edge.edgeID}`,
+  //         {},
+  //         {
+  //           headers: { "Content-Type": "application/json" },
+  //         },
+  //       )
+  //       .then((res) => {
+  //         console.log("Deleted edge!");
+  //         console.log(res.data);
+  //         props.nodeUpdateCallback();
+  //       });
+  //   } catch (e) {
+  //     console.error("Failed to delete edge!");
+  //   }
+  // };
 
   const handleDeleteEdge = () => {
     if(!props.edge) return;
-    try {
-      axios
-        .put(
-          `/api/database/edges/deleteedge/${props.edge.edgeID}`,
-          {},
-          {
-            headers: { "Content-Type": "application/json" },
-          },
-        )
-        .then((res) => {
-          console.log("Deleted edge!");
-          console.log(res.data);
-          props.nodeUpdateCallback();
-        });
-    } catch (e) {
-      console.error("Failed to delete edge!");
-    }
+    if(GraphManager.getInstance().getEdgeByID(props.edge.edgeID))
+      GraphManager.getInstance().deleteLocalEdgeByID(props.edge.edgeID);
   };
 
   return (

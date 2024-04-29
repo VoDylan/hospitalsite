@@ -18,6 +18,7 @@ import NodeCreator from "../NodeCreator.tsx";
 import useWindowSize from "../../../hooks/useWindowSize.tsx";
 import transformCoords2 from "../../../common/TransformCoords2.ts";
 import {Box} from "@mui/material";
+import {isEqual} from "lodash";
 
 interface MapRenderProps {
   filterInfo: Map<FilterType, IFilterState>;
@@ -27,8 +28,10 @@ interface MapRenderProps {
   deselectNodeGeneral: (node: MapNode) => void;
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
-  dataLoaded: boolean;
-  setDataLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  dataLoadedHard: boolean;
+  setDataLoadedHard: React.Dispatch<React.SetStateAction<boolean>>;
+  dataLoadedSoft: boolean;
+  setDataLoadedSoft: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function MapRender(props: MapRenderProps) {
@@ -75,7 +78,6 @@ export default function MapRender(props: MapRenderProps) {
   const updateTransformState = (ref: ReactZoomPanPinchRef) => {
     // console.log("Updating transform state");
     // console.log(ref.state);
-    console.log("MapRender: Updating transform state");
 
     const newState: ReactZoomPanPinchState = {
       previousScale: ref.state.previousScale,
@@ -84,7 +86,10 @@ export default function MapRender(props: MapRenderProps) {
       positionY: ref.state.positionY,
     };
 
-    setTransformState(newState);
+    if(!isEqual(newState, transformState)) {
+      console.log("MapRender: Updating transform state");
+      setTransformState(newState);
+    }
   };
 
   const handleBackgroundRenderStatus = (backgroundRendered: boolean, width: number, height: number) => {
@@ -130,7 +135,7 @@ export default function MapRender(props: MapRenderProps) {
   };
   const handleCreateNode = () => {
     handleCloseNodeCreator();
-    props.setDataLoaded(false);
+    props.setDataLoadedHard(false);
   };
 
   useEffect(() => {
@@ -194,7 +199,7 @@ export default function MapRender(props: MapRenderProps) {
               height={canvasHeight}
               floor={floor}
               nodeData={filteredNodes}
-              dataLoaded={props.dataLoaded}
+              dataLoaded={props.dataLoadedHard}
             />
             <SymbolCanvas
               backgroundRendered={backgroundRendered}
@@ -207,6 +212,7 @@ export default function MapRender(props: MapRenderProps) {
               selectedNode2={props.selectedNode2}
               handleNodeCreationRequest={handleNodeCreationRequest}
               transformState={transformState}
+              setDataLoadedSoft={props.setDataLoadedSoft}
             />
           </>
         </TransformComponent>
