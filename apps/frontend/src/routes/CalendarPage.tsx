@@ -286,18 +286,24 @@ export default function CalendarPage() {
                 onMonthChange={handleMonthChange}
                 renderLoading={() => <DayCalendarSkeleton/>}
                 sx={{
+                  '.MuiDateCalendar-root': {
+                    borderRadius: '5px',
+                    border: '3px solid',
+                    borderColor: '#186BD9',
+                  },
                   '.MuiPickersToolbar-root': {
                     color: '#186BD9',
-                    //borderRadius: '2px',
+                    borderRadius: '5px',
                     //borderWidth: '1px',
                     borderColor: '#186BD9',
-                    border: '1px solid',
+                    border: '3px solid',
                     backgroundColor: 'white',
                     //width: '200px'
                   },
                   '.MuiPickersDay-dayWithMargin': {
                     //color: '#186BD9',
-                  }
+                  },
+                  marginLeft: "20px"
                 }}
                 slots={{
                   day: ServerDay,
@@ -309,7 +315,7 @@ export default function CalendarPage() {
                 }}
               />
             </LocalizationProvider>
-           <h3>{handleOk(selectedDate)}</h3>
+           <h3 style={{marginLeft: "20px"}}>{handleOk(selectedDate)}</h3>
           </Grid>
           <Grid
             xs={6}
@@ -389,7 +395,7 @@ export default function CalendarPage() {
               </Grid>
               <Grid
                 item
-                xs={6}
+                xs={12}
                 sx={{
                   display: "flex",
                   my: 2,
