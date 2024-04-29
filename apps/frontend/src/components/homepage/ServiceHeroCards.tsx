@@ -16,31 +16,28 @@ interface CardProps {
 }
 
 const ServiceCard: React.FC<CardProps> = ({
-  image,
-  title,
-  description,
-  buttonText,
-  path,
-}: CardProps) => {
+                                            image,
+                                            title,
+                                            description,
+                                            buttonText,
+                                            path,
+                                          }: CardProps) => {
   return (
     <Card
       sx={{
-        position: "relative",
-        width: "100%",
-        minHeight: "20%",
+        width: "250px", // Set desired width
+        height: "350px", // Set desired height
         display: "flex",
         flexDirection: "column",
         justifyContent: "center", // Center content horizontally
       }}
     >
       <CardMedia
-        sx={{ height: "35vh", position: "relative" }}
+        sx={{ height: "60%", minWidth: "100%" }} // Adjust height and width of the media
         image={image}
         title={title}
       ></CardMedia>
-      <CardContent
-        style={{ flex: 1, backgroundColor: "white", textAlign: "center" }}
-      >
+      <CardContent style={{ backgroundColor: "white", textAlign: "center" }}>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
@@ -60,3 +57,4 @@ const ServiceCard: React.FC<CardProps> = ({
 };
 
 export default ServiceCard;
+
