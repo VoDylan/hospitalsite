@@ -14,9 +14,8 @@ import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 import {CalendarAvailabiltiySubmitButton} from "../components/buttons/AppointmentSubmitButton.tsx";
-import axios from "axios";
-import {DropDown} from "../components/dropdown/DropDown.tsx";
 import { makeStyles } from "@material-ui/core/styles";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
 
 const useStyles = makeStyles({
   root: {
@@ -41,36 +40,8 @@ export default function CalendarPage() {
     roomNumber: ""
   });
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
@@ -368,15 +339,7 @@ export default function CalendarPage() {
               </Grid>
               <Grid item xs={6} sx={{align: "center"}}>
                 <Typography align={"center"}>Room:</Typography>
-                <DropDown
-                  items={nodes.map((node) => ({
-                    value: node.nodeID,
-                    label: node.longName,
-                  }))}
-                  label={"Room Number"}
-                  returnData={form.roomNumber}
-                  handleChange={handleRoomNumberInput}
-                />
+                <NodeDropDown handleChange={handleRoomNumberInput} returnedNodeID={form.roomNumber} label={"Room"} filterRoomsOnly={true} />
               </Grid>
               <Grid item xs={6} sx={{align: "center"}}>
                 <Typography align={"center"}>Select Open Date From Calendar:</Typography>

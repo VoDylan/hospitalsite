@@ -26,7 +26,6 @@ function FlowerDeliveryService() {
     message: "",
   });
 
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
