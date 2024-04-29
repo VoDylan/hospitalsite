@@ -15,6 +15,7 @@ import Omeprazole from "../images/servicePageImages/FormIcons/Omeprazole.jpeg";
 import Diphen from "../images/servicePageImages/FormIcons/Diphen.jpeg";
 import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
 import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
+import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function MedicineDelivery() {
   const [form, setFormResponses] = useState<MedicineDeliveryFormSubmission>({
@@ -173,42 +174,42 @@ function MedicineDelivery() {
             <PurchaseCard imagePath={Fexo} title={"Fexofenadine"} description={"(Allegra)"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Tylenol Amount"}
               value={form.Acetaminophen}
               onChange={handleAceInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Ibuprofen Amount"}
               value={form.Ibuprofen}
               onChange={handleIbuInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Prilosec Amount"}
               value={form.Omeprazole}
               onChange={handleOmeInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Allegra Amount"}
               value={form.Fexofenadine}
               onChange={handleFexInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={12} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Diphen} title={"Diphenhydramine"} description={"(Benadryl)"} />
           </Grid>
           <Grid item xs={12} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Benadryl Amount"}
               value={form.Diphenhydramine}
               onChange={handleDipInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
 
           <Grid item xs={3} mt={2} sx={{align: "center"}}>

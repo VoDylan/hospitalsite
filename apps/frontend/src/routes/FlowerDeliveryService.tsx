@@ -12,6 +12,7 @@ import WhiteRose from "../images/servicePageImages/FormIcons/WhiteRose.jpg";
 import Tulip from "../images/servicePageImages/FormIcons/Tulip.jpg";
 import RedCarns from "../images/servicePageImages/FormIcons/RedCarns.jpg";
 import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
+import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function FlowerDeliveryService() {
   const [form, setResponses] = useState<FlowerDeliveryFormSubmission>({
@@ -174,32 +175,32 @@ function FlowerDeliveryService() {
           </Grid>
 
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Red Rose Amount"}
               value={form.RRose}
               onChange={handleRRoseInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"White Rose Amount"}
               value={form.WRose}
               onChange={handleWRoseInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Red Carnation Amount"}
               value={form.RCarn}
               onChange={handleRCarnInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Tulip Amount"}
               value={form.Tulip}
               onChange={handleTulipInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
 
           <Grid item xs={3} mt={5} sx={{align: "center"}}>

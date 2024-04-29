@@ -14,6 +14,7 @@ import BalLoons from "../images/servicePageImages/FormIcons/BalLoons.jpg";
 import GetWellCard from "../images/servicePageImages/FormIcons/GetWellCard.jpg";
 import TedBear from "../images/servicePageImages/FormIcons/TedBear.jpeg";
 import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
+import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -168,25 +169,25 @@ function GiftDeliveryService() {
             <PurchaseCard imagePath={TedBear} title={"Teddy Bear"} description={"$5.99"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Balloon Amount"}
               value={form.balloons}
               onChange={handleBalloonsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Card Amount"}
               value={form.cards}
               onChange={handleCardsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Bear Amount"}
               value={form.bears}
               onChange={handleBearsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
 
           <Grid item xs={4} mt={5} sx={{align: "center"}}>
