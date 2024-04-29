@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
-import {IconButton, styled } from "@mui/material";
+import {Button, IconButton, Link, Typography, styled} from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import CustomCard from "./Card.tsx"; // Update path to Card component
-
 import noLady from "../../videos/noLady.mp4";
 import mapVideo from "../../videos/finaledit2.mp4";
+import ServiceCarousel from "./ServiceCarousel.tsx";
+import InfoIcon from "@mui/icons-material/Info";
+import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
 
 interface CardData {
   image: string;
@@ -169,6 +171,99 @@ function Carousel() {
         >
           <NavigateNextIcon />
         </IconButton>
+      </Stack>
+      {/*{Icons}*/}
+      <Stack
+        direction={"row"}
+        display={"flex"}
+        justifyContent={"center"}
+        marginTop={'-4%'}
+        marginBottom={'0.5%'}
+      >
+
+        <a
+          href="/Credits"
+        >
+          <IconButton
+            sx={{ color: "#186BD9" }}
+            size="large"
+            aria-label="Credits"
+          >
+            <RateReviewSharpIcon />
+          </IconButton>
+          <Button variant={"text"}>
+            Credits
+          </Button>
+        </a>
+
+        <a
+          href="/About"
+        >
+          <IconButton
+            sx={{ color: "#186BD9" }}
+            size="large"
+            aria-label="About Team F"
+          >
+            <InfoIcon />
+          </IconButton>
+          <Button variant={"text"}>About Us!</Button>
+        </a>
+      </Stack>
+
+      <Box
+        sx={{
+          color: "#186BD9",
+          opacity: "0.7",
+          marginBottom: "2%"}}
+        display={"flex"}
+        justifyContent={"center"}>
+        <Typography variant = "subtitle1"
+                    fontSize={"12px"}>
+          This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
+        </Typography>
+      </Box>
+
+      {/*{Divider Bar}*/}
+      <Box
+        sx={{
+          width: "100%",
+          height: "8vh",
+          backgroundColor: "#003A96",
+          opacity: "90%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            color: "white",
+            fontSize: 40,
+            //textDecoration: "underline",
+            marginLeft: "2%",
+            fontStyle: "inherit",
+            fontFamily: "sans-serif",
+          }}
+        >
+          Services
+        </Box>
+      </Box>
+      <ServiceCarousel />
+      <Stack
+        direction={"row"}
+        sx={{
+          display: "flex",
+          alignContent: "center",
+          justifyContent: "end",
+          marginRight: "70px",
+          marginBottom: "10px",
+        }}
+      >
+        <Link to={"/Services"}>
+          <Button variant="contained" size="large">
+            See All {">"}
+          </Button>
+        </Link>
       </Stack>
     </>
   );
