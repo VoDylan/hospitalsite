@@ -18,6 +18,7 @@ import Labs from "../../images/realMapIcons/labs.svg";
 import Department from "../../images/realMapIcons/dept.svg";
 import Conference from "../../images/realMapIcons/conf.png";
 import Exit from "../../images/realMapIcons/exit.png";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
 interface SymbolCanvasProps {
   style: React.CSSProperties;
@@ -26,7 +27,10 @@ interface SymbolCanvasProps {
   height: number;
   filtersApplied: boolean;
   filteredNodes: MapNode[];
+  pathNodes: TypeCoordinates[];
   floor: Floor;
+  startNode: string;
+  endNode: string;
 }
 
 export default function SymbolCanvas(props: SymbolCanvasProps) {
@@ -119,7 +123,29 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         props.filteredNodes,
       );
 
+      // Filter out nodes in path
+      const nodesToRender: MapNode[] = [];
+
       for (let i = 0; i < nodesOnFloor.length; i++) {
+        const nodeOnFloor = nodesOnFloor[i];
+        // Check if the nodeID of the current node is present in props.pathNodes
+        const isInPath = props.pathNodes.some(pathNode =>
+          pathNode.nodeID === nodeOnFloor.nodeID &&
+          pathNode.nodeID !== props.startNode &&
+          pathNode.nodeID !== props.endNode
+        );        // If the node is in pathNodes, add it to nodesToRender
+        if (isInPath) {
+          nodesToRender.push(nodeOnFloor);
+        }
+      }
+
+      for (let i = 0; i < nodesOnFloor.length; i++) {
+        const nodeOnFloor = nodesOnFloor[i];
+        const isInNodesToRender = nodesToRender.some(node => node.nodeID === nodeOnFloor.nodeID);
+        // If the node is in nodesToRender, skip rendering
+        if (isInNodesToRender) {
+          continue;
+        }
         switch (nodesOnFloor[i].nodeType) {
           case "ELEV":
             draw.drawFloorIcon(
@@ -215,9 +241,9 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
             console.error("Unsupported nodeType");
             break;
         }
+        }
       }
-    }
-  }, [props.filtersApplied, props.filteredNodes, props.floor, props.height, props.width, elevators, stairs, retail, service, info, bathroom, department, lab, exit, conference]);
+  }, [props.filtersApplied, props.filteredNodes, props.floor, props.height, props.width, elevators, stairs, retail, service, info, bathroom, department, lab, exit, conference, props.pathNodes, props.startNode, props.endNode]);
 
   return <canvas ref={canvasRef} style={props.style} />;
 }

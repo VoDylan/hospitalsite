@@ -1,6 +1,5 @@
-import {Button, Drawer, Slide, Stack, Toolbar, Typography} from "@mui/material";
-// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useEffect } from "react";
+import {Button, IconButton, Drawer, Slide, Stack, Toolbar, Typography} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
@@ -10,6 +9,7 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import Floor from "./FloorTabs.tsx";
 import NestedList from "./PathfindingSelect.tsx";
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 
 export default function MapSideBar(props: {
   activeFloor: string;
@@ -48,6 +48,9 @@ export default function MapSideBar(props: {
   text: boolean;
   icon2: React.JSX.Element;
 }) {
+
+  const [clearPath, setClearPath] = useState(false);
+
   useEffect(() => {
     if (props.checked2) {
       document.body.classList.add("no-scroll");
@@ -59,6 +62,13 @@ export default function MapSideBar(props: {
       document.body.classList.remove("no-scroll");
     };
   }, [props.checked2]);
+
+  // const handleClearPath = () => {
+  //   setClearPath(true);
+  //   console.log("Path Cleared");
+  //   console.log(clearPath);
+  //   // Add any additional logic to clear path animation and calculations
+  // };
 
   return (
     <Drawer
@@ -157,24 +167,32 @@ export default function MapSideBar(props: {
               />
             )}
         </Stack>
-        <Stack direction={"column"} spacing={2} sx={{ marginLeft: "14%", marginTop: "4%" }}>
+        <Stack direction={"column"} spacing={2} sx={{ marginTop: "4%", display: "flex", alignItems: "center" }}>
           {props.errorMessage && <p style={{ color: "red" }}>{props.errorMessage}</p>}
           {props.onClick && (
-            <Button
-              startIcon={<AltRouteIcon />}
-              variant={"contained"}
-              sx={{ width: "84%", display: "flex", justifyContent: "center" }}
-              onClick={props.onClick}
-            >
-              Find Path
-            </Button>
+            <Stack direction="row" alignItems="center" spacing={0} sx={{ width: "100%", paddingLeft: "14%" }}>
+              <Button
+                startIcon={<AltRouteIcon />}
+                variant={"contained"}
+                sx={{ width: "240px", display: "flex", justifyContent: "center"}}
+                onClick={props.onClick}
+              >
+                Find Path
+              </Button>
+              {props.text && (
+                <IconButton >
+                  <RotateLeftIcon />
+                </IconButton>
+              )}
+            </Stack>
           )}
           {props.text && (
             <Button
               variant={"text"}
               sx={{
-                width: "84%",
+                width: "100%",
                 display: "flex",
+                alignItems: "center",
                 justifyContent: "center",
                 height: "25%",
               }}

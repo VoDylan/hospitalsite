@@ -88,7 +88,7 @@ function MainCarousel() {
 
     setCards(mainCards);
     if (autoScroll) {
-      const interval = setInterval(handleNextPage, 4500);
+      const interval = setInterval(handleNextPage, 5500);
       return () => clearInterval(interval);
     }
   }, [handleNextPage, autoScroll]);
