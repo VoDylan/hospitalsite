@@ -150,7 +150,11 @@ function DisplayDatabase() {
       ...prevRowModesModel,
       [id]: { mode: GridRowModes.View },
     }));
-    window.location.reload();
+
+    // Add a delay of, for example, 1 second (1000 milliseconds) before refreshing the page
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); // Adjust the delay time as needed
   };
 
   const [nodeColumns] = useState<GridColDef[]>([
@@ -502,7 +506,11 @@ function DisplayDatabase() {
     };
 
     fileReader.readAsText(file);
-    window.location.reload();
+
+    // Add a delay of, for example, 1 second (1000 milliseconds) before refreshing the page
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); // Adjust the delay time as needed
   }
 
   function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
@@ -514,7 +522,11 @@ function DisplayDatabase() {
       handleNodeImport(file![0]);
     }
     console.log("Handling node import data");
-    window.location.reload();
+
+    // Add a delay of, for example, 1 second (1000 milliseconds) before refreshing the page
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); // Adjust the delay time as needed
   }
 
   function handleEdgeFileUpload(event: { target: { files: FileList | null } }) {
@@ -526,7 +538,11 @@ function DisplayDatabase() {
       handleEdgeImport(file![0]);
     }
     console.log("Handling node import data");
-    window.location.reload();
+
+    // Add a delay of, for example, 1 second (1000 milliseconds) before refreshing the page
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); // Adjust the delay time as needed
   }
 
   function handleEmployeeFileUpload(event: { target: { files: FileList | null } }) {

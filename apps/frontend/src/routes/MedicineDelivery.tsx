@@ -5,7 +5,6 @@ import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { MedicineDeliveryFormSubmission } from "../common/formSubmission/MedicineDeliveryFormSubmission.ts";
 import MedicineBackground from "../images/MedicineDelivery.jpeg";
 import { MedicineSubmitButton } from "../components/buttons/MedicineSubmitButton.tsx";
-import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
@@ -15,6 +14,8 @@ import Ibup from "../images/servicePageImages/FormIcons/Ibup.jpeg";
 import Omeprazole from "../images/servicePageImages/FormIcons/Omeprazole.jpeg";
 import Diphen from "../images/servicePageImages/FormIcons/Diphen.jpeg";
 import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
+import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function MedicineDelivery() {
   const [form, setFormResponses] = useState<MedicineDeliveryFormSubmission>({
@@ -88,36 +89,8 @@ function MedicineDelivery() {
     });
   }
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -201,42 +174,42 @@ function MedicineDelivery() {
             <PurchaseCard imagePath={Fexo} title={"Fexofenadine"} description={"(Allegra)"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Tylenol Amount"}
               value={form.Acetaminophen}
               onChange={handleAceInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Ibuprofen Amount"}
               value={form.Ibuprofen}
               onChange={handleIbuInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Prilosec Amount"}
               value={form.Omeprazole}
               onChange={handleOmeInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Allegra Amount"}
               value={form.Fexofenadine}
               onChange={handleFexInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={12} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Diphen} title={"Diphenhydramine"} description={"(Benadryl)"} />
           </Grid>
           <Grid item xs={12} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Benadryl Amount"}
               value={form.Diphenhydramine}
               onChange={handleDipInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
 
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
@@ -264,15 +237,7 @@ function MedicineDelivery() {
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.location}
-              handleChange={handleLocationInput}
-              items={nodes.map((node) => ({
-                value: node.nodeID,
-                label: node.longName,
-              }))}
-            />
+            <NodeDropDown  handleChange={handleLocationInput} label={"Location"} returnedNodeID={form.location} filterRoomsOnly={true}/>
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>

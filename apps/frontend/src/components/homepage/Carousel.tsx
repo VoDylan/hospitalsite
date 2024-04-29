@@ -7,7 +7,7 @@ import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import CustomCard from "./Card.tsx"; // Update path to Card component
 import noLady from "../../videos/noLady.mp4";
-import mapVideo from "../../videos/finaledit2.mp4";
+import mapVideo from "../../videos/mapedit3.mp4";
 import ServiceCarousel from "./ServiceCarousel.tsx";
 import InfoIcon from "@mui/icons-material/Info";
 import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
