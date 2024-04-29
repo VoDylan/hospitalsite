@@ -1,6 +1,6 @@
-import MainCarousel from "../components/homepage/Carousel.tsx";
+import Carousel from "../components/homepage/Carousel.tsx";
 
-function MapPage() {
+function HeroPage() {
   return (
     <>
       <div
@@ -8,10 +8,10 @@ function MapPage() {
           backgroundColor: "white",
         }}
       >
-        <MainCarousel />
+        <Carousel />
       </div>
     </>
   );
 }
 
-export default MapPage;
+export default HeroPage;
