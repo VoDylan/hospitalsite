@@ -8,8 +8,7 @@ interface NodeDropDownProps {
   returnedNodeID: string;
   handleChange: (event: SelectChangeEvent) => string;
   label: string;
-  filterHalls?: boolean;
-  filterElevators?: boolean;
+  filterRoomsOnly?: boolean;
 }
 
 interface NodeData {
@@ -33,12 +32,16 @@ const NodeDropDown: React.FC<NodeDropDownProps> = (props) => {
         const updatedNodes: NodeData[] = [];
 
         for (let i = 0; i < nodeIDs.length; i++) {
-          if (props.filterHalls && nodeTypes[i] === "HALL") {
+          if (props.filterRoomsOnly && (
+            nodeTypes[i] === "HALL" ||
+            nodeTypes[i] === "STAI" ||
+            nodeTypes[i] === "EXIT" ||
+            nodeTypes[i] === "ELEV" ||
+            nodeTypes[i] === "REST"
+          )) {
             continue;
           }
-          if (props.filterElevators && nodeTypes[i] === "ELEV") {
-            continue;
-          }
+
           updatedNodes.push({
             nodeID: nodeIDs[i],
             longName: longNames[i],
@@ -53,7 +56,7 @@ const NodeDropDown: React.FC<NodeDropDownProps> = (props) => {
     };
 
     fetchNodeData();
-  }, [props.filterElevators, props.filterHalls]);
+  }, [props.filterRoomsOnly]);
 
   const EmployeeDropDownData: LabelValuePair[] = nodesFromDB.map((node: NodeData) => ({
     value: node.nodeID,
