@@ -101,7 +101,7 @@ function Carousel() {
           alignItems: "center",
           alignContent: "center",
           justifyContent: "center",
-          height: "40vh",
+          height: "50vh",
           width: "100%",
         }}
       >
@@ -146,7 +146,7 @@ function Carousel() {
           position: "relative",
           display: "flex",
           flexDirection: "row",
-          marginTop: "6%",
+          marginTop: "4%",
           height: "220px",
           alignItems: "center",
           justifyContent: "center",
@@ -173,13 +173,15 @@ function Carousel() {
           <NavigateNextIcon />
         </IconButton>
       </Stack>
+
+
       {/*{Icons}*/}
       <Stack
         direction={"row"}
         display={"flex"}
         justifyContent={"center"}
         marginTop={'-4%'}
-        marginBottom={'1.5%'}
+        marginBottom={'0.5%'}
       >
 
         <a
@@ -213,13 +215,15 @@ function Carousel() {
 
       <Box
         sx={{
-          color: "red",
+          color: "#186BD9",
           opacity: "0.7",
           marginBottom: "2%"}}
         display={"flex"}
         justifyContent={"center"}>
         <Typography variant = "subtitle1"
-                    fontSize={"16px"}>
+                    fontSize={"100%"}
+                    color = 'red'
+                    fontWeight = 'bold'>
           This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
         </Typography>
       </Box>
@@ -254,15 +258,14 @@ function Carousel() {
         direction={"row"}
         sx={{
           display: "flex",
-          position: "absolute",
-          right: 184,
           alignContent: "center",
           justifyContent: "end",
-
+          marginRight: "70px",
+          marginBottom: "10px",
         }}
       >
         <Link to={"/Services"}>
-          <Button variant="contained" size="medium">
+          <Button variant="contained" size="large">
             See All {">"}
           </Button>
         </Link>
