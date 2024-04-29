@@ -130,4 +130,4 @@ export default function CustomCard({
       </CardActions>
     </Card>
   );
-}
+};
