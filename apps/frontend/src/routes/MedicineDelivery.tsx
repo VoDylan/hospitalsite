@@ -146,7 +146,7 @@ function MedicineDelivery() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "75%", //Adjust this to change the width of the form
+          width: "85%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -188,50 +188,50 @@ function MedicineDelivery() {
             </Typography>
           </Grid>
 
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Acet} title={"Acetaminophen"} description={"(Tylenol)"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Ibup} title={"Ibuprofen"} description={"(Advil)"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Omeprazole} title={"Omeprazole"} description={"(Prilosec)"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Fexo} title={"Fexofenadine"} description={"(Allegra)"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Diphen} title={"Diphenhydramine"} description={"(Benadryl)"} />
+          </Grid>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"Tylenol Amount"}
               value={form.Acetaminophen}
               onChange={handleAceInput}
               type={"text"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"Ibuprofen Amount"}
               value={form.Ibuprofen}
               onChange={handleIbuInput}
               type={"text"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"Prilosec Amount"}
               value={form.Omeprazole}
               onChange={handleOmeInput}
               type={"text"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"Allegra Amount"}
               value={form.Fexofenadine}
               onChange={handleFexInput}
               type={"text"} />
           </Grid>
-          <Grid item xs={12} mt={2} sx={{align: "center"}}>
-            <PurchaseCard imagePath={Diphen} title={"Diphenhydramine"} description={"(Benadryl)"} />
-          </Grid>
-          <Grid item xs={12} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedTextbox
               label={"Benadryl Amount"}
               value={form.Diphenhydramine}
