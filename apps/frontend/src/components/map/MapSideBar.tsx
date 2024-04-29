@@ -63,13 +63,6 @@ export default function MapSideBar(props: {
     };
   }, [props.checked2]);
 
-  // const handleClearPath = () => {
-  //   setClearPath(true);
-  //   console.log("Path Cleared");
-  //   console.log(clearPath);
-  //   // Add any additional logic to clear path animation and calculations
-  // };
-
   return (
     <Drawer
       variant="permanent"
@@ -174,7 +167,7 @@ export default function MapSideBar(props: {
               <Button
                 startIcon={<AltRouteIcon />}
                 variant={"contained"}
-                sx={{ width: "240px", display: "flex", justifyContent: "center"}}
+                sx={{ width: "84%", display: "flex", justifyContent: "center"}}
                 onClick={props.onClick}
               >
                 Find Path
