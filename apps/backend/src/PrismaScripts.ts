@@ -18,7 +18,7 @@ export async function createNodePrisma(node: MapNodeType) {
       e instanceof Prisma.PrismaClientKnownRequestError &&
       e.code == "P2002"
     ) {
-      console.log(`${loggingPrefix}Node already exists. Skipping...`);
+      // console.log(`${loggingPrefix}Node already exists. Skipping...`);
       return 304;
     } else {
       console.error(e);
@@ -80,7 +80,7 @@ export async function createEdgePrisma(edge: MapEdgeType) {
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.log(`${loggingPrefix}Edge already exists. Skipping...`);
+      // console.log(`${loggingPrefix}Edge already exists. Skipping...`);
     } else {
       console.error(e);
     }
@@ -89,38 +89,38 @@ export async function createEdgePrisma(edge: MapEdgeType) {
 }
 
 export async function clearDBNodes() {
-  console.log(`${loggingPrefix}Clearing nodes from DB`);
+  // console.log(`${loggingPrefix}Clearing nodes from DB`);
   try {
     await client.node.deleteMany({});
   } catch (e) {
     console.error(e);
   }
-  console.log(`${loggingPrefix}Nodes cleared from DB`);
+  // console.log(`${loggingPrefix}Nodes cleared from DB`);
 }
 
 export async function clearDBEdges() {
-  console.log(`${loggingPrefix}Clearing edges from DB`);
+  // console.log(`${loggingPrefix}Clearing edges from DB`);
   try {
     await client.edge.deleteMany({});
   } catch (e) {
     console.error(e);
   }
-  console.log(`${loggingPrefix}Edges cleared from DB`);
+  // console.log(`${loggingPrefix}Edges cleared from DB`);
 }
 
 export async function clearDBRequests() {
-  console.log(`${loggingPrefix}Clearing service requests from DB`);
+  // console.log(`${loggingPrefix}Clearing service requests from DB`);
   try {
     await client.serviceRequest.deleteMany({});
   } catch (e) {
     console.error(e);
   }
 
-  console.log(`${loggingPrefix}Service requests cleared from DB`);
+  // console.log(`${loggingPrefix}Service requests cleared from DB`);
 }
 
 export async function getDBNodes(): Promise<MapNodeType[] | null> {
-  console.log(`${loggingPrefix}Getting nodes from DB`);
+  // console.log(`${loggingPrefix}Getting nodes from DB`);
   let nodes: MapNodeType[] | null = null;
   try {
     nodes = await client.node.findMany({});
@@ -140,7 +140,7 @@ export async function getDBNodes(): Promise<MapNodeType[] | null> {
 export async function getDBNodeByID(
   nodeID: string,
 ): Promise<MapNodeType | null> {
-  console.log(`${loggingPrefix}Getting node of id ${nodeID} from DB`);
+  // console.log(`${loggingPrefix}Getting node of id ${nodeID} from DB`);
   let node: MapNodeType | null = null;
   try {
     node = await client.node.findUnique({
@@ -153,9 +153,9 @@ export async function getDBNodeByID(
   }
 
   if (node == null) {
-    console.log(`${loggingPrefix}Node with id ${nodeID} not found`);
+    // console.log(`${loggingPrefix}Node with id ${nodeID} not found`);
   } else {
-    console.log(`${loggingPrefix}Node with id ${nodeID} found`);
+    // console.log(`${loggingPrefix}Node with id ${nodeID} found`);
   }
 
   return node;
@@ -189,11 +189,11 @@ export async function createServiceRequest(
       },
     });
 
-    console.log(`Service request created with ID: ${createdServiceRequest.id}`);
+    // console.log(`Service request created with ID: ${createdServiceRequest.id}`);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        console.log("Service request already exists. Skipping...");
+        // console.log("Service request already exists. Skipping...");
       }
     } else {
       // All other errors
@@ -203,7 +203,7 @@ export async function createServiceRequest(
 }
 
 export async function getDBEdges(): Promise<MapEdgeType[] | null> {
-  console.log(`${loggingPrefix}Getting edges from DB`);
+  // console.log(`${loggingPrefix}Getting edges from DB`);
   let edges: MapEdgeType[] | null = null;
   try {
     edges = await client.edge.findMany({});
@@ -223,7 +223,7 @@ export async function getDBEdges(): Promise<MapEdgeType[] | null> {
 export async function getDBEdgeByEdgeID(
   edgeID: string,
 ): Promise<MapEdgeType | null> {
-  console.log(`${loggingPrefix}Getting edge by ID: ${edgeID}`);
+  // console.log(`${loggingPrefix}Getting edge by ID: ${edgeID}`);
   let edge: MapEdgeType | null = null;
   try {
     edge = await client.edge.findUnique({
@@ -232,13 +232,13 @@ export async function getDBEdgeByEdgeID(
       },
     });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
 
   if (edge == null) {
-    console.log(`${loggingPrefix}No edge found with ID ${edgeID}`);
+    // console.log(`${loggingPrefix}No edge found with ID ${edgeID}`);
   } else {
-    console.log(`${loggingPrefix}Edge found with ID ${edgeID}`);
+    // console.log(`${loggingPrefix}Edge found with ID ${edgeID}`);
   }
 
   return edge;
@@ -257,9 +257,9 @@ export async function getServiceRequestsFromDB() {
   }
 
   if (requests == null) {
-    console.log(`${loggingPrefix}No service requests found in DB`);
+    // console.log(`${loggingPrefix}No service requests found in DB`);
   } else {
-    console.log(`${loggingPrefix}Service requests found in DB`);
+    // console.log(`${loggingPrefix}Service requests found in DB`);
   }
 
   return requests;
@@ -278,9 +278,9 @@ export async function getServiceRequestFromDBByType(serviceType: string) {
   }
 
   if (request == null) {
-    console.log(
-      `${loggingPrefix}No request found with serviceType ${serviceType}`,
-    );
+    // console.log(
+    //   `${loggingPrefix}No request found with serviceType ${serviceType}`,
+    // );
   } else {
     console.log(
       `${loggingPrefix}Request(s) found with serviceType ${serviceType}`,
@@ -299,17 +299,17 @@ export async function getServiceRequestFromDBByNodeID(nodeID: string) {
       },
     });
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   if (request == null) {
-    console.log(
-      `${loggingPrefix}No request found from rooms with nodeID ${nodeID}`,
-    );
+    // console.log(
+    //   `${loggingPrefix}No request found from rooms with nodeID ${nodeID}`,
+    // );
   } else {
-    console.log(
-      `${loggingPrefix}Request(s) found from rooms with nodeID ${nodeID}`,
-    );
+    // console.log(
+    //   `${loggingPrefix}Request(s) found from rooms with nodeID ${nodeID}`,
+    // );
   }
 
   return request;
@@ -328,13 +328,13 @@ export async function getServiceRequestFromDBByUserID(employeeID: number) {
   }
 
   if (request == null) {
-    console.log(
-      `${loggingPrefix}No request found from users with userID ${employeeID}`,
-    );
+    // console.log(
+    //   `${loggingPrefix}No request found from users with userID ${employeeID}`,
+    // );
   } else {
-    console.log(
-      `${loggingPrefix}Request(s) found from users with userID ${employeeID}`,
-    );
+    // console.log(
+    //   `${loggingPrefix}Request(s) found from users with userID ${employeeID}`,
+    // );
   }
   return request;
 }
@@ -352,14 +352,14 @@ export async function checkUserID(userID: number) {
     console.error(e);
   }
   if (user == null) {
-    console.log(
-      `${loggingPrefix}User ${userID} does not exist within current database`,
-    );
+    // console.log(
+    //   `${loggingPrefix}User ${userID} does not exist within current database`,
+    // );
     return false;
   } else {
-    console.log(
-      `${loggingPrefix}User ${userID} is within the current database`,
-    );
+    // console.log(
+    //   `${loggingPrefix}User ${userID} is within the current database`,
+    // );
     return true;
   }
 }
@@ -374,24 +374,24 @@ export async function checkUserMedicalStaff(userID: number): Promise<boolean> {
 
       // Check if the user exists and has MedicalWorker association
       if (user && user.MedicalWorker.length > 0) {
-        console.log(
-          `${loggingPrefix}User ${userID} is a part of medical staff`,
-        );
+        // console.log(
+        //   `${loggingPrefix}User ${userID} is a part of medical staff`,
+        // );
         return true;
       } else {
-        console.log(
-          `${loggingPrefix}User ${userID} is not a part of medical staff`,
-        );
+        // console.log(
+        //   `${loggingPrefix}User ${userID} is not a part of medical staff`,
+        // );
         return false;
       }
     } catch (e) {
-      console.error(e);
+      // console.error(e);
       return false;
     }
   } else {
-    console.log(
-      `${loggingPrefix}User ${userID} does not exist in current database`,
-    );
+    // console.log(
+    //   `${loggingPrefix}User ${userID} does not exist in current database`,
+    // );
     return false;
   }
 }
@@ -406,10 +406,10 @@ export async function checkUserPatient(userID: number): Promise<boolean> {
 
       // Check if the user exists and has MedicalWorker association
       if (user && user.Patient.length > 0) {
-        console.log(`${loggingPrefix}User ${userID} is a patient`);
+        // console.log(`${loggingPrefix}User ${userID} is a patient`);
         return true;
       } else {
-        console.log(`${loggingPrefix}User ${userID} is not a patient`);
+        // console.log(`${loggingPrefix}User ${userID} is not a patient`);
         return false;
       }
     } catch (e) {
@@ -417,9 +417,9 @@ export async function checkUserPatient(userID: number): Promise<boolean> {
       return false;
     }
   } else {
-    console.log(
-      `${loggingPrefix}User ${userID} does not exist in current database`,
-    );
+    // console.log(
+    //   `${loggingPrefix}User ${userID} does not exist in current database`,
+    // );
     return false;
   }
 }
@@ -434,10 +434,10 @@ export async function checkUserAdmin(userID: number): Promise<boolean> {
 
       // Check if the user exists and has MedicalWorker association
       if (user && user.Admin.length > 0) {
-        console.log(`${loggingPrefix}User ${userID} is an admin`);
+        // console.log(`${loggingPrefix}User ${userID} is an admin`);
         return true;
       } else {
-        console.log(`${loggingPrefix}User ${userID} is not an admin`);
+        // console.log(`${loggingPrefix}User ${userID} is not an admin`);
         return false;
       }
     } catch (e) {
@@ -445,9 +445,9 @@ export async function checkUserAdmin(userID: number): Promise<boolean> {
       return false;
     }
   } else {
-    console.log(
-      `${loggingPrefix}User ${userID} does not exist in current database`,
-    );
+    // console.log(
+    //   `${loggingPrefix}User ${userID} does not exist in current database`,
+    // );
     return false;
   }
 }
@@ -475,20 +475,20 @@ export async function getEmployeesFromDB() {
   }
 
   if (employees == null) {
-    console.log(`${loggingPrefix}No employees found in DB`);
+    // console.log(`${loggingPrefix}No employees found in DB`);
   } else {
-    console.log(`${loggingPrefix}Employees found in DB`);
+    // console.log(`${loggingPrefix}Employees found in DB`);
   }
 
   return employees;
 }
 
 export async function clearEmployeesFromDB() {
-  console.log(`${loggingPrefix}Clearing employees from DB`);
+  // console.log(`${loggingPrefix}Clearing employees from DB`);
   try {
     await client.employee.deleteMany({});
   } catch (e) {
     console.error(e);
   }
-  console.log(`${loggingPrefix}Employees cleared from DB`);
+  // console.log(`${loggingPrefix}Employees cleared from DB`);
 }
