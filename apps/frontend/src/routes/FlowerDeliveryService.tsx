@@ -1,10 +1,8 @@
 import { Grid, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import { ChangeEvent, useEffect, useState } from "react";
-import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { FlowerDeliverySubmitButton } from "../components/buttons/FlowerDeliverySubmitButton.tsx";
 import LadyWithFlowersInHospital from "../images/LadyWithFlowersInHospital.jpg";
-import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
@@ -13,6 +11,7 @@ import RedRose from "../images/servicePageImages/FormIcons/RedRose.jpg";
 import WhiteRose from "../images/servicePageImages/FormIcons/WhiteRose.jpg";
 import Tulip from "../images/servicePageImages/FormIcons/Tulip.jpg";
 import RedCarns from "../images/servicePageImages/FormIcons/RedCarns.jpg";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
 import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function FlowerDeliveryService() {
@@ -28,36 +27,8 @@ function FlowerDeliveryService() {
     message: "",
   });
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
@@ -259,15 +230,7 @@ function FlowerDeliveryService() {
           </Grid>
           <Grid item xs={3} mt={5} sx={{align: "center"}}>
             <Typography align={"center"}>Room:</Typography>
-            <DropDown
-              items={nodes.map((node) => ({
-                value: node.nodeID,
-                label: node.longName,
-              }))}
-              label={"Room Number"}
-              returnData={form.roomNumber}
-              handleChange={handleRoomNumberInput}
-            />
+            <NodeDropDown returnedNodeID={form.roomNumber} label={"Room"} handleChange={handleRoomNumberInput} filterRoomsOnly={true} />
           </Grid>
           <Grid item xs={12} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>
