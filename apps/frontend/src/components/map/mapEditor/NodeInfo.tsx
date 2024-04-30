@@ -2,7 +2,7 @@ import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import MapNode from "common/src/map/MapNode.ts";
-import GraphManager from "../../common/GraphManager.ts";
+import GraphManager from "frontend/src/common/GraphManager.ts";
 
 interface NodeInfoProps {
   style: React.CSSProperties;

@@ -6,10 +6,10 @@ import FilterManager, {
 import { FilterName } from "common/src/filter/FilterName.ts";
 import Filter from "common/src/filter/filters/Filter.ts";
 import { Floor } from "common/src/map/Floor.ts";
-import {FilterType} from "../../../common/types/FilterType.ts";
-import {IFilterState, IRenderInfo} from "../../../hooks/useFilters.tsx";
+import {FilterType} from "frontend/src/common/types/FilterType.ts";
+import {IFilterState, IRenderInfo} from "frontend/src/hooks/useFilters.tsx";
 import {getNodeTypeFromStr, NodeType} from "common/src/map/MapNodeType.ts";
-import MapIcon from "./MapIcon.tsx";
+import MapIcon from "frontend/src/components/map/mapEditor/MapIcon.tsx";
 import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
 
 interface SymbolCanvasProps {

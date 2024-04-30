@@ -1,974 +1,182 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import axios from "axios";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import TopBanner2 from "../components/banner/TopBanner.tsx";
-import "./map.css";
-import GraphManager from "../common/GraphManager.ts";
+import {useNodes} from "frontend/src/hooks/useNodes.tsx";
+import {useEffect, useState} from "react";
+import {Box, Paper, Stack} from "@mui/material";
+import useWindowSize from "frontend/src/hooks/useWindowSize.tsx";
+import MapRender from "frontend/src/components/map/MapRender.tsx";
+import MapEditorSideBar from "frontend/src/components/map/MapEditorSideBar.tsx";
+import {useSelectedNodes} from "frontend/src/hooks/useSelectedNodes.tsx";
+import GraphManager from "frontend/src/common/GraphManager.ts";
+import {useFilters} from "frontend/src/hooks/useFilters.tsx";
 import MapNode from "common/src/map/MapNode.ts";
-import Legend from "../components/map/Legend.tsx";
+import ToggleButton from "frontend/src/components/map/MapToggleBar.tsx";
+import Legend from "frontend/src/components/map/mapEditor/Legend.tsx";
+import {useLegend} from "frontend/src/hooks/useLegend.tsx";
+import Floors from "frontend/src/components/map/FloorTabs.tsx";
+import {useFloor} from "frontend/src/hooks/useFloor.tsx";
 
-import FilterManager, {
-  generateFilterValue,
-} from "common/src/filter/FilterManager.ts";
-import { FilterName } from "common/src/filter/FilterName.ts";
-import NodeFilter from "common/src/filter/filters/Filter.ts";
-import {
-  ReactZoomPanPinchRef,
-  TransformComponent,
-  TransformWrapper,
-} from "react-zoom-pan-pinch";
+export default function MapEditingPage() {
+  const {
+    nodeData,
+    edgeData,
+    dataLoadedHard,
+    setDataLoadedHard,
+    dataLoadedSoft,
+    setDataLoadedSoft,
+  } = useNodes();
 
-import Icon from "../components/map/SlideIcon.tsx";
-import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
-import { Floor, floorStrToObj } from "common/src/map/Floor.ts";
-import SymbolCanvas from "../components/map/SymbolCanvas.tsx";
-import startIcon from "../images/mapImages/starticon3.png";
-import endIcon from "../images/mapImages/endIcon.png";
-import IconCanvas from "../components/map/IconCanvas.tsx";
-import MapEditorSideBar from "../components/map/MapEditorSideBar.tsx";
-import EdgeCanvas from "../components/map/EdgeCanvas.tsx";
-import ClickableCanvas from "../components/map/ClickableCanvas.tsx";
-import MapEdge from "common/src/map/MapEdge.ts";
-import { MapEdgeType } from "common/src/map/MapEdgeType.ts";
-import {INodeCreationInfo} from "../common/INodeCreationInfo.ts";
-import NodeCreator from "../components/map/NodeCreator.tsx";
-import transformCanvasCoords from "../common/TransformCanvasCoords.ts";
-import {useNodes} from "../hooks/useNodes.tsx";
-import ToggleButton from "../components/map/MapToggleBar.tsx";
-import {Stack} from "@mui/material";
+  const {
+    selectedNode1,
+    selectedNode2,
+    edgeBetween,
+    setSelectedNode1,
+    setSelectedNode2,
+    selectNodeGeneral,
+    deselectNodeGeneral,
+  } = useSelectedNodes();
 
-interface TransformState {
-  scale: number;
-  positionX: number;
-  positionY: number;
-}
+  const [
+    filteredNodes,
+    filtersApplied,
+    filterInfo,
+    setFiltersApplied,
+    setNodeDataFilters,
+    setNodeDataLoadedFilters,
+    setNewFilterActiveStatus,
+    selectAllFilters,
+    selectNoFilters
+  ] = useFilters(true);
 
-function MapEditingPage() {
-  const iconCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [
+    isOpen,
+    setIsOpen
+  ] = useLegend();
 
-  const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
-  const transformState = useRef<TransformState>({
-    scale: 1,
-    positionX: 0,
-    positionY: 0,
-  });
+  const [
+    floor,
+    setFloor
+  ] = useFloor();
 
-  const [isOpen, setIsOpen] = useState(true); // State to control visibility of legend
+  const [windowWidth, windowHeight] = useWindowSize();
+  const [updateSelection, setUpdateSelection] = useState<boolean>(false);
 
-  const toggleLegend = () => {
-    setIsOpen(!isOpen); // Toggle the visibility of the legend
-  };
+  useEffect(() => {
+    if(dataLoadedHard) {
+      if(selectedNode1) setSelectedNode1(GraphManager.getInstance().getNodeByID(selectedNode1.nodeID));
+      if(selectedNode2) setSelectedNode2(GraphManager.getInstance().getNodeByID(selectedNode2.nodeID));
+    }
+  }, [dataLoadedHard, selectedNode1, selectedNode2, setSelectedNode1, setSelectedNode2]);
 
-  const [selectedNode1, setSelectedNode1] = useState<MapNode | null>(null);
-  const [selectedNode2, setSelectedNode2] = useState<MapNode | null>(null);
-  const [edgeBetweenSelectedNodes, setEdgeBetweenSelectedNodes] =
-    useState<MapEdge | null>(null);
-
-  const [nodeCreationInfo, setNodeCreationInfo] = useState<INodeCreationInfo>({
-    creatingNode: false,
-    mouseXCoord: 0,
-    mouseYCoord: 0,
-    canvasXCoord: 0,
-    canvasYCoord: 0,
-  });
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
-  const {nodeData, edgeData, dataLoaded, setDataLoaded} = useNodes();
-
-  const [autocompleteNodeData, setAutocompleteNodeData] = useState<
-    { label: string; node: string }[]
-  >([]);
-
-  const [backgroundRenderStatus, setBackgroundRenderStatus] =
-    useState<boolean>(false);
-  const [canvasWidth, setCanvasWidth] = useState<number>(0);
-  const [canvasHeight, setCanvasHeight] = useState<number>(0);
-
-  const [floor, setFloor] = useState<Floor>(Floor.L1);
-
-  /**
-   * Pathfinder selection
-   */
-  const [open] = React.useState(false);
-  const [filteredNodes, setFilteredNodes] = useState<MapNode[]>([]);
-  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
-
-  const populateAutocompleteData = useCallback((nodes: MapNode[]) => {
-    const filteredNodeAssociations = nodes.map((node) => ({
-      label: node.longName, // Assuming `longName` is the label you want to use
-      node: node.nodeID,
-    }));
-    setAutocompleteNodeData(filteredNodeAssociations);
-  }, []);
-
-  //-----------------------------------------------------------------------------------------
-
-  /**
-   * Slide Container
-   */
-
-  const [checked, setChecked] = React.useState(false);
-
-  const handleButtonClick = () => {
-    setChecked((prev) => !prev);
-  };
-
-  /**
-   * FILTER USE STATES
-   */
-
-  const [elevatorIconState, setElevatorIconState] = React.useState<
-    "plus" | "check"
-  >("check");
-  const [stairsIconState, setStairsIconState] = React.useState<
-    "plus" | "check"
-  >("check");
-  const [exitsIconState, setExitsIconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [servIconState, setServIconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [infoIconState, setInfoIconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [restroomsIconState, setRestroomsIconState] = React.useState<
-    "plus" | "check"
-  >("check");
-  const [confIconState, setConfIconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [deptIconState, setDeptIconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [labsIconState, setLabsIconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [retlIconState, setRetlIconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [ll1IconState, setLL1IconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [ll2IconState, setLL2IconState] = React.useState<"plus" | "check">(
-    "check",
-  );
-  const [firstFloorIconState, setFirstFloorIconState] = React.useState<
-    "plus" | "check"
-  >("check");
-  const [secondFloorIconState, setSecondFloorIconState] = React.useState<
-    "plus" | "check"
-  >("check");
-  const [thirdFloorIconState, setThirdFloorIconState] = React.useState<
-    "plus" | "check"
-  >("check");
-
-  /**
-    Update filters in legend when they are selected
-   */
-
-  const filterIcons = [
-    ...(confIconState === "check"
-      ? [
-        {
-          iconColor: "#1CA7EC",
-          filterName: "Conference",
-          filterType: 1,
-          shape: "conf",
-        },
-      ]
-      : []),
-    ...(deptIconState === "check"
-      ? [
-        {
-          iconColor: "#72c41c",
-          filterName: "Department",
-          filterType: 1,
-          shape: "dept",
-        },
-      ]
-      : []),
-    ...(labsIconState === "check"
-      ? [
-        {
-          iconColor: "#e88911",
-          filterName: "Labs",
-          filterType: 1,
-          shape: "labs",
-        },
-      ]
-      : []),
-    ...(servIconState === "check"
-      ? [
-        {
-          iconColor: "#e88911",
-          filterName: "Service",
-          filterType: 1,
-          shape: "service",
-        },
-      ]
-      : []),
-    ...(infoIconState === "check"
-      ? [
-        {
-          iconColor: "#1CA7EC",
-          filterName: "Info",
-          filterType: 1,
-          shape: "info",
-        },
-      ]
-      : []),
-    ...(restroomsIconState === "check"
-      ? [
-        {
-          iconColor: "#72c41c",
-          filterName: "Restrooms",
-          filterType: 1,
-          shape: "bathroom",
-        },
-      ]
-      : []),
-    ...(retlIconState === "check"
-      ? [
-        {
-          iconColor: "#e88911",
-          filterName: "Retail",
-          filterType: 1,
-          shape: "retail",
-        },
-      ]
-      : []),
-    ...(stairsIconState === "check"
-      ? [
-        {
-          iconColor: "#72c41c",
-          filterName: "Stairs",
-          filterType: 1,
-          shape: "stairs",
-        },
-      ]
-      : []),
-    ...(elevatorIconState === "check"
-      ? [
-        {
-          iconColor: "#1CA7EC",
-          filterName: "Elevators",
-          filterType: 1,
-          shape: "elevators",
-        },
-      ]
-      : []),
-
-    ...(exitsIconState === "check"
-      ? [
-        {
-          iconColor: "red",
-          filterName: "Exits",
-          filterType: 1,
-          shape: "exit",
-        },
-      ]
-      : []),
-
-  ];
-
-  /**
-   * Update state of icons to selected or not
-   * @param stateSetter change state of set use state
-   */
-
-  const handleIconStateToggle = (
-    stateSetter: React.Dispatch<React.SetStateAction<"plus" | "check">>,
-  ) => {
-    return () => {
-      stateSetter((prevState) => (prevState === "plus" ? "check" : "plus"));
-      setFiltersApplied(false);
-    };
-  };
-
-  const handleElevatorIconState = handleIconStateToggle(setElevatorIconState);
-  const handleStairsIconState = handleIconStateToggle(setStairsIconState);
-  const handleExitsIconState = handleIconStateToggle(setExitsIconState);
-  const handleInfoIconState = handleIconStateToggle(setInfoIconState);
-  const handleServIconState = handleIconStateToggle(setServIconState);
-  const handleRestroomsIconState = handleIconStateToggle(setRestroomsIconState);
-  const handleConfIconState = handleIconStateToggle(setConfIconState);
-  const handleDeptIconState = handleIconStateToggle(setDeptIconState);
-  const handleLabsIconState = handleIconStateToggle(setLabsIconState);
-  const handleRetlIconState = handleIconStateToggle(setRetlIconState);
-  const handleLL1IconState = handleIconStateToggle(setLL1IconState);
-  const handleLL2IconState = handleIconStateToggle(setLL2IconState);
-  const handleFirstFloorIconState = handleIconStateToggle(
-    setFirstFloorIconState,
-  );
-  const handleSecondFloorIconState = handleIconStateToggle(
-    setSecondFloorIconState,
-  );
-  const handleThirdFloorIconState = handleIconStateToggle(
-    setThirdFloorIconState,
-  );
-
-  const handleSelectAll = () => {
-    setElevatorIconState("check");
-    setStairsIconState("check");
-    setExitsIconState("check");
-    setInfoIconState("check");
-    setServIconState("check");
-    setRestroomsIconState("check");
-    setConfIconState("check");
-    setDeptIconState("check");
-    setLabsIconState("check");
-    setRetlIconState("check");
-    setLL1IconState("check");
-    setLL2IconState("check");
-    setFirstFloorIconState("check");
-    setSecondFloorIconState("check");
-    setThirdFloorIconState("check");
+  useEffect(() => {
+    setNodeDataLoadedFilters(dataLoadedSoft);
     setFiltersApplied(false);
-  };
-
-  const handleClearAll = () => {
-    setElevatorIconState("plus");
-    setStairsIconState("plus");
-    setExitsIconState("plus");
-    setInfoIconState("plus");
-    setServIconState("plus");
-    setRestroomsIconState("plus");
-    setConfIconState("plus");
-    setDeptIconState("plus");
-    setLabsIconState("plus");
-    setRetlIconState("plus");
-    setLL1IconState("plus");
-    setLL2IconState("plus");
-    setFirstFloorIconState("plus");
-    setSecondFloorIconState("plus");
-    setThirdFloorIconState("plus");
-    setFiltersApplied(false);
-  };
-
-  /**
-   * Change list of nodes based on applied filters
-   */
-
-  const determineFilters = useCallback(() => {
-    const filters: NodeFilter[] = []; // Define the filters array here
-
-    const applyIconFilter = (
-      iconState: string,
-      filterName: FilterName,
-      filterValue: string,
-    ) => {
-      if (iconState === "plus") {
-        filters.push(
-          FilterManager.getInstance().getConfiguredFilter(filterName, [
-            generateFilterValue(true, filterValue),
-          ])!,
-        );
-      }
-    };
-
-    applyIconFilter(ll1IconState, FilterName.FLOOR, "L1");
-    applyIconFilter(ll2IconState, FilterName.FLOOR, "L2");
-    applyIconFilter(firstFloorIconState, FilterName.FLOOR, "1");
-    applyIconFilter(secondFloorIconState, FilterName.FLOOR, "2");
-    applyIconFilter(thirdFloorIconState, FilterName.FLOOR, "3");
-    applyIconFilter(elevatorIconState, FilterName.TYPE, "ELEV");
-    applyIconFilter(stairsIconState, FilterName.TYPE, "STAI");
-    applyIconFilter(servIconState, FilterName.TYPE, "SERV");
-    applyIconFilter(infoIconState, FilterName.TYPE, "INFO");
-    applyIconFilter(restroomsIconState, FilterName.TYPE, "REST");
-    applyIconFilter(exitsIconState, FilterName.TYPE, "EXIT");
-    applyIconFilter(confIconState, FilterName.TYPE, "CONF");
-    applyIconFilter(deptIconState, FilterName.TYPE, "DEPT");
-    applyIconFilter(labsIconState, FilterName.TYPE, "LABS");
-    applyIconFilter(retlIconState, FilterName.TYPE, "RETL");
-
-    console.log("Filtering");
-
-    const newFilteredNodes: MapNode[] =
-      FilterManager.getInstance().applyFilters(
-        filters,
-        GraphManager.getInstance().nodes,
-      );
-
-    // Update filteredNodes state with the filtered result
-    setFilteredNodes(newFilteredNodes);
-    // Update autocomplete data based on the filtered nodes
-    populateAutocompleteData(newFilteredNodes);
-  }, [
-    populateAutocompleteData,
-    ll1IconState,
-    ll2IconState,
-    elevatorIconState,
-    stairsIconState,
-    servIconState,
-    infoIconState,
-    restroomsIconState,
-    exitsIconState,
-    confIconState,
-    deptIconState,
-    labsIconState,
-    retlIconState,
-    firstFloorIconState,
-    secondFloorIconState,
-    thirdFloorIconState,
-  ]);
-
-  const handleStartNodeChange = (value: string | null) => {
-    if (value) {
-      // Find the corresponding node for the selected label
-      const selectedNode = autocompleteNodeData.find(
-        (node) => node.label === value,
-      );
-      if (selectedNode) {
-        setSelectedNode1(
-          GraphManager.getInstance().getNodeByID(selectedNode.node)!,
-        );
-      }
-    } else {
-      setSelectedNode1(null); // Handle null value if necessary
-    }
-  };
-
-  const handleEndNodeChange = (value: string | null) => {
-    if (value) {
-      // Find the corresponding node for the selected label
-      const selectedNode = autocompleteNodeData.find(
-        (node) => node.label === value,
-      );
-      if (selectedNode) {
-        setSelectedNode2(
-          GraphManager.getInstance().getNodeByID(selectedNode.node)!,
-        );
-      }
-    } else {
-      setSelectedNode2(null); // Handle null value if necessary
-    }
-  };
-
-  const handleFloorChange = (newFloor: string) => {
-    const newFloorObj = floorStrToObj(newFloor);
-
-    if (!newFloorObj) {
-      console.error("New map floor is not a valid floor!");
-      return;
-    }
-
-    if(transformRef.current) {
-      transformRef.current.resetTransform();
-    }
-
-    setFloor(newFloorObj);
-  };
-
-  /**
-   * useEffect to just load the node data. Only called when the flags determining loading data are changed
-   */
-  useEffect(() => {
-    if (dataLoaded && !filtersApplied) {
-      console.log("Applying filters");
-      determineFilters();
-      setFiltersApplied(true);
-    }
-  }, [determineFilters, filtersApplied, nodeData, dataLoaded]);
-
-  const handleBackgroundRenderStatus = (
-    status: boolean,
-    width: number,
-    height: number,
-  ) => {
-    setBackgroundRenderStatus(status);
-    setCanvasWidth(width);
-    setCanvasHeight(height);
-  };
-
-  const handleIconCallback = (ref: HTMLCanvasElement) => {
-    iconCanvasRef.current = ref;
-  };
-
-  const handleTransform = (
-    ref: ReactZoomPanPinchRef,
-    state: { scale: number; positionX: number; positionY: number },
-  ) => {
-    if (!transformRef.current) transformRef.current = ref;
-    transformState.current = state;
-  };
-
-  const handleCanvasClick = (event: React.MouseEvent) => {
-    if (!iconCanvasRef.current) return;
-    const rect = iconCanvasRef.current.getBoundingClientRect();
-
-    const {actualX, actualY} = transformCanvasCoords(
-      event.clientX,
-      event.clientY,
-      transformState.current.scale,
-      transformState.current.positionX,
-      transformState.current.positionY,
-      canvasWidth,
-      canvasHeight,
-      rect);
-
-    for (let i = 0; i < filteredNodes.length; i++) {
-      if (filteredNodes[i].floor === floor) {
-        const node = filteredNodes[i];
-        const distance = Math.sqrt(
-          (actualX - node.xcoord) ** 2 + (actualY - node.ycoord) ** 2,
-        );
-
-        if (distance < 25) {
-          if (selectedNode1 && selectedNode2) {
-            setSelectedNode1(filteredNodes[i]);
-            setSelectedNode2(null);
-            return;
-          } else if (selectedNode1) {
-            if(selectedNode1.nodeID !== filteredNodes[i].nodeID) {
-              setSelectedNode2(filteredNodes[i]);
-              console.log("Set node 2");
-            }
-            return;
-          } else if (selectedNode2){
-            if(selectedNode2.nodeID !== filteredNodes[i].nodeID) {
-              setSelectedNode1(filteredNodes[i]);
-              console.log("Set node 1");
-            }
-            return;
-          } else {
-            setSelectedNode1(filteredNodes[i]);
-            console.log("Set node 1");
-            return;
-          }
-        }
-      }
-    }
-  };
-
-  const handleCanvasDoubleClick = (event: React.MouseEvent) => {
-    if (!iconCanvasRef.current) return;
-    const rect = iconCanvasRef.current.getBoundingClientRect();
-
-    const {actualX, actualY} = transformCanvasCoords(
-      event.clientX,
-      event.clientY,
-      transformState.current.scale,
-      transformState.current.positionX,
-      transformState.current.positionY,
-      canvasWidth,
-      canvasHeight,
-      rect
-      );
-
-    console.log(`Double click registered: ${actualX}, ${actualY}`);
-
-    setNodeCreationInfo({
-      creatingNode: true,
-      mouseXCoord: event.clientX,
-      mouseYCoord: event.clientY,
-      canvasXCoord: actualX,
-      canvasYCoord: actualY,
-    });
-  };
-
-  const handleCloseNodeCreator = () => {
-    setNodeCreationInfo({
-      creatingNode: false,
-      mouseXCoord: 0,
-      mouseYCoord: 0,
-      canvasXCoord: 0,
-      canvasYCoord: 0,
-    });
-  };
-
-  const handleClearNode1 = () => {
-    setSelectedNode1(null);
-  };
-
-  const handleClearNode2 = () => {
-    setSelectedNode2(null);
-  };
-
-  const handleEditNode = (node: MapNode) => {
-    try {
-      axios
-        .put("/api/database/nodes/updatenode", node.nodeInfo, {
-          headers: { "Content-Type": "application/json" },
-        })
-        .then((res) => {
-          console.log("Updated node!");
-          console.log(res.data);
-        });
-    } catch (e) {
-      console.log("Failed to update node");
-    }
-    setDataLoaded(false);
-  };
-
-  const handleCreateNode = () => {
-    handleCloseNodeCreator();
-    setDataLoaded(false);
-  };
-
-  const handleDeleteNode = (node: MapNode) => {
-    try {
-      axios
-        .put(
-          `/api/database/nodes/deletenode/${node.nodeID}`,
-          {},
-          {
-            headers: { "Content-Type": "application/json" },
-          },
-        )
-        .then((res) => {
-          console.log("Deleted node!");
-          console.log(res.data);
-        });
-    } catch (e) {
-      console.log("Failed to delete node");
-    }
-    setDataLoaded(false);
-  };
-
-  const handleCreateEdge = (startingNode1: MapNode, startingNode2: MapNode) => {
-    console.log("Creating edge");
-    try {
-      axios
-        .put(
-          `/api/database/edges/createedge`,
-          {
-            edgeID: `${startingNode1.nodeID}_${startingNode2.nodeID}`,
-            startNodeID: `${startingNode1.nodeID}`,
-            endNodeID: `${startingNode2.nodeID}`,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-            timeout: 10000,
-            timeoutErrorMessage: "Timed out trying to create edge",
-          },
-        )
-        .then((res) => {
-          console.log("Added edge!");
-          console.log(res.data);
-          setDataLoaded(false);
-        });
-    } catch (e) {
-      console.error("Failed to create edge!");
-    }
-  };
-
-  const handleDeleteEdge = (edge: MapEdge) => {
-    try {
-      axios
-        .put(
-          `/api/database/edges/deleteedge/${edge.edgeID}`,
-          {},
-          {
-            headers: { "Content-Type": "application/json" },
-          },
-        )
-        .then((res) => {
-          console.log("Deleted edge!");
-          console.log(res.data);
-          setDataLoaded(false);
-        });
-    } catch (e) {
-      console.error("Failed to delete edge!");
-    }
-  };
+  }, [dataLoadedSoft, setFiltersApplied, setNodeDataLoadedFilters]);
 
   useEffect(() => {
-    console.log(nodeData);
-  }, [nodeData]);
+    console.log("Filtered Nodes");
+    console.log(filteredNodes);
+  }, [filteredNodes]);
 
   useEffect(() => {
-    console.log(edgeData);
-  }, [edgeData]);
+    setUpdateSelection(filtersApplied);
+  }, [filtersApplied]);
 
   useEffect(() => {
-    const getEdge = async (edgeID: string) => {
-      let edgeBetween: MapEdge | null = null;
-      try {
-        const response = await axios.get(`/api/database/edges/${edgeID}`, {
-          headers: { "Content-Type": "application/json" },
-          validateStatus: (stat: number) => {
-            return stat == 200 || stat == 404 || stat == 304;
-          },
-        });
-        if (response.status == 200 || response.status == 304) {
-          const edgeData: MapEdgeType = response.data;
-          edgeBetween = GraphManager.getInstance().getEdgeByID(edgeData.edgeID);
-          if (!edgeBetween) {
-            console.log(
-              `Corresponding edge object for the returned edge data (id ${edgeData.edgeID}) could not be found!`,
-            );
-          } else {
-            console.log(`Edge with edgeID ${edgeBetween.edgeID} found!`);
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
+    if(updateSelection) {
+      if(selectedNode1 && !filteredNodes.find((value: MapNode) => {
+        return value == selectedNode1;
+      }))
+        setSelectedNode1(null);
+      if(selectedNode2 && !filteredNodes.find((value: MapNode) => {
+        return value == selectedNode2;
+      }))
+        setSelectedNode2(null);
 
-      return edgeBetween;
-    };
-
-    const checkAllEdges = async () => {
-      let edgeBetween: MapEdge | null = await getEdge(
-        `${selectedNode1!.nodeID}_${selectedNode2!.nodeID}`,
-      );
-      if (!edgeBetween) {
-        edgeBetween = await getEdge(
-          `${selectedNode2!.nodeID}_${selectedNode1!.nodeID}`,
-        );
-      }
-
-      setEdgeBetweenSelectedNodes(edgeBetween);
-    };
-
-    console.log("Checking for edge");
-
-    if (selectedNode1 && selectedNode2) {
-      checkAllEdges().then(() => console.log("Finished checking for edge"));
+      setUpdateSelection(false);
     }
-  }, [selectedNode1, selectedNode2, nodeData]);
+  }, [filteredNodes, selectedNode1, selectedNode2, setSelectedNode1, setSelectedNode2, updateSelection]);
+
+  useEffect(() => {
+    setNodeDataFilters(nodeData);
+  }, [nodeData, setNodeDataFilters]);
 
   return (
     <>
-      <img
-        src={startIcon}
-        className={"start"}
-        alt="icon"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          opacity: 0,
-          zIndex: -1,
-        }}
-      />
-      <img
-        src={endIcon}
-        className={"end"}
-        alt="icon"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          opacity: 0,
-          zIndex: -1,
-        }}
-      />
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          maxHeight: window.innerHeight,
-        }}
+        position={"absolute"}
+        top={"120px"}
+        width={"100%"}
+        height={`${windowHeight - 120}px`}
       >
-        <Box sx={{ height: "120px", minHeight: "120px" }}>
-          <CssBaseline />
-          <TopBanner2 />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            height: "100%",
-            maxHeight: window.innerHeight,
-            minHeight: 0,
-            overflow: "clip",
-            flexGrow: 1,
-            flexShrink: 1,
-          }}
+        <Stack
+          direction={"row"}
+          height={"100%"}
         >
-          <Box
-            sx={{
-              width: "18%",
-              minWidth: "18%",
-              backgroundColor: "#D9DAD7",
-              height: "100vh",
-              display: "flex"
+          <MapEditorSideBar
+            title={"Map Editor"}
+            filterInfo={filterInfo}
+            selectedNode1={selectedNode1}
+            selectedNode2={selectedNode2}
+            edgeBetweenNodes={edgeBetween}
+            nodeData={filteredNodes}
+            nodeUpdateCallback={() => setDataLoadedSoft(false)}
+            handleSelectNode1={(nodeID) => setSelectedNode1(nodeID ? GraphManager.getInstance().getNodeByID(nodeID) : null)}
+            handleSelectNode2={(nodeID) => setSelectedNode2(nodeID ? GraphManager.getInstance().getNodeByID(nodeID) : null)}
+            handleClearNode1={() => setSelectedNode1(null)}
+            handleClearNode2={() => setSelectedNode2(null)}
+            handleCreateEdge={() => setDataLoadedSoft(false)}
+            handleDeleteEdge={() => setDataLoadedSoft(false)}
+            handleDeleteNode={() => setDataLoadedSoft(false)}
+            handleEditNode={() => setDataLoadedSoft(false)}
+
+            handleIconStateChange={(filterType, newState) => {
+              setNewFilterActiveStatus({type: filterType, active: newState});
             }}
+
+            handleSelectAllFilters={() => selectAllFilters(true)}
+            handleSelectNoFilters={() => selectNoFilters(true)}
+          />
+          <Box
+            width={"100%"}
+            height={"100%"}
           >
-            {/*Side Bar*/}
-            <MapEditorSideBar
-              title="Map Editing"
-              onChange={(event, value) => handleStartNodeChange(value)}
-              autocompleteNodeData={autocompleteNodeData}
-              compareFn={(a, b) => a.label.localeCompare(b.label)}
-              nodeToLabelIdCallback={(node) => node.label}
-              groupBy={(option) => option.charAt(0).toUpperCase()}
-              optionLabel={(option) => option}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Node 1"
-                  value={selectedNode1 ? selectedNode1.nodeID : ""}
-                />
-              )}
-              onChange1={(event, value) => handleEndNodeChange(value)}
-              renderInput1={(params) => (
-                <TextField
-                  {...params}
-                  label="Node 2"
-                  value={selectedNode2 ? selectedNode2.nodeID : ""}
-                />
-              )}
-              open={open}
-              onClick1={handleButtonClick}
-              checked={checked}
-              onClick2={handleSelectAll}
-              icon={
-                <Icon
-                  handleButtonClick={handleButtonClick}
-                  checked={false}
-                  confIconState={confIconState}
-                  deptIconState={deptIconState}
-                  labsIconState={labsIconState}
-                  servIconState={servIconState}
-                  infoIconState={infoIconState}
-                  restroomsIconState={restroomsIconState}
-                  elevatorIconState={elevatorIconState}
-                  stairsIconState={stairsIconState}
-                  exitsIconState={exitsIconState}
-                  retlIconState={retlIconState}
-                  ll1IconState={ll1IconState}
-                  ll2IconState={ll2IconState}
-                  firstFloorIconState={firstFloorIconState}
-                  secondFloorIconState={secondFloorIconState}
-                  thirdFloorIconState={thirdFloorIconState}
-                  handleConfIconState={handleConfIconState}
-                  handleDeptIconState={handleDeptIconState}
-                  handleLabsIconState={handleLabsIconState}
-                  handleServIconState={handleServIconState}
-                  handleInfoIconState={handleInfoIconState}
-                  handleRestroomsIconState={handleRestroomsIconState}
-                  handleElevatorIconState={handleElevatorIconState}
-                  handleStairsIconState={handleStairsIconState}
-                  handleExitsIconState={handleExitsIconState}
-                  handleRetlIconState={handleRetlIconState}
-                  handleLL1IconState={handleLL1IconState}
-                  handleLL2IconState={handleLL2IconState}
-                  handleFirstFloorIconState={handleFirstFloorIconState}
-                  handleSecondFloorIconState={handleSecondFloorIconState}
-                  handleThirdFloorIconState={handleThirdFloorIconState}
-                  handleSelectAll={handleSelectAll}
-                  handleClearAll={handleClearAll}
-                />
-              }
-              callback={handleFloorChange}
+            <Paper
+              style={{
+                position: "absolute",
+                right: 0,
+                width: "200px",
+                margin: "25px",
+                zIndex: 2,
+              }}
+              elevation={3}
+            >
+              <>
+                {/* Toggle button */}
+                <ToggleButton onClick={() => setIsOpen(!isOpen)} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
+                {isOpen && (
+                  <Legend filterInfo={[...filterInfo.values()]}/>
+                )}
+              </>
+            </Paper>
+            <Floors
+              setFloor={setFloor}
+              activeFloor={floor}
+            />
+            <MapRender
+              filterInfo={filterInfo}
+              floor={floor}
+              filteredNodes={filteredNodes}
+              selectNodeGeneral={selectNodeGeneral}
+              deselectNodeGeneral={deselectNodeGeneral}
               selectedNode1={selectedNode1}
               selectedNode2={selectedNode2}
-              edgeBetweenNodes={edgeBetweenSelectedNodes}
-              handleCreateEdge={handleCreateEdge}
-              handleDeleteEdge={handleDeleteEdge}
-              handleClearNode1={handleClearNode1}
-              handleClearNode2={handleClearNode2}
-              handleEditNode={handleEditNode}
-              handleDeleteNode={handleDeleteNode}
+              dataLoadedHard={dataLoadedHard}
+              setDataLoadedHard={setDataLoadedHard}
+              dataLoadedSoft={dataLoadedSoft}
+              setDataLoadedSoft={setDataLoadedSoft}
             />
           </Box>
-
-          <Box height={"100%"} overflow={"clip"}>
-            <TransformWrapper
-              onTransformed={handleTransform}
-              minScale={0.8}
-              initialScale={1.0}
-              initialPositionX={0}
-              initialPositionY={0}
-              doubleClick={{disabled: true}}
-            >
-              <TransformComponent>
-                <>
-                  <BackgroundCanvas
-                    style={{
-                      position: "relative",
-                      // minHeight: "100vh",
-                      // maxHeight: "100%",
-                      maxWidth: "100%",
-                    }}
-                    floor={floor}
-                    renderStatusCallback={handleBackgroundRenderStatus}
-                  />
-                  <EdgeCanvas
-                    style={{
-                      position: "absolute",
-                      maxWidth: "100%",
-                    }}
-                    backgroundRendered={backgroundRenderStatus}
-                    width={canvasWidth}
-                    height={canvasHeight}
-                    floor={floor}
-                    nodeData={nodeData}
-                  />
-                  <SymbolCanvas
-                    style={{
-                      position: "absolute",
-                      maxWidth: "100%",
-                    }}
-                    backgroundRendered={backgroundRenderStatus}
-                    width={canvasWidth}
-                    height={canvasHeight}
-                    filtersApplied={filtersApplied}
-                    filteredNodes={filteredNodes}
-                    floor={floor}
-                  />
-                  <IconCanvas
-                    style={{
-                      position: "absolute",
-                      maxWidth: "100%",
-                    }}
-                    backgroundRendered={backgroundRenderStatus}
-                    width={canvasWidth}
-                    height={canvasHeight}
-                    refCallback={handleIconCallback}
-                  />
-                  <ClickableCanvas
-                    style={{
-                      position: "absolute",
-                      maxWidth: "100%",
-                    }}
-                    backgroundRendered={backgroundRenderStatus}
-                    width={canvasWidth}
-                    height={canvasHeight}
-                    onClick={handleCanvasClick}
-                    onDoubleClick={handleCanvasDoubleClick}
-                  />
-                </>
-              </TransformComponent>
-            </TransformWrapper>
-            {nodeCreationInfo.creatingNode ?
-              <NodeCreator
-                nodeCreationInfo={nodeCreationInfo}
-                floor={floor}
-                handleCloseDialogue={handleCloseNodeCreator}
-                handleCreateNodeCallback={handleCreateNode}
-              />
-              :
-              <></>
-            }
-          </Box>
-        </Box>
-        <Stack direction={"row"}>
-          <Box
-            position={"fixed"}
-            right={"0.5%"}
-            sx={{
-              top: "120px"
-            }}
-          >
-            {/* Toggle button */}
-            <ToggleButton onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
-          </Box>
-          {isOpen && (
-            <Legend filterItems={filterIcons} />
-          )}
         </Stack>
       </Box>
     </>
   );
 }
-
-export default MapEditingPage;

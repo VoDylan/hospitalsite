@@ -1,10 +1,10 @@
 import {Box, Button, Stack, SxProps, Theme} from "@mui/material";
 import Slide from "@mui/material/Slide";
 import {useState} from "react";
-import FilterList from "./FilterList.tsx";
-import useWindowSize from "../../../hooks/useWindowSize.tsx";
-import {IFilterState} from "../../../hooks/useFilters.tsx";
-import {FilterType} from "../../../common/types/FilterType.ts";
+import FilterList from "frontend/src/components/map/filter/FilterList.tsx";
+import useWindowSize from "frontend/src/hooks/useWindowSize.tsx";
+import {IFilterState} from "frontend/src/hooks/useFilters.tsx";
+import {FilterType} from "frontend/src/common/types/FilterType.ts";
 
 interface FilterSelectorProps {
   filterInfo: Map<FilterType, IFilterState>;

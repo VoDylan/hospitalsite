@@ -1,9 +1,9 @@
 import React from "react";
 import {Box, Button, Stack} from "@mui/material";
-import {IFilterState} from "../../../hooks/useFilters.tsx";
-import FilterWithIcon from "./FilterWithIcon.tsx";
-import {FilterType} from "../../../common/types/FilterType.ts";
-import Spacer from "../../general/Spacer.tsx";
+import {IFilterState} from "frontend/src/hooks/useFilters.tsx";
+import FilterWithIcon from "frontend/src/components/map/filter/FilterWithIcon.tsx";
+import {FilterType} from "frontend/src/common/types/FilterType.ts";
+import Spacer from "frontend/src/components/general/Spacer.tsx";
 
 interface FilterListProps {
   hideFilterMenu: () => void;

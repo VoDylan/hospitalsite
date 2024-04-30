@@ -1,270 +1,174 @@
-import Floor from "./FloorTabs.tsx";
-import React from "react";
-import Autocomplete from "@mui/material/Autocomplete";
-import { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Drawer from "@mui/material/Drawer";
+import {Box, Divider, Drawer, Stack, Typography} from "@mui/material";
+import NodeAutocomplete from "frontend/src/components/map/NodeAutocomplete.tsx";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
-import Slide from "@mui/material/Slide";
-import Stack from "@mui/material/Stack";
+import {SyntheticEvent} from "react";
+import {AutocompleteNodeType} from "frontend/src/common/types/AutocompleteNodeType.ts";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Divider, Typography } from "@mui/material";
-import NodeInfo from "./NodeInfo.tsx";
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
-import EdgeInfo from "./EdgeInfo.tsx";
+import useWindowSize from "frontend/src/hooks/useWindowSize.tsx";
+import FilterSlider from "frontend/src/components/map/filter/FilterSlider.tsx";
+import {IFilterState} from "frontend/src/hooks/useFilters.tsx";
+import {FilterType} from "frontend/src/common/types/FilterType.ts";
+import ChangeLogComponent from "frontend/src/components/map/mapEditor/ChangeLogComponent.tsx";
+import SelectedNodeInfo from "./mapEditor/SelectedNodeInfo.tsx";
 
-export default function MapEditorSideBar(props: {
+interface MapEditorSideBar2Props {
   title: string;
-  onChange: (event: React.SyntheticEvent, value: string | null) => void;
-  autocompleteNodeData: { label: string; node: string }[];
-  compareFn: (
-    a: { label: string; node: string },
-    b: { label: string; node: string },
-  ) => number;
-  nodeToLabelIdCallback: (node: { label: string; node: string }) => string;
-  groupBy: (option: string) => string;
-  optionLabel: (option: string) => string;
-  renderInput: (params: AutocompleteRenderInputParams) => React.JSX.Element;
-  onChange1: (event: React.SyntheticEvent, value: string | null) => void;
-  renderInput1: (params: AutocompleteRenderInputParams) => React.JSX.Element;
-  open?: boolean;
-  handleClick?: () => void;
-  checkedBFS?: boolean;
-  handleSelectBFS?: () => void;
-  checkedAS?: boolean;
-  handleSelectAS?: () => void;
-  checkedDFS?: boolean;
-  handleSelectDFS?: () => void;
-  errorMessage?: string;
-  onClick?: () => void;
-  onClick1?: () => void;
-  checked?: boolean;
-  onClick2?: () => void;
-  icon?: React.JSX.Element;
-  callback?: (newFloor: string) => void;
+
+  nodeData: MapNode[];
+
+  filterInfo: Map<FilterType, IFilterState>;
+
   selectedNode1: MapNode | null;
   selectedNode2: MapNode | null;
   edgeBetweenNodes: MapEdge | null;
+
+  nodeUpdateCallback: () => void;
+
+  handleSelectNode1: (nodeID: string | null) => void;
+  handleSelectNode2: (nodeID: string | null) => void;
   handleCreateEdge: (startNode1: MapNode, startNode2: MapNode) => void;
   handleDeleteEdge: (edge: MapEdge) => void;
   handleClearNode1: () => void;
   handleClearNode2: () => void;
   handleEditNode: (node: MapNode) => void;
   handleDeleteNode: (node: MapNode) => void;
-}) {
+
+  handleIconStateChange: (filterType: FilterType, newState: boolean) => void;
+
+  handleSelectAllFilters: () => void;
+  handleSelectNoFilters: () => void;
+}
+
+export default function MapEditorSideBar(props: MapEditorSideBar2Props) {
+  const [windowWidth, windowHeight] = useWindowSize();
+
+  const handleNode1Change = (event: SyntheticEvent, value: AutocompleteNodeType | null) => {
+    props.handleSelectNode1((value ? value.node : null));
+  };
+
+  const handleNode2Change = (event: SyntheticEvent, value: AutocompleteNodeType | null) => {
+    props.handleSelectNode2((value ? value.node : null));
+  };
+
   return (
     <Drawer
-      variant="permanent"
+      variant={"permanent"}
       sx={{
-        [`& .MuiDrawer-paper`]: {
-          position: "relative",
-          marginTop: "0.4%",
-          marginLeft: "0.2%",
-          width: "18vw",
-          height: "90%",
-          boxSizing: "border-box",
-          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-          elevation: 100,
-          zIndex: 1,
-          border: "3px solid rgba(0, 0, 0, 0.05)",
-        },
+        width: "18%",
+        height: "100%",
+        flexShrink: 0,
       }}
+      PaperProps={{
+        sx: {
+          position: "relative",
+          width: "100%",
+          height: `${windowHeight - 120}px`,
+        },
+        elevation: 3,
+      }}
+
     >
-      <Stack display={"flex"} direction={"column"} sx={{ marginLeft: "4%" }}>
-
-      <Typography
-          color={"#003A96"}
-          align={"center"}
-          fontStyle={"Open Sans"}
-          fontSize={30}
-          sx={{ marginBottom: "10%", marginRight: "4%", marginTop: "10%" }}
-        >
-          {props.title}
-        </Typography>
-
-        <Stack
-          direction={"row"}
-          spacing={1}
-          sx={{ display: "flex", alignItems: "center" }}
-        >
-          <RadioButtonCheckedIcon
-            sx={{ color: "blue" }}
-          ></RadioButtonCheckedIcon>
-
-          <Autocomplete
-            onChange={props.onChange}
-            disablePortal
-            id="startNode"
-            options={props.autocompleteNodeData
-              .sort(props.compareFn)
-              .map(props.nodeToLabelIdCallback)}
-            groupBy={props.groupBy}
-            getOptionLabel={props.optionLabel}
-            sx={{ width: "75%" }}
-            renderInput={props.renderInput}
-          />
-        </Stack>
-
+      <Box
+        margin={"25px"}
+        marginBottom={"50px"}
+      >
         <Stack>
-          <MoreVertIcon fontSize={"medium"}></MoreVertIcon>
-        </Stack>
-
-        <Stack
-          direction={"row"}
-          spacing={1}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <LocationOnIcon
-            fontSize={"medium"}
-            sx={{ color: "red" }}
-          ></LocationOnIcon>
-
-          <Autocomplete
-            onChange={props.onChange1}
-            disablePortal
-            id="startNode"
-            options={props.autocompleteNodeData
-              .sort(props.compareFn)
-              .map(props.nodeToLabelIdCallback)}
-            groupBy={props.groupBy}
-            getOptionLabel={props.optionLabel}
-            sx={{ width: "75%" }}
-            renderInput={props.renderInput1}
-          />
-        </Stack>
-
-        <Divider
-          variant={"middle"}
-          orientation={"horizontal"}
-          flexItem
-          aria-hidden={"true"}
-          sx={{
-            borderBottom: "2px solid",
-            opacity: "0.5",
-          }}
-        />
-
-        {!props.selectedNode1 && !props.selectedNode2 ? (
-          <></>
-        ) : (
-          <Box
+          <Typography
+            color={"#003A96"}
+            align={"center"}
+            fontStyle={"Open Sans"}
+            fontSize={30}
+          >
+            {props.title}
+          </Typography>
+          <Divider
+            variant={"middle"}
+            orientation={"horizontal"}
+            flexItem
+            aria-hidden={"true"}
             sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
+              borderBottom: "2px solid",
+              opacity: "0.5",
+              marginTop: "25px",
+              marginBottom: "25px",
+            }}
+          />
+          <Stack
+            sx={{
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "80%",
             }}
           >
-            {props.selectedNode1 ? (
-              <NodeInfo
-                style={{
-                  opacity: "1",
-                  marginTop: "20px",
-                }}
-                title={"Node 1"}
-                node={props.selectedNode1}
-                textColor={"#535353"}
-                clearNodeCallback={props.handleClearNode1}
-                editNodeCallback={props.handleEditNode}
-                deleteNodeCallback={props.handleDeleteNode}
-              />
-            ) : (
-              <></>
-            )}
-            {props.selectedNode2 ? (
-              <NodeInfo
-                style={{
-                  opacity: "1",
-                  marginTop: "20px",
-                }}
-                title={"Node 2"}
-                node={props.selectedNode2}
-                textColor={"#535353"}
-                clearNodeCallback={props.handleClearNode2}
-                editNodeCallback={props.handleEditNode}
-                deleteNodeCallback={props.handleDeleteNode}
-              />
-            ) : (
-              <></>
-            )}
-            {props.selectedNode1 && props.selectedNode2 ? (
-              <Box
-                display={"flex"}
-                flexDirection={"row"}
-                justifyContent={"space-between"}
-              >
-                <EdgeInfo
-                  style={{
-                    opacity: "1",
-                    marginTop: "20px",
-                    width: "100%",
-                    overflow: "clip",
-                  }}
-                  edge={props.edgeBetweenNodes}
-                  selectedNode1={props.selectedNode1}
-                  selectedNode2={props.selectedNode2}
-                  textColor={"#535353"}
-                  createEdgeCallback={props.handleCreateEdge}
-                  deleteEdgeCallback={props.handleDeleteEdge}
-                />
-              </Box>
-            ) : (
-              <></>
-            )}
-          </Box>
-        )}
-
-        <Stack
-          direction={"column"}
-          spacing={2}
-          sx={{ marginLeft: "10%", marginTop: "20%" }}
-        >
-          {props.onClick1 && (
-            <Button
-              variant={"contained"}
-              sx={{ width: "80%" }}
-              onClick={props.onClick1}
-            >
-              {props.checked ? "Add Filters" : "Add Filters"}
-            </Button>
-          )}
-          {props.onClick2 && (
-            <Button
-              variant={"contained"}
-              sx={{ width: "80%", backgroundColor: "#D9D9D9" }}
-              onClick={props.onClick2}
-            >
-              Clear Filters
-            </Button>
-          )}
-          {props.checked && (
-            <Slide
-              in={props.checked}
-              direction="up"
-              style={{
-                zIndex: 1,
-                backgroundColor: "#F5F7FA",
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                minWidth: "100%",
-                height: "100%",
-                marginTop: 0,
-              }}
-            >
-              <div>{props.icon || <div />}</div>
-            </Slide>
-          )}
-          {props.callback && <Floor callback={props.callback} />}
+            <NodeAutocomplete
+              label={"Node 1"}
+              Icon={<RadioButtonCheckedIcon color={"primary"} sx={{color: "blue"}}/>}
+              onChange={handleNode1Change}
+              nodeData={props.nodeData}
+              value={props.selectedNode1}
+            />
+            <MoreVertIcon fontSize={"medium"}/>
+            <NodeAutocomplete
+              label={"Node 2"}
+              Icon={<LocationOnIcon fontSize={"medium"} sx={{color: "red"}}/>}
+              onChange={handleNode2Change}
+              nodeData={props.nodeData}
+              value={props.selectedNode2}
+            />
+          </Stack>
+          <Divider
+            variant={"middle"}
+            orientation={"horizontal"}
+            flexItem
+            aria-hidden={"true"}
+            sx={{
+              borderBottom: "2px solid",
+              opacity: "0.5",
+              marginTop: "25px",
+              marginBottom: "25px",
+            }}
+          />
+          <SelectedNodeInfo
+            selectedNode1={props.selectedNode1}
+            selectedNode2={props.selectedNode2}
+            edgeBetweenNodes={props.edgeBetweenNodes}
+            nodeUpdateCallback={props.nodeUpdateCallback}
+            handleClearNode1={props.handleClearNode1}
+            handleClearNode2={props.handleClearNode1}
+          />
+          <ChangeLogComponent
+            sx={{
+              marginRight: "auto",
+              marginLeft: "auto",
+            }}
+          />
+          <Divider
+            variant={"middle"}
+            orientation={"horizontal"}
+            flexItem
+            aria-hidden={"true"}
+            sx={{
+              borderBottom: "2px solid",
+              opacity: "0.5",
+              marginTop: "25px",
+              marginBottom: "25px",
+            }}
+          />
+          <FilterSlider
+            filterInfo={props.filterInfo}
+            handleIconStateChange={props.handleIconStateChange}
+            handleSelectAllFilters={props.handleSelectAllFilters}
+            handleSelectNofilters={props.handleSelectNoFilters}
+            sx={{
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          />
         </Stack>
-      </Stack>
+      </Box>
     </Drawer>
   );
 }

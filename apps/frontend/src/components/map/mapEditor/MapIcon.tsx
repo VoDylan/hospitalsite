@@ -1,10 +1,10 @@
 import MapNode from "common/src/map/MapNode.ts";
-import {IRenderInfo} from "../../../hooks/useFilters.tsx";
+import {IRenderInfo} from "frontend/src/hooks/useFilters.tsx";
 import React, {useEffect, useRef, useState} from "react";
 import {MapNodeType, NodeType} from "common/src/map/MapNodeType.ts";
 import Draggable, {DraggableData, DraggableEvent} from "react-draggable";
 import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
-import GraphManager from "../../../common/GraphManager.ts";
+import GraphManager from "frontend/src/common/GraphManager.ts";
 
 interface MapIconProps {
   node: MapNode;
@@ -180,12 +180,7 @@ export default function MapIcon(props: MapIconProps) {
       <div
         style={{
           position: "absolute",
-          // left: currPositionX,
-          // top: currPositionY,
           zIndex: zIndex,
-          // transform: (isHovered || selected) ? `scale(1.25)` : `scale(1)`,
-          // transition: (!selected && !isDragging) ? "transform 0.05s ease-in-out" : "none",
-          transition: (!selected && !isDragging) ? "none" : "none",
           boxShadow: selected ? "0 0 2em 0.5em #003A96" : undefined,
           borderRadius: props.node.nodeType == NodeType.EXIT ? undefined : "100%",
           width: iconWidth,

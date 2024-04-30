@@ -1,10 +1,10 @@
 import {Stack, SxProps, Theme} from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import Filter from "./Filter.tsx";
+import Filter from "frontend/src/components/map/filter/Filter.tsx";
 import React, {useEffect, useRef, useState} from "react";
-import {IFilterState, IRenderInfo} from "../../../hooks/useFilters.tsx";
-import {FilterType} from "../../../common/types/FilterType.ts";
+import {IFilterState, IRenderInfo} from "frontend/src/hooks/useFilters.tsx";
+import {FilterType} from "frontend/src/common/types/FilterType.ts";
 
 interface FilterWithIconProps {
   filterInfo: IFilterState,

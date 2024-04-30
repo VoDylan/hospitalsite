@@ -5,18 +5,18 @@ import {
   TransformWrapper
 } from "react-zoom-pan-pinch";
 import React, {useEffect, useRef, useState} from "react";
-import {IFilterState} from "../../../hooks/useFilters.tsx";
-import BackgroundCanvas from "../BackgroundCanvas.tsx";
-import {useCanvasInfo} from "../../../hooks/useCanvasInfo.tsx";
+import {IFilterState} from "frontend/src/hooks/useFilters.tsx";
+import BackgroundCanvas from "frontend/src/components/map/BackgroundCanvas.tsx";
+import {useCanvasInfo} from "frontend/src/hooks/useCanvasInfo.tsx";
 import {Floor} from "common/src/map/Floor.ts";
-import EdgeCanvas from "../EdgeCanvas.tsx";
+import EdgeCanvas from "frontend/src/components/map/EdgeCanvas.tsx";
 import MapNode from "common/src/map/MapNode.ts";
-import {FilterType} from "../../../common/types/FilterType.ts";
-import SymbolCanvas from "./SymbolCanvas.tsx";
-import {useNodeCreationInfo} from "../../../hooks/useNodeCreationInfo.tsx";
-import NodeCreator from "../NodeCreator.tsx";
-import useWindowSize from "../../../hooks/useWindowSize.tsx";
-import transformCoords2 from "../../../common/TransformCoords2.ts";
+import {FilterType} from "frontend/src/common/types/FilterType.ts";
+import SymbolCanvas from "frontend/src/components/map/mapEditor/SymbolCanvas.tsx";
+import {useNodeCreationInfo} from "frontend/src/hooks/useNodeCreationInfo.tsx";
+import NodeCreator from "frontend/src/components/map/NodeCreator.tsx";
+import useWindowSize from "frontend/src/hooks/useWindowSize.tsx";
+import transformCoords2 from "frontend/src/common/TransformCoords2.ts";
 import {Box} from "@mui/material";
 import {isEqual} from "lodash";
 

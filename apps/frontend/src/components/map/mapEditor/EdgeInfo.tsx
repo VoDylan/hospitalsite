@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MapEdge from "common/src/map/MapEdge.ts";
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import MapNode from "common/src/map/MapNode.ts";
-import GraphManager from "../../common/GraphManager.ts";
+import GraphManager from "frontend/src/common/GraphManager.ts";
 
 interface EdgeInfoProps {
   style: React.CSSProperties;

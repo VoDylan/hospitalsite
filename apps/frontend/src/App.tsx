@@ -30,7 +30,6 @@ import MapEditingPage from "./routes/MapEditingPage.tsx";
 import CalendarPage from "./routes/CalendarPage.tsx";
 import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
-import MapEditingPage2 from "./routes/MapEditingPage2.tsx";
 import CheckOutPage from "./routes/CheckOutPage.tsx";
 
 function App() {
@@ -110,10 +109,6 @@ function App() {
         {
           path: "/MapEditingPage",
           element: <Auth0Protection component={MapEditingPage} />,
-        },
-        {
-          path: "/mapeditingpage2",
-          element: <MapEditingPage2/>,
         },
         {
           path: "map/:startnode/:endnode",

@@ -1,6 +1,6 @@
-import {IFilterState} from "../../../hooks/useFilters.tsx";
+import {IFilterState} from "frontend/src/hooks/useFilters.tsx";
 import {Box, Stack, Typography} from "@mui/material";
-import Filter from "./Filter.tsx";
+import Filter from "frontend/src/components/map/filter/Filter.tsx";
 import React, {useEffect, useState} from "react";
 
 interface LegendProps {

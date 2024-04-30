@@ -1,7 +1,7 @@
 import React, {SyntheticEvent, useEffect, useState} from "react";
 import {Stack, TextField} from "@mui/material";
 import Autocomplete, {AutocompleteRenderInputParams} from "@mui/material/Autocomplete";
-import {AutocompleteNodeType} from "../../../common/types/AutocompleteNodeType.ts";
+import {AutocompleteNodeType} from "frontend/src/common/types/AutocompleteNodeType.ts";
 import MapNode from "common/src/map/MapNode.ts";
 
 interface NodeAutocompleteProps {
