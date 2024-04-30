@@ -40,7 +40,7 @@ export default function CalendarPage() {
     reasonForVisit: "",
     roomNumber: "",
     toEmail:"",
-    roomName: ""
+    // roomName: ""
   });
 
   // Define an interface for the node data
@@ -121,7 +121,7 @@ export default function CalendarPage() {
       reasonForVisit: "",
       roomNumber: "",
       toEmail:"",
-      roomName: "",
+      // roomName: "",
     });
   }
 

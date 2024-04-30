@@ -5,5 +5,5 @@ export type CalendarPageFormSubmission = {
   reasonForVisit: string;
   roomNumber: string;
   toEmail: string;
-  roomName: string;
+  // roomName: string;
 };

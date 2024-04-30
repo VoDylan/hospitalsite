@@ -55,6 +55,8 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
       openWithError("Please enter your name");
     } else if (props.input.reasonForVisit === "") {
       openWithError("Please enter your reason for visiting");
+    } else if (props.input.toEmail === "") {
+      openWithError("Please enter your email");
     } else {
       const submission = props.input;
       console.log(props.input);
@@ -65,7 +67,7 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
       const emailData = {
         to: props.input.toEmail,
         date: props.input.date,
-        location: props.input.roomName,
+        location: props.input.roomNumber,
       };
 
       if (!result.success) {
