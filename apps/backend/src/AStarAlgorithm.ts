@@ -21,7 +21,7 @@ export class AStarAlgorithm extends Algorithms {
     console.log(this.nodes);
 
     gScores[startNodeIndex] = 0;
-    fScores[startNodeIndex] = this.distance(start, end);
+    fScores[startNodeIndex] = this.distance(start, end)!;
     parents[startNodeIndex] = null;
     open.set(start, fScores[startNodeIndex]);
 
@@ -53,7 +53,7 @@ export class AStarAlgorithm extends Algorithms {
 
         const currentNeighborCost: number =
           gScores[currentNodeIndex] +
-          this.distance(currentNodeID, currentNeighborID);
+          this.distance(currentNodeID, currentNeighborID)!;
 
         if (open.has(currentNeighborID)) {
           if (gScores[currentNeighborIndex] <= currentNeighborCost) {
@@ -66,7 +66,7 @@ export class AStarAlgorithm extends Algorithms {
         } else {
           open.set(
             currentNeighborID,
-            currentNeighborCost + this.distance(currentNeighborID, end),
+            currentNeighborCost + this.distance(currentNeighborID, end)!,
           );
         }
         gScores[currentNeighborIndex] = currentNeighborCost;
