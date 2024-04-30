@@ -45,7 +45,6 @@ router.post("/resyncnodes", async (req, res) => {
   await clearDBNodes();
 
   const data = req.body;
-  console.log(data);
   if (!Array.isArray(data)) {
     res.status(400).json({
       message: "Node data must be an array!",
@@ -110,7 +109,6 @@ router.post("/resyncnodes", async (req, res) => {
 
 router.post("/nodes", async (req: Request, res: Response) => {
   const data = req.body;
-  console.log(data);
   if (!Array.isArray(data)) {
     res.status(400).json({
       message: "Node data must be an array!",
@@ -401,8 +399,6 @@ router.post("/servicerequest", async (req, res) => {
     services: string;
   } = req.body;
 
-  console.log(data);
-
   if (
     (await client.node.findUnique({
       where: {
@@ -454,8 +450,6 @@ router.post("/uploadnodes", async (req, res) => {
 router.post("/uploadedges", async (req, res) => {
   const data: [] = req.body;
 
-  console.log(data);
-
   await clearDBEdges();
 
   for (let i = 0; i < data.length; i++) {
@@ -484,8 +478,6 @@ router.put("/updatesr/:id", async (req, res) => {
     services: string;
     status: string;
   } = req.body;
-
-  console.log(data);
 
   await client.serviceRequest.update({
     where: {
@@ -533,8 +525,6 @@ router.get("/employees", async (req, res) => {
 
 router.post("/uploademployees", async (req, res) => {
   const data: [] = req.body;
-
-  console.log(data);
 
   await clearEmployeesFromDB();
 
