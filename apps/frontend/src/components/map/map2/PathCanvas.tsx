@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import { Floor, floorStrToObj } from "common/src/map/Floor.ts";
 import initializeLayeredCanvas from "frontend/src/components/map/InitializeLayeredCanvas.ts";
 // import { IDCoordinates } from "common/src/IDCoordinates.ts";
@@ -7,29 +7,27 @@ import MapNode from "common/src/map/MapNode.ts";
 import GraphManager from "frontend/src/common/GraphManager.ts";
 
 interface PathCanvasProps {
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
   backgroundRendered: boolean;
-  updateNodesBetweenFloors: boolean;
   width: number;
   height: number;
   floor: Floor;
   pathNodesData: TypeCoordinates[];
-  floorConnectionCallback: (
+  handleInterFloorNodesUpdate: (
     nodesToNextFloor: Map<TypeCoordinates, Floor>,
     nodesToPrevFloor: Map<TypeCoordinates, Floor>,
   ) => void;
-  pathRenderStatusCallback: (status: boolean) => void;
-  startNode: string;
-  endNode: string;
-  iconCanvasRef: HTMLCanvasElement;
+  setPathRenderStatus: (status: boolean) => void;
 }
 
 export default function PathCanvas(props: PathCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameRequestID = useRef<number>();
 
-  const floorConnectionCallback = props.floorConnectionCallback;
-  // const pathRenderStatusCallback = props.pathRenderStatusCallback;
+  const floorConnectionCallback = useRef<(
+    nodesToNextFloor: Map<TypeCoordinates, Floor>,
+    nodesToPrevFloor: Map<TypeCoordinates, Floor>,
+  ) => void>(props.handleInterFloorNodesUpdate);
 
   useEffect(() => {
     if (props.backgroundRendered)
@@ -37,46 +35,44 @@ export default function PathCanvas(props: PathCanvasProps) {
   }, [props.backgroundRendered, props.height, props.width]);
 
   useEffect(() => {
-    if (props.updateNodesBetweenFloors) {
-      if (!props.pathNodesData || props.pathNodesData.length == 0) return;
-      console.log("Determining interfloor nodes");
+    if (!props.pathNodesData || props.pathNodesData.length == 0) return;
+    console.log("Determining interfloor nodes");
 
-      const nodesToPrevFloor: Map<TypeCoordinates, Floor> = new Map<
-        TypeCoordinates,
-        Floor
-      >();
-      const nodesToNextFloor: Map<TypeCoordinates, Floor> = new Map<
-        TypeCoordinates,
-        Floor
-      >();
+    const nodesToPrevFloor: Map<TypeCoordinates, Floor> = new Map<
+      TypeCoordinates,
+      Floor
+    >();
+    const nodesToNextFloor: Map<TypeCoordinates, Floor> = new Map<
+      TypeCoordinates,
+      Floor
+    >();
 
-      let lastVisitedFloor: Floor = floorStrToObj(
-        GraphManager.getInstance().getNodeByID(props.pathNodesData[0].nodeID)!
-          .floor,
-      )!;
-      let lastVisitedNode: TypeCoordinates = props.pathNodesData[0];
+    let lastVisitedFloor: Floor = floorStrToObj(
+      GraphManager.getInstance().getNodeByID(props.pathNodesData[0].nodeID)!
+        .floor,
+    )!;
+    let lastVisitedNode: TypeCoordinates = props.pathNodesData[0];
 
-      for (let i = 0; i < props.pathNodesData.length; i++) {
-        const node: MapNode | null = GraphManager.getInstance().getNodeByID(
-          props.pathNodesData[i].nodeID,
-        );
-        if (!node) continue;
+    for (let i = 0; i < props.pathNodesData.length; i++) {
+      const node: MapNode | null = GraphManager.getInstance().getNodeByID(
+        props.pathNodesData[i].nodeID,
+      );
+      if (!node) continue;
 
-        if (node.floor != lastVisitedFloor) {
-          nodesToNextFloor.set(lastVisitedNode, floorStrToObj(node.floor)!);
-          nodesToPrevFloor.set(props.pathNodesData[i], lastVisitedFloor);
-        }
-
-        lastVisitedFloor = floorStrToObj(node.floor)!;
-        lastVisitedNode = props.pathNodesData[i];
+      if (node.floor != lastVisitedFloor) {
+        nodesToNextFloor.set(lastVisitedNode, floorStrToObj(node.floor)!);
+        nodesToPrevFloor.set(props.pathNodesData[i], lastVisitedFloor);
       }
 
-      floorConnectionCallback(nodesToNextFloor, nodesToPrevFloor);
+      lastVisitedFloor = floorStrToObj(node.floor)!;
+      lastVisitedNode = props.pathNodesData[i];
     }
+
+    floorConnectionCallback.current(nodesToNextFloor, nodesToPrevFloor);
   }, [
     floorConnectionCallback,
     props.pathNodesData,
-    props.updateNodesBetweenFloors,
+    props.floor,
   ]);
 
   useEffect(() => {
@@ -148,39 +144,39 @@ export default function PathCanvas(props: PathCanvasProps) {
             for (let j = 0; j < includedPathsOnFloor[i].length; j++) {
               ctx.beginPath();
 
-              if (includedPathsOnFloor[i][j].nodeID === props.startNode) {
-                // Check if it's the first element
-                const image: HTMLImageElement | null =
-                  document.querySelector(`.start`);
-                if (!image) return;
-
-                props.iconCanvasRef
-                  .getContext("2d")!
-                  .drawImage(
-                    image,
-                    includedPathsOnFloor[i][j].coordinates.x - 58,
-                    includedPathsOnFloor[i][j].coordinates.y - 42,
-                    110,
-                    80,
-                  );
-              }
-
-              if (includedPathsOnFloor[i][j].nodeID === props.endNode) {
-                // Check if it's the last element
-                const image2: HTMLImageElement | null =
-                  document.querySelector(`.end`);
-                if (!image2) return;
-
-                props.iconCanvasRef
-                  .getContext("2d")!
-                  .drawImage(
-                    image2,
-                    includedPathsOnFloor[i][j].coordinates.x - 63,
-                    includedPathsOnFloor[i][j].coordinates.y - 65,
-                    180,
-                    150,
-                  ); // Adjust iconWidth and iconHeight as needed
-              }
+              // if (includedPathsOnFloor[i][j].nodeID === props.startNode) {
+              //   // Check if it's the first element
+              //   const image: HTMLImageElement | null =
+              //     document.querySelector(`.start`);
+              //   if (!image) return;
+              //
+              //   props.iconCanvasRef
+              //     .getContext("2d")!
+              //     .drawImage(
+              //       image,
+              //       includedPathsOnFloor[i][j].coordinates.x - 58,
+              //       includedPathsOnFloor[i][j].coordinates.y - 42,
+              //       110,
+              //       80,
+              //     );
+              // }
+              //
+              // if (includedPathsOnFloor[i][j].nodeID === props.endNode) {
+              //   // Check if it's the last element
+              //   const image2: HTMLImageElement | null =
+              //     document.querySelector(`.end`);
+              //   if (!image2) return;
+              //
+              //   props.iconCanvasRef
+              //     .getContext("2d")!
+              //     .drawImage(
+              //       image2,
+              //       includedPathsOnFloor[i][j].coordinates.x - 63,
+              //       includedPathsOnFloor[i][j].coordinates.y - 65,
+              //       180,
+              //       150,
+              //     ); // Adjust iconWidth and iconHeight as needed
+              // }
 
               ctx.arc(
                 includedPathsOnFloor[i][j].coordinates.x,
@@ -272,12 +268,9 @@ export default function PathCanvas(props: PathCanvasProps) {
       }
     }
   }, [
-    props.endNode,
     props.floor,
     props.height,
-    props.iconCanvasRef,
     props.pathNodesData,
-    props.startNode,
     props.width,
   ]);
 

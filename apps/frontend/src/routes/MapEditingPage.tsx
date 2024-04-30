@@ -71,11 +71,6 @@ export default function MapEditingPage() {
   }, [dataLoadedSoft, setFiltersApplied, setNodeDataLoadedFilters]);
 
   useEffect(() => {
-    console.log("Filtered Nodes");
-    console.log(filteredNodes);
-  }, [filteredNodes]);
-
-  useEffect(() => {
     setUpdateSelection(filtersApplied);
   }, [filtersApplied]);
 

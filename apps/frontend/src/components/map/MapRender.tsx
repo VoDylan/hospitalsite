@@ -19,12 +19,18 @@ import useWindowSize from "frontend/src/hooks/useWindowSize.tsx";
 import transformCoords2 from "frontend/src/common/TransformCoords2.ts";
 import {Box} from "@mui/material";
 import {isEqual} from "lodash";
+import PathCanvas from "./map2/PathCanvas.tsx";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
 interface MapRenderProps {
   enableEditorTools?: boolean
+
   filterInfo: Map<FilterType, IFilterState>;
   floor: Floor;
   filteredNodes: MapNode[];
+
+  pathNodesData?: TypeCoordinates[];
+
   selectNodeGeneral: (node: MapNode) => void;
   deselectNodeGeneral: (node: MapNode) => void;
   selectedNode1: MapNode | null;
@@ -33,16 +39,15 @@ interface MapRenderProps {
   setDataLoadedHard: React.Dispatch<React.SetStateAction<boolean>>;
   dataLoadedSoft: boolean;
   setDataLoadedSoft: React.Dispatch<React.SetStateAction<boolean>>;
+
+  handleInterFloorNodesUpdate?: (
+    nodesToNextFloor: Map<TypeCoordinates, Floor>,
+    nodesToPrevFloor: Map<TypeCoordinates, Floor>,
+  ) => void;
+  setPathRenderStatus?: (status: boolean) => void;
 }
 
 export default function MapRender(props: MapRenderProps) {
-  const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
-  // const transformState = useRef<TransformState>({
-  //   scale: 1,
-  //   positionX: 0,
-  //   positionY: 0,
-  // });
-
   const [transformState, setTransformState] = useState<ReactZoomPanPinchState>({
     previousScale: 1,
     scale: 1,
@@ -56,6 +61,7 @@ export default function MapRender(props: MapRenderProps) {
   const [filterInfo, setFilterInfo] = useState<Map<FilterType, IFilterState>>(props.filterInfo);
   const [floor, setFloor] = useState<Floor>(props.floor);
   const [filteredNodes, setFilteredNodes] = useState<MapNode[]>(props.filteredNodes);
+  const [pathNodesData, setPathNodesData] = useState<TypeCoordinates[] | undefined>(props.pathNodesData);
 
   const transformWrapperRef = useRef<ReactZoomPanPinchContentRef>(null);
 
@@ -145,14 +151,18 @@ export default function MapRender(props: MapRenderProps) {
 
   useEffect(() => {
     setFloor(props.floor);
-    if(transformRef.current) {
-      transformRef.current.resetTransform();
+    if(transformWrapperRef.current) {
+      transformWrapperRef.current.resetTransform();
     }
   }, [props.floor]);
 
   useEffect(() => {
     setFilteredNodes(props.filteredNodes);
   }, [props.filteredNodes]);
+
+  useEffect(() => {
+    setPathNodesData(props.pathNodesData);
+  }, [props.pathNodesData]);
 
   return (
     <Box
@@ -203,7 +213,21 @@ export default function MapRender(props: MapRenderProps) {
                 nodeData={filteredNodes}
                 dataLoaded={props.dataLoadedHard}
               /> :
-              <></>
+              <PathCanvas
+                style={{
+                  position: "absolute",
+                  maxWidth: "100%",
+                }}
+                backgroundRendered={backgroundRendered}
+                width={canvasWidth}
+                height={canvasHeight}
+                floor={floor}
+                pathNodesData={pathNodesData!}
+                handleInterFloorNodesUpdate={props.handleInterFloorNodesUpdate!}
+                setPathRenderStatus={props.setPathRenderStatus!}
+                // startNode={props.selectedNode1}
+                // endNode={props.selectedNode2}
+              />
             }
             <SymbolCanvas
               enableEditorTools={props.enableEditorTools}

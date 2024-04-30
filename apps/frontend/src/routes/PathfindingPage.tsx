@@ -15,6 +15,7 @@ import Floors from "../components/map/FloorTabs.tsx";
 import MapRender from "../components/map/MapRender.tsx";
 import {usePathfinding} from "../hooks/usePathfinding.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import {Floor} from "common/src/map/Floor.ts";
 
 interface PathfindingPageProps {
 
@@ -53,7 +54,13 @@ export default function PathfindingPage(props: PathfindingPageProps) {
 
   const [
     pathNodesData,
-    setPathNodesData
+    setPathNodesData,
+    pathRendered,
+    setPathRendered,
+    nodesToNextFloor,
+    setNodesToNextFloor,
+    nodesToPrevFloor,
+    setNodesToPrevFloor,
   ] = usePathfinding();
 
   const [
@@ -68,6 +75,13 @@ export default function PathfindingPage(props: PathfindingPageProps) {
 
   const [, windowHeight] = useWindowSize();
   const [updateSelection, setUpdateSelection] = useState<boolean>(false);
+
+  const handleInterFloorNodesUpdate = (
+    nodesToNextFloor: Map<TypeCoordinates, Floor>,
+    nodesToPrevFloor: Map<TypeCoordinates, Floor>,) => {
+    setNodesToNextFloor(nodesToNextFloor);
+    setNodesToPrevFloor(nodesToPrevFloor);
+  };
 
   useEffect(() => {
     if(dataLoadedHard) {
@@ -175,6 +189,9 @@ export default function PathfindingPage(props: PathfindingPageProps) {
               filterInfo={filterInfo}
               floor={floor}
               filteredNodes={filteredNodes}
+
+              pathNodesData={pathNodesData}
+
               selectNodeGeneral={selectNodeGeneral}
               deselectNodeGeneral={deselectNodeGeneral}
               selectedNode1={selectedNode1}
@@ -183,6 +200,9 @@ export default function PathfindingPage(props: PathfindingPageProps) {
               setDataLoadedHard={setDataLoadedHard}
               dataLoadedSoft={dataLoadedSoft}
               setDataLoadedSoft={setDataLoadedSoft}
+
+              handleInterFloorNodesUpdate={handleInterFloorNodesUpdate}
+              setPathRenderStatus={setPathRendered}
             />
           </Box>
         </Stack>
