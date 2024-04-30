@@ -58,7 +58,11 @@ abstract class Algorithms {
     return minKey;
   }
 
-  distance(startNodeID: string, endNodeID: string) {
+  distance(startNodeID: string | null, endNodeID: string | null) {
+    if (startNodeID === "0" || endNodeID === "0") {
+      return 0;
+    }
+
     const startNodeType = this.mapNodes.find(
       (node) => node.nodeID === startNodeID,
     )!.nodeType;
@@ -172,8 +176,6 @@ abstract class Algorithms {
     let secondElevator: boolean = false;
     let secondStairs: boolean = false;
 
-    // console.log(typeCoordinates);
-
     for (let i = 0; i < typeCoordinates.length; i++) {
       currentFloorNodes.push(typeCoordinates[i]);
 
@@ -229,6 +231,7 @@ abstract class Algorithms {
     let TypeCoordinatesPath: TypeCoordinates[] = [];
     const path: string[] = [];
     let current: string | null = currentNodeID;
+    let prevNode: string | null = "0";
 
     // go through the parent list
     while (current !== start) {
@@ -249,6 +252,7 @@ abstract class Algorithms {
           longName: currentNode.longName,
           coordinates: currentCoordinates,
           direction: "",
+          distance: this.distance(current, prevNode)!,
         });
         IDCoordinatesPath.unshift({
           nodeID: current,
@@ -258,6 +262,7 @@ abstract class Algorithms {
           (node) => node.startNodeID === current,
         );
       }
+      prevNode = current;
       current = parents[currentIdx];
     }
 
@@ -274,6 +279,7 @@ abstract class Algorithms {
       longName: startNode.longName,
       coordinates: this.getCoordinates(start),
       direction: "",
+      distance: this.distance(prevNode, start)!,
     });
     path.unshift(start);
 
