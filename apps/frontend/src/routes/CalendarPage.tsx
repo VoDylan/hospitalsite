@@ -38,7 +38,9 @@ export default function CalendarPage() {
     employee: -1,
     date: "",
     reasonForVisit: "",
-    roomNumber: ""
+    roomNumber: "",
+    toEmail:"",
+    roomName: ""
   });
 
   // Define an interface for the node data
@@ -87,9 +89,15 @@ export default function CalendarPage() {
   }
 
   function handleRoomNumberInput(event: SelectChangeEvent) {
+
     setResponses({ ...form, roomNumber: event.target.value });
     return event.target.value;
   }
+
+  // function handleRoomNameInput(event: SelectChangeEvent) {
+  //   setResponses({ ...form, roomName: event.target.value });
+  //   return event.target.value;
+  // }
 
   function handleDateInput(date: Dayjs | null) {
     setSelectedDate(date);
@@ -100,6 +108,11 @@ export default function CalendarPage() {
     }
   }
 
+  function handleEmailInput(event: SelectChangeEvent) {
+    setResponses({ ...form, toEmail: event.target.value });
+    return event.target.value;
+  }
+
   function clear() {
     setResponses({
       name: "",
@@ -107,6 +120,8 @@ export default function CalendarPage() {
       date: "",
       reasonForVisit: "",
       roomNumber: "",
+      toEmail:"",
+      roomName: "",
     });
   }
 
@@ -373,7 +388,7 @@ export default function CalendarPage() {
                     value: node.nodeID,
                     label: node.longName,
                   }))}
-                  label={"Room Number"}
+                  label={"Room Name"}
                   returnData={form.roomNumber}
                   handleChange={handleRoomNumberInput}
                 />
@@ -382,9 +397,6 @@ export default function CalendarPage() {
                 <Typography align={"center"}>Select Open Date From Calendar:</Typography>
                 <div className={classes.root}>
                 <TextField
-                  // sx={{
-                  //   mx: "35px" //is there a better way to line this up tp CenterAllginedTextbox elements???
-                  // }}
                   id="date"
                   label="Selected Date"
                   value={selectedDate ? selectedDate.format('MM-DD-YYYY') : ''}
@@ -392,6 +404,14 @@ export default function CalendarPage() {
                   onChange={(e) => handleDateInput(dayjs(e.target.value))}
                 />
                 </div>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography align={"center"}>Email:</Typography>
+                <CenterAlignedTextbox
+                  label={"Message"}
+                  value={form.toEmail}
+                  onChange={handleEmailInput}
+                />
               </Grid>
               <Grid
                 item

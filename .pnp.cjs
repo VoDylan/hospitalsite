@@ -5304,6 +5304,7 @@ const RAW_RUNTIME_STATE =
           ["@types/http-errors", "npm:2.0.4"],\
           ["@types/morgan", "npm:1.9.9"],\
           ["@types/node", "npm:20.11.5"],\
+          ["@types/nodemailer", "npm:6.4.14"],\
           ["@types/pg", "npm:8.10.9"],\
           ["@types/supertest", "npm:2.0.16"],\
           ["common", "workspace:packages/common"],\
@@ -5318,6 +5319,7 @@ const RAW_RUNTIME_STATE =
           ["http-terminator", "npm:3.2.0"],\
           ["jose", "npm:5.2.4"],\
           ["morgan", "npm:1.10.0"],\
+          ["nodemailer", "npm:6.9.13"],\
           ["nodemon", "npm:3.0.3"],\
           ["pg", "virtual:9a28949798a912c67218bf8cea1001b3cae21be82aaad0589210650a91ed87ad2b921ce3379d36f5723672b5e5a668da59a3e262568425b08570aa654e7b0112#npm:8.11.3"],\
           ["prettier", "npm:3.2.4"],\

@@ -4,4 +4,6 @@ export type CalendarPageFormSubmission = {
   date: string;
   reasonForVisit: string;
   roomNumber: string;
+  toEmail: string;
+  roomName: string;
 };
