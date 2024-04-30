@@ -10,10 +10,10 @@ export class DetermineAlgorithm {
   algorithm: Algorithms | undefined;
 
   chooseAlgorithm(algorithmName: string) {
-    if (algorithmName === "A*") this.algorithm = new AStarAlgorithm();
+    if (algorithmName === "ASTAR") this.algorithm = new AStarAlgorithm();
     else if (algorithmName === "BFS") this.algorithm = new BFSalgorithm();
     else if (algorithmName === "DFS") this.algorithm = new DFSalgorithm();
-    else if (algorithmName === "Dijkstra")
+    else if (algorithmName === "DIJKSTRA")
       this.algorithm = new DijkstrasAlgorithm();
     else {
       this.algorithm = undefined;

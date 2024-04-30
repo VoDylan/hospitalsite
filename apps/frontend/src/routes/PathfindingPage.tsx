@@ -1,20 +1,26 @@
-import {useNodes} from "frontend/src/hooks/useNodes.tsx";
-import {useEffect, useState} from "react";
-import {Box, Paper, Stack} from "@mui/material";
-import useWindowSize from "frontend/src/hooks/useWindowSize.tsx";
-import MapRender from "frontend/src/components/map/MapRender.tsx";
-import MapSideBar from "frontend/src/components/map/MapSideBar.tsx";
-import {useSelectedNodes} from "frontend/src/hooks/useSelectedNodes.tsx";
-import GraphManager from "frontend/src/common/GraphManager.ts";
-import {useFilters} from "frontend/src/hooks/useFilters.tsx";
 import MapNode from "common/src/map/MapNode.ts";
-import MapToggleBar from "frontend/src/components/map/MapToggleBar.tsx";
+import {useNodes} from "../hooks/useNodes.tsx";
+import {useSelectedNodes} from "../hooks/useSelectedNodes.tsx";
+import {useFilters} from "../hooks/useFilters.tsx";
+import {useLegend} from "../hooks/useLegend.tsx";
+import {useFloor} from "../hooks/useFloor.tsx";
+import useWindowSize from "../hooks/useWindowSize.tsx";
+import {useEffect, useState} from "react";
+import GraphManager from "../common/GraphManager.ts";
+import {Box, Paper, Stack} from "@mui/material";
+import MapSideBar from "../components/map/MapSideBar.tsx";
+import MapToggleBar from "../components/map/MapToggleBar.tsx";
 import Legend from "frontend/src/components/map/mapEditor/Legend.tsx";
-import {useLegend} from "frontend/src/hooks/useLegend.tsx";
-import Floors from "frontend/src/components/map/FloorTabs.tsx";
-import {useFloor} from "frontend/src/hooks/useFloor.tsx";
+import Floors from "../components/map/FloorTabs.tsx";
+import MapRender from "../components/map/MapRender.tsx";
+import {usePathfinding} from "../hooks/usePathfinding.tsx";
+import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 
-export default function MapEditingPage() {
+interface PathfindingPageProps {
+
+}
+
+export default function PathfindingPage(props: PathfindingPageProps) {
   const {
     nodeData,
     dataLoadedHard,
@@ -43,7 +49,12 @@ export default function MapEditingPage() {
     setNewFilterActiveStatus,
     selectAllFilters,
     selectNoFilters
-  ] = useFilters(true);
+  ] = useFilters(false);
+
+  const [
+    pathNodesData,
+    setPathNodesData
+  ] = usePathfinding();
 
   const [
     isOpen,
@@ -111,9 +122,10 @@ export default function MapEditingPage() {
           height={"100%"}
         >
           <MapSideBar
-            title={"Map Editor"}
+            title={"Pathfinding"}
 
-            enableEditorTools
+            setPathNodesData={(newPathNodesData: TypeCoordinates[]) => setPathNodesData(newPathNodesData)}
+            setFloor={setFloor}
 
             filterInfo={filterInfo}
             selectedNode1={selectedNode1}
@@ -160,7 +172,6 @@ export default function MapEditingPage() {
               activeFloor={floor}
             />
             <MapRender
-              enableEditorTools
               filterInfo={filterInfo}
               floor={floor}
               filteredNodes={filteredNodes}

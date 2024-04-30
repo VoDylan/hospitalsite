@@ -31,6 +31,7 @@ import CalendarPage from "./routes/CalendarPage.tsx";
 import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 import CheckOutPage from "./routes/CheckOutPage.tsx";
+import PathfindingPage from "./routes/PathfindingPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -91,12 +92,14 @@ function App() {
           path: "/Cart",
           element: <Auth0Protection component={CheckOutPage} />,
         },
-
         {
           path: "/Map",
           element: <MapRoute />,
         },
-
+        {
+          path: "/map2",
+          element: <PathfindingPage />,
+        },
         {
           path: "/Credits",
           element: <CreditsPage />

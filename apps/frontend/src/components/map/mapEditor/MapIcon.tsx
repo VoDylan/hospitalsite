@@ -7,6 +7,7 @@ import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
 import GraphManager from "frontend/src/common/GraphManager.ts";
 
 interface MapIconProps {
+  enableEditorTools?: boolean;
   node: MapNode;
   renderInfo: IRenderInfo;
   selectNodeGeneral: (node: MapNode) => void;
@@ -174,7 +175,7 @@ export default function MapIcon(props: MapIconProps) {
       onDrag={handleDrag}
       onStop={handleDragStop}
       scale={transformState.scale}
-      disabled={!selected}
+      disabled={!selected || !props.enableEditorTools}
       position={position}
     >
       <div

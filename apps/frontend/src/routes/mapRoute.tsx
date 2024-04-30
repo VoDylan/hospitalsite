@@ -17,7 +17,7 @@ import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
 import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper,} from "react-zoom-pan-pinch";
 
-import MapSideBar from "../components/map/MapSideBar.tsx";
+import MapSideBarOLD from "../components/map/MapSideBarOLD.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
 import TextIcon from "../components/map/TextDirectionsSlide.tsx";
 import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
@@ -30,7 +30,7 @@ import endIcon from "../images/mapImages/endIcon.png";
 import NearMeIcon from '@mui/icons-material/NearMe';
 import IconCanvas from "../components/map/IconCanvas.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
-import ToggleButton from "../components/map/MapToggleBar.tsx";
+import MapToggleBar from "../components/map/MapToggleBar.tsx";
 import {IconButton, Stack} from "@mui/material";
 import {useParams} from "react-router-dom";
 
@@ -933,7 +933,7 @@ function MapRoute() {
             }}
           >
             {/*Side Bar*/}
-            <MapSideBar
+            <MapSideBarOLD
               activeFloor={floor}
               title="Navigation"
               onChange={(event, value) => handleStartNodeChange(value)}
@@ -1127,7 +1127,7 @@ function MapRoute() {
                 }}
               >
                 {/* Toggle button */}
-                <ToggleButton onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
+                <MapToggleBar onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
               </Box>
               {isOpen && (
                 <Legend filterItems={filterIcons} />

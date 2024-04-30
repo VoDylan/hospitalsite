@@ -13,6 +13,7 @@ import MapIcon from "frontend/src/components/map/mapEditor/MapIcon.tsx";
 import {ReactZoomPanPinchState} from "react-zoom-pan-pinch";
 
 interface SymbolCanvasProps {
+  enableEditorTools?: boolean;
   backgroundRendered: boolean;
   filterInfo: Map<FilterType, IFilterState>;
   filteredNodes: MapNode[];
@@ -84,7 +85,13 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         height: "100%",
       }}
       ref={boundingBoxRef}
-      onDoubleClick={(event: React.MouseEvent) => props.handleNodeCreationRequest(event, boundingBoxRef)}
+      onDoubleClick={
+        props.enableEditorTools ?
+        (event: React.MouseEvent) => props.handleNodeCreationRequest(event, boundingBoxRef) :
+        () => {
+          return;
+        }
+      }
     >
       {nodesOnFloor.map((node, index: number, array ) => {
         const nodeTypeObj: NodeType | undefined = getNodeTypeFromStr(node.nodeType);
@@ -100,6 +107,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
 
             return (
               <MapIcon
+                enableEditorTools={props.enableEditorTools}
                 node={node}
                 renderInfo={renderInfo}
                 selectNodeGeneral={props.selectNodeGeneral}

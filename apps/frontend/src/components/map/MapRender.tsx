@@ -21,6 +21,7 @@ import {Box} from "@mui/material";
 import {isEqual} from "lodash";
 
 interface MapRenderProps {
+  enableEditorTools?: boolean
   filterInfo: Map<FilterType, IFilterState>;
   floor: Floor;
   filteredNodes: MapNode[];
@@ -189,19 +190,23 @@ export default function MapRender(props: MapRenderProps) {
               floor={floor}
               renderStatusCallback={handleBackgroundRenderStatus}
             />
-            <EdgeCanvas
-              style={{
-                position: "absolute",
-                maxWidth: "100%",
-              }}
-              backgroundRendered={backgroundRendered}
-              width={canvasWidth}
-              height={canvasHeight}
-              floor={floor}
-              nodeData={filteredNodes}
-              dataLoaded={props.dataLoadedHard}
-            />
+            {props.enableEditorTools ?
+              <EdgeCanvas
+                style={{
+                  position: "absolute",
+                  maxWidth: "100%",
+                }}
+                backgroundRendered={backgroundRendered}
+                width={canvasWidth}
+                height={canvasHeight}
+                floor={floor}
+                nodeData={filteredNodes}
+                dataLoaded={props.dataLoadedHard}
+              /> :
+              <></>
+            }
             <SymbolCanvas
+              enableEditorTools={props.enableEditorTools}
               backgroundRendered={backgroundRendered}
               filterInfo={filterInfo}
               filteredNodes={filteredNodes}
