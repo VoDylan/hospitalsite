@@ -76,11 +76,17 @@ function CheckOutPage(){
   }
 
   return (
-    <Box sx={{ pt: '150px' }} display="flex" justifyContent="center" p={4}>
+    <Box sx={{
+        pt: '150px'
+    }}
+         display="flex"
+         justifyContent="center"
+         p={4}>
       {/* Payment Details */}
       <Box width="50%" paddingRight={2}>
         <Typography
-          variant="h5" gutterBottom>Payment Details
+          variant="h5" gutterBottom>
+          Payment Details
         </Typography>
         <form>
           <TextField
@@ -123,11 +129,11 @@ function CheckOutPage(){
               text={"COMPLETE ORDER"}>
             </CheckOutPageSubmitButton>
           </Box>
-
-
           <Button
             color="secondary"
+            href={"/"}
           >
+            Cancel order
           </Button>
         </form>
       </Box>

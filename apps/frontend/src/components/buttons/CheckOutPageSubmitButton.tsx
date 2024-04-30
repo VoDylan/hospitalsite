@@ -2,12 +2,13 @@ import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
 import { forwardRef, useState } from "react";
 import {Link} from "react-router-dom";
 import {CheckOutPageFormSubmission} from "../../common/formSubmission/CheckOutPageFormSubmission.ts";
+import InitCart from "../../common/InitCart.ts";
+
 
 interface ButtonProps {
   text: string;
   input: CheckOutPageFormSubmission;
   clear: () => void;
-  //updateList: () => void;
 }
 
 export function CheckOutPageSubmitButton(props: ButtonProps) {
@@ -64,6 +65,7 @@ export function CheckOutPageSubmitButton(props: ButtonProps) {
 
         handleClear();
         openWithSuccess();
+        InitCart.clearCart();
 
     }
   }
@@ -71,6 +73,7 @@ export function CheckOutPageSubmitButton(props: ButtonProps) {
   function handleClear() {
     props.clear();
   }
+
 
 
 
