@@ -1,4 +1,4 @@
-import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
+import {Alert, AlertProps, Button, Snackbar, Stack} from "@mui/material";
 import { forwardRef, useState } from "react";
 import { GiftDeliveryFormSubmission } from "../../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
@@ -155,6 +155,9 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
+    <Stack
+      direction={"row"}
+      spacing={3}>
     <Button
       variant="contained"
       id={"submitButton"}
@@ -173,6 +176,14 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         {/*@ts-expect-error Severity will only be of type "success" or "error"*/}
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
+      <Button
+        variant={"outlined"}
+        id={"toCart"}
+        href={"/Cart"}
+      >
+        To Cart
+      </Button>
     </Button>
+    </Stack>
   );
 }

@@ -1,4 +1,4 @@
-import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
+import {Alert, AlertProps, Button, Snackbar, Stack} from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
@@ -137,6 +137,9 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
+    <Stack
+    direction={"row"}
+    spacing={3}>
     <Button
       variant="contained"
       id={"submitButton"}
@@ -156,5 +159,13 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
+      <Button
+        variant={"outlined"}
+        id={"toCart"}
+        href={"/Cart"}
+      >
+        To Cart
+      </Button>
+    </Stack>
   );
 }
