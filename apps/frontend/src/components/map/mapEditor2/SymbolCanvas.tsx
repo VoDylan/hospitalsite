@@ -72,9 +72,6 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         props.filteredNodes,
       );
 
-      nodesOnFloor.forEach((node: MapNode) => {
-        console.log(node.floor);
-      });
       setNodesOnFloor(nodesOnFloor);
     }
   }, [props.backgroundRendered, props.filteredNodes, props.floor]);

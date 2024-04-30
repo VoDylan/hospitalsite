@@ -44,6 +44,11 @@ export default function MapIcon(props: MapIconProps) {
     y: initPosition.y,
   });
 
+  const [preDragPosition, setPreDragPosition] = useState<IconPosition>({
+    x: initPosition.x,
+    y: initPosition.y,
+  });
+
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const [transformState, setTransformState] = useState<ReactZoomPanPinchState>(props.transformState);
@@ -58,6 +63,7 @@ export default function MapIcon(props: MapIconProps) {
     if(event.type == "mousemove" || event.type == "touchmove") {
       console.log("Dragging start");
       setIsDragging(true);
+      setPreDragPosition(position);
     }
   };
 
@@ -78,7 +84,11 @@ export default function MapIcon(props: MapIconProps) {
     GraphManager.getInstance().updateLocalNode(newNodeInfo);
   };
 
-  const handleDragStop = (event: DraggableEvent) => {
+  const handleDragStop = (event: DraggableEvent, data: DraggableData) => {
+    if(Math.abs(initPosition.x - data.x) < 10 && Math.abs(initPosition.y - data.y) < 10) {
+      setIsDragging(false);
+      handleClick();
+    }
     if(event.type == "mouseup" || event.type == "touchend") {
       const nodeInfo: MapNodeType = props.node.nodeInfo;
       nodeInfo.xcoord = position.x + (props.renderInfo.width / 2);
@@ -116,7 +126,7 @@ export default function MapIcon(props: MapIconProps) {
 
   const handleClick = () => {
     if(isDragging) {
-      // setIsDragging(false);
+      setIsDragging(false);
       return;
     }
 

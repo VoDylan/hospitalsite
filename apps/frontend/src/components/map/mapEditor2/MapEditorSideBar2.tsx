@@ -13,6 +13,7 @@ import useWindowSize from "../../../hooks/useWindowSize.tsx";
 import FilterSlider from "./FilterSlider.tsx";
 import {IFilterState} from "../../../hooks/useFilters.tsx";
 import {FilterType} from "../../../common/types/FilterType.ts";
+import ChangeLogComponent from "./ChangeLogComponent.tsx";
 
 interface MapEditorSideBar2Props {
   title: string;
@@ -208,6 +209,24 @@ export default function MapEditorSideBar2(props: MapEditorSideBar2Props) {
               />
             </Box>
           )}
+          <ChangeLogComponent
+            sx={{
+              marginRight: "auto",
+              marginLeft: "auto",
+            }}
+          />
+          <Divider
+            variant={"middle"}
+            orientation={"horizontal"}
+            flexItem
+            aria-hidden={"true"}
+            sx={{
+              borderBottom: "2px solid",
+              opacity: "0.5",
+              marginTop: "25px",
+              marginBottom: "25px",
+            }}
+          />
           <FilterSlider
             filterInfo={props.filterInfo}
             handleIconStateChange={props.handleIconStateChange}

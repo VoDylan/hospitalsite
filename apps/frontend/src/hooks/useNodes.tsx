@@ -52,12 +52,12 @@ export const useNodes = () => {
   }, [dataLoadedHard]);
 
   useEffect(() => {
-    if(!dataLoadedSoft) {
+    if(!dataLoadedSoft && dataLoadedHard) {
       setNodeData(GraphManager.getInstance().nodes);
       setEdgeData(GraphManager.getInstance().edges);
-      setDataLoadedSoft(false);
+      setDataLoadedSoft(true);
     }
-  }, [dataLoadedSoft]);
+  }, [dataLoadedSoft, dataLoadedHard]);
 
   return {nodeData: nodeData, edgeData: edgeData, dataLoadedHard, setDataLoadedHard, dataLoadedSoft, setDataLoadedSoft};
 };

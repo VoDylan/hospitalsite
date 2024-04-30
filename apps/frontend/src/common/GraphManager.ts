@@ -1,6 +1,8 @@
 import MapNode from "common/src/map/MapNode.ts";
 import MapEdge from "common/src/map/MapEdge.ts";
 import {MapNodeType} from "common/src/map/MapNodeType.ts";
+import {MapEdgeType} from "common/src/map/MapEdgeType.ts";
+import axios from "axios";
 
 class GraphManager {
   private static instance: GraphManager;
@@ -77,7 +79,6 @@ class GraphManager {
   }
 
   public updateLocalNode(nodeInfo: MapNodeType) {
-    console.log("Updating local node");
     const nodeIndex: number = this.nodes.findIndex((node: MapNode) => {
       return node.nodeID == nodeInfo.nodeID;
     });
@@ -114,6 +115,51 @@ class GraphManager {
       this.updateLocalNode(newNodeInfo);
     } else {
       this.nodes.push(new MapNode(newNodeInfo));
+    }
+  }
+
+  public async sync() {
+    const nodeData: MapNodeType[] = [];
+    const edgeData: MapEdgeType[] = [];
+
+    GraphManager.getInstance().nodes.forEach((node: MapNode) => {
+      nodeData.push(node.nodeInfo);
+    });
+
+    GraphManager.getInstance().edges.forEach((edge: MapEdge) => {
+      edgeData.push(edge.edgeInfo);
+    });
+
+    try {
+      const status: number = await axios.post("/api/database/resyncnodes", nodeData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        validateStatus: ((status: number) => {
+          return status == 200 || status == 304 || status == 400;
+        })
+      });
+      if(status == 200) console.log("Successfully added nodes to the database!");
+      if(status == 304) console.log("Node data not modified");
+      if(status == 400) console.log("Bad request. Node data not modified");
+    } catch (e) {
+      console.error(e);
+    }
+
+    try {
+      const status: number = await axios.post("/api/database/resyncedges", edgeData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        validateStatus: ((status: number) => {
+          return status == 200 || status == 304 || status == 400;
+        })
+      });
+      if(status == 200) console.log("Successfully added edges to the database!");
+      if(status == 304) console.log("Edge data not modified");
+      if(status == 400) console.log("Bad request. Edge data not modified");
+    } catch (e) {
+      console.error(e);
     }
   }
 
