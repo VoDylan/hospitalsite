@@ -12,9 +12,9 @@ const flowerPrices = {
 };
 
 const giftPrices = {
-  balloons: 3.99,
-  cards: 1.99,
-  bears: 5.99
+  Balloons: 3.99,
+  Cards: 1.99,
+  Bears: 5.99
 };
 
 function getFlowerTotal():number {
