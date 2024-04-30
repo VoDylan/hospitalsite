@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
@@ -64,11 +63,13 @@ export default function CustomCard({
             color: "#003A96",
             fontSize: 40,
             position: "relative",
-            marginTop: "6%",
+            marginTop: "12%",
             marginBottom: "0.75%",
             width: "26vw",
             borderRadius: '1rem',
+            padding: "25px",
           }}>
+          <Box sx={{ zIndex: 1, position: "relative"}}>
           <Box
             sx={{
               color: "#003A96",
@@ -82,52 +83,57 @@ export default function CustomCard({
           >
             {cardTitle}
           </Box>
-
           <Box
             sx={{
               color: "#003A96",
               fontSize: 20,
+              marginTop: "4%",
               fontWeight: "lighter",
               width: "26vw",
               whiteSpace: "nowrap",
+
             }}
           >
             {cardDescription}
           </Box>
-        </Box>
-        <Button
-          sx={{
-            position: "relative",
-            marginTop: "2%",
-            width: "auto",
-            minWidth: "10vw",
-            whiteSpace: "nowrap",
+            <Button
+              sx={{
+                position: "relative",
+                marginTop: "6%",
+                width: "auto",
+                minWidth: "10vw",
+                whiteSpace: "nowrap",
 
-          }}
-          component={Link}
-          to={path}
-          variant="contained"
-          color="primary"
-        >
-          {buttonText}
-        </Button>
+              }}
+              component={Link}
+              to={path}
+              variant="contained"
+              color="primary"
+            >
+              {buttonText}
+            </Button>
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "white",
+              opacity: "0.3",
+              borderRadius: "1em",
+              boxShadow: "0 0 2em 2em white",
+            }}
+          >
+
+          </Box>
+
+
+        </Box>
       </Stack>
 
-      {/*      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {description}
-        </Typography>
-      </CardContent>*/}
-      <CardActions>
-        <Link to={path}>
-          <Button variant="contained" size="large">
-            {buttonText}
-          </Button>
-        </Link>
-      </CardActions>
+
     </Card>
   );
 };

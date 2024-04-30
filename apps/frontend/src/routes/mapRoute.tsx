@@ -1017,7 +1017,7 @@ function MapRoute() {
                 handleButtonClick2={handleButtonClick2}
                 checked2={false}
                 nodesData={pathNodesData}
-                onClickText={setFloor}/>
+                onClickText={handleFloorChange}/>
               }
 
               callback={handleFloorChange}

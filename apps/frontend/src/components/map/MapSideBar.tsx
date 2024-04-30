@@ -1,5 +1,5 @@
 import {Button, IconButton, Drawer, Slide, Stack, Toolbar, Typography} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
@@ -48,8 +48,6 @@ export default function MapSideBar(props: {
   text: boolean;
   icon2: React.JSX.Element;
 }) {
-
-  const [clearPath, setClearPath] = useState(false);
 
   useEffect(() => {
     if (props.checked2) {

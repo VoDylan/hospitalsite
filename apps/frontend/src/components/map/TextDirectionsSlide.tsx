@@ -20,53 +20,69 @@ function DirectionButton(props: {
   nodesData: TypeCoordinates[]; // Add nodesData property here
   index: number
 }) {
-  return <Button
-    startIcon={props.item.direction.startsWith("Turn right") ? (
-      <TurnRightIcon
-        sx={{fontSize: "large", color: "white", backgroundColor: "#34BA2C", marginRight: "5px", marginTop: "15%"}}/>
-    ) : props.item.direction.startsWith("Turn left") ? (
-        <TurnLeftIcon
-          sx={{fontSize: "large", color: "white", backgroundColor: "#34BA2C", marginRight: "5px", marginTop: "15%"}}/>
-      ) :
-      props.item.direction.toLowerCase().startsWith("come off") ? (
-          <img src={Elevator} alt="Elevator"
-               style={{width: "23px", height: "23px", marginLeft: "-1px", marginRight: "3px"}}/>
+  // Extract previous direction
+  // const prevDirection = props.nodesData[props.index - 1]?.direction;
+  //
+  // // Check if both current and previous directions are "continue"
+  // const isContinue = props.item.direction.toLowerCase().startsWith("continue");
+  // const prevIsContinue = prevDirection?.toLowerCase().startsWith("continue");
+  //
+  // // Render button only if the current direction is not "continue"
+  // if (isContinue && prevIsContinue) {
+  //   return null;
+  // }
+
+  return (
+    <Button
+      startIcon={props.item.direction.startsWith("Turn right") ? (
+        <TurnRightIcon
+          sx={{ fontSize: "large", color: "white", backgroundColor: "#34BA2C", marginRight: "5px", marginTop: "15%" }} />
+      ) : props.item.direction.startsWith("Turn left") ? (
+          <TurnLeftIcon
+            sx={{ fontSize: "large", color: "white", backgroundColor: "#34BA2C", marginRight: "5px", marginTop: "15%" }} />
         ) :
+        props.item.direction.toLowerCase().startsWith("come off") ? (
+            <img src={Elevator} alt="Elevator"
+                 style={{ width: "23px", height: "23px", marginLeft: "-1px", marginRight: "3px" }} />
+          ) :
 
-        props.item.direction.toLowerCase().startsWith("go to") ? (
-          <img src={Elevator} alt="Elevator"
-               style={{width: "23px", height: "23px", marginLeft: "-1px", marginRight: "3px"}}/>
-        ) :(
-          <NorthIcon sx={{
-            fontSize: "",
-            color: "white",
-            backgroundColor: "#34BA2C",
-            padding: "2%",
-            marginRight: "5px",
-            marginTop: "15%"
-          }}/>
-        )}
-    onClick={props.onClick}
+          props.item.direction.toLowerCase().startsWith("go to") ? (
+            <img src={Elevator} alt="Elevator"
+                 style={{ width: "23px", height: "23px", marginLeft: "-1px", marginRight: "3px" }} />
+          ) : (
+            <NorthIcon sx={{
+              fontSize: "",
+              color: "white",
+              backgroundColor: "#34BA2C",
+              padding: "2%",
+              marginRight: "5px",
+              marginTop: "15%"
+            }} />
+          )}
+      onClick={props.onClick}
 
-    variant="outlined"
-    sx={{
-      fontSize: "15px",
-      width: "100%", // Stretch button to full width
-      borderRadius: "0%",
-      color: "black",
-      borderColor: "#FAFAFA",
-      textTransform: "none", // Set textTransform to none
-      textAlign: "start",
-      justifyContent: "left",
-      alignItems: "flex-start", // Align items flex-start to keep icon centered with top line
-      borderBottom: props.nodesData[props.index + 1]?.floor !== props.item.floor ? "2px solid lightGray" : "0.5px solid rgba(169, 169, 169, 0.3)",
-      borderLeft: "0px",
-      borderRight: "0px",
-    }}
-  >
-    {props.index}. {props.item.direction}
-  </Button>;
+      variant="outlined"
+      sx={{
+        fontSize: "15px",
+        width: "100%", // Stretch button to full width
+        borderRadius: "0%",
+        color: "black",
+        borderColor: "#FAFAFA",
+        textTransform: "none", // Set textTransform to none
+        textAlign: "start",
+        justifyContent: "left",
+        alignItems: "flex-start", // Align items flex-start to keep icon centered with top line
+        borderBottom: props.nodesData[props.index + 1]?.floor !== props.item.floor ? "2px solid lightGray" : "0.5px solid rgba(169, 169, 169, 0.3)",
+        borderLeft: "0px",
+        borderRight: "0px",
+      }}
+    >
+      {props.index}. {props.item.direction}
+    </Button>
+  );
 }
+
+
 
 function StartButton(props: {
   item: TypeCoordinates,
