@@ -9,6 +9,7 @@ import {useFloorIcons} from "../../hooks/useFloorIcons.tsx";
 interface IconProps {
   style?: React.CSSProperties;
   backgroundRendered: boolean;
+
   startNode: MapNode | null;
   endNode: MapNode | null;
 
@@ -16,6 +17,7 @@ interface IconProps {
   nodesToPrevFloor: Map<TypeCoordinates, Floor>;
 
   floor: Floor;
+  setFloorCallback: (newFloor: Floor) => void;
 }
 
 const START_ICON_LENGTH: number = 45;
@@ -37,6 +39,12 @@ export default function IconCanvas(props: IconProps) {
     floorToIconPrevImageMap,
   ] = useFloorIcons();
 
+  const handleFloorIconClick = (event: React.MouseEvent, newFloor: Floor) => {
+    event.stopPropagation();
+
+    props.setFloorCallback(newFloor);
+  };
+
   const getAllFloorIcons = () => {
     const icons: React.JSX.Element[] = [];
 
@@ -53,8 +61,10 @@ export default function IconCanvas(props: IconProps) {
             position: "absolute",
             left: key.coordinates.x - (FLOOR_ICON_LENGTH / 2),
             top: key.coordinates.y - (FLOOR_ICON_LENGTH / 2),
-            zIndex: 2,
+            zIndex: 4,
+            pointerEvents: "auto",
           }}
+          onClick={(event: React.MouseEvent) => handleFloorIconClick(event, value)}
         />
       );
     });
@@ -72,8 +82,10 @@ export default function IconCanvas(props: IconProps) {
             position: "absolute",
             left: key.coordinates.x - (FLOOR_ICON_LENGTH / 2),
             top: key.coordinates.y - (FLOOR_ICON_LENGTH / 2),
-            zIndex: 2,
+            zIndex: 4,
+            pointerEvents: "auto",
           }}
+          onClick={(event: React.MouseEvent) => handleFloorIconClick(event, value)}
         />
       );
     });

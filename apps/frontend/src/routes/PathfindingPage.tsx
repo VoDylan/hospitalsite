@@ -61,6 +61,8 @@ export default function PathfindingPage(props: PathfindingPageProps) {
     setNodesToNextFloor,
     nodesToPrevFloor,
     setNodesToPrevFloor,
+    algorithm,
+    setAlgorithm,
   ] = usePathfinding();
 
   const [
@@ -96,11 +98,6 @@ export default function PathfindingPage(props: PathfindingPageProps) {
   }, [dataLoadedSoft, setFiltersApplied, setNodeDataLoadedFilters]);
 
   useEffect(() => {
-    console.log("Filtered Nodes");
-    console.log(filteredNodes);
-  }, [filteredNodes]);
-
-  useEffect(() => {
     setUpdateSelection(filtersApplied);
   }, [filtersApplied]);
 
@@ -123,6 +120,13 @@ export default function PathfindingPage(props: PathfindingPageProps) {
     setNodeDataFilters(nodeData);
   }, [nodeData, setNodeDataFilters]);
 
+  useEffect(() => {
+    setPathNodesData([]);
+    setPathRendered(false);
+    setNodesToNextFloor(new Map<TypeCoordinates, Floor>());
+    setNodesToPrevFloor(new Map<TypeCoordinates, Floor>());
+  }, [setPathNodesData, setPathRendered, selectedNode1, selectedNode2, algorithm, setNodesToNextFloor, setNodesToPrevFloor]);
+
   return (
     <>
       <Box
@@ -140,6 +144,8 @@ export default function PathfindingPage(props: PathfindingPageProps) {
 
             setPathNodesData={(newPathNodesData: TypeCoordinates[]) => setPathNodesData(newPathNodesData)}
             setFloor={setFloor}
+
+            setAlgorithmCallback={setAlgorithm}
 
             filterInfo={filterInfo}
             selectedNode1={selectedNode1}
@@ -188,6 +194,7 @@ export default function PathfindingPage(props: PathfindingPageProps) {
             <MapRender
               filterInfo={filterInfo}
               floor={floor}
+              setFloorCallback={setFloor}
               filteredNodes={filteredNodes}
 
               pathNodesData={pathNodesData}

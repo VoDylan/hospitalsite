@@ -28,6 +28,7 @@ interface MapRenderProps {
 
   filterInfo: Map<FilterType, IFilterState>;
   floor: Floor;
+  setFloorCallback?: (newFloor: Floor) => void;
   filteredNodes: MapNode[];
 
   pathNodesData?: TypeCoordinates[];
@@ -242,6 +243,7 @@ export default function MapRender(props: MapRenderProps) {
                 nodesToPrevFloor={props.nodesToPrevFloor!}
 
                 floor={floor}
+                setFloorCallback={props.setFloorCallback!}
               /> :
               <></>
             }

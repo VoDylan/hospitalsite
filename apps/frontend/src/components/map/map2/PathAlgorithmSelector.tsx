@@ -12,7 +12,7 @@ import {Box} from "@mui/material";
 
 interface PathAlgorithmSelectorProps {
   algorithm: PathAlgorithmType;
-  setAlgorithm: React.Dispatch<React.SetStateAction<PathAlgorithmType>>;
+  setAlgorithm: (algorithm: PathAlgorithmType) => void;
 }
 
 export default function PathAlgorithmSelector(props: PathAlgorithmSelectorProps) {

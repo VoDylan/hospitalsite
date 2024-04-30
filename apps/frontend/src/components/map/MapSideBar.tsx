@@ -16,6 +16,7 @@ import SelectedNodeInfo from "./mapEditor/SelectedNodeInfo.tsx";
 import PathfindingInfo from "./PathfindingInfo.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 import {Floor} from "common/src/map/Floor.ts";
+import {PathAlgorithmType} from "../../common/types/PathAlgorithmType.ts";
 
 interface MapEditorSideBar2Props {
   title: string;
@@ -23,6 +24,8 @@ interface MapEditorSideBar2Props {
 
   setPathNodesData?: (newPathNodesData: TypeCoordinates[]) => void;
   setFloor?: (newFloor: Floor) => void;
+
+  setAlgorithmCallback?: (algorithm: PathAlgorithmType) => void;
 
   nodeData: MapNode[];
 
@@ -171,6 +174,7 @@ export default function MapSideBar(props: MapEditorSideBar2Props) {
                   endNode={props.selectedNode2}
                   setPathNodesDataCallback={props.setPathNodesData!}
                   setFloor={props.setFloor!}
+                  setAlgorithmCallback={props.setAlgorithmCallback!}
                 />
                 <Divider
                   variant={"middle"}

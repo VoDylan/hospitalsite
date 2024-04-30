@@ -14,6 +14,7 @@ interface PathfindingInfoProps {
   startNode: MapNode | null;
   endNode: MapNode | null;
   setPathNodesDataCallback: (newPathNodesData: TypeCoordinates[]) => void;
+  setAlgorithmCallback: (algorithm: PathAlgorithmType) => void;
   setFloor: (newFloor: Floor) => void;
 }
 
@@ -85,7 +86,10 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
     <Stack>
       <PathAlgorithmSelector
         algorithm={algorithm}
-        setAlgorithm={setAlgorithm}
+        setAlgorithm={(algorithm: PathAlgorithmType) => {
+          setAlgorithm(algorithm);
+          props.setAlgorithmCallback(algorithm);
+        }}
       />
       <Button
         startIcon={<AltRouteIcon />}
