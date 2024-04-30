@@ -100,10 +100,10 @@ export function AboutCardLeft(props: AboutCardProps) {
                     sx={{
                       position: 'absolute',
                       top: 124,
-                      left: 700,
-                      right: 32,
+                      left: 876,
+                      right: 96,
                       bottom: 20,
-                      backgroundColor: 'rgba(0,0,0,0.2)',
+                      backgroundColor: 'rgba(0,0,0,0.7)',
                       color: 'white',
                       display: 'flex',
                       alignItems: 'center',

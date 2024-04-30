@@ -22,7 +22,7 @@ export function AboutCardRight(props: AboutCardProps) {
             backgroundColor: "lightgray",
             maxWidth: "70%",
             borderRadius: "20px",
-            position: 'absolute',
+            position: 'relative',
           }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -81,23 +81,22 @@ export function AboutCardRight(props: AboutCardProps) {
                     sx={{
                       position: 'absolute',
                       top: 124,
-                      left: 17,
-                      right: 717,
+                      left: 15,
+                      right: 956,
                       bottom: 20,
-                      backgroundColor: 'rgba(0,0,0,0.2)',
+                      backgroundColor: 'rgba(0,0,0,0.7)',
                       color: 'white',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      borderRadius: '20%', // Match the image borderRadius
+                      borderRadius: '20%',
                     }}
                   >
                     <Typography variant="h6" sx={{ p: 2, textAlign: 'center' }}>
-                      {props.quote} {/* Displaying quote as hover text */}
+                      {props.quote}
                     </Typography>
                   </Box>
                 )}
-
               </Grid>
               <Grid item xs={8}>
                 <Stack>
