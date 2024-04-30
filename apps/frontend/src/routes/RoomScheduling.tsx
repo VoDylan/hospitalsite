@@ -93,7 +93,7 @@ function RoomScheduling() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "95%", //Adjust this to change the width of the form
+          width: "85%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
