@@ -50,6 +50,7 @@ export function ServiceCard(props: ServiceProps) {
                   textAlign: "center",
                   marginLeft: "5%",
                   marginRight: "5%",
+                  wordBreak: "break-word",
                 }}
               >
                 {props.description}
