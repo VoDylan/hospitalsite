@@ -1,13 +1,11 @@
 import { Grid, Typography, SelectChangeEvent, Stack } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import RadioButtonsGroup from "../components/buttons/RadioButtonsGroup.tsx";
-import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { GiftDeliveryFormSubmission } from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import giftbackground from "../images/giftbackground.jpg";
 import { GiftDeliverySubmitButton } from "../components/buttons/GiftDeliverySubmitButton.tsx";
 import React from "react";
 import Confetti from "react-confetti";
-import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
@@ -15,6 +13,8 @@ import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
 import BalLoons from "../images/servicePageImages/FormIcons/BalLoons.jpg";
 import GetWellCard from "../images/servicePageImages/FormIcons/GetWellCard.jpg";
 import TedBear from "../images/servicePageImages/FormIcons/TedBear.jpeg";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
+import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function GiftDeliveryService() {
   const [form, setFormResponses] = useState<GiftDeliveryFormSubmission>({
@@ -74,36 +74,8 @@ function GiftDeliveryService() {
     });
   }
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   const [showConfetti, setShowConfetti] = useState(false);
@@ -197,25 +169,25 @@ function GiftDeliveryService() {
             <PurchaseCard imagePath={TedBear} title={"Teddy Bear"} description={"$5.99"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Balloon Amount"}
               value={form.balloons}
               onChange={handleBalloonsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Card Amount"}
               value={form.cards}
               onChange={handleCardsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <CenterAlignedTextbox
+            <CenterAlignedNumTextbox
               label={"Bear Amount"}
               value={form.bears}
               onChange={handleBearsInput}
-              type={"text"} />
+              type={"number"} />
           </Grid>
 
           <Grid item xs={4} mt={5} sx={{align: "center"}}>
@@ -256,15 +228,7 @@ function GiftDeliveryService() {
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.location}
-              handleChange={handleLocationInput}
-              items={nodes.map((node) => ({
-                value: node.nodeID,
-                label: node.longName,
-              }))}
-            />
+            <NodeDropDown label={"Location"} returnedNodeID={form.location} handleChange={handleLocationInput} filterRoomsOnly={true}/>
           </Grid>
 
           <Grid item xs={4} mt={5} sx={{align: "center"}}>
