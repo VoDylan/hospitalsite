@@ -26,7 +26,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     },
   );
 
-  /*function handleShowConfetti() {
+  function handleShowConfetti() {
     props.displayConfetti();
 
     const duration = 7000; // 7 seconds
@@ -34,7 +34,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
     setTimeout(() => {
       props.hideConfetti();
     }, duration);
-  }*/
+  }
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
@@ -88,6 +88,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       } else {
         handleClear();
         openWithSuccess();
+        handleShowConfetti();
         InitCart.setGifts(props.input);
         InitCart.loadGifts();
         InitCart.loadGiftAmounts();
@@ -176,6 +177,7 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
         {/*@ts-expect-error Severity will only be of type "success" or "error"*/}
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
+    </Button>
       <Button
         variant={"outlined"}
         id={"toCart"}
@@ -183,7 +185,6 @@ export function GiftDeliverySubmitButton(props: ButtonProps) {
       >
         To Cart
       </Button>
-    </Button>
     </Stack>
   );
 }
