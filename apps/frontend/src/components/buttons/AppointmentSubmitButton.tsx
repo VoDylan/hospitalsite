@@ -3,8 +3,6 @@ import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import {CalendarPageFormSubmission} from "../../common/formSubmission/CalendarPageFormSubmission.ts";
-// import sendSMS from "../sms/sendSMS.tsx";
-import { Twilio } from "twilio";
 
 interface ButtonProps {
   text: string;
@@ -17,15 +15,6 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
   const [message, setMessage] = useState("");
-
-  const twilioNumber = '+18457292533';
-  const myNumber = '+18667816473';
-
-  const accountSid = 'ACcdf0db382c3d07ac03d14acf72538a9a';
-  const authToken = '1993739fd8d4b6d5279153dfc6797f45';
-  const client = new Twilio(accountSid, authToken);
-
-
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
@@ -79,13 +68,7 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
       } else {
         handleClear();
         openWithSuccess();
-        client.messages
-          .create({
-            from: twilioNumber,
-            to: myNumber,
-            body: "You just sent an SMS from TypeScript using Twilio!",
-          })
-          .then((message) => console.log(message.sid));
+        await axios.post("/api/sendSMS");
       }
     }
   }
