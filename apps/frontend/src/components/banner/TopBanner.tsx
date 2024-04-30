@@ -94,7 +94,7 @@ function TopBanner() {
             <IconButton
               sx={{ color: "#012D5A" }}
               size="large"
-              aria-label="account of current user"
+              aria-label="cart of current user"
             >
               <ShoppingCartIcon />
             </IconButton>

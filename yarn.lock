@@ -2980,6 +2980,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/nodemailer@npm:^6.4.14":
+  version: 6.4.14
+  resolution: "@types/nodemailer@npm:6.4.14"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/0f7e93a7fda5cc72ca3214ad2780fc251f7dcfb9a5b2d0616927fa4a700c82b024ce0a5134dfac52429f4d08429d1af027002e9ed385bd3cb6224c890598bf03
+  languageName: node
+  linkType: hard
+
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -3945,6 +3954,7 @@ __metadata:
     "@types/http-errors": "npm:^2.0.1"
     "@types/morgan": "npm:^1.9.4"
     "@types/node": "npm:^20.2.3"
+    "@types/nodemailer": "npm:^6.4.14"
     "@types/pg": "npm:^8.10.1"
     "@types/supertest": "npm:^2.0.12"
     common: "workspace:*"
@@ -3959,6 +3969,7 @@ __metadata:
     http-terminator: "npm:^3.2.0"
     jose: "npm:^5.2.4"
     morgan: "npm:^1.10.0"
+    nodemailer: "npm:^6.9.13"
     nodemon: "npm:latest"
     pg: "npm:^8.11.0"
     prettier: "npm:latest"
@@ -6270,7 +6281,6 @@ __metadata:
     tailwindcss: "npm:^3.4.1"
     tsconfig-custom: "workspace:*"
     typescript: "npm:^5.0.2"
-    v4: "npm:^0.0.1"
     vite: "npm:^4.3.9"
     vite-plugin-eslint: "npm:^1.8.1"
     vitest: "npm:^0.34.1"
@@ -7608,13 +7618,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^3.10.0":
-  version: 3.10.1
-  resolution: "lodash@npm:3.10.1"
-  checksum: 10/3fa24526ced39885889d5609239d14c4145b3736f103fcdde247524203bfeb38e641653df7bdcc172b316a9775ca32787dda09430872ce906f017a699c92fad8
-  languageName: node
-  linkType: hard
-
 "lodash@npm:^4.17.15, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
@@ -8186,6 +8189,13 @@ __metadata:
   version: 2.0.14
   resolution: "node-releases@npm:2.0.14"
   checksum: 10/0f7607ec7db5ef1dc616899a5f24ae90c869b6a54c2d4f36ff6d84a282ab9343c7ff3ca3670fe4669171bb1e8a9b3e286e1ef1c131f09a83d70554f855d54f24
+  languageName: node
+  linkType: hard
+
+"nodemailer@npm:^6.9.13":
+  version: 6.9.13
+  resolution: "nodemailer@npm:6.9.13"
+  checksum: 10/efbc6fc415ec1e1dc1b91530920b0bcfc648183003c3d79718cd54fc2efef4b7dd1917ddd3853ab127e4b5ebd7353903b5859f0ac3ccea487374b076d41ac8b8
   languageName: node
   linkType: hard
 
@@ -11604,15 +11614,6 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 10/5d6949693d58cb2e636a84f3ee1c6e7b2f9c16cb1d42d0ecb386d8c025c69e327205aa1c69e2868cc06a01e5e20681fbba55a4e0ed0cce913d60334024eae798
-  languageName: node
-  linkType: hard
-
-"v4@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "v4@npm:0.0.1"
-  dependencies:
-    lodash: "npm:^3.10.0"
-  checksum: 10/f7d66df39f8e769fb51acfe0af3bfe826e0ca162798f7da160c26c801614749e58c3569bd5bfe26a0bb93e6cc1e77bc352ba0c4f03204188895031ea024e5889
   languageName: node
   linkType: hard
 
