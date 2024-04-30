@@ -31,6 +31,8 @@ interface MapRenderProps {
   setFloorCallback?: (newFloor: Floor) => void;
   filteredNodes: MapNode[];
 
+  resetZoom?: boolean;
+
   pathNodesData?: TypeCoordinates[];
   nodesToNextFloor?: Map<TypeCoordinates, Floor>;
   nodesToPrevFloor?: Map<TypeCoordinates, Floor>;
@@ -158,7 +160,7 @@ export default function MapRender(props: MapRenderProps) {
     if(transformWrapperRef.current) {
       transformWrapperRef.current.resetTransform();
     }
-  }, [props.floor]);
+  }, [props.floor, props.resetZoom]);
 
   useEffect(() => {
     setFilteredNodes(props.filteredNodes);

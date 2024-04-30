@@ -17,6 +17,7 @@ import PathfindingInfo from "./PathfindingInfo.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 import {Floor} from "common/src/map/Floor.ts";
 import {PathAlgorithmType} from "../../common/types/PathAlgorithmType.ts";
+import Spacer from "../general/Spacer.tsx";
 
 interface MapEditorSideBar2Props {
   title: string;
@@ -78,7 +79,8 @@ export default function MapSideBar(props: MapEditorSideBar2Props) {
 
     >
       <Box
-        margin={"25px"}
+        margin={"15px"}
+        marginTop={"35px"}
         marginBottom={"50px"}
       >
         <Stack>
@@ -90,23 +92,12 @@ export default function MapSideBar(props: MapEditorSideBar2Props) {
           >
             {props.title}
           </Typography>
-          <Divider
-            variant={"middle"}
-            orientation={"horizontal"}
-            flexItem
-            aria-hidden={"true"}
-            sx={{
-              borderBottom: "2px solid",
-              opacity: "0.5",
-              marginTop: "25px",
-              marginBottom: "25px",
-            }}
-          />
+          <Spacer spaceLength={"35px"}/>
           <Stack
             sx={{
               marginLeft: "auto",
               marginRight: "auto",
-              width: "80%",
+              width: "100%",
             }}
           >
             <NodeAutocomplete
@@ -125,18 +116,7 @@ export default function MapSideBar(props: MapEditorSideBar2Props) {
               value={props.selectedNode2}
             />
           </Stack>
-          <Divider
-            variant={"middle"}
-            orientation={"horizontal"}
-            flexItem
-            aria-hidden={"true"}
-            sx={{
-              borderBottom: "2px solid",
-              opacity: "0.5",
-              marginTop: "25px",
-              marginBottom: "25px",
-            }}
-          />
+          <Spacer spaceLength={"25px"}/>
           {props.enableEditorTools ?
             (
               <>
@@ -199,6 +179,7 @@ export default function MapSideBar(props: MapEditorSideBar2Props) {
             sx={{
               marginLeft: "auto",
               marginRight: "auto",
+              width: "75%",
             }}
           />
         </Stack>

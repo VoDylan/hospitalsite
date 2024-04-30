@@ -7,7 +7,7 @@ import {useFloor} from "../hooks/useFloor.tsx";
 import useWindowSize from "../hooks/useWindowSize.tsx";
 import {useEffect, useState} from "react";
 import GraphManager from "../common/GraphManager.ts";
-import {Box, Paper, Stack} from "@mui/material";
+import {Box, IconButton, Paper, Stack} from "@mui/material";
 import MapSideBar from "../components/map/MapSideBar.tsx";
 import MapToggleBar from "../components/map/MapToggleBar.tsx";
 import Legend from "frontend/src/components/map/mapEditor/Legend.tsx";
@@ -16,6 +16,7 @@ import MapRender from "../components/map/MapRender.tsx";
 import {usePathfinding} from "../hooks/usePathfinding.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 import {Floor} from "common/src/map/Floor.ts";
+import NearMeIcon from "@mui/icons-material/NearMe";
 
 interface PathfindingPageProps {
 
@@ -77,6 +78,7 @@ export default function PathfindingPage(props: PathfindingPageProps) {
 
   const [, windowHeight] = useWindowSize();
   const [updateSelection, setUpdateSelection] = useState<boolean>(false);
+  const [resetZoom, setResetZoom] = useState<boolean>(false);
 
   const handleInterFloorNodesUpdate = (
     nodesToNextFloor: Map<TypeCoordinates, Floor>,
@@ -168,6 +170,7 @@ export default function PathfindingPage(props: PathfindingPageProps) {
           <Box
             width={"100%"}
             height={"100%"}
+            position={"relative"}
           >
             <Paper
               style={{
@@ -191,11 +194,38 @@ export default function PathfindingPage(props: PathfindingPageProps) {
               setFloor={setFloor}
               activeFloor={floor}
             />
+            <IconButton
+              onClick={() => {
+                if(selectedNode1) {
+                  setFloor(selectedNode1.floor as Floor);
+                  setResetZoom((old: boolean) => {
+                    return !old;
+                  });
+                }
+                else return;
+              }}
+              aria-label="start"
+              sx={{
+                color: "#186BD9",
+                backgroundColor: "white",
+                border: "1px solid #186BD9",
+                "&:hover": {
+                 backgroundColor: "white"},
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                margin: "15px",
+                zIndex: 100,
+              }}>
+              <NearMeIcon />
+            </IconButton>
             <MapRender
               filterInfo={filterInfo}
               floor={floor}
               setFloorCallback={setFloor}
               filteredNodes={filteredNodes}
+
+              resetZoom={resetZoom}
 
               pathNodesData={pathNodesData}
               nodesToNextFloor={nodesToNextFloor}
