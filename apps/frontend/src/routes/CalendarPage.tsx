@@ -37,7 +37,8 @@ export default function CalendarPage() {
     employee: -1,
     date: "",
     reasonForVisit: "",
-    roomNumber: ""
+    roomNumber: "",
+    toEmail:"",
   });
 
   useEffect(() => {
@@ -71,6 +72,11 @@ export default function CalendarPage() {
     }
   }
 
+  function handleEmailInput(event: SelectChangeEvent) {
+    setResponses({ ...form, toEmail: event.target.value });
+    return event.target.value;
+  }
+
   function clear() {
     setResponses({
       name: "",
@@ -78,6 +84,7 @@ export default function CalendarPage() {
       date: "",
       reasonForVisit: "",
       roomNumber: "",
+      toEmail:"",
     });
   }
 
@@ -145,11 +152,6 @@ export default function CalendarPage() {
     requestAbortController.current = controller;
   };
 
- /* React.useEffect(() => {
-    fetchHighlightedDays(currentDate);
-    // abort request on unmount
-    return () => requestAbortController.current?.abort();
-  }, );*/
 
   const handleMonthChange = (date: Dayjs) => {
     if (requestAbortController.current) {
@@ -368,6 +370,14 @@ export default function CalendarPage() {
                     onChange={(e) => handleDateInput(dayjs(e.target.value))}
                   />
                   </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography align={"center"}>Email:</Typography>
+                  <CenterAlignedTextbox
+                    label={"Message"}
+                    value={form.toEmail}
+                    onChange={handleEmailInput}
+                  />
                 </Grid>
                 <Grid
                   item
