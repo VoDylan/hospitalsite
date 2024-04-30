@@ -31,6 +31,7 @@ import CalendarPage from "./routes/CalendarPage.tsx";
 import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 import CheckOutPage from "./routes/CheckOutPage.tsx";
+// import SendingEmails from "./routes/Emails.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -114,6 +115,10 @@ function App() {
           path: "map/:startnode/:endnode",
           element: <MapRoute />,
         },
+        // {
+        //   path: "/sendingEmails",
+        //   element: <SendingEmails />
+        // }
       ],
     },
   ]);

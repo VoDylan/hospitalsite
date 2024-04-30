@@ -80,6 +80,7 @@ const RAW_RUNTIME_STATE =
           ["@types/lodash", "npm:4.17.0"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.12.2"],\
+          ["@types/nodemailer", "npm:6.4.14"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
           ["@types/react-modal", "npm:3.16.3"],\
@@ -101,6 +102,7 @@ const RAW_RUNTIME_STATE =
           ["install", "npm:0.13.0"],\
           ["lodash", "npm:4.17.21"],\
           ["multer", "npm:1.4.5-lts.1"],\
+          ["nodemailer", "npm:6.9.13"],\
           ["npm", "npm:10.6.0"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
@@ -117,7 +119,7 @@ const RAW_RUNTIME_STATE =
           ["styled-components", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:6.1.8"],\
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["turbo", "npm:1.11.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"],\
           ["vite", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.2.7"],\
           ["vitest", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.4.0"],\
           ["wsrun", "npm:5.2.4"]\
@@ -4028,6 +4030,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/nodemailer", [\
+      ["npm:6.4.14", {\
+        "packageLocation": "./.yarn/cache/@types-nodemailer-npm-6.4.14-03cb75dde7-0f7e93a7fd.zip/node_modules/@types/nodemailer/",\
+        "packageDependencies": [\
+          ["@types/nodemailer", "npm:6.4.14"],\
+          ["@types/node", "npm:20.11.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/parse-json", [\
       ["npm:4.0.2", {\
         "packageLocation": "./.yarn/cache/@types-parse-json-npm-4.0.2-f87f65692e-5bf62eec37.zip/node_modules/@types/parse-json/",\
@@ -7773,6 +7785,7 @@ const RAW_RUNTIME_STATE =
           ["@tanstack/react-table", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.11.6"],\
           ["@types/bootstrap", "npm:5.2.10"],\
           ["@types/node", "npm:20.11.5"],\
+          ["@types/nodemailer", "npm:6.4.14"],\
           ["@types/prop-types", "npm:15.7.11"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-bootstrap", "npm:0.32.35"],\
@@ -7794,6 +7807,7 @@ const RAW_RUNTIME_STATE =
           ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.25"],\
           ["localforage", "npm:1.10.0"],\
           ["match-sorter", "npm:6.3.3"],\
+          ["nodemailer", "npm:6.9.13"],\
           ["postcss", "npm:8.4.35"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
@@ -7814,7 +7828,7 @@ const RAW_RUNTIME_STATE =
           ["styled-components", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:6.1.8"],\
           ["tailwindcss", "npm:3.4.1"],\
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"],\
           ["v4", "npm:0.0.1"],\
           ["vite", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.5.1"],\
           ["vite-plugin-eslint", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.8.1"],\
@@ -9929,6 +9943,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/node-releases-npm-2.0.14-d39047cad8-0f7607ec7d.zip/node_modules/node-releases/",\
         "packageDependencies": [\
           ["node-releases", "npm:2.0.14"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["nodemailer", [\
+      ["npm:6.9.13", {\
+        "packageLocation": "./.yarn/cache/nodemailer-npm-6.9.13-be5fdd0d61-efbc6fc415.zip/node_modules/nodemailer/",\
+        "packageDependencies": [\
+          ["nodemailer", "npm:6.9.13"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12707,6 +12730,7 @@ const RAW_RUNTIME_STATE =
           ["@types/lodash", "npm:4.17.0"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.12.2"],\
+          ["@types/nodemailer", "npm:6.4.14"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
           ["@types/react-modal", "npm:3.16.3"],\
@@ -12728,6 +12752,7 @@ const RAW_RUNTIME_STATE =
           ["install", "npm:0.13.0"],\
           ["lodash", "npm:4.17.21"],\
           ["multer", "npm:1.4.5-lts.1"],\
+          ["nodemailer", "npm:6.9.13"],\
           ["npm", "npm:10.6.0"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
@@ -12744,7 +12769,7 @@ const RAW_RUNTIME_STATE =
           ["styled-components", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:6.1.8"],\
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["turbo", "npm:1.11.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"],\
           ["vite", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.2.7"],\
           ["vitest", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.4.0"],\
           ["wsrun", "npm:5.2.4"]\
@@ -13759,6 +13784,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/typescript-patch-4778c7998b-c93786fcc9.zip/node_modules/typescript/",\
         "packageDependencies": [\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c", {\
+        "packageLocation": "./.yarn/cache/typescript-patch-6e159bfddb-760f7d92fb.zip/node_modules/typescript/",\
+        "packageDependencies": [\
+          ["typescript", "patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"]\
         ],\
         "linkType": "HARD"\
       }]\

@@ -2980,6 +2980,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/nodemailer@npm:^6.4.14":
+  version: 6.4.14
+  resolution: "@types/nodemailer@npm:6.4.14"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/0f7e93a7fda5cc72ca3214ad2780fc251f7dcfb9a5b2d0616927fa4a700c82b024ce0a5134dfac52429f4d08429d1af027002e9ed385bd3cb6224c890598bf03
+  languageName: node
+  linkType: hard
+
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -6226,6 +6235,7 @@ __metadata:
     "@tanstack/react-table": "npm:^8.9.3"
     "@types/bootstrap": "npm:^5.2.6"
     "@types/node": "npm:^20.2.5"
+    "@types/nodemailer": "npm:^6.4.14"
     "@types/prop-types": "npm:^15.7.5"
     "@types/react": "npm:^18.0.37"
     "@types/react-bootstrap": "npm:^0.32.32"
@@ -6247,6 +6257,7 @@ __metadata:
     framer-motion: "npm:^11.0.25"
     localforage: "npm:^1.10.0"
     match-sorter: "npm:^6.3.1"
+    nodemailer: "npm:^6.9.13"
     postcss: "npm:^8.4.35"
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
@@ -6267,7 +6278,7 @@ __metadata:
     styled-components: "npm:^6.1.8"
     tailwindcss: "npm:^3.4.1"
     tsconfig-custom: "workspace:*"
-    typescript: "npm:^5.0.2"
+    typescript: "npm:^5.4.5"
     v4: "npm:^0.0.1"
     vite: "npm:^4.3.9"
     vite-plugin-eslint: "npm:^1.8.1"
@@ -8184,6 +8195,13 @@ __metadata:
   version: 2.0.14
   resolution: "node-releases@npm:2.0.14"
   checksum: 10/0f7607ec7db5ef1dc616899a5f24ae90c869b6a54c2d4f36ff6d84a282ab9343c7ff3ca3670fe4669171bb1e8a9b3e286e1ef1c131f09a83d70554f855d54f24
+  languageName: node
+  linkType: hard
+
+"nodemailer@npm:^6.9.13":
+  version: 6.9.13
+  resolution: "nodemailer@npm:6.9.13"
+  checksum: 10/efbc6fc415ec1e1dc1b91530920b0bcfc648183003c3d79718cd54fc2efef4b7dd1917ddd3853ab127e4b5ebd7353903b5859f0ac3ccea487374b076d41ac8b8
   languageName: node
   linkType: hard
 
@@ -10558,6 +10576,7 @@ __metadata:
     "@types/lodash": "npm:^4"
     "@types/multer": "npm:^1.4.11"
     "@types/node": "npm:^20.11.30"
+    "@types/nodemailer": "npm:^6.4.14"
     "@types/react": "npm:^18.0.37"
     "@types/react-dom": "npm:^18.0.11"
     "@types/react-modal": "npm:^3.16.3"
@@ -10579,6 +10598,7 @@ __metadata:
     install: "npm:^0.13.0"
     lodash: "npm:^4.17.21"
     multer: "npm:^1.4.5-lts.1"
+    nodemailer: "npm:^6.9.13"
     npm: "npm:^10.6.0"
     prettier: "npm:2.8.8"
     prettier-config-custom: "workspace:*"
@@ -10595,7 +10615,7 @@ __metadata:
     styled-components: "npm:^6.1.8"
     tsconfig-custom: "workspace:*"
     turbo: "npm:latest"
-    typescript: "npm:^5.0.4"
+    typescript: "npm:^5.4.5"
     vite: "npm:^5.2.7"
     vitest: "npm:^1.4.0"
     wsrun: "npm:^5.2.4"
@@ -11469,7 +11489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.0.2, typescript@npm:^5.0.4":
+"typescript@npm:^5.0.4":
   version: 5.3.3
   resolution: "typescript@npm:5.3.3"
   bin:
@@ -11479,13 +11499,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.0.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.0.4#optional!builtin<compat/typescript>":
+"typescript@npm:^5.4.5":
+  version: 5.4.5
+  resolution: "typescript@npm:5.4.5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/d04a9e27e6d83861f2126665aa8d84847e8ebabcea9125b9ebc30370b98cb38b5dff2508d74e2326a744938191a83a69aa9fddab41f193ffa43eabfdf3f190a5
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A^5.0.4#optional!builtin<compat/typescript>":
   version: 5.3.3
   resolution: "typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10/c93786fcc9a70718ba1e3819bab56064ead5817004d1b8186f8ca66165f3a2d0100fee91fa64c840dcd45f994ca5d615d8e1f566d39a7470fc1e014dbb4cf15d
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
+  version: 5.4.5
+  resolution: "typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/760f7d92fb383dbf7dee2443bf902f4365db2117f96f875cf809167f6103d55064de973db9f78fe8f31ec08fff52b2c969aee0d310939c0a3798ec75d0bca2e1
   languageName: node
   linkType: hard
 
