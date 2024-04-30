@@ -152,11 +152,6 @@ export default function CalendarPage() {
     requestAbortController.current = controller;
   };
 
- /* React.useEffect(() => {
-    fetchHighlightedDays(currentDate);
-    // abort request on unmount
-    return () => requestAbortController.current?.abort();
-  }, );*/
 
   const handleMonthChange = (date: Dayjs) => {
     if (requestAbortController.current) {
