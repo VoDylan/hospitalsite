@@ -171,7 +171,7 @@ function CheckOutPage(){
 
           {/* Total Price */}
           <Box display="flex" justifyContent="space-between" mt={2}>
-            <Typography variant="h6">Total Price: ${total}</Typography>
+            <Typography variant="h6">Total Price: ${total.toFixed(2)}</Typography>
           </Box>
         </CardContent>
       </Box>
