@@ -191,6 +191,8 @@ export default function PathfindingPage(props: PathfindingPageProps) {
               filteredNodes={filteredNodes}
 
               pathNodesData={pathNodesData}
+              nodesToNextFloor={nodesToNextFloor}
+              nodesToPrevFloor={nodesToPrevFloor}
 
               selectNodeGeneral={selectNodeGeneral}
               deselectNodeGeneral={deselectNodeGeneral}

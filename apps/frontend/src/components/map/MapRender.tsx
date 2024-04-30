@@ -21,6 +21,7 @@ import {Box} from "@mui/material";
 import {isEqual} from "lodash";
 import PathCanvas from "./map2/PathCanvas.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
+import IconCanvas from "./IconCanvas.tsx";
 
 interface MapRenderProps {
   enableEditorTools?: boolean
@@ -30,6 +31,8 @@ interface MapRenderProps {
   filteredNodes: MapNode[];
 
   pathNodesData?: TypeCoordinates[];
+  nodesToNextFloor?: Map<TypeCoordinates, Floor>;
+  nodesToPrevFloor?: Map<TypeCoordinates, Floor>;
 
   selectNodeGeneral: (node: MapNode) => void;
   deselectNodeGeneral: (node: MapNode) => void;
@@ -228,6 +231,19 @@ export default function MapRender(props: MapRenderProps) {
                 // startNode={props.selectedNode1}
                 // endNode={props.selectedNode2}
               />
+            }
+            {!props.enableEditorTools ?
+              <IconCanvas
+                backgroundRendered={backgroundRendered}
+                startNode={props.selectedNode1}
+                endNode={props.selectedNode2}
+
+                nodesToNextFloor={props.nodesToNextFloor!}
+                nodesToPrevFloor={props.nodesToPrevFloor!}
+
+                floor={floor}
+              /> :
+              <></>
             }
             <SymbolCanvas
               enableEditorTools={props.enableEditorTools}
