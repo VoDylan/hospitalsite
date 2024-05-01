@@ -1,4 +1,5 @@
 import {Box, Grid, Stack, Typography} from "@mui/material";
+import { useState } from "react";
 
 interface AboutCardProps {
   role: string;
@@ -6,9 +7,11 @@ interface AboutCardProps {
   bio: string;
   email: string;
   imagePath: string;
+  quote: string;
 }
 
 export function AboutCardRight(props: AboutCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <>
       <br/>
@@ -19,9 +22,12 @@ export function AboutCardRight(props: AboutCardProps) {
             mx: 'auto',
             backgroundImage: "linear-gradient(to left, lightgray, #2874C0)",
             maxWidth: "70%",
+            position: 'relative',
             borderRadius: "2em",
             minWidth: "70%", // forces all cards to be same width
           }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
       >
         <Stack
             padding={2}
@@ -69,6 +75,27 @@ export function AboutCardRight(props: AboutCardProps) {
                       borderRadius: "20%",
                     }}
                 />
+                {isHovered && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 124,
+                      left: 15,
+                      right: 956,
+                      bottom: 20,
+                      backgroundColor: 'rgba(0,0,0,0.7)',
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '20%',
+                    }}
+                  >
+                    <Typography variant="h6" sx={{ p: 2, textAlign: 'center' }}>
+                      {props.quote}
+                    </Typography>
+                  </Box>
+                )}
               </Grid>
               <Grid item xs={8}>
                 <Stack>
