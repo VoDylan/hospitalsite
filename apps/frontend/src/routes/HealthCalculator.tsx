@@ -166,14 +166,15 @@ export default function HealthCalculator() {
             {currentIndex === 0 && (
             <Grid
               sx={{
-                mx: "110vh",
+                right: 0,
+                top: "25%",
                 width: "50vh",
                 backgroundColor: "#186BD9",
                 boxShadow: "5",
+                marginRight: "100px",
             }}
               borderRadius={3}
               position={"fixed"}
-              mt={"5vh"}
             >
               <Typography color={"white"} align={"center"} fontSize={20} fontWeight="bold">Please Note:</Typography>
               <Typography color={"white"} align={"center"} fontSize={18}>
