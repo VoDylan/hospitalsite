@@ -17,7 +17,7 @@ import NodeFilter from "common/src/filter/filters/Filter.ts";
 import Draggable from "react-draggable";
 import {ReactZoomPanPinchRef, TransformComponent, TransformWrapper,} from "react-zoom-pan-pinch";
 
-import MapSideBarOLD from "../components/map/MapSideBarOLD.tsx";
+import MapSideBar from "../components/map/MapSideBar.tsx";
 import Icon from "../components/map/SlideIcon.tsx";
 import TextIcon from "../components/map/TextDirectionsSlide.tsx";
 import BackgroundCanvas from "../components/map/BackgroundCanvas.tsx";
@@ -933,7 +933,7 @@ function MapRoute() {
             }}
           >
             {/*Side Bar*/}
-            <MapSideBarOLD
+            <MapSideBar
               activeFloor={floor}
               title="Navigation"
               onChange={(event, value) => handleStartNodeChange(value)}

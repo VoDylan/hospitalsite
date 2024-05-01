@@ -8,7 +8,7 @@ import useWindowSize from "../hooks/useWindowSize.tsx";
 import {useEffect, useState} from "react";
 import GraphManager from "../common/GraphManager.ts";
 import {Box, IconButton, Paper, Stack} from "@mui/material";
-import MapSideBar from "../components/map/MapSideBar.tsx";
+import MapSideBarNEW from "../components/map/MapSideBarNEW.tsx";
 import MapToggleBar from "../components/map/MapToggleBar.tsx";
 import Legend from "frontend/src/components/map/mapEditor/Legend.tsx";
 import Floors from "../components/map/FloorTabs.tsx";
@@ -161,7 +161,7 @@ export default function PathfindingPage(props: PathfindingPageProps) {
           direction={"row"}
           height={"100%"}
         >
-          <MapSideBar
+          <MapSideBarNEW
             title={"Pathfinding"}
 
             setPathNodesData={(newPathNodesData: TypeCoordinates[]) => setPathNodesData(newPathNodesData)}

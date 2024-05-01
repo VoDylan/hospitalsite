@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Box, Paper, Stack} from "@mui/material";
 import useWindowSize from "frontend/src/hooks/useWindowSize.tsx";
 import MapRender from "frontend/src/components/map/MapRender.tsx";
-import MapSideBar from "frontend/src/components/map/MapSideBar.tsx";
+import MapSideBar from "frontend/src/components/map/MapSideBarNEW.tsx";
 import {useSelectedNodes} from "frontend/src/hooks/useSelectedNodes.tsx";
 import GraphManager from "frontend/src/common/GraphManager.ts";
 import {useFilters} from "frontend/src/hooks/useFilters.tsx";
