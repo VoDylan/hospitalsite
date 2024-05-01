@@ -35,6 +35,7 @@ import PathfindingPage from "./routes/PathfindingPage.tsx";
 import HealthCalculator from "./routes/HealthCalculator.tsx";
 import PageNotFound from "./routes/PageNotFound.tsx";
 import Map3D from "./routes/Map3D.tsx";
+import ScreenSaver from "./components/homepage/ScreenSaver.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -172,6 +173,7 @@ function App() {
         }}
       >
         <div className="w-full flex flex-col px-0 gap-5">
+          <ScreenSaver />
           <TopBanner />
           <Outlet />
         </div>
