@@ -18,11 +18,13 @@ export function AboutCardRight(props: AboutCardProps) {
       <br/>
       <Box
           sx={{
+            my: "2.5em",
             mx: 'auto',
-            backgroundColor: "lightgray",
+            backgroundImage: "linear-gradient(to left, lightgray, #2874C0)",
             maxWidth: "70%",
-            borderRadius: "20px",
             position: 'relative',
+            borderRadius: "2em",
+            minWidth: "70%", // forces all cards to be same width
           }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -31,9 +33,6 @@ export function AboutCardRight(props: AboutCardProps) {
             padding={2}
         >
           <Box
-              sx={{
-                backgroundColor: "lightgray",
-              }}
           >
             <Typography
                 variant="h4"

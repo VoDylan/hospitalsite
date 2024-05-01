@@ -35,9 +35,14 @@ function SearchBar() {
     {label: "Gift Delivery Service", link: "/services/GiftDelivery"},
     {label: "Medical Device Service", link: "/services/DeviceDeliveryService"},
     {label: "Room Scheduling Service", link: "/services/RoomScheduling"},
-    {label: "Calendar", link: "/services/calendar"},
+    {label: "Appointment Scheduling", link: "/services/calendar"},
     {label: "Map Page", link: "/Map"},
+    {label: "Map Editor", link: "/MapEditingPage"},
+    {label: "About Us", link: "/About"},
+    {label: "Credits", link: "/Credits"},
+    {label: "Database Display Page", link: "/DisplayDatabase"},
     {label: "All Services", link: "/services"},
+    {label: "Health Calculator", link: "/Calculator"},
   ];
 
   const [value, setValue] = useState<string | null>("");

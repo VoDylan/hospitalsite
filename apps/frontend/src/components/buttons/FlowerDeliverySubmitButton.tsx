@@ -1,8 +1,10 @@
-import { Alert, AlertProps, Button, Snackbar } from "@mui/material";
+import {Alert, AlertProps, Button, Snackbar, Stack} from "@mui/material";
 import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/FlowerDeliveryFormSubmission.ts";
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import InitCart from "../../common/InitCart.ts";
+import {Link} from "react-router-dom";
 
 interface ButtonProps {
   text: string;
@@ -15,7 +17,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("success");
   const [message, setMessage] = useState("");
-  const link:string = "";
 
   const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
     function SnackbarAlert(props, ref) {
@@ -71,6 +72,9 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
       } else {
         openWithSuccess();
         handleClear();
+        InitCart.setFlowers(props.input);
+        InitCart.loadFlowers();
+        InitCart.loadFlowerAmounts();
       }
     }
   }
@@ -78,22 +82,6 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   function handleClear() {
     props.clear();
   }
-  
-  function linkToCart(link:string) {
-    if (props.input.RRose === "" && props.input.WRose === "" && props.input.RCarn === "" && props.input.Tulip === "") {
-      return link;
-    } else if (props.input.employeeID === -1){
-      return link;
-    } else if (props.input.name === "") {
-      return link;
-    } else if (props.input.recipientName === "") {
-      return link;
-    } else if (props.input.roomNumber === "") {
-      return link;
-    } else link = "/Cart";
-    return link;
-  }
-
 
   // Function for posting the form submission to the database
   async function pushToDB(form: FlowerDeliveryFormSubmission) {
@@ -150,11 +138,13 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
   }
 
   return (
+    <Stack
+    direction={"row"}
+    spacing={3}>
     <Button
       variant="contained"
       id={"submitButton"}
       onClick={() => handleSubmit()}
-      href={linkToCart(link)}
     >
       {props.text}
       <Snackbar
@@ -170,5 +160,14 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
+      <Link to={"/Cart"}>
+      <Button
+        variant={"outlined"}
+        id={"toCart"}
+      >
+        To Cart
+      </Button>
+      </Link>
+    </Stack>
   );
 }

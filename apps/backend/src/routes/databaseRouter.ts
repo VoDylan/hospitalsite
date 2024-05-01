@@ -345,7 +345,7 @@ router.post("/uploadedges", async (req, res) => {
 router.put("/updatesr/:id", async (req, res) => {
   const data: {
     id: number;
-    userID: string;
+    employeeID: number;
     nodeID: string;
     serviceType: string;
     services: string;
@@ -360,11 +360,20 @@ router.put("/updatesr/:id", async (req, res) => {
     },
     data: {
       status: data.status,
+      employeeID: data.employeeID,
     },
   });
 
   res.status(200).json({
     message: "success",
+  });
+});
+
+router.delete("/updatesr/:id", async (req, res) => {
+  await client.serviceRequest.delete({
+    where: {
+      id: parseInt(req.params.id),
+    },
   });
 });
 

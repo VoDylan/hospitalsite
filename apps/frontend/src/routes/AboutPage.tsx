@@ -16,6 +16,7 @@ import Robert from "../images/aboutImages/Robert.png";
 import Sebastian from "../images/aboutImages/Sebastian.jpg";
 import Spencer from "../images/aboutImages/Spencer.jpg";
 import Yitao from "../images/aboutImages/Yitao.jpg";
+import ScrollTopButton from "../components/ScrollTopButton.tsx";
 
 export default function AboutPage() {
   return (
@@ -184,6 +185,7 @@ export default function AboutPage() {
           sole use of educational purposes.
         </Typography>
       </Stack>
+      <ScrollTopButton />
     </Box>
 
   );

@@ -4,6 +4,7 @@ import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
 import {CalendarPageFormSubmission} from "../../common/formSubmission/CalendarPageFormSubmission.ts";
 
+
 interface ButtonProps {
   text: string;
   input: CalendarPageFormSubmission;
@@ -49,11 +50,13 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
     if (props.input.date === "") {
       openWithError("Please select a date");
     } else if (props.input.employee === -1){
-      openWithError("Please enter your employee ID");
+      openWithError("Please enter employee ID");
     } else if (props.input.name === "") {
       openWithError("Please enter your name");
     } else if (props.input.reasonForVisit === "") {
       openWithError("Please enter your reason for visiting");
+    } else if (props.input.toEmail === "") {
+      openWithError("Please enter your email");
     } else {
       const submission = props.input;
       console.log(props.input);
@@ -61,11 +64,22 @@ export function CalendarAvailabiltiySubmitButton(props: ButtonProps) {
       const result: { success: boolean; data: HTTPResponseType } =
         await pushToDB(submission);
 
+      const emailData = {
+        to: props.input.toEmail,
+        date: props.input.date,
+        location: props.input.roomNumber,
+      };
+
       if (!result.success) {
         openWithError(
           `Failed to post form data to database: ${result.data.message}`,
         );
       } else {
+        await axios.post("/api/sendEmail",emailData, {
+          headers: {
+            "Content-Type": 'application/json'
+          }
+        });
         handleClear();
         openWithSuccess();
       }

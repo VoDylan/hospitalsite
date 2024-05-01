@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
-import {IconButton, Button, styled, Typography } from "@mui/material";
+import {Button, IconButton, Typography, styled} from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
-import InfoIcon from "@mui/icons-material/Info";
 import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import CustomCard from "./Card.tsx"; // Update path to Card component
-import ServiceCarousel from "./ServiceCarousel.tsx";
-import { Link } from "react-router-dom";
-
 import noLady from "../../videos/noLady.mp4";
-import mapVideo from "../../videos/finaledit2.mp4";
-
+import mapVideo from "../../videos/mapedit3.mp4";
+import ServiceCarousel from "./ServiceCarousel.tsx";
+import InfoIcon from "@mui/icons-material/Info";
+import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
+import { Link } from "react-router-dom";
 
 interface CardData {
   image: string;
@@ -34,7 +32,7 @@ const Dot = styled("span")(({ theme }) => ({
   cursor: "pointer",
 }));
 
-function MainCarousel() {
+function Carousel() {
   const [cards, setCards] = useState<CardData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [autoScroll, setAutoScroll] = useState<boolean>(true);
@@ -103,7 +101,7 @@ function MainCarousel() {
           alignItems: "center",
           alignContent: "center",
           justifyContent: "center",
-          height: "50vh",
+          height: "40vh",
           width: "100%",
         }}
       >
@@ -148,7 +146,7 @@ function MainCarousel() {
           position: "relative",
           display: "flex",
           flexDirection: "row",
-          marginTop: "4%",
+          marginTop: "6%",
           height: "220px",
           alignItems: "center",
           justifyContent: "center",
@@ -175,8 +173,6 @@ function MainCarousel() {
           <NavigateNextIcon />
         </IconButton>
       </Stack>
-
-
       {/*{Icons}*/}
       <Stack
         direction={"row"}
@@ -217,15 +213,13 @@ function MainCarousel() {
 
       <Box
         sx={{
-          color: "#186BD9",
-        opacity: "0.7",
-        marginBottom: "2%"}}
+          color: "red",
+          opacity: "0.7",
+          marginBottom: "2%"}}
         display={"flex"}
         justifyContent={"center"}>
         <Typography variant = "subtitle1"
-        fontSize={"100%"}
-        color = 'red'
-        fontWeight = 'bold'>
+                    fontSize={"16px"}>
           This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
         </Typography>
       </Box>
@@ -276,4 +270,4 @@ function MainCarousel() {
   );
 }
 
-export default MainCarousel;
+export default Carousel;

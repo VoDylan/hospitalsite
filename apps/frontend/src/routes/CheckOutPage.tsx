@@ -1,10 +1,8 @@
 import React, {ChangeEvent, useState } from 'react';
 import { TextField, Button, CardContent, Typography, Box } from '@mui/material';
-import { FlowerDeliveryFormSubmission } from '../common/formSubmission/FlowerDeliveryFormSubmission.ts';
-import {useLocation} from "react-router-dom";
-import {GiftDeliveryFormSubmission} from "../common/formSubmission/GiftDeliveryFormSubmission.ts";
 import { CheckOutPageFormSubmission } from '../common/formSubmission/CheckOutPageFormSubmission.ts';
 import { CheckOutPageSubmitButton } from "../components/buttons/CheckOutPageSubmitButton.tsx";
+import InitCart from "../common/InitCart.ts";
 
 const flowerPrices = {
   RRose: 5.99,
@@ -14,16 +12,36 @@ const flowerPrices = {
 };
 
 const giftPrices = {
-  balloons: 3.99,
-  cards: 1.99,
-  bears: 5.99
+  Balloons: 3.99,
+  Cards: 1.99,
+  Bears: 5.99
 };
 
-const flowerCart: FlowerDeliveryFormSubmission[] = [];
-const giftCart: GiftDeliveryFormSubmission[] = [];
+function getFlowerTotal():number {
+  let total = 0;
+
+  total += 5.99*InitCart.RRose;
+  total += 4.99*InitCart.WRose;
+  total += 3.99*InitCart.RCarn;
+  total += 2.99*InitCart.Tulip;
+
+  return total;
+}
+
+function getGiftTotal():number {
+  let total=0;
+
+  total += 3.99*InitCart.Balloons;
+  total += 1.99*InitCart.Cards;
+  total += 5.99*InitCart.Bears;
+
+  return total;
+}
 
 function CheckOutPage(){
-  //const [flowerAmounts, setFlowerAmounts] = React.useState<number[]>([0, 0, 0, 0]);
+
+  const total = getFlowerTotal() + getGiftTotal();
+  total.toFixed(2);
 
   const [form, setFormResponses] = useState<CheckOutPageFormSubmission>({
     nameOnCard: "",
@@ -56,45 +74,19 @@ function CheckOutPage(){
       cvc: "",
     });
   }
-  const parseAmount = (amountStr: string): number => {
-    return parseInt(amountStr, 10) || 0;
-  };
-
-  const location = useLocation();
-  if (location.state !== null && location.state.RRose !== undefined) {
-    flowerCart[0] = location.state;
-    // const Famounts: number[] = [parseAmount(location.state.RRose), parseAmount(location.state.WRose), parseAmount(location.state.RCarn), parseAmount(location.state.Tulip)];
-    // setFlowerAmounts(Famounts);
-  }
-  else if (location.state !== null && location.state.balloons !== undefined) {
-    giftCart[0] = location.state;
-  }
-
-  // Calculate the total price for flowers
-  const totalFlowerPrice = flowerCart.reduce((acc, flower) => {
-    acc += parseAmount(flower.RRose) * flowerPrices['RRose'] +
-      parseAmount(flower.WRose) * flowerPrices['WRose'] +
-      parseAmount(flower.RCarn) * flowerPrices['RCarn'] +
-      parseAmount(flower.Tulip) * flowerPrices['Tulip'];
-    return acc;
-  }, 0);
-
-// Calculate the total price for gift
-  const totalGiftPrice = giftCart.reduce((acc, gift) => {
-    acc += parseAmount(gift.balloons) * giftPrices['balloons'] +
-      parseAmount(gift.cards) * giftPrices['cards'] +
-      parseAmount(gift.bears) * giftPrices['bears'] ;
-    return acc;
-  }, 0);
-
-  const totalPrice = totalFlowerPrice + totalGiftPrice;
 
   return (
-    <Box sx={{ pt: '150px' }} display="flex" justifyContent="center" p={4}>
+    <Box sx={{
+        pt: '150px'
+    }}
+         display="flex"
+         justifyContent="center"
+         p={4}>
       {/* Payment Details */}
       <Box width="50%" paddingRight={2}>
         <Typography
-          variant="h5" gutterBottom>Payment Details
+          variant="h5" gutterBottom>
+          Payment Details
         </Typography>
         <form>
           <TextField
@@ -137,11 +129,11 @@ function CheckOutPage(){
               text={"COMPLETE ORDER"}>
             </CheckOutPageSubmitButton>
           </Box>
-
-
           <Button
             color="secondary"
+            href={"/"}
           >
+            Cancel order
           </Button>
         </form>
       </Box>
@@ -150,42 +142,36 @@ function CheckOutPage(){
       <Box width="50%" paddingLeft={2}>
         <CardContent>
           <Typography variant="h5" gutterBottom>Order Summary</Typography>
-          {flowerCart.map((flower, index) => (
-            <React.Fragment key={index}>
-              {Object.keys(flowerPrices).map((flowerType) => {
-                const flowerKey = flowerType as keyof FlowerDeliveryFormSubmission;
-                const amountStr = flower[flowerKey] as string;
-                const amount = parseAmount(amountStr);
-                return amount > 0 && (
-                  <Box display="flex" justifyContent="space-between" alignItems="center" key={flowerType}>
-                    <Typography variant="subtitle1">{flowerType}</Typography>
-                    <Typography variant="body1">{amount}</Typography>
-                    <Typography variant="body1">${(amount * flowerPrices[flowerType as keyof typeof flowerPrices]).toFixed(2)}</Typography>
-                  </Box>
-                );
-              })}
-            </React.Fragment>
-          ))}
 
-          {giftCart.map((gift, index) => (
-            <React.Fragment key={`gift_${index}`}>
-              {Object.keys(giftPrices).map((giftType) => {
-                const giftKey = giftType as keyof GiftDeliveryFormSubmission;
-                const amountStr = gift[giftKey] as string;
-                const amount = parseAmount(amountStr);
-                return amount > 0 && (
-                  <Box display="flex" justifyContent="space-between" alignItems="center" key={giftType}>
-                    <Typography variant="subtitle1">{giftType}</Typography>
-                    <Typography variant="body1">{amount}</Typography>
-                    <Typography variant="body1">${(amount * giftPrices[giftType as keyof typeof giftPrices]).toFixed(2)}</Typography>
-                  </Box>
-                );
-              })}
-            </React.Fragment>
-          ))}
+          {/* Flowers Summary */}
+          {InitCart.presentFlowers.map((flowerKey, index) => {
+            const amount = InitCart.flowerAmounts[index];
+            const price = flowerPrices[flowerKey as keyof typeof flowerPrices]; // Assert the key type
+            return (
+              <Box display="flex" justifyContent="space-between" alignItems="center" key={flowerKey}>
+                <Typography variant="subtitle1">{flowerKey}</Typography>
+                <Typography variant="body1">{amount}</Typography>
+                <Typography variant="body1">${(amount * price).toFixed(2)}</Typography>
+              </Box>
+            );
+          })}
 
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6">Total Price: ${totalPrice.toFixed(2)}</Typography>
+          {/* Gifts Summary */}
+          {InitCart.presentGifts.map((giftKey, index) => {
+            const amount = InitCart.giftAmounts[index];
+            const price = giftPrices[giftKey as keyof typeof giftPrices]; // Assert the key type
+            return (
+              <Box display="flex" justifyContent="space-between" alignItems="center" key={giftKey}>
+                <Typography variant="subtitle1">{giftKey}</Typography>
+                <Typography variant="body1">{amount}</Typography>
+                <Typography variant="body1">${(amount * price).toFixed(2)}</Typography>
+              </Box>
+            );
+          })}
+
+          {/* Total Price */}
+          <Box display="flex" justifyContent="space-between" mt={2}>
+            <Typography variant="h6">Total Price: ${total.toFixed(2)}</Typography>
           </Box>
         </CardContent>
       </Box>
