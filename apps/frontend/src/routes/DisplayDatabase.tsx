@@ -819,6 +819,11 @@ function DisplayDatabase() {
                   {/*<Typography variant='h5'>Service Data Table</Typography>*/}
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                     sx={{
                       padding: "40px",
                       position: "relative",
@@ -1101,6 +1106,11 @@ function DisplayDatabase() {
                 >
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                     sx={{
                       padding: "40px",
                       position: "relative",
@@ -1188,6 +1198,11 @@ function DisplayDatabase() {
                 >
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                     sx={{
                       padding: "40px",
                       position: "relative",
@@ -1248,6 +1263,11 @@ function DisplayDatabase() {
                 >
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                     sx={{
                       padding: "40px",
                       position: "relative",
