@@ -61,12 +61,10 @@ export function CheckOutPageSubmitButton(props: ButtonProps) {
       console.log(props.input);
       console.log(props.input);
 
-
-
         handleClear();
         openWithSuccess();
-        InitCart.clearCart();
 
+        InitCart.clearCart();
     }
   }
 

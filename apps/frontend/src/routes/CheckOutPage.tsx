@@ -3,6 +3,7 @@ import { TextField, Button, CardContent, Typography, Box } from '@mui/material';
 import { CheckOutPageFormSubmission } from '../common/formSubmission/CheckOutPageFormSubmission.ts';
 import { CheckOutPageSubmitButton } from "../components/buttons/CheckOutPageSubmitButton.tsx";
 import InitCart from "../common/InitCart.ts";
+import {makeStyles} from "@mui/styles";
 
 const flowerPrices = {
   RRose: 5.99,
@@ -38,8 +39,25 @@ function getGiftTotal():number {
   return total;
 }
 
+const useStyles = makeStyles({
+  input: {
+    '& input[type=number]': {
+      '-moz-appearance': 'textfield'
+    },
+    '& input[type=number]::-webkit-outer-spin-button': {
+      '-webkit-appearance': 'none',
+      margin: 0
+    },
+    '& input[type=number]::-webkit-inner-spin-button': {
+      '-webkit-appearance': 'none',
+      margin: 0
+    }
+  },
+});
+
 function CheckOutPage(){
 
+  const classes = useStyles();
   const total = getFlowerTotal() + getGiftTotal();
   total.toFixed(2);
 
@@ -91,11 +109,15 @@ function CheckOutPage(){
         <form>
           <TextField
             fullWidth margin="normal"
-            label="Name on card"
+            label="Name on Card"
             value={form.nameOnCard}
+            InputLabelProps={{ shrink: true }}
             onChange={handleNameOnCardInput}
             variant="outlined" />
           <TextField
+            className={classes.input}
+            type={"number"}
+            InputLabelProps={{ shrink: true }}
             fullWidth margin="normal"
             label="Card number"
             value={form.cardNum}
@@ -105,6 +127,9 @@ function CheckOutPage(){
             display="flex"
             justifyContent="left">
             <TextField
+              className={classes.input}
+              type={"number"}
+              InputLabelProps={{ shrink: true }}
               fullWidth margin="normal"
               label="Expiration"
               variant="outlined"
@@ -112,6 +137,9 @@ function CheckOutPage(){
               onChange={handleExpirationInput}
               style={{ marginRight: '10px', width: '30%' }} />
             <TextField
+              className={classes.input}
+              type={"number"}
+              InputLabelProps={{ shrink: true }}
               fullWidth margin="normal"
               label="CVC"
               variant="outlined"
