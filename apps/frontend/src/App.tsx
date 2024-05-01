@@ -31,6 +31,8 @@ import CalendarPage from "./routes/CalendarPage.tsx";
 import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 import CheckOutPage from "./routes/CheckOutPage.tsx";
+import HealthCalculator from "./routes/HealthCalculator.tsx";
+import PageNotFound from "./routes/PageNotFound.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -91,7 +93,11 @@ function App() {
           path: "/Cart",
           element: <Auth0Protection component={CheckOutPage} />,
         },
-
+        {
+          path: "/Calculator",
+          //element: <Auth0Protection component={HealthCalculator} />,
+          element: <HealthCalculator />,
+        },
         {
           path: "/Map",
           element: <MapRoute />,
@@ -113,6 +119,10 @@ function App() {
         {
           path: "map/:startnode/:endnode",
           element: <MapRoute />,
+        },
+        {
+          path: "*",
+          element: <PageNotFound />,
         },
       ],
     },

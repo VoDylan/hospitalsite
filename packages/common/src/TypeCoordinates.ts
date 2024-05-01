@@ -6,5 +6,6 @@ export type TypeCoordinates = {
   floor: string,
   longName: string,
   coordinates: Coordinates,
-  direction: string
+  direction: string,
+  distance: number
 };

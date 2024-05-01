@@ -43,7 +43,7 @@ const Weather = () => {
 
 
   return (
-    <Stack direction="row" spacing={0.5}>
+    <Stack direction="row" sx={{ alignItems: "center" }}>
       {data && (
         <>
           {data.weather[0].main === "Clouds" && (
@@ -51,8 +51,8 @@ const Weather = () => {
               src={cloudy}
               alt="cloudy"
               style={{
-                width: "35px",
-                height: "32px"
+                width: "46px",
+                height: "42px"
               }}
             />
           )}
@@ -61,8 +61,8 @@ const Weather = () => {
               src={rain}
               alt="rain"
               style={{
-                width: "35px",
-                height: "32px"
+                width: "50px",
+                height: "44px"
               }}
             />
           )}
@@ -71,8 +71,8 @@ const Weather = () => {
               src={snow}
               alt="snow"
               style={{
-                width: "35px",
-                height: "32px"
+                width: "50px",
+                height: "44px"
               }}
             />
           )}
@@ -81,8 +81,8 @@ const Weather = () => {
               src={storm}
               alt="storm"
               style={{
-                width: "35px",
-                height: "32px"
+                width: "50px",
+                height: "44px"
               }}
             />
           )}
@@ -91,8 +91,8 @@ const Weather = () => {
               src={sunny}
               alt="sunny"
               style={{
-                width: "35px",
-                height: "32px"
+                width: "55px",
+                height: "50px"
               }}
             />
           )}

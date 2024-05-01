@@ -104,7 +104,7 @@ function SanitationService() {
         }}
       >
         <Typography
-        color={'white'}>
+        color={'black'}>
           Jacob Murphy, Spencer Trautz
         </Typography>
         <Grid

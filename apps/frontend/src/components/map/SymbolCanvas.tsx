@@ -18,6 +18,7 @@ import Labs from "../../images/realMapIcons/labs.svg";
 import Department from "../../images/realMapIcons/dept.svg";
 import Conference from "../../images/realMapIcons/conf.png";
 import Exit from "../../images/realMapIcons/exit.png";
+import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 interface SymbolCanvasProps {
   style: React.CSSProperties;
@@ -26,78 +27,52 @@ interface SymbolCanvasProps {
   height: number;
   filtersApplied: boolean;
   filteredNodes: MapNode[];
+  pathNodes?: TypeCoordinates[]; // Make pathNodes optional
   floor: Floor;
+  startNode?: string; // Make startNode optional
+  endNode?: string; // Make endNode optional
 }
 
 export default function SymbolCanvas(props: SymbolCanvasProps) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
-  const [elevators] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Elevator;
-    return img;
-  });
-
-  const [stairs] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Stairs;
-    return img;
-  });
-
-  const [info] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Info;
-    return img;
-  });
-
-  const [bathroom] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Bathroom;
-    return img;
-  });
-
-  const [retail] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Retail;
-    return img;
-  });
-
-  const [service] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Service;
-    return img;
-  });
-
-  const [lab] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Labs;
-    return img;
-  });
-
-  const [department] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Department;
-    return img;
-  });
-
-  const [conference] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Conference;
-    return img;
-  });
-
-  const [exit] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Exit;
-    return img;
-  });
+  // Define state for image elements
+  const [elevators] = useState<HTMLImageElement>(() => new Image());
+  const [stairs] = useState<HTMLImageElement>(() => new Image());
+  const [info] = useState<HTMLImageElement>(() => new Image());
+  const [bathroom] = useState<HTMLImageElement>(() => new Image());
+  const [retail] = useState<HTMLImageElement>(() => new Image());
+  const [service] = useState<HTMLImageElement>(() => new Image());
+  const [lab] = useState<HTMLImageElement>(() => new Image());
+  const [department] = useState<HTMLImageElement>(() => new Image());
+  const [conference] = useState<HTMLImageElement>(() => new Image());
+  const [exit] = useState<HTMLImageElement>(() => new Image());
 
   useEffect(() => {
-    if (props.backgroundRendered)
-      initializeLayeredCanvas(canvasRef.current, props.width, props.height);
-  }, [props.backgroundRendered, props.height, props.width]);
+    // Assign src for image elements
+    elevators.src = Elevator;
+    stairs.src = Stairs;
+    info.src = Info;
+    bathroom.src = Bathroom;
+    retail.src = Retail;
+    service.src = Service;
+    lab.src = Labs;
+    department.src = Department;
+    conference.src = Conference;
+    exit.src = Exit;
+
+    // Initialize canvas after background is rendered
+    if (props.backgroundRendered && canvasRef.current) {
+      initializeLayeredCanvas(
+        canvasRef.current,
+        props.width,
+        props.height
+      );
+    }
+  }, [bathroom, conference, department, elevators, exit, info, lab, props.backgroundRendered, props.height, props.width, retail, service, stairs]);
 
   useEffect(() => {
+    // Render symbols when filters are applied
     if (canvasRef.current && props.filtersApplied) {
       console.log("Rendering symbol canvas");
       const canvas: HTMLCanvasElement = canvasRef.current;
@@ -119,8 +94,34 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         props.filteredNodes,
       );
 
+      // Filter out nodes in path
+      const nodesToRender: MapNode[] = [];
+
+      if (props.pathNodes) { // Check if pathNodes is defined
+        for (let i = 0; i < nodesOnFloor.length; i++) {
+          const nodeOnFloor = nodesOnFloor[i];
+          // Check if the nodeID of the current node is present in props.pathNodes
+          const isInPath = props.pathNodes.some(pathNode =>
+            pathNode.nodeID === nodeOnFloor.nodeID &&
+            pathNode.nodeID !== props.startNode &&
+            pathNode.nodeID !== props.endNode
+          );
+          // If the node is in pathNodes, add it to nodesToRender
+          if (isInPath) {
+            nodesToRender.push(nodeOnFloor);
+          }
+        }
+      }
+
       for (let i = 0; i < nodesOnFloor.length; i++) {
+        const nodeOnFloor = nodesOnFloor[i];
+        const isInNodesToRender = nodesToRender.some(node => node.nodeID === nodeOnFloor.nodeID);
+        // If the node is in nodesToRender, skip rendering
+        if (isInNodesToRender) {
+          continue;
+        }
         switch (nodesOnFloor[i].nodeType) {
+          // Handle different node types
           case "ELEV":
             draw.drawFloorIcon(
               nodesOnFloor[i].xcoord,
@@ -217,7 +218,7 @@ export default function SymbolCanvas(props: SymbolCanvasProps) {
         }
       }
     }
-  }, [props.filtersApplied, props.filteredNodes, props.floor, props.height, props.width, elevators, stairs, retail, service, info, bathroom, department, lab, exit, conference]);
+  }, [props.filtersApplied, props.filteredNodes, props.floor, props.height, props.width, elevators, stairs, retail, service, info, bathroom, department, lab, exit, conference, props.pathNodes, props.startNode, props.endNode]);
 
   return <canvas ref={canvasRef} style={props.style} />;
 }

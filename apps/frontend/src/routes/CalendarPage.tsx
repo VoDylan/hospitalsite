@@ -212,9 +212,9 @@ export default function CalendarPage() {
           }}
         >
           <Typography
-            align={"center"}
-            fontStyle={"Open Sans"}
-            fontSize={18}
+            // align={"center"}
+            // fontStyle={"Open Sans"}
+            // fontSize={18}
           >
             Arayah Remillard
           </Typography>
