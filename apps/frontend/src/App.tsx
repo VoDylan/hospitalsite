@@ -34,6 +34,7 @@ import CheckOutPage from "./routes/CheckOutPage.tsx";
 import PathfindingPage from "./routes/PathfindingPage.tsx";
 import HealthCalculator from "./routes/HealthCalculator.tsx";
 import PageNotFound from "./routes/PageNotFound.tsx";
+import Map3D from "./routes/Map3D.tsx";
 import ScreenSaver from "./components/homepage/ScreenSaver.tsx";
 
 function App() {
@@ -103,6 +104,10 @@ function App() {
         {
           path: "/map",
           element: <PathfindingPage />,
+        },
+        {
+          path: "/map3d",
+          element: <Map3D />,
         },
         {
           path: "/mapold",
