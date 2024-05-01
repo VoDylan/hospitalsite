@@ -174,7 +174,7 @@ export default function AboutPage() {
             "Outside of class, he enjoys going on drives and is passionate about cars."}
           email={"sctrautz@wpi.edu"}
           imagePath={Spencer}
-          quote={"\"I got on two watches, I still come in late\""}
+          quote={"“Nice carousel guys”"}
         />
         <br/>
         <Typography paddingTop={5} textAlign={"center"} variant={"h1"} color={"black"} fontSize={30}>
