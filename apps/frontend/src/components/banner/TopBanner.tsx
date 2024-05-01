@@ -15,9 +15,10 @@ const useStyles = makeStyles({
   logoImage: {
     display: "flex",
     width: "100%", // Set the width to 100%
-    minHeight: "120px",
+    minHeight: "100%",
     minWidth: "250px",
     maxWidth: "450px", // Add a max-width for responsiveness
+    alignItems: "center",
   },
 });
 
@@ -45,6 +46,7 @@ function TopBanner() {
         height: "120px",
         boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
         elevation: 1,
+        justifyContent: "center"
       }}
     >
       <Toolbar>

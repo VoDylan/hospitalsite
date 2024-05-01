@@ -8,7 +8,7 @@ import security from "../images/servicePageImages/securityService.jpg";
 //import Gift from "../images/servicePageImages/GiftDelivery.svg";
 import medicalDevice from "../images/servicePageImages/medicalDevices.jpg";
 //import Room from "../images/servicePageImages/RoomScheduling.svg";
-import Template from "../images/servicePageImages/ServicesTemplate.svg";
+// import Template from "../images/servicePageImages/ServicesTemplate.svg";
 import flower from "../images/servicePageImages/Flower_new.png";
 import gift from "../images/servicePageImages/giftBasket.jpg";
 import medicine from "../images/servicePageImages/medicineCard.jpg";
@@ -75,13 +75,6 @@ export default function ServicesPage() {
       title: "Appointment Calendar",
       description: "View availability and make an appointment",
       buttonContent: "Make Appointment",
-    },
-    {
-      path: "",
-      image: Template,
-      title: "More Services Soon",
-      description: "More services to be displayed here, coming soon!",
-      buttonContent: "Home Page",
     },
   ];
 
