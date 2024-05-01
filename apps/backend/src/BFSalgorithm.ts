@@ -5,13 +5,13 @@ export class BFSalgorithm extends Algorithms {
   runAlgorithm(start: string, end: string): TypeCoordinates[] {
     const queue: string[] = [];
     const visited: string[] = [];
-    const parents: (string | null)[] = [];
+    const parents: string[] = [];
     const startNodeIndex: number = this.nodes.findIndex(
       (node) => node.startNodeID === start,
     );
     queue.push(start);
     visited.push(start);
-    parents[startNodeIndex] = null;
+    parents[startNodeIndex] = "";
 
     while (queue.length > 0) {
       const currentNodeID = queue.shift();
