@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Slider from '@mui/material/Slider';
 import Rotate3D from '../components/Rotate3D';
 import myImage from '../images/mapImages/MapTestL1.svg'; // Import your image file
@@ -12,8 +12,7 @@ import myImageShadowF2 from '../images/mapImages/MapTestF2Shadow.svg';
 import myImageF3 from '../images/mapImages/MapTestF3.svg';
 import myImageShadowF3 from '../images/mapImages/MapTestF3Shadow.svg';
 
-
-  const Test: React.FC = () => {
+const Test: React.FC = () => {
     const defaultAngle = 60;
     const defaultTopValue1 = 31.5;
     const defaultTopValue2 = -.75;
@@ -22,17 +21,13 @@ import myImageShadowF3 from '../images/mapImages/MapTestF3Shadow.svg';
     const calculatePixelSize1 = (currentAngle: number) => {
       const minPixelSize = defaultTopValue1;
       const decreaseRate = 1.65; // Rate at which pixel size decreases per degree away from 60
-      const pixelSize = minPixelSize - Math.abs(currentAngle - defaultAngle) * decreaseRate;
-      console.log("Pixel Size 1:", pixelSize);
-      return pixelSize;
+      return minPixelSize - Math.abs(currentAngle - defaultAngle) * decreaseRate;
     };
 
     const calculatePixelSize2 = (currentAngle: number) => {
       const minPixelSize = defaultTopValue2;
       const decreaseRate = .05; // Rate at which pixel size decreases per degree away from 60
-      const pixelSize = minPixelSize - Math.abs(currentAngle - defaultAngle) * decreaseRate;
-      console.log("Pixel Size 2:", pixelSize);
-      return pixelSize;
+      return minPixelSize - Math.abs(currentAngle - defaultAngle) * decreaseRate;
     };
 
     const handleChange = (event: Event, newValue: number | number[]) => {
@@ -42,7 +37,8 @@ import myImageShadowF3 from '../images/mapImages/MapTestF3Shadow.svg';
 
   return (
     <div>
-      <div style={{display: 'flex', marginTop: '175px', marginLeft: '700px', width: '40%', zIndex: '999' }}>
+
+      <div style={{display: 'flex', marginTop: '175px', marginLeft: '700px', width: '20%', zIndex: '999' }}>
         <Slider
           aria-label="Angle"
           value={angle}
@@ -50,9 +46,12 @@ import myImageShadowF3 from '../images/mapImages/MapTestF3Shadow.svg';
           min={40}
           max={60}
           marks={true}
+          valueLabelDisplay="auto"
         />
       </div>
+
       <div style={{justifyContent: 'center', alignItems: 'center'}}>
+
       {/* FLOOR F3 */}
       <div style={{ position: 'absolute', top: '0px', left: '150px', zIndex: 0, height: "0.1%", width: "0%" }}>
         <Rotate3D x={100} y={-20} z={40} angle={angle}>
@@ -142,7 +141,9 @@ import myImageShadowF3 from '../images/mapImages/MapTestF3Shadow.svg';
           </Rotate3D>
         </div>
       </div>
+
       </div>
+
     </div>
   );
 };
