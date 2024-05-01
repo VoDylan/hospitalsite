@@ -5,7 +5,6 @@ import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { SanitationRequestFormSubmission } from "../common/formSubmission/SanitationRequestFormSubmission.ts";
 import sanitationBackground from "../images/sanitationBackground.webp";
 import { SanitationSubmitButton } from "../components/buttons/SanitationSubmitButton.tsx";
-import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
@@ -16,6 +15,7 @@ import Disinfection from "../images/servicePageImages/FormIcons/Disinfection.jpg
 import DrySanitation from "../images/servicePageImages/FormIcons/DrySanitation.jpg";
 import WasteMan from "../images/servicePageImages/FormIcons/WasteMan.jpg";
 import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
 
 
 
@@ -68,36 +68,8 @@ function SanitationService() {
     });
   }
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -219,15 +191,7 @@ function SanitationService() {
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.location}
-              handleChange={handleLocationInput}
-              items={nodes.map((node) => ({
-                value: node.nodeID,
-                label: node.longName,
-              }))}
-            />
+            <NodeDropDown handleChange={handleLocationInput} label={"Location"} returnedNodeID={form.location} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>

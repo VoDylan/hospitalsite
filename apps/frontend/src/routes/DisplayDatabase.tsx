@@ -150,7 +150,11 @@ function DisplayDatabase() {
       ...prevRowModesModel,
       [id]: { mode: GridRowModes.View },
     }));
-    window.location.reload();
+
+    // Add a delay of, for example, 1 second (1000 milliseconds) before refreshing the page
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); // Adjust the delay time as needed
   };
 
   const [nodeColumns] = useState<GridColDef[]>([
@@ -393,9 +397,10 @@ function DisplayDatabase() {
           .post("/api/database/uploadnodes", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
+            window.location.reload();
           })
           .catch((e) => {
-            console.error("Error posting employee data:",e);
+            console.error("Error posting node data:",e);
           });
       }
     };
@@ -441,7 +446,10 @@ function DisplayDatabase() {
           .post("/api/database/uploadedges", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
-          });
+            window.location.reload();
+          }).catch((e) => {
+          console.error("Error posting edge data:",e);
+        });
       }
     };
 
@@ -497,12 +505,14 @@ function DisplayDatabase() {
           .post("/api/database/uploademployees", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
-          });
+            window.location.reload();
+          }).catch((e) => {
+          console.error("Error posting employee data:",e);
+        });
       }
     };
 
     fileReader.readAsText(file);
-    window.location.reload();
   }
 
   function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
@@ -514,7 +524,6 @@ function DisplayDatabase() {
       handleNodeImport(file![0]);
     }
     console.log("Handling node import data");
-    window.location.reload();
   }
 
   function handleEdgeFileUpload(event: { target: { files: FileList | null } }) {
@@ -526,7 +535,6 @@ function DisplayDatabase() {
       handleEdgeImport(file![0]);
     }
     console.log("Handling node import data");
-    window.location.reload();
   }
 
   function handleEmployeeFileUpload(event: { target: { files: FileList | null } }) {
@@ -553,7 +561,14 @@ function DisplayDatabase() {
       };
 
       // Make the HTTP request to save in the backend
-      await axios.put(`/api/database/updatesr/${id}`, data);
+      await axios.put(`/api/database/updatesr/${id}`, data).then(
+        (response: AxiosResponse) => {
+          console.log(response);
+          window.location.reload();
+      })
+        .catch((e) => {
+          console.error("Error saving service request data:",e);
+        });
       return newRow;
     },
     [],

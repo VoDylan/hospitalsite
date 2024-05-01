@@ -69,7 +69,7 @@ return (
              marginRight:"7.5%",
            }}
       >
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background:'#3884d4',
@@ -119,7 +119,7 @@ return (
              marginRight: "7.5%",
            }}
       >
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -164,7 +164,7 @@ return (
             </a>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -207,7 +207,7 @@ return (
             </a>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -249,7 +249,7 @@ return (
             </a>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -292,7 +292,7 @@ return (
             </a>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -335,7 +335,7 @@ return (
             </a>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -377,7 +377,7 @@ return (
             </a>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -420,7 +420,7 @@ return (
             </a>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -467,7 +467,7 @@ return (
             </a>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
@@ -518,7 +518,7 @@ return (
              marginRight: "7.5%",
            }}
       >
-        <Accordion>
+        <Accordion defaultExpanded>
           <AccordionSummary
             sx={{
               background: '#3884d4',
