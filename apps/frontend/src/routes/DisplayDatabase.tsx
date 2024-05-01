@@ -25,6 +25,7 @@ import "./TableSlide.css";
 import Tab from "@mui/material/Tab";
 import { PieChart, BarChart } from "@mui/x-charts";
 import {employeeCsvHeader, EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
+import {Delete} from "@mui/icons-material";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -157,6 +158,20 @@ function DisplayDatabase() {
     }, 500); // Adjust the delay time as needed
   };
 
+  const handleDeleteClick = (id: GridRowId) => () => {
+    console.log(rowModesModel);
+    setServiceRowData((prevData) => prevData.filter((service) => service.id !== id));
+
+    axios.delete(`/api/database/updatesr/${id}`)
+      .then((response: AxiosResponse) => {
+        console.log(response);
+        getServiceData();
+      })
+      .catch((error) => {
+        console.error("Error deleting service request:", error);
+      });
+  };
+
   const [nodeColumns] = useState<GridColDef[]>([
     { field: "nodeID", headerName: "NodeID", width: 150 },
     { field: "xcoord", headerName: "XCoord", width: 120 },
@@ -215,7 +230,7 @@ function DisplayDatabase() {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 100,
+      width: 125,
       cellClassName: "actions",
       getActions: ({ row }) => [
         <GridActionsCellItem
@@ -223,7 +238,9 @@ function DisplayDatabase() {
           label="Edit"
           className="textPrimary"
           onClick={handleEditClick(row.id)}
-          color="inherit"
+          sx={{
+            color: "primary.main",
+          }}
         />,
         <GridActionsCellItem
           icon={<SaveIcon />}
@@ -232,6 +249,14 @@ function DisplayDatabase() {
             color: "primary.main",
           }}
           onClick={handleSaveClick(row.id)}
+        />,
+        <GridActionsCellItem
+          icon={<Delete />}
+          label="Delete"
+          sx={{
+            color: "primary.main",
+          }}
+          onClick={handleDeleteClick(row.id)}
         />,
       ],
     },
