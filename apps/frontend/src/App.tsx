@@ -11,8 +11,7 @@ import ServicesPage from "./routes/ServicesPage.tsx";
 import FlowerDeliveryService from "./routes/FlowerDeliveryService.tsx";
 import DisplayDatabase from "./routes/DisplayDatabase.tsx";
 //import LoginForm from "./routes/LoginForm.tsx";
-//import SlidesPage from "./routes/SlidesPage.tsx";
-import MapTest from "./routes/MapTest.tsx";
+import SlidesPage from "./routes/SlidesPage.tsx";
 import SanitationService from "./routes/SanitationService.tsx";
 import DeviceDeliveryService from "./routes/DeviceDeliveryService.tsx";
 import GiftDeliveryService from "./routes/GiftDeliveryService.tsx";
@@ -35,6 +34,7 @@ import CheckOutPage from "./routes/CheckOutPage.tsx";
 import PathfindingPage from "./routes/PathfindingPage.tsx";
 import HealthCalculator from "./routes/HealthCalculator.tsx";
 import PageNotFound from "./routes/PageNotFound.tsx";
+import Map3D from "./routes/Map3D.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -45,7 +45,7 @@ function App() {
       children: [
         {
           path: "",
-          element: <MapTest />,
+          element: <SlidesPage />,
         },
         {
           path: "/About",
@@ -103,6 +103,10 @@ function App() {
         {
           path: "/map",
           element: <PathfindingPage />,
+        },
+        {
+          path: "/map3d",
+          element: <Map3D />,
         },
         {
           path: "/mapold",
