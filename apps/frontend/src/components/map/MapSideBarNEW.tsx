@@ -1,4 +1,4 @@
-import {Box, Divider, Drawer, Stack, Typography} from "@mui/material";
+import {Box, Divider, Drawer, Stack, Typography, Button} from "@mui/material";
 import NodeAutocomplete from "frontend/src/components/map/NodeAutocomplete.tsx";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import React, {SyntheticEvent} from "react";
@@ -18,6 +18,7 @@ import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 import {Floor} from "common/src/map/Floor.ts";
 import {PathAlgorithmType} from "../../common/types/PathAlgorithmType.ts";
 import Spacer from "../general/Spacer.tsx";
+
 
 interface MapEditorSideBar2Props {
   title: string;
@@ -196,6 +197,15 @@ export default function MapSideBarNEW(props: MapEditorSideBar2Props) {
               width: "75%",
             }}
           />
+          <Button variant="contained" href={"/map3d"}
+                  sx={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    marginTop: '25px',
+                    width: "75%",
+                  }}>
+            3D MAP
+          </Button>
         </Stack>
       </Box>
     </Drawer>
