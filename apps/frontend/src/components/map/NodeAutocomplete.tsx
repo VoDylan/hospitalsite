@@ -48,6 +48,9 @@ export default function NodeAutocomplete(props: NodeAutocompleteProps) {
       style={{
         ...props.style,
         alignItems: "center",
+        marginRight: "auto",
+        marginLeft: "auto",
+        width: "90%",
       }}
     >
       {props.Icon}
@@ -60,7 +63,7 @@ export default function NodeAutocomplete(props: NodeAutocompleteProps) {
           .sort((val1: AutocompleteNodeType, val2: AutocompleteNodeType) => val1.label.localeCompare(val2.label))
         }
         groupBy={(option) => option.label.charAt(0).toUpperCase()}
-        sx={{ width: "75%" }}
+        sx={{ width: "100%" }}
         renderInput={(params: AutocompleteRenderInputParams) => <TextField {...params} label={props.label}/>}
         renderOption={(props, option) => {
           return (

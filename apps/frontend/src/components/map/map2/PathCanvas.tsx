@@ -144,40 +144,6 @@ export default function PathCanvas(props: PathCanvasProps) {
             for (let j = 0; j < includedPathsOnFloor[i].length; j++) {
               ctx.beginPath();
 
-              // if (includedPathsOnFloor[i][j].nodeID === props.startNode) {
-              //   // Check if it's the first element
-              //   const image: HTMLImageElement | null =
-              //     document.querySelector(`.start`);
-              //   if (!image) return;
-              //
-              //   props.iconCanvasRef
-              //     .getContext("2d")!
-              //     .drawImage(
-              //       image,
-              //       includedPathsOnFloor[i][j].coordinates.x - 58,
-              //       includedPathsOnFloor[i][j].coordinates.y - 42,
-              //       110,
-              //       80,
-              //     );
-              // }
-              //
-              // if (includedPathsOnFloor[i][j].nodeID === props.endNode) {
-              //   // Check if it's the last element
-              //   const image2: HTMLImageElement | null =
-              //     document.querySelector(`.end`);
-              //   if (!image2) return;
-              //
-              //   props.iconCanvasRef
-              //     .getContext("2d")!
-              //     .drawImage(
-              //       image2,
-              //       includedPathsOnFloor[i][j].coordinates.x - 63,
-              //       includedPathsOnFloor[i][j].coordinates.y - 65,
-              //       180,
-              //       150,
-              //     ); // Adjust iconWidth and iconHeight as needed
-              // }
-
               ctx.arc(
                 includedPathsOnFloor[i][j].coordinates.x,
                 includedPathsOnFloor[i][j].coordinates.y,

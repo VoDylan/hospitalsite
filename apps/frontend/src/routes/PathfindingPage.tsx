@@ -79,6 +79,7 @@ export default function PathfindingPage(props: PathfindingPageProps) {
   const [, windowHeight] = useWindowSize();
   const [updateSelection, setUpdateSelection] = useState<boolean>(false);
   const [resetZoom, setResetZoom] = useState<boolean>(false);
+  const [resetPath, setResetPath] = useState<boolean>(false);
 
   const handleInterFloorNodesUpdate = (
     nodesToNextFloor: Map<TypeCoordinates, Floor>,
@@ -123,11 +124,16 @@ export default function PathfindingPage(props: PathfindingPageProps) {
   }, [nodeData, setNodeDataFilters]);
 
   useEffect(() => {
+    if(pathNodesData.length == 0) setPathRendered(false);
+    else setPathRendered(true);
+  }, [pathNodesData, setPathRendered]);
+
+  useEffect(() => {
     setPathNodesData([]);
     setPathRendered(false);
     setNodesToNextFloor(new Map<TypeCoordinates, Floor>());
     setNodesToPrevFloor(new Map<TypeCoordinates, Floor>());
-  }, [setPathNodesData, setPathRendered, selectedNode1, selectedNode2, algorithm, setNodesToNextFloor, setNodesToPrevFloor]);
+  }, [setPathNodesData, setPathRendered, selectedNode1, selectedNode2, algorithm, resetPath, setNodesToNextFloor, setNodesToPrevFloor]);
 
   return (
     <>
@@ -146,6 +152,7 @@ export default function PathfindingPage(props: PathfindingPageProps) {
 
             setPathNodesData={(newPathNodesData: TypeCoordinates[]) => setPathNodesData(newPathNodesData)}
             setFloor={setFloor}
+            pathRendered={pathRendered}
 
             setAlgorithmCallback={setAlgorithm}
 
@@ -155,6 +162,9 @@ export default function PathfindingPage(props: PathfindingPageProps) {
             edgeBetweenNodes={edgeBetween}
             nodeData={filteredNodes}
             nodeUpdateCallback={() => setDataLoadedSoft(false)}
+            clearPathCallback={() => setResetPath((old: boolean) => {
+              return !old;
+            })}
             handleSelectNode1={(nodeID) => setSelectedNode1(nodeID ? GraphManager.getInstance().getNodeByID(nodeID) : null)}
             handleSelectNode2={(nodeID) => setSelectedNode2(nodeID ? GraphManager.getInstance().getNodeByID(nodeID) : null)}
             handleClearNode1={() => setSelectedNode1(null)}

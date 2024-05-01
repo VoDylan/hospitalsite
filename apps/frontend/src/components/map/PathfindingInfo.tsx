@@ -1,4 +1,4 @@
-import {Button, Stack} from "@mui/material";
+import {Button, IconButton, Stack} from "@mui/material";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import PathAlgorithmSelector from "./map2/PathAlgorithmSelector.tsx";
 import React, {useEffect, useState} from "react";
@@ -9,13 +9,16 @@ import axios from "axios";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
 import TextDirections from "./map2/TextDirections.tsx";
 import {Floor} from "common/src/map/Floor.ts";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 
 interface PathfindingInfoProps {
   startNode: MapNode | null;
   endNode: MapNode | null;
+  pathRendered: boolean;
   setPathNodesDataCallback: (newPathNodesData: TypeCoordinates[]) => void;
   setAlgorithmCallback: (algorithm: PathAlgorithmType) => void;
   setFloor: (newFloor: Floor) => void;
+  clearPathCallback: () => void;
 }
 
 export default function PathfindingInfo(props: PathfindingInfoProps) {
@@ -82,6 +85,11 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
     setEndNode(props.endNode);
   }, [props.endNode]);
 
+  useEffect(() => {
+    console.log(`Setting text directions enabled to ${props.pathRendered}`);
+    setTextDirectionsEnabled(props.pathRendered);
+  }, [props.pathRendered]);
+
   return (
     <Stack>
       <PathAlgorithmSelector
@@ -91,18 +99,34 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
           props.setAlgorithmCallback(algorithm);
         }}
       />
-      <Button
-        startIcon={<AltRouteIcon />}
-        variant={"contained"}
+      <Stack
+        direction={"row"}
         sx={{
-          minWidth: "75%",
-          marginRight: "auto",
+          width: "100%",
           marginLeft: "auto",
+          marginRight: "auto",
         }}
-        onClick={handleSubmit}
+        justifyContent={"center"}
+        spacing={2}
       >
-        Find Path
-      </Button>
+        <Button
+          startIcon={<AltRouteIcon />}
+          variant={"contained"}
+          onClick={handleSubmit}
+          sx={{
+            width: "75%"
+          }}
+        >
+          Find Path
+        </Button>
+        {textDirectionsEnabled && (
+          <IconButton
+            onClick={props.clearPathCallback}
+          >
+            <RotateLeftIcon />
+          </IconButton>
+        )}
+      </Stack>
       <TextDirections
         textDirectionsEnabled={textDirectionsEnabled}
         pathNodesData={pathNodesData}

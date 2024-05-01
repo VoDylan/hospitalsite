@@ -37,6 +37,8 @@ interface MapEditorSideBar2Props {
   edgeBetweenNodes?: MapEdge | null;
 
   nodeUpdateCallback?: () => void;
+  clearPathCallback?: () => void;
+  pathRendered?: boolean;
 
   handleSelectNode1: (nodeID: string | null) => void;
   handleSelectNode2: (nodeID: string | null) => void;
@@ -107,7 +109,12 @@ export default function MapSideBar(props: MapEditorSideBar2Props) {
               nodeData={props.nodeData}
               value={props.selectedNode1}
             />
-            <MoreVertIcon fontSize={"medium"}/>
+            <MoreVertIcon
+              fontSize={"medium"}
+              sx={{
+                marginLeft: "5%",
+              }}
+            />
             <NodeAutocomplete
               label={"Node 2"}
               Icon={<LocationOnIcon fontSize={"medium"} sx={{color: "red"}}/>}
@@ -152,9 +159,11 @@ export default function MapSideBar(props: MapEditorSideBar2Props) {
                 <PathfindingInfo
                   startNode={props.selectedNode1}
                   endNode={props.selectedNode2}
+                  pathRendered={props.pathRendered!}
                   setPathNodesDataCallback={props.setPathNodesData!}
                   setFloor={props.setFloor!}
                   setAlgorithmCallback={props.setAlgorithmCallback!}
+                  clearPathCallback={props.clearPathCallback!}
                 />
                 <Divider
                   variant={"middle"}
