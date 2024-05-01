@@ -10,9 +10,9 @@ import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
-import BalLoons from "../images/servicePageImages/FormIcons/BalLoons.jpg";
+import Balloons from "../images/servicePageImages/FormIcons/Balloons.jpg";
 import GetWellCard from "../images/servicePageImages/FormIcons/GetWellCard.jpg";
-import TedBear from "../images/servicePageImages/FormIcons/TedBear.jpeg";
+import TedBear from "../images/servicePageImages/FormIcons/TedBear.jpg";
 import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
 import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
@@ -160,7 +160,7 @@ function GiftDeliveryService() {
             </Typography>
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
-            <PurchaseCard imagePath={BalLoons} title={"Balloons!"} description={"$3.99"} />
+            <PurchaseCard imagePath={Balloons} title={"Balloons!"} description={"$3.99"} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={GetWellCard} title={"Card"} description={"$1.99"} />
