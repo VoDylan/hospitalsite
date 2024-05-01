@@ -205,14 +205,17 @@ abstract class Algorithms {
           currentFloorNodes = [];
           turnsList.push(`Go to ${typeCoordinates[i].longName}.`);
           secondStairs = true;
+        } else if (typeCoordinates[i].nodeType === "ELEV" && secondElevator) {
+          turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
+          secondElevator = false;
+        } else if (typeCoordinates[i].nodeType === "STAI" && secondStairs) {
+          turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
+          secondStairs = false;
         }
-      } else if (typeCoordinates[i].nodeType === "ELEV" && secondElevator) {
-        turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
-        secondElevator = false;
-      } else if (typeCoordinates[i].nodeType === "STAI" && secondStairs) {
-        turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
-        secondStairs = false;
       } else if (i === typeCoordinates.length - 1) {
+        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+        turnsList = [...turnsList, ...newTurnsList];
+      } else {
         const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
         turnsList = [...turnsList, ...newTurnsList];
       }
