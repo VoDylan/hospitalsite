@@ -13,7 +13,7 @@ function SlideInBox() {
 
   return (
     <React.StrictMode>
-      <ScreenSaver />
+      <ScreenSaver/>
       <App />
     </React.StrictMode>
   );
