@@ -186,7 +186,7 @@ export default function PathCanvas(props: PathCanvasProps) {
               ctx.arc(
                 includedPathsOnFloor[i][j].coordinates.x,
                 includedPathsOnFloor[i][j].coordinates.y,
-                1,
+                0,
                 0,
                 2 * Math.PI,
               );
