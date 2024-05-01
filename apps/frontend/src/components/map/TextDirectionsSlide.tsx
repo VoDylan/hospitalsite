@@ -13,7 +13,7 @@ import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import Elevator from "../../images/realMapIcons/elevator.svg";
 import WalkingPerson from "../../images/mapIcons/WalkingPerson.png";
 
-let pathDistance = 0;
+const pathDistance = 0;
 
 function DirectionButton(props: {
   item: TypeCoordinates,
@@ -36,7 +36,7 @@ function DirectionButton(props: {
   }
   // Function to merge consecutive continue directions and sum their distances
   const mergeContinueDirections = () => {
-    let mergedDirections = [];
+    const mergedDirections = [];
     let totalDistance = 0;
     let currentIndex = props.index;
 
