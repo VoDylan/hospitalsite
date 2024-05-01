@@ -5,7 +5,6 @@ import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { RoomSchedulingFormSubmission } from "../common/formSubmission/RoomSchedulingFormSubmission.ts";
 import RoomBackground from "../images/servicePageImages/RoomScheduling.jpg";
 import { RoomSubmitButton } from "../components/buttons/RoomSubmitButton.tsx";
-import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
@@ -15,6 +14,7 @@ import MRI from "../images/servicePageImages/FormIcons/MRI.jpg";
 import Waiting from "../images/servicePageImages/FormIcons/Waiting.jpg";
 import Surge from "../images/servicePageImages/FormIcons/Surge.jpg";
 import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
 
 function RoomScheduling() {
   const [form, setFormResponses] = useState<RoomSchedulingFormSubmission>({
@@ -64,36 +64,8 @@ function RoomScheduling() {
       frequency: "",});
   }
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -121,7 +93,7 @@ function RoomScheduling() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "75%", //Adjust this to change the width of the form
+          width: "85%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -149,19 +121,19 @@ function RoomScheduling() {
             Room Scheduling Form
           </Typography>
         </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={MRI} title={"MRI Room"} description={""} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Surge} title={"Surgery Room"} description={""} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Conference} title={"Conference Room"} description={""} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Checkup} title={"Checkup Room"} description={""} />
           </Grid>
-          <Grid item xs={12} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Waiting} title={"Waiting Room"} description={""} />
           </Grid>
 
@@ -196,15 +168,7 @@ function RoomScheduling() {
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.location}
-              handleChange={handleLocationInput}
-              items={nodes.map((node) => ({
-                value: node.nodeID,
-                label: node.longName,
-              }))}
-            />
+            <NodeDropDown handleChange={handleLocationInput} label={"Location"} returnedNodeID={form.location} filterRoomsOnly={true} />
           </Grid>
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>

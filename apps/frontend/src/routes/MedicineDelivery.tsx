@@ -5,16 +5,16 @@ import { DropDown } from "../components/dropdown/DropDown.tsx";
 import { MedicineDeliveryFormSubmission } from "../common/formSubmission/MedicineDeliveryFormSubmission.ts";
 import MedicineBackground from "../images/MedicineDelivery.jpeg";
 import { MedicineSubmitButton } from "../components/buttons/MedicineSubmitButton.tsx";
-import axios from "axios";
 import { CenterAlignedTextbox } from "../components/textbox/CenterAlignedTextbox.tsx";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 import Acet from "../images/servicePageImages/FormIcons/Acet.jpg";
 import Fexo from "../images/servicePageImages/FormIcons/Fexo.jpeg";
-import Ibup from "../images/servicePageImages/FormIcons/Ibup.jpeg";
-import Omeprazole from "../images/servicePageImages/FormIcons/Omeprazole.jpeg";
+import Ibup from "../images/servicePageImages/FormIcons/Ibup.jpg";
+import Omeprazole from "../images/servicePageImages/FormIcons/Omeprazole.jpg";
 import Diphen from "../images/servicePageImages/FormIcons/Diphen.jpeg";
 import {PurchaseCard} from "../components/homepage/PurchaseCard.tsx";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
 import {CenterAlignedNumTextbox} from "../components/textbox/CenterAlignedNumTextbox.tsx";
 
 function MedicineDelivery() {
@@ -89,36 +89,8 @@ function MedicineDelivery() {
     });
   }
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -147,7 +119,7 @@ function MedicineDelivery() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "75%", //Adjust this to change the width of the form
+          width: "85%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -189,50 +161,50 @@ function MedicineDelivery() {
             </Typography>
           </Grid>
 
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Acet} title={"Acetaminophen"} description={"(Tylenol)"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Ibup} title={"Ibuprofen"} description={"(Advil)"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Omeprazole} title={"Omeprazole"} description={"(Prilosec)"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Fexo} title={"Fexofenadine"} description={"(Allegra)"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
+            <PurchaseCard imagePath={Diphen} title={"Diphenhydramine"} description={"(Benadryl)"} />
+          </Grid>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedNumTextbox
               label={"Tylenol Amount"}
               value={form.Acetaminophen}
               onChange={handleAceInput}
               type={"number"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedNumTextbox
               label={"Ibuprofen Amount"}
               value={form.Ibuprofen}
               onChange={handleIbuInput}
               type={"number"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedNumTextbox
               label={"Prilosec Amount"}
               value={form.Omeprazole}
               onChange={handleOmeInput}
               type={"number"} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedNumTextbox
               label={"Allegra Amount"}
               value={form.Fexofenadine}
               onChange={handleFexInput}
               type={"number"} />
           </Grid>
-          <Grid item xs={12} mt={2} sx={{align: "center"}}>
-            <PurchaseCard imagePath={Diphen} title={"Diphenhydramine"} description={"(Benadryl)"} />
-          </Grid>
-          <Grid item xs={12} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <CenterAlignedNumTextbox
               label={"Benadryl Amount"}
               value={form.Diphenhydramine}
@@ -240,7 +212,7 @@ function MedicineDelivery() {
               type={"number"} />
           </Grid>
 
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -250,7 +222,7 @@ function MedicineDelivery() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Frequency Needed:
             </Typography>
@@ -261,25 +233,17 @@ function MedicineDelivery() {
               returnData={form.frequency}
             />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Location:
             </Typography>
-            <DropDown
-              label={"Location"}
-              returnData={form.location}
-              handleChange={handleLocationInput}
-              items={nodes.map((node) => ({
-                value: node.nodeID,
-                label: node.longName,
-              }))}
-            />
+            <NodeDropDown  handleChange={handleLocationInput} label={"Location"} returnedNodeID={form.location} filterRoomsOnly={true}/>
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>
             <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
-          <Grid item xs={12} mt={3} mb={3} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={3} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Priority of Medicine:
             </Typography>

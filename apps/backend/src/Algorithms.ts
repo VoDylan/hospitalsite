@@ -58,7 +58,11 @@ abstract class Algorithms {
     return minKey;
   }
 
-  distance(startNodeID: string, endNodeID: string) {
+  distance(startNodeID: string | null, endNodeID: string | null) {
+    if (startNodeID === "0" || endNodeID === "0") {
+      return 0;
+    }
+
     const startNodeType = this.mapNodes.find(
       (node) => node.nodeID === startNodeID,
     )!.nodeType;
@@ -172,36 +176,39 @@ abstract class Algorithms {
     let secondElevator: boolean = false;
     let secondStairs: boolean = false;
 
-    // console.log(typeCoordinates);
-
     for (let i = 0; i < typeCoordinates.length; i++) {
       currentFloorNodes.push(typeCoordinates[i]);
 
-      if (
-        typeCoordinates[i].nodeType === "ELEV" &&
-        !secondElevator &&
-        typeCoordinates[i].floor !== typeCoordinates[i + 1].floor
-      ) {
-        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
-        turnsList = [...turnsList, ...newTurnsList];
-        currentFloorNodes.push(typeCoordinates[i]);
-        currentFloorNodes = [];
-        turnsList.push(`Go to ${typeCoordinates[i].longName}.`);
-        secondElevator = true;
+      // console.log(typeCoordinates);
+
+      if (typeCoordinates[i + 1]) {
+        if (
+          typeCoordinates[i].nodeType === "ELEV" &&
+          !secondElevator &&
+          typeCoordinates[i].floor !== typeCoordinates[i + 1].floor
+        ) {
+          const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+          turnsList = [...turnsList, ...newTurnsList];
+          currentFloorNodes.push(typeCoordinates[i]);
+          currentFloorNodes = [];
+          turnsList.push(`Go to ${typeCoordinates[i].longName}.`);
+          secondElevator = true;
+        } else if (
+          typeCoordinates[i].nodeType === "STAI" &&
+          !secondStairs &&
+          typeCoordinates[i + 1].floor &&
+          typeCoordinates[i].floor !== typeCoordinates[i + 1].floor
+        ) {
+          const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
+          turnsList = [...turnsList, ...newTurnsList];
+          currentFloorNodes.push(typeCoordinates[i]);
+          currentFloorNodes = [];
+          turnsList.push(`Go to ${typeCoordinates[i].longName}.`);
+          secondStairs = true;
+        }
       } else if (typeCoordinates[i].nodeType === "ELEV" && secondElevator) {
         turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
         secondElevator = false;
-      } else if (
-        typeCoordinates[i].nodeType === "STAI" &&
-        !secondStairs &&
-        typeCoordinates[i].floor !== typeCoordinates[i + 1].floor
-      ) {
-        const newTurnsList: string[] = this.getTurnings(currentFloorNodes);
-        turnsList = [...turnsList, ...newTurnsList];
-        currentFloorNodes.push(typeCoordinates[i]);
-        currentFloorNodes = [];
-        turnsList.push(`Go to ${typeCoordinates[i].longName}.`);
-        secondStairs = true;
       } else if (typeCoordinates[i].nodeType === "STAI" && secondStairs) {
         turnsList.push(`Come off Floor ${typeCoordinates[i].floor}.`);
         secondStairs = false;
@@ -229,6 +236,7 @@ abstract class Algorithms {
     let TypeCoordinatesPath: TypeCoordinates[] = [];
     const path: string[] = [];
     let current: string | null = currentNodeID;
+    let prevNode: string | null = "0";
 
     // go through the parent list
     while (current !== start) {
@@ -242,6 +250,9 @@ abstract class Algorithms {
           (node) => node.nodeID === current,
         )!;
 
+        console.log(currentNode);
+
+        // if (currentNode) {
         TypeCoordinatesPath.unshift({
           nodeID: currentNode.nodeID,
           nodeType: currentNode.nodeType,
@@ -249,15 +260,18 @@ abstract class Algorithms {
           longName: currentNode.longName,
           coordinates: currentCoordinates,
           direction: "",
+          distance: this.distance(current, prevNode)!,
         });
         IDCoordinatesPath.unshift({
           nodeID: current,
           coordinates: currentCoordinates,
         });
+        // }
         currentIdx = this.nodes.findIndex(
           (node) => node.startNodeID === current,
         );
       }
+      prevNode = current;
       current = parents[currentIdx];
     }
 
@@ -274,6 +288,7 @@ abstract class Algorithms {
       longName: startNode.longName,
       coordinates: this.getCoordinates(start),
       direction: "",
+      distance: this.distance(prevNode, start)!,
     });
     path.unshift(start);
 

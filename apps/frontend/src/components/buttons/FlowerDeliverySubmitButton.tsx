@@ -3,6 +3,8 @@ import { FlowerDeliveryFormSubmission } from "../../common/formSubmission/Flower
 import axios, { isAxiosError } from "axios";
 import { forwardRef, useState } from "react";
 import { HTTPResponseType } from "common/src/HTTPResponseType.ts";
+import InitCart from "../../common/InitCart.ts";
+import {Link} from "react-router-dom";
 
 interface ButtonProps {
   text: string;
@@ -70,6 +72,9 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
       } else {
         openWithSuccess();
         handleClear();
+        InitCart.setFlowers(props.input);
+        InitCart.loadFlowers();
+        InitCart.loadFlowerAmounts();
       }
     }
   }
@@ -155,13 +160,14 @@ export function FlowerDeliverySubmitButton(props: ButtonProps) {
         <SnackbarAlert severity={type}>{message}</SnackbarAlert>
       </Snackbar>
     </Button>
+      <Link to={"/Cart"}>
       <Button
         variant={"outlined"}
         id={"toCart"}
-        href={"/Cart"}
       >
         To Cart
       </Button>
+      </Link>
     </Stack>
   );
 }

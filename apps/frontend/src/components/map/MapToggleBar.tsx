@@ -7,7 +7,7 @@ interface ToggleButtonProps {
   buttonText: string; // Text to display on the button
 }
 
-const ToggleButton: React.FC<ToggleButtonProps> = ({ onClick, buttonText }) => {
+const MapToggleBar: React.FC<ToggleButtonProps> = ({ onClick, buttonText }) => {
   return (
     <Box>
       <Button
@@ -30,4 +30,4 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ onClick, buttonText }) => {
   );
 };
 
-export default ToggleButton;
+export default MapToggleBar;

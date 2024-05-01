@@ -52,7 +52,7 @@ export default class FilterManager {
       return;
     }
 
-    return this.registeredFilters.get(filterName)!().configure(filterValues);
+    return filterGenerator().configure(filterValues);
   }
 
   public applyFilters(activeFilters: Filter[], data: MapNode[]): MapNode[] {

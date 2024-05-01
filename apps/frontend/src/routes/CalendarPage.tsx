@@ -1,22 +1,21 @@
 import * as React from 'react';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+// import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import {Badge, Grid, SelectChangeEvent, Stack, Typography, TextField} from "@mui/material";
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay/PickersDay';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import calendar from "../images/servicePageImages/calendar.jpg";
 import dayjs, {Dayjs} from "dayjs";
-import {DayCalendarSkeleton} from "@mui/x-date-pickers";
+import {DateCalendar, DayCalendarSkeleton} from "@mui/x-date-pickers";
 import {ChangeEvent, useEffect, useState} from "react";
 import {CalendarPageFormSubmission} from "../common/formSubmission/CalendarPageFormSubmission.ts";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
 import {CenterAlignedTextbox} from "../components/textbox/CenterAlignedTextbox.tsx";
 import EmployeeDropDown from "../components/dropdown/EmployeeDropDown.tsx";
 import {CalendarAvailabiltiySubmitButton} from "../components/buttons/AppointmentSubmitButton.tsx";
-import axios from "axios";
-import {DropDown} from "../components/dropdown/DropDown.tsx";
 import { makeStyles } from "@material-ui/core/styles";
+import NodeDropDown from "../components/dropdown/NodeDropDown.tsx";
 
 const useStyles = makeStyles({
   root: {
@@ -38,39 +37,12 @@ export default function CalendarPage() {
     employee: -1,
     date: "",
     reasonForVisit: "",
-    roomNumber: ""
+    roomNumber: "",
+    toEmail:"",
   });
 
-  // Define an interface for the node data
-  interface NodeData {
-    nodeID: string;
-    longName: string;
-  }
-
-  // Storing the node numbers in a use state so that we only make a get request once
-  const [nodes, updateNodes] = useState<NodeData[]>([]);
-
-  // GET request to retrieve node numbers wrapped in a useEffect function
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios
-      .get<NodeData[]>("/api/database/nodes")
-      .then((response) => {
-        const nodeIDs = response.data.map((node) => node.nodeID);
-        const longNames = response.data.map((node) => node.longName);
-
-        const updatedNodes: NodeData[] = [];
-
-        for (let i = 0; i < nodeIDs.length; i++) {
-          updatedNodes.push({
-            nodeID: nodeIDs[i],
-            longName: longNames[i],
-          });
-        }
-
-        updateNodes(updatedNodes);
-      })
-      .catch((error) => console.error(error));
   }, []);
 
   function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
@@ -100,6 +72,11 @@ export default function CalendarPage() {
     }
   }
 
+  function handleEmailInput(event: SelectChangeEvent) {
+    setResponses({ ...form, toEmail: event.target.value });
+    return event.target.value;
+  }
+
   function clear() {
     setResponses({
       name: "",
@@ -107,6 +84,7 @@ export default function CalendarPage() {
       date: "",
       reasonForVisit: "",
       roomNumber: "",
+      toEmail:"",
     });
   }
 
@@ -174,11 +152,6 @@ export default function CalendarPage() {
     requestAbortController.current = controller;
   };
 
- /* React.useEffect(() => {
-    fetchHighlightedDays(currentDate);
-    // abort request on unmount
-    return () => requestAbortController.current?.abort();
-  }, );*/
 
   const handleMonthChange = (date: Dayjs) => {
     if (requestAbortController.current) {
@@ -239,9 +212,9 @@ export default function CalendarPage() {
           }}
         >
           <Typography
-            align={"center"}
-            fontStyle={"Open Sans"}
-            fontSize={18}
+            // align={"center"}
+            // fontStyle={"Open Sans"}
+            // fontSize={18}
           >
             Arayah Remillard
           </Typography>
@@ -261,6 +234,8 @@ export default function CalendarPage() {
             justifyContent="center"
             boxShadow={5}
             borderRadius={5}
+            paddingLeft={'1%'}
+            paddingBottom={'1%'}
             sx={{
               backgroundColor: "white",
               width: "75%", //Adjust this to change the width of the form
@@ -285,38 +260,44 @@ export default function CalendarPage() {
               item xs={12}
               sm={6}
               mt={2}
+
+              border={3}
+              borderRadius={5}
+              borderColor={'#186BD9'}
             >
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
               >
-                <StaticDatePicker
-                  orientation="landscape"
+                <DateCalendar
                   minDate={currentDate}
                   //value={currentDate}
-                  onAccept={handleOk}
+                  // onAccept={handleOk}
                   onChange={handleDateInput}
                   loading={isLoading}
                   onMonthChange={handleMonthChange}
                   renderLoading={() => <DayCalendarSkeleton/>}
                   sx={{
+                    width: "90%",
+                    height: "100%",
                     '.MuiDateCalendar-root': {
                       borderRadius: '5px',
-                      border: '3px solid',
+                      border:   '3px solid',
                       borderColor: '#186BD9',
+                    },"& div[role=row]": {
+                      paddingLeft: '5%',
+                      paddingRight: '5%',
+                      paddingBottom: '5',
+                      justifyContent: "space-between !important",
                     },
                     '.MuiPickersToolbar-root': {
                       color: '#186BD9',
-                      borderRadius: '5px',
-                      //borderWidth: '1px',
-                      borderColor: '#186BD9',
-                      border: '3px solid',
-                      backgroundColor: 'white',
+
                       //width: '200px'
                     },
                     '.MuiPickersDay-dayWithMargin': {
-                      //color: '#186BD9',
+                      // color: '#186BD9',
                     },
-                    marginLeft: "20px"
+                    marginLeft: "2%"
                   }}
                   slots={{
                     day: ServerDay,
@@ -328,7 +309,7 @@ export default function CalendarPage() {
                   }}
                 />
               </LocalizationProvider>
-             <h3 style={{marginLeft: "20px"}}>{handleOk(selectedDate)}</h3>
+             <Typography variant="h5" style={{marginLeft: "20px", marginTop: "10%"}}>{handleOk(selectedDate)}</Typography>
             </Grid>
             <Grid
               xs={6}
@@ -381,18 +362,10 @@ export default function CalendarPage() {
                 </Grid>
                 <Grid item xs={6} sx={{align: "center"}}>
                   <Typography align={"center"}>Room:</Typography>
-                  <DropDown
-                    items={nodes.map((node) => ({
-                      value: node.nodeID,
-                      label: node.longName,
-                    }))}
-                    label={"Room Number"}
-                    returnData={form.roomNumber}
-                    handleChange={handleRoomNumberInput}
-                  />
+                  <NodeDropDown handleChange={handleRoomNumberInput} returnedNodeID={form.roomNumber} label={"Room"} filterRoomsOnly={true} />
                 </Grid>
                 <Grid item xs={6} sx={{align: "center"}}>
-                  <Typography align={"center"}>Select Open Date From Calendar:</Typography>
+                  <Typography align={"center"}>Select Open Date:</Typography>
                   <div className={classes.root}>
                   <TextField
                     // sx={{
@@ -405,6 +378,14 @@ export default function CalendarPage() {
                     onChange={(e) => handleDateInput(dayjs(e.target.value))}
                   />
                   </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography align={"center"}>Email:</Typography>
+                  <CenterAlignedTextbox
+                    label={"Message"}
+                    value={form.toEmail}
+                    onChange={handleEmailInput}
+                  />
                 </Grid>
                 <Grid
                   item

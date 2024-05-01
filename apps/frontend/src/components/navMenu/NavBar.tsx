@@ -15,6 +15,7 @@ import MapIcon from "@mui/icons-material/Map";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import StorageIcon from "@mui/icons-material/Storage";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import CalculateIcon from '@mui/icons-material/Calculate';
 import { blue } from "@mui/material/colors";
 
 export const NavBar = () => {
@@ -34,6 +35,9 @@ export const NavBar = () => {
         anchor={"left"}
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
+        sx={{
+          zIndex: 9999,
+        }}
       >
         <Box
           sx={{
@@ -87,6 +91,15 @@ export const NavBar = () => {
                 startIcon={<AnnouncementIcon sx={{ color: blue[200] }} />}
               >
                 <Typography color="white">Services</Typography>
+              </Button>
+            </ListItem>
+            <ListItem>
+              <Button
+                variant="text"
+                href={"/Calculator"}
+                startIcon={<CalculateIcon sx={{ color: blue[200] }} />}
+              >
+                <Typography color="white">Health Calculator</Typography>
               </Button>
             </ListItem>
             <ListItem>
