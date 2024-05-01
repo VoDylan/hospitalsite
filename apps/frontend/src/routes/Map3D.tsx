@@ -12,7 +12,6 @@ import myImageShadowF2 from '../images/mapImages/MapTestF2Shadow.svg';
 import myImageF3 from '../images/mapImages/MapTestF3.svg';
 import myImageShadowF3 from '../images/mapImages/MapTestF3Shadow.svg';
 import {Box} from "@mui/material";
-//import { TransformComponent} from "react-zoom-pan-pinch";
 
 const Test: React.FC = () => {
     const defaultAngle = 60;
@@ -39,7 +38,6 @@ const Test: React.FC = () => {
 
   return (
     <div>
-
       <Box
         sx={{position: "fixed",
           top: '52%',
@@ -231,7 +229,6 @@ const Test: React.FC = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
