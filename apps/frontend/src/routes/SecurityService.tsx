@@ -139,7 +139,7 @@ function SecurityService() {
             <PurchaseCard imagePath={StatePig} title={"State Police"} description={"Threat to Hospital & Area"} />
           </Grid>
           <Grid item xs={3} mt={2} sx={{align: "center"}}>
-            <PurchaseCard imagePath={Wong} title={"Other"} description={"Professor Wilson Wong, PhD."} />
+            <PurchaseCard imagePath={Wong} title={"Other"} description={""} />
           </Grid>
 
           <Grid item xs={4} mt={2} sx={{align: "center"}}>
