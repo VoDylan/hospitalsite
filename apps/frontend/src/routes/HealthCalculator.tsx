@@ -61,7 +61,6 @@ export default function HealthCalculator() {
         sx={{
           position: "relative",
           display: "flex",
-          justifyContent: "center",
           alignItems: "center",
           minWidth: "100wh",
           marginTop: "150px",
@@ -170,6 +169,7 @@ export default function HealthCalculator() {
                 mx: "95vh",
                 width: "50vh",
                 backgroundColor: "#186BD9",
+                boxShadow: "5",
             }}
               borderRadius={3}
               position={"fixed"}
@@ -263,6 +263,7 @@ export default function HealthCalculator() {
                   mx: "95vh",
                   width: "50vh",
                   backgroundColor: "#186BD9",
+                  boxShadow: "5",
                 }}
                 borderRadius={3}
                 position={"fixed"}
