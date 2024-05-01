@@ -369,6 +369,14 @@ router.put("/updatesr/:id", async (req, res) => {
   });
 });
 
+router.delete("/updatesr/:id", async (req, res) => {
+  await client.serviceRequest.delete({
+    where: {
+      id: parseInt(req.params.id),
+    },
+  });
+});
+
 router.post("/employees", async (req, res) => {
   const data = req.body;
 
