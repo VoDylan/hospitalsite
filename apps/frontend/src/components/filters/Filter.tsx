@@ -8,11 +8,11 @@ import labsImage from "../../images/realMapIcons/labs.svg";
 import stairsImage from "../../images/realMapIcons/stairs.svg";
 import bathroomImage from "../../images/realMapIcons/bathrom.svg";
 import serviceImage from "../../images/realMapIcons/service.svg";
-import retailImage from "../../images/realMapIcons/retail.png";
+import retailImage from "../../images/realMapIcons/retail.svg";
 import infoImage from "../../images/realMapIcons/info.svg";
-import confImage from "../../images/realMapIcons/conf.png";
-import exitImage from "../../images/realMapIcons/exit.png";
-import floorImage from "../../images/realMapIcons/floors.png";
+import confImage from "../../images/realMapIcons/conf.svg";
+import exitImage from "../../images/realMapIcons/exit.svg";
+import floorImage from "../../images/realMapIcons/floors.svg";
 
 interface FilterProps {
   iconColor: string;
