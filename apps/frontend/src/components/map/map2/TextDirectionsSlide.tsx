@@ -1,6 +1,6 @@
 import { Button, Paper, Stack, Box, Typography } from "@mui/material";
 import RemoveIcon from '@mui/icons-material/Remove';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 import { Floor } from "common/src/map/Floor.ts";
 import startIcon from "frontend/src/images/mapImages/starticon3.png";
@@ -13,6 +13,7 @@ import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import Elevator from "frontend/src/images/realMapIcons/elevator.svg";
 import WalkingPerson from "frontend/src/images/mapIcons/WalkingPerson.png";
 
+const pathDistance = 0;
 
 function DirectionButton(props: {
   item: TypeCoordinates,
@@ -20,53 +21,107 @@ function DirectionButton(props: {
   nodesData: TypeCoordinates[]; // Add nodesData property here
   index: number
 }) {
-  return <Button
-    startIcon={props.item.direction.startsWith("Turn right") ? (
-      <TurnRightIcon
-        sx={{fontSize: "large", color: "white", backgroundColor: "#34BA2C", marginRight: "5px", marginTop: "15%"}}/>
-    ) : props.item.direction.startsWith("Turn left") ? (
-        <TurnLeftIcon
-          sx={{fontSize: "large", color: "white", backgroundColor: "#34BA2C", marginRight: "5px", marginTop: "15%"}}/>
-      ) :
-      props.item.direction.toLowerCase().startsWith("come off") ? (
-          <img src={Elevator} alt="Elevator"
-               style={{width: "23px", height: "23px", marginLeft: "-1px", marginRight: "3px"}}/>
+
+
+  // Extract previous direction
+  const prevDirection = props.nodesData[props.index - 1].direction;
+
+  console.log(prevDirection);
+  console.log(props.item);
+
+  if(!props.item.direction) return null;
+
+  // Check if both current and previous directions are "continue"
+  const isContinue = props.item.direction.toLowerCase().startsWith("continue");
+  const prevIsContinue = prevDirection.toLowerCase().startsWith("continue");
+
+  // Render button only if the current direction is not "continue"
+  if (isContinue && prevIsContinue) {
+    return null;
+  }
+  // Function to merge consecutive continue directions and sum their distances
+  const mergeContinueDirections = () => {
+    const mergedDirections = [];
+    let totalDistance = 0;
+    let currentIndex = props.index;
+
+    // Iterate through the nodesData starting from the current index
+    while (props.nodesData[currentIndex].direction ? props.nodesData[currentIndex]?.direction.toLowerCase().startsWith("continue") : false) {
+      // Add the distance to the total
+      totalDistance += props.nodesData[currentIndex].distance || 0;
+      // Add the direction to the mergedDirections array
+      mergedDirections.push(props.nodesData[currentIndex].direction);
+      // Move to the next index
+      currentIndex++;
+    }
+
+    // If there are multiple continue directions, calculate the total distance
+    if (mergedDirections.length > 0) {
+      // If the total distance is more than 2 digits, divide by 10 and round to the nearest integer
+      if (totalDistance > 99) {
+        totalDistance = Math.round(totalDistance / 10) + 50;
+      } else {
+        totalDistance = Math.round(totalDistance / 1) + 50;
+      }
+      // Return the merged direction with the total distance
+      return `Continue straight for ${totalDistance} feet.`;
+    } else {
+      // If no continue directions, return the regular direction
+      return props.item.direction;
+    }
+  };
+
+  return (
+    <Button
+      startIcon={props.item.direction.startsWith("Turn right") ? (
+        <TurnRightIcon
+          sx={{ fontSize: "large", color: "white", backgroundColor: "#34BA2C", marginRight: "5px", marginTop: "15%" }} />
+      ) : props.item.direction.startsWith("Turn left") ? (
+          <TurnLeftIcon
+            sx={{ fontSize: "large", color: "white", backgroundColor: "#34BA2C", marginRight: "5px", marginTop: "15%" }} />
         ) :
+        props.item.direction.toLowerCase().startsWith("come off") ? (
+            <img src={Elevator} alt="Elevator"
+                 style={{ width: "23px", height: "23px", marginLeft: "-1px", marginRight: "3px" }} />
+          ) :
 
-        props.item.direction.toLowerCase().startsWith("go to") ? (
-          <img src={Elevator} alt="Elevator"
-               style={{width: "23px", height: "23px", marginLeft: "-1px", marginRight: "3px"}}/>
-        ) :(
-          <NorthIcon sx={{
-            fontSize: "",
-            color: "white",
-            backgroundColor: "#34BA2C",
-            padding: "2%",
-            marginRight: "5px",
-            marginTop: "15%"
-          }}/>
-        )}
-    onClick={props.onClick}
+          props.item.direction.toLowerCase().startsWith("go to") ? (
+            <img src={Elevator} alt="Elevator"
+                 style={{ width: "23px", height: "23px", marginLeft: "-1px", marginRight: "3px" }} />
+          ) : (
+            <NorthIcon sx={{
+              fontSize: "",
+              color: "white",
+              backgroundColor: "#34BA2C",
+              padding: "2%",
+              marginRight: "5px",
+              marginTop: "15%"
+            }} />
+          )}
+      onClick={props.onClick}
 
-    variant="outlined"
-    sx={{
-      fontSize: "15px",
-      width: "100%", // Stretch button to full width
-      borderRadius: "0%",
-      color: "black",
-      borderColor: "#FAFAFA",
-      textTransform: "none", // Set textTransform to none
-      textAlign: "start",
-      justifyContent: "left",
-      alignItems: "flex-start", // Align items flex-start to keep icon centered with top line
-      borderBottom: props.nodesData[props.index + 1]?.floor !== props.item.floor ? "2px solid lightGray" : "0.5px solid rgba(169, 169, 169, 0.3)",
-      borderLeft: "0px",
-      borderRight: "0px",
-    }}
-  >
-    {props.index}. {props.item.direction}
-  </Button>;
+      variant="outlined"
+      sx={{
+        fontSize: "15px",
+        width: "100%", // Stretch button to full width
+        borderRadius: "0%",
+        color: "black",
+        borderColor: "#FAFAFA",
+        textTransform: "none", // Set textTransform to none
+        textAlign: "start",
+        justifyContent: "left",
+        alignItems: "flex-start", // Align items flex-start to keep icon centered with top line
+        borderBottom: props.nodesData[props.index + 1]?.floor !== props.item.floor ? "2px solid lightGray" : "0.5px solid rgba(169, 169, 169, 0.3)",
+        borderLeft: "0px",
+        borderRight: "0px",
+      }}
+    >
+      {mergeContinueDirections()} {/* Render merged continue directions with total distance */}
+    </Button>
+  );
 }
+
+
 
 function StartButton(props: {
   item: TypeCoordinates,
@@ -157,23 +212,28 @@ function FloorButton(props: { item: TypeCoordinates, onClick: () => void }) {
   );
 }
 
-export default function TextDirectionsSlide(props: {
+export default function TextIcon(props: {
   handleHideTextDirections: () => void;
   pathNodesData: TypeCoordinates[];
   setFloor: (floor: Floor) => void;
 }) {
+  const [pathDistance, setPathDistance] = useState(0);
 
-  const [elevators] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = Elevator;
-    return img;
-  });
+  // Calculate path distance when nodesData changes
+  useEffect(() => {
+    let pathDistance = 0;
 
-  const [walking] = useState<HTMLImageElement>(() => {
-    const img: HTMLImageElement = new Image();
-    img.src = WalkingPerson;
-    return img;
-  });
+    // Loop through nodesData and add each distance to totalDistance
+    props.pathNodesData.forEach((node, index) => {
+      pathDistance += node.distance || 0;
+    });
+
+    pathDistance = Math.round(pathDistance);
+    const minutes = Math.round((pathDistance / 5280) * 15);
+
+    // Update pathDistance state with the total distance
+    setPathDistance(minutes);
+  }, [props.pathNodesData]);
 
   return (
     <>
@@ -217,7 +277,7 @@ export default function TextDirectionsSlide(props: {
                       fontWidth: "bold",
                     }}
                   >
-                    6 min
+                    {pathDistance} min
                   </Typography>
                 </Stack>
                 <Button
@@ -231,13 +291,14 @@ export default function TextDirectionsSlide(props: {
                 />
               </Stack>
             </Box>
+
+            {/*Floor Grouping*/}
             <Box
               sx={{
                 backgroundColor: "#003A96",
                 width: "100%",
-                // height: "40px",
                 overflowX: "auto", // Enable horizontal scrolling
-                whiteSpace: "nowrap", // Prevent wrapping of buttons
+                overflowY: "hidden", // Hide vertical overflow
               }}
             >
               <Stack direction={"row"} sx={{ display: "flex", alignItems: "center" }}>
@@ -274,6 +335,7 @@ export default function TextDirectionsSlide(props: {
                 {index !== 0 && index !== props.pathNodesData.length - 1 && props.pathNodesData[index - 1]?.floor === item.floor && (
                   <DirectionButton item={item} onClick={() => props.setFloor(item.floor as Floor)}
                                    nodesData={props.pathNodesData} index={index}/>
+
                 )}
                 {(index !== 0 && index !== props.pathNodesData.length - 1) && (props.pathNodesData[index - 1]?.floor !== item.floor) && (
                   <Stack direction={"column"} sx={{
@@ -304,6 +366,7 @@ export default function TextDirectionsSlide(props: {
                   </Stack>
                 )}
               </Stack>
+
             ))}
           </Stack>
         </Box>

@@ -19,6 +19,10 @@ export default function TextDirections(props: TextDirectionsProps) {
     setPathNodesData(props.pathNodesData);
   }, [props.pathNodesData]);
 
+  useEffect(() => {
+    setTextDirectionsShown(props.textDirectionsEnabled);
+  }, [props.textDirectionsEnabled]);
+
   return (
     <Box>
       {props.textDirectionsEnabled && (
