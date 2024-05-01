@@ -54,7 +54,7 @@ export default function AboutPage() {
             "Director of Technical Operations at various corporations in the information systems and software field."}
           email={"wwong2@wpi.edu"}
           imagePath={ProfWong}
-          quote={"Team F!"}
+          quote={"\"Team F!\""}
         />
         <AboutCardRight
           role={"Team Coach"}
@@ -144,7 +144,7 @@ export default function AboutPage() {
             "with SQL. Outside of school, he enjoys transcribing music by ear to make sheet music."}
           email={"sagurgol@wpi.edu"}
           imagePath={Sebastian}
-          quote={"ADDED GRADIENT PLEASE LET ME KEEP IT PLEASE PLEASE PLEASE\""}
+          quote={"\"ADDED GRADIENT PLEASE LET ME KEEP IT PLEASE PLEASE PLEASE\""}
         />
         <AboutCardLeft
           role={"Full Time Software Engineer"}
@@ -154,7 +154,7 @@ export default function AboutPage() {
             "using SQL to manage databases. Outside of school, he enjoys fitness and snowboarding."}
           email={"yhong4@wpi.edu"}
           imagePath={Yitao}
-          quote={"I Love Team F"}
+          quote={"\"I Love Team F\""}
         />
         <AboutCardRight
           role={"Full Time Software Engineer"}
