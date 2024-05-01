@@ -93,7 +93,7 @@ function RoomScheduling() {
         justifyContent={"center"}
         sx={{
           backgroundColor: "transparent",
-          width: "75%", //Adjust this to change the width of the form
+          width: "85%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -121,19 +121,19 @@ function RoomScheduling() {
             Room Scheduling Form
           </Typography>
         </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={MRI} title={"MRI Room"} description={""} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Surge} title={"Surgery Room"} description={""} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Conference} title={"Conference Room"} description={""} />
           </Grid>
-          <Grid item xs={3} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Checkup} title={"Checkup Room"} description={""} />
           </Grid>
-          <Grid item xs={12} mt={2} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={2} sx={{align: "center"}}>
             <PurchaseCard imagePath={Waiting} title={"Waiting Room"} description={""} />
           </Grid>
 
