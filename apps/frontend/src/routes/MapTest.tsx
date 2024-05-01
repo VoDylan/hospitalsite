@@ -11,6 +11,8 @@ import myImageF2 from '../images/mapImages/MapTestF2.svg';
 import myImageShadowF2 from '../images/mapImages/MapTestF2Shadow.svg';
 import myImageF3 from '../images/mapImages/MapTestF3.svg';
 import myImageShadowF3 from '../images/mapImages/MapTestF3Shadow.svg';
+import {Box} from "@mui/material";
+//import { TransformComponent} from "react-zoom-pan-pinch";
 
 const Test: React.FC = () => {
     const defaultAngle = 60;
@@ -38,8 +40,9 @@ const Test: React.FC = () => {
   return (
     <div>
 
-      <div style={{display: 'flex', marginTop: '175px', marginLeft: '700px', width: '20%', zIndex: '999' }}>
+      <Box sx={{display: 'flex', justifyContent: "center", marginTop: '50px', zIndex: '999', width: '60%'}}>
         <Slider
+          sx={{ display: 'flex', justifyContent: "center", zIndex: '999', marginLeft: "550px", marginTop: "175px"}}
           aria-label="Angle"
           value={angle}
           onChange={handleChange}
@@ -48,104 +51,173 @@ const Test: React.FC = () => {
           marks={true}
           valueLabelDisplay="auto"
         />
-      </div>
+      </Box>
 
-      <div style={{justifyContent: 'center', alignItems: 'center'}}>
+      <div>
 
-      {/* FLOOR F3 */}
-      <div style={{ position: 'absolute', top: '0px', left: '150px', zIndex: 0, height: "0.1%", width: "0%" }}>
-        <Rotate3D x={100} y={-20} z={40} angle={angle}>
-          <img src={myImageF3} alt="My" />
-        </Rotate3D>
-        {/* F3 SHADOW */}
-        <div style={{ position: 'absolute', top: `${calculatePixelSize1(angle)}px`, left: '0px', zIndex: -1, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadowF3} alt="My Image" />
-          </Rotate3D>
-        </div>
-        <div style={{ position: 'absolute', top: `${calculatePixelSize2(angle)}px`, left: '-1px', zIndex: -2, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadowF3} alt="My Image" />
-          </Rotate3D>
-        </div>
-      </div>
+          {/* FLOOR F3 */}
+          <div style={{position: 'absolute', top: '-100px', left: '200px', zIndex: 0, height: "0.1%", width: "0.1%"}}>
+            <Rotate3D x={100} y={-20} z={40} angle={angle}>
+              <img src={myImageF3} alt="My" height={1000} width={1000}/>
+            </Rotate3D>
+            {/* F3 SHADOW */}
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize1(angle)}px`,
+              left: '0px',
+              zIndex: -1,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadowF3} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize2(angle)}px`,
+              left: '-1px',
+              zIndex: -2,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadowF3} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+          </div>
 
-      {/* FLOOR F2 */}
-      <div style={{ position: 'absolute', top: '750px', left: '150px', zIndex: 0, height: "0.1%", width: "0%"  }}>
-        <Rotate3D x={100} y={-20} z={40} angle={angle}>
-          <img src={myImageF2} alt="My" />
-        </Rotate3D>
-        {/* F2 SHADOW */}
-        <div style={{ position: 'absolute', top: `${calculatePixelSize1(angle)}px`, left: '0px', zIndex: -1, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadowF2} alt="My Image" />
-          </Rotate3D>
-        </div>
-        <div style={{ position: 'absolute', top: `${calculatePixelSize2(angle)}px`, left: '-1px', zIndex: -2, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadowF2} alt="My Image" />
-          </Rotate3D>
-        </div>
-      </div>
+          {/* FLOOR F2 */}
+          <div style={{position: 'absolute', top: '275px', left: '200px', zIndex: 0, height: "0.1%", width: "0.1%"}}>
+            <Rotate3D x={100} y={-20} z={40} angle={angle}>
+              <img src={myImageF2} alt="My" height={1000} width={1000}/>
+            </Rotate3D>
+            {/* F2 SHADOW */}
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize1(angle)}px`,
+              left: '0px',
+              zIndex: -1,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadowF2} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize2(angle)}px`,
+              left: '-1px',
+              zIndex: -2,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadowF2} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+          </div>
 
-      {/* FLOOR F1 */}
-      <div style={{ position: 'absolute', top: '1500px', left: '150px', zIndex: 0, height: "0.1%", width: "0%"  }}>
-        <Rotate3D x={100} y={-20} z={40} angle={angle}>
-          <img src={myImageF1} alt="My" />
-        </Rotate3D>
-        {/* F1 SHADOW */}
-        <div style={{ position: 'absolute', top: `${calculatePixelSize1(angle)}px`, left: '0px', zIndex: -1, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadowF1} alt="My Image" />
-          </Rotate3D>
-        </div>
-        <div style={{ position: 'absolute', top: '-.25px', left: '-1px', zIndex: -2, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadowF1} alt="My Image" />
-          </Rotate3D>
-        </div>
-      </div>
+          {/* FLOOR F1 */}
+          <div style={{position: 'absolute', top: '650px', left: '200px', zIndex: 0, height: "0.1%", width: "0.1%"}}>
+            <Rotate3D x={100} y={-20} z={40} angle={angle}>
+              <img src={myImageF1} alt="My" height={1000} width={1000}/>
+            </Rotate3D>
+            {/* F1 SHADOW */}
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize1(angle)}px`,
+              left: '0px',
+              zIndex: -1,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadowF1} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+            <div style={{
+              position: 'absolute',
+              top: '-.25px',
+              left: '-1px',
+              zIndex: -2,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadowF1} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+          </div>
 
-      {/* FLOOR L1 */}
-      <div style={{ position: 'absolute', top: '2250px', left: '150px', zIndex: 0, height: "0.1%", width: "0%"  }}>
-        <Rotate3D x={100} y={-20} z={40} angle={angle}>
-          <img src={myImage} alt="My Image" />
-        </Rotate3D>
-        {/* L1 SHADOW */}
-        <div style={{ position: 'absolute', top: `${calculatePixelSize1(angle)}px`, left: '0px', zIndex: -1, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadow} alt="My Image" />
-          </Rotate3D>
-        </div>
-        <div style={{ position: 'absolute', top: `${calculatePixelSize2(angle)}px`, left: '-1px', zIndex: -2, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadow} alt="My Image" />
-          </Rotate3D>
-        </div>
-      </div>
+          {/* FLOOR L1 */}
+          <div style={{position: 'absolute', top: '1025px', left: '200px', zIndex: 0, height: "0.1%", width: "0.1%"}}>
+            <Rotate3D x={100} y={-20} z={40} angle={angle}>
+              <img src={myImage} alt="My Image" height={1000} width={1000}/>
+            </Rotate3D>
+            {/* L1 SHADOW */}
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize1(angle)}px`,
+              left: '0px',
+              zIndex: -1,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadow} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize2(angle)}px`,
+              left: '-1px',
+              zIndex: -2,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadow} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+          </div>
 
-      {/* FLOOR L2 */}
-      <div style={{ position: 'absolute', top: '3000px', left: '150px', zIndex: 0, height: "0.1%", width: "0%"  }}>
-        <Rotate3D x={100} y={-20} z={40} angle={angle}>
-          <img src={myImageL2} alt="My" />
-        </Rotate3D>
-        {/* L2 SHADOW */}
-        <div style={{ position: 'absolute', top: `${calculatePixelSize1(angle)}px`, left: '0px', zIndex: -1, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadowL2} alt="My Image" />
-          </Rotate3D>
-        </div>
-        <div style={{ position: 'absolute', top: `${calculatePixelSize2(angle)}px`, left: '-1px', zIndex: -2, height: "0.1%", width: "0%"  }}>
-          <Rotate3D x={100} y={-20} z={40} angle={angle}>
-            <img src={myImageShadowL2} alt="My Image" />
-          </Rotate3D>
-        </div>
-      </div>
-
+          {/* FLOOR L2 */}
+          <div style={{position: 'absolute', top: '1400px', left: '200px', zIndex: 0, height: "0.1%", width: "0.1%"}}>
+            <Rotate3D x={100} y={-20} z={40} angle={angle}>
+              <img src={myImageL2} alt="My" height={1000} width={1000}/>
+            </Rotate3D>
+            {/* L2 SHADOW */}
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize1(angle)}px`,
+              left: '0px',
+              zIndex: -1,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadowL2} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+            <div style={{
+              position: 'absolute',
+              top: `${calculatePixelSize2(angle)}px`,
+              left: '-1px',
+              zIndex: -2,
+              height: "0.1%",
+              width: "0.1%"
+            }}>
+              <Rotate3D x={100} y={-20} z={40} angle={angle}>
+                <img src={myImageShadowL2} alt="My Image" height={1000} width={1000}/>
+              </Rotate3D>
+            </div>
+          </div>
       </div>
 
     </div>
-  );
+);
 };
 
 export default Test;
