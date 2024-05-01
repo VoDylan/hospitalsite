@@ -10,7 +10,7 @@ function ScreenSaver() {
   useEffect(() => {
     const resetTimer = () => {
       if (timer) clearTimeout(timer); // Clear existing timer
-      setTimer(setTimeout(() => setShowVideo(true), 600000)); // Set a new timer
+      setTimer(setTimeout(() => setShowVideo(true), 1200000)); // Set a new timer
     };
 
     // Event listener for user activity
