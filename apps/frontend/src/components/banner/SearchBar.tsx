@@ -37,6 +37,10 @@ function SearchBar() {
     {label: "Room Scheduling Service", link: "/services/RoomScheduling"},
     {label: "Appointment Scheduling", link: "/services/calendar"},
     {label: "Map Page", link: "/Map"},
+    {label: "Map Editor", link: "/MapEditingPage"},
+    {label: "About Us", link: "/About"},
+    {label: "Credits", link: "/Credits"},
+    {label: "Database Display Page", link: "/DisplayDatabase"},
     {label: "All Services", link: "/services"},
     {label: "Health Calculator", link: "/Calculator"},
   ];
