@@ -94,7 +94,7 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
 
       newBounds.top = -mouseYCoord + 120;
       newBounds.bottom = windowHeight - mouseYCoord - height;
-      newBounds.left = -mouseXCoord + windowWidth * 0.18;
+      newBounds.left = -mouseXCoord + (windowWidth * 0.18);
       newBounds.right = windowWidth - mouseXCoord - width;
 
       return newBounds;
@@ -156,8 +156,8 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
         ...props.style,
         position: "absolute",
         left: mouseXCoord,
-        top: mouseYCoord,
-        width: `${width}px`
+        top: mouseYCoord - 120,
+        width: `${width}px`,
       }}
       ref={elementRef}
     >
@@ -263,21 +263,6 @@ export default function NodeCreator(props: INodeCreatorProps): React.JSX.Element
               </Select>
             </FormControl>
           </Box>
-          {/*<TextField*/}
-          {/*  id={"floorEntry"}*/}
-          {/*  label={"Floor"}*/}
-          {/*  variant={"outlined"}*/}
-          {/*  value={floor}*/}
-          {/*  size={"small"}*/}
-          {/*  required={true}*/}
-          {/*  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {*/}
-          {/*    setFloor(event.target.value);*/}
-          {/*  }}*/}
-          {/*  sx={{*/}
-          {/*    marginTop: "10px",*/}
-          {/*    marginBottom: "10px",*/}
-          {/*  }}*/}
-          {/*/>*/}
           <TextField
             id={"buildingEntry"}
             label={"Building"}

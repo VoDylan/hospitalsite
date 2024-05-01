@@ -30,7 +30,7 @@ import endIcon from "../images/mapImages/endIcon.png";
 import NearMeIcon from '@mui/icons-material/NearMe';
 import IconCanvas from "../components/map/IconCanvas.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
-import ToggleButton from "../components/map/MapToggleBar.tsx";
+import MapToggleBar from "../components/map/MapToggleBar.tsx";
 import {IconButton, Stack} from "@mui/material";
 import {useParams} from "react-router-dom";
 
@@ -79,7 +79,7 @@ function MapRoute() {
   const [endNode, setEndNode] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const pathNodesData = useRef<TypeCoordinates[]>([]);
+  const [pathNodesData, setPathNodesData] = useState<TypeCoordinates[]>([]);
   const [nodeDataLoaded, setNodeDataLoaded] = useState<boolean>(false);
   const [updateNodesBetweenFloors, setUpdateNodesBetweenFloors] =
     useState<boolean>(false);
@@ -562,11 +562,6 @@ function MapRoute() {
     }
   };
 
-  const updateNodesData = (newData: TypeCoordinates[]) => {
-    pathNodesData.current = newData;
-    // console.log("printing use ref now", pathNodesData.current);
-  };
-
   const findStartingFloor = useCallback(() => {
     for (let i = 0; i < filteredNodes.length; i++) {
       if (filteredNodes[i].nodeID === startNode) {
@@ -604,7 +599,7 @@ function MapRoute() {
         const data = response.data;
         const path = data.message;
 
-        updateNodesData(path);
+        setPathNodesData(path);
         setFloor(findStartingFloor() as Floor);
         if (transformRef.current) {
           transformRef.current.resetTransform();
@@ -1021,12 +1016,12 @@ function MapRoute() {
               icon2={<TextIcon
                 handleButtonClick2={handleButtonClick2}
                 checked2={false}
-                nodesData={pathNodesData.current}
-                onClickText={setFloor}/>
+                nodesData={pathNodesData}
+                onClickText={handleFloorChange}/>
               }
 
               callback={handleFloorChange}
-            />
+              />
           </Box>
 
           <Box height={"100%"} overflow={"clip"}>
@@ -1064,7 +1059,9 @@ function MapRoute() {
                       filtersApplied={filtersApplied}
                       filteredNodes={filteredNodes}
                       floor={floor}
-                    />
+                      pathNodes={pathNodesData}
+                      startNode={startNode}
+                      endNode={endNode}/>
                     <PathCanvas
                       style={{
                         position: "absolute",
@@ -1077,7 +1074,7 @@ function MapRoute() {
                       width={canvasWidth}
                       height={canvasHeight}
                       floor={floor}
-                      pathNodesData={pathNodesData.current}
+                      pathNodesData={pathNodesData}
                       floorConnectionCallback={handleNodeToFloorCallback}
                       pathRenderStatusCallback={handlePathRenderStatus}
                       startNode={startNode}
@@ -1127,7 +1124,7 @@ function MapRoute() {
                 }}
               >
                 {/* Toggle button */}
-                <ToggleButton onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
+                <MapToggleBar onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
               </Box>
               {isOpen && (
                 <Legend filterItems={filterIcons} />

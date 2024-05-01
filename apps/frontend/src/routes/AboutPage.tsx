@@ -54,6 +54,7 @@ export default function AboutPage() {
             "Director of Technical Operations at various corporations in the information systems and software field."}
           email={"wwong2@wpi.edu"}
           imagePath={ProfWong}
+          quote={"\"Team F!\""}
         />
         <AboutCardRight
           role={"Team Coach"}
@@ -63,6 +64,7 @@ export default function AboutPage() {
             "class, he enjoys skiing."}
           email={"caolsen@wpi.edu"}
           imagePath={Connor}
+          quote={"\"Run 'yarn fix'\""}
         />
         <AboutCardLeft
           role={"Lead Software Engineer"}
@@ -72,6 +74,7 @@ export default function AboutPage() {
             "a Robotics Process Automation developer. In her free time, she enjoys exploring and cooking."}
           email={"ekajaia@wpi.edu"}
           imagePath={Elene}
+          quote={"\"Kick them out of the curtain rooms!\""}
         />
         <AboutCardRight
           role={"Assistant Lead"}
@@ -81,6 +84,7 @@ export default function AboutPage() {
             "FIRST robotics team. Outside of school, he enjoys playing the trumpet in a multitude of bands."}
           email={"kjschmottlach@wpi.edu"}
           imagePath={Kyle}
+          quote={"\"I love Kinnicut Hall\""}
         />
         <AboutCardLeft
           role={"Assistant Lead"}
@@ -90,6 +94,7 @@ export default function AboutPage() {
             "for software. Outside of school, he enjoys snowboarding, reading, and playing the violin."}
           email={"dvo@wpi.edu"}
           imagePath={Dylan}
+          quote={"\"What does this do? Oh, everything broke nevermind\""}
         />
         <AboutCardRight
           role={"Project Manager"}
@@ -99,6 +104,7 @@ export default function AboutPage() {
             "enjoys playing sports and weightlifting."}
           email={"mjwalsh1@wpi.edu"}
           imagePath={Matt}
+          quote={"“Jordan’s sauce”"}
         />
         <AboutCardLeft
           role={"Scrum Master"}
@@ -108,6 +114,7 @@ export default function AboutPage() {
             "automation engineer. Outside of school, he enjoys outdoor activities such as running, hiking, and camping."}
           email={"ramellen@wpi.edu"}
           imagePath={Robert}
+          quote={"\"This is a load of barnacles\""}
         />
         <AboutCardRight
           role={"Product Owner"}
@@ -117,6 +124,7 @@ export default function AboutPage() {
             "CAD and DFM. Outside of school, he enjoys playing percussion and traveling."}
           email={"jwang23@wpi.edu"}
           imagePath={Rick}
+          quote={"\"C'est la vie\""}
         />
         <AboutCardLeft
           role={"Documentation Analyst"}
@@ -126,6 +134,7 @@ export default function AboutPage() {
             "for the Writing Center. Outside of school, she enjoys playing and watching basketball."}
           email={"ajremillard@wpi.edu"}
           imagePath={Arayah}
+          quote={"\"I'll be on discord for the meeting tn guys\""}
         />
         <AboutCardRight
           role={"Full Time Software Engineer"}
@@ -135,6 +144,7 @@ export default function AboutPage() {
             "with SQL. Outside of school, he enjoys transcribing music by ear to make sheet music."}
           email={"sagurgol@wpi.edu"}
           imagePath={Sebastian}
+          quote={"\"ADDED GRADIENT PLEASE LET ME KEEP IT PLEASE PLEASE PLEASE\""}
         />
         <AboutCardLeft
           role={"Full Time Software Engineer"}
@@ -144,6 +154,7 @@ export default function AboutPage() {
             "using SQL to manage databases. Outside of school, he enjoys fitness and snowboarding."}
           email={"yhong4@wpi.edu"}
           imagePath={Yitao}
+          quote={"\"I Love Team F\""}
         />
         <AboutCardRight
           role={"Full Time Software Engineer"}
@@ -153,6 +164,7 @@ export default function AboutPage() {
             "with a remote team. Outside of class, he enjoys power lifting and going to the gym."}
           email={"jjmurphy1@wpi.edu"}
           imagePath={Jacob}
+          quote={"\"I LOVE WONG BOT I LOVD TEAM F\""}
         />
         <AboutCardLeft
           role={"Full Time Software Engineer"}
@@ -162,6 +174,7 @@ export default function AboutPage() {
             "Outside of class, he enjoys going on drives and is passionate about cars."}
           email={"sctrautz@wpi.edu"}
           imagePath={Spencer}
+          quote={"“Nice carousel guys”"}
         />
         <br/>
         <Typography paddingTop={5} textAlign={"center"} variant={"h1"} color={"black"} fontSize={30}>

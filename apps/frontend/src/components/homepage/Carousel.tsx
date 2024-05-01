@@ -7,7 +7,7 @@ import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import CustomCard from "./Card.tsx"; // Update path to Card component
 import noLady from "../../videos/noLady.mp4";
-import mapVideo from "../../videos/finaledit2.mp4";
+import mapVideo from "../../videos/mapedit3.mp4";
 import ServiceCarousel from "./ServiceCarousel.tsx";
 import InfoIcon from "@mui/icons-material/Info";
 import RateReviewSharpIcon from "@mui/icons-material/RateReviewSharp";
@@ -86,7 +86,7 @@ function Carousel() {
 
     setCards(mainCards);
     if (autoScroll) {
-      const interval = setInterval(handleNextPage, 4500);
+      const interval = setInterval(handleNextPage, 5700);
       return () => clearInterval(interval);
     }
   }, [handleNextPage, autoScroll]);
@@ -101,7 +101,7 @@ function Carousel() {
           alignItems: "center",
           alignContent: "center",
           justifyContent: "center",
-          height: "40vh",
+          height: "50vh",
           width: "100%",
         }}
       >
@@ -146,7 +146,7 @@ function Carousel() {
           position: "relative",
           display: "flex",
           flexDirection: "row",
-          marginTop: "6%",
+          marginTop: "4%",
           height: "220px",
           alignItems: "center",
           justifyContent: "center",
@@ -173,6 +173,8 @@ function Carousel() {
           <NavigateNextIcon />
         </IconButton>
       </Stack>
+
+
       {/*{Icons}*/}
       <Stack
         direction={"row"}
@@ -213,13 +215,15 @@ function Carousel() {
 
       <Box
         sx={{
-          color: "red",
+          color: "#186BD9",
           opacity: "0.7",
           marginBottom: "2%"}}
         display={"flex"}
         justifyContent={"center"}>
         <Typography variant = "subtitle1"
-                    fontSize={"16px"}>
+                    fontSize={"100%"}
+                    color = 'red'
+                    fontWeight = 'bold'>
           This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women’s Hospital website
         </Typography>
       </Box>

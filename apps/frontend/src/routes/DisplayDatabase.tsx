@@ -25,6 +25,7 @@ import "./TableSlide.css";
 import Tab from "@mui/material/Tab";
 import { PieChart, BarChart } from "@mui/x-charts";
 import {employeeCsvHeader, EmployeeFieldsType} from "common/src/employee/EmployeeFieldsType.ts";
+import {Delete} from "@mui/icons-material";
 
 type NodeParams = { id: number } & MapNodeType;
 
@@ -150,7 +151,25 @@ function DisplayDatabase() {
       ...prevRowModesModel,
       [id]: { mode: GridRowModes.View },
     }));
-    window.location.reload();
+
+    // Add a delay of, for example, 1 second (1000 milliseconds) before refreshing the page
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); // Adjust the delay time as needed
+  };
+
+  const handleDeleteClick = (id: GridRowId) => () => {
+    console.log(rowModesModel);
+    setServiceRowData((prevData) => prevData.filter((service) => service.id !== id));
+
+    axios.delete(`/api/database/updatesr/${id}`)
+      .then((response: AxiosResponse) => {
+        console.log(response);
+        getServiceData();
+      })
+      .catch((error) => {
+        console.error("Error deleting service request:", error);
+      });
   };
 
   const [nodeColumns] = useState<GridColDef[]>([
@@ -211,7 +230,7 @@ function DisplayDatabase() {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 100,
+      width: 125,
       cellClassName: "actions",
       getActions: ({ row }) => [
         <GridActionsCellItem
@@ -219,7 +238,9 @@ function DisplayDatabase() {
           label="Edit"
           className="textPrimary"
           onClick={handleEditClick(row.id)}
-          color="inherit"
+          sx={{
+            color: "primary.main",
+          }}
         />,
         <GridActionsCellItem
           icon={<SaveIcon />}
@@ -228,6 +249,14 @@ function DisplayDatabase() {
             color: "primary.main",
           }}
           onClick={handleSaveClick(row.id)}
+        />,
+        <GridActionsCellItem
+          icon={<Delete />}
+          label="Delete"
+          sx={{
+            color: "primary.main",
+          }}
+          onClick={handleDeleteClick(row.id)}
         />,
       ],
     },
@@ -393,9 +422,10 @@ function DisplayDatabase() {
           .post("/api/database/uploadnodes", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
+            window.location.reload();
           })
           .catch((e) => {
-            console.error("Error posting employee data:",e);
+            console.error("Error posting node data:",e);
           });
       }
     };
@@ -441,7 +471,10 @@ function DisplayDatabase() {
           .post("/api/database/uploadedges", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
-          });
+            window.location.reload();
+          }).catch((e) => {
+          console.error("Error posting edge data:",e);
+        });
       }
     };
 
@@ -497,12 +530,14 @@ function DisplayDatabase() {
           .post("/api/database/uploademployees", jsonData)
           .then((response: AxiosResponse) => {
             console.log(response);
-          });
+            window.location.reload();
+          }).catch((e) => {
+          console.error("Error posting employee data:",e);
+        });
       }
     };
 
     fileReader.readAsText(file);
-    window.location.reload();
   }
 
   function handleNodeFileUpload(event: { target: { files: FileList | null } }) {
@@ -514,7 +549,6 @@ function DisplayDatabase() {
       handleNodeImport(file![0]);
     }
     console.log("Handling node import data");
-    window.location.reload();
   }
 
   function handleEdgeFileUpload(event: { target: { files: FileList | null } }) {
@@ -526,7 +560,6 @@ function DisplayDatabase() {
       handleEdgeImport(file![0]);
     }
     console.log("Handling node import data");
-    window.location.reload();
   }
 
   function handleEmployeeFileUpload(event: { target: { files: FileList | null } }) {
@@ -553,7 +586,14 @@ function DisplayDatabase() {
       };
 
       // Make the HTTP request to save in the backend
-      await axios.put(`/api/database/updatesr/${id}`, data);
+      await axios.put(`/api/database/updatesr/${id}`, data).then(
+        (response: AxiosResponse) => {
+          console.log(response);
+          window.location.reload();
+      })
+        .catch((e) => {
+          console.error("Error saving service request data:",e);
+        });
       return newRow;
     },
     [],
@@ -779,6 +819,11 @@ function DisplayDatabase() {
                   {/*<Typography variant='h5'>Service Data Table</Typography>*/}
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                     sx={{
                       padding: "40px",
                       position: "relative",
@@ -1061,6 +1106,11 @@ function DisplayDatabase() {
                 >
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                     sx={{
                       padding: "40px",
                       position: "relative",
@@ -1148,6 +1198,11 @@ function DisplayDatabase() {
                 >
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                     sx={{
                       padding: "40px",
                       position: "relative",
@@ -1208,6 +1263,11 @@ function DisplayDatabase() {
                 >
                   <DataGrid
                     slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                      },
+                    }}
                     sx={{
                       padding: "40px",
                       position: "relative",
