@@ -31,6 +31,7 @@ import CalendarPage from "./routes/CalendarPage.tsx";
 import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 import CheckOutPage from "./routes/CheckOutPage.tsx";
+import ScreenSaver from "./components/homepage/ScreenSaver.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -153,6 +154,7 @@ function App() {
         }}
       >
         <div className="w-full flex flex-col px-0 gap-5">
+          <ScreenSaver />
           <TopBanner />
           <Outlet />
         </div>
