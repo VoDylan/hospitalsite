@@ -142,7 +142,7 @@ function SecurityService() {
             <PurchaseCard imagePath={Wong} title={"Other"} description={""} />
           </Grid>
 
-          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Name:
             </Typography>
@@ -152,7 +152,7 @@ function SecurityService() {
               onChange={handleNameInput}
             />
           </Grid>
-          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Security Personnel:
             </Typography>
@@ -168,7 +168,7 @@ function SecurityService() {
               returnData={form.securityPersonnel}
             />
           </Grid>
-          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Why is Security Needed:
             </Typography>
@@ -186,7 +186,7 @@ function SecurityService() {
               returnData={form.securityCategory}
             />
           </Grid>
-          <Grid item xs={4} mt={2} sx={{align: "center"}}>
+          <Grid item xs={3} mt={2} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Additional Details (optional):
             </Typography>
@@ -206,7 +206,7 @@ function SecurityService() {
             <Typography align={"center"}>Employee:</Typography>
             <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>
-          <Grid item xs={12} mt={3} mb={3} sx={{align: "center"}}>
+          <Grid item xs={4} mt={3} mb={3} sx={{align: "center"}}>
             <Typography color={"black"} align={"center"}>
               Priority of Security:
             </Typography>

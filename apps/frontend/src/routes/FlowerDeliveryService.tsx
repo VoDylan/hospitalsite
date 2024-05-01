@@ -110,7 +110,7 @@ function FlowerDeliveryService() {
         // boxShadow={4}
         sx={{
           backgroundColor: "transparent",
-          width: "75%", //Adjust this to change the width of the form
+          width: "85%", //Adjust this to change the width of the form
           height: "auto",
           mt: "25vh",
           mb: "5vh",
@@ -203,7 +203,7 @@ function FlowerDeliveryService() {
               type={"number"} />
           </Grid>
 
-          <Grid item xs={3} mt={5} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={5} sx={{align: "center"}}>
             <Typography align={"center"}> Your Name:</Typography>
             <CenterAlignedTextbox
               label={"Name"}
@@ -212,7 +212,7 @@ function FlowerDeliveryService() {
               type={"text"}
             />
           </Grid>
-          <Grid item xs={3} mt={5} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={5} sx={{align: "center"}}>
             <Typography align={"center"}>Recipient Name:</Typography>
             <CenterAlignedTextbox
               label={"Recipient Name"}
@@ -220,7 +220,7 @@ function FlowerDeliveryService() {
               onChange={handleRecipientNameInput}
             />
           </Grid>
-          <Grid item xs={3} mt={5} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={5} sx={{align: "center"}}>
             <Typography align={"center"}>Add a message (optional):</Typography>
             <CenterAlignedTextbox
               label={"Message"}
@@ -228,11 +228,11 @@ function FlowerDeliveryService() {
               onChange={handleMessageInput}
             />
           </Grid>
-          <Grid item xs={3} mt={5} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={5} sx={{align: "center"}}>
             <Typography align={"center"}>Room:</Typography>
             <NodeDropDown returnedNodeID={form.roomNumber} label={"Room"} handleChange={handleRoomNumberInput} filterRoomsOnly={true} />
           </Grid>
-          <Grid item xs={12} sx={{align: "center"}}>
+          <Grid item xs={2.4} mt={5} sx={{align: "center"}}>
             <Typography align={"center"}>Employee:</Typography>
             <EmployeeDropDown returnedEmployeeID={form.employeeID !== -1 ? form.employeeID : ""} handleChange={handleEmployeeIDInput} />
           </Grid>

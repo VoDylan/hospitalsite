@@ -32,7 +32,6 @@ import AboutPage from "./routes/AboutPage.tsx";
 import CreditsPage from "./routes/CreditsPage.tsx";
 import CheckOutPage from "./routes/CheckOutPage.tsx";
 import PathfindingPage from "./routes/PathfindingPage.tsx";
-import ScreenSaver from "./components/homepage/ScreenSaver.tsx";
 import HealthCalculator from "./routes/HealthCalculator.tsx";
 import PageNotFound from "./routes/PageNotFound.tsx";
 
@@ -168,7 +167,6 @@ function App() {
         }}
       >
         <div className="w-full flex flex-col px-0 gap-5">
-          <ScreenSaver />
           <TopBanner />
           <Outlet />
         </div>

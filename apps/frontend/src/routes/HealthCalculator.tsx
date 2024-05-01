@@ -166,7 +166,7 @@ export default function HealthCalculator() {
             {currentIndex === 0 && (
             <Grid
               sx={{
-                mx: "95vh",
+                mx: "110vh",
                 width: "50vh",
                 backgroundColor: "#186BD9",
                 boxShadow: "5",
@@ -260,8 +260,8 @@ export default function HealthCalculator() {
             {currentIndex === 1 && (
               <Grid
                 sx={{
-                  mx: "95vh",
-                  width: "50vh",
+                  mx: "110vh",
+                  width: "55vh",
                   backgroundColor: "#186BD9",
                   boxShadow: "5",
                 }}

@@ -4,51 +4,59 @@ import "./ScreenSaveFade.css";
 
 function ScreenSaver() {
   const [showVideo, setShowVideo] = useState(false);
-  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null); // Adjust the type
-  const [startScreenSaverOnLoad, setStartScreenSaverOnLoad] = useState(false); // Flag to control whether screen saver starts on load
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const resetTimer = () => {
-      if (timer) clearTimeout(timer); // Clear existing timer
-      //setTimer(setTimeout(() => setShowVideo(true), 1200000)); // Set a new timer
+      if (timer) clearTimeout(timer);
+
+      const timerStart = localStorage.getItem("timerStart");
+      if (timerStart) {
+        const elapsed = Date.now() - parseInt(timerStart, 10);
+        const remaining =(30 * 60000) - elapsed; // 30 minutes in milliseconds
+        if (remaining > 0) {
+          setTimer(setTimeout(() => setShowVideo(false), remaining));
+        } else {
+          setShowVideo(true);
+        }
+      } else {
+        setShowVideo(true);
+      }
+      localStorage.setItem("timerStart", Date.now().toString());
     };
 
-    // Event listener for user activity
+    resetTimer(); // Reset timer on component mount or update
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [timer]); // Empty dependency array ensures this effect runs only once on mount
+
+  useEffect(() => {
     const handleUserActivity = () => {
-      setShowVideo(false); // Hide the video instantly on user activity
-      resetTimer(); // Reset the timer on user activity
+      setShowVideo(false);
+      localStorage.setItem("timerStart", Date.now().toString());
     };
 
-    // Event listener for keyboard input
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === "Insert") {
-        setShowVideo(true); // Start the screen saver when "insert" key is pressed
-        resetTimer(); // Reset the timer when screen saver starts
+        setShowVideo(true);
+        localStorage.setItem("timerStart", Date.now().toString());
       }
     };
 
-    // Start the screen saver on page load if the flag is set
-    if (startScreenSaverOnLoad) {
-      setShowVideo(true);
-      resetTimer();
-    } else {
-      // Set up initial timer and event listeners if not starting the screen saver on load
-      resetTimer();
-      window.addEventListener("mousemove", handleUserActivity);
-      window.addEventListener("keypress", handleUserActivity);
-      window.addEventListener("scroll", handleUserActivity);
-      window.addEventListener("keydown", handleKeyPress); // Add event listener for keydown
-    }
+    window.addEventListener("mousemove", handleUserActivity);
+    window.addEventListener("keypress", handleUserActivity);
+    window.addEventListener("scroll", handleUserActivity);
+    window.addEventListener("keydown", handleKeyPress);
 
-    // Clean up event listeners and timer
     return () => {
       window.removeEventListener("mousemove", handleUserActivity);
       window.removeEventListener("keypress", handleUserActivity);
       window.removeEventListener("scroll", handleUserActivity);
-      window.removeEventListener("keydown", handleKeyPress); // Remove event listener for keydown
-      if (timer) clearTimeout(timer); // Clear any remaining timer
+      window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [startScreenSaverOnLoad, timer]); // Re-run effect only once on component mount
+  }, []);
 
   return (
     <div className={`screensaver ${showVideo ? 'show' : ''}`}>
@@ -57,7 +65,7 @@ function ScreenSaver() {
         loop
         muted
         className={`video ${showVideo ? 'fade-in' : ''}`}
-        onLoadedData={() => setShowVideo(true)}
+        onLoadedData={() => setShowVideo(false)}
       >
         <source src={Brigham} type="video/mp4" />
       </video>
@@ -66,8 +74,4 @@ function ScreenSaver() {
 }
 
 export default ScreenSaver;
-
-
-
-
 
