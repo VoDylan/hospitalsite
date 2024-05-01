@@ -89,7 +89,7 @@ export function CheckOutPageSubmitButton(props: ButtonProps) {
           autoHideDuration={5000}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: "top",
+            vertical: "bottom",
             horizontal: "center",
           }}
         >
