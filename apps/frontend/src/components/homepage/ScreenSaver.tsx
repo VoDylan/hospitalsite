@@ -5,12 +5,24 @@ import "./ScreenSaveFade.css";
 function ScreenSaver() {
   const [showVideo, setShowVideo] = useState(false);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null); // Adjust the type
-  const [startScreenSaverOnLoad, setStartScreenSaverOnLoad] = useState(false); // Flag to control whether screen saver starts on load
+
 
   useEffect(() => {
     const resetTimer = () => {
       if (timer) clearTimeout(timer); // Clear existing timer
-      setTimer(setTimeout(() => setShowVideo(true), 1200000)); // Set a new timer
+      const timerStart = localStorage.getItem("timerStart");
+      if (timerStart) {
+        const elapsed = Date.now() - parseInt(timerStart, 10);
+        const remaining = 60000 * 20 - elapsed;
+        if (remaining > 0) {
+          setTimer(setTimeout(() => setShowVideo(false), remaining)); // Set a new timer with remaining time
+        } else {
+          setShowVideo(true); // If timer has elapsed, show the video immediately
+        }
+      } else {
+        setShowVideo(false); // If timer start time is not set, show the video immediately
+      }
+      localStorage.setItem("timerStart", Date.now().toString()); // Store current time as timer start time
     };
 
     // Event listener for user activity
@@ -27,18 +39,12 @@ function ScreenSaver() {
       }
     };
 
-    // Start the screen saver on page load if the flag is set
-    if (startScreenSaverOnLoad) {
-      setShowVideo(true);
-      resetTimer();
-    } else {
-      // Set up initial timer and event listeners if not starting the screen saver on load
-      resetTimer();
-      window.addEventListener("mousemove", handleUserActivity);
-      window.addEventListener("keypress", handleUserActivity);
-      window.addEventListener("scroll", handleUserActivity);
-      window.addEventListener("keydown", handleKeyPress); // Add event listener for keydown
-    }
+    // Set up initial timer and event listeners if not starting the screen saver on load
+    resetTimer();
+    window.addEventListener("mousemove", handleUserActivity);
+    window.addEventListener("keypress", handleUserActivity);
+    window.addEventListener("scroll", handleUserActivity);
+    window.addEventListener("keydown", handleKeyPress); // Add event listener for keydown
 
     // Clean up event listeners and timer
     return () => {
@@ -48,7 +54,7 @@ function ScreenSaver() {
       window.removeEventListener("keydown", handleKeyPress); // Remove event listener for keydown
       if (timer) clearTimeout(timer); // Clear any remaining timer
     };
-  }, [startScreenSaverOnLoad, timer]); // Re-run effect only once on component mount
+  }, [timer]); // Re-run effect only when timer changes
 
   return (
     <div className={`screensaver ${showVideo ? 'show' : ''}`}>
@@ -57,7 +63,7 @@ function ScreenSaver() {
         loop
         muted
         className={`video ${showVideo ? 'fade-in' : ''}`}
-        onLoadedData={() => setShowVideo(true)}
+        onLoadedData={() => setShowVideo(false)}
       >
         <source src={Brigham} type="video/mp4" />
       </video>
@@ -66,8 +72,3 @@ function ScreenSaver() {
 }
 
 export default ScreenSaver;
-
-
-
-
-
