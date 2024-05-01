@@ -1,7 +1,7 @@
 import {Button, IconButton, Stack} from "@mui/material";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import PathAlgorithmSelector from "./map2/PathAlgorithmSelector.tsx";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {PathAlgorithmType} from "../../common/types/PathAlgorithmType.ts";
 import {LocationInfo} from "common/src/LocationInfo.ts";
 import MapNode from "common/src/map/MapNode.ts";
@@ -20,8 +20,9 @@ interface PathfindingInfoProps {
   setFloor: (newFloor: Floor) => void;
   clearPathCallback: () => void;
 
-  autoGeneratePath: boolean
-  hasGeneratedPathCallback: () => void;
+  generateInitPathSignal: boolean;
+  hasGeneratedInitPath: boolean;
+  setHasGeneratedInitPath: (pathGenerated: boolean) => void;
 }
 
 export default function PathfindingInfo(props: PathfindingInfoProps) {
@@ -31,9 +32,12 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
 
   const [pathNodesData, setPathNodesData] = useState<TypeCoordinates[]>([]);
 
-  const [autoGeneratePath, setAutoGeneratePath] = useState<boolean>(props.autoGeneratePath);
-  const [hasGeneratedPathCallback] = useState<() => void>(props.hasGeneratedPathCallback);
   const [textDirectionsEnabled, setTextDirectionsEnabled] = useState<boolean>(false);
+
+  const [generateInitPathSignal, setGenerateInitPathSignal] = useState<boolean>(props.generateInitPathSignal);
+  const [hasGeneratedInitPath, setHasGeneratedInitPath] = useState<boolean>(props.hasGeneratedInitPath);
+
+  const setHasGeneratedInitPathCallback = useRef<(hasGenerated: boolean) => void>(props.setHasGeneratedInitPath);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -80,9 +84,7 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
       console.error("Failed to fetch data:", error);
       setErrorMessage("Failed to fetch data. Please try again.");
     }
-
-    hasGeneratedPathCallback();
-  }, [algorithm, endNode, hasGeneratedPathCallback, props, startNode]);
+  }, [algorithm, endNode, props, startNode]);
 
   useEffect(() => {
     setStartNode(props.startNode);
@@ -93,16 +95,24 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
   }, [props.endNode]);
 
   useEffect(() => {
+    setGenerateInitPathSignal(props.generateInitPathSignal);
+  }, [props.generateInitPathSignal]);
+
+  useEffect(() => {
+    setHasGeneratedInitPath(props.hasGeneratedInitPath);
+  }, [props.hasGeneratedInitPath]);
+
+  useEffect(() => {
+    if(generateInitPathSignal && !hasGeneratedInitPath) {
+      handleSubmit();
+      setHasGeneratedInitPathCallback.current(true);
+    }
+  }, [generateInitPathSignal, handleSubmit, hasGeneratedInitPath]);
+
+  useEffect(() => {
     console.log(`Setting text directions enabled to ${props.pathRendered}`);
     setTextDirectionsEnabled(props.pathRendered);
   }, [props.pathRendered]);
-
-  useEffect(() => {
-    if(autoGeneratePath) {
-      handleSubmit();
-    }
-    setAutoGeneratePath(false);
-  }, [autoGeneratePath, handleSubmit]);
 
   return (
     <Stack>

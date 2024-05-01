@@ -13,11 +13,11 @@ import Stairs from "../../images/realMapIcons/stairs.svg";
 import Info from "../../images/realMapIcons/info.svg";
 import Bathroom from "../../images/realMapIcons/bathrom.svg";
 import Service from "../../images/realMapIcons/service.svg";
-import Retail from "../../images/realMapIcons/retail.png";
+import Retail from "../../images/realMapIcons/retail.svg";
 import Labs from "../../images/realMapIcons/labs.svg";
 import Department from "../../images/realMapIcons/dept.svg";
-import Conference from "../../images/realMapIcons/conf.png";
-import Exit from "../../images/realMapIcons/exit.png";
+import Conference from "../../images/realMapIcons/conf.svg";
+import Exit from "../../images/realMapIcons/exit.svg";
 import { TypeCoordinates } from "common/src/TypeCoordinates.ts";
 
 interface SymbolCanvasProps {

@@ -5,6 +5,7 @@ import "./ScreenSaveFade.css";
 function ScreenSaver() {
   const [showVideo, setShowVideo] = useState(false);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+  //const [checkTimer, setCheckTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const resetTimer = () => {
@@ -13,14 +14,14 @@ function ScreenSaver() {
       const timerStart = localStorage.getItem("timerStart");
       if (timerStart) {
         const elapsed = Date.now() - parseInt(timerStart, 10);
-        const remaining =(30 * 60000) - elapsed; // 30 minutes in milliseconds
-        if (remaining > 0) {
-          setTimer(setTimeout(() => setShowVideo(false), remaining));
+        const remaining =(30 * 60000) - elapsed; // 30 minutes in ms
+        if (remaining < 0) {
+          setTimer(setTimeout(() => setShowVideo(true), remaining));
         } else {
-          setShowVideo(true);
+          setShowVideo(false);
         }
       } else {
-        setShowVideo(true);
+        setShowVideo(false);
       }
       localStorage.setItem("timerStart", Date.now().toString());
     };

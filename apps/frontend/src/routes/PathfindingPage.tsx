@@ -19,11 +19,7 @@ import {Floor} from "common/src/map/Floor.ts";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import {useParams} from "react-router-dom";
 
-interface PathfindingPageProps {
-
-}
-
-export default function PathfindingPage(props: PathfindingPageProps) {
+export default function PathfindingPage() {
   const {startnode, endnode} = useParams();
 
   const {
@@ -83,8 +79,9 @@ export default function PathfindingPage(props: PathfindingPageProps) {
   const [updateSelection, setUpdateSelection] = useState<boolean>(false);
   const [resetZoom, setResetZoom] = useState<boolean>(false);
   const [resetPath, setResetPath] = useState<boolean>(false);
-  const [generatePathSignal, setGeneratePathSignal] = useState<boolean>(false);
-  const [hasGeneratedPath, setHasGeneratedPath] = useState<boolean>(false);
+
+  const [generateInitPathSignal, setGenerateInitPathSignal] = useState<boolean>(false);
+  const [hasGeneratedInitPath, setHasGeneratedInitPath] = useState<boolean>(false);
 
   const handleInterFloorNodesUpdate = (
     nodesToNextFloor: Map<TypeCoordinates, Floor>,
@@ -141,13 +138,12 @@ export default function PathfindingPage(props: PathfindingPageProps) {
   }, [setPathNodesData, setPathRendered, selectedNode1, selectedNode2, algorithm, resetPath, setNodesToNextFloor, setNodesToPrevFloor]);
 
   useEffect(() => {
-    if(filtersApplied && startnode && endnode && !hasGeneratedPath) {
+    if(filtersApplied && startnode && endnode && !hasGeneratedInitPath) {
       setSelectedNode1(GraphManager.getInstance().getNodeByID(startnode));
-      setSelectedNode2(GraphManager.getInstance().getNodeByID(startnode));
+      setSelectedNode2(GraphManager.getInstance().getNodeByID(endnode));
+      setGenerateInitPathSignal(true);
     }
-  }, [endnode, filtersApplied, hasGeneratedPath, setSelectedNode1, setSelectedNode2, startnode]);
-
-
+  }, [endnode, filtersApplied, hasGeneratedInitPath, setSelectedNode1, setSelectedNode2, startnode]);
 
   return (
     <>
@@ -170,8 +166,9 @@ export default function PathfindingPage(props: PathfindingPageProps) {
 
             setAlgorithmCallback={setAlgorithm}
 
-            autoGeneratePath={generatePathSignal}
-            hasGeneratedPathCallback={() => setHasGeneratedPath(true)}
+            generateInitPathSignal={generateInitPathSignal}
+            hasGeneratedInitPath={hasGeneratedInitPath}
+            setHasGeneratedInitPath={setHasGeneratedInitPath}
 
             filterInfo={filterInfo}
             selectedNode1={selectedNode1}
