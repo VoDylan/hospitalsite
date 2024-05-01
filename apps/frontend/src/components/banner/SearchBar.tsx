@@ -73,6 +73,7 @@ function SearchBar() {
           handleSelectedValue(newValue); // handle the selected value here
         }}
         freeSolo
+        disablePortal
         options={results}
         getOptionLabel={(option) => (typeof option === 'string' ? option : option.label)}
         renderInput={(params) => (
@@ -103,6 +104,9 @@ function SearchBar() {
         )}
         sx={{
           width: "15vw",
+          "& + .MuiAutocomplete-popper": {
+            textAlign: "left",
+          }
         }}
       />
     </Search>
