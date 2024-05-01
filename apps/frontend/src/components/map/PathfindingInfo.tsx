@@ -1,7 +1,7 @@
 import {Button, IconButton, Stack} from "@mui/material";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import PathAlgorithmSelector from "./map2/PathAlgorithmSelector.tsx";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {PathAlgorithmType} from "../../common/types/PathAlgorithmType.ts";
 import {LocationInfo} from "common/src/LocationInfo.ts";
 import MapNode from "common/src/map/MapNode.ts";
@@ -19,6 +19,9 @@ interface PathfindingInfoProps {
   setAlgorithmCallback: (algorithm: PathAlgorithmType) => void;
   setFloor: (newFloor: Floor) => void;
   clearPathCallback: () => void;
+
+  autoGeneratePath: boolean
+  hasGeneratedPathCallback: () => void;
 }
 
 export default function PathfindingInfo(props: PathfindingInfoProps) {
@@ -28,11 +31,13 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
 
   const [pathNodesData, setPathNodesData] = useState<TypeCoordinates[]>([]);
 
+  const [autoGeneratePath, setAutoGeneratePath] = useState<boolean>(props.autoGeneratePath);
+  const [hasGeneratedPathCallback] = useState<() => void>(props.hasGeneratedPathCallback);
   const [textDirectionsEnabled, setTextDirectionsEnabled] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (!startNode || !endNode) {
       setErrorMessage("Please enter both start and end nodes");
       return;
@@ -75,7 +80,9 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
       console.error("Failed to fetch data:", error);
       setErrorMessage("Failed to fetch data. Please try again.");
     }
-  };
+
+    hasGeneratedPathCallback();
+  }, [algorithm, endNode, hasGeneratedPathCallback, props, startNode]);
 
   useEffect(() => {
     setStartNode(props.startNode);
@@ -89,6 +96,13 @@ export default function PathfindingInfo(props: PathfindingInfoProps) {
     console.log(`Setting text directions enabled to ${props.pathRendered}`);
     setTextDirectionsEnabled(props.pathRendered);
   }, [props.pathRendered]);
+
+  useEffect(() => {
+    if(autoGeneratePath) {
+      handleSubmit();
+    }
+    setAutoGeneratePath(false);
+  }, [autoGeneratePath, handleSubmit]);
 
   return (
     <Stack>

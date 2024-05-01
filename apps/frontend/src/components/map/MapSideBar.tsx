@@ -36,6 +36,9 @@ interface MapEditorSideBar2Props {
   selectedNode2: MapNode | null;
   edgeBetweenNodes?: MapEdge | null;
 
+  autoGeneratePath?: boolean;
+  hasGeneratedPathCallback?: () => void;
+
   nodeUpdateCallback?: () => void;
   clearPathCallback?: () => void;
   pathRendered?: boolean;
@@ -162,6 +165,8 @@ export default function MapSideBar(props: MapEditorSideBar2Props) {
                   pathRendered={props.pathRendered!}
                   setPathNodesDataCallback={props.setPathNodesData!}
                   setFloor={props.setFloor!}
+                  autoGeneratePath={props.autoGeneratePath!}
+                  hasGeneratedPathCallback={props.hasGeneratedPathCallback!}
                   setAlgorithmCallback={props.setAlgorithmCallback!}
                   clearPathCallback={props.clearPathCallback!}
                 />

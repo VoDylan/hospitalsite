@@ -123,7 +123,7 @@ function App() {
         },
         {
           path: "map/:startnode/:endnode",
-          element: <MapRoute />,
+          element: <PathfindingPage />,
         },
         {
           path: "*",
