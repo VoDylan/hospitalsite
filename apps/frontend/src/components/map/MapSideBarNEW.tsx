@@ -201,15 +201,20 @@ export default function MapSideBarNEW(props: MapEditorSideBar2Props) {
               width: "75%",
             }}
           />
-          <Button variant="contained" href={"/map3d"}
-                  sx={{
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    marginTop: '25px',
-                    width: "75%",
-                  }}>
-            3D MAP
-          </Button>
+          {!props.enableEditorTools && (
+            <Button
+              variant="contained"
+              href={"/map3d"}
+              sx={{
+                marginLeft: "auto",
+                marginRight: "auto",
+                marginTop: '25px',
+                width: "75%",
+              }}
+            >
+              3D MAP
+            </Button>
+          )}
         </Stack>
       </Box>
     </Drawer>
