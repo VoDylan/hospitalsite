@@ -100,12 +100,12 @@ function App() {
           element: <HealthCalculator />,
         },
         {
-          path: "/Map",
-          element: <MapRoute />,
+          path: "/map",
+          element: <PathfindingPage />,
         },
         {
-          path: "/map2",
-          element: <PathfindingPage />,
+          path: "/mapold",
+          element: <MapRoute />,
         },
         {
           path: "/Credits",
