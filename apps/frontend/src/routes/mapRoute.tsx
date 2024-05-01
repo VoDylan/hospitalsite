@@ -30,7 +30,7 @@ import endIcon from "../images/mapImages/endIcon.png";
 import NearMeIcon from '@mui/icons-material/NearMe';
 import IconCanvas from "../components/map/IconCanvas.tsx";
 import {TypeCoordinates} from "common/src/TypeCoordinates.ts";
-import ToggleButton from "../components/map/MapToggleBar.tsx";
+import MapToggleBar from "../components/map/MapToggleBar.tsx";
 import {IconButton, Stack} from "@mui/material";
 import {useParams} from "react-router-dom";
 
@@ -1124,7 +1124,7 @@ function MapRoute() {
                 }}
               >
                 {/* Toggle button */}
-                <ToggleButton onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
+                <MapToggleBar onClick={toggleLegend} buttonText={isOpen ? "Hide Legend" : "Show Legend"} />
               </Box>
               {isOpen && (
                 <Legend filterItems={filterIcons} />

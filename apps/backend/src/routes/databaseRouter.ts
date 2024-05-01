@@ -40,9 +40,75 @@ router.get("/nodes", async (req: Request, res: Response) => {
   res.status(200).json(nodeData);
 });
 
+router.post("/resyncnodes", async (req, res) => {
+  await clearDBEdges();
+  await clearDBNodes();
+
+  const data = req.body;
+  if (!Array.isArray(data)) {
+    res.status(400).json({
+      message: "Node data must be an array!",
+    });
+    return;
+  }
+
+  if (data.length == 0) {
+    res.status(304).json({
+      message: "No data sent. Not modified.",
+    });
+    return;
+  }
+
+  const badData: [] = [];
+  const addedData: [] = [];
+  const ignoredData: [] = [];
+  const erroredData: [] = [];
+
+  for (const node of data) {
+    if (validateNodeData(node as never).error != undefined) {
+      badData.push(node as never);
+    } else {
+      const result: 200 | 304 | 400 = await createNodePrisma(
+        node as MapNodeType,
+      );
+      this;
+
+      switch (result) {
+        case 200:
+          addedData.push(node as never);
+          break;
+        case 304:
+          ignoredData.push(node as never);
+          break;
+        default:
+          erroredData.push(node as never);
+          break;
+      }
+    }
+  }
+
+  let status: number = 304;
+
+  if (badData.length > 0 || erroredData.length > 0) {
+    status = 400;
+  } else if (ignoredData.length > 0) {
+    status = 304;
+  } else if (addedData.length > 0) {
+    status = 200;
+  }
+
+  res.status(status).json({
+    numAddedNodes: addedData.length,
+    numIgnoredNodes: ignoredData.length,
+    numBadNodes: badData.length,
+
+    ignoredData: ignoredData,
+    badData: badData,
+  });
+});
+
 router.post("/nodes", async (req: Request, res: Response) => {
   const data = req.body;
-  console.log(data);
   if (!Array.isArray(data)) {
     res.status(400).json({
       message: "Node data must be an array!",
@@ -214,6 +280,71 @@ router.put("/edges/createedge", async (req, res) => {
   });
 });
 
+router.post("/resyncedges", async (req, res) => {
+  await clearDBEdges();
+
+  const data = req.body;
+  if (!Array.isArray(data)) {
+    res.status(400).json({
+      message: "Edge data must be an array!",
+    });
+    return;
+  }
+
+  if (data.length == 0) {
+    res.status(304).json({
+      message: "No data sent. Not modified.",
+    });
+    return;
+  }
+
+  const badData: [] = [];
+  const addedData: [] = [];
+  const ignoredData: [] = [];
+  const erroredData: [] = [];
+
+  for (const edge of data) {
+    if (validateEdgeData(edge as never).error != undefined) {
+      badData.push(edge as never);
+    } else {
+      const result: 200 | 304 | 400 = await createEdgePrisma(
+        edge as MapEdgeType,
+      );
+
+      switch (result) {
+        case 200:
+          addedData.push(edge as never);
+          break;
+        case 304:
+          ignoredData.push(edge as never);
+          break;
+        default:
+          erroredData.push(edge as never);
+          break;
+      }
+    }
+  }
+
+  let status: number = 304;
+
+  if (badData.length > 0 || erroredData.length > 0) {
+    status = 400;
+  } else if (ignoredData.length > 0) {
+    status = 304;
+  } else if (addedData.length > 0) {
+    status = 200;
+  }
+
+  res.status(status).json({
+    numAddedEdges: addedData.length,
+    numIgnoredEdges: ignoredData.length,
+    numBadEdges: badData.length,
+
+    ignoredData: ignoredData,
+    badData: badData,
+  });
+});
+
 router.get("/servicerequest", async (req, res) => {
   const requests = await getServiceRequestsFromDB();
 
@@ -268,8 +399,6 @@ router.post("/servicerequest", async (req, res) => {
     services: string;
   } = req.body;
 
-  console.log(data);
-
   if (
     (await client.node.findUnique({
       where: {
@@ -321,8 +450,6 @@ router.post("/uploadnodes", async (req, res) => {
 router.post("/uploadedges", async (req, res) => {
   const data: [] = req.body;
 
-  console.log(data);
-
   await clearDBEdges();
 
   for (let i = 0; i < data.length; i++) {
@@ -351,8 +478,6 @@ router.put("/updatesr/:id", async (req, res) => {
     services: string;
     status: string;
   } = req.body;
-
-  console.log(data);
 
   await client.serviceRequest.update({
     where: {
@@ -408,8 +533,6 @@ router.get("/employees", async (req, res) => {
 
 router.post("/uploademployees", async (req, res) => {
   const data: [] = req.body;
-
-  console.log(data);
 
   await clearEmployeesFromDB();
 

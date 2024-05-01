@@ -7,7 +7,7 @@ import { EmployeeFieldsType } from "common/src/employee/EmployeeFieldsType.ts";
 const loggingPrefix: string = "PrismaScripts: ";
 
 export async function createNodePrisma(node: MapNodeType) {
-  console.log(`Adding node ${node.nodeID} to DB`);
+  // console.log(`Adding node ${node.nodeID} to DB`);
   try {
     await client.node.create({
       data: node,
@@ -18,7 +18,7 @@ export async function createNodePrisma(node: MapNodeType) {
       e instanceof Prisma.PrismaClientKnownRequestError &&
       e.code == "P2002"
     ) {
-      console.log(`${loggingPrefix}Node already exists. Skipping...`);
+      // console.log(`${loggingPrefix}Node already exists. Skipping...`);
       return 304;
     } else {
       console.error(e);
@@ -71,21 +71,23 @@ export async function deleteEdgePrisma(edgeID: string) {
 }
 
 export async function createEdgePrisma(edge: MapEdgeType) {
-  console.log(
-    `Adding edge (ID: ${edge.edgeID}) between ${edge.startNodeID} and ${edge.endNodeID} to DB`,
-  );
+  // console.log(
+  //   `Adding edge (ID: ${edge.edgeID}) between ${edge.startNodeID} and ${edge.endNodeID} to DB`,
+  // );
   try {
     await client.edge.create({
       data: edge,
     });
+    return 200;
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.log(`${loggingPrefix}Edge already exists. Skipping...`);
+      // console.log(`${loggingPrefix}Edge already exists. Skipping...`);
+      return 304;
     } else {
       console.error(e);
+      return 400;
     }
   }
-  console.log(`Finished adding edge`);
 }
 
 export async function clearDBNodes() {

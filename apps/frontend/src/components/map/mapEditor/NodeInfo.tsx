@@ -2,6 +2,7 @@ import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import MapNode from "common/src/map/MapNode.ts";
+import GraphManager from "frontend/src/common/GraphManager.ts";
 
 interface NodeInfoProps {
   style: React.CSSProperties;
@@ -9,13 +10,22 @@ interface NodeInfoProps {
   node: MapNode;
   textColor: string;
   clearNodeCallback: () => void;
-  editNodeCallback: (node: MapNode) => void;
-  deleteNodeCallback: (node: MapNode) => void;
+  nodeUpdateCallback: () => void;
 }
 
 export default function NodeInfo(props: NodeInfoProps) {
   const [editingMode, setEditingMode] = useState<boolean>(false);
   const [node, setNode] = useState<MapNode>(props.node);
+
+  const handleEditNode = (node: MapNode) => {
+    GraphManager.getInstance().updateLocalNode(node.nodeInfo);
+    props.nodeUpdateCallback();
+  };
+
+  const handleDeleteNode = (node: MapNode) => {
+    GraphManager.getInstance().deleteLocalNodeByID(node.nodeID);
+    props.nodeUpdateCallback();
+  };
 
   useEffect(() => {
     setNode(props.node);
@@ -31,6 +41,7 @@ export default function NodeInfo(props: NodeInfoProps) {
         display={"flex"}
         flexDirection={"column"}
         alignItems={"left"}
+        overflow={"hidden"}
       >
         {!editingMode ? (
           <>
@@ -207,18 +218,20 @@ export default function NodeInfo(props: NodeInfoProps) {
                 onClick={props.clearNodeCallback}
                 sx={{
                   marginRight: "5px",
+                  flex: 1,
                 }}
               >
-                Clear Selection
+                Clear
               </Button>
               <Button
                 variant={"contained"}
                 onClick={() => setEditingMode(true)}
                 sx={{
                   marginLeft: "5px",
+                  flex: 1,
                 }}
               >
-                Edit Node
+                Edit
               </Button>
             </Box>
           </>
@@ -345,7 +358,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               <Button
                 variant={"contained"}
                 onClick={() => {
-                  props.editNodeCallback(node);
+                  handleEditNode(node);
                   setEditingMode(false);
                 }}
                 sx={{
@@ -357,7 +370,7 @@ export default function NodeInfo(props: NodeInfoProps) {
               <Button
                 variant={"contained"}
                 onClick={() => {
-                  props.deleteNodeCallback(node);
+                  handleDeleteNode(node);
                   props.clearNodeCallback();
                 }}
                 sx={{

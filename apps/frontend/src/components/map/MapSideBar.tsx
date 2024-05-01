@@ -147,7 +147,7 @@ export default function MapSideBar(props: {
               <NestedList
                 open={props.open}
                 handleClick={props.handleClick}
-                checkedBFS={props.checkedBFS}
+                checkedBFS={props.checkedBFS}up
                 handleSelectBFS={props.handleSelectBFS}
                 checkedAS={props.checkedAS}
                 handleSelectAS={props.handleSelectAS}

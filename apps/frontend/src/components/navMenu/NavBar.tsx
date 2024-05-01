@@ -35,6 +35,9 @@ export const NavBar = () => {
         anchor={"left"}
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
+        sx={{
+          zIndex: 9999,
+        }}
       >
         <Box
           sx={{

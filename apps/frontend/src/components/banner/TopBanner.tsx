@@ -46,7 +46,8 @@ function TopBanner() {
         height: "120px",
         boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
         elevation: 1,
-        justifyContent: "center"
+        justifyContent: "center",
+        zIndex: 9999,
       }}
     >
       <Toolbar>
