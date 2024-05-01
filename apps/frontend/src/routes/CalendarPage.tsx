@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+// import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import {Badge, Grid, SelectChangeEvent, Stack, Typography, TextField} from "@mui/material";
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay/PickersDay';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import calendar from "../images/servicePageImages/calendar.jpg";
 import dayjs, {Dayjs} from "dayjs";
-import {DayCalendarSkeleton} from "@mui/x-date-pickers";
+import {DateCalendar, DayCalendarSkeleton} from "@mui/x-date-pickers";
 import {ChangeEvent, useEffect, useState} from "react";
 import {CalendarPageFormSubmission} from "../common/formSubmission/CalendarPageFormSubmission.ts";
 import ServiceNavTabs from "../components/serviceNav/tabNav/ServiceNavTabs.tsx";
@@ -234,6 +234,8 @@ export default function CalendarPage() {
             justifyContent="center"
             boxShadow={5}
             borderRadius={5}
+            paddingLeft={'1%'}
+            paddingBottom={'1%'}
             sx={{
               backgroundColor: "white",
               width: "75%", //Adjust this to change the width of the form
@@ -258,38 +260,44 @@ export default function CalendarPage() {
               item xs={12}
               sm={6}
               mt={2}
+
+              border={3}
+              borderRadius={5}
+              borderColor={'#186BD9'}
             >
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
               >
-                <StaticDatePicker
-                  orientation="landscape"
+                <DateCalendar
                   minDate={currentDate}
                   //value={currentDate}
-                  onAccept={handleOk}
+                  // onAccept={handleOk}
                   onChange={handleDateInput}
                   loading={isLoading}
                   onMonthChange={handleMonthChange}
                   renderLoading={() => <DayCalendarSkeleton/>}
                   sx={{
+                    width: "90%",
+                    height: "100%",
                     '.MuiDateCalendar-root': {
                       borderRadius: '5px',
-                      border: '3px solid',
+                      border:   '3px solid',
                       borderColor: '#186BD9',
+                    },"& div[role=row]": {
+                      paddingLeft: '5%',
+                      paddingRight: '5%',
+                      paddingBottom: '5',
+                      justifyContent: "space-between !important",
                     },
                     '.MuiPickersToolbar-root': {
                       color: '#186BD9',
-                      borderRadius: '5px',
-                      //borderWidth: '1px',
-                      borderColor: '#186BD9',
-                      border: '3px solid',
-                      backgroundColor: 'white',
+
                       //width: '200px'
                     },
                     '.MuiPickersDay-dayWithMargin': {
-                      //color: '#186BD9',
+                      // color: '#186BD9',
                     },
-                    marginLeft: "20px"
+                    marginLeft: "2%"
                   }}
                   slots={{
                     day: ServerDay,
@@ -301,7 +309,7 @@ export default function CalendarPage() {
                   }}
                 />
               </LocalizationProvider>
-             <h3 style={{marginLeft: "20px"}}>{handleOk(selectedDate)}</h3>
+             <Typography variant="h5" style={{marginLeft: "20px", marginTop: "10%"}}>{handleOk(selectedDate)}</Typography>
             </Grid>
             <Grid
               xs={6}
@@ -357,7 +365,7 @@ export default function CalendarPage() {
                   <NodeDropDown handleChange={handleRoomNumberInput} returnedNodeID={form.roomNumber} label={"Room"} filterRoomsOnly={true} />
                 </Grid>
                 <Grid item xs={6} sx={{align: "center"}}>
-                  <Typography align={"center"}>Select Open Date From Calendar:</Typography>
+                  <Typography align={"center"}>Select Open Date:</Typography>
                   <div className={classes.root}>
                   <TextField
                     // sx={{
